@@ -11,5 +11,18 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+ /**
+  * @todo убедиться что все работает, после extract
+  */
+mix.js('resources/js/app.js', 'public/js').extract(['jquery', 'bootstrap'])
+    .sass('resources/sass/app.scss', 'public/css')
+    .version()
+    .sourceMaps();
+
+if (mix.inProduction()) {
+    mix.disableNotifications();
+} else {
+    mix.browserSync({
+        proxy: 'shop.test',
+    });
+}
