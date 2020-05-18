@@ -24,7 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        Log::info('Test log message with data', ['id' => 123]);
+        // abort(404);
+        // Log::info('Test log message with data', ['id' => 123]);
         return view('home');
     }
 }
