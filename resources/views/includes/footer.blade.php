@@ -23,14 +23,15 @@
             </div>
             <div class="col-7 col-sm text-center text-sm-left">
                 <h5 class="mt-5 mb-4">Способы оплаты</h5>
-                <img src="images/footer-payments-1.png" alt="расчет">
+                {{-- <img src="images/footer-payments-1.png" alt="расчет">
                 <img src="images/footer-payments-2.png" alt="assist">
                 <img src="images/footer-payments-3.png" alt="белкарт">
                 <img src="images/footer-payments-4.png" alt="visa">
                 <img src="images/footer-payments-5.png" alt="maestercard">
                 <img src="images/footer-payments-6.png" alt="белкарт">
                 <img src="images/footer-payments-7.png" alt="maestercard">
-                <img src="images/footer-payments-8.png" alt="visa">
+                <img src="images/footer-payments-8.png" alt="visa"> --}}
+                <img src="images/footer-payments-all.png" class="img-fluid" alt="Оплата">
             </div>
             <div class="col-12 col-sm text-center text-sm-left">
                 <h5 class="mt-5 mb-4">Карта сайта</h5>
