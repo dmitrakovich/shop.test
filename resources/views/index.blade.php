@@ -40,6 +40,12 @@
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. A, sint dolorum doloremque saepe minus consequuntur beatae fugiat ipsam doloribus, ipsum nemo amet modi mollitia similique maxime possimus minima voluptatibus? Aperiam.
             </div>
 
+            <div class="col-12 js-instagram-posts">
+                <div class="row mx-n2">
+
+                </div>
+            </div>
+
 
 
         </div>
