@@ -15,6 +15,13 @@
     font-family: 'Gilroy';
 }
 
+// размеры шрифтов
+@each $font-size in $v-font-sizes {
+	.font-size-#{$font-size} {
+		font-size : #{$font-size}px !important;
+	}
+}
+
 .wrapper {
     @include media-breakpoint-up(sm) {
         padding: 0 100px;

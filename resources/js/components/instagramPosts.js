@@ -1,24 +1,3 @@
-/*window.InstagramFeed = require('./components/InstagramFeed');
-
-(function(){
-    new InstagramFeed({
-        'username': 'andrey_dmitrakovich',
-        'container': document.getElementById("instaFeed"),
-        'get_data': true,
-        'display_profile': false,
-        'display_biography': false,
-        'display_gallery': true,
-        'callback': function(data) {
-            console.log(data);
-            $('.test-gill-sans-mt').html(JSON.stringify(data, null, 2));
-        },
-        'styling': true,
-        'items': 6,
-        'items_per_row': 3,
-        'margin': 1 
-    });
-})();*/
-
 // в зависимости от цифры (0-4) выбирается размер
 // let imageSizes = {
 //     "150": 0,
@@ -34,7 +13,7 @@ $(function () {
     if ($instagramPostsBlock.length)
     {
         let host = 'https://www.instagram.com/',
-            username = 'andrey_dmitrakovich',
+            username = 'modny.by',
             postsCount = 6,
             colSize = 4, // для дектопа, для моб всегда 12
             xhr = new XMLHttpRequest();
@@ -62,45 +41,31 @@ $(function () {
                     $.each(data, function (index, value) {
                         let node = value.node,
                             url = 'https://www.instagram.com/p/' + node.shortcode;
-
-                        // доделать 
-
-                        switch (node.__typename) {
-                            case "GraphSidecar":
-                                type_resource = "sidecar"
-                                image = node.thumbnail_resources[3].src;
-                                break;
-                            case "GraphVideo":
-                                type_resource = "video";
-                                image = node.thumbnail_src
-                                break;
-                            default:
-                                type_resource = "image";
-                                image = node.thumbnail_resources[3].src;
-                        }
-
+                        // image = node.thumbnail_src // max size
+                        image = node.thumbnail_resources[3].src; // imageSizes
+                        // switch (node.__typename) {
+                        //     case "GraphSidecar": type_resource = "sidecar"; break;
+                        //     case "GraphVideo": type_resource = "video"; break;
+                        //     default: type_resource = "image";
+                        // }
                         html += '<div class="col-12 col-sm-' + colSize + ' p-2">';
                         html += '<a href="' + url + '" rel="noopener" target="_blank">';
                         html += '<img src="' + image + '" alt="" class="img-fluid" />';
                         html += '</a><div class="row">';
-                        html += '<div class="col-auto">название</div>';
+                        html += '<div class="col-auto">@barocco</div>';
                         html += '<div class="col-auto ml-auto">&#10084;&nbsp;' + node.edge_liked_by.count + '</div>';
                         html += '</div></div>';
                         if (!--postsCount) {
                             return false;
                         }
                     });
-
-                    // тут же их вывести
-                    console.log(data);
-
-                    $instagramPostsBlock.find('.row').html(html);
+                    // console.log(data);
+                    $instagramPostsBlock.html(html);
                 } else {
                     console.error("Request error. Response: " + xhr.statusText);
                 }
             }
         };
-        
         xhr.send();
     }
 });

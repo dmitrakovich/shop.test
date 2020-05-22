@@ -11,6 +11,20 @@ $line-height-base: 1.6;
 $headings-font-family: 'Roboto', sans-serif;
 $headings-font-weight: 700;
 
+// $display1-size:               6rem !default;
+// $display2-size:               5.5rem !default;
+// $display3-size:               4.5rem !default;
+$display4-size:	3.1rem;
+
+// варианты размера шрифта
+$v-font-sizes: '12', '15', '16';
+
+// Ссылки
+// $link-color:                              theme-color("primary") !default;
+$link-decoration: underline;
+// $link-hover-color:                        darken($link-color, 15%) !default;
+// $link-hover-decoration:                   underline !default;
+
 $grid-breakpoints: (
 	xs: 0,
 	sm: 480px,
@@ -18,6 +32,9 @@ $grid-breakpoints: (
 	lg: 1024px,
 	xl: 1600px
 );
+
+// Цвета
+$text-muted: #999999;
 
 // Colors
 $blue: #3490dc;
