@@ -23,11 +23,18 @@
 }
 
 .wrapper {
-    @include media-breakpoint-up(sm) {
-        padding: 0 100px;
+    @include media-breakpoint-up(md) {
+        margin: 0 100px;
     }
 }
 
 footer {
     background-color: $footer-bg;
+}
+
+
+header {
+    @include media-breakpoint-down(md) {
+        background-color: $footer-bg;
+    }
 }

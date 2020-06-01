@@ -20,10 +20,10 @@ $display4-size:	3.1rem;
 $v-font-sizes: '12', '15', '16';
 
 // Ссылки
-// $link-color:                              theme-color("primary") !default;
-$link-decoration: underline;
+$link-color: $body-color; // цвет ссылок
+// $link-decoration: underline; 			// подчеркивать ссыдки
 // $link-hover-color:                        darken($link-color, 15%) !default;
-// $link-hover-decoration:                   underline !default;
+$link-hover-decoration: none;
 
 $grid-breakpoints: (
 	xs: 0,
@@ -32,6 +32,10 @@ $grid-breakpoints: (
 	lg: 1024px,
 	xl: 1600px
 );
+
+// настройка гридов
+$grid-columns:		12;
+$grid-gutter-width:	20px;
 
 // Цвета
 $text-muted: #999999;
