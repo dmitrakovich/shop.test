@@ -48,7 +48,7 @@ $(function () {
                         //     case "GraphVideo": type_resource = "video"; break;
                         //     default: type_resource = "image";
                         // }
-                        html += '<div class="col-12 col-sm-' + colSize + ' p-2">';
+                        html += '<div class="col-12 col-sm-' + colSize + '">';
                         html += '<a href="' + url + '" rel="noopener" target="_blank">';
                         html += '<img src="' + image + '" alt="" class="img-fluid" />';
                         html += '</a><div class="row">';
