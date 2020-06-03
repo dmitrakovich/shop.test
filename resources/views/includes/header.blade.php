@@ -1,9 +1,14 @@
-<header class="header">
+<header class="header pt-2">
     <div class="container-fluid">
         <div class="row wrapper align-items-center">
             <button class="btn navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="account-btns">
+                <button class="btn p-0 d-inline-block d-lg-none js-search">
+                    <img src="images/icons/search.svg" alt="Поиск" class="img-fluid">
+                </button>
+            </div>
             <div class="col-auto d-none d-lg-block">
                 <p style="line-height: 1.15rem;"><small>
                     Ежедневно&nbsp;с 10:00&nbsp;до&nbsp;22:00<br>
@@ -12,26 +17,42 @@
                 </small></p>
                 
             </div>
-            <div class="col-auto ml-md-auto">
+            <div class="col-auto ml-auto">
                 <a href="{{ route('index-page') }}">
                     <h2 class="text-uppercase m-0">{{ config('app.name') }}</h2>
                 </a>
             </div>
-            <div class="col-auto ml-auto">
-                личный кабинет
-                избранное
-                корзина
+            <div class="col-auto ml-auto account-btns">
+                <button class="btn border-right-0 p-0">
+                    <img src="images/icons/account.svg" alt="личный кабинет" class="img-fluid">
+                </button><!--
+                --><button class="btn border-right-0  p-0 d-none d-md-inline-block">
+                    <img src="images/icons/favorites.svg" alt="избранное" class="img-fluid">
+                </button><!--
+                --><button class="btn p-0 ml-2 ml-md-0">
+                    <div class="position-relative">
+                        <img src="images/icons/cart.svg" alt="корзина" class="img-fluid">
+                        <div class="cart-count position-absolute d-flex justify-content-center align-items-center">
+                            <span class="js-cart-count">4</span>
+                        </div>
+                    </div>
+                </button>
             </div>
-            <div class="col-8">
-                <div class="row justify-content-center">
-                    <div class="col">Каталог</div>
-                    <div class="col">Магазины</div>
-                    <div class="col">Как заказать</div>
-                    <div class="col">Рассрочка</div>
-                    <div class="col">Отзывы</div>
-                    <div class="col">Карта клиента</div>
-                    <div class="col">Контакты</div>
-                    <div class="col">Поиск</div>
+            <div class="col-12">
+                <div class="row justify-content-center align-items-center text-uppercase font-size-15" style="letter-spacing: 0.3px;">
+                    <div class="col-auto">Каталог</div>
+                    <div class="col-auto">Магазины</div>
+                    <div class="col-auto">Рассрочка</div>
+                    <div class="col-auto">Отзывы</div>
+                    <div class="col-auto">Карта клиента</div>
+                    <div class="col-auto d-none d-lg-inline-block">
+                        <div class="form-inline">
+                            <input type="text" class="search-input" placeholder="Поиск">
+                            <button class="btn p-0 js-search">
+                                <img src="images/icons/search.svg" alt="Поиск" class="img-fluid">
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

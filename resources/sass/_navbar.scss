@@ -24,3 +24,59 @@
         }
     }
 }
+
+.account-btns {
+    .btn {
+        height: 42px;
+        width: 52px;
+        border-color: #D3D3D3;
+        border-radius: 0;
+        &:hover, &:focus {
+            opacity: 0.5;
+        }
+    }
+    @include media-breakpoint-down(md) {
+        .btn {
+            border: none;
+            opacity: 0.5;
+        }
+    }
+    @include media-breakpoint-down(sm) {
+        .btn {
+            height: 30px;
+            width: 30px;
+        }
+    }
+    .cart-count {
+        background: #E51717;
+        color: #FFFFFF;
+        border-radius: 50%;
+        width: 12px;
+        height: 12px;
+        font-weight: bold;
+        font-size: 0.6rem;
+        bottom: 0;
+        left: 27px;
+        @include media-breakpoint-down(sm) {
+            left: 16px;
+        }
+    }
+}
+
+.search-input {
+    width: 155px;
+    margin-right: 0.3rem;
+    border-width: 0;
+    border-color: rgba(0, 0, 0, 0.23);
+    border-bottom-width: 1px;
+    &:focus {
+        outline: none;
+    }
+}
+
+
+// header {
+//     @include media-breakpoint-down(md) {
+//         background-color: $footer-bg;
+//     }
+// }
