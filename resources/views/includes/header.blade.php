@@ -1,7 +1,7 @@
 <header class="header pt-2">
     <div class="container-fluid">
         <div class="row wrapper align-items-center">
-            <button class="btn navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu">
+            <button class="btn navbar-toggler js-show-main-menu" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="account-btns">
@@ -22,10 +22,10 @@
                     <h2 class="text-uppercase m-0">{{ config('app.name') }}</h2>
                 </a>
             </div>
-            <div class="col-auto ml-auto account-btns">
-                <button class="btn border-right-0 p-0">
+            <div class="col-auto ml-auto account-btns d-flex">
+                <a href="{{ route('login') }}" class="btn border-right-0 p-0">
                     <img src="images/icons/account.svg" alt="личный кабинет" class="img-fluid">
-                </button><!--
+                </a><!--
                 --><button class="btn border-right-0  p-0 d-none d-md-inline-block">
                     <img src="images/icons/favorites.svg" alt="избранное" class="img-fluid">
                 </button><!--
@@ -38,14 +38,50 @@
                     </div>
                 </button>
             </div>
-            <div class="col-12">
-                <div class="row justify-content-center align-items-center text-uppercase font-size-15" style="letter-spacing: 0.3px;">
-                    <div class="col-auto">Каталог</div>
-                    <div class="col-auto">Магазины</div>
-                    <div class="col-auto">Рассрочка</div>
-                    <div class="col-auto">Отзывы</div>
-                    <div class="col-auto">Карта клиента</div>
-                    <div class="col-auto d-none d-lg-inline-block">
+
+            
+            <div class="col-12 navbar-main-menu" id="mainMenu">
+                <div class="row justify-content-center align-items-center text-uppercase font-size-15 position-relative">
+                    <div class="col-12 col-lg-auto hover-dropdown">
+                        Каталог
+                        <div class="col-12 dropdown-menu position-absolute">
+                            <a class="dropdown-item" href="#">Лоферы</a>
+                            <a class="dropdown-item" href="#">Балетки</a>
+                            <a class="dropdown-item" href="#">Сабо</a>
+                            <a class="dropdown-item" href="#">Ботинки</a>
+                            <a class="dropdown-item" href="#">Туфли</a>
+                            <a class="dropdown-item" href="#">Сандали</a>
+                            <a class="dropdown-item" href="#">Босоножки</a>
+                            <a class="dropdown-item" href="#">Сапоги</a>
+                            <a class="dropdown-item" href="#">Ботильоны</a>
+                            <a class="dropdown-item" href="#">Слипоны</a>
+                            <a class="dropdown-item" href="#">Кеды</a>
+                            <a class="dropdown-item" href="#">Эспадрильи</a>
+                        </div>
+                    </div>
+                    <div class="col-12 d-lg-none"><hr></div>
+                    <div class="col-12 col-lg-auto">
+                        Магазины
+                    </div>
+                    <div class="col-12 d-lg-none"><hr></div>
+                    <div class="col-12 col-lg-auto hover-dropdown">
+                        Онлайн покупки
+                        <div class="col-12 dropdown-menu position-absolute">
+                            <a class="dropdown-item" href="#">23452345</a>
+                            <a class="dropdown-item" href="#">23452345</a>
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">2345 action</a>
+                            <a class="dropdown-item" href="#">Someth454356345ing else here</a>
+                        </div>
+                    </div>
+                    <div class="col-12 d-lg-none"><hr></div>
+                    <div class="col-12 col-lg-auto">Рассрочка</div>
+                    <div class="col-12 d-lg-none"><hr></div>
+                    <div class="col-12 col-lg-auto">Отзывы</div>
+                    <div class="col-12 d-lg-none"><hr></div>
+                    <div class="col-12 col-lg-auto">Карта клиента</div>
+                    <div class="col-12 d-lg-none"><hr></div>
+                    <div class="col-12 col-lg-auto d-none d-lg-inline-block">
                         <div class="form-inline">
                             <input type="text" class="search-input" placeholder="Поиск">
                             <button class="btn p-0 js-search">
@@ -61,7 +97,7 @@
 
 
 
-        <div class="collapse navbar-collapse navbar-main-menu" id="mainMenu">
+        <div class="collapse navbar-collapse" >
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
 
@@ -99,27 +135,6 @@
                     </li>
                 @endguest
             </ul>
-
-
-
-
-            <div class="row justify-content-center">
-                <div class="col-12 col">Каталог</div>
-                <div class="col-12 col">Магазины</div>
-                <div class="col-12 col">Как заказать</div>
-                <div class="col-12 col">Рассрочка</div>
-                <div class="col-12 col">Отзывы</div>
-                <div class="col-12 col">Карта клиента</div>
-                <div class="col-12 col">Контакты</div>
-                <div class="col-12 col">Поиск</div>
-            </div>
-
-
-
-
-
-
-
 
         </div>
 

@@ -10570,12 +10570,6 @@ a.text-dark:focus {
   visibility: hidden !important;
 }
 
-@media (min-width: 1024px) {
-  .navbar-toggler {
-    display: none;
-  }
-}
-
 .navbar-toggler-icon {
   display: inline-block;
   width: 1.5em;
@@ -10591,6 +10585,9 @@ a.text-dark:focus {
 }
 
 .account-btns .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 42px;
   width: 52px;
   border-color: #D3D3D3;
@@ -10620,18 +10617,12 @@ a.text-dark:focus {
   background: #E51717;
   color: #FFFFFF;
   border-radius: 50%;
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   font-weight: bold;
   font-size: 0.6rem;
-  bottom: 0;
-  left: 27px;
-}
-
-@media (max-width: 719.98px) {
-  .account-btns .cart-count {
-    left: 16px;
-  }
+  bottom: -2px;
+  left: 13px;
 }
 
 .search-input {
@@ -10644,6 +10635,54 @@ a.text-dark:focus {
 
 .search-input:focus {
   outline: none;
+}
+
+@media (min-width: 1024px) {
+  .navbar-toggler {
+    display: none;
+  }
+}
+
+.navbar-main-menu {
+  letter-spacing: 0.3px;
+}
+
+.navbar-main-menu .col-12 {
+  position: static;
+}
+
+@media (max-width: 1023.98px) {
+  .navbar-main-menu {
+    width: 300px;
+    position: fixed;
+    top: 0;
+    left: -300px;
+    height: 100vh;
+    z-index: 999;
+    background: #fff;
+    transition: all 0.3s;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .navbar-main-menu.active {
+    left: 0;
+  }
+
+  .navbar-main-menu .row {
+    padding: 60px 20px 0;
+  }
+}
+
+.navbar-main-menu .js-dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+.hover-dropdown {
+  cursor: pointer;
+}
+
+.hover-dropdown:hover .dropdown-menu {
+  display: block;
 }
 
 .test-roboto {
@@ -10680,7 +10719,35 @@ a.text-dark:focus {
   }
 }
 
+body.modal-open {
+  height: 100vh;
+}
+
+@media (min-width: 1024px) {
+  body.modal-open {
+    padding-right: 1.05rem;
+  }
+}
+
 footer {
   background-color: #F9F9F9;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 998;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+  top: 0;
+  left: 0;
+}
+
+.overlay.active {
+  display: block;
+  opacity: 1;
 }
 

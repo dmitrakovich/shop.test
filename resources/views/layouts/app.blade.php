@@ -26,5 +26,6 @@
         </main>
         @include('includes.footer')
     </div>
+    <div class="overlay"></div>
 </body>
 </html>

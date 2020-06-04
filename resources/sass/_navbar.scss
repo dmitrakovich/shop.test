@@ -1,9 +1,4 @@
-// переписан бутстраповскиц navbar
-.navbar-toggler {
-    @include media-breakpoint-up(lg) {
-        display: none;
-    }
-}
+// переписан бутстраповский navbar
 .navbar-toggler-icon {
     display: inline-block;
     width: 1.5em;
@@ -16,17 +11,11 @@
 .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
-
-.navbar-main-menu {
-    @include media-breakpoint-down(md) {
-        &:not(.show) {
-            // display: none;
-        }
-    }
-}
-
 .account-btns {
     .btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         height: 42px;
         width: 52px;
         border-color: #D3D3D3;
@@ -51,18 +40,14 @@
         background: #E51717;
         color: #FFFFFF;
         border-radius: 50%;
-        width: 12px;
-        height: 12px;
+        width: 13px;
+        height: 13px;
         font-weight: bold;
         font-size: 0.6rem;
-        bottom: 0;
-        left: 27px;
-        @include media-breakpoint-down(sm) {
-            left: 16px;
-        }
+        bottom: -2px;
+        left: 13px;
     }
 }
-
 .search-input {
     width: 155px;
     margin-right: 0.3rem;
@@ -74,6 +59,52 @@
     }
 }
 
+.navbar-toggler {
+    @include media-breakpoint-up(lg) {
+        display: none;
+    }
+}
+.navbar-main-menu {
+    .col-12 {
+        position: static;
+    }
+    letter-spacing: 0.3px;
+    @include media-breakpoint-down(md) {
+        width: 300px;
+        position: fixed;
+        top: 0;
+        left: -300px;
+        height: 100vh;
+        z-index: 999;
+        background: #fff;
+        transition: all 0.3s;
+        // overflow-y: scroll;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        &.active {
+            left: 0;
+        };
+        .row {
+            padding: 60px 20px 0;
+        }
+    }
+}
+
+
+// !!!
+.navbar-main-menu .js-dropdown:hover > .dropdown-menu {
+    display: block; 
+}
+
+.hover-dropdown {
+    cursor: pointer;
+    &:hover {
+        .dropdown-menu {
+            display: block; 
+        }
+    }
+}
+
+// !!! убрать hover для моб версии
 
 // header {
 //     @include media-breakpoint-down(md) {
