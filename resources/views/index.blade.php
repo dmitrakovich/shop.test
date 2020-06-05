@@ -5,7 +5,29 @@
 @section('content')
 <div class="container-fluid">
     <div class="row wrapper justify-content-center">
-        <div class="col-md-8">
+        <div class="col-12 px-0 px-md-main py-main">
+            <img src="images/banners/main2x.png" alt="" class="img-fluid">
+        </div>
+        <div class="col-12 col-md-4 p-main">
+            <img src="images/banners/main2x1.png" alt="" class="img-fluid">
+        </div>
+        <div class="col-12 col-md-4 p-main">
+            <img src="images/banners/main2x1.png" alt="" class="img-fluid">
+        </div>
+        <div class="col-12 col-md-4 p-main">
+            <img src="images/banners/main2x1.png" alt="" class="img-fluid">
+        </div>
+        
+        
+        <div class="col-12 text-center mt-5">
+            <h1 class="display-4">Популярные категории</h1>
+            
+        </div>
+        
+        
+        <div class="col-md-12">
+
+
             {{-- <div class="card">
                 <div class="card-header">Dashboard</div>
 

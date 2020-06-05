@@ -4,8 +4,12 @@
             <button class="btn navbar-toggler js-show-main-menu" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            
+
+
             <div class="account-btns">
-                <button class="btn p-0 d-inline-block d-lg-none js-search">
+                <button class="btn p-0 d-inline-block d-lg-none js-mobile-search" type="button" data-toggle="collapse" data-target="#collapseExample">
                     <img src="images/icons/search.svg" alt="Поиск" class="img-fluid">
                 </button>
             </div>
@@ -79,6 +83,10 @@
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto">Отзывы</div>
                     <div class="col-12 d-lg-none"><hr></div>
+                    <div class="col-12 d-lg-none">
+                        <strong class="text-danger">Распродажа</strong>
+                    </div>
+                    <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto">Карта клиента</div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto d-none d-lg-inline-block">
@@ -91,6 +99,19 @@
                     </div>
                 </div>
             </div>
+
+
+
+            <div class="col-12 collapse" id="collapseExample">
+                <div class="row">
+                    <input type="text" class="form-control border-0" placeholder="Поиск">
+                </div>
+            </div>
+
+
+
+
+
         </div>
 
 
