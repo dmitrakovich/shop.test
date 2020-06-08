@@ -1,4 +1,4 @@
-<header class="header pt-2">
+<header class="header pt-2 mb-4">
     <div class="container-fluid">
         <div class="row wrapper align-items-center">
             <button class="btn navbar-toggler js-show-main-menu" type="button">
@@ -71,11 +71,11 @@
                     <div class="col-12 col-lg-auto hover-dropdown">
                         Онлайн покупки
                         <div class="col-12 dropdown-menu position-absolute">
-                            <a class="dropdown-item" href="#">23452345</a>
-                            <a class="dropdown-item" href="#">23452345</a>
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">2345 action</a>
-                            <a class="dropdown-item" href="#">Someth454356345ing else here</a>
+                            <a class="dropdown-item" href="{{ route('static-kak-zakazat') }}">Как заказать</a>
+                            <a class="dropdown-item" href="{{ route('static-payment') }}">Оплата</a>
+                            <a class="dropdown-item" href="{{ route('static-delivery') }}">Доставка</a>
+                            <a class="dropdown-item" href="{{ route('static-return') }}">Возврат</a>
+                            <a class="dropdown-item" href="{{ route('static-installments') }}">Рассрочка</a>
                         </div>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>

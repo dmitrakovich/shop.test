@@ -18,14 +18,15 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
+    {{-- <div id="app"> --}}
         @include('includes.header')
 
-        <main class="py-4">
+        <main class="content">
             @yield('content')
         </main>
+
         @include('includes.footer')
-    </div>
+    {{-- </div> --}}
     <div class="overlay"></div>
 </body>
 </html>

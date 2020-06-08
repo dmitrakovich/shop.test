@@ -16,10 +16,24 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('index');
 // });
+
+
+// Route::domain(env('APP_NAME') . '.{domain}')->group(function () {
+//     Route::get('/domain', function ($domain) {
+//         dd($domain);
+//     });
+// });
+
 Route::view('/test', 'test');
-
-
 Route::view('/', 'index')->name('index-page');
+
+// static pages
+Route::view('/kak-zakazat', 'static.kak-zakazat')->name('static-kak-zakazat');
+Route::view('/payment', 'static.payment')->name('static-payment');
+Route::view('/delivery', 'static.delivery')->name('static-delivery');
+Route::view('/return', 'static.return')->name('static-return');
+Route::view('/installments', 'static.installments')->name('static-installments');
+
 
 Auth::routes();
 

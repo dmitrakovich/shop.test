@@ -11073,10 +11073,20 @@ a.text-dark:focus {
   font-size: 16px !important;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 @media (min-width: 1024px) {
   .wrapper {
     margin: 0 100px;
   }
+}
+
+body {
+  display: flex;
+  flex-direction: column;
 }
 
 body.modal-open {
@@ -11087,6 +11097,10 @@ body.modal-open {
   body.modal-open {
     padding-right: 1.05rem;
   }
+}
+
+.content {
+  flex: 1 0 auto;
 }
 
 footer {
