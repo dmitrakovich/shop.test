@@ -11125,3 +11125,29 @@ footer {
   opacity: 1;
 }
 
+.static-pages-menu-item {
+  cursor: pointer;
+  display: block;
+  padding: 0.8rem 0;
+}
+
+.static-pages-menu-item:hover,
+.static-pages-menu-item:focus {
+  background-color: #F9F9F9;
+}
+
+.static-pages-menu-item img {
+  height: 28px;
+  width: 28px;
+}
+
+.static-page {
+  margin-bottom: 30px;
+}
+
+.static-page .title {
+  font-weight: bold;
+  font-size: 18px;
+  border-bottom: 0.1rem dashed #222222;
+}
+

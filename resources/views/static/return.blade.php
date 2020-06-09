@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
-{{-- @section('title', 'Page Title') --}}
+@section('title', 'Возврат')
 
 @section('content')
-return
+<div class="col-3">
+    @include('includes.static-pages-menu')
+</div>
+<div class="col-9">
+    Возврат
+</div>
 @endsection

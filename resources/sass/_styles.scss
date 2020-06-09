@@ -63,3 +63,26 @@ footer {
     display: block;
     opacity: 1;
 }
+
+.static-pages-menu-item {
+    cursor: pointer;
+    display: block;
+    padding: 0.8rem 0;
+    &:hover, &:focus {
+        background-color: $footer-bg;
+    }
+    img {
+        height: 28px;
+        width: 28px;
+    }
+}
+
+.static-page {
+    // margin-bottom: 160px;
+    margin-bottom: 30px;
+    .title {
+        font-weight: bold;
+        font-size: 18px;
+        border-bottom: 0.1rem dashed $body-color;
+    }
+}

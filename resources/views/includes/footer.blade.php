@@ -1,7 +1,7 @@
 <footer class="footer pt-2 pb-5">
     <div class="container-fluid mb-3">
         <div class="row wrapper justify-content-center">
-            <div class="col-12 col-sm-4 col-xl-3 text-center text-sm-left">
+            <div class="col-12 col-md-4 col-xl-3 text-center text-sm-left">
                 <h2 class="mt-5 mb-4">BAROCCO</h2>
                 ИП Ермаков Игорь Вячеславович, УНП 291311363
                 РЕСПУБЛИКА БЕЛАРУСЬ, 224019,г. Брест, ул. Ландышевая, д.4

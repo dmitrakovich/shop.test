@@ -71,11 +71,7 @@
                     <div class="col-12 col-lg-auto hover-dropdown">
                         Онлайн покупки
                         <div class="col-12 dropdown-menu position-absolute">
-                            <a class="dropdown-item" href="{{ route('static-kak-zakazat') }}">Как заказать</a>
-                            <a class="dropdown-item" href="{{ route('static-payment') }}">Оплата</a>
-                            <a class="dropdown-item" href="{{ route('static-delivery') }}">Доставка</a>
-                            <a class="dropdown-item" href="{{ route('static-return') }}">Возврат</a>
-                            <a class="dropdown-item" href="{{ route('static-installments') }}">Рассрочка</a>
+                            @include('includes.static-pages-menu')
                         </div>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>

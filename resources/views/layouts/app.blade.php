@@ -22,7 +22,11 @@
         @include('includes.header')
 
         <main class="content">
-            @yield('content')
+            <div class="container-fluid">
+                <div class="row wrapper justify-content-center">
+                    @yield('content')
+                </div>
+            </div>
         </main>
 
         @include('includes.footer')
