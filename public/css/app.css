@@ -10930,6 +10930,22 @@ a.text-dark:focus {
   visibility: hidden !important;
 }
 
+.font-size-12 {
+  font-size: 12px !important;
+}
+
+.font-size-15 {
+  font-size: 15px !important;
+}
+
+.font-size-16 {
+  font-size: 16px !important;
+}
+
+.text-decoration-underline {
+  text-decoration: underline;
+}
+
 .navbar-toggler-icon {
   display: inline-block;
   width: 1.5em;
@@ -11059,18 +11075,6 @@ a.text-dark:focus {
 
 .test-gill-sans-mt {
   font-family: "Gilroy";
-}
-
-.font-size-12 {
-  font-size: 12px !important;
-}
-
-.font-size-15 {
-  font-size: 15px !important;
-}
-
-.font-size-16 {
-  font-size: 16px !important;
 }
 
 html,
