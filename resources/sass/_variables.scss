@@ -17,7 +17,7 @@ $headings-font-weight: 700;
 $display4-size:	2.8rem;
 
 // варианты размера шрифта
-$v-font-sizes: '12', '15', '16';
+$v-font-sizes: '12', '15', '16', '18';
 
 // Ссылки
 $link-color: $body-color; // цвет ссылок
@@ -42,18 +42,30 @@ $spacers: (
 	// 6: 4rem
 );
 
-
-// $component-active-bg: #000;
-
 // Цвета
 $text-muted: #999999;
+
+$white:		#ffffff;
+$red:		#D22020;;
+
+// цветовые темы
+$theme-colors: (
+	'white':			$white,
+    // "red":			$red, // red == danger
+);
+
+
+// buttons
+$btn-border-radius:    0;
+$btn-border-radius-lg: 0;
+$btn-border-radius-sm: 0;
+
 
 // Colors
 $blue: #3490dc;
 $indigo: #6574cd;
 $purple: #9561e2;
 $pink: #f66d9b;
-$red: #e3342f;
 $orange: #f6993f;
 $yellow: #ffed4a;
 $green: #38c172;
