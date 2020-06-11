@@ -44,13 +44,15 @@ $spacers: (
 
 // Цвета
 $text-muted: #999999;
+$border-color: $body-color;
 
 $white:		#ffffff;
 $red:		#D22020;;
 
 // цветовые темы
 $theme-colors: (
-	'white':			$white,
+	'white':		$white,
+	'dark':			$body-color,
     // "red":			$red, // red == danger
 );
 

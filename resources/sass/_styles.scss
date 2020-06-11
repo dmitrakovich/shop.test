@@ -80,4 +80,11 @@ footer {
         font-size: 18px;
         border-bottom: 0.1rem dashed $body-color;
     }
+    .step-num {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 38px;
+        height: 38px;
+    }
 }

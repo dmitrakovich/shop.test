@@ -79,9 +79,10 @@
         background: #fff;
         transition: all 0.3s;
         // overflow-y: scroll;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        box-shadow: none;
         &.active {
             left: 0;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
         };
         .row {
             padding: 60px 20px 0;
