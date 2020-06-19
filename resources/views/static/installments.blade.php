@@ -2,6 +2,8 @@
 
 @section('title', 'Рассрочка')
 
+@section('breadcrumbs', Breadcrumbs::render('static-installments'))
+
 @section('content')
 <div class="col-3 d-none d-lg-block">
     @include('includes.static-pages-menu')

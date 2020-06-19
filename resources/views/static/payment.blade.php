@@ -2,6 +2,8 @@
 
 @section('title', 'Оплата')
 
+@section('breadcrumbs', Breadcrumbs::render('static-payment'))
+
 @section('content')
 <div class="col-3 d-none d-lg-block">
     @include('includes.static-pages-menu')

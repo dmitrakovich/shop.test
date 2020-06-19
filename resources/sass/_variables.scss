@@ -63,6 +63,20 @@ $btn-border-radius-lg: 0;
 $btn-border-radius-sm: 0;
 
 
+// Breadcrumbs
+$breadcrumb-color:			#ABABAB;
+$breadcrumb-font-size:        12px;
+// $breadcrumb-padding-y:        .75rem !default;
+$breadcrumb-padding-x:        0;
+$breadcrumb-item-padding:     14px;
+// $breadcrumb-margin-bottom:    1rem !default;
+$breadcrumb-bg:               $white;
+$breadcrumb-divider-color:    $breadcrumb-color;
+$breadcrumb-active-color:     $breadcrumb-color;
+// $breadcrumb-divider:          quote("/") !default;
+$breadcrumb-border-radius:    0;
+
+
 // Colors
 $blue: #3490dc;
 $indigo: #6574cd;

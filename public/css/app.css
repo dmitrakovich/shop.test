@@ -5065,11 +5065,12 @@ input[type=button].btn-block {
 .breadcrumb {
   display: flex;
   flex-wrap: wrap;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0;
   margin-bottom: 1rem;
+  font-size: 0.75rem;
   list-style: none;
-  background-color: #e9ecef;
-  border-radius: 0.25rem;
+  background-color: #ffffff;
+  border-radius: 0;
 }
 
 .breadcrumb-item {
@@ -5077,13 +5078,13 @@ input[type=button].btn-block {
 }
 
 .breadcrumb-item + .breadcrumb-item {
-  padding-left: 0.5rem;
+  padding-left: 14px;
 }
 
 .breadcrumb-item + .breadcrumb-item::before {
   display: inline-block;
-  padding-right: 0.5rem;
-  color: #6c757d;
+  padding-right: 14px;
+  color: #ABABAB;
   content: "/";
 }
 
@@ -5096,7 +5097,7 @@ input[type=button].btn-block {
 }
 
 .breadcrumb-item.active {
-  color: #6c757d;
+  color: #ABABAB;
 }
 
 .pagination {
@@ -11283,6 +11284,14 @@ body.modal-open {
   body.modal-open {
     padding-right: 1.05rem;
   }
+}
+
+.breadcrumb {
+  border-top: 1px solid #D8D8D8;
+}
+
+.breadcrumb .breadcrumb-item a {
+  color: #ABABAB;
 }
 
 .content {

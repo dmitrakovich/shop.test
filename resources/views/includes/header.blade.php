@@ -1,4 +1,4 @@
-<header class="header pt-2 mb-4">
+<header class="header pt-3 mb-2 pt-lg-4 mb-lg-3">
     <div class="container-fluid">
         <div class="row wrapper align-items-center">
             <button class="btn navbar-toggler js-show-main-menu" type="button">

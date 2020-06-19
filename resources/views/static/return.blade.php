@@ -2,6 +2,8 @@
 
 @section('title', 'Возврат')
 
+@section('breadcrumbs', Breadcrumbs::render('static-return'))
+
 @section('content')
 <div class="col-3 d-none d-lg-block">
     @include('includes.static-pages-menu')

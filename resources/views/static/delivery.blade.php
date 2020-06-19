@@ -2,6 +2,8 @@
 
 @section('title', 'Доставка')
 
+@section('breadcrumbs', Breadcrumbs::render('static-delivery'))
+
 @section('content')
 <div class="col-3 d-none d-lg-block">
     @include('includes.static-pages-menu')

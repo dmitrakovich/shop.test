@@ -6,26 +6,44 @@ Breadcrumbs::for('index', function ($trail) {
 });
 
 
+#region Online shoping
 
-
-// Index > kak-zakazat
-Breadcrumbs::for('kak-zakazat', function ($trail) {
+// Index > online-shopping
+Breadcrumbs::for('online-shopping', function ($trail) {
     $trail->parent('index');
-    $trail->push('Онлайн покупки', url('kak-zakazat'));
+    $trail->push('Онлайн покупки', url('online-shopping'));
 });
 
-// Index > kak-zakazat > kak-zakazat2
+// Index > online-shopping > kak-zakazat
 Breadcrumbs::for('static-kak-zakazat', function ($trail) {
-    $trail->parent('kak-zakazat');
+    $trail->parent('online-shopping');
     $trail->push('Как заказать', route('static-kak-zakazat'));
 });
 
-// Index > kak-zakazat > kak-zakazat2
+// Index > online-shopping > payment
 Breadcrumbs::for('static-payment', function ($trail) {
-    $trail->parent('kak-zakazat');
+    $trail->parent('online-shopping');
     $trail->push('Оплата', route('static-payment'));
 });
 
+// Index > online-shopping > delivery
+Breadcrumbs::for('static-delivery', function ($trail) {
+    $trail->parent('online-shopping');
+    $trail->push('Доставка', route('static-delivery'));
+});
+
+// Index > online-shopping > return
+Breadcrumbs::for('static-return', function ($trail) {
+    $trail->parent('online-shopping');
+    $trail->push('Возврат', route('static-return'));
+});
+
+// Index > online-shopping > installments
+Breadcrumbs::for('static-installments', function ($trail) {
+    $trail->parent('online-shopping');
+    $trail->push('Рассрочка', route('static-installments'));
+});
+#endregion
 
 /*
 // Index > Blog
