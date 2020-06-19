@@ -37,13 +37,13 @@
             <strong><a href="mailto:{{ config('contacts.mail-info.link') }}">{{ config('contacts.mail-info.link') }}</a></strong> 
         или в мессенджере
         <a href="{{ config('contacts.viber.link') }}" title="{{ config('contacts.viber.name') }}" class="mx-1">
-            <img src="images/icons/viber-str-color.svg" alt="{{ config('contacts.viber.name') }}">
+            <img src="/images/icons/viber-str-color.svg" alt="{{ config('contacts.viber.name') }}">
         </a>
         <a href="{{ config('contacts.whats-app.link') }}" title="{{ config('contacts.whats-app.name') }}" class="mx-1">
-            <img src="images/icons/whats-app-str-color.svg" alt="{{ config('contacts.whats-app.name') }}">
+            <img src="/images/icons/whats-app-str-color.svg" alt="{{ config('contacts.whats-app.name') }}">
         </a>
         <a href="{{ config('contacts.telegram.link') }}" title="{{ config('contacts.telegram.name') }}" class="mx-1">
-            <img src="images/icons/telegram-str-color.svg" alt="{{ config('contacts.telegram.name') }}">
+            <img src="/images/icons/telegram-str-color.svg" alt="{{ config('contacts.telegram.name') }}">
         </a>
     </p>
     <p>

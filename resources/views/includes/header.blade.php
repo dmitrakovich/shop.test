@@ -10,7 +10,7 @@
 
             <div class="account-btns">
                 <button class="btn p-0 d-inline-block d-lg-none js-mobile-search" type="button" data-toggle="collapse" data-target="#collapseExample">
-                    <img src="images/icons/search.svg" alt="Поиск" class="img-fluid">
+                    <img src="/images/icons/search.svg" alt="Поиск" class="img-fluid">
                 </button>
             </div>
             <div class="col-auto d-none d-lg-block">
@@ -28,14 +28,14 @@
             </div>
             <div class="col-auto ml-auto account-btns d-flex">
                 <a href="{{ route('login') }}" class="btn border-right-0 p-0">
-                    <img src="images/icons/account.svg" alt="личный кабинет" class="img-fluid">
+                    <img src="/images/icons/account.svg" alt="личный кабинет" class="img-fluid">
                 </a><!--
                 --><button class="btn border-right-0  p-0 d-none d-md-inline-block">
-                    <img src="images/icons/favorites.svg" alt="избранное" class="img-fluid">
+                    <img src="/images/icons/favorites.svg" alt="избранное" class="img-fluid">
                 </button><!--
                 --><button class="btn p-0 ml-2 ml-md-0">
                     <div class="position-relative">
-                        <img src="images/icons/cart.svg" alt="корзина" class="img-fluid">
+                        <img src="/images/icons/cart.svg" alt="корзина" class="img-fluid">
                         <div class="cart-count position-absolute d-flex justify-content-center align-items-center">
                             <span class="js-cart-count">4</span>
                         </div>
@@ -89,7 +89,7 @@
                         <div class="form-inline">
                             <input type="text" class="search-input" placeholder="Поиск">
                             <button class="btn p-0 js-search">
-                                <img src="images/icons/search.svg" alt="Поиск" class="img-fluid">
+                                <img src="/images/icons/search.svg" alt="Поиск" class="img-fluid">
                             </button>
                         </div>
                     </div>

@@ -28,12 +28,14 @@ Route::view('/test', 'test');
 Route::view('/', 'index')->name('index-page');
 
 // static pages
-Route::view('/kak-zakazat', 'static.kak-zakazat')->name('static-kak-zakazat');
-Route::view('/payment', 'static.payment')->name('static-payment');
-Route::view('/delivery', 'static.delivery')->name('static-delivery');
-Route::view('/return', 'static.return')->name('static-return');
-Route::view('/installments', 'static.installments')->name('static-installments');
-
+Route::prefix('online-shopping')->group(function () {
+    Route::view('/', 'static.kak-zakazat');
+    Route::view('kak-zakazat', 'static.kak-zakazat')->name('static-kak-zakazat');
+    Route::view('payment', 'static.payment')->name('static-payment');
+    Route::view('delivery', 'static.delivery')->name('static-delivery');
+    Route::view('return', 'static.return')->name('static-return');
+    Route::view('installments', 'static.installments')->name('static-installments');
+});
 
 Auth::routes();
 

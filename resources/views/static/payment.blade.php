@@ -11,7 +11,7 @@
     <p>Доступно при доставке: курьером или при самовывозе. </p>
     <p class="mt-5">
         <span class="title">2.  ЕРИП</span>
-        <img src="images/icons/payment-erip.png" alt="ЕРИП" class="img-fluid pl-3">
+        <img src="/images/icons/payment-erip.png" alt="ЕРИП" class="img-fluid pl-3">
     </p>
     <p>
         ОПЛАТИТЕ в любом банке:<br>
@@ -37,7 +37,7 @@
     <p>Если Вы осуществляете платеж в кассе банка, пожалуйста, сообщите кассиру о необходимости проведения платежа через систему ”Расчет“ (ЕРИП).</p>
     <p class="mt-5">
         <span class="title">3.  ASSIST</span>
-        <img src="images/icons/payment-assist.png" alt="Ассист" class="img-fluid pl-3">
+        <img src="/images/icons/payment-assist.png" alt="Ассист" class="img-fluid pl-3">
     </p>
     <p>
         Проведение платежей по банковским картам осуществляется в строгом соответствии с требованиями платежных систем Visa, MasterCard, МИР, БЕЛКАРТ.<br>

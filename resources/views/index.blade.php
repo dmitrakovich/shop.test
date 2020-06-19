@@ -4,16 +4,16 @@
 
 @section('content')
 <div class="col-12 px-0 px-md-main py-main">
-    <img src="images/banners/main2x.png" alt="" class="img-fluid">
+    <img src="/images/banners/main2x.png" alt="" class="img-fluid">
 </div>
 <div class="col-12 col-md-4 p-main">
-    <img src="images/banners/main2x1.png" alt="" class="img-fluid">
+    <img src="/images/banners/main2x1.png" alt="" class="img-fluid">
 </div>
 <div class="col-12 col-md-4 p-main">
-    <img src="images/banners/main2x1.png" alt="" class="img-fluid">
+    <img src="/images/banners/main2x1.png" alt="" class="img-fluid">
 </div>
 <div class="col-12 col-md-4 p-main">
-    <img src="images/banners/main2x1.png" alt="" class="img-fluid">
+    <img src="/images/banners/main2x1.png" alt="" class="img-fluid">
 </div>
 
 
@@ -66,7 +66,7 @@
             <div class="col-12 col-sm">
                 <div class="row align-items-center">
                     <div class="col-auto">
-                        <img src="images/index/conditions-fitting.png" alt="Примерка">
+                        <img src="/images/index/conditions-fitting.png" alt="Примерка">
                     </div>
                     <div class="col">
                         Примерка по Беларуси<br>
@@ -77,7 +77,7 @@
             <div class="col-12 col-sm">
                 <div class="row align-items-center">
                     <div class="col-auto">
-                        <img src="images/index/conditions-installment.png" alt="Рассрочка">
+                        <img src="/images/index/conditions-installment.png" alt="Рассрочка">
                     </div>
                     <div class="col">
                         Рассрочка<br>                                
@@ -88,7 +88,7 @@
             <div class="col-12 col-sm">
                 <div class="row align-items-center">
                     <div class="col-auto">
-                        <img src="images/index/conditions-upon_receipt.png" alt="При получении">
+                        <img src="/images/index/conditions-upon_receipt.png" alt="При получении">
                     </div>
                     <div class="col">
                         Оплата при получении<br>
