@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('index');
-// });
+Route::get('/debug', function () {
+    // dd(Auth::check());
+    dd(Auth::id());
+    dd(Auth::user());
+})->middleware('auth.basic');
 
 
 // Route::domain(env('APP_NAME') . '.{domain}')->group(function () {
@@ -39,4 +41,8 @@ Route::prefix('online-shopping')->group(function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// dashboard
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::view('my-orders', 'dashboard.my-orders')->name('dashboard-my-orders');
+    // Route::get('/moi-zakazi', 'CatalogController@index')->name('catalog');
+});
