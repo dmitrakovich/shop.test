@@ -6,6 +6,7 @@ Breadcrumbs::for('index', function ($trail) {
 });
 
 
+
 #region Online shoping
 
 // Index > online-shopping
@@ -42,6 +43,41 @@ Breadcrumbs::for('static-return', function ($trail) {
 Breadcrumbs::for('static-installments', function ($trail) {
     $trail->parent('online-shopping');
     $trail->push('Рассрочка', route('static-installments'));
+});
+#endregion
+
+
+
+#region Dashboard
+
+// Index > dashboard
+Breadcrumbs::for('dashboard', function ($trail) {
+    $trail->parent('index');
+    $trail->push('Личный кабинет', url('dashboard'));
+});
+
+// Index > dashboard > orders
+Breadcrumbs::for('dashboard-orders', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Мои заказы', route('dashboard-orders'));
+});
+
+// Index > dashboard > saved
+Breadcrumbs::for('dashboard-saved', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Избранное', route('dashboard-saved'));
+});
+
+// Index > dashboard > profile
+Breadcrumbs::for('dashboard-profile', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Мои данные', route('dashboard-profile'));
+});
+
+// Index > dashboard > card
+Breadcrumbs::for('dashboard-card', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Карта клиента', route('dashboard-card'));
 });
 #endregion
 

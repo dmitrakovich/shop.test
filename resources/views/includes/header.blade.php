@@ -27,7 +27,7 @@
                 </a>
             </div>
             <div class="col-auto ml-auto account-btns d-flex">
-                <a href="{{ route('login') }}" class="btn border-right-0 p-0">
+                <a href="{{ route('dashboard-orders') }}" class="btn border-right-0 p-0">
                     <img src="/images/icons/account.svg" alt="личный кабинет" class="img-fluid">
                 </a><!--
                 --><button class="btn border-right-0  p-0 d-none d-md-inline-block">

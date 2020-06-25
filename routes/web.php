@@ -41,3 +41,13 @@ Route::prefix('online-shopping')->group(function () {
 
 Auth::routes();
 
+// dashboard
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('/', function() {
+        return redirect()->route('dashboard-orders');
+    });
+    Route::view('orders', 'dashboard.orders')->name('dashboard-orders');
+    Route::view('saved', 'dashboard.saved')->name('dashboard-saved');
+    Route::view('profile', 'dashboard.profile')->name('dashboard-profile');
+    Route::view('card', 'dashboard.card')->name('dashboard-card');
+});
