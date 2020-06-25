@@ -2,7 +2,7 @@
 
 @section('title', 'Как заказать')
 
-@section('breadcrumbs', Breadcrumbs::render('static-kak-zakazat'))
+@section('breadcrumbs', Breadcrumbs::render('static-instruction'))
 
 @section('content')
 <div class="col-3 d-none d-lg-block">

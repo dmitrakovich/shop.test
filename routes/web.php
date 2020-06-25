@@ -31,8 +31,8 @@ Route::view('/', 'index')->name('index-page');
 
 // static pages
 Route::prefix('online-shopping')->group(function () {
-    Route::view('/', 'static.kak-zakazat');
-    Route::view('kak-zakazat', 'static.kak-zakazat')->name('static-kak-zakazat');
+    Route::view('/', 'static.instruction');
+    Route::view('instruction', 'static.instruction')->name('static-instruction');
     Route::view('payment', 'static.payment')->name('static-payment');
     Route::view('delivery', 'static.delivery')->name('static-delivery');
     Route::view('return', 'static.return')->name('static-return');
@@ -41,8 +41,3 @@ Route::prefix('online-shopping')->group(function () {
 
 Auth::routes();
 
-// dashboard
-Route::prefix('dashboard')->middleware('auth')->group(function () {
-    Route::view('my-orders', 'dashboard.my-orders')->name('dashboard-my-orders');
-    // Route::get('/moi-zakazi', 'CatalogController@index')->name('catalog');
-});

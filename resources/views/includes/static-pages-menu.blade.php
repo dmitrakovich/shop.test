@@ -1,5 +1,5 @@
-<a class="col static-pages-menu-item" href="{{ route('static-kak-zakazat') }}">
-    <img src="/images/icons/kak-zakazat.svg" class="img-fluid mr-3" alt="Как заказать">
+<a class="col static-pages-menu-item" href="{{ route('static-instruction') }}">
+    <img src="/images/icons/instruction.svg" class="img-fluid mr-3" alt="Как заказать">
     Как заказать
 </a>
 <a class="col static-pages-menu-item" href="{{ route('static-payment') }}">

@@ -14,10 +14,10 @@ Breadcrumbs::for('online-shopping', function ($trail) {
     $trail->push('Онлайн покупки', url('online-shopping'));
 });
 
-// Index > online-shopping > kak-zakazat
-Breadcrumbs::for('static-kak-zakazat', function ($trail) {
+// Index > online-shopping > instruction
+Breadcrumbs::for('static-instruction', function ($trail) {
     $trail->parent('online-shopping');
-    $trail->push('Как заказать', route('static-kak-zakazat'));
+    $trail->push('Как заказать', route('static-instruction'));
 });
 
 // Index > online-shopping > payment
