@@ -38,8 +38,11 @@ Route::prefix('online-shopping')->group(function () {
     Route::view('return', 'static.return')->name('static-return');
     Route::view('installments', 'static.installments')->name('static-installments');
 });
+Route::view('shops', 'static.shops')->name('static-shops');
 
 Auth::routes();
+
+Route::get('reviews', 'ReviewsController@getAll')->name('reviews');
 
 // dashboard
 Route::prefix('dashboard')->middleware('auth')->group(function () {
@@ -51,3 +54,5 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::view('profile', 'dashboard.profile')->name('dashboard-profile');
     Route::view('card', 'dashboard.card')->name('dashboard-card');
 });
+
+Route::get('catalog', 'CatalogController@index')->name('catalog');

@@ -62,41 +62,7 @@
 
     <div class="col-12">
         <hr class="d-none d-sm-block">
-        <div class="row mx-2 mx-sm-5 font-size-16 font-weight-bold align-items-center">
-            <div class="col-12 col-sm">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <img src="/images/index/conditions-fitting.png" alt="Примерка">
-                    </div>
-                    <div class="col">
-                        Примерка по Беларуси<br>
-                        <small class="text-muted">на пункте выдачи или курьером</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <img src="/images/index/conditions-installment.png" alt="Рассрочка">
-                    </div>
-                    <div class="col">
-                        Рассрочка<br>                                
-                        <small class="text-muted">на 2 месяца без предоплаты</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <img src="/images/index/conditions-upon_receipt.png" alt="При получении">
-                    </div>
-                    <div class="col">
-                        Оплата при получении<br>
-                        <small class="text-muted">наличными или картой</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('includes.advantages-block')
         <hr class="d-none d-sm-block">
     </div>
 

@@ -47,7 +47,7 @@
             <div class="col-12 navbar-main-menu" id="mainMenu">
                 <div class="row justify-content-center align-items-center text-uppercase font-size-15 position-relative">
                     <div class="col-12 col-lg-auto hover-dropdown">
-                        Каталог
+                        <a href="{{ route('catalog') }}">Каталог</a>
                         <div class="col-12 dropdown-menu position-absolute">
                             <a class="dropdown-item" href="#">Лоферы</a>
                             <a class="dropdown-item" href="#">Балетки</a>
@@ -65,25 +65,33 @@
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto">
-                        Магазины
+                        <a href="{{ route('static-shops') }}">Магазины</a>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto hover-dropdown">
-                        Онлайн покупки
+                        <a href="{{ route('static-instruction') }}">Онлайн покупки</a>
                         <div class="col-12 dropdown-menu position-absolute">
                             @include('includes.static-pages-menu')
                         </div>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 col-lg-auto">Рассрочка</div>
-                    <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 col-lg-auto">Отзывы</div>
-                    <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 d-lg-none">
-                        <strong class="text-danger">Распродажа</strong>
+                    <div class="col-12 col-lg-auto">
+                        <a href="{{ route('static-return') }}">Рассрочка</a>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 col-lg-auto">Карта клиента</div>
+                    <div class="col-12 col-lg-auto">
+                        <a href="{{ route('reviews') }}">Отзывы</a>
+                    </div>
+                    <div class="col-12 d-lg-none"><hr></div>
+                    <div class="col-12 d-lg-none">
+                        <strong class="text-danger">
+                            Распродажа
+                        </strong>
+                    </div>
+                    <div class="col-12 d-lg-none"><hr></div>
+                    <div class="col-12 col-lg-auto">
+                        <a href="{{ route('dashboard-card') }}">Карта клиента</a>
+                    </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto d-none d-lg-inline-block">
                         <div class="form-inline">

@@ -44,6 +44,12 @@ Breadcrumbs::for('static-installments', function ($trail) {
     $trail->parent('online-shopping');
     $trail->push('Рассрочка', route('static-installments'));
 });
+
+// Index > shops
+Breadcrumbs::for('static-shops', function ($trail) {
+    $trail->parent('index');
+    $trail->push('Магазины', route('static-shops'));
+});
 #endregion
 
 
