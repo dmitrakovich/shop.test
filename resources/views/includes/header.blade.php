@@ -76,7 +76,7 @@
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto">
-                        <a href="{{ route('static-return') }}">Рассрочка</a>
+                        <a href="{{ route('static-installments') }}">Рассрочка</a>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto">

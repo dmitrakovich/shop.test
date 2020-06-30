@@ -11354,5 +11354,17 @@ footer {
   height: 38px;
 }
 
+@media (min-width: 1024px) {
+  .dashboard-pages {
+    margin-bottom: 100px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-pages .order-row {
+    border: 1px solid #E8E8E8;
+  }
+}
+
 
 /*# sourceMappingURL=app.css.map*/
