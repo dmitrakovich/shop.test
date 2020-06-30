@@ -96,3 +96,14 @@ footer {
         height: 38px;
     }
 }
+
+.dashboard-pages {
+    @include media-breakpoint-up(lg) {
+        margin-bottom: 100px;
+    }
+    .order-row {
+        @include media-breakpoint-up(lg) {
+            border: 1px solid #E8E8E8;
+        }
+    }
+}

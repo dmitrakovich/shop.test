@@ -26,6 +26,25 @@ Route::get('/debug', function () {
 //     });
 // });
 
+
+// дописать права только для админа
+// вообще в админку перенести !!!
+Route::prefix('clear-cache')->group(function () {
+    Route::get('/app', function() {
+        Artisan::call('cache:clear');
+        return 'App cache is cleared';
+    });
+    // ... 
+    Route::get('/all', function() {
+        Artisan::call('cache:clear');
+        Artisan::call('route:clear');
+        Artisan::call('config:clear');
+        Artisan::call('view:clear');
+        return 'All cache is cleared';
+    });
+});
+
+
 Route::view('/test', 'test');
 Route::view('/', 'index')->name('index-page');
 
