@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    /**
+     * Получить данные о заказах заказы
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getOrders()
     {
         $data = [
@@ -38,5 +43,25 @@ class DashboardController extends Controller
         $data['orders'] = array_merge($data['orders'], $data['orders']);
         $data['orders'] = array_merge($data['orders'], $data['orders']);
         return view('dashboard.orders', $data);
+    }
+    /**
+     * Получить данные профиля
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function getProfileData()
+    {
+        return view('dashboard.profile', ['user' => auth()->user()]);
+    }
+
+    /**
+     * Получить данные профиля
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function updateProfileData()
+    {
+        return '34564545345345';
+        // return view('dashboard.profile', ['user' => auth()->user()]);
     }
 }

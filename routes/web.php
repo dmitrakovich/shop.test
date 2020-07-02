@@ -70,7 +70,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     });
     Route::get('orders', 'DashboardController@getOrders')->name('dashboard-orders');
     Route::view('saved', 'dashboard.saved')->name('dashboard-saved');
-    Route::view('profile', 'dashboard.profile')->name('dashboard-profile');
+    Route::get('profile', 'DashboardController@getProfileData')->name('dashboard-profile');
+    Route::get('profile-update', 'DashboardController@updateProfileData')->name('dashboard-profile-update');
     Route::view('card', 'dashboard.card')->name('dashboard-card');
 });
 
