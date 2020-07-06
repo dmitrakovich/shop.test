@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -51,17 +52,39 @@ class DashboardController extends Controller
      */
     public function getProfileData()
     {
-        return view('dashboard.profile', ['user' => auth()->user()]);
+        $data = [
+            'user' => auth()->user(),
+            'countriesList' => [
+                'Беларусь',
+                'Украина',
+                'Российская Федерация',
+                'Казахстан'
+            ]
+        ];
+        return view('dashboard.profile', $data);
     }
 
     /**
      * Получить данные профиля
      *
-     * @return \Illuminate\Contracts\View\View
+     * @param User $user
+     * @param Request $request
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function updateProfileData()
+    public function updateProfileData(User $user, Request $request)
     {
-        return '34564545345345';
-        // return view('dashboard.profile', ['user' => auth()->user()]);
+        $validatedData = $request->validate([
+            'last_name' => ['max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'patronymic_name' => ['max:255'],
+            'email' => ['email:filter', 'unique:users,email,'.$user->id],
+            'phone' => [],
+            'birth_date' => ['date', 'nullable'],
+            'country' => ['integer'],
+            'address' => [],
+        ]);
+        $user->fill($validatedData);
+        $user->save();
+        return back();
     }
 }

@@ -166,6 +166,8 @@ return [
         'email'                 => 'E-Mail адрес',
         'first_name'            => 'Имя',
         'last_name'             => 'Фамилия',
+        'patronymic_name'       => 'Отчество',
+        'birth_date'            => 'Дата рождения',
         'password'              => 'Пароль',
         'password_confirmation' => 'Подтверждение пароля',
         'city'                  => 'Город',
