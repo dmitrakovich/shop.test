@@ -85,6 +85,7 @@ class DashboardController extends Controller
         ]);
         $user->fill($validatedData);
         $user->save();
+        // Flash::message('данные успешно обновлены');
         return back();
     }
 }
