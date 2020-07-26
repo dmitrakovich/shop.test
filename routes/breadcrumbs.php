@@ -105,3 +105,29 @@ Breadcrumbs::for('post', function ($trail, $post) {
     $trail->parent('category', $post->category);
     $trail->push($post->title, route('post', $post->id));
 });*/
+
+
+/*
+// тут должен быть массив предков 
+Breadcrumbs::for('category', function ($trail, $category) {
+    $trail->parent('blog');
+
+    foreach ($category->ancestors as $ancestor) {
+        $trail->push($ancestor->title, route('category', $ancestor->id));
+    }
+
+    $trail->push($category->title, route('category', $category->id));
+});
+
+// тут должен быть вложеннный массив предков
+Breadcrumbs::for('category', function ($trail, $category) {
+    if ($category->parent) {
+        $trail->parent('category', $category->parent);
+    } else {
+        $trail->parent('blog');
+    }
+
+    $trail->push($category->title, route('category', $category->slug));
+});*/
+
+// {{ Breadcrumbs::render('category', $category) }} // вывод в шаблоне+
