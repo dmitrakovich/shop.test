@@ -75,4 +75,4 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::view('card', 'dashboard.card')->name('dashboard-card');
 });
 
-Route::get('catalog', 'CatalogController@index')->name('catalog');
+Route::get('catalog', 'Shop\CatalogController@index')->name('catalog');
