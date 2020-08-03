@@ -9,11 +9,6 @@
 git clone https://default-089@github.com/default-089/shop.test.git
 ```
 
-## Настраиваем .env
-```shell
-cp .env.example .env
-php artisan key:generate
-```
 Настроить окружение в файле .env
 
 ## Настраиваем .htaccess в корне сайта
@@ -36,6 +31,12 @@ RewriteRule ^(/)?$ public/index.php [L]
 ```shell
 composer install --optimize-autoloader --no-dev
 npm i
+```
+
+## Настраиваем .env
+```shell
+cp .env.example .env
+php artisan key:generate
 ```
 
 ## Закэшировать конфиги и роуты (сбросить старый кэш)

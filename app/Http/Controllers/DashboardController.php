@@ -14,36 +14,34 @@ class DashboardController extends Controller
      */
     public function getOrders()
     {
-        $data = [
-            'orders' => [
-                (object)[
-                    'id' => '2',
-                    'number' => 'BY3567540987',
-                    'date' => 'от 29 апреля 2020',
-                    'price' => '137,60 BYN',
-                    'address' => 'ул. Буденного 17 - 26 Брест',
-                    'status' => 'Ожидает подтверждения менеджером',
-                    'photos' => [
-                        '/images/temp/order-product-photo_temp.png',
-                        '/images/temp/order-product-photo_temp.png',
-                    ]
-                ],
-                (object)[
-                    'id' => '1',
-                    'number' => 'BY3567540923',
-                    'date' => 'от 3 марта 2020',
-                    'price' => '137,60 BYN',
-                    'address' => 'ул. Буденного 17 - 26 Брест',
-                    'status' => 'Доставлен',
-                    'photos' => [
-                        '/images/temp/order-product-photo_temp2.png',
-                    ]
-                ],
-            ] 
+        $orders = [
+            (object)[
+                'id' => '2',
+                'number' => 'BY3567540987',
+                'date' => 'от 29 апреля 2020',
+                'price' => '137,60 BYN',
+                'address' => 'ул. Буденного 17 - 26 Брест',
+                'status' => 'Ожидает подтверждения менеджером',
+                'photos' => [
+                    '/images/temp/order-product-photo_temp.png',
+                    '/images/temp/order-product-photo_temp.png',
+                ]
+            ],
+            (object)[
+                'id' => '1',
+                'number' => 'BY3567540923',
+                'date' => 'от 3 марта 2020',
+                'price' => '137,60 BYN',
+                'address' => 'ул. Буденного 17 - 26 Брест',
+                'status' => 'Доставлен',
+                'photos' => [
+                    '/images/temp/order-product-photo_temp2.png',
+                ]
+            ],
         ];
-        $data['orders'] = array_merge($data['orders'], $data['orders']);
-        $data['orders'] = array_merge($data['orders'], $data['orders']);
-        return view('dashboard.orders', $data);
+        $orders = array_merge($orders, $orders);
+        $orders = array_merge($orders, $orders);
+        return view('dashboard.orders', compact('orders'));
     }
     /**
      * Получить данные профиля
@@ -77,7 +75,7 @@ class DashboardController extends Controller
             'last_name' => ['max:255'],
             'first_name' => ['required', 'string', 'max:255'],
             'patronymic_name' => ['max:255'],
-            'email' => ['email:filter', 'unique:users,email,'.$user->id],
+            'email' => ['email:filter', 'unique:users,email,' . $user->id],
             'phone' => [],
             'birth_date' => ['date', 'nullable'],
             'country' => ['integer'],
