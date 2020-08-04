@@ -30,12 +30,12 @@ Route::get('/debug', function () {
 // дописать права только для админа
 // вообще в админку перенести !!!
 Route::prefix('clear-cache')->group(function () {
-    Route::get('/app', function() {
+    Route::get('/app', function () {
         Artisan::call('cache:clear');
         return 'App cache is cleared';
     });
     // ... 
-    Route::get('/all', function() {
+    Route::get('/all', function () {
         Artisan::call('cache:clear');
         Artisan::call('route:clear');
         Artisan::call('config:clear');
@@ -65,7 +65,7 @@ Route::get('reviews', 'ReviewsController@getAll')->name('reviews');
 
 // dashboard
 Route::prefix('dashboard')->middleware('auth')->group(function () {
-    Route::get('/', function() {
+    Route::get('/', function () {
         return redirect()->route('dashboard-orders');
     });
     Route::get('orders', 'DashboardController@getOrders')->name('dashboard-orders');
@@ -75,4 +75,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::view('card', 'dashboard.card')->name('dashboard-card');
 });
 
-Route::get('catalog', 'Shop\CatalogController@index')->name('catalog');
+Route::group(['namespace' => 'Shop'], function () {
+    Route::get('catalog', 'CatalogController@index')->name('catalog');
+    Route::get('product/{id}', 'ProductController@index')->name('product');
+});
