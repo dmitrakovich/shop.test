@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserDataUpdateRequest;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -50,16 +51,14 @@ class DashboardController extends Controller
      */
     public function getProfileData()
     {
-        $data = [
-            'user' => auth()->user(),
-            'countriesList' => [
-                'Беларусь',
-                'Украина',
-                'Российская Федерация',
-                'Казахстан'
-            ]
+        $user = auth()->user();
+        $countriesList = [
+            'Беларусь',
+            'Украина',
+            'Российская Федерация',
+            'Казахстан'
         ];
-        return view('dashboard.profile', $data);
+        return view('dashboard.profile', compact('user', 'countriesList'));
     }
 
     /**
@@ -69,21 +68,17 @@ class DashboardController extends Controller
      * @param Request $request
      * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function updateProfileData(User $user, Request $request)
+    public function updateProfileData(User $user, UserDataUpdateRequest $request)
     {
-        $validatedData = $request->validate([
-            'last_name' => ['max:255'],
-            'first_name' => ['required', 'string', 'max:255'],
-            'patronymic_name' => ['max:255'],
-            'email' => ['email:filter', 'unique:users,email,' . $user->id],
-            'phone' => [],
-            'birth_date' => ['date', 'nullable'],
-            'country' => ['integer'],
-            'address' => [],
-        ]);
-        $user->fill($validatedData);
-        $user->save();
-        // Flash::message('данные успешно обновлены');
-        return back();
+        $result = $user->update($request->input());
+        if ($result) {
+            return redirect()
+                ->route('dashboard-profile')
+                ->with(['success' => 'Данные успешно обновлены']);
+        } else {
+            return back()
+                ->withErrors(['msg' => 'Ошибка сохранения'])
+                ->withInput();
+        }
     }
 }

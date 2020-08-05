@@ -71,7 +71,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('orders', 'DashboardController@getOrders')->name('dashboard-orders');
     Route::view('saved', 'dashboard.saved')->name('dashboard-saved');
     Route::get('profile', 'DashboardController@getProfileData')->name('dashboard-profile');
-    Route::post('profile/{user}/update', 'DashboardController@updateProfileData')->name('dashboard-profile-update');
+    Route::patch('profile/{user}/update', 'DashboardController@updateProfileData')->name('dashboard-profile-update');
     Route::view('card', 'dashboard.card')->name('dashboard-card');
 });
 
