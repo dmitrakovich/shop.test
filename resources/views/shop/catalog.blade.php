@@ -16,7 +16,7 @@
             @php /** @var App\Models\Product $product */ @endphp
             <div class="col-3 border">
                 <p>{{ $product->id }}</p>
-                <p>{{ $product->category_id }}</p>
+                <p>{{ $product->category->title }}</p>
                 <p>
                     <a href="{{ route('product', $product->id) }}" class="btn btn-primary">
                         {{ $product->title }}
