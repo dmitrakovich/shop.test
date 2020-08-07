@@ -13,31 +13,7 @@
 <div class="col-12 col-lg-9 static-page">    
     <h3>Мои данные</h3>
 
-    @if ($errors->any())
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="alert alert-danger" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <span>×</span>
-                    </button>
-                    {{ dd($errors->any()) }}
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if (session('success'))
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="alert alert-success" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <span>×</span>
-                    </button>
-                    {{ session('success') }}
-                </div>
-            </div>
-        </div>
-    @endif
+    @include('includes.result-messages')
 
     <form method="post" action="{{ route('dashboard-profile-update', $user) }}" class="mt-4">
         @method('PATCH')
