@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Models\Product;
+use App\Product;
 use Illuminate\Http\Request;
 use App\Repositories\ProductRepository;
 

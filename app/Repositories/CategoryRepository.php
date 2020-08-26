@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Category as Model;
+use App\Category as Model;
 use Illuminate\Database\Eloquent\Collection;
 
 class CategoryRepository extends CoreRepository

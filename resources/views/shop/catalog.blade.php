@@ -13,7 +13,7 @@
 
     <div class="row">
         @forelse($products as $product)
-            @php /** @var App\Models\Product $product */ @endphp
+            @php /** @var App\Product $product */ @endphp
             <div class="col-3 border">
                 <p>{{ $product->id }}</p>
                 <p>{{ $product->category->title }}</p>
