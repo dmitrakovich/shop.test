@@ -14,7 +14,8 @@ const mix = require('laravel-mix');
  /**
   * @todo убедиться что все работает, после extract
   */
-mix.js('resources/js/app.js', 'public/js').extract(['jquery', 'bootstrap'])
+mix.js('resources/js/app.js', 'public/js')
+    .extract()
     .sass('resources/sass/app.scss', 'public/css')
     .version()
     .sourceMaps(true, 'source-map');

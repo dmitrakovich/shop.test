@@ -34,4 +34,27 @@ class UserDataUpdateRequest extends FormRequest
             // 'address' => []
         ];
     }
+    /**
+     * Свои сообщения об ошибках
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'first_name.required' => 'Поле имя обязательно для заполнения',
+            // 'first_name.required' => 'Поле имя обязательно для заполнения',
+        ];
+    }
+    /**
+     * Свои названия для полей
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'birth_date' => 'дата рождения'
+        ];
+    }
 }

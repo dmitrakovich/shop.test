@@ -5,7 +5,14 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Illuminate\Support\Str;
+/**
+ * Class User
+ * 
+ * @package App
+ * 
+ * @property-read string $fullName
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -36,4 +43,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+    /**
+     * Аксессуар для поля, которе есть в БД
+     *
+     * @param string $valueFromDB
+     * @return mixed
+     */
+    public function getFirstNameAttribute($valueFromDB)
+    {
+        return Str::ucfirst($valueFromDB);
+    }
 }

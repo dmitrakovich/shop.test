@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class Product
  * 
- * @package App\Models
+ * @package App
  * 
  * @property \App\Category      $category
  * @property string             $title
@@ -31,5 +31,14 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+    /**
+     * Получить шильды для продукта
+     *
+     * @return string
+     */
+    public function getLabelsAttribute()
+    {
+        return 'labels';
     }
 }
