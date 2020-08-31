@@ -25,7 +25,13 @@ class ProductRepository extends CoreRepository
             ->startConditions()
             ->select($columns)
             ->orderBy('id', 'DESC')
-            ->with(['category:id,title'])
+            ->with([
+                'category:id,title',
+                'images' => function ($query) {
+                    $query->select('product_id', 'img')
+                        ->orderBy('sorting', 'asc');
+                },
+            ])
             ->paginate($perPage);
 
         return $result;

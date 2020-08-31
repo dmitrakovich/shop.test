@@ -33,6 +33,15 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
     /**
+     * Картинки товара
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function images()
+    {
+        return $this->hasMany('App\ProductImage');
+    }
+    /**
      * Получить шильды для продукта
      *
      * @return string

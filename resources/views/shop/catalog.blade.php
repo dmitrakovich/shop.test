@@ -15,6 +15,10 @@
         @forelse($products as $product)
             @php /** @var App\Product $product */ @endphp
             <div class="col-3 border">
+                <p>
+                    <img src="/images/products/{{ $product->images->first()['img'] }}" 
+                        alt="{{ $product->title }}" class="img-fluid">
+                </p>
                 <p>{{ $product->id }}</p>
                 <p>{{ $product->category->title }}</p>
                 <p>
@@ -23,9 +27,7 @@
                     </a>
                 </p>
             </div>
-            {{-- <pre> --}}
             {{-- {{ dd($product) }} --}}
-            {{-- </pre> --}}
         @empty
             <p>Нет товаров</p>
         @endforelse
