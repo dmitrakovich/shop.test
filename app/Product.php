@@ -35,7 +35,7 @@ class Product extends Model
     /**
      * Картинки товара
      *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return Illuminate\Database\Eloquent\Relations\hasMany
      */
     public function images()
     {

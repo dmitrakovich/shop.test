@@ -39,10 +39,11 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-## Закэшировать конфиги и роуты (сбросить старый кэш)
+## Закэшировать конфиги, роуты и шаблоны (сбросить старый кэш)
 ```shell
 php artisan config:cache
 php artisan route:cache
+php artisan view:cache
 ```
 
 ## Настройка БД

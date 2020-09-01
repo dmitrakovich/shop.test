@@ -76,6 +76,6 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 });
 
 Route::group(['namespace' => 'Shop'], function () {
-    Route::get('catalog', 'CatalogController@index')->name('catalog');
+    Route::get('catalog/{category?}', 'CatalogController@index')->name('catalog');
     Route::get('product/{id}', 'ProductController@index')->name('product');
 });

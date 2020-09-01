@@ -24,3 +24,29 @@ $(function () {
     });
 //#endregion
 });
+
+
+
+
+// набросок для isotope
+// данный пример заменяет имеющиеся товары!
+
+// https://www.npmjs.com/package/imagesloaded
+
+
+/*
+$('.product_grid').html($data);
+
+$('.product_grid').isotope('destroy');
+
+$('.product_grid').imagesLoaded(function () {
+    var $grid = $('.product_grid').isotope({
+		itemSelector: '.product',
+        layoutMode: 'fitRows',
+        fitRows: {
+            gutter: 30
+        }
+	}); 
+});
+
+*/

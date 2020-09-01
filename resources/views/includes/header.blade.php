@@ -49,18 +49,9 @@
                     <div class="col-12 col-lg-auto hover-dropdown">
                         <a href="{{ route('catalog') }}">Каталог</a>
                         <div class="col-12 dropdown-menu position-absolute">
-                            <a class="dropdown-item" href="#">Лоферы</a>
-                            <a class="dropdown-item" href="#">Балетки</a>
-                            <a class="dropdown-item" href="#">Сабо</a>
-                            <a class="dropdown-item" href="#">Ботинки</a>
-                            <a class="dropdown-item" href="#">Туфли</a>
-                            <a class="dropdown-item" href="#">Сандали</a>
-                            <a class="dropdown-item" href="#">Босоножки</a>
-                            <a class="dropdown-item" href="#">Сапоги</a>
-                            <a class="dropdown-item" href="#">Ботильоны</a>
-                            <a class="dropdown-item" href="#">Слипоны</a>
-                            <a class="dropdown-item" href="#">Кеды</a>
-                            <a class="dropdown-item" href="#">Эспадрильи</a>
+                            @foreach ($categories as $category)
+                                <a class="dropdown-item" href="{{ route('catalog', $category) }}">{{ $category->title }}</a>
+                            @endforeach
                         </div>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
