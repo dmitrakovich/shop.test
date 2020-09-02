@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Category;
 use App\Observers\UserObserver;
+use App\Repositories\CategoryRepository;
 use App\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
 
         View::share([
-            'categories' => Category::select('id', 'slug', 'title')->get()
+            'categories' => (new CategoryRepository)->getAll()
         ]);
     }
 }

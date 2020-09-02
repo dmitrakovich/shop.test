@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Category as Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryRepository extends CoreRepository
 {
@@ -20,5 +21,42 @@ class CategoryRepository extends CoreRepository
     public function getEdit($id)
     {
         return $this->startConditions()->find($id);
+    }
+    /**
+     * Получить все категории
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function getAll()
+    {
+        if (Cache::has('categories')) {
+            $categories = Cache::get('categories');
+        } else {
+            $categories = $this->startConditions()
+                ->select('id', 'slug', 'title')
+                ->get();
+
+            Cache::put('categories', $categories);
+        }
+        return $categories;
+    }
+    /**
+     * Получить категории в древовидной форме
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function getTree()
+    {
+        if (Cache::has('categoriesTree')) {
+            $categoriesTree = Cache::get('categoriesTree');
+        } else {
+            $categoriesTree = $this->startConditions()
+                ->where('parent_id', 0)
+                ->with('childrenCategories')
+                ->get();
+
+            Cache::put('categoriesTree', $categoriesTree);
+        }
+        return $categoriesTree;
     }
 }

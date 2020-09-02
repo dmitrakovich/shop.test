@@ -1,4 +1,6 @@
-<li>{{ $childCategory->title }}</li>
+<li>
+    <a href="{{ route('catalog', $childCategory) }}">{{ $childCategory->title }}</a>
+</li>
 @if ($childCategory->childrenCategories)
     <ul>
         @foreach ($childCategory->childrenCategories as $childCategory)
