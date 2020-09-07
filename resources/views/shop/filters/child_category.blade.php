@@ -1,5 +1,5 @@
 <li>
-    <a href="{{ route('catalog', $childCategory) }}">{{ $childCategory->title }}</a>
+    <a href="{{ $childCategory->getUrl() }}">{{ $childCategory->title }}</a>
 </li>
 @if ($childCategory->childrenCategories)
     <ul>

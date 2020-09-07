@@ -1,7 +1,7 @@
 <ul>
     @foreach ($categoriesTree as $category)
         <li>
-            <a href="{{ route('catalog', $category) }}">{{ $category->title }}</a>
+            <a href="{{ $category->getUrl() }}">{{ $category->title }}</a>
         </li>
         <ul>
             @foreach ($category->childrenCategories as $childCategory)

@@ -51,7 +51,7 @@ class CategoryRepository extends CoreRepository
             $categoriesTree = Cache::get('categoriesTree');
         } else {
             $categoriesTree = $this->startConditions()
-                ->where('parent_id', 0)
+                ->whereNull('parent_id')
                 ->with('childrenCategories')
                 ->get();
 

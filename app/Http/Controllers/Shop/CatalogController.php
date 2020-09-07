@@ -30,8 +30,30 @@ class CatalogController extends BaseController
         $this->categoryRepository = app(CategoryRepository::class);
     }
 
-    public function index()
+    public function show($slug, $params = null)
     {
+        dd($slug, $params);
+
+        /*if ($path) {
+            if ($this->categoryRepository->hasPath($path)) {
+                // страница каталога
+            } else {
+                $productSlug = basename($path);
+                $path = substr($path, 0, -(++strlen($productSlug)));
+                if ($this->categoryRepository->hasPath($path)) {
+                    // страница продукта
+                } else { // такая категория не найдена
+                    abort(404);
+                }
+            }
+        }*/
+        
+
+        // есть ли такая каегория
+        // есть ли такая каегория -1
+            // если есть, то в конце товар
+            // если нет, то 404
+   
         $categoriesTree =  $this->categoryRepository->getTree();
 
         // $products = Product::paginate(15);
@@ -39,7 +61,7 @@ class CatalogController extends BaseController
         if (empty($products)) {
             abort(404);
         }
-        // dd($products);
+        // dd($products->first()->category);
         return view('shop.catalog', compact('products', 'categoriesTree'));
     }
 }

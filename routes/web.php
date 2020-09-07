@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Shop\CatalogController;
+use App\Http\Controllers\Shop\ProductController;
+use App\Url;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -76,6 +79,23 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 });
 
 Route::group(['namespace' => 'Shop'], function () {
-    Route::get('catalog/{category?}', 'CatalogController@index')->name('catalog');
-    Route::get('product/{id}', 'ProductController@index')->name('product');
+    Route::get('catalog/{path?}', function () {        
+        $request = Route::getCurrentRequest();       
+        $slug = Str::of($request->path())->explode('/')->last();
+        $params = $request->input();
+
+        // посмотреть в кэше
+        // если нет, то в БД
+        // иначе 404
+        $url = Url::findOrFail($slug);
+
+        $model = new $url['model_type']();        
+
+        if ($model instanceof App\Product) {
+            return (new ProductController())->show($slug, $params);
+        }
+        return (new CatalogController())->show($slug, $params);
+    })
+        ->where('path', '[a-zA-Z0-9/_-]+')
+        ->name('shop');
 });

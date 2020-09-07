@@ -47,10 +47,10 @@
             <div class="col-12 navbar-main-menu" id="mainMenu">
                 <div class="row justify-content-center align-items-center text-uppercase font-size-15 position-relative">
                     <div class="col-12 col-lg-auto hover-dropdown">
-                        <a href="{{ route('catalog') }}">Каталог</a>
+                        <a href="{{ route('shop') }}">Каталог</a>
                         <div class="col-12 dropdown-menu position-absolute">
                             @foreach ($categories as $category)
-                                <a class="dropdown-item" href="{{ route('catalog', $category) }}">{{ $category->title }}</a>
+                                <a class="dropdown-item" href="{{ route('shop', $category) }}">{{ $category->title }}</a>
                             @endforeach
                         </div>
                     </div>
