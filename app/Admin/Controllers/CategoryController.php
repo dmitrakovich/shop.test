@@ -27,10 +27,13 @@ class CategoryController extends AdminController
         $grid = new Grid(new Category());
 
         $grid->column('id', __('Id'));
-        $grid->column('parent_id', __('Parent id'));
         $grid->column('slug', __('Slug'));
+        $grid->column('path', __('Path'));
         $grid->column('title', __('Title'));
         $grid->column('description', __('Description'));
+        $grid->column('_lft', __(' lft'));
+        $grid->column('_rgt', __(' rgt'));
+        $grid->column('parent_id', __('Parent id'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
         $grid->column('deleted_at', __('Deleted at'));
@@ -49,10 +52,13 @@ class CategoryController extends AdminController
         $show = new Show(Category::findOrFail($id));
 
         $show->field('id', __('Id'));
-        $show->field('parent_id', __('Parent id'));
         $show->field('slug', __('Slug'));
+        $show->field('path', __('Path'));
         $show->field('title', __('Title'));
         $show->field('description', __('Description'));
+        $show->field('_lft', __(' lft'));
+        $show->field('_rgt', __(' rgt'));
+        $show->field('parent_id', __('Parent id'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
         $show->field('deleted_at', __('Deleted at'));
@@ -69,10 +75,13 @@ class CategoryController extends AdminController
     {
         $form = new Form(new Category());
 
-        $form->number('parent_id', __('Parent id'))->default(1);
         $form->text('slug', __('Slug'));
+        $form->text('path', __('Path'));
         $form->text('title', __('Title'));
         $form->textarea('description', __('Description'));
+        $form->number('_lft', __(' lft'));
+        $form->number('_rgt', __(' rgt'));
+        $form->number('parent_id', __('Parent id'));
 
         return $form;
     }

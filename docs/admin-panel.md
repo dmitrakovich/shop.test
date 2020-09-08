@@ -5,6 +5,7 @@ documentation: https://laravel-admin.org/docs/
 ## Первоначальная настройка админки:
 ```shell
 php artisan admin:install
+php artisan db:seed --class=AdminPanelSeeder
 ```
 
 ## Использование:
