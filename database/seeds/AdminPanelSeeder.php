@@ -12,8 +12,6 @@ class AdminPanelSeeder extends Seeder
      */
     public function run()
     {
-        DB::table($this->tableName)->insert(['id' => 38353, 'value' => 'Jersey']);
-
         DB::table($this->tableName)->insert(['id' => 8, 'parent_id' => 9, 'order' => 4, 'title' => 'Размеры', 'icon' => 'fa-signal', 'uri' => 'sizes']);
         DB::table($this->tableName)->insert(['id' => 9, 'parent_id' => 0, 'order' => 1, 'title' => 'Аттрибуты товаров', 'icon' => 'fa-bars']);
         DB::table($this->tableName)->insert(['id' => 10, 'parent_id' => 9, 'order' => 5, 'title' => 'Цвет', 'icon' => 'fa-adjust', 'uri' => 'colors']);
