@@ -1,5 +1,6 @@
 <?php
 
+use App\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +16,9 @@ class ProductImageSeeder extends Seeder
     public function run()
     {
         $imgsList = glob(public_path() . '/images/products/*');
+        $productsId = Product::pluck('id');
 
-        for ($productId = 1; $productId <= 500; $productId++) {
+        foreach ($productsId as $productId) {
             $imgsCount =  mt_rand(2, 6);
             while (--$imgsCount) {
                 $data[] = [
