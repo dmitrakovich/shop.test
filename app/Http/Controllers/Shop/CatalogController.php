@@ -32,7 +32,7 @@ class CatalogController extends BaseController
 
     public function show($slug, $params = null)
     {
-        dd($slug, $params);
+        // dd($slug, $params);
 
         /*if ($path) {
             if ($this->categoryRepository->hasPath($path)) {
@@ -58,9 +58,7 @@ class CatalogController extends BaseController
 
         // $products = Product::paginate(15);
         $products = $this->productRepository->getAllWithPaginate(self::PAGE_SIZE);
-        if (empty($products)) {
-            abort(404);
-        }
+        abort_if(empty($products), 404);
         // dd($products->first()->category);
         return view('shop.catalog', compact('products', 'categoriesTree'));
     }
