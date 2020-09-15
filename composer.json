@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2.5",
         "davejamesmiller/laravel-breadcrumbs": "^5.3",
+        "drandin/declension-nouns": "dev-master",
         "encore/laravel-admin": "^1.7",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
