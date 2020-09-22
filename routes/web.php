@@ -84,17 +84,13 @@ Route::group(['namespace' => 'Shop'], function () {
         $slug = Str::of($request->path())->explode('/')->last();
         $params = $request->input();
 
-        // посмотреть в кэше
-        // если нет, то в БД
-        // иначе 404
-        $url = Url::findOrFail($slug);
-
-        $model = new $url['model_type']();        
+        $url = Url::search($slug);
+        $model = new $url['model_type']();
 
         if ($model instanceof App\Product) {
-            return (new ProductController())->show($slug, $params);
+            return (new ProductController())->show($url, $params);
         }
-        return (new CatalogController())->show($slug, $params);
+        return (new CatalogController())->show($url, $params);
     })
         ->where('path', '[a-zA-Z0-9/_-]+')
         ->name('shop');
