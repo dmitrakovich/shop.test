@@ -15,7 +15,9 @@ class CreateSeasonsTable extends Migration
     {
         Schema::create('seasons', function (Blueprint $table) {
             $table->id();
+            $table->uuid('slug');
             $table->string('value');
+            $table->text('seo')->nullable();;
             $table->timestamps();
         });
     }

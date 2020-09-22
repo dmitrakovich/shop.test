@@ -15,6 +15,7 @@ class CreateHeelHeightsTable extends Migration
     {
         Schema::create('heel_heights', function (Blueprint $table) {
             $table->id();
+            $table->uuid('slug');
             $table->string('value');
             $table->timestamps();
         });

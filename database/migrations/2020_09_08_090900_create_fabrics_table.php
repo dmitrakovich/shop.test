@@ -15,7 +15,9 @@ class CreateFabricsTable extends Migration
     {
         Schema::create('fabrics', function (Blueprint $table) {
             $table->id();
+            $table->uuid('slug');
             $table->string('value');
+            $table->text('seo')->nullable();
             $table->timestamps();
         });
     }
