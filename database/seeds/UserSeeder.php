@@ -13,6 +13,8 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('users')->truncate();
+
         $importDataFile = database_path() . '/import/cyizj_users.php';
         if (file_exists($importDataFile)) {
             require_once $importDataFile;

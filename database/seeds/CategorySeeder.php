@@ -15,9 +15,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        Schema::disableForeignKeyConstraints();
         DB::table('categories')->truncate();
-        Schema::enableForeignKeyConstraints();
 
         $catData = [
             [0, 'Каталог'],                       // 1

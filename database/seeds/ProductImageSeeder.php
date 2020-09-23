@@ -15,6 +15,8 @@ class ProductImageSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('product_images')->truncate();
+
         $imgsList = glob(public_path() . '/images/products/*');
         $productsId = Product::pluck('id');
 

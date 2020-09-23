@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Product;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);
-        factory(Product::class, 500)->create();
+        $this->call(FabricSeeder::class);
+        $this->call(ProductSeeder::class);
         $this->call(ProductImageSeeder::class);
         $this->call(UrlsSeeder::class);
     }
