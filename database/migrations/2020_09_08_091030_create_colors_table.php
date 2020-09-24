@@ -15,9 +15,9 @@ class CreateColorsTable extends Migration
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->uuid('slug');
-            $table->string('value');
-            $table->string('color')->default('#ffffff');
+            $table->string('value')->default('#ffffff');
             $table->text('seo')->nullable();
             $table->timestamps();
         });

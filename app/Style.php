@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class HeelHeight extends Model
+class Style extends Model
 {
     //
 }
