@@ -50,4 +50,76 @@ class Product extends Model
     {
         return 'labels';
     }
+    /**
+     * Размеры
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function sizes()
+    {
+        return $this->morphedByMany(Size::class, 'attribute', 'product_attributes');
+    }
+    /**
+     * Цвет
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function color()
+    {
+        return $this->belongsTo(Color::class);
+    }
+    /**
+     * материалы
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function fabrics()
+    {
+        return $this->morphedByMany(Fabric::class, 'attribute', 'product_attributes');
+    }
+    /**
+     * Типы каблука
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function heels()
+    {
+        return $this->morphedByMany(Heel::class, 'attribute', 'product_attributes');
+    }
+    /**
+     * Стили
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function styles()
+    {
+        return $this->morphedByMany(Style::class, 'attribute', 'product_attributes');
+    }
+    /**
+     * Сезон
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function season()
+    {
+        return $this->belongsTo(Color::class);
+    }
+    /**
+     * Теги
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphedByMany(Color::class, 'attribute', 'product_attributes');
+    }
+    /**
+     * Бренд
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
 }
