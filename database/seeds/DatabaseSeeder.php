@@ -27,5 +27,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductSeeder::class);
         $this->call(ProductImageSeeder::class);
         $this->call(UrlsSeeder::class);
+
+        // admin panel
+        Artisan::call('admin:install');
+        $this->call(AdminPanelSeeder::class);
     }
 }
