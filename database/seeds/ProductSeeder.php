@@ -36,12 +36,6 @@ class ProductSeeder extends Seeder
             $table->foreignId('season_id')->index();
             $table->foreignId('color_id')->index();
             $table->foreignId('brand_id')->index();
-
-
-
-            $table->foreignId('category_id')->index();
-
-
             $table->timestamps();
             $table->softDeletes();
         });
@@ -53,7 +47,7 @@ class ProductSeeder extends Seeder
         // категория
         DB::update("UPDATE products p, {$this->oldCategoriesTable} c SET p.category_id=c.category_id WHERE p.id=c.product_id");
         // сезон
-        DB::update("UPDATE products SET season_id=extra_field_7");
+        DB::update("UPDATE products SET season_id=extra_field_7 WHERE extra_field_7 <> ''");
         // производитель
         DB::update("UPDATE products SET brand_id=product_manufacturer_id");
 
@@ -100,8 +94,8 @@ class ProductSeeder extends Seeder
             $table->dropColumn('extra_field_14'); // Материал фильтра
             $table->dropColumn('extra_field_15'); // Теги
             $table->dropColumn('extra_field_16'); // Акция
-            $table->dropColumn('extra_field_16'); // Поднять
-            $table->dropColumn('extra_field_16'); // Рейтинг
+            $table->dropColumn('extra_field_17'); // Поднять
+            $table->dropColumn('extra_field_18'); // Рейтинг
         });
     }
 }

@@ -1,15 +1,12 @@
 <?php
 
-use App\Product;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Illuminate\Database\Schema\Blueprint;
 
 class ProductImageSeeder extends Seeder
 {
-    protected $tableName = 'cyizj_jshopping_products_images';
-    protected $oldTableName = 'product_images';
+    protected $tableName = 'product_images';
+    protected $oldTableName = 'cyizj_jshopping_products_images';
     /**
      * Run the database seeds.
      *

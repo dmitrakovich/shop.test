@@ -61,7 +61,7 @@ class ProductAttributeSeeder extends Seeder
                 49 => 14, // Мюли
             ]
         ],
-        'sizes' => [],
+        // 'sizes' => [],
         'color' =>  [
             'column' => 'color_id',
             'new_id' => [
@@ -208,7 +208,7 @@ class ProductAttributeSeeder extends Seeder
 
                 if (isset($value['column'])) { // одно значение
 
-                    $insertValue = $value['new_id'][$product->$value['column']] ?? 'del';
+                    $insertValue = $value['new_id'][$product[$value['column']]] ?? 0;
 
                     if ($method == 'color') {
                         $insertValue = explode(',', $insertValue);
@@ -219,13 +219,14 @@ class ProductAttributeSeeder extends Seeder
                         }
                     }
                     if ($insertValue === 'del') {
-                        $product->delete();
-                        continue 2;
+                        // $product->delete();
+                        // continue 2;
+                        $product[$value['column']] = 0;
                     } else {
-                        $product->$value['column'] = $insertValue;
+                        $product[$value['column']] = $insertValue;
                     }
                 } else { // несколько
-                    $values = trim($product[$value]);
+                    $values = trim($product[$value['old_column']]);
                     if (empty($values)) {
                         continue;
                     }
@@ -242,7 +243,7 @@ class ProductAttributeSeeder extends Seeder
             }
             // sizes
             $sizesList = Arr::random([1, 2, 3, 4, 5, 6, 7, 8, 9], mt_rand(1, 6));
-            $product->$method()->sync($sizesList);
+            $product->sizes()->sync($sizesList);
 
             // slug
             $slug = 'barocco-' . $product->id;

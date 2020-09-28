@@ -102,7 +102,7 @@ class Product extends Model
      */
     public function season()
     {
-        return $this->belongsTo(Color::class);
+        return $this->belongsTo(Season::class);
     }
     /**
      * Теги
@@ -111,7 +111,7 @@ class Product extends Model
      */
     public function tags()
     {
-        return $this->morphedByMany(Color::class, 'attribute', 'product_attributes');
+        return $this->morphedByMany(Tag::class, 'attribute', 'product_attributes');
     }
     /**
      * Бренд

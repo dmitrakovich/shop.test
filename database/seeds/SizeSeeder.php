@@ -6,7 +6,7 @@ class SizeSeeder extends Seeder
 {
     protected $tableName = 'sizes';
     protected $values = [
-        ['name' => 'без размера', 'slug' => 'none', 'value' => null],
+        ['name' => 'без размера', 'slug' => 'none', 'value' => 0],
         ['name' => 33, 'slug' => 33, 'value' => 21],
         ['name' => 34, 'slug' => 34, 'value' => 21.5],
         ['name' => 35, 'slug' => 35, 'value' => 22.5],
