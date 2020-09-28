@@ -10,12 +10,15 @@ class ProductController extends BaseController
 
     public function show($slug, $params)
     {
-        // $product = Product::find($id);
+        // dump($slug);
+        $product = Product::find($slug->model_id);
         /*$product = Product::findOrFail($id);
         dd($product);
         dd($request);*/
 
+        // $product = 'slug = '.$slug.'<br>params = '.print_r($params, true);
 
-        return 'slug = '.$slug.'<br>params = '.print_r($params, true);
+
+        return view('shop.product', compact('product'));
     }
 }

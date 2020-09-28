@@ -47,7 +47,7 @@ class Category extends Model
     // Получение ссылки
     public function getUrl()
     {
-        return DIRECTORY_SEPARATOR . $this->path;
+        return '/' . $this->path;
     }
 
     public function generatePath()

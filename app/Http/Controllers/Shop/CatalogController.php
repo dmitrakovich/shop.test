@@ -56,10 +56,10 @@ class CatalogController extends BaseController
    
         $categoriesTree =  $this->categoryRepository->getTree();
 
-        // $products = Product::paginate(15);
-        $products = $this->productRepository->getAllWithPaginate(self::PAGE_SIZE);
+        $products = Product::paginate(15);
+        // $products = $this->productRepository->getAllWithPaginate(self::PAGE_SIZE);
         abort_if(empty($products), 404);
-        // dd($products->first()->category);
+        // dd($products->first());
         return view('shop.catalog', compact('products', 'categoriesTree'));
     }
 }

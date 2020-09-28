@@ -14,17 +14,24 @@
             @forelse($products as $product)
                 @php /** @var App\Product $product */ @endphp
                 <div class="col-3 border">
+                    <a href="{{ $product->category->getUrl() . '/' . $product->slug }}">
+                        <p>
+                            <img src="/images/products/{{ $product->images->first()['img'] }}" alt="{{ $product->title }}"
+                                class="img-fluid">
+                        </p>
+                    </a>
                     <p>
-                        <img src="/images/products/{{ $product->images->first()['img'] }}" alt="{{ $product->title }}"
-                            class="img-fluid">
+                        {{ $product->brand->name }} {{ $product['name_ru-RU'] }}
                     </p>
-                    <p>{{ $product->id }}</p>
-                    <p>{{ $product->category->title }}</p>
-                    <p>
-                        <a href="/{{ $product->category->getUrl() . '/' . $product->id }}" class="btn btn-primary">
-                            {{ $product->title }}
-                        </a>
-                    </p>
+                    <p><b>Категория: </b>{{ $product->category->title }}</p>
+                    <p><b>Размеры: </b>{{ $product->sizes->implode('name', ',') }}</p>
+                    {{-- <p><b>Цвет: </b>{{ $product->color->name ?? '' }}</p> --}}
+                    <p><b>Материал: </b>{{ $product->fabrics->implode('name', ',') }}</p>
+                    {{-- <p><b>Каблук: </b>{{ $product->heels->implode('name', ',') }}</p> --}}
+                    {{-- <p><b>Стиль: </b>{{ $product->styles->implode('name', ',') }}</p> --}}
+                    {{-- <p><b>Сезон: </b>{{ $product->season->name }}</p> --}}
+                    {{-- <p><b>Теги: </b>{{ $product->tags->implode('name', ',') }}</p> --}}
+                    <p><b>Бренд: </b>{{ $product->brand->name }}</p>
                 </div>
             @empty
                 <p>Нет товаров</p>
