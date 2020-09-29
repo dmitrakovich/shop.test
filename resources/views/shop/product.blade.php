@@ -2,7 +2,8 @@
 
 @section('title', 'Женская обувь')
 
-@section('breadcrumbs', Breadcrumbs::render('static-delivery'))
+@section('breadcrumbs', Breadcrumbs::render('product', $product))
+{{-- {{ Breadcrumbs::render('product', $product) }} --}}
 
 @section('content')
     <pre>

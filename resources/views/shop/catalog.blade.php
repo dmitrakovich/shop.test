@@ -7,8 +7,7 @@
         @include('shop.filters.all')
     </div>
     <div class="col-12 col-lg-9 catalog-page">
-        {{ Breadcrumbs::render('index') }}
-        {{ Breadcrumbs::render('static-payment') }}
+        {{ Breadcrumbs::render('category', $currentCategory) }}
 
         <div class="col-12 scrolling-pagination">
             <div class="row jscroll-inner">

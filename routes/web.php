@@ -43,6 +43,7 @@ Route::prefix('clear-cache')->group(function () {
         Artisan::call('route:clear');
         Artisan::call('config:clear');
         Artisan::call('view:clear');
+        Cache::flush();
         return 'All cache is cleared';
     });
 });

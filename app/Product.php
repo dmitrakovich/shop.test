@@ -122,4 +122,13 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class);
     }
+    /**
+     * Получить полное название продукта
+     *
+     * @return void
+     */
+    public function getFullName()
+    {
+        return $this->brand->name . ' ' . $this['name_ru-RU'];
+    }
 }

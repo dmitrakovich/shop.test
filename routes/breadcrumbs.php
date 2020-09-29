@@ -6,9 +6,26 @@ Breadcrumbs::for('index', function ($trail) {
 });
 
 
+#region Shop
+// Index > catalog > category
+Breadcrumbs::for('category', function ($trail, $category) {
+    if ($category->parentCategory) {
+        $trail->parent('category', $category->parentCategory);
+    } else {
+        $trail->parent('index');
+    }
+    $trail->push($category->title, $category->getUrl());
+});
+
+// Index > catalog > category > product
+Breadcrumbs::for('product', function ($trail, $product) {
+    $trail->parent('category', $product->category);
+    $trail->push($product->getFullName());
+});
+#endregion
+
 
 #region Online shoping
-
 // Index > online-shopping
 Breadcrumbs::for('online-shopping', function ($trail) {
     $trail->parent('index');
@@ -53,9 +70,7 @@ Breadcrumbs::for('static-shops', function ($trail) {
 #endregion
 
 
-
 #region Dashboard
-
 // Index > dashboard
 Breadcrumbs::for('dashboard', function ($trail) {
     $trail->parent('index');
@@ -86,48 +101,3 @@ Breadcrumbs::for('dashboard-card', function ($trail) {
     $trail->push('Карта клиента', route('dashboard-card'));
 });
 #endregion
-
-/*
-// Index > Blog
-Breadcrumbs::for('blog', function ($trail) {
-    $trail->parent('index');
-    $trail->push('Blog', route('blog'));
-});
-
-// Index > Blog > [Category]
-Breadcrumbs::for('category', function ($trail, $category) {
-    $trail->parent('blog');
-    $trail->push($category->title, route('category', $category->id));
-});
-
-// Index > Blog > [Category] > [Post]
-Breadcrumbs::for('post', function ($trail, $post) {
-    $trail->parent('category', $post->category);
-    $trail->push($post->title, route('post', $post->id));
-});*/
-
-
-/*
-// тут должен быть массив предков 
-Breadcrumbs::for('category', function ($trail, $category) {
-    $trail->parent('blog');
-
-    foreach ($category->ancestors as $ancestor) {
-        $trail->push($ancestor->title, route('category', $ancestor->id));
-    }
-
-    $trail->push($category->title, route('category', $category->id));
-});
-
-// тут должен быть вложеннный массив предков
-Breadcrumbs::for('category', function ($trail, $category) {
-    if ($category->parent) {
-        $trail->parent('category', $category->parent);
-    } else {
-        $trail->parent('blog');
-    }
-
-    $trail->push($category->title, route('category', $category->slug));
-});*/
-
-// {{ Breadcrumbs::render('category', $category) }} // вывод в шаблоне+

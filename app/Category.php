@@ -21,6 +21,11 @@ class Category extends Model
         return 'slug';
     }
 
+    public function parentCategory()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
     public function categories()
     {
         return $this->hasMany(Category::class, 'parent_id');

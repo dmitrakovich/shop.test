@@ -14,7 +14,7 @@ class CatalogController extends BaseController
     /**
      * Количество товаров на странице
      */
-    protected const PAGE_SIZE = 30;
+    protected const PAGE_SIZE = 12;
     /**
      * ProductRepository
      *
@@ -60,6 +60,9 @@ class CatalogController extends BaseController
             // если есть, то в конце товар
             // если нет, то 404
    
+        
+        $currentCategory = Category::find($slug->model_id);
+        // dd($slug, $currentCategory);
         $categoriesTree =  $this->categoryRepository->getTree();
 
 
@@ -72,11 +75,11 @@ class CatalogController extends BaseController
             'sizes',
             'color',
             'fabrics',
-        ])->paginate(12);
+        ])->paginate(self::PAGE_SIZE);
 
         // $products = $this->productRepository->getAllWithPaginate(self::PAGE_SIZE);
         abort_if(empty($products), 404);
         // dd($products->first());
-        return view('shop.catalog', compact('products', 'categoriesTree'));
+        return view('shop.catalog', compact('products', 'currentCategory', 'categoriesTree'));
     }
 }
