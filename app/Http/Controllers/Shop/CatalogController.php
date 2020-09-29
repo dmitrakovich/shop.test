@@ -30,6 +30,12 @@ class CatalogController extends BaseController
         $this->categoryRepository = app(CategoryRepository::class);
     }
 
+    public function ajaxNextPage()
+    {
+        // в будущем создать отдельный view для подгрузки только моделей, 
+        // а не всей страницы целиком
+    }
+
     public function show($slug, $params = null)
     {
         // dd($slug, $params);
@@ -56,7 +62,18 @@ class CatalogController extends BaseController
    
         $categoriesTree =  $this->categoryRepository->getTree();
 
-        $products = Product::paginate(15);
+
+        // Product::where('category_id', 0)->delete();
+
+        $products = Product::with([
+            'category',
+            'brand',
+            'images',
+            'sizes',
+            'color',
+            'fabrics',
+        ])->paginate(12);
+
         // $products = $this->productRepository->getAllWithPaginate(self::PAGE_SIZE);
         abort_if(empty($products), 404);
         // dd($products->first());

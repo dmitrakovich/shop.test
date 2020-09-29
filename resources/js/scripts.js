@@ -23,6 +23,23 @@ $(function () {
         history.pushState(null, null, '#mainMenuOpen');
     });
 //#endregion
+
+//#region catalog
+    $('.catalog-page ul.pagination').hide();
+    $(function() {
+        $('.catalog-page .scrolling-pagination').jscroll({
+            autoTrigger: true,
+            padding: 220,
+            nextSelector: 'nav .pagination li.active + li a',
+            contentSelector: 'div.jscroll-inner',
+            callback: function() {
+                $('ul.pagination').parent().remove();
+                $('.jscroll-added .jscroll-inner .js-product-item').unwrap().unwrap();
+            }
+        });
+    });
+//#endregion
+
 });
 
 

@@ -107,3 +107,9 @@ footer {
         }
     }
 }
+
+.catalog-page {
+    @include media-breakpoint-up(lg) {
+        margin-bottom: 100px;
+    }
+}
