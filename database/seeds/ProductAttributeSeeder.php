@@ -242,8 +242,11 @@ class ProductAttributeSeeder extends Seeder
                 }
             }
             // sizes
-            $sizesList = Arr::random([1, 2, 3, 4, 5, 6, 7, 8, 9], mt_rand(1, 6));
+            $sizesList = Arr::random(range(1, 9), mt_rand(1, 6));
             $product->sizes()->sync($sizesList);
+
+            // color
+            $product->color_id = mt_rand(1, 17);
 
             // slug
             $slug = 'barocco-' . $product->id;
