@@ -3,7 +3,6 @@
 @section('title', 'Женская обувь')
 
 @section('breadcrumbs', Breadcrumbs::render('product', $product))
-{{-- {{ Breadcrumbs::render('product', $product) }} --}}
 
 @section('content')
     <div class="col-12">
@@ -15,6 +14,8 @@
                 @endforeach
             </div>
             <div class="col-5">
+                
+                <input type="hidden" id="product_id" value="{{ $product->id }}">
 
                 <div class="row">
                     <div class="col-6 text-muted">
@@ -64,8 +65,12 @@
 
                 <div class="row justify-content-center">
                     <div class="col-8">
-                        <button class="btn btn-dark btn-lg btn-block py-3">В КОРЗИНУ</button>
-                        <button class="btn btn-outline-dark btn-lg btn-block py-3">КУПИТЬ В ОДИН КЛИК</button>
+                        <button class="btn btn-dark btn-lg btn-block py-3 js-add-to-cart">
+                            В КОРЗИНУ
+                        </button>
+                        <button class="btn btn-outline-dark btn-lg btn-block py-3">
+                            КУПИТЬ В ОДИН КЛИК
+                        </button>
                     </div>
                 </div>
 

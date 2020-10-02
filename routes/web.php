@@ -95,4 +95,7 @@ Route::group(['namespace' => 'Shop'], function () {
     })
         ->where('path', '[a-zA-Z0-9/_-]+')
         ->name('shop');
+
+    Route::get('cart', 'CartController@index')->name('cart');
+    Route::post('add-to-cart', 'CartController@addToCart')->name('addToCart');
 });

@@ -22,6 +22,12 @@ Breadcrumbs::for('product', function ($trail, $product) {
     $trail->parent('category', $product->category);
     $trail->push($product->getFullName());
 });
+
+// Index > cart
+Breadcrumbs::for('cart', function ($trail) {
+    $trail->parent('index');
+    $trail->push('Корзина');
+});
 #endregion
 
 

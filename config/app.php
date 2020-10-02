@@ -175,6 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Drandin\DeclensionNouns\DeclensionNounsServiceProvider::class,
+        Darryldecode\Cart\CartServiceProvider::class,
 
     ],
 
@@ -228,6 +229,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'DeclensionNoun' => \Drandin\DeclensionNouns\Facades\DeclensionNoun::class,
+        'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
 
     ],
 

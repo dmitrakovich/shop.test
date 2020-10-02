@@ -40,6 +40,25 @@ $(function () {
     });
 //#endregion
 
+
+//#region cart
+$('button.js-add-to-cart').on('click', function () {
+    $.ajax({
+        method: "post",
+        url: "/add-to-cart",
+        data: {id: $('#product_id').val()},
+        // dataType: "dataType",
+        success: function (response) {
+            if (response.result != 'ok') {
+                alert('ошибка добавления в корзину');
+            } else {
+                $('.js-cart-count').text(response.total_count);
+            }
+        }
+    });
+});
+//#endregion
+
 });
 
 

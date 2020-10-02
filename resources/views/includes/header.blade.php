@@ -33,14 +33,16 @@
                 --><button class="btn border-right-0  p-0 d-none d-md-inline-block">
                     <img src="/images/icons/favorites.svg" alt="избранное" class="img-fluid">
                 </button><!--
-                --><button class="btn p-0 ml-2 ml-md-0">
+                --><a href="{{ route('cart') }}" class="btn p-0 ml-2 ml-md-0">
                     <div class="position-relative">
                         <img src="/images/icons/cart.svg" alt="корзина" class="img-fluid">
                         <div class="cart-count position-absolute d-flex justify-content-center align-items-center">
-                            <span class="js-cart-count">4</span>
+                            <span class="js-cart-count">
+                                {{ Cart::session(345345)->getTotalQuantity() }}
+                            </span>
                         </div>
                     </div>
-                </button>
+                </a>
             </div>
 
             
