@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
 use App\Product;
+use App\User;
 use Cart;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,8 @@ class CartController extends Controller
     public function index()
     {
         $items = Cart::session(345345)->getContent();
-        return view('shop.cart', compact('items'));
+        $user = auth()->user() ?? new User();
+        return view('shop.cart', compact('items', 'user'));
     }
 
     public function addToCart(Request $request)

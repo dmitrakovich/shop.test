@@ -52,6 +52,7 @@ $('button.js-add-to-cart').on('click', function () {
             if (response.result != 'ok') {
                 alert('ошибка добавления в корзину');
             } else {
+                alert('товар успешно добавлен в корзину');
                 $('.js-cart-count').text(response.total_count);
             }
         }
