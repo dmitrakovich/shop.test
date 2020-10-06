@@ -18,6 +18,15 @@ class UrlsSeeder extends Seeder
         $this->setSlugs('App\Category');
         $this->setSlugs('App\Product');
 
+        $this->setSlugs('App\Color');
+        $this->setSlugs('App\Size', 'size-');
+        $this->setSlugs('App\Brand');
+        $this->setSlugs('App\Season');
+        $this->setSlugs('App\Fabric');
+        $this->setSlugs('App\Heel', 'heel-');
+        $this->setSlugs('App\Tag');
+        $this->setSlugs('App\Style');
+
         foreach ($this->getSlugs() as $slug) {
             $slug = new Url($slug);
             $slug->save();
@@ -30,7 +39,7 @@ class UrlsSeeder extends Seeder
 
         foreach ($slugs as $slug) {
             $this->slugs[] = [
-                'slug' => $slug['slug'],
+                'slug' => $prefix . $slug['slug'],
                 'model_id' => $slug['id'],
                 'model_type' => $class
             ];

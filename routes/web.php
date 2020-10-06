@@ -83,19 +83,20 @@ Route::group(['namespace' => 'Shop'], function () {
     Route::get('catalog/{path?}', function () {        
         $request = Route::getCurrentRequest();       
         $slug = Str::of($request->path())->explode('/')->last();
-        $params = $request->input();
-
         $url = Url::search($slug);
-        $model = new $url['model_type']();
 
-        if ($model instanceof App\Product) {
-            return (new ProductController())->show($url, $params);
+        if (isset($url) && (new $url['model_type']) instanceof App\Product) {
+            return (new ProductController())->show($url, $request->input());
         }
-        return (new CatalogController())->show($url, $params);
+        return (new CatalogController())->show($request);
     })
         ->where('path', '[a-zA-Z0-9/_-]+')
         ->name('shop');
 
     Route::get('cart', 'CartController@index')->name('cart');
     Route::post('add-to-cart', 'CartController@addToCart')->name('addToCart');
+});
+
+Route::fallback(function() {
+    return 'Хм… Почему ты оказался здесь?';
 });
