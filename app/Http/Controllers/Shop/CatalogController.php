@@ -22,6 +22,12 @@ class CatalogController extends BaseController
      * @var ProductRepository
      */
     private $productRepository;
+    /**
+     * CategoryRepository
+     *
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
 
     public function __construct()
     {
@@ -29,6 +35,25 @@ class CatalogController extends BaseController
 
         $this->productRepository = app(ProductRepository::class);
         $this->categoryRepository = app(CategoryRepository::class);
+    }
+    /**
+     * Применить фильтры к выборке
+     *
+     * @param array $filters
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    protected function applyFilters(array $filters)
+    {
+        $query = (new Product())->newQuery();
+
+        foreach ($filters as $filterName => $filterValues) {
+            if (class_exists($filterName) && method_exists($filterName, 'applyFilter')) {
+                $query = $filterName::applyFilter($query, array_column($filterValues, 'model_id'));
+            } else {
+                continue;
+            }
+        }
+        return $query;
     }
 
     public function ajaxNextPage()
@@ -45,49 +70,24 @@ class CatalogController extends BaseController
     public function getFilters($request)
     {
         $slugs = $request->path() ? explode('/', $request->path()) : [];
-        $filters = [];
-
         unset($slugs[0]); // catalog
 
         if (!empty($slugs)) {
-
-
-            $filters = Url::whereIn('slug', $slugs)
-                ->get()
-                ->groupBy('model_type');
-            dd($filters);
-
+            return Url::whereIn('slug', $slugs)
+                ->get(['slug', 'model_type', 'model_id'])
+                ->groupBy('model_type')
+                ->toArray();
         } else {
             return [];
         }
-        
-        /*foreach ($slugs as $slug) {
-
-            $filter = Cache::tags(['slugs'])
-                ->rememberForever("slugs.$slug", function () use ($slug) {
-                    return Url::where('slug', $slug)
-                        ->with('attribute:id,value')
-                        ->first(['slug', 'model_type', 'model_id'])
-                        ->toArray();
-                });
-
-            dump($filter);
-
-            $filters[$filter['model_type']][$filter['model_id']] = [
-                'slug' => $filter,
-                'name' => Filter::getNamePrefix($filter['model_type']) . $filter['attribute']['value'],
-            ];
-        }
-
-        return $filters;*/
     }
 
     public function show($request)
     {
-        $filters = $this->getFilters($request);
+        $currentFilters = $this->getFilters($request);
 
 
-        dd($filters);
+        dump($currentFilters);
 
         /*if ($path) {
             if ($this->categoryRepository->hasPath($path)) {
@@ -110,25 +110,29 @@ class CatalogController extends BaseController
             // если нет, то 404
    
         
-        $currentCategory = Category::find($slug->model_id);
+        // $currentCategory = Category::find($slug->model_id);
+        $currentCategory = Category::first();
         // dd($slug, $currentCategory);
         $categoriesTree =  $this->categoryRepository->getTree();
 
 
         // Product::where('category_id', 0)->delete();
 
-        $products = Product::with([
-            'category',
-            'brand',
-            'images',
-            'sizes',
-            'color',
-            'fabrics',
-        ])->paginate(self::PAGE_SIZE);
+        $products = $this->applyFilters($currentFilters)
+            ->with([
+                'category',
+                'brand',
+                'images',
+                'sizes',
+                'color',
+                'fabrics',
+            ])
+            // ->orderBy('created_at', 'desc')
+            ->paginate(self::PAGE_SIZE);
 
         // $products = $this->productRepository->getAllWithPaginate(self::PAGE_SIZE);
         abort_if(empty($products), 404);
-        // dd($products->first());
+
         return view('shop.catalog', compact('products', 'currentCategory', 'categoriesTree'));
     }
 }

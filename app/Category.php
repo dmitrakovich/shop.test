@@ -10,6 +10,11 @@ class Category extends Model
 {
     use SoftDeletes;
     use NodeTrait;
+    use AttributeFilterTrait;
+
+    public $timestamps = false;
+    protected static $relationName = 'category';
+    protected static $relationTable = 'categories';
     //
     /**
      * Get the route key for the model.

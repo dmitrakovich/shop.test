@@ -9,6 +9,7 @@ class Url extends Model
 {
     public $timestamps = false;
     protected $primaryKey = 'slug';
+    protected $keyType = 'string';
 
     /**
      * Найти url model по slug
