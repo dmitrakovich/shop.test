@@ -5,7 +5,7 @@
 @section('breadcrumbs', Breadcrumbs::render('category', $currentCategory))
 
 @section('content')
-    <div class="col-3 col-xl-2 d-none d-lg-block">
+    <div class="col-3 col-xl-2 d-none d-lg-block filters-sidebar">
         @include('shop.filters.all')
     </div>
     <div class="col-12 col-lg-9 col-xl-10 catalog-page">

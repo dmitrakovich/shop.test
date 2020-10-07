@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Shop;
 
 use App\Product;
 use App\Category;
+use App\Filter;
 use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use App\Repositories\ProductRepository;
@@ -133,6 +134,9 @@ class CatalogController extends BaseController
         // $products = $this->productRepository->getAllWithPaginate(self::PAGE_SIZE);
         abort_if(empty($products), 404);
 
-        return view('shop.catalog', compact('products', 'currentCategory', 'categoriesTree'));
+        $filters = Filter::all();
+        // dd($filters);
+
+        return view('shop.catalog', compact('products', 'currentCategory', 'categoriesTree', 'filters'));
     }
 }

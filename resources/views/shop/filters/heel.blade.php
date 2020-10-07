@@ -1,8 +1,8 @@
 <div class="filter-block sizes">
-    <div class="title"><span>РАЗМЕРЫ</span></div>
+    <div class="title"><span>ВЫСОТА КАБЛУКА</span></div>
     <div class="list" {{-- style="display: none" --}}>
         <ul>
-            @foreach ($filters['sizes'] as $filter)
+            @foreach ($filters['heels'] as $filter)
                 <a href="{{ \App\Url::generate($filter['slug']) }}">
                     <li>
                         <label class="check">

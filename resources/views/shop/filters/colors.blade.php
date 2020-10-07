@@ -1,15 +1,17 @@
-<ul>
-    <li>черный</li>
-    <li>серый</li>
-    <li>белый</li>
-    <li>бордовый</li>
-    <li>коричневый</li>
-    <li>крансый</li>
-    <li>оранжевый</li>
-    <li>желтый</li>
-    <li>фиолетовый</li>
-    <li>синеий</li>
-    <li>голубой</li>
-    <li>зеленый</li>
-    <li>розовый</li>
-</ul>
+<div class="filter-block colors">
+    <div class="title"><span>ЦВЕТА</span></div>
+    <div class="list" {{-- style="display: none" --}}>
+        <ul>
+            @foreach ($filters['colors'] as $filter)
+                <a href="{{ \App\Url::generate($filter['slug']) }}">
+                    <li>
+                        <label class="check">
+                            {{-- <input type="checkbox"> --}}
+                            <i class="checkmark" style="background: {{ $filter['value'] }}"></i>
+                        </label>
+                    </li>
+                </a>
+            @endforeach
+        </ul>
+    </div>
+</div>

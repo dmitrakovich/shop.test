@@ -26,4 +26,9 @@ class Url extends Model
         );
         // if (!empty($url->redirect)) return redirect($url->redirect);
     }
+
+    public static function generate($add = null)
+    {
+        return url()->current() . '/' . $add;
+    }
 }

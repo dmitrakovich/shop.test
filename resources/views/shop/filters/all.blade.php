@@ -1,32 +1,25 @@
-Категории
 @include('shop.filters.categories')
+<hr>
 
-Материал<br>
-{{-- @include('shop.filters.categories') --}}
-<br>
+@include('shop.filters.fabric')
+<hr>
 
-Размеры<br>
 @include('shop.filters.sizes')
-<br>
+<hr>
 
-Цвета<br>
 @include('shop.filters.colors')
-<br>
+<hr>
 
-высота каблука<br>
-{{-- @include('shop.filters.categories') --}}
-<br>
+@include('shop.filters.heel')
+<hr>
 
-сезон<br>
-{{-- @include('shop.filters.categories') --}}
-<br>
+@include('shop.filters.season')
+<hr>
 
-Теги<br>
-{{-- @include('shop.filters.categories') --}}
-<br>
+@include('shop.filters.tag')
+<hr>
 
-Бренды<br>
-{{-- @include('shop.filters.categories') --}}
+@include('shop.filters.brand')
 <br>
 
 <button class="btn btn-dark">Очистить фильтр</button>

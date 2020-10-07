@@ -1,9 +1,9 @@
-<ul>
+<ul class="text-uppercase filter-block categories pl-0">
     @foreach ($categoriesTree as $category)
         <li>
-            <a href="{{ $category->getUrl() }}">{{ $category->title }}</a>
+            <b><a href="{{ $category->getUrl() }}">{{ $category->title }}</a></b>
         </li>
-        <ul>
+        <ul class="pl-0">
             @foreach ($category->childrenCategories as $childCategory)
                 @include('shop.filters.child_category', $childCategory)
             @endforeach
