@@ -87,7 +87,7 @@ class CatalogController extends BaseController
         $currentFilters = $this->getFilters($request);
 
 
-        dump($currentFilters);
+        // dump($currentFilters);
 
         /*if ($path) {
             if ($this->categoryRepository->hasPath($path)) {

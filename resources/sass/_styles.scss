@@ -113,3 +113,9 @@ footer {
         margin-bottom: 100px;
     }
 }
+
+.product-item {
+    @include media-breakpoint-up(md) {
+        max-width: 260px;
+    }
+}
