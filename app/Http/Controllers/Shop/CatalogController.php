@@ -128,6 +128,7 @@ class CatalogController extends BaseController
                 'color',
                 'fabrics',
             ])
+            ->where('product_publish', true)
             // ->orderBy('created_at', 'desc')
             ->paginate(self::PAGE_SIZE);
 
