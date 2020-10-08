@@ -19,11 +19,11 @@ class Url extends Model
      */
     public static function search(string $slug)
     {
-        return Cache::tags(['catalog_slugs'])
-            ->rememberForever($slug, function () use ($slug) {
+        // return Cache::tags(['catalog_slugs'])
+            // ->rememberForever($slug, function () use ($slug) {
                 return self::find($slug);
-            }
-        );
+            // }
+        // );
         // if (!empty($url->redirect)) return redirect($url->redirect);
     }
 
