@@ -17,6 +17,19 @@ class CartController extends Controller
         return view('shop.cart', compact('items', 'user'));
     }
 
+    public function submit(Request $request)
+    {
+        // dump($request->all());
+        $orderInfo = [
+            'orderNum' => mt_rand(),
+            'totalPrice' => Cart::session(345345)->getTotal(),
+            'address' => 'Брест, ' . $request->input('address'),
+        ];
+        Cart::clear();
+        $recomended = Product::inRandomOrder()->limit(5)->get();
+        return view('shop.cart-done', compact('orderInfo', 'recomended'));
+    }
+
     public function addToCart(Request $request)
     {
         $product = Product::findOrFail($request->input('id'));

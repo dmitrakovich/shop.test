@@ -71,7 +71,8 @@
             </div>
         </div>
 
-        <form action="" method="post" class="row my-5">
+        <form action="{{ route('cartSubmit') }}" id="cartData" method="post" class="row my-5">
+            @csrf
             <div class="col-12 mb-4">
                 <h5>ЗАПОЛНИТЕ ДАННЫЕ ДОСТАВКИ</h5>
             </div>
@@ -138,7 +139,7 @@
             </div>
         </form>
         <div class="row mb-5 justify-content-center">
-            <button class="btn btn-dark col-12 col-sm-6 col-md-4 col-lg-3 py-2">
+            <button type="submit" form="cartData" class="btn btn-dark col-12 col-sm-6 col-md-4 col-lg-3 py-2">
                 Подтвердить заказ
             </button>
         </div>

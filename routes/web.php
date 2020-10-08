@@ -95,6 +95,7 @@ Route::group(['namespace' => 'Shop'], function () {
 
     Route::get('cart', 'CartController@index')->name('cart');
     Route::post('add-to-cart', 'CartController@addToCart')->name('addToCart');
+    Route::post('cart-submit', 'CartController@submit')->name('cartSubmit');
 });
 
 Route::fallback(function() {

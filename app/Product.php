@@ -129,6 +129,6 @@ class Product extends Model
      */
     public function getFullName()
     {
-        return $this->brand->name . ' ' . $this['name_ru-RU'];
+        return ($this->brand->name ?? 'VITACCI'). ' ' . $this['name_ru-RU'];
     }
 }
