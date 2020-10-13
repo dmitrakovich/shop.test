@@ -39,7 +39,7 @@ class Product extends Model
      */
     public function images()
     {
-        return $this->hasMany('App\ProductImage');
+        return $this->hasMany(ProductImage::class);
     }
     /**
      * Получить шильды для продукта

@@ -26,13 +26,13 @@ class Filter
      * @var array
      */
     protected static $filtersModels = [
-        'fabrics' => 'App\Fabric',
-        'sizes' => 'App\Size',
-        'colors' => 'App\Color',
-        'heels' => 'App\Heel',
-        'seasons' => 'App\Season',
-        'tags' => 'App\Tag',        
-        'brands' => 'App\Brand',
+        'fabrics' => 'App\Models\Fabric',
+        'sizes' => 'App\Models\Size',
+        'colors' => 'App\Models\Color',
+        'heels' => 'App\Models\Heel',
+        'seasons' => 'App\Models\Season',
+        'tags' => 'App\Models\Tag',        
+        'brands' => 'App\Models\Brand',
     ];
     /**
      * префиксы для выьранных фильтров

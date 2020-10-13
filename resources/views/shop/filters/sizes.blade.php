@@ -3,7 +3,7 @@
     <div class="list" {{-- style="display: none" --}}>
         <ul>
             @foreach ($filters['sizes'] as $filter)
-                <a href="{{ \App\Url::generate($filter['slug']) }}">
+                <a href="{{ \App\Models\Url::generate($filter['slug']) }}">
                     <li>
                         <label class="check">
                             <span>{{ $filter['name'] }}</span>
