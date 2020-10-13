@@ -1,8 +1,11 @@
 <?php
 
-use App\Product;
+namespace Database\Seeders;
+
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductAttributeSeeder extends Seeder
