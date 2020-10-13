@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Product;
-use App\Category;
-use App\Filter;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Filter;
 use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use App\Repositories\ProductRepository;
-use App\Url;
+use App\Models\Url;
 use Illuminate\Support\Facades\Cache;
 
 class CatalogController extends BaseController

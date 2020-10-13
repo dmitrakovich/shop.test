@@ -1,16 +1,16 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Kalnoy\Nestedset\NodeTrait;
 
+
 class Category extends Model
 {
-    use SoftDeletes;
-    use NodeTrait;
-    use AttributeFilterTrait;
+    use SoftDeletes, NodeTrait, AttributeFilterTrait;
 
     public $timestamps = false;
     protected static $relationName = 'category';

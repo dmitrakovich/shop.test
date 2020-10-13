@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Product as Model;
+use App\Models\Product as Model;
 use Illuminate\Database\Eloquent\Collection;
 
 class ProductRepository extends CoreRepository

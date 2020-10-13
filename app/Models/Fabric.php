@@ -1,10 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Heel extends Model
+class Fabric extends Model
 {
     use AttributeFilterTrait;
 

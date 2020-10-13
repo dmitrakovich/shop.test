@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
-use App\Product;
-use App\User;
+use App\Models\Product;
+use App\Models\User;
 use Cart;
 use Illuminate\Http\Request;
 

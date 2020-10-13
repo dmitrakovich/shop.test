@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserDataUpdateRequest;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller

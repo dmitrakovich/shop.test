@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Shop\CatalogController;
 use App\Http\Controllers\Shop\ProductController;
-use App\Url;
+use App\Models\Url;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,7 +85,7 @@ Route::group(['namespace' => 'Shop'], function () {
         $slug = Str::of($request->path())->explode('/')->last();
         $url = Url::search($slug);
 
-        if (isset($url) && (new $url['model_type']) instanceof App\Product) {
+        if (isset($url) && (new $url['model_type']) instanceof App\Models\Product) {
             return (new ProductController())->show($url, $request->input());
         }
         return (new CatalogController())->show($request);
