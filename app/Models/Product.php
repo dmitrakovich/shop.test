@@ -35,11 +35,11 @@ class Product extends Model
     /**
      * Картинки товара
      *
-     * @return Illuminate\Database\Eloquent\Relations\hasMany
+     * @return Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function images()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->morphMany(Images::class, 'entity')->orderBy('sorting');
     }
     /**
      * Получить шильды для продукта
