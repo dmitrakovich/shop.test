@@ -3,63 +3,18 @@
 @section('title', 'Page Title')
 
 @section('content')
-<div class="col-12 px-0 px-md-main py-main">
-    <img src="/images/banners/main2x.png" alt="" class="img-fluid">
-</div>
-<div class="col-12 col-md-4 p-main">
-    <img src="/images/banners/main2x1.png" alt="" class="img-fluid">
-</div>
-<div class="col-12 col-md-4 p-main">
-    <img src="/images/banners/main2x1.png" alt="" class="img-fluid">
-</div>
-<div class="col-12 col-md-4 p-main">
-    <img src="/images/banners/main2x1.png" alt="" class="img-fluid">
-</div>
 
+{{ Banner::getIndexMain() }}
 
 <div class="col-12 text-center mt-5">
-    <h1 class="display-4">Популярные категории</h1>
+    {{-- <h1 class="display-4">Популярные категории</h1> --}}
     
 </div>
 
 
 <div class="col-md-12">
 
-
-    {{-- <div class="card">
-        <div class="card-header">Dashboard</div>
-
-        <div class="card-body">
-            @if (session('status'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            You are logged in!
-        </div>
-    </div> --}}
-
-    <div class="col-12">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. A, sint dolorum doloremque saepe minus consequuntur beatae fugiat ipsam doloribus, ipsum nemo amet modi mollitia similique maxime possimus minima voluptatibus? Aperiam.
-    </div>
-    <div class="col-12"><hr></div>
-    <div class="col-12 test-roboto">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. A, sint dolorum doloremque saepe minus consequuntur beatae fugiat ipsam doloribus, ipsum nemo amet modi mollitia similique maxime possimus minima voluptatibus? Aperiam.
-    </div>
-    <div class="col-12"><hr></div>
-    <div class="col-12 test-popins">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. A, sint dolorum doloremque saepe minus consequuntur beatae fugiat ipsam doloribus, ipsum nemo amet modi mollitia similique maxime possimus minima voluptatibus? Aperiam.
-    </div>
-    <div class="col-12"><hr></div>
-    <div class="col-12 test-gilroy">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. A, sint dolorum doloremque saepe minus consequuntur beatae fugiat ipsam doloribus, ipsum nemo amet modi mollitia similique maxime possimus minima voluptatibus? Aperiam.
-    </div>
-    <div class="col-12"><hr></div>
-    <div class="col-12 test-gill-sans-mt">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. A, sint dolorum doloremque saepe minus consequuntur beatae fugiat ipsam doloribus, ipsum nemo amet modi mollitia similique maxime possimus minima voluptatibus? Aperiam.
-    </div>
-
+    
     <div class="col-12">
         <hr class="d-none d-sm-block">
         @include('includes.advantages-block')
@@ -86,10 +41,11 @@
 
 </div>
 
+{{ Banner::getIndexBottom() }}
 
 {{-- wrapper close --}}
 </div>
-<div class="row">
+<div class="row my-5">
     <div class="col-12 bg-danger py-5">
         <div class="row wrapper">
             <div class="col-12 col-md-6 text-center text-md-left">

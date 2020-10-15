@@ -9,11 +9,8 @@
         @include('shop.filters.all')
     </div>
     <div class="col-12 col-lg-9 col-xl-10 catalog-page">
-        <div class="col-12">
-            <a href="/catalog/lofery">
-                <img src="/images/banners/catalog_top.png" alt="catalog_top" class="img-fluid">
-            </a>
-        </div>
+
+        {{ Banner::getCatalogTop() }}
 
         <div class="col-12 scrolling-pagination">
             <div class="row jscroll-inner justify-content-between">

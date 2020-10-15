@@ -230,6 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'DeclensionNoun' => \Drandin\DeclensionNouns\Facades\DeclensionNoun::class,
         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
+        'Banner' => App\Models\Banner::class,
 
     ],
 
