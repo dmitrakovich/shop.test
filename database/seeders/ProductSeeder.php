@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 class ProductSeeder extends Seeder
 {
@@ -14,6 +13,7 @@ class ProductSeeder extends Seeder
     protected $oldTableName = 'cyizj_jshopping_products';
     protected $oldCategoriesTable = 'cyizj_jshopping_products_to_categories';
     protected $oldImagesTable = 'cyizj_jshopping_products_images';
+    protected $oldSizesTable = 'cyizj_jshopping_products_attr2';
 
     protected $attributesList = [
         'category' => [
@@ -69,9 +69,25 @@ class ProductSeeder extends Seeder
                 49 => 14, // Мюли
             ]
         ],
-        // 'sizes' => [],
+        'sizes' => [
+            'new_id' => [
+                12 => 4, // 35
+                13 => 5, // 36
+                14 => 6, // 37
+                15 => 7, // 38
+                16 => 8, // 39
+                17 => 9, // 40
+                18 => 10, // 41
+                // 19 => 'del', // 42
+                // 20 => 'del', // 43
+                // 21 => 'del', // 44
+                // 22 => 'del', // 45
+                23 => 2, // 33
+                24 => 3, // 34
+            ]
+        ],
         'color' =>  [
-            'column' => 'color_id',
+            // 'column' => 'color_id',
             'new_id' => [
                 22 => 1, // черный
                 23 => 6, // белый
@@ -113,7 +129,7 @@ class ProductSeeder extends Seeder
             ]
         ],
         'tags' => [
-            'old_column' => 'extra_field_14',
+            'old_column' => 'extra_field_15',
             'new_id' => [
                 // 28 => 000000, // на низкой подошве
                 // 29 => 000000, // на низком каблуке
@@ -207,8 +223,8 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        // DB::table($this->tableName)->truncate();
-        // DB::table('product_attributes')->truncate();
+        DB::table($this->tableName)->truncate();
+        DB::table('product_attributes')->truncate();
 
         $oldProducts = DB::connection('old_mysql')
             ->table($this->oldTableName)
@@ -226,7 +242,7 @@ class ProductSeeder extends Seeder
                 'product_old_price as old_price',
                 'category_id',
                 'extra_field_7 as season_id',
-                'extra_field_7 as color_id', // !!!!
+                'extra_field_13 as color_id',
                 'product_manufacturer_id as brand_id',
                 'extra_field_1 as color_txt',
                 'extra_field_2 as fabric_top_txt',
@@ -240,57 +256,67 @@ class ProductSeeder extends Seeder
 
                 'extra_field_3', // Коллекция
                 'extra_field_7', // Сезон
-                'extra_field_12', // Размер аксессуара
-                'extra_field_13', // Цвет фильтра
+                // 'extra_field_12', // Размер аксессуара
+                // 'extra_field_13', // Цвет фильтра
                 'extra_field_14', // Материал фильтра
                 'extra_field_15', // Теги
                 // 'extra_field_16', // Акция
                 // 'extra_field_17', // Поднять
                 // 'extra_field_18', // Рейтинг
-            ]);
+            ])
+            ->keyBy('id');
 
         $oldProductImages = DB::connection('old_mysql')
             ->table($this->oldImagesTable)
             ->get(['product_id', 'image_name', 'ordering'])
-            ->keyBy('product_id')
-            ->groupBy('product_id', true);
+            ->groupBy('product_id')
+            ->toArray();
 
-        foreach ($oldProducts as $oldProduct) {
-            
+        $oldProductSizes = DB::connection('old_mysql')
+            ->table($this->oldSizesTable)
+            // ->leftJoin('cyizj_jshopping_attr_values', "$this->oldSizesTable.attr_value_id", '=', 'cyizj_jshopping_attr_values.value_id')
+            ->orderByDesc('product_id')
+            ->get(['product_id', 'attr_value_id'])
+            ->groupBy('product_id')
+            ->toArray();
+
+        foreach ($oldProducts as $productId => $oldProduct) {
+
             $insertData = $oldProduct = (array)$oldProduct;
-            unset(
-                $insertData['extra_field_3'],
-                $insertData['extra_field_7'],
-                $insertData['extra_field_12'],
-                $insertData['extra_field_13'],
-                $insertData['extra_field_14'],
-                $insertData['extra_field_15'],
-            );
-            $product = new Product($insertData);
-            $product->save();
+            unset($insertData['extra_field_3'],
+            $insertData['extra_field_7'],
+            // $insertData['extra_field_12'],
+            // $insertData['extra_field_13'],
+            $insertData['extra_field_14'],
+            $insertData['extra_field_15'],);
+
+            // color
+            $colorsId = explode(',', $insertData['color_id']);
+            if ($colorsId > 1) {
+                $insertData['color_id'] = 17; // мультиколор
+            } else {
+                $insertData['color_id'] = $this->attributesList['color']['new_id'][($colorsId[0] ?? 0)] ?? 0;
+            }
 
             foreach ($this->attributesList as $method => $value) {
-
                 if (isset($value['column'])) { // одно значение
 
                     $insertValue = $value['new_id'][$oldProduct[$value['column']]] ?? 0;
 
-                    /*if ($method == 'color') {
-                        $insertValue = explode(',', $insertValue);
-                        if (count($insertValue) > 1) {
-                            $insertValue = 17; // мультиколор
-                        } else {
-                            $insertValue = $insertValue[0];
-                        }
-                    }*/
-
-
                     if ($insertValue === 'del') {
                         continue 2;
                     } else {
-                        $product[$value['column']] = $insertValue;
+                        $insertData[$value['column']] = $insertValue;
                     }
-                } else { // несколько
+                }
+            }
+
+            $product = new Product($insertData);
+            $product->save();
+
+
+            foreach ($this->attributesList as $method => $value) {
+                if (isset($value['old_column'])) { // несколько
                     $values = trim($oldProduct[$value['old_column']]);
                     if (empty($values)) {
                         continue;
@@ -307,18 +333,20 @@ class ProductSeeder extends Seeder
                 }
             }
 
-            /*
-            // sizes cyizj_jshopping_products_attr2
-            $sizesList = Arr::random(range(1, 9), mt_rand(1, 6));
+            // sizes
+            $sizesList = array_column($oldProductSizes[$productId] ?? [], 'attr_value_id');
+            foreach ($sizesList as $key => &$newValue) {
+                if (isset($this->attributesList['sizes']['new_id'][$newValue])) {
+                    $newValue = $this->attributesList['sizes']['new_id'][$newValue];
+                } else {
+                    unset($sizesList[$key]);
+                }
+            }
+            $sizesList = empty($sizesList) ? [1] : $sizesList;
             $product->sizes()->sync($sizesList);
-
-            // color
-            $product->color_id = mt_rand(1, 17);
-            */
 
             // images
             // $product->images()->sync($sizesList);
-
 
             $product->save();
         }
