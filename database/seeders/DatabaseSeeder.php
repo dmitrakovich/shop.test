@@ -23,9 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SeasonSeeder::class);
         $this->call(TagSeeder::class);
         $this->call(BrandSeeder::class);
-
         $this->call(ProductSeeder::class);
-        $this->call(ProductImageSeeder::class);
         $this->call(UrlsSeeder::class);
 
         // admin panel
