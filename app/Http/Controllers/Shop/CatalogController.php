@@ -85,39 +85,12 @@ class CatalogController extends BaseController
 
     public function show($request)
     {
-        $currentFilters = $this->getFilters($request);
-
-
-        // dump($currentFilters);
-
-        /*if ($path) {
-            if ($this->categoryRepository->hasPath($path)) {
-                // страница каталога
-            } else {
-                $productSlug = basename($path);
-                $path = substr($path, 0, -(++strlen($productSlug)));
-                if ($this->categoryRepository->hasPath($path)) {
-                    // страница продукта
-                } else { // такая категория не найдена
-                    abort(404);
-                }
-            }
-        }*/
-        
-
-        // есть ли такая каегория
-        // есть ли такая каегория -1
-            // если есть, то в конце товар
-            // если нет, то 404
-   
+        $currentFilters = $this->getFilters($request);   
         
         // $currentCategory = Category::find($slug->model_id);
         $currentCategory = Category::first();
         // dd($slug, $currentCategory);
         $categoriesTree =  $this->categoryRepository->getTree();
-
-
-        // Product::where('category_id', 0)->delete();
 
         $products = $this->applyFilters($currentFilters)
             ->with([
@@ -127,8 +100,9 @@ class CatalogController extends BaseController
                 'sizes',
                 'color',
                 'fabrics',
+                'media',
             ])
-            ->where('product_publish', true)
+            ->where('publish', true)
             // ->orderBy('created_at', 'desc')
             ->paginate(self::PAGE_SIZE);
 

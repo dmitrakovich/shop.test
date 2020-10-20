@@ -346,7 +346,18 @@ class ProductSeeder extends Seeder
             $product->sizes()->sync($sizesList);
 
             // images
-            // $product->images()->sync($sizesList);
+            $imagesList = array_column($oldProductImages[$productId] ?? [], 'image_name');
+            foreach ($imagesList as $image) {
+
+                $pathToFile = 'C:/OSPanel/domains/shop.test/public/images/products/' . $image;
+                
+                if (file_exists($pathToFile)) {
+                    $product
+                        ->addMedia($pathToFile)
+                        ->preservingOriginal()
+                        ->toMediaCollection();
+                }
+            }
 
             $product->save();
         }

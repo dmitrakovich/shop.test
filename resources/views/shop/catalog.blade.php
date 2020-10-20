@@ -19,16 +19,16 @@
                     <div class="col-12 col-md-auto js-product-item product-item mb-3 px-3">
                         <a href="{{ $product->category->getUrl() . '/' . $product->slug }}">
                             <p>
-                                <img src="/images/products/{{ $product->images->first()['img'] }}" alt="{{ $product->title }}"
+                                <img src="{{ $product->getMedia()->first()->getUrl('catalog') }}" alt="{{ $product->title }}"
                                     class="img-fluid">
                             </p>
                         </a>
                         <b>{{ $product->getFullName() }}</b> <br>
-                        @if ($product->product_price < $product->product_old_price)
-                            <s>{{ round($product->product_old_price, 2) }} руб.</s>
-                            <font color="#D22020">{{ round($product->product_price, 2) }} руб.</font><br>
+                        @if ($product->price < $product->old_price)
+                            <s>{{ round($product->old_price, 2) }} руб.</s>
+                            <font color="#D22020">{{ round($product->price, 2) }} руб.</font><br>
                         @else
-                            {{ round($product->product_price, 2) }} руб.<br>
+                            {{ round($product->price, 2) }} руб.<br>
                         @endif
                         {{-- <p><b>Категория: </b>{{ $product->category->title }}</p> --}}
                         {{-- <p><b>Размеры: </b>{{ $product->sizes->implode('name', ',') }}</p> --}}
