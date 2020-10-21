@@ -22,4 +22,4 @@
 @include('shop.filters.brand')
 <br>
 
-<button class="btn btn-dark">Очистить фильтр</button>
+<button class="btn btn-dark btn-block">Очистить фильтр</button>
