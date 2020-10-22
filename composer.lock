@@ -3158,12 +3158,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/default-089/laravel-medialibrary.git",
-                "reference": "5934c4857c60f8fd107dc5eee9a4efb718c493da"
+                "reference": "9c4f1b7c51208bf05bbdcdf7e76a504a4df9dda7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/default-089/laravel-medialibrary/zipball/5934c4857c60f8fd107dc5eee9a4efb718c493da",
-                "reference": "5934c4857c60f8fd107dc5eee9a4efb718c493da",
+                "url": "https://api.github.com/repos/default-089/laravel-medialibrary/zipball/9c4f1b7c51208bf05bbdcdf7e76a504a4df9dda7",
+                "reference": "9c4f1b7c51208bf05bbdcdf7e76a504a4df9dda7",
                 "shasum": ""
             },
             "require": {
@@ -3255,7 +3255,7 @@
             "support": {
                 "source": "https://github.com/default-089/laravel-medialibrary/tree/downgrade-to-php-7.3"
             },
-            "time": "2020-10-22T06:17:20+00:00"
+            "time": "2020-10-22T06:53:29+00:00"
         },
         {
             "name": "spatie/temporary-directory",
