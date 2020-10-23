@@ -3,3 +3,8 @@
 ```shell
 php artisan storage:link
 ```
+
+если в ENV
+QUEUE_CONNECTION=database
+то задачи по созданию других размеров изображения
+складываются в базу

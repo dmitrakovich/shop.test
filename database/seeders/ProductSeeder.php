@@ -348,14 +348,17 @@ class ProductSeeder extends Seeder
             // images
             $imagesList = array_column($oldProductImages[$productId] ?? [], 'image_name');
             foreach ($imagesList as $image) {
-
-                $pathToFile = 'C:/OSPanel/domains/shop.test/public/images/products/' . $image;
+                // $pathToFile = 'C:/OSPanel/domains/shop.test/public/images/products/' . $image;
+                $urlToFile = 'https://modny.by/components/com_jshopping/files/img_products/' . $image;
                 
-                if (file_exists($pathToFile)) {
+                try {
                     $product
-                        ->addMedia($pathToFile)
+                        // ->addMedia($pathToFile)
+                        ->addMediaFromUrl($urlToFile)
                         ->preservingOriginal()
                         ->toMediaCollection();
+                } catch (\Throwable $th) {
+                    // echo $th->getMessage();
                 }
             }
 
