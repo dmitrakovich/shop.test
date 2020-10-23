@@ -16,7 +16,7 @@
     "require": {
         "php": "^7.3",
         "darryldecode/cart": "^4.2",
-        "davejamesmiller/laravel-breadcrumbs": "^5.3",
+        "diglactic/laravel-breadcrumbs": "^6.0",
         "drandin/declension-nouns": "dev-master",
         "encore/laravel-admin": "^1.7",
         "fideloper/proxy": "^4.2",
