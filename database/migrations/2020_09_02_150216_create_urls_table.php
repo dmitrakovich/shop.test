@@ -14,7 +14,7 @@ class CreateUrlsTable extends Migration
     public function up()
     {
         Schema::create('urls', function (Blueprint $table) {
-            $table->uuid('slug')->unique();
+            $table->string('slug', 100)->unique();
             $table->morphs('model');
             $table->text('redirect')->nullable();
         });
