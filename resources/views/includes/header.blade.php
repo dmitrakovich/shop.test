@@ -23,7 +23,7 @@
             </div>
             <div class="col-auto ml-auto">
                 <a href="{{ route('index-page') }}">
-                    <h2 class="text-uppercase m-0">{{ config('app.name') }}</h2>
+                    <img src="/images/icons/barocco.svg" alt="" class="img-fluid w-100">
                 </a>
             </div>
             <div class="col-auto ml-auto account-btns d-flex">

@@ -13,7 +13,7 @@
         </div>
         <div class="col-12 p-main">
             <a href="">
-                <img src="/images/banners/{{ $banners['left'] }}" alt="" class="img-fluid">
+                <img src="/images/banners/{{ $banners['left'] }}" alt="" class="img-fluid w-100">
             </a>
         </div>
     </div>
@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-12 p-main">
             <a href="">
-                <img src="/images/banners/{{ $banners['right'] }}" alt="" class="img-fluid">
+                <img src="/images/banners/{{ $banners['right'] }}" alt="" class="img-fluid w-100">
             </a>
         </div>
         <div class="col-12 p-main">

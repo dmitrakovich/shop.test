@@ -55,7 +55,7 @@
             <div class="col-12 col-md-auto js-product-item product-item mb-3 px-3 text-left">
                 <a href="{{ $product->category->getUrl() . '/' . $product->slug }}">
                     <p>
-                        <img src="/images/products/{{ $product->images->first()['img'] }}" alt="{{ $product->title }}"
+                        <img src="{{ $product->getFirstMedia()->getUrl('catalog') }}" alt="{{ $product->title }}"
                                     class="img-fluid" style="max-width: 180px">
                     </p>
                 </a>
