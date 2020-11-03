@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(SizeSeeder::class);
-        $this->call(ColorSeeder::class);        
+        $this->call(ColorSeeder::class);
         $this->call(FabricSeeder::class);
         $this->call(HeelSeeder::class);
         $this->call(StyleSeeder::class);
@@ -26,6 +26,9 @@ class DatabaseSeeder extends Seeder
         $this->call(BrandSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(UrlsSeeder::class);
+
+        $this->call(CountriesSeeder::class);
+        $this->call(FeedbackSeeder::class);
 
         // admin panel
         Artisan::call('admin:install');
