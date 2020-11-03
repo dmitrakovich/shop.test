@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class FeedbackSeeder extends Seeder
 {
-    protected string $tableName = 'feedback';
+    protected string $tableName = 'feedbacks';
     protected string $oldTableName = 'cyizj_jshopping_products_reviews';
     /**
      * Run the database seeds.
