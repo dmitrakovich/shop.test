@@ -5,8 +5,6 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            
-
 
             <div class="account-btns">
                 <button class="btn p-0 d-inline-block d-lg-none js-mobile-search" type="button" data-toggle="collapse" data-target="#collapseExample">
@@ -19,7 +17,7 @@
                     +375&nbsp;44&nbsp;728&nbsp;66&nbsp;06<br>
                     Viber / Telegram / What’s App
                 </small></p>
-                
+
             </div>
             <div class="col-auto ml-auto">
                 <a href="{{ route('index-page') }}">
@@ -45,7 +43,7 @@
                 </a>
             </div>
 
-            
+
             <div class="col-12 navbar-main-menu" id="mainMenu">
                 <div class="row justify-content-center align-items-center text-uppercase font-size-15 position-relative">
                     <div class="col-12 col-lg-auto hover-dropdown">
@@ -73,7 +71,7 @@
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto">
-                        <a href="{{ route('reviews') }}">Отзывы</a>
+                        <a href="{{ route('feedbacks') }}">Отзывы</a>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 d-lg-none">

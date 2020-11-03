@@ -1,9 +1,14 @@
 <?php
 
+use App\Models\Url;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Shop\CatalogController;
 use App\Http\Controllers\Shop\ProductController;
-use App\Models\Url;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +42,7 @@ Route::prefix('clear-cache')->group(function () {
         Artisan::call('cache:clear');
         return 'App cache is cleared';
     });
-    // ... 
+    // ...
     Route::get('/all', function () {
         Artisan::call('cache:clear');
         Artisan::call('route:clear');
@@ -65,7 +70,7 @@ Route::view('shops', 'static.shops')->name('static-shops');
 
 Auth::routes();
 
-Route::get('reviews', 'ReviewsController@getAll')->name('reviews');
+Route::get('/feedbacks/{type?}', [FeedbackController::class, 'index'])->name('feedbacks');
 
 // dashboard
 Route::prefix('dashboard')->middleware('auth')->group(function () {
@@ -80,8 +85,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 });
 
 Route::group(['namespace' => 'Shop'], function () {
-    Route::get('catalog/{path?}', function () {        
-        $request = Route::getCurrentRequest();       
+    Route::get('catalog/{path?}', function () {
+        $request = Route::getCurrentRequest();
         $slug = Str::of($request->path())->explode('/')->last();
         $url = Url::search($slug);
 
