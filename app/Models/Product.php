@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class Product
- * 
+ *
  * @package App
- * 
+ *
  * @property \App\Category      $category
  * @property string             $title
  * @property string             $slug
@@ -159,5 +160,31 @@ class Product extends Model implements HasMedia
         $this->addMediaConversion('normal')->width(700);
         $this->addMediaConversion('full')->width(1200);
     }
+    /**
+     * Сортировка товаров
+     *
+     * @param Builder $query
+     * @param string $type
+     * @return Builder
+     */
+    public function scopeSorting(Builder $query, string $type)
+    {
+        switch ($type) {
+            case 'newness':
+            default:
+                return $query->orderBy('created_at', 'desc');
 
+            case 'rating':
+                return $query->orderBy('created_at', 'desc');
+
+            case 'price-up':
+                return $query->orderBy('price', 'asc');
+
+            case 'price-down':
+                return $query->orderBy('price', 'desc');
+
+            case 'sale':
+                return $query->orderByRaw('((old_price - price) / old_price) desc');
+        }
+    }
 }

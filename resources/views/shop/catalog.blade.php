@@ -12,6 +12,32 @@
 
         {{ Banner::getCatalogTop() }}
 
+        <div class="col-12 my-4">
+            <div class="row justify-content-end">
+                <div class="col-auto align-self-center mr-3 d-none d-md-block">
+                    Сортировка:
+                </div>
+                <select name="sorting" class="form-control col-6 col-md-4 col-lg-3 col-xl-2">
+                    <option data-href="{{ URL::current() . '?' . http_build_query(['sort' => 'rating']) }}"
+                        {{ $sort == 'rating' ? 'selected' : null }}>
+                        по популярности
+                    </option>
+                    <option data-href="{{ URL::current() . '?' . http_build_query(['sort' => 'newness']) }}"
+                        {{ $sort == 'newness' ? 'selected' : null }}>
+                        новинки
+                    </option>
+                    <option data-href="{{ URL::current() . '?' . http_build_query(['sort' => 'price-up']) }}"
+                        {{ $sort == 'price-up' ? 'selected' : null }}>
+                        по возрастанию цены
+                    </option>
+                    <option data-href="{{ URL::current() . '?' . http_build_query(['sort' => 'price-down']) }}"
+                        {{ $sort == 'price-down' ? 'selected' : null }}>
+                        по убыванию цены
+                    </option>
+                </select>
+            </div>
+        </div>
+
         <div class="col-12 scrolling-pagination">
             <div class="row jscroll-inner justify-content-between">
                 @forelse($products as $product)
@@ -33,7 +59,7 @@
                         {{-- <p><b>Категория: </b>{{ $product->category->title }}</p> --}}
                         {{-- <p><b>Размеры: </b>{{ $product->sizes->implode('name', ',') }}</p> --}}
                         <span class="text-mutted">{{ $product->sizes->implode('name', ' | ') }}</span>
-                        
+
                         {{-- <p><b>Цвет: </b>{{ $product->color->name ?? '' }}</p> --}}
                         {{-- <p><b>Материал: </b>{{ $product->fabrics->implode('name', ',') }}</p> --}}
                         {{-- <p><b>Каблук: </b>{{ $product->heels->implode('name', ',') }}</p> --}}

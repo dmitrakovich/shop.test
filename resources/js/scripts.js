@@ -25,18 +25,21 @@ $(function () {
 //#endregion
 
 //#region catalog
+    // infinite scroll
     $('.catalog-page ul.pagination').hide();
-    $(function() {
-        $('.catalog-page .scrolling-pagination').jscroll({
-            autoTrigger: true,
-            padding: 220,
-            nextSelector: 'nav .pagination li.active + li a',
-            contentSelector: 'div.jscroll-inner',
-            callback: function() {
-                $('ul.pagination').parent().remove();
-                $('.jscroll-added .jscroll-inner .js-product-item').unwrap().unwrap();
-            }
-        });
+    $('.catalog-page .scrolling-pagination').jscroll({
+        autoTrigger: true,
+        padding: 220,
+        nextSelector: 'nav .pagination li.active + li a',
+        contentSelector: 'div.jscroll-inner',
+        callback: function() {
+            $('ul.pagination').parent().remove();
+            $('.jscroll-added .jscroll-inner .js-product-item').unwrap().unwrap();
+        }
+    });
+    // sorting
+    $('select[name="sorting"]').on('change', function () {
+        window.location.href = $(this).find('option:selected').data('href');
     });
 //#endregion
 
@@ -83,7 +86,7 @@ $('.product_grid').imagesLoaded(function () {
         fitRows: {
             gutter: 30
         }
-	}); 
+	});
 });
 
 */

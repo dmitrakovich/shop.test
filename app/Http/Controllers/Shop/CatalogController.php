@@ -18,6 +18,10 @@ class CatalogController extends BaseController
      */
     protected const PAGE_SIZE = 12;
     /**
+     * Сортировка по умлочанию
+     */
+    const DEFAULT_SORT = 'newness';
+    /**
      * ProductRepository
      *
      * @var ProductRepository
@@ -59,7 +63,7 @@ class CatalogController extends BaseController
 
     public function ajaxNextPage()
     {
-        // в будущем создать отдельный view для подгрузки только моделей, 
+        // в будущем создать отдельный view для подгрузки только моделей,
         // а не всей страницы целиком
     }
 
@@ -85,8 +89,9 @@ class CatalogController extends BaseController
 
     public function show($request)
     {
-        $currentFilters = $this->getFilters($request);   
-        
+        $sort = $request->input('sort') ?? self::DEFAULT_SORT;
+        $currentFilters = $this->getFilters($request);
+
         // $currentCategory = Category::find($slug->model_id);
         $currentCategory = Category::first();
         // dd($slug, $currentCategory);
@@ -103,7 +108,7 @@ class CatalogController extends BaseController
                 'media',
             ])
             ->where('publish', true)
-            // ->orderBy('created_at', 'desc')
+            ->sorting($sort)
             ->paginate(self::PAGE_SIZE);
 
         // $products = $this->productRepository->getAllWithPaginate(self::PAGE_SIZE);
@@ -112,6 +117,14 @@ class CatalogController extends BaseController
         $filters = Filter::all();
         // dd($filters);
 
-        return view('shop.catalog', compact('products', 'currentCategory', 'categoriesTree', 'filters'));
+        $data = compact(
+            'products',
+            'currentCategory',
+            'categoriesTree',
+            'filters',
+            'sort'
+        );
+
+        return view('shop.catalog', $data);
     }
 }
