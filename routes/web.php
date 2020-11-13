@@ -1,14 +1,15 @@
 <?php
 
-use App\Models\Url;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\Shop\CatalogController;
+use App\Models\Url;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Shop\ProductController;
+use App\Http\Controllers\Shop\CatalogController;
+use App\Http\Controllers\FeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +103,15 @@ Route::group(['namespace' => 'Shop'], function () {
     Route::post('add-to-cart', 'CartController@addToCart')->name('addToCart');
     Route::post('cart-submit', 'CartController@submit')->name('cartSubmit');
 });
+
+// sitemap
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
+Route::get('/sitemap.static.xml', [SitemapController::class, 'static'])->name('sitemap.static');
+Route::get('/sitemap.products.xml', [SitemapController::class, 'products'])->name('sitemap.products');
+Route::get('/sitemap.catalog.categories.xml', [SitemapController::class, 'categories'])->name('sitemap.catalog.categories');
+Route::get('/sitemap.catalog.brands.xml', [SitemapController::class, 'brands'])->name('sitemap.catalog.brands');
+Route::get('/sitemap.catalog.categories_and_{another}_and_{another2}.xml', [SitemapController::class, 'catalog3'])->name('sitemap.catalog.catalog3');
+Route::get('/sitemap.catalog.categories_and_{another}.xml', [SitemapController::class, 'catalog2'])->name('sitemap.catalog.catalog2');
 
 Route::fallback(function() {
     return 'Хм… Почему ты оказался здесь?';
