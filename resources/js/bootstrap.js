@@ -12,6 +12,7 @@ try {
 
     require('jscroll');
     require('bootstrap');
+    require('@fancyapps/fancybox');
 } catch (e) {}
 
 /**
