@@ -139,6 +139,20 @@ footer {
         }
     }
 }
+
+.check {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+}
+
 .filters-sidebar {
     ul {
         list-style-type: none;
@@ -168,10 +182,6 @@ footer {
             }
         }
         .check {
-            display: inline-block;
-            position: relative;
-            cursor: pointer;
-            user-select: none;
             span {
                 display: inline-block;
                 vertical-align: top;
@@ -181,12 +191,8 @@ footer {
             }
         }
         .checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
             height: 20px;
             width: 20px;
-            background-color: transparent;
             border: 1px solid #231f20;
         }
         &.categories {
@@ -214,3 +220,79 @@ footer {
     }
 }
 
+
+
+.product-page {
+    .product-description {
+        line-height: 30px;
+    }
+
+    .price-block {
+        .price {
+            font-weight: 300;
+            font-size: 31px;
+            line-height: 30px;
+            &.price-old {
+                text-decoration-line: line-through;
+                color: #767676;
+            }
+            &.price-new {
+                color: #D22020;
+            }
+        }
+    }
+}
+
+
+.rating-result {
+    span.star {
+        padding: 0;
+        font-size: 32px;
+        margin: 0 2px;
+        color: lightgrey;
+        &:before {
+            content: '★';
+        }
+        &.active {
+            color: #000;
+        }
+    }
+}
+
+.product-size {
+    ul {
+        li {
+            .check {
+                width: 40px;
+                height: 40px;
+                line-height: 40px;
+                text-align: center;
+            }
+            .checkmark {
+                height: 100%;
+                width: 100%;
+                font-size: 12px;
+                color: #3A2E2C;
+                font-style: normal;
+                transition: all .3s;
+                border: 1px solid #767676;
+                &:hover {
+                    background: #000;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
+
+.tooltip-trigger {
+    display: inline-block;
+    background: #D22020;
+    color: #ffff;
+    text-align: center;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: help;
+    font-size: 12px;
+}
