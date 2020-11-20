@@ -893,3 +893,14 @@ body.compensate-for-scrollbar {
         max-width: calc(100% - 10px);
     }
 }
+
+
+
+// my styles
+
+a[data-fancybox] {
+    cursor: zoom-in;
+    &:focus {
+        outline: none;
+    }
+}

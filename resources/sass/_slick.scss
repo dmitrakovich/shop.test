@@ -105,6 +105,9 @@
 }
 
 .product-page {
+    .slick-active img {
+        cursor: pointer;
+    }
     .slider-nav .slick-current img {
         border-bottom: 2px solid;
         padding-bottom: 2px;
