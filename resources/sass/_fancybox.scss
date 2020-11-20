@@ -899,8 +899,11 @@ body.compensate-for-scrollbar {
 // my styles
 
 a[data-fancybox] {
-    cursor: zoom-in;
     &:focus {
         outline: none;
+    }
+    cursor: zoom-in;
+    img {
+        cursor: zoom-in !important;
     }
 }
