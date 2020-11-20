@@ -8,13 +8,24 @@
     <div class="col-12 product-page">
         <div class="row">
             <div class="col-12 col-md-6 col-xl-7">
-                {{-- <img src="{{ $product->getFirstMedia()->getUrl('full') }}" alt="{{ $product->title }}" --}}
-                <img src="{{ $product->getFirstMedia()->getUrl('normal') }}" alt="{{ $product->title }}"
-                    class="img-fluid"><br>
-                @foreach ($product->getMedia() as $image)
-                    <img src="{{ $image->getUrl('thumb') }}" alt="{{ $product->title }}" class="img-fluid pr-3"
-                        style="max-width: 70px">
-                @endforeach
+
+                <div class="slider-for">
+                    @foreach ($product->getMedia() as $image)
+                        <a href="{{ $image->getUrl('full') }}" data-fancybox>
+                            <img src="{{ $image->getUrl('normal') }}" class="img-fluid">
+                        </a>
+                    @endforeach
+                </div>
+                <div class="slider-nav mb-3 row" style="max-width: 720px">
+                    @foreach ($product->getMedia() as $image)
+                        <div class="col-auto">
+                            <img src="{{ $image->getUrl('thumb') }}" class="img-fluid">
+                        </div>
+                    @endforeach
+                </div>
+
+
+
             </div>
             <div class="col-12 col-md-6 col-xl-5">
                 <div class="col-12">

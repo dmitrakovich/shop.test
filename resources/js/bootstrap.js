@@ -13,6 +13,7 @@ try {
     require('jscroll');
     require('bootstrap');
     require('@fancyapps/fancybox');
+    require('slick-carousel');
 } catch (e) {}
 
 /**
