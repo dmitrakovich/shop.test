@@ -1,8 +1,6 @@
 $(function () {
 //#region боковое меню в мобильной версии
 
-    // посмотреть fancybox
-
     // скрытие
     $('.overlay').on('click', function () {
         $('#mainMenu, .overlay').removeClass('active');

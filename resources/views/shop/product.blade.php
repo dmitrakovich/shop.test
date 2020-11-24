@@ -11,7 +11,7 @@
 
                 <div class="slider-for">
                     @foreach ($product->getMedia() as $image)
-                        <a href="{{ $image->getUrl('full') }}" data-fancybox>
+                        <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
                             <img src="{{ $image->getUrl('normal') }}" class="img-fluid">
                         </a>
                     @endforeach
