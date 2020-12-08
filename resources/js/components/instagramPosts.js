@@ -13,12 +13,12 @@ $(function () {
     if ($instagramPostsBlock.length)
     {
         let host = 'https://www.instagram.com/',
-            username = 'modny.by',
+            username = 'barocco.by',
             postsCount = 6,
             colSize = 4, // для дектопа, для моб всегда 12
             xhr = new XMLHttpRequest();
 
-        xhr.open("GET", host + username + '/'); 
+        xhr.open("GET", host + username + '/');
 
         xhr.onload = function() {
             if (xhr.readyState === 4) {
@@ -28,7 +28,7 @@ $(function () {
                     }catch(error){
                         console.error("доступ к профилю видимо закрыт");
                         return;
-                    }                
+                    }
                     data = JSON.parse(data.substr(0, data.length - 1)); // обрезать ';' и перевести в JSON
                     data = data.entry_data.ProfilePage;
                     if(typeof data === "undefined"){
@@ -36,7 +36,7 @@ $(function () {
                         return;
                     }
                     data = data[0].graphql.user.edge_owner_to_timeline_media.edges;
-    
+
                     let html = '';
                     $.each(data, function (index, value) {
                         let node = value.node,
