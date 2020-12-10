@@ -36,7 +36,7 @@
                         <img src="/images/icons/cart.svg" alt="корзина" class="img-fluid">
                         <div class="cart-count position-absolute d-flex justify-content-center align-items-center">
                             <span class="js-cart-count">
-                                {{ Cart::session(345345)->getTotalQuantity() }}
+                                {{ Cart::itemsCount() }}
                             </span>
                         </div>
                     </div>
