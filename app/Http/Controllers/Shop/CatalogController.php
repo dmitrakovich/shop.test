@@ -101,7 +101,7 @@ class CatalogController extends BaseController
             ->with([
                 'category',
                 'brand',
-                'images',
+                // 'images',
                 'sizes',
                 'color',
                 'fabrics',

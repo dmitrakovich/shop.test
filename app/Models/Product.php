@@ -48,15 +48,15 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(Category::class);
     }
-    /**
-     * Картинки товара
-     *
-     * @return Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function images()
-    {
-        return $this->morphMany(Images::class, 'entity')->orderBy('sorting');
-    }
+    // /**
+    //  * Картинки товара
+    //  *
+    //  * @return Illuminate\Database\Eloquent\Relations\MorphMany
+    //  */
+    // public function images()
+    // {
+    //     return $this->morphMany(Images::class, 'entity')->orderBy('sorting');
+    // }
     /**
      * Получить шильды для продукта
      *
