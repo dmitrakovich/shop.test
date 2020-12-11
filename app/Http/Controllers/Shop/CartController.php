@@ -12,9 +12,9 @@ class CartController extends Controller
 {
     public function index()
     {
-        $items = Cart::getData();
+        $cart = Cart::withData();
         $user = auth()->user() ?? new User();
-        return view('shop.cart', compact('items', 'user'));
+        return view('shop.cart', compact('cart', 'user'));
     }
 
     public function submit(Request $request)

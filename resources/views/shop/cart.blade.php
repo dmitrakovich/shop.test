@@ -7,22 +7,21 @@
 @section('content')
     <div class="col-10 my-5">
         <div class="row">
-            @forelse ($items as $row)
-            {{-- {{ dump($row) }} --}}
+            @forelse ($cart->items as $item)
                 <div class="col-12 border-bottom border-secondary">
                     <div class="row">
                         <div class="col-2">
-                            <img src="/images/products/{{ $row->associatedModel->images->first()['img'] }}" 
-                                alt="{{ $row->associatedModel->title }}" class="img-fluid">
+                            <img src="{{ $item->product->getFirstMedia()->getUrl('catalog') }}"
+                                alt="{{ $item->product->title }}" class="img-fluid">
                         </div>
                         <div class="col-3">
-                            {{ $row->associatedModel->getFullName() }} <br>
-                           <small>{{ $row->associatedModel->category->title }}</small>
+                            {{ $item->product->getFullName() }} <br>
+                           <small>{{ $item->product->category->title }}</small>
                         </div>
-                        <div class="col-1">{{ DeclensionNoun::make($row->quantity, 'пара') }}</div>
+                        <div class="col-1">{{ DeclensionNoun::make($item->count, 'пара') }}</div>
                         <div class="col-1">размер 36</div>
-                        <div class="col-2">{{ $row->associatedModel->color->name }}</div>
-                        <div class="col-3">{{ $row->associatedModel->product_price }} BYN</div>
+                        <div class="col-2">{{ $item->product->color->name }}</div>
+                        <div class="col-3">{{ $item->product->product_price }} BYN</div>
                     </div>
                 </div>
             @empty
@@ -49,7 +48,7 @@
                         СТОИМОСТЬ ЗАКАЗА
                     </div>
                     <div class="col-auto">
-                        {{ Cart::getTotal() }} BYN
+                        {{ Cart::getTotalPrice() }} BYN
                     </div>
                 </div>
                 <div class="row justify-content-between mb-2">
@@ -65,7 +64,7 @@
                         К оплате
                     </div>
                     <div class="col-auto">
-                        {{ Cart::getTotal() }} BYN
+                        {{-- {{ Cart::getTotal() }} BYN --}}
                     </div>
                 </div>
             </div>
@@ -76,9 +75,9 @@
             <div class="col-12 mb-4">
                 <h5>ЗАПОЛНИТЕ ДАННЫЕ ДОСТАВКИ</h5>
             </div>
-            <div class="col-12 col-md-4 form-group">                
+            <div class="col-12 col-md-4 form-group">
                 <label for="city">Город</label>
-                <select name="city" id="city" 
+                <select name="city" id="city"
                     class="form-control @error('city') is-invalid @enderror">
                     <option value="1">Брест</option>
                     <option value="2">Витебск</option>
@@ -95,7 +94,7 @@
             </div>
             <div class="col-12 col-md-8 form-group">
                 <label for="address">Адрес</label>
-                <input id="city" type="text" name="address" 
+                <input id="city" type="text" name="address"
                     class="form-control @error('address') is-invalid @enderror"
                     value="{{ old('address', $user->address) }}">
                 @error('address')
@@ -106,7 +105,7 @@
             </div>
             <div class="col-12 col-md-4 form-group">
                 <label for="fio">ФИО</label>
-                <input id="fio" type="text" name="fio" 
+                <input id="fio" type="text" name="fio"
                     class="form-control @error('fio') is-invalid @enderror"
                     value="{{ old('fio', $user->full_name) }}">
                 @error('fio')
@@ -117,8 +116,8 @@
             </div>
             <div class="col-12 col-md-4 form-group">
                 <label for="city">Телефон</label>
-                <input id="phone" type="tel" name="phone" 
-                    class="form-control @error('phone') is-invalid @enderror" 
+                <input id="phone" type="tel" name="phone"
+                    class="form-control @error('phone') is-invalid @enderror"
                     value="{{ old('phone', $user->phone ?? '+375') }}">
                 @error('phone')
                     <span class="invalid-feedback" role="alert">
@@ -128,7 +127,7 @@
             </div>
             <div class="col-12 col-md-4 form-group">
                 <label for="city">E-mail</label>
-                <input id="email" type="email" name="email" 
+                <input id="email" type="email" name="email"
                     class="form-control @error('email') is-invalid @enderror"
                     value="{{ old('email', $user->email) }}">
                 @error('email')
@@ -143,7 +142,7 @@
                 Подтвердить заказ
             </button>
         </div>
-        
+
     </div>
-    
+
 @endsection

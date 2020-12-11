@@ -43,6 +43,19 @@ class Cart extends Model
         return $counter;
     }
     /**
+     * Получить общую стоимость товаров в корзине
+     *
+     * @return float
+     */
+    public function getTotalPrice()
+    {
+        $price = 0;
+        foreach ($this->items as $item) {
+            $price += ($item->product->price * $item->count);
+        }
+        return $price;
+    }
+    /**
      * Добавить товар в корзину
      *
      * @param integer $productId
@@ -94,10 +107,10 @@ class Cart extends Model
      *
      * @return void
      */
-    public function getData()
+    public function withData()
     {
         $this->load('items');
-        $this->items->load('products');
+        $this->items->load('product');
         return $this;
     }
 }
