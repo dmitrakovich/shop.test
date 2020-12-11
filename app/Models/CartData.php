@@ -17,4 +17,13 @@ class CartData extends Model
         'color_id',
         'count',
     ];
+    /**
+     * Связть с товарами
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function products()
+    {
+        return $this->hasOne(Product::class, 'id');
+    }
 }

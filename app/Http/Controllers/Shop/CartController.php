@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Facades\Cart;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\User;
-use Cart;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
     public function index()
     {
-        $items = Cart::session(345345)->getContent();
+        $items = Cart::getData();
         $user = auth()->user() ?? new User();
         return view('shop.cart', compact('items', 'user'));
     }
@@ -32,22 +32,25 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-        $product = Product::findOrFail($request->input('id'));
+        $productId = $request->input('id') ?? abort(404);
+        $sizeId = $request->input('size_id') ?? abort(404);
+        $colorId = $request->input('color_id') ?? abort(404);
 
-        $userID = 345345;
+        // Product::where('id', $request->input('id'))
+            /*->whereHas('sizes', function ($query) use ($request) {
+                $query->where('sizes.id', $request->input('size_id'));
+            })*/
+            /*->whereHas(function ($query) use ($request) {
+                $query->where("$relationTable.id", $request->input('id')));
+            })*/
+            // ->first(['id']);
 
-        Cart::session($userID)->add([
-            'id' => $product->id, // $product->size !!!!
-            'name' => $product->getFullName(),
-            'price' => $product->product_price,
-            'quantity' => 1,
-            'attributes' => [],
-            'associatedModel' => $product
-        ]);
-        
+        $product = Product::findOrFail($productId);
+        Cart::addItem($product->id, $sizeId, $colorId);
+
         return [
             'result' => 'ok',
-            'total_count' => Cart::getTotalQuantity()
+            'total_count' => Cart::itemsCount()
         ];
     }
 }

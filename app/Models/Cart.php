@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-use ReflectionClass;
 
 class Cart extends Model
 {
@@ -89,5 +88,16 @@ class Cart extends Model
                 Cookie::queue(cookie('cart_token', $this->id, 60 * 24 * 30, '/'));
             }
         }
+    }
+    /**
+     * Получить содержимое корзины
+     *
+     * @return void
+     */
+    public function getData()
+    {
+        $this->load('items');
+        $this->items->load('products');
+        return $this;
     }
 }
