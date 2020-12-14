@@ -14,8 +14,7 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
     .extract()
     .sass('resources/sass/app.scss', 'public/css')
-    .version()
-    .sourceMaps(true, 'source-map');
+    .version();
 
 if (mix.inProduction()) {
     mix.disableNotifications();
@@ -23,4 +22,5 @@ if (mix.inProduction()) {
     mix.browserSync({
         proxy: 'shop.test',
     });
+    mix.sourceMaps(true, 'source-map');
 }
