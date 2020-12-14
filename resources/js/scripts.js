@@ -43,11 +43,21 @@ $(function () {
 
 
 //#region cart
+$('label.check .checkmark').on('click', function () {
+    let $checkBox = $(this).siblings('input[type=checkbox]');
+    $checkBox.prop("checked", !$checkBox.prop("checked")).trigger('click');
+    $(this).parent().toggleClass("checked");
+});
 $('button.js-add-to-cart').on('click', function () {
+    let $sizesBlock = $('.js-sizes').find('input[type=checkbox]:checked');
+    if (!$sizesBlock.length) {
+        alert('не выбран размер');
+        return false;
+    }
     $.ajax({
         method: "post",
         url: "/add-to-cart",
-        data: {id: $('#product_id').val()},
+        data: $('form#product-info').serialize(),
         // dataType: "dataType",
         success: function (response) {
             if (response.result != 'ok') {
@@ -58,33 +68,8 @@ $('button.js-add-to-cart').on('click', function () {
             }
         }
     });
+    return false;
 });
 //#endregion
 
 });
-
-
-
-
-// набросок для isotope
-// данный пример заменяет имеющиеся товары!
-
-// https://www.npmjs.com/package/imagesloaded
-
-
-/*
-$('.product_grid').html($data);
-
-$('.product_grid').isotope('destroy');
-
-$('.product_grid').imagesLoaded(function () {
-    var $grid = $('.product_grid').isotope({
-		itemSelector: '.product',
-        layoutMode: 'fitRows',
-        fitRows: {
-            gutter: 30
-        }
-	});
-});
-
-*/

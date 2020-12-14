@@ -111,6 +111,7 @@ class Cart extends Model
     {
         $this->load('items');
         $this->items->load('product');
+        $this->items->load('size:id,name');
         return $this;
     }
 }

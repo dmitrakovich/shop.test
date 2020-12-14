@@ -19,9 +19,9 @@
                            <small>{{ $item->product->category->title }}</small>
                         </div>
                         <div class="col-1">{{ DeclensionNoun::make($item->count, 'пара') }}</div>
-                        <div class="col-1">размер 36</div>
+                        <div class="col-1">размер {{ $item->size->name}}</div>
                         <div class="col-2">{{ $item->product->color->name }}</div>
-                        <div class="col-3">{{ $item->product->product_price }} BYN</div>
+                        <div class="col-3">{{ $item->product->price }} BYN</div>
                     </div>
                 </div>
             @empty

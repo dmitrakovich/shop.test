@@ -27,4 +27,13 @@ class CartData extends Model
         return $this->hasOne(Product::class, 'id', 'product_id')
             ->with(['category', 'brand', 'color', 'media']);
     }
+    /**
+     * Связть с размерами
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function size()
+    {
+        return $this->hasOne(Size::class, 'id', 'size_id');
+    }
 }

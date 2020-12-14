@@ -29,8 +29,6 @@
             </div>
             <div class="col-12 col-md-6 col-xl-5">
                 <div class="col-12">
-                    <input type="hidden" id="product_id" value="{{ $product->id }}">
-
                     <div class="row">
                         <div class="col-6 text-muted">
                             {{ $product->getFullName() }}
@@ -45,7 +43,8 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-xl-10">
+                <form class="col-12 col-xl-10" id="product-info">
+                    <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                     <div class="row mt-4">
                         <div class="col-12 col-lg-6 price-block">
                             <div class="row">
@@ -101,11 +100,11 @@
                                     <a class="text-decoration-underline" href="#">Таблица размеров</a>
                                 </div>
                             </div>
-                            <ul class="p-0 mt-3">
+                            <ul class="p-0 mt-3 js-sizes">
                                 @foreach ($product->sizes as $size)
                                     <li class="d-inline-block pr-3">
                                         <label class="check">
-                                            <input type="checkbox" class="d-none">
+                                            <input type="checkbox" class="d-none" name="sizes[{{ $size->id }}]">
                                             <span class="checkmark">{{ $size->name }}</span>
                                         </label>
                                     </li>
@@ -139,7 +138,7 @@
                             Возврат 14 дней
                         </p>
                     </div>
-                </div>
+                </form>
 
             </div>
         </div>

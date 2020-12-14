@@ -267,6 +267,12 @@ footer {
                 height: 40px;
                 line-height: 40px;
                 text-align: center;
+                &.checked, &:hover {
+                    .checkmark {
+                        background: #000;
+                        color: #fff;
+                    }
+                }
             }
             .checkmark {
                 height: 100%;
@@ -276,10 +282,6 @@ footer {
                 font-style: normal;
                 transition: all .3s;
                 border: 1px solid #767676;
-                &:hover {
-                    background: #000;
-                    color: #fff;
-                }
             }
         }
     }

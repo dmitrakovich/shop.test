@@ -19,6 +19,10 @@ class CartController extends Controller
 
     public function submit(Request $request)
     {
+
+        // !!!
+
+
         // dump($request->all());
         $orderInfo = [
             'orderNum' => mt_rand(),
@@ -32,9 +36,10 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-        $productId = $request->input('id') ?? abort(404);
-        $sizeId = $request->input('size_id') ?? abort(404);
-        $colorId = $request->input('color_id') ?? abort(404);
+        $productId = $request->input('product_id') ?? abort(404);
+        $sizes = $request->input('sizes') ?? abort(404);
+        // $colorId = $request->input('color_id') ?? abort(404);
+        $colorId = 17;
 
         // Product::where('id', $request->input('id'))
             /*->whereHas('sizes', function ($query) use ($request) {
@@ -46,7 +51,9 @@ class CartController extends Controller
             // ->first(['id']);
 
         $product = Product::findOrFail($productId);
-        Cart::addItem($product->id, $sizeId, $colorId);
+        foreach ($sizes as $sizeId => $state) {
+            Cart::addItem($product->id, $sizeId, $colorId);
+        }
 
         return [
             'result' => 'ok',
