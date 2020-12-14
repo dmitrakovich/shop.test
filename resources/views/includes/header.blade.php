@@ -19,7 +19,7 @@
                 </small></p>
 
             </div>
-            <div class="col-auto ml-auto">
+            <div class="col col-sm-auto ml-auto">
                 <a href="{{ route('index-page') }}">
                     <img src="/images/icons/barocco.svg" alt="" class="img-fluid w-100">
                 </a>
