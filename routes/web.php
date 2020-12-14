@@ -22,13 +22,6 @@ use App\Http\Controllers\FeedbackController;
 |
 */
 
-Route::get('/debug', function () {
-    // dd(Auth::check());
-    dd(Auth::id());
-    dd(Auth::user());
-})->middleware('auth.basic');
-
-
 // Route::domain(env('APP_NAME') . '.{domain}')->group(function () {
 //     Route::get('/domain', function ($domain) {
 //         dd($domain);
