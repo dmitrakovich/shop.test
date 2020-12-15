@@ -8,20 +8,28 @@
     <div class="col-10 my-5">
         <div class="row">
             @forelse ($cart->items as $item)
-                <div class="col-12 border-bottom border-secondary">
+                <div class="col-12 pt-3 pb-2 border-bottom border-secondary">
                     <div class="row">
-                        <div class="col-2">
+                        <div class="pl-0 col-6 col-md-2 ">
                             <img src="{{ $item->product->getFirstMedia()->getUrl('catalog') }}"
                                 alt="{{ $item->product->title }}" class="img-fluid">
                         </div>
-                        <div class="col-3">
-                            {{ $item->product->getFullName() }} <br>
-                           <small>{{ $item->product->category->title }}</small>
+                        <div class="col-6 col-md-10">
+                            <div class="row">
+                                <div class="col-12 col-md-3">
+                                    {{ $item->product->getFullName() }} <br>
+                                   <small>{{ $item->product->category->title }}</small>
+                                </div>
+                                <div class="col-12 col-md-2 mt-2">{{ DeclensionNoun::make($item->count, 'пара') }}</div>
+                                <div class="col-12 col-md-2 mt-2">размер {{ $item->size->name}}</div>
+                                <div class="col-12 col-md-2 mt-2">{{ $item->product->color->name }}</div>
+                                <div class="col-12 col-md-3 mt-2">{{ $item->product->price }} BYN</div>
+
+                                <div class="col-12 col-auto mt-auto">
+                                    <a href="">Удалить из корзины</a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-1">{{ DeclensionNoun::make($item->count, 'пара') }}</div>
-                        <div class="col-1">размер {{ $item->size->name}}</div>
-                        <div class="col-2">{{ $item->product->color->name }}</div>
-                        <div class="col-3">{{ $item->product->price }} BYN</div>
                     </div>
                 </div>
             @empty
@@ -34,12 +42,12 @@
         <div class="row my-5">
             <div class="col-12 col-md-6">
                 <div class="row">
-                    <div class="col-auto">
+                    {{-- <div class="col-auto">
                         <input type="text" class="form-control" value="#ПРОМОКОД">
                     </div>
                     <div class="col-auto">
                         <button class="btn btn-secondary px-5">Применить</button>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="col-12 offset-md-1 col-md-5">
@@ -70,7 +78,7 @@
             </div>
         </div>
 
-        <form action="{{ route('cartSubmit') }}" id="cartData" method="post" class="row my-5">
+        <form action="{{ route('cart-submit') }}" id="cartData" method="post" class="row my-5">
             @csrf
             <div class="col-12 mb-4">
                 <h5>ЗАПОЛНИТЕ ДАННЫЕ ДОСТАВКИ</h5>
