@@ -1,15 +1,17 @@
 <?php
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Artisan;
-use App\Models\Url;
-use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\Shop\ProductController;
-use App\Http\Controllers\Shop\CatalogController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\Shop\CartController;
+use App\Http\Controllers\Shop\CatalogController;
+use App\Http\Controllers\Shop\ProductController;
+use App\Http\Controllers\SitemapController;
+use App\Models\Url;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,10 +48,13 @@ Route::prefix('clear-cache')->group(function () {
         return 'All cache is cleared';
     });
 });
-
-
 Route::view('/test', 'test');
 Route::view('/', 'index')->name('index-page');
+
+
+
+
+
 
 // static pages
 Route::prefix('online-shopping')->group(function () {
@@ -71,10 +76,10 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/', function () {
         return redirect()->route('dashboard-orders');
     });
-    Route::get('orders', 'DashboardController@getOrders')->name('dashboard-orders');
+    Route::get('orders', [DashboardController::class, 'getOrders'])->name('dashboard-orders');
     Route::view('saved', 'dashboard.saved')->name('dashboard-saved');
-    Route::get('profile', 'DashboardController@getProfileData')->name('dashboard-profile');
-    Route::patch('profile/{user}/update', 'DashboardController@updateProfileData')->name('dashboard-profile-update');
+    Route::get('profile', [DashboardController::class, 'getProfileData'])->name('dashboard-profile');
+    Route::patch('profile/{user}/update', [DashboardController::class, 'updateProfileData'])->name('dashboard-profile-update');
     Route::view('card', 'dashboard.card')->name('dashboard-card');
 });
 
@@ -92,9 +97,14 @@ Route::group(['namespace' => 'Shop'], function () {
         ->where('path', '[a-zA-Z0-9/_-]+')
         ->name('shop');
 
-    Route::get('cart', 'CartController@index')->name('cart');
-    Route::post('add-to-cart', 'CartController@addToCart')->name('addToCart');
-    Route::post('cart-submit', 'CartController@submit')->name('cartSubmit');
+    Route::prefix('cart')->group(function () { // routes for cart pages
+        Route::get('/', [CartController::class, 'index'])->name('cart');
+        Route::post('add', [CartController::class, 'addToCart'])->name('cart-add');
+        Route::post('delete', [CartController::class, 'delete'])->name('cart-delete');
+        Route::post('submit', [CartController::class, 'submit'])->name('cart-submit');
+        Route::post('buy-one-click', [CartController::class, 'buyOneClick'])->name('cart-buy-one-click');
+        Route::get('final', [CartController::class, 'final'])->name('cart-final');
+    });
 });
 
 // sitemap

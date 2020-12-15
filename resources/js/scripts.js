@@ -54,10 +54,11 @@ $('button.js-add-to-cart').on('click', function () {
         alert('не выбран размер');
         return false;
     }
+    let $form = $('form#product-info');
     $.ajax({
         method: "post",
-        url: "/add-to-cart",
-        data: $('form#product-info').serialize(),
+        url: $form.attr('action'),
+        data: $form.serialize(),
         // dataType: "dataType",
         success: function (response) {
             if (response.result != 'ok') {

@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <form class="col-12 col-xl-10" id="product-info">
+                <form class="col-12 col-xl-10" id="product-info" action=" {{ route('cart-add') }}" method="post">
                     <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                     <div class="row mt-4">
                         <div class="col-12 col-lg-6 price-block">
