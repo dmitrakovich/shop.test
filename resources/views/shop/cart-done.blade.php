@@ -9,10 +9,10 @@
 <div class="col-12 col-md-4 col-xl-5 my-5 text-center text-muted">
     <p>
         Ваш заказ принят!
-    </p>    
-    <h3 class="text-danger">Заказ {{ $orderInfo['orderNum'] }}</h3>
+    </p>
+    <h3 class="text-danger">Заказ №{{ session('order_info')['orderNum'] }}</h3>
     <p>
-        от {{ date('j') }} октября 2020 на сумму {{ $orderInfo['totalPrice'] }} BYN
+        от {{ date('j') }} декабря 2020 на сумму {{ session('order_info')['totalPrice'] }} BYN
     </p>
     <div class="row px-5 py-4 text-left" style="background: #FBFBFD">
 
@@ -24,11 +24,11 @@
         </div>
 
         <div class="col-6 py-2 font-weight-bold">
-            Способ получения 
+            Способ получения
         </div>
         <div class="col-6 py-2">
             Курьерская доставка <br>
-            {{ $orderInfo['address'] }}
+            {{ session('order_info')['address'] }}
         </div>
 
         <div class="col-6 py-2 font-weight-bold">
@@ -43,7 +43,7 @@
     <p class="font-weight-light font-size-12 text-center mt-2">
         По указанному номеру с Вами свяжется менеджер для <br>
         подтверждения условий доставки
-    </p>    
+    </p>
 </div>
 
 <div class="col-12 my-5 text-center">
@@ -67,8 +67,8 @@
                 @else
                     {{ round($product->product_price, 2) }} руб.<br>
                 @endif
-                
-            </div> 
+
+            </div>
         @endforeach
     </div>
     <div class="col-12 my-5 text-center">

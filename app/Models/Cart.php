@@ -121,6 +121,15 @@ class Cart extends Model
         }
     }
     /**
+     * Очистить содержимое корзины
+     *
+     * @return void
+     */
+    public function clear()
+    {
+        $this->items()->delete();
+    }
+    /**
      * Получить содержимое корзины
      *
      * @return void

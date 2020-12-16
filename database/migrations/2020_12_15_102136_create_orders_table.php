@@ -43,7 +43,7 @@ class CreateOrdersTable extends Migration
             $table->string('delivery_point')->nullable();
             $table->string('delivery_point_code', 30)->nullable();
 
-            $table->unsignedTinyInteger('source');
+            $table->unsignedTinyInteger('source')->default(0);
             $table->timestamps();
         });
     }

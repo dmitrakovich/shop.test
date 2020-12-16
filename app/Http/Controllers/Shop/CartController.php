@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Shop;
 
 use App\Facades\Cart;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOrderRequest;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
@@ -29,37 +33,71 @@ class CartController extends Controller
         return back();
     }
 
-    public function submit(Request $request)
+    public function submit(StoreOrderRequest $request)
     {
         $cart = Cart::withData();
+        $userData = $request->validated();
 
-        dd(
-            $request,
-            $cart
-        );
-        // !!!
-        // !!!
-        // !!!
+        $order = Order::create([
+            'user_name' => $userData['name'],
+            'user_id' => Auth::check() ? 123 : null,
+            'type' => 'retail',
+            'email' => $userData['email'],
+            'phone' => $userData['phone'],
+            // 'comment' => $request->input('comment'),
+            'currency' => 'BYN',
+            'rate' => 1, // CurrencyFacade::getCurrentCurrencyData()->rate,
+            // 'promocode_id' => Cart::getPromocodeId(),
+            // 'country' => $address['country'] ?? null,
+            // 'region' => $address['administrative_area_level_1'] ?? null,
+            'city' => $userData['city'],
+            // 'zip' => $address['postal_code'] ?? null,
+            // 'street' => $address['route'] ?? null,
+            // 'house' => $address['street_number'] ?? null,
+            'user_addr' => $userData['user_addr'],
+            // 'payment' => $payment['name'] ?? '',
+            // 'payment_code' => $payment['code'] ?? '',
+            // 'payment_cost' => isset($payment['price']) ? $payment['price'] : 0.00,
+            // 'delivery' => $delivery['name'] ?? '',
+            // 'delivery_code' => $delivery['code'] ?? '',
+            // 'delivery_cost' => $delivery['price'] ?? null,
+            // 'delivery_point' => $point['address'] ?? '',
+            // 'delivery_point_code' => $point['code'] ?? '',
+            // 'source' => Cookie::has('soc_order') ? 1 : 0
+        ]);
 
+        foreach ($cart->items as $item) {
+            $order->data()->create([
+                'product_id' => $item->product_id,
+                'size_id' => $item->size_id,
+                'color_id' => $item->color_id,
+                'count' => $item->count,
+                'buy_price' => $item->product->buy_price,
+                'price' => $item->product->price,
+                'old_price' => $item->product->old_price,
+                'current_price' => $item->product->price,
+                'discount' => 0,
+            ]);
+        }
 
-        // dump($request->all());
         $orderInfo = [
-            'orderNum' => mt_rand(),
-            'totalPrice' => 234, // Cart::session(345345)->getTotal(),
-            'address' => 'Брест, ' . $request->input('address'),
+            'orderNum' => $order->id,
+            'totalPrice' => $cart->getTotalPrice(),
+            'address' => $userData['user_addr'],
         ];
-        // Cart::clear();
-        $recomended = Product::inRandomOrder()->limit(5)->get();
-        return view('shop.cart-done', compact('orderInfo', 'recomended'));
+
+        Cart::clear();
+
+        return redirect()->route('cart-final')->with('order_info', $orderInfo);
     }
 
     public function final()
     {
-        // взять из базы данные по заказу
-        // сравнить id пользователя, чтобы нельзя было смотреть чужие заказы
-        $name = 'Username';
-        $popular = Product::getPopular();
-        return view('cart-final', compact('popular', 'name'));
+        if (!Session::has('order_info')) {
+            return redirect()->route('dashboard-orders');
+        }
+        $recomended = Product::inRandomOrder()->limit(5)->get();
+        return view('shop.cart-done', compact('recomended'));
     }
 
     public function addToCart(Request $request)

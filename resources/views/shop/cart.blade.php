@@ -107,22 +107,22 @@
                     @enderror
                 </div>
                 <div class="col-12 col-md-8 form-group">
-                    <label for="address">Адрес</label>
-                    <input id="city" type="text" name="address"
-                        class="form-control @error('address') is-invalid @enderror"
-                        value="{{ old('address', $user->address) }}">
-                    @error('address')
+                    <label for="user_addr">Адрес</label>
+                    <input id="user_addr" type="text" name="user_addr"
+                        class="form-control @error('user_addr') is-invalid @enderror"
+                        value="{{ old('user_addr', $user->address) }}">
+                    @error('user_addr')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
                 <div class="col-12 col-md-4 form-group">
-                    <label for="fio">ФИО</label>
-                    <input id="fio" type="text" name="fio"
-                        class="form-control @error('fio') is-invalid @enderror"
-                        value="{{ old('fio', $user->full_name) }}">
-                    @error('fio')
+                    <label for="name">ФИО</label>
+                    <input id="name" type="text" name="name"
+                        class="form-control @error('name') is-invalid @enderror"
+                        value="{{ old('name', $user->full_name) }}" required>
+                    @error('name')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
