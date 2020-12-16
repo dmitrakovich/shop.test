@@ -61,11 +61,11 @@
                 </a>
                 <b>{{ $product->getFullName() }}</b> <br>
                 <span class="text-mutted">{{ $product->category->title }}</span> <br>
-                @if ($product->product_price < $product->product_old_price)
-                    <s>{{ round($product->product_old_price, 2) }} руб.</s>
-                    <font color="#D22020">{{ round($product->product_price, 2) }} руб.</font><br>
+                @if ($product->price < $product->old_price)
+                    <s>{{ round($product->old_price, 2) }} руб.</s>
+                    <font color="#D22020">{{ round($product->price, 2) }} руб.</font><br>
                 @else
-                    {{ round($product->product_price, 2) }} руб.<br>
+                    {{ round($product->price, 2) }} руб.<br>
                 @endif
 
             </div>
