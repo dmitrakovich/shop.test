@@ -85,6 +85,24 @@ class Cart extends Model
         }
     }
     /**
+     * Удалить товар из корзины
+     *
+     * @param integer $itemId идентификатор удаляемого товара
+     * @param integer $count количество удаляемых товаров
+     * @return void
+     */
+    public function removeItem(int $itemId, int $count = 1)
+    {
+        $item = $this->items()->where('id', $itemId)->first();
+        if (isset($item)) {
+            if ($count == 0 || $item->count <= $count) {
+                $item->delete();
+            } else {
+                $item->decrement('count', $count);
+            }
+        }
+    }
+    /**
      * Создать корзину, если она еще не создана
      *
      * @return void

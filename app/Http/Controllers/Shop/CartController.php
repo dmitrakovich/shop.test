@@ -17,21 +17,49 @@ class CartController extends Controller
         return view('shop.cart', compact('cart', 'user'));
     }
 
+    public function delete(Request $request, int $itemId)
+    {
+        Cart::items()->where('id', $itemId)->delete();
+        Cart::removeItem($itemId);
+
+        /*if (Cart::availableItemsCount() < 1) {
+            Cart::removePromocodeAuto();
+        }*/
+
+        return back();
+    }
+
     public function submit(Request $request)
     {
+        $cart = Cart::withData();
 
+        dd(
+            $request,
+            $cart
+        );
+        // !!!
+        // !!!
         // !!!
 
 
         // dump($request->all());
         $orderInfo = [
             'orderNum' => mt_rand(),
-            'totalPrice' => Cart::session(345345)->getTotal(),
+            'totalPrice' => 234, // Cart::session(345345)->getTotal(),
             'address' => 'Брест, ' . $request->input('address'),
         ];
-        Cart::clear();
+        // Cart::clear();
         $recomended = Product::inRandomOrder()->limit(5)->get();
         return view('shop.cart-done', compact('orderInfo', 'recomended'));
+    }
+
+    public function final()
+    {
+        // взять из базы данные по заказу
+        // сравнить id пользователя, чтобы нельзя было смотреть чужие заказы
+        $name = 'Username';
+        $popular = Product::getPopular();
+        return view('cart-final', compact('popular', 'name'));
     }
 
     public function addToCart(Request $request)

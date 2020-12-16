@@ -100,7 +100,7 @@ Route::group(['namespace' => 'Shop'], function () {
     Route::prefix('cart')->group(function () { // routes for cart pages
         Route::get('/', [CartController::class, 'index'])->name('cart');
         Route::post('add', [CartController::class, 'addToCart'])->name('cart-add');
-        Route::post('delete', [CartController::class, 'delete'])->name('cart-delete');
+        Route::get('delete/{item}', [CartController::class, 'delete'])->name('cart-delete');
         Route::post('submit', [CartController::class, 'submit'])->name('cart-submit');
         Route::post('buy-one-click', [CartController::class, 'buyOneClick'])->name('cart-buy-one-click');
         Route::get('final', [CartController::class, 'final'])->name('cart-final');
