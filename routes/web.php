@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
+// use App\Http\Controllers\Shop\OrderController;
 use App\Http\Controllers\Shop\ProductController;
 use App\Http\Controllers\SitemapController;
 use App\Models\Url;
@@ -101,10 +102,10 @@ Route::group(['namespace' => 'Shop'], function () {
         Route::get('/', [CartController::class, 'index'])->name('cart');
         Route::post('add', [CartController::class, 'addToCart'])->name('cart-add');
         Route::get('delete/{item}', [CartController::class, 'delete'])->name('cart-delete');
-        Route::post('submit', [CartController::class, 'submit'])->name('cart-submit');
         Route::post('buy-one-click', [CartController::class, 'buyOneClick'])->name('cart-buy-one-click');
         Route::get('final', [CartController::class, 'final'])->name('cart-final');
     });
+    Route::resource('orders', OrderController::class)->only(['index', 'store']);
 });
 
 // sitemap
