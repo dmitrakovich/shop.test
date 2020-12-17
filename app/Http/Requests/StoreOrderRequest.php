@@ -27,6 +27,8 @@ class StoreOrderRequest extends FormRequest
             'name' => 'required|max:200',
             'email' => 'email|nullable',
             'phone' => 'required',
+            'delivery' => 'required',
+            'payment' => 'required',
             'city' =>'nullable',
             'user_addr' => 'nullable',
         ];

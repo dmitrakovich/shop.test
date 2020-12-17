@@ -18,7 +18,18 @@ class CartController extends Controller
     {
         $cart = Cart::withData();
         $user = auth()->user() ?? new User();
-        return view('shop.cart', compact('cart', 'user'));
+        $deliveriesList = [
+            'BelpostCourierFitting' => 'Курьером с примеркой',
+            'BelpostCourier' => 'Курьер',
+            'Belpost' => 'Белпочта',
+            'BelpostEMS' => 'Емс',
+        ];
+        $paymentsList = [
+            'COD' => 'При получении',
+            'Card' => 'Банковской картой',
+            'ERIP' => 'Ерип',
+        ];
+        return view('shop.cart', compact('cart', 'user', 'deliveriesList', 'paymentsList'));
     }
 
     public function delete(Request $request, int $itemId)
@@ -38,6 +49,9 @@ class CartController extends Controller
         $cart = Cart::withData();
         $userData = $request->validated();
 
+        list($deliveryCode, $delivery) = explode('|', $userData['delivery']);
+        list($paymentCode, $payment) = explode('|', $userData['payment']);
+
         $order = Order::create([
             'user_name' => $userData['name'],
             'user_id' => Auth::check() ? 123 : null,
@@ -55,11 +69,11 @@ class CartController extends Controller
             // 'street' => $address['route'] ?? null,
             // 'house' => $address['street_number'] ?? null,
             'user_addr' => $userData['user_addr'],
-            // 'payment' => $payment['name'] ?? '',
-            // 'payment_code' => $payment['code'] ?? '',
+            'payment' => $payment,
+            'payment_code' => $paymentCode,
             // 'payment_cost' => isset($payment['price']) ? $payment['price'] : 0.00,
-            // 'delivery' => $delivery['name'] ?? '',
-            // 'delivery_code' => $delivery['code'] ?? '',
+            'delivery' => $delivery,
+            'delivery_code' => $deliveryCode,
             // 'delivery_cost' => $delivery['price'] ?? null,
             // 'delivery_point' => $point['address'] ?? '',
             // 'delivery_point_code' => $point['code'] ?? '',
@@ -84,6 +98,8 @@ class CartController extends Controller
             'orderNum' => $order->id,
             'totalPrice' => $cart->getTotalPrice(),
             'address' => $userData['user_addr'],
+            'delivery' => $delivery,
+            'payment' => $payment,
         ];
 
         Cart::clear();

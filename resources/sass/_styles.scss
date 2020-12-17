@@ -298,3 +298,9 @@ footer {
     cursor: help;
     font-size: 12px;
 }
+
+.form-check {
+    .form-check-input, .form-check-label {
+        cursor: pointer;
+    }
+}

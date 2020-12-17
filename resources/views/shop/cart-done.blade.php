@@ -27,7 +27,7 @@
             Способ получения
         </div>
         <div class="col-6 py-2">
-            Курьерская доставка <br>
+            {{ session('order_info')['delivery'] }} <br>
             {{ session('order_info')['address'] }}
         </div>
 
@@ -35,7 +35,7 @@
             Способ оплаты
         </div>
         <div class="col-6 py-2">
-            Рассрочка, при получении
+            {{ session('order_info')['payment'] }}
         </div>
 
     </div>
