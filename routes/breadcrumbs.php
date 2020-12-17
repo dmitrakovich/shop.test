@@ -1,5 +1,7 @@
 <?php
 
+use Diglactic\Breadcrumbs\Breadcrumbs;
+
 // Index
 Breadcrumbs::for('index', function ($trail) {
     $trail->push('Главная', route('index-page'));
@@ -76,6 +78,13 @@ Breadcrumbs::for('static-shops', function ($trail) {
 #endregion
 
 
+// Index > feedbacks
+Breadcrumbs::for('feedbacks', function ($trail) {
+    $trail->parent('index');
+    $trail->push('Отзывы', route('feedbacks'));
+});
+
+
 #region Dashboard
 // Index > dashboard
 Breadcrumbs::for('dashboard', function ($trail) {
@@ -86,7 +95,7 @@ Breadcrumbs::for('dashboard', function ($trail) {
 // Index > dashboard > orders
 Breadcrumbs::for('dashboard-orders', function ($trail) {
     $trail->parent('dashboard');
-    $trail->push('Мои заказы', route('dashboard-orders'));
+    $trail->push('Мои заказы', route('orders.index'));
 });
 
 // Index > dashboard > saved

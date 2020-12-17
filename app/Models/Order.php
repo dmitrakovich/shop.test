@@ -45,4 +45,11 @@ class Order extends Model
     {
         return $this->hasMany(OrderData::class);
     }
+
+    public function price()
+    {
+        return $this->hasMany(OrderData::class)
+            ->selectRaw('order_id, SUM(price) as total')
+            ->groupBy('order_id');
+    }
 }

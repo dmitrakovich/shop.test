@@ -1,4 +1,4 @@
-<a class="col static-pages-menu-item" href="{{ route('dashboard-orders') }}">
+<a class="col static-pages-menu-item" href="{{ route('orders.index') }}">
     <img src="/images/icons/cart.svg" class="img-fluid mr-3" alt="Мои заказы">
     Мои заказы
 </a>
@@ -14,7 +14,7 @@
     <img src="/images/icons/gift-card.svg" class="img-fluid mr-3" alt="Карта клиента">
     Карта клиента
 </a>
-<a class="col static-pages-menu-item" href="{{ route('logout') }}" 
+<a class="col static-pages-menu-item" href="{{ route('logout') }}"
     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
     <img src="/images/icons/logout.svg" class="img-fluid mr-3" alt="Выйти">
     {{ __('auth.Logout') }}

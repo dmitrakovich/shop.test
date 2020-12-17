@@ -74,14 +74,11 @@ Route::get('/feedbacks/{type?}', [FeedbackController::class, 'index'])->name('fe
 
 // dashboard
 Route::prefix('dashboard')->middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('dashboard-orders');
-    });
-    Route::get('orders', [DashboardController::class, 'getOrders'])->name('dashboard-orders');
     Route::view('saved', 'dashboard.saved')->name('dashboard-saved');
     Route::get('profile', [DashboardController::class, 'getProfileData'])->name('dashboard-profile');
     Route::patch('profile/{user}/update', [DashboardController::class, 'updateProfileData'])->name('dashboard-profile-update');
     Route::view('card', 'dashboard.card')->name('dashboard-card');
+    Route::get('{orders?}', function () { return redirect()->route('orders.index'); });
 });
 
 Route::group(['namespace' => 'Shop'], function () {
@@ -117,6 +114,6 @@ Route::get('/sitemap.catalog.brands.xml', [SitemapController::class, 'brands'])-
 Route::get('/sitemap.catalog.categories_and_{another}_and_{another2}.xml', [SitemapController::class, 'catalog3'])->name('sitemap.catalog.catalog3');
 Route::get('/sitemap.catalog.categories_and_{another}.xml', [SitemapController::class, 'catalog2'])->name('sitemap.catalog.catalog2');
 
-Route::fallback(function() {
+Route::fallback(function () {
     return 'Хм… Почему ты оказался здесь?';
 });

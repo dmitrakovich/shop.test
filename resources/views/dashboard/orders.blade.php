@@ -16,23 +16,24 @@
             <div class="col-12 order-row p-3 mb-3">
                 <div class="row">
                     <div class="col-12 col-md-4 order-1">
-                        <p><strong>№{{ $order->number }}</strong></p>
-                        <p>{{ $order->date }}</p>
-                        <div>
+                        <p><strong>№ {{ $order->id }}</strong></p>
+                        <p>{{ $order->created_at }}</p>
+                        {{-- <div>
                             @foreach ($order->photos as $photo)
                                 <img src="{{ $photo }}" alt="" class="img-fluid">
                             @endforeach
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="col-12 col-md-2 order-4 order-md-2">
-                        {{ $order->price }}
+                        {{ $order->price[0]->total }} BYN
                     </div>
                     <div class="col-12 col-md-3 order-3">
-                        {{ $order->address }}
+                        {{ $order->user_addr }}
                     </div>
                     <div class="col-12 col-md-3 order-2 order-md-4 text-left text-md-right">
                         <span class="text-primary">
-                            <b>{{ $order->status }}</b>
+                            {{-- <b>{{ $order->status }}</b> --}}
+                            <b>Ожидает подтверждения менеджером</b>
                         </span>
                     </div>
                 </div>

@@ -7,7 +7,7 @@
 @section('content')
     <div class="col-10 my-5">
         @if ($cart->items->isNotEmpty())
-            <form action="{{ route('cart-submit') }}" id="cartData" method="post">
+            <form action="{{ route('orders.store') }}" id="cartData" method="post">
                 <div class="row">
                     @foreach ($cart->items as $item)
                         <div class="col-12 py-3 border-bottom border-secondary">

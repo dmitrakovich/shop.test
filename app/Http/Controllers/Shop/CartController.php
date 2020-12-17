@@ -43,7 +43,7 @@ class CartController extends BaseController
     public function final()
     {
         if (!Session::has('order_info')) {
-            return redirect()->route('dashboard-orders');
+            return redirect()->route('orders.index');
         }
         $recomended = Product::inRandomOrder()->limit(5)->get();
         return view('shop.cart-done', compact('recomended'));
