@@ -102,7 +102,8 @@ Route::group(['namespace' => 'Shop'], function () {
         Route::post('buy-one-click', [CartController::class, 'buyOneClick'])->name('cart-buy-one-click');
         Route::get('final', [CartController::class, 'final'])->name('cart-final');
     });
-    Route::resource('orders', OrderController::class)->only(['index', 'store']);
+    Route::resource('orders', OrderController::class)->only('store');
+    Route::resource('orders', OrderController::class)->only('index')->middleware('auth');
 });
 
 // sitemap
