@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-12 col-md-4 order-1">
                         <p><strong>№ {{ $order->id }}</strong></p>
-                        <p>{{ $order->created_at }}</p>
+                        <p>{{ $order->created_at->format('от d F Y') }}</p>
                         {{-- <div>
                             @foreach ($order->photos as $photo)
                                 <img src="{{ $photo }}" alt="" class="img-fluid">
