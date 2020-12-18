@@ -39,38 +39,58 @@ $(function () {
     $('select[name="sorting"]').on('change', function () {
         window.location.href = $(this).find('option:selected').data('href');
     });
+    // quick view
+    $(document).on('click', '.quick-link a', function (e) {
+        e.preventDefault();
+        let url = $(this).data('src');
+        $.fancybox.open({
+            type: 'ajax',
+            ajax: {
+                settings: {
+                    url: url,
+                    type: "POST"
+                }
+            },
+            afterShow: function () {
+                slickRefresh();
+            }
+        });
+    });
 //#endregion
 
+//#region product
+
+//#endregion
 
 //#region cart
-$('label.check .checkmark').on('click', function () {
-    let $checkBox = $(this).siblings('input[type=checkbox]');
-    $checkBox.prop("checked", !$checkBox.prop("checked")).trigger('click');
-    $(this).parent().toggleClass("checked");
-});
-$('button.js-add-to-cart').on('click', function () {
-    let $sizesBlock = $('.js-sizes').find('input[type=checkbox]:checked');
-    if (!$sizesBlock.length) {
-        alert('не выбран размер');
-        return false;
-    }
-    let $form = $('form#product-info');
-    $.ajax({
-        method: "post",
-        url: $form.attr('action'),
-        data: $form.serialize(),
-        // dataType: "dataType",
-        success: function (response) {
-            if (response.result != 'ok') {
-                alert('ошибка добавления в корзину');
-            } else {
-                alert('товар успешно добавлен в корзину');
-                $('.js-cart-count').text(response.total_count);
-            }
-        }
+    $(document).on('click', 'label.check .checkmark', function () {
+        let $checkBox = $(this).siblings('input[type=checkbox]');
+        $checkBox.prop("checked", !$checkBox.prop("checked")).trigger('click');
+        $(this).parent().toggleClass("checked");
     });
-    return false;
-});
+    $(document).on('click', 'button.js-add-to-cart', function () {
+        let $sizesBlock = $('.js-sizes').find('input[type=checkbox]:checked');
+        if (!$sizesBlock.length) {
+            $.fancybox.open($('#product-no-size'));
+            return false;
+        }
+        let $form = $('form#product-info');
+        $.ajax({
+            method: "post",
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            // dataType: "dataType",
+            success: function (response) {
+                if (response.result != 'ok') {
+                    alert('ошибка добавления в корзину');
+                } else {
+                    alert('товар успешно добавлен в корзину');
+                    $('.js-cart-count').text(response.total_count);
+                }
+            }
+        });
+        return false;
+    });
 //#endregion
 
 });

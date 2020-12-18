@@ -82,6 +82,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 });
 
 Route::group(['namespace' => 'Shop'], function () {
+    Route::post('/quick/{id}', [ProductController::class, 'quickView'])->name('product.quick');
+
     Route::get('catalog/{path?}', function () {
         $request = Route::getCurrentRequest();
         $slug = Str::of($request->path())->explode('/')->last();

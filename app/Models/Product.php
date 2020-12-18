@@ -38,6 +38,12 @@ class Product extends Model implements HasMedia
      * @var array
      */
     protected $guarded = [];
+    /**
+     * Ссылка на товар
+     *
+     * @var string
+     */
+    protected $url = null;
     //
     /**
      * Категория товара
@@ -146,6 +152,15 @@ class Product extends Model implements HasMedia
     public function getFullName()
     {
         return ($this->brand->name ?? 'VITACCI'). ' ' . $this['name_ru-RU'];
+    }
+    /**
+     * Получить ссылку на товар
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url ?? ($this->url = $this->category->getUrl() . '/' . $this->slug);
     }
     /**
      * Размеры изображений

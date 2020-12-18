@@ -1,4 +1,8 @@
 $(function () {
+    slickRefresh();
+});
+
+window.slickRefresh = function () {
     $('.slider-for').slick({
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -40,4 +44,4 @@ $(function () {
 			}
         ]
     });
-});
+}

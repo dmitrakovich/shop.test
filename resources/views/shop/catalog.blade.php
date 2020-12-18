@@ -47,13 +47,16 @@
         <div class="col-12 scrolling-pagination px-0">
             <div class="row jscroll-inner justify-content-center justify-content-lg-between">
                 @forelse($products as $product)
-                    @php /** @var App\Product $product */ @endphp
                     <div class="col-3 js-product-item product-item mb-3 text-center text-lg-left">
-                        <a href="{{ $product->category->getUrl() . '/' . $product->slug }}">
-                            <p>
-                                <img src="{{ $product->getFirstMedia()->getUrl('catalog') }}" alt="{{ $product->title }}"
-                                    class="img-fluid">
-                            </p>
+                        <a href="{{ $product->getUrl() }}">
+                            <div class="mb-3 image position-relative">
+                                <img src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
+                                    alt="{{ $product->title }}" class="img-fluid">
+                                    <div class="quick-link">
+                                        <a data-src="{{ route('product.quick', $product->id) }}"
+                                            href="{{ $product->getUrl() }}" class="btn btn-light border">быстрый просмотр</a>
+                                    </div>
+                            </div>
                         </a>
                         <b>{{ $product->getFullName() }}</b> <br>
                         @if ($product->price < $product->old_price)
