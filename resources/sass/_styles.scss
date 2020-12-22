@@ -220,6 +220,25 @@ footer {
     }
 }
 
+.product-item .image {
+    .quick-link {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 80%;
+        margin-left: -40%;
+        margin-top: -20px;
+        transition: all .3s;
+        z-index: 5;
+        opacity: 0;
+    }
+    &:hover {
+        .quick-link {
+            opacity: 1;
+        }
+    }
+}
+
 
 
 .product-page {
