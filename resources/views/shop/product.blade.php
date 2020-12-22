@@ -107,10 +107,10 @@
 
                 <div class="row justify-content-center">
                     <div class="col-12">
-                        <button class="btn btn-dark btn-lg btn-block py-3 js-add-to-cart">
+                        <button type="button" class="btn btn-dark btn-lg btn-block py-3 js-add-to-cart">
                             В КОРЗИНУ
                         </button>
-                        <button class="btn btn-outline-dark btn-lg btn-block py-3">
+                        <button type="button" class="btn btn-outline-dark btn-lg btn-block py-3 js-buy-one-click">
                             КУПИТЬ В ОДИН КЛИК
                         </button>
                     </div>
@@ -181,6 +181,26 @@
 </div>
 
 {{-- modals --}}
+<div style="display: none;" id="buy-one-click" class="row">
+
+    <div class="col-12 text-center">
+        <h3 class="mx-5 mb-4">Купить в один клик</h3>
+        <div class="form-group">
+            <input type="text" class="form-control" name="name" placeholder="Имя" required>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="phone" placeholder="Телефон" required>
+        </div>
+        <button type="button" class="btn btn-dark my-3 px-5" id="buy-one-click-submit">
+            Купить
+        </button>
+        <p class="text-muted font-size-12">
+            После заказа менеджер перезвонит Вам и уточнит <br>
+            адрес доставки
+        </p>
+    </div>
+</div>
+
 <div style="display: none;" id="product-no-size" class="p-5">
     <h3>Не выбран размер</h3>
 </div>

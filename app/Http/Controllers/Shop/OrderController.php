@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Shop;
 
 use App\Facades\Cart;
 use App\Http\Requests\StoreOrderRequest;
+use App\Models\CartData;
 use App\Models\Order;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,17 +45,31 @@ class OrderController extends BaseController
      */
     public function store(StoreOrderRequest $request)
     {
-        $cart = Cart::withData();
         $userData = $request->validated();
+        $isOneClick = $request->has(['product_id', 'sizes']);
 
-        list($deliveryCode, $delivery) = explode('|', $userData['delivery']);
-        list($paymentCode, $payment) = explode('|', $userData['payment']);
+        if ($isOneClick) {
+            $cart = Cart::make();
+            $items = [];
+            foreach ($request->input('sizes') as $sizeId => $state) {
+                $items[] = CartData::make([
+                    'product_id' => (int)$request->input('product_id'),
+                    'size_id' => $sizeId,
+                    'color_id' => 17,
+                    'count' => 1,
+                ]);
+            }
+            $cart->setRelation('items', new EloquentCollection($items));
+        } else {
+            $cart = Cart::withData();
+            abort_if($cart->isEmpty(), 404);
+        }
 
         $order = Order::create([
             'user_name' => $userData['name'],
             'user_id' => Auth::check() ? Auth::id() : null,
             'type' => 'retail',
-            'email' => $userData['email'],
+            'email' => $userData['email'] ?? null,
             'phone' => $userData['phone'],
             // 'comment' => $request->input('comment'),
             'currency' => 'BYN',
@@ -61,16 +77,16 @@ class OrderController extends BaseController
             // 'promocode_id' => Cart::getPromocodeId(),
             // 'country' => $address['country'] ?? null,
             // 'region' => $address['administrative_area_level_1'] ?? null,
-            'city' => $userData['city'],
+            'city' => $userData['city'] ?? null,
             // 'zip' => $address['postal_code'] ?? null,
             // 'street' => $address['route'] ?? null,
             // 'house' => $address['street_number'] ?? null,
-            'user_addr' => $userData['user_addr'],
-            'payment' => $payment,
-            'payment_code' => $paymentCode,
+            'user_addr' => $userData['user_addr'] ?? null,
+            'payment' => $userData['payment_name'],
+            'payment_code' => $userData['payment_code'],
             // 'payment_cost' => isset($payment['price']) ? $payment['price'] : 0.00,
-            'delivery' => $delivery,
-            'delivery_code' => $deliveryCode,
+            'delivery' => $userData['delivery_name'],
+            'delivery_code' => $userData['delivery_code'],
             // 'delivery_cost' => $delivery['price'] ?? null,
             // 'delivery_point' => $point['address'] ?? '',
             // 'delivery_point_code' => $point['code'] ?? '',
@@ -91,17 +107,20 @@ class OrderController extends BaseController
             ]);
         }
 
-        $orderInfo = [
-            'orderNum' => $order->id,
-            'totalPrice' => $cart->getTotalPrice(),
-            'address' => $userData['user_addr'],
-            'delivery' => $delivery,
-            'payment' => $payment,
-        ];
+        if ($isOneClick) {
+            return "Заказ № {$order->id} успешно оформлен";
+        } else {
+            $orderInfo = [
+                'orderNum' => $order->id,
+                'totalPrice' => $cart->getTotalPrice(),
+                'address' => $userData['user_addr'],
+                'delivery' => $userData['delivery_name'],
+                'payment' => $userData['delivery_code'],
+            ];
+            Cart::clear();
+            return redirect()->route('cart-final')->with('order_info', $orderInfo);
+        }
 
-        Cart::clear();
-
-        return redirect()->route('cart-final')->with('order_info', $orderInfo);
     }
 
     /**

@@ -69,17 +69,13 @@ $(function () {
         $(this).parent().toggleClass("checked");
     });
     $(document).on('click', 'button.js-add-to-cart', function () {
-        let $sizesBlock = $('.js-sizes').find('input[type=checkbox]:checked');
-        if (!$sizesBlock.length) {
-            $.fancybox.open($('#product-no-size'));
-            return false;
-        }
+        sizesValidate();
+
         let $form = $('form#product-info');
         $.ajax({
             method: "post",
             url: $form.attr('action'),
             data: $form.serialize(),
-            // dataType: "dataType",
             success: function (response) {
                 if (response.result != 'ok') {
                     alert('ошибка добавления в корзину');
@@ -89,8 +85,51 @@ $(function () {
                 }
             }
         });
-        return false;
+    });
+    $(document).on('click', 'button.js-buy-one-click', function () {
+        if (sizesValidate()) {
+            $.fancybox.open($('#buy-one-click'));
+        }
+    });
+    $(document).on('click', 'button#buy-one-click-submit', function () {
+        sizesValidate();
+
+        let phone = $('input[name="phone"]').val();
+        let name = $('input[name="name"]').val();
+
+        if (phone.length < 4) {
+            return alert('введите корректный номер телефона');
+        }
+        if (name.length < 2) {
+            return alert('введите имя');
+        }
+
+        let $form = $('form#product-info');
+        let $modal = $('#buy-one-click .col-12');
+
+        $modal.find('#buy-one-click-submit').prop('disabled', true);
+        $.fancybox.getInstance('showLoading');
+
+        $.ajax({
+            method: "post",
+            url: '/orders',
+            data: $form.serialize() + '&phone=34564&name=andrey',
+            success: function (response) {
+                $modal.html(response).wrapInner('<h3>');
+                $.fancybox.getInstance('hideLoading');
+            }
+        });
+
     });
 //#endregion
 
 });
+
+window.sizesValidate = function () {
+    let $sizesBlock = $('.js-sizes').find('input[type=checkbox]:checked');
+    if (!$sizesBlock.length) {
+        $.fancybox.open($('#product-no-size'));
+        return false;
+    }
+    return true;
+}

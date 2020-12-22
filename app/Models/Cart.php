@@ -132,7 +132,7 @@ class Cart extends Model
     /**
      * Получить содержимое корзины
      *
-     * @return void
+     * @return $this
      */
     public function withData()
     {

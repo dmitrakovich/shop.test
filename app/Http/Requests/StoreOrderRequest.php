@@ -16,6 +16,18 @@ class StoreOrderRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        list($deliveryCode, $deliveryName) = explode('|', $this->delivery ?? '|');
+        list($paymentCode, $paymentName) = explode('|', $this->payment ?? '|');
+
+        $this->merge([
+            'payment_name' => $paymentName,
+            'payment_code' => $paymentCode,
+            'delivery_name' => $deliveryName,
+            'delivery_code' => $deliveryCode,
+        ]);
+    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,8 +39,10 @@ class StoreOrderRequest extends FormRequest
             'name' => 'required|max:200',
             'email' => 'email|nullable',
             'phone' => 'required',
-            'delivery' => 'required',
-            'payment' => 'required',
+            'payment_name' => 'nullable',
+            'payment_code' => 'nullable',
+            'delivery_name' => 'nullable',
+            'delivery_code' => 'nullable',
             'city' =>'nullable',
             'user_addr' => 'nullable',
         ];
