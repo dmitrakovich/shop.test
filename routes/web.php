@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DebugController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
@@ -50,6 +51,7 @@ Route::prefix('clear-cache')->group(function () {
     });
 });
 Route::view('/test', 'test');
+Route::get('debug', [DebugController::class, 'index']);
 Route::view('/', 'index')->name('index-page');
 
 
