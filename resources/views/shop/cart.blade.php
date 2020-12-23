@@ -22,10 +22,10 @@
                                             {{ $item->product->getFullName() }} <br>
                                         <small>{{ $item->product->category->title }}</small>
                                         </div>
-                                        <div class="col-12 col-md-2 mt-2">{{ DeclensionNoun::make($item->count, 'пара') }}</div>
-                                        <div class="col-12 col-md-2 mt-2">размер {{ $item->size->name}}</div>
-                                        <div class="col-12 col-md-2 mt-2">{{ $item->product->color->name }}</div>
-                                        <div class="col-12 col-md-3 mt-2">{{ $item->product->price }} BYN</div>
+                                        <div class="col-12 col-md-2 mt-md-2">{{ DeclensionNoun::make($item->count, 'пара') }}</div>
+                                        <div class="col-12 col-md-2 mt-md-2">размер {{ $item->size->name}}</div>
+                                        <div class="col-12 col-md-2 mt-md-2">{{ $item->product->color->name }}</div>
+                                        <div class="col-12 col-md-3 mt-md-2 mb-4">{{ $item->product->price }} BYN</div>
 
                                         <div class="col-12 col-auto mt-auto position-absolute fixed-bottom">
                                             <div class="row">
@@ -46,8 +46,8 @@
                     @endforeach
                 </div>
 
-                <div class="row py-5  border-bottom border-secondary">
-                    <div class="col-12 col-md-6">
+                <div class="row pb-3 pb-md-5 border-bottom border-secondary">
+                    <div class="col-12 col-md-6 mt-3 mt-md-5">
                         <p class="font-size-18"><b>Способ доставки:</b></p>
                         @foreach ($deliveriesList as $key => $value)
                             <div class="form-check">
@@ -56,7 +56,7 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-md-6 mt-3 mt-md-5">
                         <p class="font-size-18"><b>Способ оплаты:</b></p>
                         @foreach ($paymentsList as $key => $value)
                             <div class="form-check">
@@ -101,18 +101,18 @@
                                 К оплате
                             </div>
                             <div class="col-auto">
-                                {{-- {{ Cart::getTotal() }} BYN --}}
+                                {{ Cart::getTotalPrice() }} BYN
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row my-5">
+                <div class="row mt-5">
                     @csrf
                     <div class="col-12 mb-4">
                         <h5>ЗАПОЛНИТЕ ДАННЫЕ ДОСТАВКИ</h5>
                     </div>
-                    <div class="col-12 col-md-4 form-group">
+                    {{-- <div class="col-12 col-md-4 form-group">
                         <label for="city">Город</label>
                         <select name="city" id="city"
                             class="form-control @error('city') is-invalid @enderror">
@@ -128,8 +128,8 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                    </div>
-                    <div class="col-12 col-md-8 form-group">
+                    </div> --}}
+                    <div class="col-12 {{-- col-md-8 --}} form-group">
                         <label for="user_addr">Адрес</label>
                         <input id="user_addr" type="text" name="user_addr"
                             class="form-control @error('user_addr') is-invalid @enderror"
@@ -174,7 +174,7 @@
                         @enderror
                     </div>
                 </div>
-                <div class="row mb-5 justify-content-center">
+                <div class="row mt-3 my-md-5 justify-content-center">
                     <button type="submit" form="cartData" class="btn btn-dark col-12 col-sm-6 col-md-4 col-lg-3 py-2">
                         Подтвердить заказ
                     </button>

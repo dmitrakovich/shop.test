@@ -200,7 +200,3 @@
         </p>
     </div>
 </div>
-
-<div style="display: none;" id="product-no-size" class="p-5">
-    <h3>Не выбран размер</h3>
-</div>
