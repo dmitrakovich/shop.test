@@ -1,5 +1,5 @@
 $(function () {
-//#region боковое меню в мобильной версии
+    //#region боковое меню в мобильной версии
 
     // скрытие
     $('.overlay').on('click', function () {
@@ -7,7 +7,7 @@ $(function () {
         $('body').removeClass('modal-open');
         window.history.back();
     });
-    $(window).on('popstate', function() {
+    $(window).on('popstate', function () {
         // решение чисто для одного элемента
         // если нужен переход по несколким,
         // надо писать функцию
@@ -20,9 +20,9 @@ $(function () {
         $('body').addClass('modal-open');
         history.pushState(null, null, '#mainMenuOpen');
     });
-//#endregion
+    //#endregion
 
-//#region catalog
+    //#region catalog
     // infinite scroll
     $('.catalog-page ul.pagination').hide();
     $('.catalog-page .scrolling-pagination').jscroll({
@@ -30,7 +30,7 @@ $(function () {
         padding: 220,
         nextSelector: 'nav .pagination li.active + li a',
         contentSelector: 'div.jscroll-inner',
-        callback: function() {
+        callback: function () {
             $('ul.pagination').parent().remove();
             $('.jscroll-added .jscroll-inner .js-product-item').unwrap().unwrap();
         }
@@ -56,13 +56,13 @@ $(function () {
             }
         });
     });
-//#endregion
+    //#endregion
 
-//#region product
+    //#region product
 
-//#endregion
+    //#endregion
 
-//#region cart
+    //#region cart
     $(document).on('click', 'label.check .checkmark', function () {
         let $checkBox = $(this).siblings('input[type=checkbox]');
         $checkBox.prop("checked", !$checkBox.prop("checked")).trigger('click');
@@ -78,9 +78,9 @@ $(function () {
             data: $form.serialize(),
             success: function (response) {
                 if (response.result != 'ok') {
-                    alert('ошибка добавления в корзину');
+                    $.fancybox.open('<h3 class="py-5 text-danger">Ошибка добавления в корзину</h3>');
                 } else {
-                    alert('товар успешно добавлен в корзину');
+                    $.fancybox.open('<h3 class="py-5 text-success">Товар успешно добавлен в корзину</h3>');
                     $('.js-cart-count').text(response.total_count);
                 }
             }
@@ -98,10 +98,10 @@ $(function () {
         let name = $('input[name="name"]').val();
 
         if (phone.length < 4) {
-            return alert('введите корректный номер телефона');
+            return $.fancybox.open('<h3 class="py-3 text-danger">Введите корректный номер телефона</h3>');
         }
         if (name.length < 2) {
-            return alert('введите имя');
+            return $.fancybox.open('<h3 class="py-3 text-danger">Введите имя</h3>');
         }
 
         let $form = $('form#product-info');
@@ -113,7 +113,7 @@ $(function () {
         $.ajax({
             method: "post",
             url: '/orders',
-            data: $form.serialize() + '&phone=34564&name=andrey',
+            data: $form.serialize() + '&phone=' + phone + '&name=' + name,
             success: function (response) {
                 $modal.html(response).wrapInner('<h3>');
                 $.fancybox.getInstance('hideLoading');
@@ -121,14 +121,14 @@ $(function () {
         });
 
     });
-//#endregion
+    //#endregion
 
 });
 
 window.sizesValidate = function () {
     let $sizesBlock = $('.js-sizes').find('input[type=checkbox]:checked');
     if (!$sizesBlock.length) {
-        $.fancybox.open($('#product-no-size'));
+        $.fancybox.open('<h3 class="py-4 px-5">Не выбран размер</h3>');
         return false;
     }
     return true;
