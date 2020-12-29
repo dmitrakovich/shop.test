@@ -21,7 +21,7 @@ class CreateFeedbackTable extends Migration
             $table->string('user_email');
             $table->unsignedBigInteger('user_phone')->nullable();
             $table->text('text');
-            $table->tinyInteger('rating')->default(0);
+            $table->tinyInteger('rating')->default(5);
             $table->unsignedBigInteger('product_id')->index()->default(0);
             $table->tinyInteger('type_id')->default(1);
             $table->boolean('view_only_posted')->default(true);
