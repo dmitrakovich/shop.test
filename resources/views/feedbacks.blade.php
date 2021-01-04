@@ -13,7 +13,7 @@
             <h2>ОЦЕНКИ И ОТЗЫВЫ</h2>
         </div>
         <div class="col-12 col-md-auto">
-            <button class="btn btn-danger btn-block py-3">
+            <button type="button" class="btn btn-danger btn-block py-3" data-fancybox data-src="#leave-feedback-modal">
                 ОСТАВИТЬ ОТЗЫВ О СВОЕЙ ПОКУПКЕ
             </button>
         </div>
@@ -63,5 +63,56 @@
     </div>
 
 </div>
+
+
+<div id="leave-feedback-modal">
+    <form id="leave-feedback" action="{{ route('feedbacks.store') }}" method="post">
+        @csrf
+        <h3 class="mb-4">Оставить отзыв</h3>
+
+        {{-- <div class="row form-group">
+            <div class="col-12 col-md-4">
+                <b>Оцените товар</b>
+            </div>
+            <div class="col-12 col-md-8">
+                звезды
+            </div>
+        </div> --}}
+
+        <div class="row form-group">
+            <label for="inputName" class="col-12 col-md-4 col-form-label">
+                <b>Оставьте комментарий</b>
+            </label>
+            <div class="col-12 col-md-8">
+                <textarea rows="5" class="form-control" name="text" id="textareaText" placeholder="Что вам понравилось в этом товаре?"></textarea>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <label for="inputName" class="col-12 col-md-4 col-form-label">
+                <b>Представьтесь, пожалуйста</b>
+            </label>
+            <div class="col-12 col-md-8">
+                <input type="text" name="name" id="inputName" class="form-control" placeholder="Имя" required>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <label for="inputMedia" class="col-12 col-md-4 col-form-label">
+                <b>Загрузите фотографии</b>
+            </label>
+            <div class="col-12 col-md-8">
+                <input type="file"  accept="image/*, video/*" name="media" id="inputMedia" class="form-control-file" multiple>
+            </div>
+        </div>
+
+        <div class="row form-group justify-content-end">
+            <button type="submit" class="btn btn-dark px-4">Оставить отзыв</button>
+        </div>
+
+    </form>
+</div>
+
+
 
 @endsection

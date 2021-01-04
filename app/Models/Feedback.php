@@ -16,6 +16,18 @@ class Feedback extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $table = 'feedbacks';
+    protected $fillable = [
+        'user_id',
+        'user_name',
+        'user_email',
+        'text',
+        'rating',
+        'product_id',
+        'type_id',
+        'view_only_posted',
+        'publish',
+        'ip',
+    ];
     /**
      * Тип по умолчанию
      *
