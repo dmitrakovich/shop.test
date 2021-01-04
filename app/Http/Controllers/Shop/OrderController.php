@@ -62,7 +62,7 @@ class OrderController extends BaseController
             $cart->setRelation('items', new EloquentCollection($items));
         } else {
             $cart = Cart::withData();
-            abort_if($cart->isEmpty(), 404);
+            abort_if(empty($cart['items']) || $cart->items->isEmpty(), 404);
         }
 
         $order = Order::create([

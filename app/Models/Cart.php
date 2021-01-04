@@ -18,7 +18,7 @@ class Cart extends Model
     public function setCart()
     {
         $cartId = Auth::user() ? Auth::user()->cart_token : Cookie::get('cart_token');
-        return Cart::findOrNew($cartId);
+        return self::findOrNew($cartId);
     }
     /**
      * Содержимое корзины
