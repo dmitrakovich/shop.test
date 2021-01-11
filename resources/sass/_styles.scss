@@ -318,6 +318,15 @@ footer {
     font-size: 12px;
 }
 
+.installment-help-block {
+    .tooltip-trigger {
+        cursor: unset;
+    }
+    &.btn {
+        box-shadow: unset;
+    }
+}
+
 .form-check {
     .form-check-input, .form-check-label {
         cursor: pointer;

@@ -40,19 +40,6 @@
                 <div class="row mt-4">
                     <div class="col-12 col-lg-6 price-block">
                         <div class="row">
-                            {{-- @if ($product->price < $product->old_price)
-                                <div class="col-auto price price-old">
-                                    <s>{{ $product->old_price }}</s>
-                                </div>
-                                <div class="col-auto price price-new">
-                                    {{ $product->price }}
-                                </div>
-                                @else
-                                <div class="col-auto price price-new">
-                                    {{ $product->price }}
-                                </div>
-                            @endif --}}
-
                             @if ($product->price < $product->old_price)
                                 <div class="col-auto price price-old">
                                     {{ $product->old_price }}
@@ -62,11 +49,29 @@
                                 {{ $product->price }} руб.
                             </div>
                         </div>
-
                     </div>
+
                     <div class="col-12 col-lg-6 text-right">
-                        Условия рассрочки
-                        <div class="tooltip-trigger ml-2">?</div>
+                        <button type="button" class="btn installment-help-block" data-toggle="dropdown">
+                            <span class="border-bottom border-secondary">Условия рассрочки</span>
+                            <div class="tooltip-trigger ml-2">?</div>
+                        </button>
+
+                        <div class="dropdown-menu p-3">
+                            <p class="font-size-15">
+                                <b>РАССРОЧКА НА 3 ПЛАТЕЖА</b>
+                            </p>
+                            <p>
+                                Первый взнос<br>
+                                <b>{{ $product->price * 0.4 }} руб.</b><br>
+                                Оставшиеся 2 платежа<br>
+                                <b class="border-bottom border-danger font-size-14">
+                                    {{ $product->price * 0.3 }} руб. в месяц
+                                </b>
+                            </p>
+                            &#9989; Без увеличения цены <br>
+                            &#9989; Без справки о доходах
+                        </div>
                     </div>
                 </div>
 

@@ -61,7 +61,20 @@
                         @foreach ($paymentsList as $key => $value)
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="payment" id="{{ $key }}" value="{{ $key . '|' . $value }}" {{ $loop->first ? 'checked' : null }}>
-                                <label class="form-check-label" for="{{ $key }}">{{ $value }}</label>
+                                <label class="form-check-label" for="{{ $key }}">
+                                    {{ $value }}
+                                    @if ($key == 'Installment')
+                                        <br>
+                                        <span class="text-muted font-size-12">
+                                            (Рассрочка на 3 платежа
+                                            Первый взнос
+                                            <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() * 0.4 }} руб.</span>
+                                            Оставшиеся 2 платежа
+                                            <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() * 0.3 }} руб.</span>
+                                            в месяц)
+                                    </span>
+                                    @endif
+                                </label>
                             </div>
                         @endforeach
                     </div>

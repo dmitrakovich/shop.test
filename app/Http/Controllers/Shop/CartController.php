@@ -24,6 +24,7 @@ class CartController extends BaseController
             'COD' => 'При получении',
             'Card' => 'Банковской картой',
             'ERIP' => 'Ерип',
+            'Installment' => 'Оформить рассрочку',
         ];
         return view('shop.cart', compact('cart', 'user', 'deliveriesList', 'paymentsList'));
     }
