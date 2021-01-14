@@ -12,4 +12,14 @@ class Brand extends Model
     public $timestamps = false;
     protected static $relationName = 'brand';
     protected static $relationTable = 'brands';
+
+    // public function setLogoAttribute($logo)
+    // {
+    //     $this->attributes['logo'] = strtr($logo, ['brand_logos/' => '']);
+    // }
+
+    // public function getLogoAttribute($logo)
+    // {
+    //     return "brand_logos/$logo";
+    // }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Url;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
@@ -41,12 +42,22 @@ trait AttributeFilterTrait
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
-    public function slug()
+    public function url()
     {
-        return $this->morphOne(Slug::class, 'attribute');
+        return $this->morphOne(Url::class, 'model');
     }
     /**
-     * Если перед применением фильтра необходимо произветсти 
+     * Удалить отношение при удалении фильтра
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        $this->url()->delete();
+        return parent::delete();
+    }
+    /**
+     * Если перед применением фильтра необходимо произветсти
      * преобразолвание над данными или запросом
      *
      * @param Builder $builder

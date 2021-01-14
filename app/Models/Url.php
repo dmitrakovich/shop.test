@@ -10,7 +10,9 @@ class Url extends Model
     public $timestamps = false;
     protected $primaryKey = 'slug';
     protected $keyType = 'string';
-
+    protected $fillable = [
+        'slug'
+    ];
     /**
      * Найти url model по slug
      *
