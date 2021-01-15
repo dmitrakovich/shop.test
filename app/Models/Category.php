@@ -26,6 +26,11 @@ class Category extends Model
         return 'slug';
     }
 
+    public function setPathAttribute($path)
+    {
+        $this->generatePath();
+    }
+
     public function parentCategory()
     {
         return $this->belongsTo(self::class, 'parent_id');
@@ -41,19 +46,6 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id')->with('childrenCategories');
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Получение ссылки
     public function getUrl()
     {
@@ -63,7 +55,7 @@ class Category extends Model
     public function generatePath()
     {
         $slug = $this->slug;
-        $this->path = $this->isRoot() ? $slug : $this->parent->path . '/' . $slug;
+        $this->attributes['path'] = $this->isRoot() ? $slug : $this->parent->path . '/' . $slug;
         return $this;
     }
 

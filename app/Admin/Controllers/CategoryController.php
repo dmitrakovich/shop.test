@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Category;
+use App\Models\Category;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -37,6 +37,8 @@ class CategoryController extends AdminController
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
         $grid->column('deleted_at', __('Deleted at'));
+
+        $grid->paginate(30);
 
         return $grid;
     }
@@ -76,12 +78,12 @@ class CategoryController extends AdminController
         $form = new Form(new Category());
 
         $form->text('slug', __('Slug'));
-        $form->text('path', __('Path'));
         $form->text('title', __('Title'));
         $form->textarea('description', __('Description'));
-        $form->number('_lft', __(' lft'));
-        $form->number('_rgt', __(' rgt'));
-        $form->number('parent_id', __('Parent id'));
+        // $form->number('_lft', __(' lft'));
+        // $form->number('_rgt', __(' rgt'));
+        $form->number('parent_id', __('Parent id'))->default(1);
+        $form->hidden('path', __('Path'))->default(time());
 
         return $form;
     }
