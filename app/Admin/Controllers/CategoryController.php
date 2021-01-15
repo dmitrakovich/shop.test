@@ -85,6 +85,10 @@ class CategoryController extends AdminController
         $form->number('parent_id', __('Parent id'))->default(1);
         $form->hidden('path', __('Path'))->default(time());
 
+        $form->saved(function (Form $form) {
+            $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
+        });
+
         return $form;
     }
 }
