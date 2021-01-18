@@ -145,6 +145,15 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(Brand::class);
     }
     /**
+     * Slug для фильтра
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function url()
+    {
+        return $this->morphOne(Url::class, 'model');
+    }
+    /**
      * Получить полное название продукта
      *
      * @return void
