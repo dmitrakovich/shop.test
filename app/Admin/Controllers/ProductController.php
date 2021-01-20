@@ -120,15 +120,9 @@ class ProductController extends AdminController
         $form = new Form(new Product());
 
         $form->switch('publish', __('Publish'));
-
-
-        // $form->multipleImage('media.id', __('Фотографии'))
-        //     ->removable()
-        //     ->downloadable();
-        // доделать !!!
-
-
+        $form->multipleImage('photos', __('Фотографии'))->removable()->downloadable();
         $form->text('slug', __('Slug'));
+        $form->display('path', __('Path'));
         $form->text('title', __('Title'));
         $form->decimal('buy_price', __('Buy price'));
         $form->decimal('price', __('Price'));
@@ -144,7 +138,6 @@ class ProductController extends AdminController
         $form->text('fabric_outsole_txt', __('Fabric outsole txt'));
         $form->text('heel_txt', __('Heel txt'));
         $form->quill('description', __('Description'));
-
 
         $form->saved(function (Form $form) {
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
