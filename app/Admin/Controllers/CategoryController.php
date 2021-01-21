@@ -31,12 +31,12 @@ class CategoryController extends AdminController
         $grid->column('path', __('Path'));
         $grid->column('title', __('Title'));
         $grid->column('description', __('Description'));
-        $grid->column('_lft', __(' lft'));
-        $grid->column('_rgt', __(' rgt'));
+        // $grid->column('_lft', __(' lft'));
+        // $grid->column('_rgt', __(' rgt'));
         $grid->column('parent_id', __('Parent id'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
-        $grid->column('deleted_at', __('Deleted at'));
+        // $grid->column('deleted_at', __('Deleted at'));
 
         $grid->paginate(30);
 
