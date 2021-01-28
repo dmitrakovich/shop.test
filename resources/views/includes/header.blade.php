@@ -7,7 +7,7 @@
 
 
             <div class="account-btns">
-                <button class="btn p-0 d-inline-block d-lg-none js-mobile-search" type="button" data-toggle="collapse" data-target="#collapseExample">
+                <button class="btn p-0 d-inline-block d-lg-none js-mobile-search" type="button" data-toggle="collapse" data-target="#search-input">
                     <img src="/images/icons/search.svg" alt="Поиск" class="img-fluid">
                 </button>
             </div>
@@ -85,22 +85,21 @@
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto d-none d-lg-inline-block">
-                        <div class="form-inline">
-                            <input type="text" class="search-input" placeholder="Поиск">
-                            <button class="btn p-0 js-search">
+                        <form action="{{ url()->current() }}" method="get" class="form-inline">
+                            <input type="text" name="search" class="search-input" placeholder="Поиск">
+                            <button type="submit" class="btn p-0 js-search">
                                 <img src="/images/icons/search.svg" alt="Поиск" class="img-fluid">
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
 
 
-
-            <div class="col-12 collapse" id="collapseExample">
-                <div class="row">
-                    <input type="text" class="form-control border-0" placeholder="Поиск">
-                </div>
+            <div class="col-12 collapse" id="search-input">
+                <form action="{{ url()->current() }}" method="get" class="row">
+                    <input type="text" name="search" class="form-control border-0" placeholder="Поиск">
+                </form>
             </div>
 
 

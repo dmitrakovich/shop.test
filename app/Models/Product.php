@@ -268,4 +268,34 @@ class Product extends Model implements HasMedia
                 return $query->orderByRaw('((old_price - price) / old_price) desc');
         }
     }
+    /**
+     * Поиск товаров
+     *
+     * @param Builder $query
+     * @param string $search
+     * @return Builder
+     */
+    public function scopeSearch(Builder $query, ?string $search = null)
+    {
+        if (!empty($search)) {
+            $query->where(function ($query) use ($search) {
+
+                $query->where('title', 'like', "%$search%")
+                    ->orWhereHas('brand', function (Builder $query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    })
+                    ->orWhereHas('category', function (Builder $query) use ($search) {
+                        $query->where('title', 'like', "%$search%");
+                    })
+                    ->orWhereHas('color', function (Builder $query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    })
+                    ->orWhereHas('tags', function (Builder $query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    });
+            });
+            $query->orderBy('created_at', 'desc');
+        }
+        return $query;
+    }
 }

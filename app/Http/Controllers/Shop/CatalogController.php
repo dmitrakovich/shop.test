@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Models\Product;
 use App\Models\Category;
 use App\Models\Filter;
-use App\Repositories\CategoryRepository;
-use Illuminate\Http\Request;
-use App\Repositories\ProductRepository;
+use App\Models\Product;
 use App\Models\Url;
-use Illuminate\Support\Facades\Cache;
+use App\Repositories\CategoryRepository;
+use App\Repositories\ProductRepository;
+use Illuminate\Http\Request;
 
 class CatalogController extends BaseController
 {
@@ -118,6 +117,7 @@ class CatalogController extends BaseController
                 'media',
             ])
             ->where('publish', true)
+            ->search($request->input('search'))
             ->sorting($sort)
             ->paginate(self::PAGE_SIZE);
 
