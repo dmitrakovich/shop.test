@@ -23,23 +23,12 @@
                 <div class="col-auto align-self-center mr-3 d-none d-md-block">
                     Сортировка:
                 </div>
-                <select name="sorting" class="form-control col-6 col-md-4 col-lg-3 col-xl-2">
-                    <option data-href="{{ URL::current() . '?' . http_build_query(['sort' => 'rating']) }}"
-                        {{ $sort == 'rating' ? 'selected' : null }}>
-                        по популярности
-                    </option>
-                    <option data-href="{{ URL::current() . '?' . http_build_query(['sort' => 'newness']) }}"
-                        {{ $sort == 'newness' ? 'selected' : null }}>
-                        новинки
-                    </option>
-                    <option data-href="{{ URL::current() . '?' . http_build_query(['sort' => 'price-up']) }}"
-                        {{ $sort == 'price-up' ? 'selected' : null }}>
-                        по возрастанию цены
-                    </option>
-                    <option data-href="{{ URL::current() . '?' . http_build_query(['sort' => 'price-down']) }}"
-                        {{ $sort == 'price-down' ? 'selected' : null }}>
-                        по убыванию цены
-                    </option>
+                <select onchange="window.location.href = this.value" class="form-control col-6 col-md-4 col-lg-3 col-xl-2">
+                    @foreach ($sortingList as $key => $value)
+                        <option value="{{ URL::current() . "?sort=$key" }}" {{ $sort == $key ? 'selected' : null }}>
+                            {{ $value }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
         </div>

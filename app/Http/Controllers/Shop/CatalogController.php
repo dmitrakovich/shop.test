@@ -87,9 +87,19 @@ class CatalogController extends BaseController
         }
     }
 
+    protected function getSorting($request)
+    {
+        $sorting = $request->input('sort') ?? session()->get('sorting', self::DEFAULT_SORT);
+        if (session()->get('sorting') <> $sorting) {
+            session()->put('sorting', $sorting);
+            session()->save();
+        }
+        return $sorting;
+    }
+
     public function show($request)
     {
-        $sort = $request->input('sort') ?? self::DEFAULT_SORT;
+        $sort = $this->getSorting($request);
         $currentFilters = $this->getFilters($request);
 
         // $currentCategory = Category::find($slug->model_id);
@@ -115,14 +125,22 @@ class CatalogController extends BaseController
         abort_if(empty($products), 404);
 
         $filters = Filter::all();
+        $sortingList = [
+            'rating' => 'по популярности',
+            'newness' => 'новинки',
+            'price-up' => 'по возрастанию цены',
+            'price-down' => 'по убыванию цены',
+        ];
         // dd($filters);
 
         $data = compact(
             'products',
+            'currentFilters',
             'currentCategory',
             'categoriesTree',
             'filters',
-            'sort'
+            'sort',
+            'sortingList'
         );
 
         return view('shop.catalog', $data);
