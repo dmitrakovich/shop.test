@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af0955526658e424a7f5644bb6a7363c",
+    "content-hash": "231e1de3b24f0616fd5252e2a115dc1d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3853,71 +3853,6 @@
                 }
             ],
             "time": "2020-10-22T08:40:42+00:00"
-        },
-        {
-            "name": "spatie/laravel-searchable",
-            "version": "1.9.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/laravel-searchable.git",
-                "reference": "a246b78d3934016885963a6ac5f6ac63a3ed7655"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-searchable/zipball/a246b78d3934016885963a6ac5f6ac63a3ed7655",
-                "reference": "a246b78d3934016885963a6ac5f6ac63a3ed7655",
-                "shasum": ""
-            },
-            "require": {
-                "laravel/framework": "^6.0|^7.0|^8.0",
-                "php": "^7.2|^8.0"
-            },
-            "require-dev": {
-                "larapack/dd": "^1.0",
-                "orchestra/testbench": "~3.8.0|^4.0|^5.0|^6.0",
-                "phpunit/phpunit": "^7.5|^8.0|^9.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\Searchable\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alex Vanderbist",
-                    "email": "alex@spatie.be",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Pragmatically search through models and other sources",
-            "homepage": "https://github.com/spatie/laravel-searchable",
-            "keywords": [
-                "laravel-searchable",
-                "spatie"
-            ],
-            "support": {
-                "issues": "https://github.com/spatie/laravel-searchable/issues",
-                "source": "https://github.com/spatie/laravel-searchable/tree/1.9.1"
-            },
-            "funding": [
-                {
-                    "url": "https://spatie.be/open-source/support-us",
-                    "type": "custom"
-                }
-            ],
-            "time": "2020-12-27T21:00:03+00:00"
         },
         {
             "name": "spatie/temporary-directory",
