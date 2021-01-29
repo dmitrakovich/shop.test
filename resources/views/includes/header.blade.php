@@ -43,6 +43,10 @@
                 </a>
             </div>
 
+            @php
+                $catalogUrl = strpos(url()->current(), 'catalog') !== false ? url()->current() : route('shop');
+            @endphp
+
 
             <div class="col-12 navbar-main-menu" id="mainMenu">
                 <div class="row justify-content-center align-items-center text-uppercase font-size-15 position-relative">
@@ -85,8 +89,8 @@
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto d-none d-lg-inline-block">
-                        <form action="{{ url()->current() }}" method="get" class="form-inline">
-                            <input type="text" name="search" class="search-input" placeholder="Поиск">
+                        <form action="{{ $catalogUrl }}" method="get" class="form-inline">
+                            <input type="text" name="search" class="search-input" value="{{ request()->get('search') }}" placeholder="Поиск">
                             <button type="submit" class="btn p-0 js-search">
                                 <img src="/images/icons/search.svg" alt="Поиск" class="img-fluid">
                             </button>
@@ -97,8 +101,8 @@
 
 
             <div class="col-12 collapse" id="search-input">
-                <form action="{{ url()->current() }}" method="get" class="row">
-                    <input type="text" name="search" class="form-control border-0" placeholder="Поиск">
+                <form action="{{ $catalogUrl }}" method="get" class="row">
+                    <input type="text" name="search" class="form-control border-0" value="{{ request()->get('search') }}" placeholder="Поиск">
                 </form>
             </div>
 

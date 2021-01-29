@@ -279,22 +279,41 @@ class Product extends Model implements HasMedia
     {
         if (!empty($search)) {
             $query->where(function ($query) use ($search) {
-
-                $query->where('title', 'like', "%$search%")
+                $search = explode(' ', $search);
+                $this->generateSearchQuery($query, 'title', $search)
                     ->orWhereHas('brand', function (Builder $query) use ($search) {
-                        $query->where('name', 'like', "%$search%");
+                        $this->generateSearchQuery($query, 'name', $search);
                     })
                     ->orWhereHas('category', function (Builder $query) use ($search) {
-                        $query->where('title', 'like', "%$search%");
+                        $this->generateSearchQuery($query, 'title', $search);
                     })
                     ->orWhereHas('color', function (Builder $query) use ($search) {
-                        $query->where('name', 'like', "%$search%");
+                        $this->generateSearchQuery($query, 'name', $search);
                     })
                     ->orWhereHas('tags', function (Builder $query) use ($search) {
-                        $query->where('name', 'like', "%$search%");
+                        $this->generateSearchQuery($query, 'name', $search);
                     });
             });
             $query->orderBy('created_at', 'desc');
+        }
+        return $query;
+    }
+
+    /**
+     * Сгенерировать query для поиска
+     *
+     * @param Builder $query
+     * @param string $column
+     * @param array $search
+     * @return Builder
+     */
+    protected function generateSearchQuery(Builder $query, string $column, array $search)
+    {
+        $value = current($search);
+        $query->where($column, 'like', "%$value%");
+
+        while ($value = next($search)) {
+            $query->orWhere($column, 'like', "%$value%");
         }
         return $query;
     }
