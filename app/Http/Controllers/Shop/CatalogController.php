@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Filter;
 use App\Models\Product;
 use App\Models\Url;
-use App\Repositories\CategoryRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 
@@ -20,26 +19,6 @@ class CatalogController extends BaseController
      * Сортировка по умлочанию
      */
     const DEFAULT_SORT = 'newness';
-    /**
-     * ProductRepository
-     *
-     * @var ProductRepository
-     */
-    private $productRepository;
-    /**
-     * CategoryRepository
-     *
-     * @var CategoryRepository
-     */
-    private $categoryRepository;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->productRepository = app(ProductRepository::class);
-        $this->categoryRepository = app(CategoryRepository::class);
-    }
     /**
      * Применить фильтры к выборке
      *
@@ -104,7 +83,6 @@ class CatalogController extends BaseController
         // $currentCategory = Category::find($slug->model_id);
         $currentCategory = Category::first();
         // dd($slug, $currentCategory);
-        $categoriesTree =  $this->categoryRepository->getTree();
 
         $products = $this->applyFilters($currentFilters)
             ->with([
@@ -121,7 +99,6 @@ class CatalogController extends BaseController
             ->sorting($sort)
             ->paginate(self::PAGE_SIZE);
 
-        // $products = $this->productRepository->getAllWithPaginate(self::PAGE_SIZE);
         abort_if(empty($products), 404);
 
         $filters = Filter::all();
@@ -137,7 +114,6 @@ class CatalogController extends BaseController
             'products',
             'currentFilters',
             'currentCategory',
-            'categoriesTree',
             'filters',
             'sort',
             'sortingList'
