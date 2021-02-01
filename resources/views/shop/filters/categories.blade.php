@@ -1,5 +1,5 @@
 <ul class="text-uppercase filter-block categories pl-0">
-    @foreach ($categoriesTree as $category)
+    @foreach ($filters['categories'] as $category)
         <li>
             <b><a href="{{ $category->getUrl() }}">{{ $category->title }}</a></b>
         </li>

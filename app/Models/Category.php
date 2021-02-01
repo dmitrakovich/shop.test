@@ -43,7 +43,9 @@ class Category extends Model
 
     public function childrenCategories()
     {
-        return $this->hasMany(Category::class, 'parent_id')->with('childrenCategories');
+        return $this->hasMany(Category::class, 'parent_id')
+            ->where('active', true)
+            ->with('childrenCategories');
     }
 
     // Получение ссылки

@@ -12,6 +12,7 @@ class Filter
      * @var array
      */
     protected static $filtersList = [
+        'categories',
         'fabrics',
         'sizes',
         'colors',
@@ -26,12 +27,13 @@ class Filter
      * @var array
      */
     protected static $filtersModels = [
+        'categories' => 'App\Models\Category',
         'fabrics' => 'App\Models\Fabric',
         'sizes' => 'App\Models\Size',
         'colors' => 'App\Models\Color',
         'heels' => 'App\Models\Heel',
         'seasons' => 'App\Models\Season',
-        'tags' => 'App\Models\Tag',        
+        'tags' => 'App\Models\Tag',
         'brands' => 'App\Models\Brand',
     ];
     /**
@@ -51,20 +53,24 @@ class Filter
      */
     public static function all(array $filtersList = null)
     {
-        $filtersList = $filtersList ?? self::$filtersList;
-        // Cache::tags(['filters'])->flush();
-        foreach ($filtersList as $filterName) {
-            $model = self::$filtersModels[$filterName];
-            $filters[$filterName] = 
-                // Cache::tags(['filters'])
-                // ->rememberForever("filters.$filterName", function () use ($model) {
-                    // $query = $model::with('slug');
-                    // if ($model == 'App\Category') {
-                    //     $query->where('parent_id', 0)->with('childrenCategories')->orderBy('sorting');
-                    // }
-                    // return 
-                    $model::get()->keyBy('id')->toArray();
-                // });
+        if (Cache::has('filters')) {
+            $filters = Cache::get('filters');
+        }
+
+        if (!isset($filters)) {
+            $filtersList = $filtersList ?? self::$filtersList;
+            foreach ($filtersList as $filterName) {
+                $model = self::$filtersModels[$filterName];
+                $query = (new $model)->newQuery();
+                if ($filterName == 'categories') {
+                    $filters[$filterName] = $query->whereNull('parent_id')
+                        ->with('childrenCategories')->get(); // говнокод;
+                } else {
+                    $filters[$filterName] = $query->get()->keyBy('id')->toArray();
+                }
+
+            }
+            Cache::put('filters', $filters, 86400); // day
         }
         return $filters;
     }

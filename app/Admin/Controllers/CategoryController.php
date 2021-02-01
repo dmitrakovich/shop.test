@@ -29,6 +29,7 @@ class CategoryController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('slug', __('Slug'));
         $grid->column('path', __('Path'));
+        $grid->column('active', __('Активный'))->switch();
         $grid->column('title', __('Title'));
         $grid->column('description', __('Description'));
         // $grid->column('_lft', __(' lft'));
@@ -56,6 +57,7 @@ class CategoryController extends AdminController
         $show->field('id', __('Id'));
         $show->field('slug', __('Slug'));
         $show->field('path', __('Path'));
+        $show->field('active', __('Активный'));
         $show->field('title', __('Title'));
         $show->field('description', __('Description'));
         $show->field('_lft', __(' lft'));
@@ -78,6 +80,7 @@ class CategoryController extends AdminController
         $form = new Form(new Category());
 
         $form->text('slug', __('Slug'));
+        $form->switch('active', __('Активный'));
         $form->text('title', __('Title'));
         $form->textarea('description', __('Description'));
         // $form->number('_lft', __(' lft'));
