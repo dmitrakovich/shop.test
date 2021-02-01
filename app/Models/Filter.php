@@ -19,7 +19,7 @@ class Filter
         'heels',
         'seasons',
         'tags',
-        'brands',
+        // 'brands',
     ];
     /**
      * связанные с фильтрами классы
@@ -34,7 +34,7 @@ class Filter
         'heels' => 'App\Models\Heel',
         'seasons' => 'App\Models\Season',
         'tags' => 'App\Models\Tag',
-        'brands' => 'App\Models\Brand',
+        // 'brands' => 'App\Models\Brand',
     ];
     /**
      * префиксы для выьранных фильтров
