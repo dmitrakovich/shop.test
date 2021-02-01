@@ -8,7 +8,7 @@
 <div class="col-12 static-page">
     <div class="row mt-4">
         <div class="col-md-8 mb-5">
-            <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Ab642935229b2f4e923884c82a4de9c7c5f983779f4b37c73c1229af726f79d2f&amp;width=100%25&amp;height=469&amp;lang=ru_RU&amp;scroll=true"></script>
+            <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Ab642935229b2f4e923884c82a4de9c7c5f983779f4b37c73c1229af726f79d2f&amp;width=100%25&amp;height=580&amp;lang=ru_RU&amp;scroll=true"></script>
         </div>
         <div class="col-md-4 mb-5">
 
