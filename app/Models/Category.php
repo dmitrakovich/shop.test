@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Kalnoy\Nestedset\NodeTrait;
 use App\Traits\AttributeFilterTrait;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Kalnoy\Nestedset\NodeTrait;
 
 
 class Category extends Model
@@ -48,6 +49,38 @@ class Category extends Model
             ->with('childrenCategories');
     }
 
+    public static function beforeApplyFilter(&$builder, &$values)
+    {
+        $values = self::getChildrenCategoriesIdsList($values[0]);
+    }
+    /**
+     * Получить список идентификаторов дочерних категорий
+     *
+     * @param integer $categoryId
+     * @return array
+     */
+    public static function getChildrenCategoriesIdsList(int $categoryId): array
+    {
+        return Cache::rememberForever("categoryChilds.$categoryId", function () use ($categoryId) {
+            return self::traverseTree(
+                self::with('childrenCategories')->find($categoryId)->toArray()
+            );
+        });
+    }
+    /**
+     * Сделать одноуровневый массив из дерева
+     *
+     * @param array $subtree
+     * @return array
+     */
+    protected static function traverseTree(array $subtree)
+    {
+        $descendants[] = $subtree['id'];
+        foreach ($subtree['children_categories'] as $child) {
+            $descendants = array_merge($descendants, self::traverseTree($child));
+        }
+        return $descendants;
+    }
     // Получение ссылки
     public function getUrl()
     {
