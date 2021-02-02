@@ -23,4 +23,9 @@ Route::group([
     $router->resource('tags', TagController::class);
     $router->resource('brands', BrandController::class);
     $router->resource('products', ProductController::class);
+
+    // legacy
+    $router->any('sklad', function () { return require_once app_path('Admin/legacy/sklad.php'); });
+    $router->any('availability', function () { return require_once app_path('Admin/legacy/availability.php'); });
+    $router->any('rating', function () { return require_once app_path('Admin/legacy/rating.php'); });
 });
