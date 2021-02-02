@@ -94,7 +94,9 @@
                                 <span class="text-muted">Выберите размер:</span>
                             </div>
                             <div class="col-auto">
-                                <a class="text-decoration-underline" href="#">Таблица размеров</a>
+                                <a class="text-decoration-underline" data-fancybox data-src="#size-table" href="javascript:;">
+                                    Таблица размеров
+                                </a>
                             </div>
                         </div>
                         <ul class="p-0 mt-3 js-sizes">
@@ -203,5 +205,26 @@
             После заказа менеджер перезвонит Вам и уточнит <br>
             адрес доставки
         </p>
+    </div>
+</div>
+
+
+<div style="display: none;" id="size-table" class="row">
+
+    <div class="col-12 text-center">
+        <table><tbody>
+            <tr><th>Размер</th><th>Длина стельки, см</th></tr>
+            <tr><td>33</td><td>21</td></tr>
+            <tr><td>34</td><td>21,5</td></tr>
+            <tr><td>35</td><td>22,5</td></tr>
+            <tr><td>36</td><td>23</td></tr>
+            <tr><td>37</td><td>23,5</td></tr>
+            <tr><td>38</td><td>24,5</td></tr>
+            <tr><td>39</td><td>25</td></tr>
+            <tr><td>40</td><td>25,5</td></tr>
+            <tr><td>41</td><td>26,5</td></tr>
+            <tr><td>42</td><td>27</td></tr>
+            <tr><td>43</td><td>27,5</td></tr>
+        </tbody></table>
     </div>
 </div>
