@@ -124,20 +124,20 @@ class ProductController extends AdminController
         $form->text('slug', __('Slug'));
         $form->display('path', __('Path'));
         $form->text('title', __('Title'));
-        $form->decimal('buy_price', __('Buy price'));
-        $form->decimal('price', __('Price'));
-        $form->decimal('old_price', __('Old price'));
-        $form->select('category_id')->options(Category::all()->pluck('title','id'));
-        $form->select('season_id')->options(Season::all()->pluck('name','id'));
-        $form->select('color_id')->options(Color::all()->pluck('name','id'));
-        $form->select('brand_id')->options(Brand::all()->pluck('name','id'));
-        $form->text('color_txt', __('Color txt'));
-        $form->text('fabric_top_txt', __('Fabric top txt'));
-        $form->text('fabric_inner_txt', __('Fabric inner txt'));
-        $form->text('fabric_insole_txt', __('Fabric insole txt'));
-        $form->text('fabric_outsole_txt', __('Fabric outsole txt'));
-        $form->text('heel_txt', __('Heel txt'));
-        $form->quill('description', __('Description'));
+        // $form->decimal('buy_price', __('Buy price'));
+        $form->decimal('price', 'Цена');
+        $form->decimal('old_price', 'Старая цена');
+        $form->select('category_id', 'Категория')->options(Category::getFormatedTree());
+        $form->select('season_id', 'Сезон')->options(Season::all()->pluck('name','id'));
+        $form->select('color_id', 'Цвет')->options(Color::all()->pluck('name','id'));
+        $form->select('brand_id', 'Бренд')->options(Brand::all()->pluck('name','id'));
+        $form->text('color_txt', 'Цвет');
+        $form->text('fabric_top_txt', 'Материал верха');
+        $form->text('fabric_inner_txt', 'Материал внутри');
+        $form->text('fabric_insole_txt', 'Материал стельки');
+        $form->text('fabric_outsole_txt', 'Материал подошвы');
+        $form->text('heel_txt', 'Тип каблука/подошвы');
+        $form->ckeditor('description', 'Описание');
 
         $form->saved(function (Form $form) {
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);

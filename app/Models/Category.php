@@ -106,4 +106,24 @@ class Category extends Model
             $model->generatePath()->save();
         }
     }
+    /**
+     * Получить форматированное дерево категорий
+     *
+     * @return array
+     */
+    public static function getFormatedTree()
+    {
+        $nodes = self::whereNotNull('parent_id')->get()->toTree();
+
+        $traverse = function ($categories, $prefix = '', &$result = []) use (&$traverse) {
+            foreach ($categories as $category) {
+                $result[] = $prefix . $category->title;
+
+                $traverse($category->children, $prefix.'---- ', $result);
+            }
+            return $result;
+        };
+
+        return $traverse($nodes);
+    }
 }
