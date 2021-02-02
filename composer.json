@@ -22,7 +22,6 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "jenssegers/agent": "^2.6",
-        "jxlwqq/quill": "^1.0",
         "kalnoy/nestedset": "^5.0",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
