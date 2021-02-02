@@ -132,16 +132,12 @@ class SitemapController extends Controller
         return $this->render('sitemap.static', [
             'routes' => [
                 'index-page',
-                'static-instruction',
-                'static-payment',
-                'static-delivery',
-                'static-return',
-                'static-installments',
                 'static-shops',
                 'cart'
             ],
             'routesWithParams' => [
                 'feedbacks' => ['reviews', 'models', 'questions'],
+                'info' => ['instruction', 'payment', 'delivery', 'return', 'installments'],
             ]
         ]);
     }

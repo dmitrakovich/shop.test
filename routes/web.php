@@ -1,19 +1,20 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DebugController;
-use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\Shop\CartController;
-use App\Http\Controllers\Shop\CatalogController;
-// use App\Http\Controllers\Shop\OrderController;
-use App\Http\Controllers\Shop\ProductController;
-use App\Http\Controllers\SitemapController;
 use App\Models\Url;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
+// use App\Http\Controllers\Shop\OrderController;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\DebugController;
+use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\InfoPageController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Shop\CartController;
+use App\Http\Controllers\Shop\CatalogController;
+use App\Http\Controllers\Shop\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,18 +57,8 @@ Route::view('/', 'index')->name('index-page');
 
 
 
+Route::get('online-shopping/{slug?}', [InfoPageController::class, 'index'])->name('info');
 
-
-
-// static pages
-Route::prefix('online-shopping')->group(function () {
-    Route::view('/', 'static.instruction');
-    Route::view('instruction', 'static.instruction')->name('static-instruction');
-    Route::view('payment', 'static.payment')->name('static-payment');
-    Route::view('delivery', 'static.delivery')->name('static-delivery');
-    Route::view('return', 'static.return')->name('static-return');
-    Route::view('installments', 'static.installments')->name('static-installments');
-});
 Route::view('shops', 'static.shops')->name('static-shops');
 
 Auth::routes();

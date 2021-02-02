@@ -40,34 +40,10 @@ Breadcrumbs::for('online-shopping', function ($trail) {
     $trail->push('Онлайн покупки', url('online-shopping'));
 });
 
-// Index > online-shopping > instruction
-Breadcrumbs::for('static-instruction', function ($trail) {
+// Index > online-shopping > {item}
+Breadcrumbs::for('info-page', function ($trail, $item) {
     $trail->parent('online-shopping');
-    $trail->push('Как заказать', route('static-instruction'));
-});
-
-// Index > online-shopping > payment
-Breadcrumbs::for('static-payment', function ($trail) {
-    $trail->parent('online-shopping');
-    $trail->push('Оплата', route('static-payment'));
-});
-
-// Index > online-shopping > delivery
-Breadcrumbs::for('static-delivery', function ($trail) {
-    $trail->parent('online-shopping');
-    $trail->push('Доставка', route('static-delivery'));
-});
-
-// Index > online-shopping > return
-Breadcrumbs::for('static-return', function ($trail) {
-    $trail->parent('online-shopping');
-    $trail->push('Возврат', route('static-return'));
-});
-
-// Index > online-shopping > installments
-Breadcrumbs::for('static-installments', function ($trail) {
-    $trail->parent('online-shopping');
-    $trail->push('Рассрочка', route('static-installments'));
+    $trail->push($item['name'], route('info', $item['slug']));
 });
 
 // Index > shops

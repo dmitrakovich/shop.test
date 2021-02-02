@@ -52,7 +52,7 @@
                 <div class="row justify-content-center align-items-center text-uppercase font-size-15 position-relative">
                     <div class="col-12 col-lg-auto hover-dropdown">
                         <a href="{{ route('shop') }}">Каталог</a>
-                        <div class="col-12 dropdown-menu position-absolute">
+                        <div class="col-12 dropdown-menu position-absolute" style="margin-top: -1px;">
                             @foreach ($categories as $category)
                                 <a class="dropdown-item" href="{{ route('shop', $category) }}">{{ $category->title }}</a>
                             @endforeach
@@ -64,14 +64,14 @@
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto hover-dropdown">
-                        <a href="{{ route('static-instruction') }}">Онлайн покупки</a>
-                        <div class="col-12 dropdown-menu position-absolute">
+                        <a href="{{ route('info') }}">Онлайн покупки</a>
+                        <div class="col-12 dropdown-menu position-absolute" style="margin-top: -1px;">
                             @include('includes.static-pages-menu')
                         </div>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto">
-                        <a href="{{ route('static-installments') }}">Рассрочка</a>
+                        <a href="{{ route('info', 'installments') }}">Рассрочка</a>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto">

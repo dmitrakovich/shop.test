@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Models\Category;
+use App\Models\InfoPage;
 use Illuminate\Support\Carbon;
 use App\Observers\UserObserver;
 use Illuminate\Pagination\Paginator;
@@ -40,7 +41,8 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
 
         View::share([
-            'categories' => Category::get(['id', 'slug', 'title'])
+            'categories' => Category::get(['id', 'slug', 'title']),
+            'infoPagesMenu' => InfoPage::getMenu()
         ]);
     }
 }
