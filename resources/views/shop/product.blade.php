@@ -198,6 +198,9 @@
         <div class="form-group">
             <input type="text" class="form-control" name="phone" placeholder="Телефон" required>
         </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="address" placeholder="Населенный пункт" required>
+        </div>
         <button type="button" class="btn btn-dark my-3 px-5" id="buy-one-click-submit">
             Купить
         </button>

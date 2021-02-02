@@ -96,6 +96,7 @@ $(function () {
 
         let phone = $('input[name="phone"]').val();
         let name = $('input[name="name"]').val();
+        let address = $('input[name="address"]').val();
 
         if (phone.length < 4) {
             return $.fancybox.open('<h3 class="py-3 text-danger">Введите корректный номер телефона</h3>');
@@ -113,7 +114,7 @@ $(function () {
         $.ajax({
             method: "post",
             url: '/orders',
-            data: $form.serialize() + '&phone=' + phone + '&name=' + name,
+            data: $form.serialize() + '&phone=' + phone + '&name=' + name + '&user_addr=' + address,
             success: function (response) {
                 $modal.html(response).wrapInner('<h3>');
                 $.fancybox.getInstance('hideLoading');
