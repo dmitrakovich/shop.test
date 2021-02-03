@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Filter;
 use App\Models\Product;
 use App\Models\Url;
-use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 
 class CatalogController extends BaseController
@@ -90,7 +89,7 @@ class CatalogController extends BaseController
                 'brand',
                 // 'images',
                 'sizes',
-                'color',
+                // 'color',
                 'fabrics',
                 'media',
             ])

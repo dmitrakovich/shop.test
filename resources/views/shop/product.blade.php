@@ -81,11 +81,11 @@
                     </div>
                 </div>
 
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-12 py-3">
                         Цвет / {{ $product->color->name }}
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="row mb-4">
                     <div class="col-12 product-size">
@@ -150,8 +150,8 @@
             {!! $product->description !!}
         </div>
         <div class="col-12 col-lg-4 offset-lg-1">
-            @if (!empty($product->color->name))
-                Цвет - {{ $product->color->name }} <br>
+            @if (!empty($product->color_txt))
+                Цвет - {{ $product->color_txt }} <br>
             @endif
 
             @if (!empty($product->season))
