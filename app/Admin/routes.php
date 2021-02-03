@@ -23,6 +23,7 @@ Route::group([
     $router->resource('tags', TagController::class);
     $router->resource('brands', BrandController::class);
     $router->resource('products', ProductController::class);
+    $router->resource('info-pages', InfoPageController::class);
 
     // legacy
     $router->any('sklad', function () { return require_once app_path('Admin/legacy/sklad.php'); });
