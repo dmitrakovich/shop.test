@@ -17,8 +17,8 @@
             </div>
             <div class="col-12 col-sm text-center text-sm-left">
                 <h5 class="mt-5 mb-4">Контакты</h5>
-                <a href="tel:+375447286606">+375&nbsp;44&nbsp;728&nbsp;66&nbsp;06</a><br>
-                <a href="tel:+375297286636">+375&nbsp;29&nbsp;728&nbsp;66&nbsp;36</a><br>
+                <a href="tel:+375291793790">+375&nbsp;(29)&nbsp;179-37-90</a><br>
+                <a href="tel:88001007769">8-800-100-77-69&nbsp;(РФ)</a><br>
                 <a href="mailto:info@modny.by">info@modny.by</a>
             </div>
             <div class="col-7 col-sm text-center text-sm-left">

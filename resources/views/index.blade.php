@@ -8,13 +8,13 @@
 
 <div class="col-12 text-center mt-5">
     {{-- <h1 class="display-4">Популярные категории</h1> --}}
-    
+
 </div>
 
 
 <div class="col-md-12">
 
-    
+
     <div class="col-12">
         <hr class="d-none d-sm-block">
         @include('includes.advantages-block')
@@ -24,13 +24,27 @@
     <div class="col-12 mt-5">
         <div class="row align-items-center">
             <div class="col-12 col-sm-auto text-center">
-                <h1 class="display-4">#BAROCCO look</h1>
+                <h1 class="display-4">#Barocco_style</h1>
             </div>
             <div class="col-12 col-sm-auto text-center ml-auto">
                 <a href="{{ config('contacts.instagram.link') }}">Подпишись на наш Instagram</a>
             </div>
         </div>
-        <div class="row mx-n2 js-instagram-posts"></div>
+        <div class="row mx-n2 js-instagram-posts">
+            @foreach ($instagramPosts as $post)
+                <div class="col-12 col-sm-4">
+                    <a href="{{ $post['url'] }}" rel="noopener" target="_blank">
+                        <img src="{{ $post['image'] }}" alt="" class="img-fluid" />
+                    </a>
+                    <div class="row">
+                        <div class="col-auto">@barocco</div>
+                        <div class="col-auto ml-auto">
+                            &#10084;&nbsp;{{ $post['likes'] }}
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
         <div class="row mt-4 mb-5">
             <div class="col text-center">
                 <a href="{{ config('contacts.instagram.link') }}">Больше образов</a>
@@ -54,7 +68,9 @@
             </div>
             <div class="col-12 col-md-6 mt-4 mt-md-0">
                 <div class="row justify-content-center align-items-center h-100">
-                    <button class="btn btn-white col-10 col-lg-8 col-xl-6 p-2">Присоединиться</button>
+                    <a href="{{ route('dashboard-card') }}" class="btn btn-white col-10 col-lg-8 col-xl-6 p-2">
+                        Присоединиться
+                    </a>
                 </div>
             </div>
         </div>

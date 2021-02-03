@@ -16,8 +16,8 @@
                 <img src="/images/index/conditions-installment.png" alt="Рассрочка">
             </div>
             <div class="col col-md-5 col-lg">
-                Рассрочка<br>                                
-                <small class="text-muted">на 2 месяца без предоплаты</small>
+                Рассрочка<br>
+                <small class="text-muted">на 3 платежа без переплаты</small>
             </div>
         </div>
     </div>

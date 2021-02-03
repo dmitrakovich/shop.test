@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\Shop\OrderController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\DebugController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\InfoPageController;
@@ -53,9 +54,9 @@ Route::prefix('clear-cache')->group(function () {
 });
 Route::view('/test', 'test');
 Route::get('debug', [DebugController::class, 'index']);
-Route::view('/', 'index')->name('index-page');
 
 
+Route::get('/', [IndexController::class, 'index'])->name('index-page');
 
 Route::get('online-shopping/{slug?}', [InfoPageController::class, 'index'])->name('info');
 
