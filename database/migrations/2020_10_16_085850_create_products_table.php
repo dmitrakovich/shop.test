@@ -21,14 +21,14 @@ class CreateProductsTable extends Migration
             $table->string('slug', 100)->unique();
             $table->string('title')->index();
 
-            $table->unsignedDecimal('buy_price');
-            $table->unsignedDecimal('price');
-            $table->unsignedDecimal('old_price');
+            $table->unsignedDecimal('buy_price')->default(0);
+            $table->unsignedDecimal('price')->default(0);
+            $table->unsignedDecimal('old_price')->default(0);
 
-            $table->foreignId('category_id')->index();
-            $table->foreignId('season_id')->index();
-            $table->foreignId('color_id')->index();
-            $table->foreignId('brand_id')->index();
+            $table->foreignId('category_id')->index()->default(0);
+            $table->foreignId('season_id')->index()->default(0);
+            $table->foreignId('color_id')->index()->default(0);
+            $table->foreignId('brand_id')->index()->default(0);
 
             $table->string('color_txt')->nullable();
             $table->string('fabric_top_txt')->nullable();
