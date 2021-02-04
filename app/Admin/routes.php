@@ -28,5 +28,5 @@ Route::group([
     // legacy
     $router->any('sklad', function () { return require_once app_path('Admin/legacy/sklad.php'); });
     $router->any('availability', function () { return require_once app_path('Admin/legacy/availability.php'); });
-    $router->any('rating', function () { return require_once app_path('Admin/legacy/rating.php'); });
+    $router->any('rating', RatingController::class);
 });
