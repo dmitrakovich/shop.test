@@ -254,15 +254,16 @@ class ProductSeeder extends Seeder
                 'product_date_added as created_at',
                 'date_modify as updated_at',
 
+                'label_id', // ярлык на товарах
                 'extra_field_3', // Коллекция
                 'extra_field_7', // Сезон
                 // 'extra_field_12', // Размер аксессуара
                 // 'extra_field_13', // Цвет фильтра
                 'extra_field_14', // Материал фильтра
                 'extra_field_15', // Теги
-                // 'extra_field_16', // Акция
+                'extra_field_16 as action', // Акция
                 // 'extra_field_17', // Поднять
-                // 'extra_field_18', // Рейтинг
+                'extra_field_18 as rating', // Рейтинг
             ])
             ->keyBy('id');
 
@@ -350,7 +351,7 @@ class ProductSeeder extends Seeder
             foreach ($imagesList as $image) {
                 // $pathToFile = 'C:/OSPanel/domains/shop.test/public/images/products/' . $image;
                 $urlToFile = 'https://modny.by/components/com_jshopping/files/img_products/' . $image;
-                
+
                 try {
                     $product
                         // ->addMedia($pathToFile)
