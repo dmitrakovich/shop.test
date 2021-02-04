@@ -256,7 +256,7 @@ class Product extends Model implements HasMedia
                 return $query->orderBy('created_at', 'desc');
 
             case 'rating':
-                return $query->orderBy('created_at', 'desc');
+                return $query->orderBy('rating', 'desc');
 
             case 'price-up':
                 return $query->orderBy('price', 'asc');

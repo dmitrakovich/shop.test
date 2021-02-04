@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\DB;
 
-$ratingConfigFile = app_path('Admin/legacy/rating.conf.php');
+$ratingConfigFile = database_path('files/rating.conf.php');
 $ratingConfig = require_once $ratingConfigFile;
 
 // Предустановки
@@ -43,7 +43,7 @@ switch (request()->input(['act'])) {
 
 // Запись в config
 if (request()->input(['act'])) {
-	file_put_contents($ratingConfigFile, "<?php\nreturn " . var_export($ratingConfig, true) . ";\n?>");
+	file_put_contents($ratingConfigFile, "<?php\nreturn " . var_export($ratingConfig, true) . ';');
 }
 ?>
 
