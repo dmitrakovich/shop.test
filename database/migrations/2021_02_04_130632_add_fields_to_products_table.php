@@ -14,7 +14,7 @@ class AddFieldsToProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->unsignedInteger('label_id')->after('title')->nullable();
+            $table->unsignedInteger('label_id')->after('title')->default(0);
             $table->boolean('action')->default(false);
             $table->unsignedInteger('rating')->default(0);
         });
