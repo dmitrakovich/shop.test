@@ -1,8 +1,9 @@
 <?php
 
-use Encore\Admin\Facades\Admin;
 use Illuminate\Routing\Router;
+use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Admin\Controllers\SkladController;
 
 Admin::routes();
 
@@ -26,7 +27,9 @@ Route::group([
     $router->resource('info-pages', InfoPageController::class);
 
     // legacy
-    $router->any('sklad', function () { return require_once app_path('Admin/legacy/sklad.php'); });
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);
+
+    $router->get('sklad', [SkladController::class, 'index']);
+    $router->post('sklad/export', [SkladController::class, 'export']);
 });

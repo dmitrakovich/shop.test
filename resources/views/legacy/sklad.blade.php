@@ -1,118 +1,87 @@
 <?php
 
-/**
-
-* @version      4.10.0 13.08.2013
-
-* @author       MAXXmarketing GmbH
-
-* @package      Jshopping
-
-* @copyright    Copyright (C) 2010 webdesigner-profi.de. All rights reserved.
-
-* @license      GNU/GPL
-
-*/
-
-ini_set("display_errors", "1");
-
-error_reporting(E_ALL);
-
-
-
-defined('_JEXEC') or die('Restricted access');
-
-$pachAd = JPATH_BASE.'/components/com_jshopping/views/panel/tmpl/';
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 
 $pachImg = str_replace('/administrator/components/com_jshopping/views/panel/tmpl','',__DIR__).'/components/com_jshopping/files/img_products/';
 
 
-
-
-
 // Предустановки
-
 $thtime = date("Y-m-d-H:i:s");
-
 $dShop = array();
-
 $dSklad = array();
-
 $dSize = array();
-
 $fltr = array(
-
 	'place'=>array("* ЗАО САНДАЛ","* ИП Ермаков И.В.*","ЗАО САНДАЛ","ИП Ермаков И.В.","ИНТЕРНЕТ МАГАЗИН"),
-
 	'brand'=>array(),
-
 	'count'=>999,
-
 	'status'=>'all',
-
 	'season'=>array('17','18','19'),
-
 	'days'=>365,
-
 	'excel'=>0
-
 );
 
-foreach ($fltr as $fltrK => $fltrV) if (isset($_POST[$fltrK])) $fltr[$fltrK] = $_POST[$fltrK];
+foreach ($fltr as $fltrK => $fltrV) {
+    if (isset($_POST[$fltrK])) {
+        $fltr[$fltrK] = $_POST[$fltrK];
+    }
+}
 
 $statusArr = array('all'=>'Все','new'=>'Новинки','sale'=>'Скидки','sold'=>'Продано');
-
 $seasonArr = array('17'=>'Лето','18'=>'Деми','19'=>'Зима');
-
-$db = JFactory::getDbo();
-
 
 
 // Продукты
+$res_prod = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
+    ->with('media')
+    ->get([
+        'products.id',
+        'brand_id',
+        'brands.name as brand',
+        'category_id as cat_id',
+        'title as name',
+        'publish',
+        'label_id as label',
+        'price',
+        'season_id as season'
+    ]);
 
-$field = "prod.product_id as id, br.`name_ru-RU` as brand, prod.`name_ru-RU` as name, prod.product_publish as publish, cat.category_id as cat_id, prod.label_id as label, product_price as price, prod.extra_field_7 as season";
-
-$query = $db->getQuery(true);
-
-$query = "SELECT $field  FROM `#__jshopping_products` AS prod
-
-		  LEFT JOIN `#__jshopping_manufacturers` AS br ON prod.product_manufacturer_id=br.manufacturer_id
-
-		  LEFT JOIN `#__jshopping_products_to_categories` AS cat USING (product_id)";
 
 
 
-$db->setQuery($query);
 
-$res_prod = $db->loadObjectList();
 
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 $sec_list_id = array();
 
-foreach ($res_prod as $res_prod_v1) $sec_list_id[] = $res_prod_v1->id;
+foreach ($res_prod as $res_prod_v1) {
+    $sec_list_id[] = $res_prod_v1->id;
+}
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-reset($res_prod);
+
+
 
 
 
 
 
 // Модели по дате
-
-$days_limit = $fltr['days'];
-
-$query = $db->getQuery(true);
-
-$query = "SELECT product_id as id, product_date_added as adddate FROM `#__jshopping_products` WHERE DATEDIFF(NOW(),product_date_added)<$days_limit AND product_publish = 0";
-
-$db->setQuery($query);
-
-$prod_fordate = $db->loadObjectList();
+$prod_fordate = DB::table('products')
+    ->where('publish', false)
+    ->whereRaw('DATEDIFF(NOW(), created_at) < ' . (int)$fltr['days'])
+    ->get(['id', 'created_at as adddate']);
 
 $prod_actuel = array();
+foreach ($prod_fordate as $prod_fordate_v) {
+    $prod_actuel[] = $prod_fordate_v->id;
+}
 
-foreach ($prod_fordate as $prod_fordate_v) $prod_actuel[] = $prod_fordate_v->id;
-
-
+dd(
+    $prod_actuel,
+    $prod_fordate->first()
+);
 
 // Картинки
 
