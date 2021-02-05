@@ -7,7 +7,7 @@
                     <li>
                         <label class="check">
                             {{-- <input type="checkbox"> --}}
-                            <i class="checkmark" style="background: {{ $filter['value'] }}"></i>
+                            <i class="checkmark" title="{{ $filter['name'] }}" style="background: {{ $filter['value'] }}"></i>
                         </label>
                     </li>
                 </a>
