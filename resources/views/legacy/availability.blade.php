@@ -3,6 +3,7 @@
 use App\Models\Brand;
 use App\Models\Size;
 use App\Models\Product;
+use App\Jobs\UpdateAvailabilityJob;
 
 $availabilityConfigFile = database_path('files/availability.conf.php');
 $availabilityConfig = require_once $availabilityConfigFile;
@@ -105,7 +106,7 @@ if ($chAdd) {
 if (isset($_POST['act'])) {
 	switch ($_POST['act']) {
         case "start":
-            require_once app_path('Admin/legacy/availability.action.php');
+            $service_message = UpdateAvailabilityJob::dispatchNow();
 			break;
 
 		case "publish":
