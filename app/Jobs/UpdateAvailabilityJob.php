@@ -2,25 +2,41 @@
 
 namespace App\Jobs;
 
+use App\Models\Product;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class UpdateAvailabilityJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    /**
+     * Ручной способ обновления
+     *
+     * @var boolean
+     */
+    protected $isManual = false;
+    protected $thtime = null;
 
+    const YANDEX_METRIKA_HEADERS = [
+        // 'Accept' => 'application/x-yametrika+json',
+        // 'Content-Type' => 'application/x-yametrika+json',
+        'Authorization' => 'OAuth AgAAAAAb991aAAW4YjwHjdE_60CZpTWD4C4J64o',
+    ];
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(bool $manual = false)
     {
-        //
+        $this->isManual = $manual;
+        $this->thtime = date("Y-m-d-H:i:s");
     }
 
     /**
@@ -30,71 +46,46 @@ class UpdateAvailabilityJob implements ShouldQueue
      */
     public function handle()
     {
-        // как я понял это для обновления по крону через wget
-        if (!isset($_GET['start']) && !isset($_POST['act'])) {
-            echo 'неправильный запрос';
-            exit();
-        } elseif (isset($_GET['start'])) {
-            define('_JEXEC', 1);
-            if (file_exists(str_replace('/administrator/components/com_jshopping/views/panel/tmpl','',__DIR__) . '/defines.php'))
-            {
-                include_once str_replace('/administrator/components/com_jshopping/views/panel/tmpl','',__DIR__) . '/defines.php';
-            }
-            if (!defined('_JDEFINES'))
-            {
-                define('JPATH_BASE', str_replace('/administrator/components/com_jshopping/views/panel/tmpl','',__DIR__));
-                require_once JPATH_BASE . '/includes/defines.php';
-            }
-            require_once JPATH_BASE . '/includes/framework.php';
-            JFactory::getApplication('site')->initialise();
-            $pachAd = JPATH_BASE.'/administrator/components/com_jshopping/views/panel/tmpl/';
-            include_once($pachAd.'availability.conf.php');
-            // Проверка на авто
-            if ($availabilityConfig['auto_del'] == 'off') {
-                echo 'Автоматическое обновление выключено!';
-                exit();
-            }
-            // Предустановки
-            $thtime = date("Y-m-d-H:i:s");
+        $availabilityConfig = $this->getConfig();
+
+        if (!$this->isManual && $availabilityConfig['auto_del'] == 'off') {
+            return 'Автоматическое обновление выключено!';
         }
-
-        throw new Exception('Move this script in Job');
-
-
-        // Product::get(['id']);
-
-
-        $db = JFactory::getDbo();
         $prodS = array();
-        $field = "prod.product_id as id, br.`name_ru-RU` as brand, prod.`name_ru-RU` as name, prod.product_publish as publish, cat.category_id as cat_id, prod.label_id as label";
-        $query = $db->getQuery(true);
-        $query = "SELECT $field  FROM `#__jshopping_products` AS prod
-                LEFT JOIN `#__jshopping_manufacturers` AS br ON prod.product_manufacturer_id=br.manufacturer_id
-                LEFT JOIN `#__jshopping_products_to_categories` AS cat USING (product_id)";
-        $db->setQuery($query);
-        $res_prod = $db->loadObjectList();
-        $query = "SELECT pr.id as sid, pr.product_id as pid, pr.attr_value_id as vid, attr.`name_ru-RU` as value FROM `#__jshopping_products_attr2` as pr
-                LEFT JOIN `#__jshopping_attr_values` AS attr ON pr.attr_value_id = attr.value_id";
-        $db->setQuery($query);
-        $allAtr = $db->loadObjectList();
+        $res_prod = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
+        ->with('media')
+        ->get([
+            'products.id',
+            'brand_id',
+            'brands.name as brand',
+            'category_id as cat_id',
+            'title as name',
+            'publish',
+            'label_id as label',
+        ]);
+
+        $allAtr = DB::table('product_attributes')
+            ->where('attribute_type', 'App\Models\Size')
+            ->leftJoin('sizes', 'product_attributes.attribute_id', '=', 'sizes.id')
+            ->get([
+                // 'pr.id as sid',
+                'product_id as pid',
+                'attribute_id as vid',
+                'name as value'
+            ]);
+
         $attrL = array();
-        $fullAttr = array();
         $fullProd = array();
         $attrName = array();
-        foreach ($allAtr as $atrV) {
-            if (!isset($attrL[$atrV->pid])) $attrL[$atrV->pid] = array();
-            $attrL[$atrV->pid][$atrV->value] = $atrV->sid;
-            $fullAttr[$atrV->value] = $atrV->sid;
+        foreach ($allAtr as $sid => $atrV) {
+            $attrL[$atrV->pid] = $attrL[$atrV->pid] ?? [];
+            $attrL[$atrV->pid][$atrV->value] = $sid; // $atrV->sid; !!!
             $attrName[$atrV->value] = $atrV->vid;
         }
         foreach ($res_prod as $res_prod_v) {
-            $res_prod_size = '';
-            if (isset($attrL[$res_prod_v->id])) {
-                $res_prod_size = $attrL[$res_prod_v->id];
-            } else $res_prod_size = 'b';
             $ibrand = trim($res_prod_v->brand);
             $sbrand = strtolower($ibrand);
-            $smallN = smallArt($res_prod_v->name);
+            $smallN = $this->smallArt($res_prod_v->name);
             $checkB = str_replace(' ', '', $ibrand);
             $itemB = array(
                 'id' => $res_prod_v->id,
@@ -102,7 +93,7 @@ class UpdateAvailabilityJob implements ShouldQueue
                 'status' => $res_prod_v->publish,
                 'articul' => $res_prod_v->name,
                 'brand' => $ibrand,
-                'size' => $res_prod_size,
+                'size' => $attrL[$res_prod_v->id] ?? 'b',
                 'label' => $res_prod_v->label
             );
             if (!empty($checkB)) {
@@ -113,48 +104,38 @@ class UpdateAvailabilityJob implements ShouldQueue
                 $fullProd[$sbrand][$smallN] = $res_prod_v->id;
             }
         }
-        function smallArt($txt)
-        {
-            $r = array(' ', '-', '.', '_', '*');
-            return mb_strtolower(str_replace($r, '', $txt));
-        }
+        $crutchForOldSiteSizes = $allAtr->toArray(); // было завязано на id (sid), котрых сейчас нет
         unset($res_prod, $allAtr, $attrL);
-        // Яндекс
-        $context = stream_context_create(array(
-            'http' => array(
-                'method' => 'GET',
-                'header' => 'Authorization: OAuth AgAAAAAb991aAAW4YjwHjdE_60CZpTWD4C4J64o' . PHP_EOL .
-                    'Content-Type: application/x-yametrika+json' . PHP_EOL
-            ),
-        ));
 
+        // Яндекс
         $url = 'https://cloud-api.yandex.net:443/v1/disk/resources';
         $params = array(
             'path' => '/Ostatki/ostatki.txt',
             'field' => 'modified,md5',
         );
-        $infoF = file_get_contents($url . '?' . http_build_query($params), false, $context);
-        if (!$infoF) {
-            echo "Ошибка! Яндекс Диск не отдал данные о файле.";
-            exit;
+        $infoF = Http::withHeaders(self::YANDEX_METRIKA_HEADERS)
+                ->get($url, $params)
+                ->json();
+
+        if (empty($infoF)) {
+            return 'Ошибка! Яндекс Диск не отдал данные о файле.';
         }
-        $infoF = json_decode($infoF, true);
-        $filedate = explode(",", $availabilityConfig['file']);
+        $filedate = explode(',', $availabilityConfig['file']);
         if ($infoF['md5'] == $filedate[1] && (count($availabilityConfig['publish']) + count($availabilityConfig['add_size']) + count($availabilityConfig['del']) + count($availabilityConfig['del_size']) + count($availabilityConfig['new'])) > 0 && !isset($_POST['act'])) {
-            echo "Файл не обновлялся.";
-            exit;
+            return "Файл не обновлялся.";
         }
         $availabilityConfig['file'] = date("Y-m-d-H:i:s", strtotime($infoF['modified'])) . "," . $infoF['md5'];
+
+
         $url = 'https://cloud-api.yandex.net:443/v1/disk/resources/download';
-        $params = array(
-            'path'         => '/Ostatki/ostatki.txt'
-        );
-        $hrefF = file_get_contents($url . '?' . http_build_query($params), false, $context);
-        if (!$hrefF) {
-            echo "Ошибка! Яндекс Диск не получил ссылку на скачивание.";
-            exit;
+        $hrefF = Http::withHeaders(self::YANDEX_METRIKA_HEADERS)
+                ->get($url, ['path' => '/Ostatki/ostatki.txt'])
+                ->json();
+
+        if (empty($hrefF)) {
+            return "Ошибка! Яндекс Диск не получил ссылку на скачивание.";
         }
-        $hrefF = json_decode($hrefF, true);
+
         $resI = file_get_contents($hrefF['href']);
         $resI = mb_convert_encoding($resI, "UTF-8", "windows-1251");
         $resI = explode("\n", $resI);
@@ -166,7 +147,7 @@ class UpdateAvailabilityJob implements ShouldQueue
                 $ibrand = trim($itemA[3]);
                 $sbrand = strtolower($ibrand);
                 $checkB = str_replace(' ', '', $ibrand);
-                $smallN = smallArt($itemC[0]);
+                $smallN = $this->smallArt($itemC[0]);
                 $sizeNotNull = true;
                 if ($itemA[5] == 0) $sizeNotNull = false;
                 $isize = 'b';
@@ -221,11 +202,11 @@ class UpdateAvailabilityJob implements ShouldQueue
                 if ($checkIgn && $checkNoM && $checkCat) {
                     if (isset($prodS[$fbK][$fK]) && $prodS[$fbK][$fK]['status'] != 1 && isset($resD[$fbK][$fK])) {
                         $it = $prodS[$fbK][$fK];
-                        $availabilityConfig['publish'][] = array('id' => $it['id'], 'name' => $it['brand'] . ' ' . $it['articul'], 'status' => 0, 'time' => $thtime);
+                        $availabilityConfig['publish'][] = array('id' => $it['id'], 'name' => $it['brand'] . ' ' . $it['articul'], 'status' => 0, 'time' => $this->thtime);
                     }
                     if (isset($prodS[$fbK][$fK]) && $prodS[$fbK][$fK]['status'] == 1 && !isset($resD[$fbK][$fK])) {
                         $it = $prodS[$fbK][$fK];
-                        $availabilityConfig['del'][] = array('id' => $it['id'], 'name' => $it['brand'] . ' ' . $it['articul'], 'status' => 0, 'time' => $thtime);
+                        $availabilityConfig['del'][] = array('id' => $it['id'], 'name' => $it['brand'] . ' ' . $it['articul'], 'status' => 0, 'time' => $this->thtime);
                     }
                     if (isset($fullProd[$fbK][$fK]) && $fullProd[$fbK][$fK] == 'new') {
                         $it = $resD[$fbK][$fK];
@@ -243,7 +224,7 @@ class UpdateAvailabilityJob implements ShouldQueue
                             'cat' => $it['cat'],
                             'size' => $it['size'],
                             'err' => $it_err,
-                            'time' => $thtime
+                            'time' => $this->thtime
                         );
                     }
                     // размеры
@@ -255,9 +236,9 @@ class UpdateAvailabilityJob implements ShouldQueue
                         foreach ($fs as $fsk => $fsv) {
                             if (!isset($ss[$fsk]) && isset($ds[$fsk])) {
                                 if (!isset($attrName[$fsk])) $attrName[$fsk] = 'new';
-                                $availabilityConfig['add_size'][] = array('id' => $it['id'], 'vid' => $attrName[$fsk], 'name' => $it['brand'] . ' ' . $it['articul'], 'size' => $fsk, 'status' => 0, 'time' => $thtime);
+                                $availabilityConfig['add_size'][] = array('id' => $it['id'], 'vid' => $attrName[$fsk], 'name' => $it['brand'] . ' ' . $it['articul'], 'size' => $fsk, 'status' => 0, 'time' => $this->thtime);
                             } elseif (isset($ss[$fsk]) && !isset($ds[$fsk])) {
-                                $availabilityConfig['del_size'][] = array('id' => $it['id'], 'vid' => $ss[$fsk], 'name' => $it['brand'] . ' ' . $it['articul'], 'size' => $fsk, 'status' => 0, 'time' => $thtime);
+                                $availabilityConfig['del_size'][] = array('id' => $it['id'], 'vid' => $ss[$fsk], 'name' => $it['brand'] . ' ' . $it['articul'], 'size' => $fsk, 'status' => 0, 'time' => $this->thtime);
                             }
                         }
                     }
@@ -265,9 +246,9 @@ class UpdateAvailabilityJob implements ShouldQueue
             };
         };
         $checkLog = 0;
-        $availabilityConfig['last_update'] = $thtime;
+        $availabilityConfig['last_update'] = $this->thtime;
         $filedate = explode(",", $availabilityConfig['file']);
-        $service_message = "<p class='adminka_message_success'>Файл " . $filedate[0] . ". Наличие сверено в " . $availabilityConfig['last_update'];
+        $service_message = "Файл $filedate[0] . Наличие сверено в $availabilityConfig[last_update]";
         if ($availabilityConfig['auto_del'] == 'on') {
             $act_count = 0;
             // публикации
@@ -276,17 +257,18 @@ class UpdateAvailabilityJob implements ShouldQueue
                 $img_list = array();
                 $q_list = array();
                 $imgL = array();
-                foreach ($availabilityConfig['publish'] as $actK => $actV) {
-                    if ($availabilityConfig['publish'][$actK]['status'] != 1) {
+                foreach ($availabilityConfig['publish'] as $actV) {
+                    if ($actV['status'] != 1) {
                         $img_list[] = $actV['id'];
-                    } else $imgL[] = $actV['id'];
+                    } else {
+                        $imgL[] = $actV['id'];
+                    }
                 }
 
                 if (count($img_list) > 0) {
-                    $img_list = implode(',', $img_list);
-                    $query = "SELECT product_id as pid FROM #__jshopping_products_images WHERE product_id IN($img_list)";
-                    $db->setQuery($query);
-                    $imgFL = $db->loadObjectList();
+                    $imgFL = Product::whereIn('id', $img_list)
+                        ->whereHas('media')
+                        ->get('id as pid');
 
                     foreach ($imgFL as $imgV) {
                         if (!in_array($imgV->pid, $imgL)) $imgL[] = $imgV->pid;
@@ -303,12 +285,8 @@ class UpdateAvailabilityJob implements ShouldQueue
                 }
 
                 if (count($q_list) > 0) {
-
-                    $q_list = implode(',', $imgL);
-                    $query = "UPDATE `#__jshopping_products` SET product_publish = 1 WHERE product_id IN($q_list)";
-                    $db->setQuery($query);
-                    $db->query();
-                    $service_message .= ". Опубликовано " . $act_count;
+                    Product::whereIn('id', $imgL)->update(['publish' => true]);
+                    $service_message .= ". Опубликовано $act_count";
                 }
                 $checkLog += $act_count;
             }
@@ -327,11 +305,8 @@ class UpdateAvailabilityJob implements ShouldQueue
                     $service_message .= ". !!! Ошибка. Больше 50 снять с публикации";
                     $act_count = 0;
                 } elseif ($act_count > 0) {
-                    $q_list = implode(',', $q_list);
-                    $query = "UPDATE `#__jshopping_products` SET product_publish = 0 WHERE product_id IN($q_list)";
-                    $db->setQuery($query);
-                    $db->query();
-                    $service_message .= ". Снято с публикации " . $act_count;
+                    Product::whereIn('id', $q_list)->update(['publish' => false]);
+                    $service_message .= ". Снято с публикации $act_count";
                 }
                 $checkLog += $act_count;
             }
@@ -350,51 +325,76 @@ class UpdateAvailabilityJob implements ShouldQueue
                     $service_message .= ". !!! Ошибка. Больше 100 удалить размеров";
                     $act_count = 0;
                 } elseif ($act_count > 0) {
-                    $q_list = implode(',', $q_list);
-                    $query = "DELETE FROM `#__jshopping_products_attr2` WHERE id IN($q_list)";
-                    $db->setQuery($query);
-                    $db->query();
-                    $service_message .= ". Удалено размеров " . $act_count;
+                    foreach ($q_list as $sid) {
+                        DB::where('product_id', $crutchForOldSiteSizes[$sid]['pid'])
+                            ->where('attribute_id', $crutchForOldSiteSizes[$sid]['vid'])
+                            ->delete();
+                    }
+                    $service_message .= ". Удалено размеров $act_count";
                 }
                 $checkLog += $act_count;
             }
             // добавление размеров
             if (count($availabilityConfig['add_size']) > 0) {
                 $act_count = 0;
-                $q_list = array();
+                $insertData = [];
                 foreach ($availabilityConfig['add_size'] as $actK => $actV) {
                     if ($availabilityConfig['add_size'][$actK]['status'] != 1 && $actV['vid'] != 'new') {
-                        $q_list[] = "(" . $actV['id'] . ",2," . $actV['vid'] . ",'+',0)";
+                        $insertData[] = [
+                            'product_id' => $actV['id'],
+                            'attribute_type' => 'App\Models\Size',
+                            'attribute_id' => $actV['vid'],
+                        ];
                         $availabilityConfig['add_size'][$actK]['status'] = 1;
                         $act_count++;
                     }
                 }
                 if ($act_count > 0) {
-                    $q_list = implode(',', $q_list);
-                    $query = "INSERT INTO `#__jshopping_products_attr2`  (product_id,attr_id,attr_value_id,price_mod,addprice) VALUES $q_list";
-                    $db->setQuery($query);
-                    $db->query();
-                    $service_message .= ". Добавлено размеров " . $act_count;
+                    DB::table('product_attributes')->insert($insertData);
+                    $service_message .= ". Добавлено размеров $act_count";
                 }
                 $checkLog += $act_count;
             }
 
             // Запись в log
             if ($checkLog > 0) {
-                $log_type = ((isset($_POST['act'])) ? "РУЧНОЕ" : "АВТО");
-                $log_mess = str_replace(array("<p class='adminka_message_success'>", "</p>"), "", $service_message);
-                file_put_contents($pachAd . "availability.log.txt", "$thtime [$log_type]: $log_mess" . PHP_EOL, FILE_APPEND);
+                $this->writeLog($service_message);
             }
         } else {
-            $log_type = ((isset($_POST['act'])) ? "РУЧНОЕ" : "АВТО");
-            $log_mess = str_replace(array("<p class='adminka_message_success'>", "</p>"), "", $service_message);
-            file_put_contents($pachAd . "availability.log.txt", "$thtime [$log_type]: $log_mess" . PHP_EOL, FILE_APPEND);
+            $this->writeLog($service_message);
         }
-        $service_message .= ".</p>";
+
         if (!isset($_POST['act'])) {
-            // Запись в config
-            $strToFile = '<?' . PHP_EOL . '$availabilityConfig = ' . var_export($availabilityConfig, true) . ';' . PHP_EOL . '?>';
-            file_put_contents($pachAd . 'availability.conf.php', $strToFile);
+            $this->saveConfig($availabilityConfig);
         }
+
+        return "<p class='adminka_message_success'>$service_message.</p>";
+    }
+
+    protected function getConfig()
+    {
+        $availabilityConfigFile = database_path('files/availability.conf.php');
+        if (!file_exists($availabilityConfigFile)) {
+            return 'Не найден файл конфигурации';
+        }
+        return require $availabilityConfigFile;
+    }
+
+    protected function saveConfig($config)
+    {
+        $availabilityConfigFile = database_path('files/availability.conf.php');
+        file_put_contents($availabilityConfigFile, "<?php\nreturn " . var_export($config, true) . ';');
+    }
+
+    public function writeLog($msg)
+    {
+        $log_type = $this->isManual ? 'РУЧНОЕ' : 'АВТО';
+        file_put_contents(database_path('files/availability.log.txt'), "{$this->thtime} [$log_type]: $msg\n", FILE_APPEND);
+    }
+
+    protected function smallArt($txt)
+    {
+        $r = array(' ', '-', '.', '_', '*');
+        return mb_strtolower(str_replace($r, '', $txt));
     }
 }

@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Jobs\UpdateAvailabilityJob;
 
 $availabilityConfigFile = database_path('files/availability.conf.php');
-$availabilityConfig = require_once $availabilityConfigFile;
+$availabilityConfig = require $availabilityConfigFile;
 
 // Предустановки
 $thtime = date("Y-m-d-H:i:s");
@@ -106,7 +106,7 @@ if ($chAdd) {
 if (isset($_POST['act'])) {
 	switch ($_POST['act']) {
         case "start":
-            $service_message = UpdateAvailabilityJob::dispatchNow();
+            $service_message = UpdateAvailabilityJob::dispatchNow(true);
 			break;
 
 		case "publish":
