@@ -24,7 +24,7 @@
                                         </div>
                                         <div class="col-12 col-md-2 mt-md-2">{{ DeclensionNoun::make($item->count, 'пара') }}</div>
                                         <div class="col-12 col-md-2 mt-md-2">размер {{ $item->size->name}}</div>
-                                        <div class="col-12 col-md-2 mt-md-2">{{ $item->product->color->name }}</div>
+                                        <div class="col-12 col-md-2 mt-md-2">{{ $item->product->color_txt }}</div>
                                         <div class="col-12 col-md-3 mt-md-2 mb-4">{{ $item->product->price }} BYN</div>
 
                                         <div class="col-12 col-auto mt-auto position-absolute fixed-bottom">
