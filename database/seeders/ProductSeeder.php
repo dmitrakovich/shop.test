@@ -87,7 +87,7 @@ class ProductSeeder extends Seeder
             ]
         ],
         'color' =>  [
-            // 'column' => 'color_id',
+            'old_column' => 'extra_field_13',
             'new_id' => [
                 22 => 1, // черный
                 23 => 6, // белый
@@ -241,8 +241,6 @@ class ProductSeeder extends Seeder
                 'product_price as price',
                 'product_old_price as old_price',
                 'category_id',
-                'extra_field_7 as season_id',
-                'extra_field_13 as color_id',
                 'product_manufacturer_id as brand_id',
                 'extra_field_1 as color_txt',
                 'extra_field_2 as fabric_top_txt',
@@ -256,9 +254,9 @@ class ProductSeeder extends Seeder
 
                 'label_id', // ярлык на товарах
                 'extra_field_3', // Коллекция
-                'extra_field_7', // Сезон
+                'extra_field_7 as season_id', // Сезон
                 // 'extra_field_12', // Размер аксессуара
-                // 'extra_field_13', // Цвет фильтра
+                'extra_field_13', // Цвет фильтра
                 'extra_field_14', // Материал фильтра
                 'extra_field_15', // Теги
                 'extra_field_16 as action', // Акция
@@ -284,20 +282,7 @@ class ProductSeeder extends Seeder
         foreach ($oldProducts as $productId => $oldProduct) {
 
             $insertData = $oldProduct = (array)$oldProduct;
-            unset($insertData['extra_field_3'],
-            $insertData['extra_field_7'],
-            // $insertData['extra_field_12'],
-            // $insertData['extra_field_13'],
-            $insertData['extra_field_14'],
-            $insertData['extra_field_15'],);
-
-            // color
-            $colorsId = explode(',', $insertData['color_id']);
-            if ($colorsId > 1) {
-                $insertData['color_id'] = 17; // мультиколор
-            } else {
-                $insertData['color_id'] = $this->attributesList['color']['new_id'][($colorsId[0] ?? 0)] ?? 0;
-            }
+            unset($insertData['extra_field_3'], $insertData['extra_field_14'], $insertData['extra_field_15']);
 
             foreach ($this->attributesList as $method => $value) {
                 if (isset($value['column'])) { // одно значение
