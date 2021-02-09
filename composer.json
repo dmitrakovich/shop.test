@@ -21,6 +21,7 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "irazasyed/telegram-bot-sdk": "^3.4",
         "jenssegers/agent": "^2.6",
         "kalnoy/nestedset": "^5.0",
         "laravel-admin-ext/ckeditor": "^1.0",
