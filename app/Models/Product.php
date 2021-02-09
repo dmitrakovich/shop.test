@@ -90,9 +90,9 @@ class Product extends Model implements HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function color()
+    public function colors()
     {
-        return $this->belongsTo(Color::class);
+        return $this->morphedByMany(Color::class, 'attribute', 'product_attributes');
     }
     /**
      * материалы

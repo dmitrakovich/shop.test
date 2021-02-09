@@ -86,7 +86,7 @@ class ProductSeeder extends Seeder
                 24 => 3, // 34
             ]
         ],
-        'color' =>  [
+        'colors' =>  [
             'old_column' => 'extra_field_13',
             'new_id' => [
                 22 => 1, // черный
@@ -281,8 +281,15 @@ class ProductSeeder extends Seeder
 
         foreach ($oldProducts as $productId => $oldProduct) {
 
+            // fixes
+            $oldProduct->action = intval($oldProduct->action);
+            $oldProduct->rating = $oldProduct->rating > 0 ? $oldProduct->rating : 0;
+
             $insertData = $oldProduct = (array)$oldProduct;
-            unset($insertData['extra_field_3'], $insertData['extra_field_14'], $insertData['extra_field_15']);
+            unset($insertData['extra_field_3'],
+                $insertData['extra_field_13'],
+                $insertData['extra_field_14'],
+                $insertData['extra_field_15']);
 
             foreach ($this->attributesList as $method => $value) {
                 if (isset($value['column'])) { // одно значение
