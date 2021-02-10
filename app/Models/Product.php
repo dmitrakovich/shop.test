@@ -287,8 +287,8 @@ class Product extends Model implements HasMedia
                     ->orWhereHas('category', function (Builder $query) use ($search) {
                         $this->generateSearchQuery($query, 'title', $search);
                     })
-                    ->orWhereHas('color', function (Builder $query) use ($search) {
-                        $this->generateSearchQuery($query, 'name', $search);
+                    ->orWhere(function (Builder $query) use ($search) {
+                        $this->generateSearchQuery($query, 'color_txt', $search);
                     })
                     ->orWhereHas('tags', function (Builder $query) use ($search) {
                         $this->generateSearchQuery($query, 'name', $search);
