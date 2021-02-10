@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\DebugController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DebugController;
+use App\Http\Controllers\CropperController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('debug', [DebugController::class, 'index']);
 Route::get('phpinfo', function () { phpinfo(); });
+
+// Route::post('croppic/save', [CropperController::class, 'save']);
+Route::post('croppic/crop', [CropperController::class, 'crop']);
