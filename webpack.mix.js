@@ -16,6 +16,13 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .version();
 
+// for admin panel
+mix.scripts([
+    'node_modules/cropperjs/dist/cropper.min.js',
+    'resources/js/admin/admin.js'
+], 'public/js/admin.js')
+    .postCss('node_modules/cropperjs/dist/cropper.min.css', 'public/css/admin.css');
+
 if (mix.inProduction()) {
     mix.disableNotifications();
 } else {

@@ -28,5 +28,8 @@
         "typeface-poppins": "0.0.72",
         "typeface-roboto": "0.0.75",
         "vue-template-compiler": "^2.6.12"
+    },
+    "dependencies": {
+        "cropperjs": "^1.5.9"
     }
 }
