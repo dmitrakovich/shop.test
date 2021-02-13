@@ -19,7 +19,7 @@ trait AttributeFilterTrait
     {
         $IdList = $values; // array_keys($values);
 
-        self::beforeApplyFilter($builder, $values);
+        self::beforeApplyFilter($builder, $IdList);
 
         if ($relationColumn = self::getRelationColumn()) {
             if (count($IdList) == 1) {
@@ -31,11 +31,11 @@ trait AttributeFilterTrait
 
         $relationTable = $relationName = self::getRelationNameByClass();
 
-        return $builder->whereHas($relationName, function ($query) use ($values, $relationTable) {
-            if (count($values) == 1) {
-                $query->where("$relationTable.id", $values[0]);
+        return $builder->whereHas($relationName, function ($query) use ($IdList, $relationTable) {
+            if (count($IdList) == 1) {
+                $query->where("$relationTable.id", $IdList[0]);
             } else {
-                $query->whereIn("$relationTable.id", $values);
+                $query->whereIn("$relationTable.id", $IdList);
             }
         });
     }
