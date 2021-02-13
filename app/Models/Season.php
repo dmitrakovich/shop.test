@@ -10,6 +10,9 @@ class Season extends Model
     use AttributeFilterTrait;
 
     public $timestamps = false;
-    protected static $relationName = 'season';
-    protected static $relationTable = 'seasons';
+
+    protected static function getRelationColumn()
+    {
+        return 'season_id';
+    }
 }

@@ -8,8 +8,6 @@ use Illuminate\Support\Str;
 
 trait AttributeFilterTrait
 {
-    // protected static $relationName;
-    // protected static $relationTable;
     /**
      * Применить фильтр
      *
@@ -19,10 +17,19 @@ trait AttributeFilterTrait
      */
     public static function applyFilter(Builder $builder, array $values)
     {
-        $relationName = self::$relationName ?? self::getRelationNameByClass();
-        $relationTable = self::$relationTable ?? $relationName;
+        $IdList = $values; // array_keys($values);
 
         self::beforeApplyFilter($builder, $values);
+
+        if ($relationColumn = self::getRelationColumn()) {
+            if (count($IdList) == 1) {
+                return $builder->where($relationColumn, $IdList[0]);
+            } else {
+                return $builder->whereIn($relationColumn, $IdList);
+            }
+        }
+
+        $relationTable = $relationName = self::getRelationNameByClass();
 
         return $builder->whereHas($relationName, function ($query) use ($values, $relationTable) {
             if (count($values) == 1) {
@@ -31,6 +38,11 @@ trait AttributeFilterTrait
                 $query->whereIn("$relationTable.id", $values);
             }
         });
+    }
+
+    protected static function getRelationColumn()
+    {
+        return null;
     }
 
     protected static function getRelationNameByClass()

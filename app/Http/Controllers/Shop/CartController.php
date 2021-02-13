@@ -57,15 +57,6 @@ class CartController extends BaseController
         // $colorId = $request->input('color_id') ?? abort(404);
         $colorId = 17;
 
-        // Product::where('id', $request->input('id'))
-            /*->whereHas('sizes', function ($query) use ($request) {
-                $query->where('sizes.id', $request->input('size_id'));
-            })*/
-            /*->whereHas(function ($query) use ($request) {
-                $query->where("$relationTable.id", $request->input('id')));
-            })*/
-            // ->first(['id']);
-
         $product = Product::findOrFail($productId);
         foreach ($sizes as $sizeId => $state) {
             Cart::addItem($product->id, $sizeId, $colorId);

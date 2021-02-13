@@ -3,7 +3,9 @@
 namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
-
+/**
+ * @see \App\Models\Cart
+ */
 class Cart extends Facade
 {
     protected static function getFacadeAccessor()

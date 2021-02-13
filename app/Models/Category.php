@@ -14,8 +14,6 @@ class Category extends Model
     use SoftDeletes, NodeTrait, AttributeFilterTrait;
 
     public $timestamps = false;
-    protected static $relationName = 'category';
-    protected static $relationTable = 'categories';
     //
     /**
      * Get the route key for the model.
@@ -25,6 +23,11 @@ class Category extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    protected static function getRelationColumn()
+    {
+        return 'category_id';
     }
 
     public function setPathAttribute($path)

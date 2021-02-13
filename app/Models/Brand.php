@@ -10,9 +10,11 @@ class Brand extends Model
     use AttributeFilterTrait;
 
     public $timestamps = false;
-    protected static $relationName = 'brand';
-    protected static $relationTable = 'brands';
 
+    protected static function getRelationColumn()
+    {
+        return 'brand_id';
+    }
     // public function setLogoAttribute($logo)
     // {
     //     $this->attributes['logo'] = strtr($logo, ['brand_logos/' => '']);
