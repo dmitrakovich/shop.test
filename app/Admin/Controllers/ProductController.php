@@ -93,7 +93,6 @@ class ProductController extends AdminController
         $show->field('old_price', __('Old price'));
         $show->field('category_id', __('Category id'));
         $show->field('season_id', __('Season id'));
-        $show->field('color_id', __('Color id'));
         $show->field('brand_id', __('Brand id'));
         $show->field('color_txt', __('Color txt'));
         $show->field('fabric_top_txt', __('Fabric top txt'));
@@ -170,7 +169,6 @@ class ProductController extends AdminController
         $form->decimal('old_price', 'Старая цена');
         $form->select('category_id', 'Категория')->options(Category::getFormatedTree());
         $form->select('season_id', 'Сезон')->options(Season::all()->pluck('name','id'));
-        // $form->select('color_id', 'Цвет')->options(Color::all()->pluck('name','id'));
         $form->select('brand_id', 'Бренд')->options(Brand::all()->pluck('name','id'));
         $form->text('color_txt', 'Цвет');
         $form->text('fabric_top_txt', 'Материал верха');

@@ -25,7 +25,7 @@ class CartData extends Model
     public function product()
     {
         return $this->hasOne(Product::class, 'id', 'product_id')
-            ->with(['category', 'brand', 'color', 'media']);
+            ->with(['category', 'brand', 'media']);
     }
     /**
      * Связть с размерами
