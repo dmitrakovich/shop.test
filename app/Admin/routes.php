@@ -29,7 +29,5 @@ Route::group([
     // legacy
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);
-
-    $router->get('sklad', [SkladController::class, 'index']);
-    $router->post('sklad/export', [SkladController::class, 'export']);
+    $router->any('sklad', [SkladController::class, 'index']);
 });
