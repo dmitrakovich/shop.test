@@ -73,7 +73,8 @@ foreach ($res_prod as $product) {
 		'status' => $product->publish,
 		'articul' => $product->name,
 		'brand' => $ibrand,
-		'img' => optional($product->getFirstMedia())->getUrl('thumb'),
+		'img_url' => optional($product->getFirstMedia())->getUrl('thumb'),
+		'img_path' => optional($product->getFirstMedia())->getPath('thumb'),
 		'label' => $product->label,
 		'season' => $product->season,
 		'price' => $product->price
@@ -144,7 +145,7 @@ for ($i=4;$i<count($resI);$i++) {
 		$isize = trim($itemA[4]);
 
 		$itemB = array(
-			'img'=>'',
+			'img_url'=>'',
 			'articul'=>$itemC[0],
 			'brand'=>$ibrand,
 			'cat'=>str_replace(" женские","",$itemC[1]),
@@ -174,7 +175,8 @@ for ($i=4;$i<count($resI);$i++) {
 				}
 				$itemB['discount']=$discount.'%';
 				$itemB['price_im']=$shopInfo['price'];
-				$itemB['img']=$shopInfo['img'];
+				$itemB['img_url']=$shopInfo['img_url'];
+				$itemB['img_path']=$shopInfo['img_path'];
 				$itemB['season']=$shopInfo['season'];
 			}
 
@@ -281,7 +283,7 @@ ksort($brandArr);
 	<h2>Складские остатки</h2>
 
     <form id="formSklad" name="formSklad" method="post">
-
+		@csrf
 		<div class="filterSkladName">Фильтр<span class="filterSkladSymbol">&nbsp;+</span></div>
 		<div class="filterSklad">
 
@@ -350,463 +352,251 @@ ksort($brandArr);
     </form>
 
 
-@if ($fltr['excel'] == 1)
-
-<?
-
+@if ($fltr['excel'] == 1) @php
 /*********EXCEL*************/
 
 // Подключаем класс для работы с excel
-
-require_once($pachAd.'PHPExcel.php');
+require_once app_path('Admin/legacy/PHPExcel.php');
 
 // Подключаем класс для вывода данных в формате excel
-
-require_once($pachAd.'PHPExcel/Writer/Excel2007.php');
-
+require_once app_path('Admin/legacy/PHPExcel/Writer/Excel2007.php');
 
 
-// Создаем объект класса PHPExcel
-
-$xls = new PHPExcel();
-
-// Устанавливаем индекс активного листа
-
-$xls->setActiveSheetIndex(0);
-
-// Получаем активный лист
-
-$sheet = $xls->getActiveSheet();
-
-// Подписываем лист
-
-$sheet->setTitle('Склад');
-
-
+$xls = new PHPExcel(); // Создаем объект класса PHPExcel
+$xls->setActiveSheetIndex(0); // Устанавливаем индекс активного листа
+$sheet = $xls->getActiveSheet(); // Получаем активный лист
+$sheet->setTitle('Склад'); // Подписываем лист
 
 // Стили ячеек
-
 $style_title = array(
-
     'font' => array(
-
         'name' => 'Arial',
-
 		'size' => 12,
-
 		'bold' => true,
-
         'color' => array ('rgb' => 'FFFFFF')
-
 	),
-
     'fill' => array(
-
         'type' => PHPExcel_Style_Fill::FILL_SOLID,
-
         'color' => array ('rgb' => '777777')
-
     ),
-
 	'borders' => array(
-
 		'allborders' => array(
-
 			'style' => PHPExcel_Style_Border::BORDER_THIN,
-
 			'color' => array('rgb' => '000000')
-
 		)
-
 	),
-
     'alignment' => array (
-
 		'horizontal' 	=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-
 		'vertical'   	=> PHPExcel_Style_Alignment::VERTICAL_CENTER,
-
 		'wrap'       	=> true,
-
 	)
-
 );
 
 $style_normal = array(
-
     'font' => array(
-
         'name' => 'Arial',
-
 		'size' => 10,
-
         'color' => array ('rgb' => '000000')
-
 	),
-
 	'borders' => array(
-
 		'allborders' => array(
-
 			'style' => PHPExcel_Style_Border::BORDER_THIN,
-
 			'color' => array('rgb' => '000000')
-
 		)
-
 	),
-
     'alignment' => array (
-
 		'horizontal' 	=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-
 		'vertical'   	=> PHPExcel_Style_Alignment::VERTICAL_CENTER,
-
 		'wrap'       	=> true,
-
 	)
-
 );
 
 $style_none = array(
-
     'font' => array(
-
         'name' => 'Arial',
-
 		'size' => 10,
-
         'color' => array ('rgb' => '000000')
-
 	),
-
     'fill' => array(
-
         'type' => PHPExcel_Style_Fill::FILL_SOLID,
-
         'color' => array ('rgb' => 'CCCCCC')
-
     ),
-
 	'borders' => array(
-
 		'allborders' => array(
-
 			'style' => PHPExcel_Style_Border::BORDER_THIN,
-
 			'color' => array('rgb' => '000000')
-
 		)
-
 	),
-
     'alignment' => array (
-
 		'horizontal' 	=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-
 		'vertical'   	=> PHPExcel_Style_Alignment::VERTICAL_CENTER,
-
 		'wrap'       	=> true,
-
 	)
-
 );
 
 $style_sold = array(
-
     'font' => array(
-
         'name' => 'Arial',
-
 		'size' => 10,
-
-        'color' => array ('rgb' => '000000')
-
+        'color' => array('rgb' => '000000')
 	),
-
     'fill' => array(
-
         'type' => PHPExcel_Style_Fill::FILL_SOLID,
-
-        'color' => array ('rgb' => 'FF0000')
-
+        'color' => array('rgb' => 'FF0000')
     ),
-
 	'borders' => array(
-
 		'allborders' => array(
-
 			'style' => PHPExcel_Style_Border::BORDER_THIN,
-
 			'color' => array('rgb' => '000000')
-
 		)
-
 	),
-
-    'alignment' => array (
-
+    'alignment' => array(
 		'horizontal' 	=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-
 		'vertical'   	=> PHPExcel_Style_Alignment::VERTICAL_CENTER,
-
 		'wrap'       	=> true,
-
 	)
-
 );
 
 $style_sale = array(
-
     'font' => array(
-
         'name' => 'Arial',
-
 		'size' => 10,
-
-        'color' => array ('rgb' => '000000')
-
+        'color' => array('rgb' => '000000')
 	),
-
     'fill' => array(
-
         'type' => PHPExcel_Style_Fill::FILL_SOLID,
-
-        'color' => array ('rgb' => 'FFFF00')
-
+        'color' => array('rgb' => 'FFFF00')
     ),
-
 	'borders' => array(
-
 		'allborders' => array(
-
 			'style' => PHPExcel_Style_Border::BORDER_THIN,
-
 			'color' => array('rgb' => '000000')
-
 		)
-
 	),
-
-    'alignment' => array (
-
+    'alignment' => array(
 		'horizontal' 	=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-
 		'vertical'   	=> PHPExcel_Style_Alignment::VERTICAL_CENTER,
-
 		'wrap'       	=> true,
-
 	)
-
 );
 
-
-
 // Устанавливаем начальные значения
-
 $cN = array('A','B','C','D','E','F','G','H','I','J','K','L');
-
 $rw = 1;
-
 $cl = 0;
 
-
-
 // Заголовок
-
 $sheet->setCellValue($cN[$cl].$rw,'Фото');
-
 $sheet->getColumnDimension($cN[$cl])->setWidth(17);
-
 $cl++;
-
 $sheet->setCellValue($cN[$cl].$rw,'Модель');
-
 $sheet->getColumnDimension($cN[$cl])->setWidth(30);
-
 $cl++;
 
 foreach($placeArr as $placeV) {
-
 	if (!in_array($placeV,$fltr['place'])) continue;
-
 	$sheet->setCellValue($cN[$cl].$rw,$placeV);
-
 	$sheet->getColumnDimension($cN[$cl])->setWidth(15);
-
 	$cl++;
-
 }
 
 $sheet->setCellValue($cN[$cl].$rw,'Цена');
-
 $sheet->getColumnDimension($cN[$cl])->setWidth(10);
-
 $cl++;
-
 $sheet->setCellValue($cN[$cl].$rw,'Скидка');
-
 $sheet->getColumnDimension($cN[$cl])->setWidth(10);
-
 $cl++;
-
 $sheet->setCellValue($cN[$cl].$rw,'Цена на сайте');
-
 $sheet->getColumnDimension($cN[$cl])->setWidth(10);
-
 $sheet->getStyle('A1:'.$cN[$cl].$rw)->applyFromArray($style_title);
 
-
-
 // Содержимое
-
 foreach($dSklad as $kBrand => $dBrand) {
-
 	if (count($fltr['brand']) > 0 && !in_array($kBrand,$fltr['brand'])) continue;
-
 	ksort($dBrand);
-
 	foreach($dBrand as $prod) {
-
 		// проверки фильтра
-
 		$countOfPlace = 0;
-
 		$countOfProduct = 0;
-
 		foreach($placeArr as $placeV) {
-
 			if (isset($prod['size'][$placeV])) {
-
 				$countOfProduct += count($prod['size'][$placeV]);
-
 				if(in_array($placeV,$fltr['place'])) $countOfPlace += count($prod['size'][$placeV]);
-
 			}
-
 		}
-
 		if ($countOfPlace == 0 && $fltr['status'] != 'sold') continue;
-
 		if ($fltr['count']<$countOfProduct) continue;
-
 		if (($fltr['status'] == 'new' && $prod['discount'] != '0%') || ($fltr['status'] == 'sale' && $prod['discount'] == '0%') || ($fltr['status'] == 'sold' && $countOfProduct != 0)) continue;
-
 		if(!empty($prod['season']) && !in_array($prod['season'],$fltr['season'])) continue;
-
 		$rw++;
-
 		$cl = 0;
-
 		$prodName = $prod['brand']." ".$prod['articul'];
 
 		// изображение
-
-		if(!empty($prod['img'])) {
-
+		if(!empty($prod['img_path'])) {
 			$sheet->getRowDimension($rw)->setRowHeight(85);
-
 			$pic = new PHPExcel_Worksheet_Drawing();
-
 			$pic->setName($prodName);
-
-			$pic->setPath($pachImg."mini_".$prod['img']);
-
+			$pic->setPath($prod['img_path']);
 			$pic->setCoordinates($cN[$cl].$rw);
-
 			$pic->setOffsetX(5);
-
 			$pic->setOffsetY(5);
-
 			$pic->setWorksheet($sheet);
-
-		} else $sheet->setCellValue($cN[$cl].$rw,"нет фото");
-
+		} else {
+			$sheet->setCellValue($cN[$cl].$rw,"нет фото");
+		}
 		$cl++;
 
 		// описание
-
 		$sheet->setCellValue($cN[$cl].$rw,$prodName."\r\n".$prod['cat']);
-
 		$cl++;
 
 		// размеры
-
 		foreach($placeArr as $placeV) {
-
 			if (!in_array($placeV,$fltr['place'])) continue;
-
 			if(isset($prod['size'][$placeV])) $sheet->setCellValue($cN[$cl].$rw,implode(', ',$prod['size'][$placeV]));
-
 			$cl++;
-
 		}
 
 		// цены
-
 		$sheet->setCellValue($cN[$cl].$rw,$prod['price']);
-
 		$cl++;
-
 		$sheet->setCellValue($cN[$cl].$rw,$prod['discount']);
-
 		$cl++;
-
 		$sheet->setCellValue($cN[$cl].$rw,$prod['price_im']);
 
-
-
 		// оформление
-
-		if (empty($prod['img'])) {
-
+		if (empty($prod['img_url'])) {
 			$style_row = $style_none;
-
 		} elseif ($prod['discount'] != '0%') {
-
 			$style_row = $style_sale;
-
 		} elseif ($countOfProduct == 0) {
-
 			$style_row = $style_sold;
-
-		} else $style_row = $style_normal;
+		} else {
+			$style_row = $style_normal;
+		}
 
 		$sheet->getStyle('A'.$rw.':'.$cN[$cl].$rw)->applyFromArray($style_row);
-
 		$sheet->getStyle('B'.$rw.':'.$cN[$cl - 3].$rw)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-
 	}
-
 }
 
 // автофильтр
-
 $sheet->setAutoFilter('A1:'.$cN[$cl].$rw);
-
 $sheet->freezePane('D2');
 
-
-
 // Выводим содержимое файла
-
 $objWriter = new PHPExcel_Writer_Excel2007($xls);
-
-$objWriter->save($pachAd.'sklad.xlsx');
+$objWriter->save(storage_path('app/temp/sklad.xlsx'));
 
  /*********END EXCEL*************/
-
-?>
+@endphp
 
     <div class="adminka_field adminka_field_excel">
-
-            <a href="https://modny.by/administrator/components/com_jshopping/views/panel/tmpl/sklad.xlsx" target="_blank" title="">скачать sklad.xlsx</a>
-
+		<a href="/temp/sklad.xlsx" target="_blank" title="">скачать sklad.xlsx</a>
     </div>
 
-<? else:?>
-
-
+@else
 
 	<div class="adminka_field">
 		<table><tbody>
@@ -852,7 +642,7 @@ $objWriter->save($pachAd.'sklad.xlsx');
 					@endphp
 
 				<tr class="
-					@if (empty($prod['img']))
+					@if (empty($prod['img_url']))
 						prodRowNot
 					@elseif ($countOfProduct == 0)
 						prodRowSold
@@ -862,7 +652,7 @@ $objWriter->save($pachAd.'sklad.xlsx');
 				>
 
 					<td class="prodImg">
-						{!! !empty($prod['img']) ? "<img src=\"$prod[img]\" title=\"$prodName\">" : 'нет фото' !!}
+						{!! !empty($prod['img_url']) ? "<img src=\"$prod[img_url]\" title=\"$prodName\">" : 'нет фото' !!}
 					</td>
 
 					<td class="prodName">
