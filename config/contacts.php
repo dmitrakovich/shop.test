@@ -4,7 +4,7 @@ return [
     // Конфиг для инстаграма
     'instagram' => [
         'name' => 'Инстаграм',
-        'link' => 'https://www.instagram.com/barocco.style/'
+        'link' => 'https://www.instagram.com/barocco.by/'
     ],
     'mail-info' => [
         'name' => 'info@modny.by',

@@ -33,16 +33,10 @@ class IndexController extends Controller
 
     protected function getInstagramPosts(int $postsCount = 6)
     {
-
         // Cache::forget('instagram_posts');
-
-
         return Cache::remember('instagram_posts', 10800, function () use ($postsCount) { // 3h
             $posts = [];
-            $host = 'https://www.instagram.com/';
-            $username = 'barocco.style';
-
-            $response = Http::get($host . $username . '/');
+            $response = $this->getInstagramData();
             if ($response->failed()) {
                 return []; // Request error
             }
@@ -68,5 +62,19 @@ class IndexController extends Controller
             }
             return $posts;
         });
+    }
+    /**
+     * Получить данные из инстаграмма
+     *
+     * @return \Illuminate\Http\Client\Response
+     */
+    protected function getInstagramData()
+    {
+        // $host = 'https://www.instagram.com/';
+        // $username = 'barocco.by';
+        // return Http::get($host . $username . '/');
+
+        $proxyServer = 'https://modny.by/yml/parse-insta-HjcvyT7n4.php';
+        return Http::post($proxyServer, ['token' => 'fhYvHhfd74Gn4K9Fb08J']);
     }
 }
