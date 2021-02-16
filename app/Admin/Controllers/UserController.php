@@ -2,11 +2,11 @@
 
 namespace App\Admin\Controllers;
 
-use App\User;
-use Encore\Admin\Controllers\AdminController;
+use App\Models\User;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Controllers\AdminController;
 
 class UserController extends AdminController
 {
@@ -26,20 +26,23 @@ class UserController extends AdminController
     {
         $grid = new Grid(new User());
 
-        $grid->column('id', __('Id'));
-        $grid->column('first_name', __('First name'));
+        // $grid->column('id', __('Id'));
+        $grid->column('first_name', 'Имя');
+        $grid->column('last_name', 'Фамилия');
+        $grid->column('patronymic_name', 'Отчество');
         $grid->column('email', __('Email'));
-        $grid->column('email_verified_at', __('Email verified at'));
-        $grid->column('password', __('Password'));
-        $grid->column('remember_token', __('Remember token'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('last_name', __('Last name'));
-        $grid->column('patronymic_name', __('Patronymic name'));
-        $grid->column('phone', __('Phone'));
-        $grid->column('birth_date', __('Birth date'));
-        $grid->column('country', __('Country'));
-        $grid->column('address', __('Address'));
+        // $grid->column('email_verified_at', __('Email verified at'));
+        // $grid->column('password', __('Password'));
+        // $grid->column('remember_token', __('Remember token'));
+        $grid->column('phone', 'Телефон');
+        // $grid->column('birth_date', 'Дата рождения');
+        // $grid->column('country', __('Country'));
+        $grid->column('address', 'Адрес');
+        // $grid->column('created_at', __('Created at'));
+        // $grid->column('updated_at', __('Updated at'));
+
+        $grid->model()->orderBy('id', 'desc');
+        $grid->paginate(50);
 
         return $grid;
     }
@@ -54,20 +57,13 @@ class UserController extends AdminController
     {
         $show = new Show(User::findOrFail($id));
 
-        $show->field('id', __('Id'));
-        $show->field('first_name', __('First name'));
+        $show->field('first_name', 'Имя');
+        $show->field('last_name', 'Фамилия');
+        $show->field('patronymic_name', 'Отчество');
         $show->field('email', __('Email'));
-        $show->field('email_verified_at', __('Email verified at'));
-        $show->field('password', __('Password'));
-        $show->field('remember_token', __('Remember token'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
-        $show->field('last_name', __('Last name'));
-        $show->field('patronymic_name', __('Patronymic name'));
-        $show->field('phone', __('Phone'));
-        $show->field('birth_date', __('Birth date'));
-        $show->field('country', __('Country'));
-        $show->field('address', __('Address'));
+        $show->field('phone', 'Телефон');
+        $show->field('birth_date', 'Дата рождения');
+        $show->field('address', 'Адрес');
 
         return $show;
     }
@@ -81,17 +77,17 @@ class UserController extends AdminController
     {
         $form = new Form(new User());
 
-        $form->text('first_name', __('First name'));
+        $form->text('first_name', 'Имя');
+        $form->text('last_name', 'Фамилия');
+        $form->text('patronymic_name', 'Отчество');
         $form->email('email', __('Email'));
-        $form->datetime('email_verified_at', __('Email verified at'))->default(date('Y-m-d H:i:s'));
-        $form->password('password', __('Password'));
-        $form->text('remember_token', __('Remember token'));
-        $form->text('last_name', __('Last name'));
-        $form->text('patronymic_name', __('Patronymic name'));
-        $form->mobile('phone', __('Phone'));
-        $form->date('birth_date', __('Birth date'))->default(date('Y-m-d'));
-        $form->text('country', __('Country'));
-        $form->textarea('address', __('Address'));
+        // $form->datetime('email_verified_at', __('Email verified at'))->default(date('Y-m-d H:i:s'));
+        // $form->password('password', __('Password'));
+        // $form->text('remember_token', __('Remember token'));
+        $form->mobile('phone', 'Телефон');
+        $form->date('birth_date', 'Дата рождения')->default(date('Y-m-d'));
+        // $form->text('country', __('Country'));
+        $form->textarea('address', 'Адрес');
 
         return $form;
     }
