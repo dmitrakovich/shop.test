@@ -112,8 +112,10 @@ $(function () {
         $(this).parents('.file-preview-frame').remove();
     });
 
-
-
+    // hide/show mask
+    $(document).on('click', '.js-mask-toggler', function () {
+        $('.cropper-face').toggleClass('hide-mask');
+    });
 
 
 });

@@ -2,15 +2,20 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Tag;
+use App\Models\Heel;
+use App\Models\Size;
 use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Color;
-use App\Models\Product;
+use App\Models\Style;
+use App\Models\Fabric;
 use App\Models\Season;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\Product;
+use App\Models\Category;
+use Encore\Admin\Controllers\AdminController;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductController extends AdminController
@@ -69,6 +74,7 @@ class ProductController extends AdminController
         // $grid->column('updated_at', __('Updated at'));
         // $grid->column('deleted_at', __('Deleted at'));
 
+        $grid->model()->orderBy('id', 'desc');
         $grid->paginate(30);
 
         return $grid;
@@ -117,66 +123,89 @@ class ProductController extends AdminController
     {
         $form = new Form(new Product());
 
-        $form->switch('publish', __('Publish'));
-        // $form->multipleImage('photos', __('Фотографии'))->removable()->downloadable();
+        $form->column(6, function ($form) {
+            $form->switch('publish', 'Публиковать');
+            // $form->multipleImage('photos', __('Фотографии'))->removable()->downloadable();
 
-        $form->html(function ($form) {
-            $imagesBlock = '';
-            foreach ( $form->model()->getMedia() as $image) {
-                $imagesBlock .= '<div class="file-preview-frame krajee-default">
-                    <div class="kv-file-content">
-                        <img src="' . $image->getUrl('catalog') . '"
-                            class="file-preview-image kv-preview-data"
-                            style="max-width:100%;max-height:100%;">
-                    </div>
-                    <div class="file-thumbnail-footer">
-                        <div class="file-footer-caption" title="' . $image->file_name . '">
-                            <div class="file-caption-info">' . $image->file_name . '</div>
+            $form->html(function ($form) {
+                $imagesBlock = '';
+                foreach ( $form->model()->getMedia() as $image) {
+                    $imagesBlock .= '<div class="file-preview-frame krajee-default">
+                        <div class="kv-file-content">
+                            <img src="' . $image->getUrl('catalog') . '"
+                                class="file-preview-image kv-preview-data"
+                                style="max-width:100%;max-height:100%;">
                         </div>
-                        <div class="file-actions">
-                            <div class="file-footer-buttons">
-                                <button type="button" data-id="' . $image->id . '"
-                                    class="kv-file-remove btn btn-sm btn-kv btn-default btn-outline-secondary">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </button>
-                                <button type="button" data-full="' . $image->getUrl('full') . '"
-                                    class="kv-file-zoom btn btn-sm btn-kv btn-default btn-outline-secondary">
-                                    <i class="glyphicon glyphicon-zoom-in"></i>
-                                </button>
+                        <div class="file-thumbnail-footer">
+                            <div class="file-footer-caption" title="' . $image->file_name . '">
+                                <div class="file-caption-info">' . $image->file_name . '</div>
                             </div>
+                            <div class="file-actions">
+                                <div class="file-footer-buttons">
+                                    <button type="button" data-id="' . $image->id . '"
+                                        class="kv-file-remove btn btn-sm btn-kv btn-default btn-outline-secondary">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                    <button type="button" data-full="' . $image->getUrl('full') . '"
+                                        class="kv-file-zoom btn btn-sm btn-kv btn-default btn-outline-secondary">
+                                        <i class="glyphicon glyphicon-zoom-in"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>';
-            }
-            return '<div class="js-images-area">' . $imagesBlock . '</div>';
+                    </div>';
+                }
+                return '<div class="js-images-area">' . $imagesBlock . '</div>';
+            });
+
+            $form->html('<div class="input-group-btn input-group-append">
+                <div tabindex="500" class="btn btn-primary btn-file">
+                    <i class="glyphicon glyphicon-folder-open"></i>&nbsp;
+                    <span class="hidden-xs">Выбор файла</span>
+                    <input type="file" class="" name="photos[]" multiple id="imageLoader" accept="image/*">
+                </div>
+                <input type="hidden" name="add_images">
+            </div>', 'Картинки');
+
+            $form->text('slug', __('Slug'));
+            $form->text('path', 'Путь')->readonly();;
+            $form->text('title', 'Артикул');
+            $form->currency('buy_price', 'Цена покупки')->symbol('BYN');
+            $form->currency('price', 'Цена')->symbol('BYN');
+            $form->currency('old_price', 'Старая цена')->symbol('BYN');
+        });
+        $form->column(6, function ($form) {
+            $form->multipleSelect('sizes', 'Размеры')->options(Size::all()->pluck('name', 'id'));
+            $form->multipleSelect('colors', 'Цвет для фильтра')->options(Color::all()->pluck('name', 'id'));
+            $form->multipleSelect('fabrics', 'Материал для фильтра')->options(Fabric::all()->pluck('name', 'id'));
+            $form->multipleSelect('styles', 'Стиль')->options(Style::all()->pluck('name', 'id'));
+            $form->multipleSelect('heels', 'Каблук/подошва')->options(Heel::all()->pluck('name', 'id'));
+            $form->select('category_id', 'Категория')->options(Category::getFormatedTree());
+            $form->select('season_id', 'Сезон')->options(Season::all()->pluck('name','id'));
+            $form->select('brand_id', 'Бренд')->options(Brand::all()->pluck('name','id'));
+            $form->text('color_txt', 'Цвет');
+            $form->text('fabric_top_txt', 'Материал верха');
+            $form->text('fabric_inner_txt', 'Материал внутри');
+            $form->text('fabric_insole_txt', 'Материал стельки');
+            $form->text('fabric_outsole_txt', 'Материал подошвы');
+            $form->text('heel_txt', 'Тип каблука/подошвы');
+
+            $form->divider();
+            $form->select('label_id', 'Метка')->options([
+                0 => 'нет',
+                1 => 'хит',
+                2 => 'ликвидация',
+                3 => 'не выгружать'
+            ]);
+            $form->text('rating', 'Рейтинг')->readonly();
+            $form->multipleSelect('tags', 'Теги')->options(Tag::all()->pluck('name', 'id'));
         });
 
-        $form->html('<div class="input-group-btn input-group-append">
-            <div tabindex="500" class="btn btn-primary btn-file">
-                <i class="glyphicon glyphicon-folder-open"></i>&nbsp;
-                <span class="hidden-xs">Выбор файла</span>
-                <input type="file" class="" name="photos[]" multiple id="imageLoader" accept="image/*">
-            </div>
-            <input type="hidden" name="add_images">
-        </div>', 'Картинки');
-
-        $form->text('slug', __('Slug'));
-        $form->display('path', __('Path'));
-        $form->text('title', __('Title'));
-        // $form->decimal('buy_price', __('Buy price'));
-        $form->decimal('price', 'Цена');
-        $form->decimal('old_price', 'Старая цена');
-        $form->select('category_id', 'Категория')->options(Category::getFormatedTree());
-        $form->select('season_id', 'Сезон')->options(Season::all()->pluck('name','id'));
-        $form->select('brand_id', 'Бренд')->options(Brand::all()->pluck('name','id'));
-        $form->text('color_txt', 'Цвет');
-        $form->text('fabric_top_txt', 'Материал верха');
-        $form->text('fabric_inner_txt', 'Материал внутри');
-        $form->text('fabric_insole_txt', 'Материал стельки');
-        $form->text('fabric_outsole_txt', 'Материал подошвы');
-        $form->text('heel_txt', 'Тип каблука/подошвы');
-        $form->ckeditor('description', 'Описание');
+        $form->column(12, function ($form) {
+            $form->divider('Описание');
+            $form->ckeditor('description', '');
+        });
 
         $form->html('<div style="display: none;" id="crop-image">
             <div class="form-group">
@@ -185,6 +214,9 @@ class ProductController extends AdminController
                 </button>
                 <button type="button" class="btn btn-primary" onclick="cropper.setAspectRatio(2/3)">
                     2 x 3
+                </button>
+                <button type="button" class="btn btn-default js-mask-toggler">
+                    Скрыть/показать маску
                 </button>
             </div>
             <div class="form-group">
@@ -207,6 +239,9 @@ class ProductController extends AdminController
             background-image: url("/images/admin/maska.png");
             background-size: cover;
             opacity: 0.8;
+        }
+        .cropper-face.hide-mask {
+            background-image: unset;
         }
         </style>');
 
