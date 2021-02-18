@@ -10,6 +10,10 @@ class DebugController extends Controller
 {
     public function index()
     {
+
+
+        // php artisan make:mail OrderShipped
+
         throw new Exception("Test exeption");
 
         list($a, $b, $c) = [1, 2];
