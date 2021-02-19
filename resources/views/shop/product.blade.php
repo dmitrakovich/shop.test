@@ -76,9 +76,9 @@
                 </div>
 
                 <div class="row my-4">
-                    <div class="col-12 py-3 py-xl-4 text-center" style="background: #EEF6FC;">
+                    {{-- <div class="col-12 py-3 py-xl-4 text-center" style="background: #EEF6FC;">
                         -30% на вторую и -50% на третью пару до конца апреля
-                    </div>
+                    </div> --}}
                 </div>
 
                 {{-- <div class="row">
