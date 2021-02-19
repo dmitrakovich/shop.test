@@ -44,13 +44,47 @@ class Order extends Model
     public function data()
     {
         return $this->hasMany(OrderData::class)
-            ->with(['product', 'size:id,name']);
+            ->with([
+                'product',
+                'size:id,name'
+            ]);
     }
 
-    public function price()
+    public function getItemsPrice()
     {
-        return $this->hasMany(OrderData::class)
-            ->selectRaw('order_id, SUM(price) as total')
-            ->groupBy('order_id');
+        $price = 0;
+        foreach ($this->data as $item) {
+            $price += ($item->price * $item->count);
+        }
+        return $price;
+    }
+
+    public function getMaxItemsPrice()
+    {
+        $price = 0;
+        foreach ($this->data as $item) {
+            $price += (($item->old_price > $item->price ? $item->old_price : $item->price) * $item->count);
+        }
+        return $price;
+    }
+
+
+    public function getTotalPrice()
+    {
+        $price = $this->getItemsPrice();
+
+        // учесть стоимость доставки
+        // учесть коммиссию оплаты
+
+        return $price;
+    }
+
+    public function getItemsCount()
+    {
+        $count = 0;
+        foreach ($this->data as $item) {
+            $count += $item->count;
+        }
+        return $count;
     }
 }

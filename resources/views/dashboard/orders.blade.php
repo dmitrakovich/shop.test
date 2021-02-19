@@ -25,7 +25,7 @@
                         </div> --}}
                     </div>
                     <div class="col-12 col-md-2 order-4 order-md-2">
-                        {{ $order->price[0]->total }} BYN
+                        {{ $order->getTotalPrice() }} BYN
                     </div>
                     <div class="col-12 col-md-3 order-3">
                         {{ $order->user_addr }}

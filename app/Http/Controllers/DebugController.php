@@ -18,9 +18,14 @@ class DebugController extends Controller
         // php artisan make:mail OrderShipped
 
         $email = 'dmitrakovich.andrey@yandex.by';
-        $order = Order::with(['data', 'price'])->find(18);
+        $order = Order::with('data')->find(18);
 
-        // dd($order);
+        // dd(
+        //     $order,
+        //     $order->getMaxItemsPrice(),
+        // );
+
+        return view('emails.order-created', compact('order'));
 
         Mail::to($email)->send(new OrderCreated($order));
 

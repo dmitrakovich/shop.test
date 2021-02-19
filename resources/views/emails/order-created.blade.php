@@ -103,11 +103,11 @@
 					</tr>
 
 					<tr>
-					  <td style="font-family:Roboto, Verdana; font-size:18px; color:#222222; font-weight: bold;">Заказ №{{ $order->id }}</td>
+                        <td style="font-family:Roboto, Verdana; font-size:18px; color:#222222; font-weight: bold;">Заказ №{{ $order->id }}</td>
 					</tr>
 
 					<tr>
-					  <td colspan="3" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">{order_type} заказ на {goods_number} товара</td>
+                        <td colspan="3" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">{{ $order->type == 'retail' ? 'Розничный' : 'Оптовый' }} заказ на {{ DeclensionNoun::make($order->getItemsCount(), 'товар') }}</td>
 					</tr>
 
 					<tr><td height="10"></td></tr>
@@ -166,12 +166,16 @@
                                 {{-- {{PROMOCODE}} --}}
                             </td>
                             <td width="150px" valign="middle" align="center" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">
-                                <span style="color: #C0976B;">{MODEL_DISCOUNT_PERCENT}}</span> ({MODEL_DISCOUNT_SUMM}})<br>
-                                <span style="color: #C0976B;">{MODEL_PROMO_PERCENT}}</span> ({MODEL_PROMO_SUMM}})
+                                @if ($item->old_price > $item->price)
+                                    <span style="color: #C0976B;">{{ ($item->price / $item->old_price) * 100 }}%</span> ({{ $item->old_price - $item->price }})<br>
+                                @endif
+                                {{-- <span style="color: #C0976B;">{{MODEL_PROMO_PERCENT}}</span> ({{MODEL_PROMO_SUMM}}) --}}
                             </td>
                             <td width="120px" valign="middle" align="center" style="font-family:Roboto, Verdana; font-size:16px; color:#C0976B; font-weight: bold;">
-                                <span style="color: #777777; text-decoration: line-through; font-size:14px;">{MODEL_MAX_PRICE}}</span><br>
-                                {MODEL_PRICE}}
+                                @if ($item->old_price > $item->price)
+                                    <span style="color: #777777; text-decoration: line-through; font-size:14px;">{{ $item->old_price }} BYN</span><br>
+                                @endif
+                                {{ $item->price }} BYN
                             </td>
                             <td style="border-right: 1px solid #DDDDDD" width="10px" valign="top" align="center"></td>
                         </tr>
@@ -193,23 +197,25 @@
 						<td width="100"></td>
 						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Стоимость моделей (без скидки)</td>
 						<td width="20"></td>
-						<td width="170" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{ORDER_SUMM_MAX}}</td>
+						<td width="170" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{{ $order->getMaxItemsPrice() }} BYN</td>
 						<td width="10px"></td>
 					</tr>
+
 					<tr>
 						<td width="100"></td>
 						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Скидка</td>
 						<td width="20px"></td>
-						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{ORDER_SUMM_DISCOUNT}}</td>
+						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{{ $order->getMaxItemsPrice() - $order->getItemsPrice() }} BYN</td>
 						<td width="10px"></td>
 					</tr>
-					<tr>
+
+					{{-- <tr>
 						<td width="100"></td>
 						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Скидка</td>
 						<td width="20px"></td>
 						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{ORDER_SUMM_PROMOCODE}}</td>
 						<td width="10px"></td>
-					</tr>
+					</tr> --}}
 
 					{{-- <tr>
 						<td width="100"></td>
@@ -229,7 +235,7 @@
 						<td width="100"></td>
 						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:20px; color:#222222; font-weight: bold;">ИТОГО</td>
 						<td width="20px"></td>
-						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:20px; color:#C0976B; font-weight: bold;">{PAYMENT_FULL_SUM}}</td>
+						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:20px; color:#C0976B; font-weight: bold;">{{ $order->getTotalPrice() }} BYN</td>
 						<td width="10px"></td>
 					</tr>
 					<tr><td colspan="5" height="10px"></td></tr>

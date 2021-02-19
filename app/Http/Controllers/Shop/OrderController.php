@@ -19,9 +19,7 @@ class OrderController extends BaseController
      */
     public function index()
     {
-        $orders = Order::where('user_id', Auth::id())
-            ->with('price')
-            ->get();
+        $orders = Order::where('user_id', Auth::id())->get();
         // dd($orders);
 
         return view('dashboard.orders', compact('orders'));
