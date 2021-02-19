@@ -43,7 +43,8 @@ class Order extends Model
      */
     public function data()
     {
-        return $this->hasMany(OrderData::class);
+        return $this->hasMany(OrderData::class)
+            ->with(['product', 'size:id,name']);
     }
 
     public function price()

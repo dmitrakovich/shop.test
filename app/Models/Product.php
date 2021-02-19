@@ -164,7 +164,7 @@ class Product extends Model implements HasMedia
      */
     public function getFullName()
     {
-        return ($this->brand->name ?? 'VITACCI'). ' ' . $this['name_ru-RU'];
+        return ($this->brand->name ?? 'VITACCI'). ' ' . $this->title;
     }
     /**
      * Получить ссылку на товар

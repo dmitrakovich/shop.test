@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderCreated;
+use App\Models\Order;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class DebugController extends Controller
 {
@@ -13,6 +16,17 @@ class DebugController extends Controller
 
 
         // php artisan make:mail OrderShipped
+
+        $email = 'dmitrakovich.andrey@yandex.by';
+        $order = Order::with(['data', 'price'])->find(18);
+
+        // dd($order);
+
+        Mail::to($email)->send(new OrderCreated($order));
+
+
+
+        dd(324543);
 
         throw new Exception("Test exeption");
 

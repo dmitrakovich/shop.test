@@ -22,4 +22,25 @@ class OrderData extends Model
         'current_price',
         'discount',
     ];
+
+    /**
+     * Товар заказ
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class)
+            ->with(['brand', 'category', 'media']);
+    }
+    /**
+     * Товар заказ
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function size()
+    {
+        return $this->belongsTo(Size::class);
+    }
+
 }
