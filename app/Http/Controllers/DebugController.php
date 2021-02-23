@@ -25,9 +25,12 @@ class DebugController extends Controller
         //     $order->getMaxItemsPrice(),
         // );
 
-        return view('emails.order-created', compact('order'));
+
 
         Mail::to($email)->send(new OrderCreated($order));
+
+
+        return view('emails.order-created', compact('order'));
 
 
 
