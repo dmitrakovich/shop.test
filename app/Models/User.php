@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Str;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 /**
  * Class User
- * 
+ *
  * @package App
- * 
+ *
  * @property-read string $fullName
  */
 class User extends Authenticatable
@@ -62,5 +61,15 @@ class User extends Authenticatable
     public function getFirstNameAttribute($valueFromDB)
     {
         return Str::ucfirst($valueFromDB);
+    }
+    /**
+     * Farmat date in admin panel
+     *
+     * @param \DateTimeInterface $date
+     * @return string
+     */
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('d.m.Y H:i:s');
     }
 }

@@ -38,7 +38,7 @@ class UserController extends AdminController
         // $grid->column('birth_date', 'Дата рождения');
         // $grid->column('country', __('Country'));
         $grid->column('address', 'Адрес');
-        // $grid->column('created_at', __('Created at'));
+        $grid->column('created_at', 'Дата регистрации');
         // $grid->column('updated_at', __('Updated at'));
 
         $grid->model()->orderBy('id', 'desc');
