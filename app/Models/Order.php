@@ -87,4 +87,14 @@ class Order extends Model
         }
         return $count;
     }
+    /**
+     * Farmat date in admin panel
+     *
+     * @param \DateTimeInterface $date
+     * @return string
+     */
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('d.m.Y H:i:s');
+    }
 }

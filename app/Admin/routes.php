@@ -25,6 +25,7 @@ Route::group([
     $router->resource('brands', BrandController::class);
     $router->resource('products', ProductController::class);
     $router->resource('info-pages', InfoPageController::class);
+    $router->resource('admin-orders', OrderController::class);
 
     // legacy
     $router->any('availability', AvailiabilityController::class);
