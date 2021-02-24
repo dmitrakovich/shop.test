@@ -6,7 +6,7 @@ var cropper;
  * config for cropper
  */
 var cropperConfig = {
-    viewMode: 2,
+    // viewMode: 2,
     modal: true,
     aspectRatio: 1,
     autoCropArea: 1
