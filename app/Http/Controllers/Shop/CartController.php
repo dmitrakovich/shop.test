@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Shop;
 use App\Facades\Cart;
 use App\Models\Product;
 use App\Models\User;
+use Deliveries\DeliveryMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Payments\PaymentMethod;
 
 class CartController extends BaseController
 {
@@ -14,18 +16,10 @@ class CartController extends BaseController
     {
         $cart = Cart::withData();
         $user = auth()->user() ?? new User();
-        $deliveriesList = [
-            'BelpostCourierFitting' => 'Курьером с примеркой',
-            'BelpostCourier' => 'Курьер',
-            'Belpost' => 'Белпочта',
-            'BelpostEMS' => 'Емс',
-        ];
-        $paymentsList = [
-            'COD' => 'При получении',
-            'Card' => 'Банковской картой',
-            'ERIP' => 'Ерип',
-            'Installment' => 'Оформить рассрочку',
-        ];
+
+        $deliveriesList = DeliveryMethod::where('active', true)->pluck('name', 'class');
+        $paymentsList = PaymentMethod::where('active', true)->pluck('name', 'class');
+
         return view('shop.cart', compact('cart', 'user', 'deliveriesList', 'paymentsList'));
     }
 
