@@ -27,6 +27,9 @@ Route::group([
     $router->resource('info-pages', InfoPageController::class);
     $router->resource('admin-orders', OrderController::class);
 
+    $router->resource('payment-methods', PaymentController::class);
+    $router->resource('delivery-methods', DeliveryController::class);
+
     // legacy
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);
