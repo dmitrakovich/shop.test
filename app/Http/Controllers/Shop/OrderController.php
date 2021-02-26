@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Facades\Cart;
-use App\Http\Requests\StoreOrderRequest;
-use App\Models\CartData;
 use App\Models\Order;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use App\Models\CartData;
+use App\Mail\OrderCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\StoreOrderRequest;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class OrderController extends BaseController
 {
@@ -103,6 +105,10 @@ class OrderController extends BaseController
                 'current_price' => $item->product->price,
                 'discount' => 0,
             ]);
+        }
+
+        if (!empty($order['email'])) {
+            Mail::to($order['email'])->send(new OrderCreated($order));
         }
 
         if ($isOneClick) {

@@ -36,6 +36,7 @@ class OrderCreated extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.order-created');
+        return $this->subject("Заказ №{$this->order->id} - barocco.by")
+            ->view('emails.order-created');
     }
 }

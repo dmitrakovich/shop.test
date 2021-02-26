@@ -24,11 +24,23 @@
                             <a href="tel:+375291793790" style="font-family:Roboto, Verdana; font-size:12px; color:#111111 !important; text-decoration:none;">+375 (29) 179 37 90</a> <span style="font-family:Roboto, Verdana; font-size:10px; color:#111111 !important;">(РБ и другие страны)</span><br>
                             <a href="tel:88001007769" style="font-family:Roboto, Verdana; font-size:12px; color:#111111 !important; text-decoration:none;">8 (800) 100 77 69</a> <span style="font-family:Roboto, Verdana; font-size:10px; color:#111111 !important;">(бесплатно для РФ)</span>
                         </td>
-                      <td align="center" valign="middle" width="25"><a href="https://wa.me/375447286606" style="border: none; text-decoration: none;" target="_blank" title="WhatsApp"><img alt="WhatsApp" src="https://barocco.by/images/icons/whats-app-str-color.svg" width="20"></a></td>
-                      <td align="center" valign="middle" width="10"></td>
-                      <td align="center" valign="middle" width="25"><a href="viber://add?number=375447286606" style="border: none; text-decoration: none;" target="_blank" title="Viber"><img alt="Viber" src="https://barocco.by/images/icons/viber-str-color.svg" width="20"></a></td>
-                      <td align="center" valign="middle" width="10"></td>
-                      <td align="center" valign="middle" width="25"><a href="tg://resolve?domain=modnyby" style="border: none; text-decoration: none;" target="_blank" title="Telegram"><img alt="Telegram" src="https://barocco.by/images/icons/telegram-str-color.svg" width="20"></a></td>
+                        <td align="center" valign="middle" width="25">
+                            <a href="https://wa.me/375447286606" style="border: none; text-decoration: none;" target="_blank" title="WhatsApp">
+                                <img alt="WhatsApp" src="https://barocco.by/images/emails/whatsapp.png" width="20">
+                            </a>
+                        </td>
+                        <td align="center" valign="middle" width="10"></td>
+                        <td align="center" valign="middle" width="25">
+                            <a href="viber://add?number=375447286606" style="border: none; text-decoration: none;" target="_blank" title="Viber">
+                                <img alt="Viber" src="https://barocco.by/images/emails/viber.png" width="20">
+                            </a>
+                        </td>
+                        <td align="center" valign="middle" width="10"></td>
+                        <td align="center" valign="middle" width="25">
+                            <a href="tg://resolve?domain=modnyby" style="border: none; text-decoration: none;" target="_blank" title="Telegram">
+                                <img alt="Telegram" src="https://barocco.by/images/emails/telegram.png" width="20">
+                            </a>
+                        </td>
                     </tr>
                   </tbody>
                 </table>
@@ -38,13 +50,17 @@
                       <td colspan="13" height="7"></td>
                     </tr>
                     <tr>
-                      <td width="30"></td>
-                      <td width="170"></td>
-                      <td width="15"></td>
-                      <td align="center" valign="top"><a href="https://barocco.by/" style="border: none; text-decoration: none;" target="_blank" title="Модны Бай"><img alt="barocco.by" src="https://barocco.by/images/icons/barocco.svg" width="300"></a></td>
-                      <td width="15"></td>
-                      <td width="170"></td>
-                      <td width="30"></td>
+                        <td width="30"></td>
+                        <td width="170"></td>
+                        <td width="15"></td>
+                        <td align="center" valign="top">
+                            <a href="https://barocco.by/" style="border: none; text-decoration: none;" target="_blank" title="Модны Бай">
+                                <img alt="barocco.by" src="https://barocco.by/images/emails/barocco.png" width="300">
+                            </a>
+                        </td>
+                        <td width="15"></td>
+                        <td width="170"></td>
+                        <td width="30"></td>
                     </tr>
                     <tr>
                       <td colspan="13" height="7"></td>
