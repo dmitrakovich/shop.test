@@ -36,15 +36,15 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:200',
-            'email' => 'email|nullable',
-            'phone' => 'required',
+            'name' => 'required|max:191',
+            'email' => 'email|nullable|max:50',
+            'phone' => 'required|max:20',
             'payment_name' => 'nullable',
             'payment_code' => 'nullable',
             'delivery_name' => 'nullable',
             'delivery_code' => 'nullable',
-            'city' =>'nullable',
-            'user_addr' => 'nullable',
+            'city' =>'nullable|max:50',
+            'user_addr' => 'nullable|max:191',
         ];
     }
 }
