@@ -14,12 +14,13 @@ class Filter
     protected static $filtersList = [
         'categories',
         'fabrics',
+        'collections',
         'sizes',
         'colors',
         'heels',
         'seasons',
         'tags',
-        // 'brands',
+        'brands',
     ];
     /**
      * связанные с фильтрами классы
@@ -29,12 +30,13 @@ class Filter
     protected static $filtersModels = [
         'categories' => 'App\Models\Category',
         'fabrics' => 'App\Models\Fabric',
+        'collections' => 'App\Models\Collection',
         'sizes' => 'App\Models\Size',
         'colors' => 'App\Models\Color',
         'heels' => 'App\Models\Heel',
         'seasons' => 'App\Models\Season',
         'tags' => 'App\Models\Tag',
-        // 'brands' => 'App\Models\Brand',
+        'brands' => 'App\Models\Brand',
     ];
     /**
      * префиксы для выьранных фильтров

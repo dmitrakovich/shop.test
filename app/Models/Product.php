@@ -58,6 +58,15 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(Category::class);
     }
+    /**
+     * коллекция
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function collection()
+    {
+        return $this->belongsTo(Collection::class);
+    }
     // /**
     //  * Картинки товара
     //  *
@@ -142,7 +151,7 @@ class Product extends Model implements HasMedia
     /**
      * Бренд
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function brand()
     {

@@ -15,7 +15,9 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Collection;
 use Encore\Admin\Controllers\AdminController;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductController extends AdminController
@@ -45,7 +47,7 @@ class ProductController extends AdminController
                 $media[] = $image->getUrl('thumb');
             }
             return $media;*/
-            return $this->getFirstMedia()->getUrl('thumb');
+            return optional($this->getFirstMedia())->getUrl('thumb');
         })->image(); // ->carousel();
 
 
@@ -169,26 +171,28 @@ class ProductController extends AdminController
             </div>', 'Картинки');
 
             $form->text('slug', __('Slug'));
-            $form->text('path', 'Путь')->readonly();;
-            $form->text('title', 'Артикул');
+            $form->text('path', 'Путь')->disable();
+            $form->text('title', 'Артикул')->required();
             $form->currency('buy_price', 'Цена покупки')->symbol('BYN');
-            $form->currency('price', 'Цена')->symbol('BYN');
+            $form->currency('price', 'Цена')->symbol('BYN')->required();
             $form->currency('old_price', 'Старая цена')->symbol('BYN');
         });
         $form->column(6, function ($form) {
-            $form->multipleSelect('sizes', 'Размеры')->options(Size::all()->pluck('name', 'id'));
+            $form->multipleSelect('sizes', 'Размеры')->options(Size::all()->pluck('name', 'id'))->required();
             $form->multipleSelect('colors', 'Цвет для фильтра')->options(Color::all()->pluck('name', 'id'));
             $form->multipleSelect('fabrics', 'Материал для фильтра')->options(Fabric::all()->pluck('name', 'id'));
             $form->multipleSelect('styles', 'Стиль')->options(Style::all()->pluck('name', 'id'));
             $form->multipleSelect('heels', 'Каблук/подошва')->options(Heel::all()->pluck('name', 'id'));
-            $form->select('category_id', 'Категория')->options(Category::getFormatedTree());
-            $form->select('season_id', 'Сезон')->options(Season::all()->pluck('name','id'));
-            $form->select('brand_id', 'Бренд')->options(Brand::all()->pluck('name','id'));
+            $form->select('category_id', 'Категория')->options(Category::getFormatedTree())->required();
+            $form->select('season_id', 'Сезон')->options(Season::all()->pluck('name','id'))->required();
+            $form->select('brand_id', 'Бренд')->options(Brand::all()->pluck('name','id'))->required();
+            $form->select('collection_id', 'Коллекция')->options(Collection::all()->pluck('name','id'));
             $form->text('color_txt', 'Цвет');
             $form->text('fabric_top_txt', 'Материал верха');
             $form->text('fabric_inner_txt', 'Материал внутри');
             $form->text('fabric_insole_txt', 'Материал стельки');
             $form->text('fabric_outsole_txt', 'Материал подошвы');
+            $form->text('bootleg_height_txt', 'Материал подошвы');
             $form->text('heel_txt', 'Тип каблука/подошвы');
 
             $form->divider();
@@ -198,7 +202,7 @@ class ProductController extends AdminController
                 2 => 'ликвидация',
                 3 => 'не выгружать'
             ]);
-            $form->text('rating', 'Рейтинг')->readonly();
+            $form->text('rating', 'Рейтинг')->disable();
             $form->multipleSelect('tags', 'Теги')->options(Tag::all()->pluck('name', 'id'));
         });
 
@@ -244,6 +248,10 @@ class ProductController extends AdminController
             background-image: unset;
         }
         </style>');
+
+        $form->saving(function (Form $form) {
+            $form->slug = $form->slug ?? Str::slug($form->model()->brand->name . '-' . $form->title);
+        });
 
         $form->saved(function (Form $form) {
 

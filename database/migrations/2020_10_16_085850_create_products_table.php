@@ -29,6 +29,7 @@ class CreateProductsTable extends Migration
             $table->foreignId('season_id')->index()->default(0);
             $table->foreignId('color_id')->index()->default(0);
             $table->foreignId('brand_id')->index()->default(0);
+            $table->foreignId('collection_id')->index()->default(0);
 
             $table->string('color_txt')->nullable();
             $table->string('fabric_top_txt')->nullable();
@@ -36,6 +37,7 @@ class CreateProductsTable extends Migration
             $table->string('fabric_insole_txt')->nullable();
             $table->string('fabric_outsole_txt')->nullable();
             $table->string('heel_txt')->nullable();
+            $table->string('bootleg_height_txt')->nullable();
             $table->text('description')->nullable();
 
             $table->timestamps();

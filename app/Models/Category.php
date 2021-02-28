@@ -120,7 +120,7 @@ class Category extends Model
 
         $traverse = function ($categories, $prefix = '', &$result = []) use (&$traverse) {
             foreach ($categories as $category) {
-                $result[] = $prefix . $category->title;
+                $result[$category->id] = $prefix . $category->title;
 
                 $traverse($category->children, $prefix.'---- ', $result);
             }

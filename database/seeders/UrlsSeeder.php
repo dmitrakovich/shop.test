@@ -29,6 +29,7 @@ class UrlsSeeder extends Seeder
         $this->setSlugs('App\Models\Heel', 'heel-');
         $this->setSlugs('App\Models\Tag');
         $this->setSlugs('App\Models\Style');
+        $this->setSlugs('App\Models\Collection');
 
         foreach ($this->getSlugs() as $slug) {
             $slug = new Url($slug);
