@@ -269,8 +269,23 @@ class ProductController extends AdminController
             }
 
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
+
+            $this->saveInOldDB($form);
         });
 
         return $form;
+    }
+    /**
+     * Сохранить товар в старую базу баддых
+     *
+     * @param \Encore\Admin\Form $form
+     * @return void
+     */
+    protected function saveInOldDB(Form $form)
+    {
+        // cyizj_jshopping_products
+        // cyizj_jshopping_products_images
+        // cyizj_jshopping_products_to_categories (товары по категориям)
+        // cyizj_jshopping_products_attr2 размеры (поля соответственно product_id и attr_value_id, а attr_id у всех один "2")
     }
 }
