@@ -192,7 +192,7 @@ class ProductController extends AdminController
             $form->text('fabric_inner_txt', 'Материал внутри');
             $form->text('fabric_insole_txt', 'Материал стельки');
             $form->text('fabric_outsole_txt', 'Материал подошвы');
-            $form->text('bootleg_height_txt', 'Материал подошвы');
+            $form->text('bootleg_height_txt', 'Высота голенища');
             $form->text('heel_txt', 'Тип каблука/подошвы');
 
             $form->divider();

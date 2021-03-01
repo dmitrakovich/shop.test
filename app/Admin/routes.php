@@ -23,6 +23,7 @@ Route::group([
     $router->resource('seasons', SeasonController::class);
     $router->resource('tags', TagController::class);
     $router->resource('brands', BrandController::class);
+    $router->resource('collections', CollectionController::class);
     $router->resource('products', ProductController::class);
     $router->resource('info-pages', InfoPageController::class);
     $router->resource('admin-orders', OrderController::class);
