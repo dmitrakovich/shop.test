@@ -4,6 +4,9 @@
 @include('shop.filters.fabric')
 <hr>
 
+@include('shop.filters.collection')
+<hr>
+
 @include('shop.filters.sizes')
 <hr>
 
