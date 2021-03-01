@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class ProductSeeder extends Seeder
 {
     protected $tableName = 'products';
+    protected $startId = 3648; // for add new products
 
     protected $oldTableName = 'cyizj_jshopping_products';
     protected $oldCategoriesTable = 'cyizj_jshopping_products_to_categories';
@@ -237,8 +238,10 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        DB::table($this->tableName)->truncate();
-        DB::table('product_attributes')->truncate();
+        if ($this->startId <= 0) {
+            DB::table($this->tableName)->truncate();
+            DB::table('product_attributes')->truncate();
+        }
 
         $oldProducts = DB::connection('old_mysql')
             ->table($this->oldTableName)
@@ -246,6 +249,7 @@ class ProductSeeder extends Seeder
             ->where('product_date_added', '<>', '0000-00-00 00:00:00')
             ->where('date_modify', '<>', '0000-00-00 00:00:00')
             ->where('alias_ru-RU', '<>', '')
+            ->where("$this->oldTableName.product_id", '>', $this->startId)
             ->get([
                 "{$this->oldTableName}.product_id as id",
                 'product_publish as publish',
@@ -267,7 +271,7 @@ class ProductSeeder extends Seeder
                 'date_modify as updated_at',
 
                 'label_id', // ярлык на товарах
-                'extra_field_3', // Коллекция
+                'extra_field_3 as collection_id', // Коллекция
                 'extra_field_7 as season_id', // Сезон
                 // 'extra_field_12', // Размер аксессуара
                 'extra_field_13', // Цвет фильтра
