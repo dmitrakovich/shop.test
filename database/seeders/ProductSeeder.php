@@ -16,7 +16,7 @@ class ProductSeeder extends Seeder
     protected $oldImagesTable = 'cyizj_jshopping_products_images';
     protected $oldSizesTable = 'cyizj_jshopping_products_attr2';
 
-    protected $attributesList = [
+    public $attributesList = [
         'category' => [
             'column' => 'category_id',
             'new_id' => [
