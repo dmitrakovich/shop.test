@@ -356,12 +356,12 @@ class ProductController extends AdminController
                 'extra_field_10' => $form->fabric_outsole_txt ?? '',
                 'extra_field_11' => $form->heel_txt ?? '',
                 'extra_field_12' => '',
-                'extra_field_13' => array_filter(array_map(function ($value) {
+                'extra_field_13' => implode(',', array_filter(array_map(function ($value) {
                     return $this->getOldId('colors', $value);
-                }, $form->colors)),
-                'extra_field_14' => array_filter(array_map(function ($value) {
+                }, $form->colors))),
+                'extra_field_14' => implode(',', array_filter(array_map(function ($value) {
                     return $this->getOldId('fabrics', $value);
-                }, $form->fabrics)),
+                }, $form->fabrics))),
                 'extra_field_15' => '',
                 'extra_field_16' => '',
                 'extra_field_17' => '',
