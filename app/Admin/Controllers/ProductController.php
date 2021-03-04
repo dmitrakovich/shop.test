@@ -281,7 +281,7 @@ class ProductController extends AdminController
 
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
 
-            $this->saveInOldDB($form);
+            $this->sendToOldSite($form);
         });
 
         return $form;
@@ -422,5 +422,109 @@ class ProductController extends AdminController
             $response = Http::asForm()->post('https://modny.by/saveimg_gRf5lP46jRm8s.php', $data);
             admin_info('Modny.by:', $response->body());
         }
+    }
+    /**
+     * Отправить товары на старый сайт
+     *
+     * @param \Encore\Admin\Form $form
+     * @return void
+     */
+    protected function sendToOldSite(Form $form)
+    {
+        $data = [
+            'product' => [
+                'product_id' => $form->model()->id,
+                'parent_id' => 0,
+                'product_ean' => '',
+                'product_quantity' => 0,
+                'unlimited' => 0,
+                'product_availability' => '',
+                'product_date_added' => date('Y-m-d H:i:s'),
+                'date_modify' => date('Y-m-d H:i:s'),
+                'product_publish' => $form->model()->publish,
+                'product_tax_id' => 0,
+                'currency_id' => 1,
+                'product_template' => 'default',
+                'product_url' => '',
+                'product_old_price' => $form->old_price,
+                'product_buy_price' => $form->buy_price,
+                'product_price' => $form->price,
+                'min_price' => $form->price,
+                'different_prices' => 0,
+                'product_weight' => 0,
+                'image' => '',
+                'product_manufacturer_id' => $this->getOldId('brand',  $form->brand_id),
+                'product_is_add_price' => 0,
+                'add_price_unit_id' => 3,
+                'average_rating' => 0,
+                'reviews_count' => 0,
+                'delivery_times_id' => 0,
+                'hits' => 0,
+                'weight_volume_units' => 0,
+                'basic_price_unit_id' => 0,
+                'label_id' => 0,
+                'vendor_id' => 0,
+                'access' => 1,
+                'name_en-GB' => '',
+                'alias_en-GB' => '',
+                'short_description_en-GB' => '',
+                'description_en-GB' => '',
+                'meta_title_en-GB' => '',
+                'meta_description_en-GB' => '',
+                'meta_keyword_en-GB' => '',
+                'name_ru-RU' => $form->title,
+                'alias_ru-RU' => $form->slug,
+                'short_description_ru-RU' => '',
+                'description_ru-RU' => $form->description ?? '',
+                'meta_title_ru-RU' => '',
+                'meta_description_ru-RU' => '',
+                'meta_keyword_ru-RU' => '',
+                'extra_field_1' => $form->color_txt ?? '',
+                'extra_field_2' => $form->fabric_top_txt ?? '',
+                'extra_field_3' => $form->collection_id,
+                'extra_field_6' => 14,
+                'extra_field_7' => $this->getOldId('season',  $form->season_id),
+                'extra_field_8' => $form->fabric_inner_txt ?? '',
+                'extra_field_9' => $form->fabric_insole_txt ?? '',
+                'extra_field_10' => $form->fabric_outsole_txt ?? '',
+                'extra_field_11' => $form->heel_txt ?? '',
+                'extra_field_12' => '',
+                'extra_field_13' => implode(',', array_filter(array_map(function ($value) {
+                    return $this->getOldId('colors', $value);
+                }, $form->colors))),
+                'extra_field_14' => implode(',', array_filter(array_map(function ($value) {
+                    return $this->getOldId('fabrics', $value);
+                }, $form->fabrics))),
+                'extra_field_15' => '',
+                'extra_field_16' => '',
+                'extra_field_17' => '',
+                'extra_field_18' => 0,
+            ],
+            'category' => [
+                'product_id' => $form->model()->id,
+                'category_id' => $this->getOldId('category', $form->category_id),
+                'product_ordering' => 1
+            ],
+            'sizes' => array_map(function ($size) use ($form) {
+                return [
+                    'product_id' => $form->model()->id,
+                    'attr_id' => 2,
+                    'attr_value_id' => $this->getOldId('category', $size),
+                    'price_mod' => '+',
+                    'addprice ' => 0
+                ];
+            }, $form->sizes),
+            'images' => $form->model()->getMedia()->map(function ($image) {
+                return $image->getUrl();
+            })->toArray(),
+        ];
+
+        $data = [
+            'token' => 'vTnD57Pdq45lkU',
+            'data' => $data
+        ];
+
+        $response = Http::asForm()->post('https://modny.by/saveimg_gRf5lP46jRm8s.php', $data);
+        admin_info('Modny.by:', $response->body());
     }
 }
