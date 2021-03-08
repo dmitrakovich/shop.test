@@ -22,7 +22,7 @@
 @include('shop.filters.tag')
 <hr>
 
-{{-- @include('shop.filters.brand') --}}
+@include('shop.filters.brand')
 <br>
 
 <button class="btn btn-dark btn-block">Очистить фильтр</button>
