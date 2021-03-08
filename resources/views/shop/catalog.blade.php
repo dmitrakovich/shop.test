@@ -5,22 +5,33 @@
 @section('breadcrumbs', Breadcrumbs::render('category', $currentCategory))
 
 @section('content')
-    <div class="col-3 col-xl-2 d-none d-lg-block filters-sidebar">
+    <div class="row d-flex d-lg-none">
+        <div class="col-6 align-self-center">
+            <button class="btn px-0" type="button" data-toggle="collapse" data-target="#sidebarFilters">
+                Фильтр
+            </button>
+            <span class="text-muted font-size-12">
+                {{ DeclensionNoun::make($products->total(), 'модель') }}
+            </span>
+        </div>
+        <select onchange="window.location.href = this.value" class="form-control col-6">
+            @foreach ($sortingList as $key => $value)
+                <option value="{{ URL::current() . "?sort=$key" }}" {{ $sort == $key ? 'selected' : null }}>
+                    {{ $value }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="collapse col-12 col-lg-3 col-xl-2 d-lg-block filters-sidebar" id="sidebarFilters">
         @include('shop.filters.all')
     </div>
     <div class="col-12 col-lg-9 col-xl-10 catalog-page">
 
         {{ Banner::getCatalogTop() }}
 
-        <div class="col-12 my-4">
-            <div class="row justify-content-end">
-                <div class="d-block d-lg-none col-6 align-self-center">
-                    Фильтр
-                    <span class="text-muted">
-                        {{ DeclensionNoun::make($products->total(), 'модель') }}
-                    </span>
-                </div>
-                <div class="col-auto align-self-center mr-3 d-none d-md-block">
+        <div class="col-12 my-4 d-none d-lg-block">
+            <div class="row justify-content-end ">
+                <div class="col-auto align-self-center mr-3">
                     Сортировка:
                 </div>
                 <select onchange="window.location.href = this.value" class="form-control col-6 col-md-4 col-lg-3 col-xl-2">
