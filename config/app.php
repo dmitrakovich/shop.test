@@ -1,5 +1,7 @@
 <?php
 
+use App\Helpers\UrlHelper;
+
 return [
 
     /*
@@ -231,6 +233,7 @@ return [
         'DeclensionNoun' => \Drandin\DeclensionNouns\Facades\DeclensionNoun::class,
         'Banner' => App\Models\Banner::class,
         'Cart' => App\Facades\Cart::class,
+        'UrlHelper' => App\Helpers\UrlHelper::class,
 
     ],
 
