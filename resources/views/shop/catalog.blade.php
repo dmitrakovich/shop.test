@@ -4,8 +4,8 @@
 
 @php
     // временное решение
-    $category = end($currentFilters['App\Models\Category']);
-    $category = \App\Models\Category::find($category['model_id']);
+    $category = end($currentFilters['App\Models\Category'] ?? []);
+    $category = \App\Models\Category::find($category['model_id'] ?? 0);
 @endphp
 
 @section('breadcrumbs', Breadcrumbs::render('category', $category))
