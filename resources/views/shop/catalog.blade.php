@@ -11,9 +11,9 @@
 @section('breadcrumbs', Breadcrumbs::render('category', $category))
 
 @section('content')
-    <div class="row d-flex d-lg-none">
+    <div class="row d-flex d-lg-none mb-2">
         <div class="col-6 align-self-center">
-            <button class="btn px-0" type="button" data-toggle="collapse" data-target="#sidebarFilters">
+            <button class="btn btn-outline-dark rounded" type="button" data-toggle="collapse" data-target="#sidebarFilters">
                 Фильтр
             </button>
             <span class="text-muted font-size-12">
