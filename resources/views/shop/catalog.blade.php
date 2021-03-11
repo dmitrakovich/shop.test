@@ -5,11 +5,10 @@
 @php
     // временное решение
     if (isset($currentFilters['App\Models\Category'])) {
-        $category = end($currentFilters['App\Models\Category']);
+        $category = \App\Models\Category::find(end($currentFilters['App\Models\Category'])['model_id']);
     } else {
-        $category = 1;
+        $category = \App\Models\Category::first();
     }
-    $category = \App\Models\Category::find($category['model_id']);
 @endphp
 
 @section('breadcrumbs', Breadcrumbs::render('category', $category))
