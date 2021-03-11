@@ -7,7 +7,7 @@
     if (isset($currentFilters['App\Models\Category'])) {
         $category = end($currentFilters['App\Models\Category']);
     } else {
-        $category = 0;
+        $category = 1;
     }
     $category = \App\Models\Category::find($category['model_id']);
 @endphp
