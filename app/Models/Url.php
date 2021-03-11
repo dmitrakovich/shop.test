@@ -28,9 +28,11 @@ class Url extends Model
         // );
         // if (!empty($url->redirect)) return redirect($url->redirect);
     }
-
-    public static function generate($add = null)
+    /**
+     * Get the parent filters model
+     */
+    public function filters()
     {
-        return url()->current() . '/' . $add;
+        return $this->morphTo('filters', 'model_type', 'model_id');
     }
 }

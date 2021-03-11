@@ -97,8 +97,8 @@ class UrlHelper
     public static function setCurrentFilters(array $currentFilters)
     {
         self::$currentFilters = $currentFilters;
-        /*dd($currentFilters);
-        foreach ($currentFilters as $model => $items) {
+        // dd($currentFilters);
+        /*foreach ($currentFilters as $model => $items) {
             foreach ($items as $item) {
                 self::$currentFilters[$model][$item['slug']['slug']] = $item['slug']['slug'];
             }

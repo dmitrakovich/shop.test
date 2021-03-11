@@ -152,6 +152,34 @@ footer {
     left: 0;
     background-color: transparent;
 }
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.check.checked .checkmark:after,
+.check input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.check .checkmark:after {
+    left: 50%;
+    margin-left: -5px;
+    top: 50%;
+    margin-top: -5px;
+    width: 10px;
+    height: 10px;
+    background: #000000;
+}
+.filter-block.colors .check.checked {
+    .checkmark {
+        border: 2px solid #000000;
+        &:after {
+            display: none;
+        }
+    }
+}
 
 .filters-sidebar {
     ul {

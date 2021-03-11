@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Helpers\UrlHelper;
 use App\Models\Category;
 use App\Models\Filter;
 use App\Models\Product;
@@ -55,10 +56,25 @@ class CatalogController extends BaseController
         unset($slugs[0]); // catalog
 
         if (!empty($slugs)) {
-            return Url::whereIn('slug', $slugs)
-                ->get(['slug', 'model_type', 'model_id'])
-                ->groupBy('model_type')
-                ->toArray();
+            $filters = [];
+            $filtersTemp = Url::whereIn('slug', $slugs)
+                ->with('filters') // :id,name !!!
+                ->get(['slug', 'model_type', 'model_id']);
+
+            foreach ($filtersTemp as $value) {
+                $filters[$value->model_type][$value->slug] = $value->toArray();
+            }
+            // говнокод на скорую руку для сортировки категорий в правильном порядке
+            if (isset($filters['App\Models\Category'])) {
+                $categoriesFilters = $filters['App\Models\Category'];
+                $filters['App\Models\Category'] = [];
+                foreach ($slugs as $slug) {
+                    if (isset($categoriesFilters[$slug])) {
+                        $filters['App\Models\Category'][$slug] = $categoriesFilters[$slug];
+                    }
+                }
+            }
+            return $filters;
         } else {
             return [];
         }
@@ -78,10 +94,9 @@ class CatalogController extends BaseController
     {
         $sort = $this->getSorting($request);
         $currentFilters = $this->getFilters($request);
+        UrlHelper::setCurrentFilters($currentFilters);
 
-        // $currentCategory = Category::find($slug->model_id);
-        $currentCategory = Category::first();
-        // dd($slug, $currentCategory);
+        // dump($currentFilters);
 
         $products = $this->applyFilters($currentFilters)
             ->with([
@@ -112,7 +127,6 @@ class CatalogController extends BaseController
         $data = compact(
             'products',
             'currentFilters',
-            'currentCategory',
             'filters',
             'sort',
             'sortingList'

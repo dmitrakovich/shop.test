@@ -68,9 +68,11 @@ class Filter
                     $filters[$filterName] = $query->whereNull('parent_id')
                         ->with('childrenCategories')->get(); // говнокод;
                 } else {
-                    $filters[$filterName] = $query->get()->keyBy('id')->toArray();
+                    $filters[$filterName] = $query->get()->keyBy('slug')->toArray();
                 }
-
+                foreach ($filters[$filterName] as &$value) {
+                    $value['model'] = $model;
+                }
             }
             Cache::put('filters', $filters, 86400); // day
         }

@@ -2,7 +2,13 @@
 
 @section('title', 'Женская обувь')
 
-@section('breadcrumbs', Breadcrumbs::render('category', $currentCategory))
+@php
+    // временное решение
+    $category = end($currentFilters['App\Models\Category']);
+    $category = \App\Models\Category::find($category['model_id']);
+@endphp
+
+@section('breadcrumbs', Breadcrumbs::render('category', $category))
 
 @section('content')
     <div class="row d-flex d-lg-none">
