@@ -23,7 +23,7 @@ class UrlHelper
         // 11. Город
         'App\Models\Brand' => [false,],            // 12. Бренд
     ];
-    protected static ?array $params = null;
+    protected static $params = null;
     protected static $availableParams = [
         'search'
     ];
