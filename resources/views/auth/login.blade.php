@@ -11,7 +11,7 @@
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <a href="{{ route('register') }}">Создать аккаунт</a>
+                        <a class="text-decoration-underline" href="{{ route('register') }}">Создать аккаунт</a>
 
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
