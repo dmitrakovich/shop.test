@@ -62,7 +62,7 @@ Route::get('online-shopping/{slug?}', [InfoPageController::class, 'index'])->nam
 
 Route::view('shops', 'static.shops')->name('static-shops');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('feedbacks/{type?}', [FeedbackController::class, 'index'])->name('feedbacks');
 Route::post('feedbacks', [FeedbackController::class, 'store'])->name('feedbacks.store');
