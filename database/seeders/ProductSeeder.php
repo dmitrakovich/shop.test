@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class ProductSeeder extends Seeder
 {
     protected $tableName = 'products';
-    protected $startId = 3648; // for add new products
+    protected $startId = 3742; // for add new products
 
     protected $oldTableName = 'cyizj_jshopping_products';
     protected $oldCategoriesTable = 'cyizj_jshopping_products_to_categories';

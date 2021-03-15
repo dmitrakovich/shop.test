@@ -509,7 +509,7 @@ class ProductController extends AdminController
                 return [
                     'product_id' => $form->model()->id,
                     'attr_id' => 2,
-                    'attr_value_id' => $this->getOldId('category', $size),
+                    'attr_value_id' => $this->getOldId('sizes', $size),
                     'price_mod' => '+',
                     'addprice ' => 0
                 ];
