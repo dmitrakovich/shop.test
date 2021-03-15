@@ -506,15 +506,18 @@ class ProductController extends AdminController
                 'category_id' => $this->getOldId('category', $form->category_id),
                 'product_ordering' => 1
             ],
-            'sizes' => array_map(function ($size) use ($form) {
+            'sizes' => array_map(function ($oldSizeId) use ($form) {
                 return [
                     'product_id' => $form->model()->id,
                     'attr_id' => 2,
-                    'attr_value_id' => $this->getOldId('sizes', $size),
+                    'attr_value_id' => $oldSizeId,
                     'price_mod' => '+',
                     'addprice ' => 0
                 ];
-            }, $form->sizes),
+            }, array_filter(array_map(function ($size) {
+                return $this->getOldId('sizes', $size);
+            }, $form->sizes))),
+
             'images' => $form->model()->getMedia()->map(function ($image) {
                 return $image->getUrl();
             })->toArray(),
@@ -525,7 +528,7 @@ class ProductController extends AdminController
             'data' => $data
         ];
 
-        Log::info($data);
+        // Log::info($data);
 
         $response = Http::asForm()->post('https://modny.by/saveimg_gRf5lP46jRm8s.php', $data);
         admin_info('Modny.by:', $response->body());
