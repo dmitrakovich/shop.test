@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Encore\Admin\Controllers\AdminController;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductController extends AdminController
@@ -523,6 +524,8 @@ class ProductController extends AdminController
             'token' => 'vTnD57Pdq45lkU',
             'data' => $data
         ];
+
+        Log::info($data);
 
         $response = Http::asForm()->post('https://modny.by/saveimg_gRf5lP46jRm8s.php', $data);
         admin_info('Modny.by:', $response->body());
