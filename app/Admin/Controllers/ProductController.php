@@ -519,7 +519,7 @@ class ProductController extends AdminController
             }, $form->sizes))),
 
             'images' => $form->model()->getMedia()->map(function ($image) {
-                return $image->getUrl();
+                return $image->getUrl('full');
             })->toArray(),
         ];
 
