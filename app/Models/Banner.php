@@ -6,11 +6,13 @@ use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Banner extends Model implements HasMedia
 {
     use HasFactory,
-        InteractsWithMedia;
+        InteractsWithMedia,
+        SoftDeletes;
 
     protected $appends = [
         'resource',
@@ -29,18 +31,17 @@ class Banner extends Model implements HasMedia
 
     public static function getIndexMain()
     {
-        $banners = collect([
+        $indexTopBanners = self::active()
+            ->with('media')
+            ->inRandomOrder()
+            ->limit(3)
+            ->get(['id', 'title', 'url']);
+
+        $banners = [
             'main' => 'main.jpg',
             'main_mobile' => 'main_mobile.jpg',
-        ])->concat(
-            collect([
-                'category_01.jpg',
-                'category_02.jpg',
-                'category_03.jpg',
-                'category_04.jpg',
-                'category_05.jpg',
-            ])->random(3)
-        );
+            'index_top' => $indexTopBanners,
+        ];
         return view('banners.index-main', compact('banners'));
     }
 
@@ -56,5 +57,18 @@ class Banner extends Model implements HasMedia
     public static function getCatalogTop()
     {
         return view('banners.catalog-top', ['banner' => 'catalog_top.jpg']);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true)
+            ->where(function ($query) {
+                return $query->where('start_datetime', '<', now())
+                    ->orWhereNull('start_datetime');
+            })
+            ->where(function ($query) {
+                return $query->where('end_datetime', '>=', now())
+                    ->orWhereNull('end_datetime');
+            });
     }
 }

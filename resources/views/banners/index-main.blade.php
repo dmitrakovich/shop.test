@@ -18,18 +18,15 @@
         <img src="/images/banners/{{ $banners['main_mobile'] }}" alt="" class="img-fluid">
     </a>
 </div>
-<div class="col-4 p-main d-none d-lg-block">
-    <a href="{{ route('shop') }}">
-        <img src="/images/banners/{{ $banners[0] }}" alt="" class="img-fluid">
-    </a>
-</div>
-<div class="col-4 p-main d-none d-lg-block">
-    <a href="{{ route('shop') }}">
-        <img src="/images/banners/{{ $banners[1] }}" alt="" class="img-fluid">
-    </a>
-</div>
-<div class="col-4 p-main d-none d-lg-block">
-    <a href="{{ route('shop') }}">
-        <img src="/images/banners/{{ $banners[2] }}" alt="" class="img-fluid">
-    </a>
-</div>
+
+@foreach ($banners['index_top'] as $banner)
+    <div class="col-4 p-main d-none d-lg-block">
+        <a href="{{ $banner->url }}">
+            <img src="{{ $banner->getFirstMediaUrl() }}"
+                alt="{{ $banner->title }}"
+                title="{{ $banner->title }}"
+                class="img-fluid"
+            />
+        </a>
+    </div>
+@endforeach
