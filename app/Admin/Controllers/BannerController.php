@@ -90,7 +90,7 @@ class BannerController extends AdminController
         ])->required();
         $form->image('resource', 'Media');
         $form->text('title', __('Title'));
-        $form->url('url', __('Url'));
+        $form->text('url', __('Url'));
         $form->number('priority', 'Приоритет')->default(0);
         $form->switch('active', 'Активный')->default(1);
         $form->datetime('start_datetime', 'Дата начала')->default(date('Y-m-d H:i:s'));
