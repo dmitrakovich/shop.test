@@ -31,6 +31,8 @@ Route::group([
     $router->resource('payment-methods', PaymentController::class);
     $router->resource('delivery-methods', DeliveryController::class);
 
+    $router->resource('banners', BannerController::class);
+
     // legacy
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);

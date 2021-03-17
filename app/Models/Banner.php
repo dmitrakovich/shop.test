@@ -2,22 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Banner extends Model
+class Banner extends Model implements HasMedia
 {
-    use HasFactory;
-    /**
-     * Картинки баннеров
-     *
-     * @return Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function images()
+    use HasFactory,
+        InteractsWithMedia;
+
+    protected $appends = [
+        'resource',
+    ];
+
+    public function setResourceAttribute($resource)
     {
-        return $this->morphMany(Images::class, 'entity')->orderBy('sorting');
+        $this->addMedia(public_path("uploads/$resource"))
+            ->toMediaCollection();
     }
-    
+
+    public function getResourceAttribute()
+    {
+        return $this->getFirstMediaUrl();
+    }
+
     public static function getIndexMain()
     {
         $banners = collect([

@@ -15,15 +15,28 @@ class CreateBannersTable extends Migration
     {
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->string('position')->index();
-            $table->string('type')->index()->default('image');
-            $table->string('css_classes')->nullable();
-            $table->string('image')->nullable();
+
+            $table->enum('position', [
+                'catalog_top',
+                'index_top',
+                'index_bottom',
+            ])->index();
+
+            // $table->enum('type', [
+            //     'image',
+            //     'video'
+            // ])->default('image');
+            // $table->string('resource')->nullable();
+
             $table->string('title')->nullable();
             $table->string('url')->nullable();
-            $table->timestamp('start_datetime')->nullable();
-            $table->timestamp('end_datetime')->nullable();
-            $table->text('sources')->nullable();
+
+            $table->unsignedInteger('priority')->default(0);
+
+            $table->boolean('active')->default(true);
+            $table->dateTime('start_datetime')->nullable();
+            $table->dateTime('end_datetime')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });
