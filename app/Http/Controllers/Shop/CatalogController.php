@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Helpers\UrlHelper;
-use App\Models\Category;
+use App\Models\Url;
 use App\Models\Filter;
 use App\Models\Product;
-use App\Models\Url;
+use App\Models\Category;
+use App\Helpers\UrlHelper;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class CatalogController extends BaseController
@@ -124,8 +125,21 @@ class CatalogController extends BaseController
         ];
         // dd($filters);
 
+
+         // временное решение
+        if (isset($currentFilters['App\Models\Category'])) {
+            $category = Category::find(end($currentFilters['App\Models\Category'])['model_id']);
+            $categoryTitle = $category->title;
+        } else {
+            $category = Category::first();
+            $categoryTitle = 'женскую обувь';
+        }
+        $categoryTitle = Str::lower($categoryTitle);
+
         $data = compact(
             'products',
+            'category',
+            'categoryTitle',
             'currentFilters',
             'filters',
             'sort',

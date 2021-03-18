@@ -1,15 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Женская обувь')
-
-@php
-    // временное решение
-    if (isset($currentFilters['App\Models\Category'])) {
-        $category = \App\Models\Category::find(end($currentFilters['App\Models\Category'])['model_id']);
-    } else {
-        $category = \App\Models\Category::first();
-    }
-@endphp
+@section('title', "Купить {$categoryTitle} с примеркой по Беларуси")
 
 @section('breadcrumbs', Breadcrumbs::render('category', $category))
 
