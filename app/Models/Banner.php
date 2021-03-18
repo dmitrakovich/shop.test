@@ -32,9 +32,10 @@ class Banner extends Model implements HasMedia
     public static function getIndexMain()
     {
         $indexTopBanners = self::active()
+            ->where('position', 'index_top')
             ->with('media')
-            ->inRandomOrder()
-            ->limit(3)
+            // ->inRandomOrder()
+            // ->limit(3)
             ->get(['id', 'title', 'url']);
 
         $banners = [
@@ -47,16 +48,25 @@ class Banner extends Model implements HasMedia
 
     public static function getIndexBottom()
     {
-        $banners = [
-            'left' => 'season_fall.jpg',
-            'right' => 'season_winter.jpg',
-        ];
-        return view('banners.index-bottom', compact('banners'));
+        $indexBottomBanners = self::active()
+            ->where('position', 'index_bottom')
+            ->with('media')
+            // ->inRandomOrder()
+            // ->limit(4)
+            ->get(['id', 'title', 'url']);
+
+        return view('banners.index-bottom', compact('indexBottomBanners'));
     }
 
     public static function getCatalogTop()
     {
-        return view('banners.catalog-top', ['banner' => 'catalog_top.jpg']);
+        $catalogBanner = self::active()
+            ->where('position', 'catalog_top')
+            ->with('media')
+            ->inRandomOrder()
+            ->first(['id', 'title', 'url']);
+
+        return view('banners.catalog-top', compact('catalogBanner'));
     }
 
     public function scopeActive($query)

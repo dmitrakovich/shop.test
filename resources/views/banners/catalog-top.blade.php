@@ -1,5 +1,9 @@
 <div class="col-12 d-none d-lg-block">
-    <a href="/catalog/lofery">
-        <img src="/images/banners/{{ $banner }}" alt="catalog_top" class="img-fluid">
+    <a href="{{ $catalogBanner->url }}">
+        <img src="{{ $catalogBanner->getFirstMediaUrl() }}"
+            alt="{{ $catalogBanner->title }}"
+            title="{{ $catalogBanner->title }}"
+            class="img-fluid"
+        />
     </a>
 </div>
