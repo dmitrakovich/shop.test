@@ -192,7 +192,7 @@ class ProductController extends AdminController
             $form->multipleSelect('colors', 'Цвет для фильтра')->options(Color::all()->pluck('name', 'id'));
             $form->multipleSelect('fabrics', 'Материал для фильтра')->options(Fabric::all()->pluck('name', 'id'));
             $form->multipleSelect('styles', 'Стиль')->options(Style::all()->pluck('name', 'id'));
-            $form->multipleSelect('heels', 'Каблук/подошва')->options(Heel::all()->pluck('name', 'id'));
+            $form->multipleSelect('heels', 'Тип каблука/подошвы')->options(Heel::all()->pluck('name', 'id'));
             $form->select('category_id', 'Категория')->options(Category::getFormatedTree())->required();
             $form->select('season_id', 'Сезон')->options(Season::all()->pluck('name','id'))->required();
             $form->select('brand_id', 'Бренд')->options(Brand::all()->pluck('name','id'))->required();
@@ -203,7 +203,7 @@ class ProductController extends AdminController
             $form->text('fabric_insole_txt', 'Материал стельки');
             $form->text('fabric_outsole_txt', 'Материал подошвы');
             $form->text('bootleg_height_txt', 'Высота голенища');
-            $form->text('heel_txt', 'Тип каблука/подошвы');
+            $form->text('heel_txt', 'Высота каблука/подошвы');
 
             $form->divider();
             $form->select('label_id', 'Метка')->options([
@@ -330,7 +330,7 @@ class ProductController extends AdminController
                 'hits' => 0,
                 'weight_volume_units' => 0,
                 'basic_price_unit_id' => 0,
-                'label_id' => 0,
+                'label_id' => $form->label_id,
                 'vendor_id' => 0,
                 'access' => 1,
                 'name_en-GB' => '',
@@ -463,7 +463,7 @@ class ProductController extends AdminController
                 'hits' => 0,
                 'weight_volume_units' => 0,
                 'basic_price_unit_id' => 0,
-                'label_id' => 0,
+                'label_id' => $form->label_id,
                 'vendor_id' => 0,
                 'access' => 1,
                 'name_en-GB' => '',
