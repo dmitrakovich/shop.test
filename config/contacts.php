@@ -6,7 +6,7 @@ return [
         'name' => 'Инстаграм',
         'link' => 'https://www.instagram.com/barocco.by/'
     ],
-    'mail-info' => [
+    'email' => [
         'name' => 'info@modny.by',
         'link' => 'info@modny.by'
     ],

@@ -35,8 +35,8 @@
     </p>
     <p class="mt-5"><span class="title">3. E-mail и мессенджеры</span></p>
     <p>
-        Отправьте нам сообщение на email 
-            <strong><a href="mailto:{{ config('contacts.mail-info.link') }}">{{ config('contacts.mail-info.link') }}</a></strong> 
+        Отправьте нам сообщение на email
+            <strong><a href="mailto:{{ config('contacts.email.link') }}">{{ config('contacts.email.link') }}</a></strong>
         или в мессенджере
         <a href="{{ config('contacts.viber.link') }}" title="{{ config('contacts.viber.name') }}" class="mx-1">
             <img src="/images/icons/viber-str-color.svg" alt="{{ config('contacts.viber.name') }}">

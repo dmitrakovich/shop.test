@@ -110,6 +110,8 @@ class OrderController extends BaseController
         if (!empty($order['email'])) {
             Mail::to($order['email'])->send(new OrderCreated($order));
         }
+        Mail::to(config('contacts.email.link', 'info@barocco.by'))
+            ->send(new OrderCreated($order));
 
         if ($isOneClick) {
             return "Заказ № {$order->id} успешно оформлен";
