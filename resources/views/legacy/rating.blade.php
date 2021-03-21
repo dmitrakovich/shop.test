@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
+use App\Jobs\UpdateProductsRatingJob;
 
 $ratingConfigFile = database_path('files/rating.conf.php');
 $ratingConfig = require_once $ratingConfigFile;
@@ -16,7 +17,7 @@ $service_message = "";
 switch (request()->input(['act'])) {
 
 	case "start":
-        require_once app_path('Admin/legacy/rating.action.php');
+        UpdateProductsRatingJob::dispatchNow();
 		$service_message = "<p class='adminka_message_success'>Рейтинг обновлен успешно в $ratingConfig[last_update]</p>";
 		break;
 
