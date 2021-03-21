@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\DB;
 class ProductSeeder extends Seeder
 {
     protected $tableName = 'products';
-    protected $startId = 3742; // for add new products
+    protected $startId = 0; // for add new products
+    protected $limit = 50000;
 
     protected $oldTableName = 'cyizj_jshopping_products';
     protected $oldCategoriesTable = 'cyizj_jshopping_products_to_categories';
@@ -241,6 +242,8 @@ class ProductSeeder extends Seeder
         if ($this->startId <= 0) {
             DB::table($this->tableName)->truncate();
             DB::table('product_attributes')->truncate();
+            DB::table('urls')->where('model_type', Product::class)->delete();
+            DB::table('media')->where('model_type', Product::class)->delete();
         }
 
         $oldProducts = DB::connection('old_mysql')
@@ -250,6 +253,7 @@ class ProductSeeder extends Seeder
             ->where('date_modify', '<>', '0000-00-00 00:00:00')
             ->where('alias_ru-RU', '<>', '')
             ->where("$this->oldTableName.product_id", '>', $this->startId)
+            ->limit($this->limit)
             ->get([
                 "{$this->oldTableName}.product_id as id",
                 'product_publish as publish',
@@ -285,7 +289,7 @@ class ProductSeeder extends Seeder
 
         $oldProductImages = DB::connection('old_mysql')
             ->table($this->oldImagesTable)
-            ->get(['product_id', 'image_name', 'ordering'])
+            ->get(['product_id', 'image_name', 'name', 'ordering'])
             ->groupBy('product_id')
             ->toArray();
 
@@ -357,23 +361,44 @@ class ProductSeeder extends Seeder
             $product->sizes()->sync($sizesList);
 
             // images
-            $imagesList = array_column($oldProductImages[$productId] ?? [], 'image_name');
+            $imagesList = $oldProductImages[$productId] ?? [];
             foreach ($imagesList as $image) {
                 // $pathToFile = 'C:/OSPanel/domains/shop.test/public/images/products/' . $image;
-                $urlToFile = 'https://modny.by/components/com_jshopping/files/img_products/' . $image;
+                $urlToFile = 'https://modny.by/components/com_jshopping/files/img_products/' . $image->image_name;
+                $customProperties = [];
+
+                if ($image->name === 'imidj') {
+                    $customProperties['imidj'] = 1;
+                }
+
+                if (strpos($image->name, 'youtube') !== false) {
+                    $customProperties['video'] = $image->name;
+                }
 
                 try {
-                    $product
+                    $media = $product
                         // ->addMedia($pathToFile)
                         ->addMediaFromUrl($urlToFile)
-                        ->preservingOriginal()
-                        ->toMediaCollection();
+                        ->preservingOriginal();
+
+                    if (!empty($customProperties)) {
+                       $media->withCustomProperties($customProperties);
+                    }
+
+                    $media->toMediaCollection();
+
                 } catch (\Throwable $th) {
                     // echo $th->getMessage();
                 }
             }
 
             $product->save();
+
+            $product->url()->create([
+                'slug' => $product->slug,
+                'model_id' => $product->id,
+                'model_type' => Product::class,
+            ]);
         }
     }
 }
