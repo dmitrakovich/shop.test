@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\UpdateAvailabilityJob;
+use App\Jobs\UpdateProductsRatingJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,6 +27,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        // обновление рейтинга товаров
+        $schedule->job(new UpdateProductsRatingJob)
+            ->withoutOverlapping()
+            ->cron('15 5,11,17,23 * * *');
+
+        $schedule->job(new UpdateAvailabilityJob)
+            ->withoutOverlapping()
+            ->everyThirtyMinutes();
     }
 
     /**
