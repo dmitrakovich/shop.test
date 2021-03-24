@@ -180,22 +180,22 @@ class ProductController extends AdminController
                 <input type="hidden" name="add_images">
             </div>', 'Картинки');
 
-            $form->text('slug', __('Slug'));
+            $form->text('slug', __('Slug'))->default(Str::slug(request('slug')));
             $form->text('path', 'Путь')->disable();
-            $form->text('title', 'Артикул')->required();
+            $form->text('title', 'Артикул')->required()->default(request('title'));
             $form->currency('buy_price', 'Цена покупки')->symbol('BYN');
             $form->currency('price', 'Цена')->symbol('BYN')->required();
             $form->currency('old_price', 'Старая цена')->symbol('BYN');
         });
         $form->column(6, function ($form) {
-            $form->multipleSelect('sizes', 'Размеры')->options(Size::all()->pluck('name', 'id'))->required();
+            $form->multipleSelect('sizes', 'Размеры')->options(Size::all()->pluck('name', 'id'))->default($this->getSizesIdFormRequest())->required();
             $form->multipleSelect('colors', 'Цвет для фильтра')->options(Color::all()->pluck('name', 'id'));
             $form->multipleSelect('fabrics', 'Материал для фильтра')->options(Fabric::all()->pluck('name', 'id'));
             $form->multipleSelect('styles', 'Стиль')->options(Style::all()->pluck('name', 'id'));
             $form->multipleSelect('heels', 'Тип каблука/подошвы')->options(Heel::all()->pluck('name', 'id'));
-            $form->select('category_id', 'Категория')->options(Category::getFormatedTree())->required();
+            $form->select('category_id', 'Категория')->options(Category::getFormatedTree())->default($this->getCategoryIdFromRequeset())->required();
             $form->select('season_id', 'Сезон')->options(Season::all()->pluck('name','id'))->required();
-            $form->select('brand_id', 'Бренд')->options(Brand::all()->pluck('name','id'))->required();
+            $form->select('brand_id', 'Бренд')->options(Brand::all()->pluck('name','id'))->required()->default(Brand::where('name', request('brand_name'))->value('id'));
             $form->select('collection_id', 'Коллекция')->options(Collection::all()->pluck('name','id'))->required();
             $form->text('color_txt', 'Цвет');
             $form->text('fabric_top_txt', 'Материал верха');
@@ -286,6 +286,48 @@ class ProductController extends AdminController
         });
 
         return $form;
+    }
+    /**
+     * Получить id категории из запроса
+     *
+     * @return int|null
+     */
+    protected function getCategoryIdFromRequeset()
+    {
+        if (empty($categoryName = request('category_name'))) {
+            return null;
+        }
+        $removeWords = [
+            'женская', 'женские', 'женский', // ...
+        ];
+        $categoryName = trim(str_replace($removeWords, '', $categoryName));
+
+        $categories = DB::table('categories')
+            ->where('title', 'like', "%$categoryName%")
+            ->get(['id', 'title']);
+
+        if (count($categories) == 1) {
+            return $categories[0]->id;
+        }
+        foreach ($categories as $category) {
+            if ($category->title == $categoryName) {
+                return $category->id;
+            }
+        }
+        return null;
+    }
+    /**
+     * Получить id размеров из запроса
+     *
+     * @return array|null
+     */
+    public function getSizesIdFormRequest()
+    {
+        if (empty($sizes = request('sizes'))) {
+            return null;
+        }
+        $sizes = explode(';', $sizes);
+        return Size::whereIn('name', $sizes)->pluck('id')->toArray();
     }
     /**
      * Сохранить товар в старую базу баддых

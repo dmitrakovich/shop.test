@@ -13,95 +13,6 @@ $thtime = date("Y-m-d-H:i:s");
 $filedate = explode(",",$availabilityConfig['file']);
 $service_message = "";
 
-// добавление товара
-$chAdd = false;
-if (isset($_GET['add'])) {
-	foreach ($availabilityConfig['new'] as $chK => $chV) {
-        if ($chV['id']==$_GET['add']) {
-            $chAdd = true;
-        }
-    }
-}
-
-if ($chAdd) {
-	$chAdd = false;
-	foreach ($availabilityConfig['new'] as $chK => $chV) {
-        if ($chV['status']==0 || $sbrV['time']<$deadline) {
-            unset($availabilityConfig[$sbrosv][$sbrK]);
-        }
-    }
-	$new_pr = $availabilityConfig['new'][$_GET['add']];
-
-	// бренды
-    $preBr = Brand::get(['id', 'name']);
-	$new_pr_ch = 0;
-	foreach ($preBr as $preBrV) {
-		if ($preBrV->name == $new_pr['brand']) {
-			$new_pr_br = $preBrV->id;
-			$new_pr_ch = 1;
-		}
-	}
-	if ($new_pr_ch == 0) {
-        throw new Exception('Ошибка в названии бренда. Товар не создан.');
-	}
-
-    // создание модели
-	$product = Product::create([
-        'slug' => $_GET['add'],
-        'brand_id' => $new_pr_br,
-        'title' => $new_pr['articul'],
-        'publish' => false
-	]);
-	$new_id = $product->id;
-/*
-	// размеры
-	$query = "SELECT value_id as id, `name_ru-RU` as name FROM `#__jshopping_attr_values`";
-	$db->setQuery($query);
-	$preAttr = $db->loadObjectList();
-	$baseAttr = array();
-	foreach ($preAttr as $preAV) {
-		$baseAttr[$preAV->name] = $preAV->id;
-	}
-	$q_list=array();
-	foreach ($new_pr['size'] as $newSI) {
-		$q_list[]="(".$new_id.",2,".$baseAttr[$newSI].",'+',0)";
-	}
-	$q_list = implode(',',$q_list);
-	$query = "INSERT INTO `#__jshopping_products_attr2`  (product_id,attr_id,attr_value_id,price_mod,addprice) VALUES $q_list";
-	$db->setQuery($query);
-    $db->query();
-
-    // $product->sizes()->sync($sizesList);
-
-	// категории
-	$new_pr['cat'] = mb_strtolower($new_pr['cat'], 'UTF-8');
-	$preCatV->name = mb_strtolower($preCatV->name, 'UTF-8');
-	$new_pr_ch = 0;
-	$query = "SELECT category_id as id, `name_ru-RU` as name FROM `#__jshopping_categories` WHERE category_id!=39";
-	$db->setQuery($query);
-	$preCat = $db->loadObjectList();
-	foreach ($preCat as $preCatV) {
-		$baseCat[$preCatV->name] = $preCatV->id;
-		if (strpos($new_pr['cat'],$preCatV->name) !== false) {
-			$new_pr_cat = $preCatV->id;
-			$new_pr_ch = 1;
-		}
-	}
-	if ($new_pr_ch == 0) {
-		$new_pr_cat = 1;
-	}
-
-	$query = "INSERT INTO `#__jshopping_products_to_categories` (product_id,category_id) VALUES ($new_id,$new_pr_cat)";
-	$db->setQuery($query);
-	$db->query();
-*/
-    exit('Подождите идет загрузка...
-	<script type="text/javascript">
-		window.location="' . url("/admin/products/$new_id/edit") . '";
-	</script>');
-}
-
-
 // Методы
 if (isset($_POST['act'])) {
 	switch ($_POST['act']) {
@@ -460,9 +371,26 @@ if (isset($_POST['act'])) {
 
 
         <div class="adminka_field">
-			<?
+			<?php
 				foreach ($availabilityConfig['new'] as $avK => $avI) {
-					echo $avI['brand'].' '.$avI['articul'].' '.$avI['cat'].(is_array($avI['size'])?(' - р. '.implode(',',$avI['size'])):'').(!empty($avI['err'])?' ('.$avI['err'].')':'&nbsp;<a href="https://modny.by/administrator/index.php?option=com_jshopping&controller=availability&add='.$avI['id'].'" class="add_but_prod" title="Создать товар" target="_blank">&rArr;</a>').'<br>';				}
+                    $name = "$avI[brand] $avI[articul] $avI[cat]";
+                    $sizes = is_array($avI['size']) ? ' - р. ' . implode(',', $avI['size']) : '';
+
+                    if (empty($avI['err'])) {
+                        $link = route('products.create', [
+                            'slug' => $avI['id'],
+                            'title' => $avI['articul'],
+                            'brand_name' => $avI['brand'],
+                            'category_name' => $avI['cat'],
+                            'sizes' => is_array($avI['size']) ? implode(';', $avI['size']) : null,
+                        ]);
+                        $link = '&nbsp;<a href="' . $link . '" class="add_but_prod" title="Создать товар" target="_blank">&rArr;</a>';
+                    } else {
+                        $link = " ($avI[err])";
+                    }
+
+					echo $name, $sizes, $link, '<br>';
+                }
 			?>
         </div>
 
