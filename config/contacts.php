@@ -7,8 +7,8 @@ return [
         'link' => 'https://www.instagram.com/barocco.by/'
     ],
     'email' => [
-        'name' => 'info@modny.by',
-        'link' => 'info@modny.by'
+        'name' => 'info@barocco.by',
+        'link' => 'info@barocco.by'
     ],
     'telegram' => [
         'name' => 'Телеграм',
