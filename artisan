@@ -15,6 +15,13 @@ define('LARAVEL_START', microtime(true));
 |
 */
 
+/**
+ |--------------------------------------------------------------------------
+ | Переопределение ларавельных хелперов и добавление своих
+ |--------------------------------------------------------------------------
+ */
+require __DIR__ . '/app/Helpers/functions.php';
+
 require __DIR__.'/vendor/autoload.php';
 
 $app = require_once __DIR__.'/bootstrap/app.php';
