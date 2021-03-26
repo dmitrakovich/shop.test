@@ -94,9 +94,12 @@ $(function () {
     $(document).on('click', 'button#buy-one-click-submit', function () {
         sizesValidate();
 
+        // подтянуть в форму размеры
+        $('.js-sizes').clone().appendTo('form#oneclick-form').hide();
+
         let phone = $('input[name="phone"]').val();
         let name = $('input[name="name"]').val();
-        let address = $('input[name="address"]').val();
+        // let address = $('input[name="address"]').val();
 
         if (phone.length < 4) {
             return $.fancybox.open('<h3 class="py-3 text-danger">Введите корректный номер телефона</h3>');
@@ -105,7 +108,9 @@ $(function () {
             return $.fancybox.open('<h3 class="py-3 text-danger">Введите имя</h3>');
         }
 
-        let $form = $('form#product-info');
+        $('form#oneclick-form').trigger('submit');
+
+        /*let $form = $('form#product-info');
         let $modal = $('#buy-one-click .col-12');
 
         $modal.find('#buy-one-click-submit').prop('disabled', true);
@@ -119,7 +124,7 @@ $(function () {
                 $modal.html(response).wrapInner('<h3>');
                 $.fancybox.getInstance('hideLoading');
             }
-        });
+        });*/
 
     });
     //#endregion

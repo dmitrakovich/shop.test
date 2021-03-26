@@ -190,7 +190,9 @@
 {{-- modals --}}
 <div style="display: none;" id="buy-one-click" class="row">
 
-    <div class="col-12 text-center">
+    <form action="{{ route('orders.store') }}" method="post" class="col-12 text-center" id="oneclick-form">
+        @csrf
+        <input type="hidden" name="product_id" value="{{ $product->id }}">
         <h3 class="mx-5 mb-4">Купить в один клик</h3>
         <div class="form-group">
             <input type="text" class="form-control" name="name" placeholder="Имя" required>
@@ -199,7 +201,7 @@
             <input type="text" class="form-control" name="phone" placeholder="Телефон" required>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="address" placeholder="Населенный пункт" required>
+            <input type="text" class="form-control" name="user_addr" placeholder="Населенный пункт" autocomplete="address" required>
         </div>
         <button type="button" class="btn btn-dark my-3 px-5" id="buy-one-click-submit">
             Купить
@@ -208,7 +210,7 @@
             После заказа менеджер перезвонит Вам и уточнит <br>
             адрес доставки
         </p>
-    </div>
+    </form>
 </div>
 
 

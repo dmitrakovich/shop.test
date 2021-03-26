@@ -27,16 +27,20 @@
             Способ получения
         </div>
         <div class="col-6 py-2">
-            {{ session('order_info')['delivery'] }} <br>
+            @if (!empty(session('order_info')['delivery']))
+                {{ session('order_info')['delivery'] }} <br>
+            @endif
             {{ session('order_info')['address'] }}
         </div>
 
-        <div class="col-6 py-2 font-weight-bold">
-            Способ оплаты
-        </div>
-        <div class="col-6 py-2">
-            {{ session('order_info')['payment'] }}
-        </div>
+        @if (!empty(session('order_info')['payment']))
+            <div class="col-6 py-2 font-weight-bold">
+                Способ оплаты
+            </div>
+            <div class="col-6 py-2">
+                {{ session('order_info')['payment'] }}
+            </div>
+        @endif
 
     </div>
 

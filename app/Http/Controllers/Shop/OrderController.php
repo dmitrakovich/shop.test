@@ -113,19 +113,15 @@ class OrderController extends BaseController
         Mail::to(config('contacts.email.link', 'info@barocco.by'))
             ->send(new OrderCreated($order));
 
-        if ($isOneClick) {
-            return "Заказ № {$order->id} успешно оформлен";
-        } else {
-            $orderInfo = [
-                'orderNum' => $order->id,
-                'totalPrice' => $cart->getTotalPrice(),
-                'address' => $userData['user_addr'],
-                'delivery' => $userData['delivery_name'],
-                'payment' => $userData['delivery_code'],
-            ];
-            Cart::clear();
-            return redirect()->route('cart-final')->with('order_info', $orderInfo);
-        }
+        $orderInfo = [
+            'orderNum' => $order->id,
+            'totalPrice' => $cart->getTotalPrice(),
+            'address' => $userData['user_addr'],
+            'delivery' => $userData['delivery_name'],
+            'payment' => $userData['delivery_code'],
+        ];
+        Cart::clear();
+        return redirect()->route('cart-final')->with('order_info', $orderInfo);
 
     }
 

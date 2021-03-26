@@ -172,7 +172,8 @@ footer {
     height: 10px;
     background: #000000;
 }
-.filter-block.colors .check.checked {
+.filter-block.colors .check.checked,
+.product-size .check.checked {
     .checkmark {
         border: 2px solid #000000;
         &:after {
