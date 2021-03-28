@@ -35,6 +35,7 @@ class Banner extends Model implements HasMedia
         $indexTopBanners = self::active()
             ->where('position', 'index_top')
             ->with('media')
+            ->orderByDesc('priority')
             // ->inRandomOrder()
             // ->limit(3)
             ->get(['id', 'title', 'url']);
@@ -52,6 +53,7 @@ class Banner extends Model implements HasMedia
         $indexBottomBanners = self::active()
             ->where('position', 'index_bottom')
             ->with('media')
+            ->orderByDesc('priority')
             // ->inRandomOrder()
             // ->limit(4)
             ->get(['id', 'title', 'url']);
