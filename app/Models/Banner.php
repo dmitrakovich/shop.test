@@ -20,7 +20,8 @@ class Banner extends Model implements HasMedia
 
     public function setResourceAttribute($resource)
     {
-        $this->addMedia(public_path("uploads/$resource"))
+        $this->clearMediaCollection()
+            ->addMedia(public_path("uploads/$resource"))
             ->toMediaCollection();
     }
 
