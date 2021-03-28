@@ -20,6 +20,7 @@ class CreateBannersTable extends Migration
                 'catalog_top',
                 'index_top',
                 'index_bottom',
+                'main_menu_catalog',
             ])->index();
 
             // $table->enum('type', [

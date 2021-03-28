@@ -31,14 +31,17 @@ class BannerController extends AdminController
             'catalog_top' => 'В каталоге',
             'index_top' => 'На главной сверху',
             'index_bottom' => 'На главной снизу',
+            'main_menu_catalog' => 'В главном меню | каталог'
         ]);
         $grid->column('resource', 'Media')->image();;
-        $grid->column('title', __('Title'));
+        $grid->column('title', __('Title'))->display(function ($title) {
+            return $title;
+        });
         $grid->column('url', __('Url'));
         $grid->column('priority', 'Приоритет')->editable(); //->orderable();
         $grid->column('active', 'Активный')->switch();
         $grid->column('start_datetime', 'Дата начала');
-        $grid->column('end_datetime', 'Дата оконания');
+        $grid->column('end_datetime', 'Дата окончания');
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
         // $grid->column('deleted_at', __('Deleted at'));
@@ -87,6 +90,7 @@ class BannerController extends AdminController
             'catalog_top' => 'В каталоге',
             'index_top' => 'На главной сверху',
             'index_bottom' => 'На главной снизу',
+            'main_menu_catalog' => 'В главном меню | каталог'
         ])->required();
         $form->image('resource', 'Media');
         $form->text('title', __('Title'));

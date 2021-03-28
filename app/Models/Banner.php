@@ -69,6 +69,17 @@ class Banner extends Model implements HasMedia
         return view('banners.catalog-top', compact('catalogBanner'));
     }
 
+    public static function getMainMenuCatalog()
+    {
+        $mainMenuCatalog = self::active()
+            ->where('position', 'main_menu_catalog')
+            ->with('media')
+            ->inRandomOrder()
+            ->first(['id', 'title', 'url']);
+
+        return view('banners.main-menu-catalog', compact('mainMenuCatalog'));
+    }
+
     public function scopeActive($query)
     {
         return $query->where('active', true)

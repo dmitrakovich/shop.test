@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
 
         View::share([
-            'categories' => Category::get(['id', 'slug', 'title']),
+            'categories' => Category::where('parent_id', 1)->get(['id', 'slug', 'title']),
             'infoPagesMenu' => InfoPage::getMenu()
         ]);
     }
