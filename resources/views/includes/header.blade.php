@@ -50,25 +50,50 @@
 
             <div class="col-12 navbar-main-menu" id="mainMenu">
                 <div class="row justify-content-center align-items-center text-uppercase font-size-15 position-relative">
-                    <div class="col-12 col-lg-auto hover-dropdown">
+                    <div class="col-12 col-lg-auto hover-dropdown position-static">
                         <a href="{{ route('shop') }}">Каталог</a>
-                        <div class="col-12 dropdown-menu position-absolute" style="margin-top: -1px;">
-                            @foreach ($categories as $category)
-                                <a class="dropdown-item" href="{{ route('shop', $category) }}">{{ $category->title }}</a>
-                            @endforeach
+                        <div class="col-12 custom-dropdown-menu">
+                            <div class="row h-100">
+                                <div class="col-4 font-size-16 pt-3 font-weight-bold" style="height: 13%">
+                                    <a href="{{ route('shop') }}">Обувь ></a>
+                                </div>
+                                <div class="col-4 font-size-16 pt-3 font-weight-bold" style="height: 13%">
+                                    Коллекции ></a>
+                                </div>
+                                <div class="col-4"></div>
+                                <div class="col-4 d-flex flex-wrap flex-column font-size-14" style="height: 87%">
+                                    @foreach ($categories as $category)
+                                        <a class="pt-2" href="{{ route('shop', $category) }}">{{ $category->title }}</a>
+                                    @endforeach
+                                </div>
+                                <div class="col-4 d-flex flex-wrap flex-column font-size-14" style="height: 87%">
+                                    <a class="pt-2" href="/catalog/heel-low">На низком каблуке</a>
+                                    <a class="pt-2" href="/catalog/krossovki">Спортивная обувь</a>
+                                    <a class="pt-2" href="/catalog/eco">Экокожа</a>
+                                    <a class="pt-2" href="/catalog?sort=rating">Бестселлеры</a>
+                                    <a class="pt-2" href="/catalog/heel-stiletto">На шпильке</a>
+                                    <a class="pt-2" href="/catalog/tufli/tufli-na-spilke">Свадебная коллекция</a>
+                                </div>
+                                <div class="col-4">
+                                    {{ Banner::getMainMenuCatalog() }}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
+                    <div class="backdrop"></div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto">
                         <a href="{{ route('static-shops') }}">Магазины</a>
                     </div>
                     <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 col-lg-auto hover-dropdown">
+                    <div class="col-12 col-lg-auto hover-dropdown position-static">
                         <a href="{{ route('info') }}">Онлайн покупки</a>
-                        <div class="col-12 dropdown-menu position-absolute" style="margin-top: -1px;">
+                        <div class="col-12 custom-dropdown-menu">
                             @include('includes.static-pages-menu')
                         </div>
                     </div>
+                    <div class="backdrop"></div>
                     <div class="col-12 d-lg-none"><hr></div>
                     <div class="col-12 col-lg-auto">
                         <a href="{{ route('info', 'installments') }}">Рассрочка</a>
@@ -98,7 +123,6 @@
                     </div>
                 </div>
             </div>
-
 
             <div class="col-12 collapse" id="search-input">
                 <form action="{{ $catalogUrl }}" method="get" class="row">
