@@ -54,7 +54,7 @@ class Category extends Model
 
     public static function beforeApplyFilter(&$builder, &$values)
     {
-        $values = self::getChildrenCategoriesIdsList($values[0]);
+        $values = self::getChildrenCategoriesIdsList(end($values));
     }
     /**
      * Получить список идентификаторов дочерних категорий
