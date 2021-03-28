@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Table;
 
 class OrderController extends AdminController
 {
@@ -41,21 +42,19 @@ class OrderController extends AdminController
         // $grid->column('zip', 'Индекс');
         // $grid->column('street', __('Street'));
         // $grid->column('house', __('House'));
-        $grid->column('data', 'Товары')->display(function ($data) {
-            $goodsHtml = '';
-            foreach ($data as $item) {
-                // dd($item);
-                $goodsHtml .= <<<HTML
-                    <div style="padding-bottom:5px">
-                        <img src="{$item['product']['photos'][0]}" style="width:40px">
-                        <a href="{$item['product']['path']}" target="_blank">
-                            {$item['product']['brand']['name']} {$item['product']['title']}
-                        </a>
-                        <b>$item[price] BYN</b>
-                    </div>
-                HTML;
-            }
-            return $goodsHtml;
+
+
+
+        $grid->column('goods', 'Товары')->expand(function ($model) {
+            $items = $model->data()->get()->map(function ($item) {
+                return [
+                    'image' => "<img src='{$item->product->getFirstMediaUrl()}' style='width:70px'>",
+                    'product' => "<a href='{$item->product->path}' target='_blank'>{$item->product->getFullName()}</a>",
+                    'size' => $item->size->name,
+                    'price' => "$item->price BYN",
+                ];
+            });
+            return new Table(['Фото', 'Товар', 'Размер', 'Цена'], $items->toArray());
         });
         $grid->column('comment', 'Коммментарий');
         $grid->column('user_addr', 'Адрес');
