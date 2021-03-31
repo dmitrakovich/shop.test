@@ -382,7 +382,7 @@ if (isset($_POST['act'])) {
                             'title' => $avI['articul'],
                             'brand_name' => $avI['brand'],
                             'category_name' => $avI['cat'],
-                            'sizes' => is_array($avI['size']) ? implode(';', $avI['size']) : null,
+                            'new_sizes' => is_array($avI['size']) ? implode(';', $avI['size']) : null,
                         ]);
                         $link = '&nbsp;<a href="' . $link . '" class="add_but_prod" title="Создать товар" target="_blank">&rArr;</a>';
                     } else {
