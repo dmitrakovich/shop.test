@@ -323,7 +323,7 @@ class ProductController extends AdminController
      */
     public function getSizesIdFormRequest()
     {
-        if (empty($sizes = request('sizes'))) {
+        if (empty($sizes = request('new_sizes'))) {
             return null;
         }
         $sizes = explode(';', $sizes);
