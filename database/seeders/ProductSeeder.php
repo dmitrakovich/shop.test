@@ -214,7 +214,7 @@ class ProductSeeder extends Seeder
                 48 => 40, // Berkonty
                 49 => 41, // Deenoor
                 50 => 42, // Berisstini
-                51 => 'del', // BAROCCO
+                51 => 57, // BAROCCO
                 52 => 43, // Tucino
                 53 => 44, // AQUAMARIN
                 54 => 45, // Chewhite
