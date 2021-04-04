@@ -50,11 +50,17 @@
                     <div class="col-3 js-product-item product-item mb-3 text-center text-lg-left">
                         <a href="{{ $product->getUrl() }}">
                             <div class="mb-3 image position-relative">
-                                <img src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
-                                    alt="{{ $product->title }}" class="img-fluid">
-                                    <div class="quick-link">
-                                        <a data-src="{{ route('product.quick', $product->id) }}"
-                                            href="{{ $product->getUrl() }}" class="btn btn-light border">быстрый просмотр</a>
+                                <img
+                                    src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
+                                    alt="{{ $product->title }}"
+                                    class="img-fluid"
+                                >
+                                    <div class="quick-link d-none d-lg-block">
+                                        <a
+                                            data-src="{{ route('product.quick', $product->id) }}"
+                                            href="{{ $product->getUrl() }}"
+                                            class="btn btn-light border">быстрый просмотр
+                                        </a>
                                     </div>
                             </div>
                         </a>
