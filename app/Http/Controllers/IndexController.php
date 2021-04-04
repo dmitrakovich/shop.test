@@ -25,7 +25,7 @@ class IndexController extends Controller
      */
     public function index()
     {
-        $instagramPosts = $this->getInstagramPosts();
+        $instagramPosts = []; // $this->getInstagramPosts();
         // abort(404);
         // Log::info('Test log message with data', ['id' => 123]);
         return view('index', compact('instagramPosts'));
