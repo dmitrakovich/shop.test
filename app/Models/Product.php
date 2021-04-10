@@ -21,7 +21,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Product extends Model implements HasMedia
 {
-    use SoftDeletes;
+    // use SoftDeletes;
     use InteractsWithMedia;
     /**
      * The attributes that are mass assignable.
@@ -214,6 +214,7 @@ class Product extends Model implements HasMedia
      */
     public function setPhotosAttribute($photos)
     {
+        dd($photos);
         $currentPhotos = [];
         $mediaItems = $this->getMedia();
         foreach ($mediaItems as $key => $image) {
@@ -245,7 +246,8 @@ class Product extends Model implements HasMedia
     {
         $photos = [];
         foreach ($this->getMedia() as $image) {
-            $photos[] = $image->getUrl('catalog');
+            $photos[] = $image->getUrl();
+            // $photos[] = $image->getUrl('catalog');
             // $photos[] = $image->getPath();
         }
         return $photos;
