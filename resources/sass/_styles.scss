@@ -250,6 +250,12 @@ footer {
 }
 
 .product-item .image {
+    .product-first-image{
+        display: block;
+    }
+    .product-second-image{
+        display: none;
+    }
     .quick-link {
         position: absolute;
         left: 50%;
@@ -264,6 +270,12 @@ footer {
     &:hover {
         .quick-link {
             opacity: 1;
+        }
+        .product-first-image{
+            display: none;
+        }
+        .product-second-image{
+            display: block;
         }
     }
 }

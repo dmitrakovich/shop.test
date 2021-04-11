@@ -53,13 +53,18 @@
                                 <img
                                     src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
                                     alt="{{ $product->title }}"
-                                    class="img-fluid"
+                                    class="img-fluid product-first-image"
+                                >
+                                <img
+                                    src="{{ $product->media->get(1)->getUrl('catalog') }}"
+                                    alt="{{ $product->title }}"
+                                    class="img-fluid product-second-image"
                                 >
                                     <div class="quick-link d-none d-lg-block">
                                         <a
                                             data-src="{{ route('product.quick', $product->id) }}"
                                             href="{{ $product->getUrl() }}"
-                                            class="btn btn-light border">быстрый просмотр
+                                            class="btn btn-outline-dark">быстрый просмотр
                                         </a>
                                     </div>
                             </div>
