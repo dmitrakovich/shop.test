@@ -45,7 +45,7 @@
         </div>
 
         <div class="col-12 scrolling-pagination px-0">
-            <div class="row jscroll-inner justify-content-center justify-content-lg-between">
+            <div class="row jscroll-inner justify-content-start">
                 @forelse($products as $product)
                     <div class="col-3 js-product-item product-item mb-3 text-center text-lg-left">
                         <a href="{{ $product->getUrl() }}">
