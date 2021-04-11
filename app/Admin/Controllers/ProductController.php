@@ -137,9 +137,9 @@ class ProductController extends AdminController
 
         $form->column(6, function ($form) {
             $form->switch('publish', 'Публиковать');
-            // $form->multipleImage('photos', __('Фотографии'))->removable()->downloadable();
+            $form->multipleImage('photos', __('Фотографии'))->removable()->downloadable()->sortable();
 
-            $form->html(function ($form) {
+            /* $form->html(function ($form) {
                 $imagesBlock = '';
                 foreach ( $form->model()->getMedia() as $image) {
                     $imagesBlock .= '<div class="file-preview-frame krajee-default">
@@ -169,16 +169,16 @@ class ProductController extends AdminController
                     </div>';
                 }
                 return '<div class="js-images-area">' . $imagesBlock . '</div>';
-            });
+            });*/
 
-            $form->html('<div class="input-group-btn input-group-append">
+            /*$form->html('<div class="input-group-btn input-group-append">
                 <div tabindex="500" class="btn btn-primary btn-file">
                     <i class="glyphicon glyphicon-folder-open"></i>&nbsp;
                     <span class="hidden-xs">Выбор файла</span>
                     <input type="file" class="" name="photos[]" multiple id="imageLoader" accept="image/*">
                 </div>
                 <input type="hidden" name="add_images">
-            </div>', 'Картинки');
+            </div>', 'Картинки');*/
 
             $form->text('slug', __('Slug'))->default(Str::slug(request('slug')));
             $form->text('path', 'Путь')->disable();
@@ -221,7 +221,7 @@ class ProductController extends AdminController
             $form->ckeditor('description', '');
         });
 
-        $form->html('<div style="display: none;" id="crop-image">
+        /*$form->html('<div style="display: none;" id="crop-image">
             <div class="form-group">
                 <button type="button" class="btn btn-primary" onclick="cropper.setAspectRatio(1)">
                     1 x 1
@@ -257,9 +257,13 @@ class ProductController extends AdminController
         .cropper-face.hide-mask {
             background-image: unset;
         }
-        </style>');
+        </style>');*/
 
         $form->saving(function (Form $form) {
+
+
+            // dd($form);
+
             if (empty($form->slug)) {
                 $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->title);
             }
@@ -268,7 +272,7 @@ class ProductController extends AdminController
         $form->saved(function (Form $form) {
 
             // delete
-            $removeImagesId = $form->input('remove_images') ?? [];
+            /*$removeImagesId = $form->input('remove_images') ?? [];
             Media::whereIn('id', $removeImagesId)->delete();
             // Storage::delete('file.jpg'); // !!!
 
@@ -278,7 +282,7 @@ class ProductController extends AdminController
                 $form->model()
                     ->addMedia(storage_path("app/$image"))
                     ->toMediaCollection();
-            }
+            }*/
 
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
 

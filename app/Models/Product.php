@@ -214,11 +214,10 @@ class Product extends Model implements HasMedia
      */
     public function setPhotosAttribute($photos)
     {
-        dd($photos);
         $currentPhotos = [];
         $mediaItems = $this->getMedia();
         foreach ($mediaItems as $key => $image) {
-            $url = $image->getUrl('catalog');
+            $url = $image->getUrl();
             $currentPhotos[] = $url;
             $mediaPointer[$url] = $key;
         }
@@ -227,6 +226,15 @@ class Product extends Model implements HasMedia
 
         $newPhotos = array_diff($photos, $currentPhotos);
         $oldPhotos = array_diff($currentPhotos, $photos);
+
+        // sorting (hotfix)
+        if (request()->has('_file_sort_') && empty($newPhotos)) {
+            $ordering = [];
+            foreach ($photos as $value) {
+                $ordering[] = $mediaItems[$mediaPointer[$value]]->id;
+            }
+            return Media::setNewOrder($ordering);
+        }
 
         foreach ($newPhotos as $photo) {
             $this->addMedia("$path/$photo")->toMediaCollection();
