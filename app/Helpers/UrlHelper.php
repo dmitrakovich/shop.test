@@ -104,4 +104,11 @@ class UrlHelper
             }
         }*/
     }
+
+    public static function getEmbedVideoUrl(string $originalVideoUrl, $extPrams = [])
+    {
+        parse_str(parse_url($originalVideoUrl, PHP_URL_QUERY), $params);
+
+        return 'https://www.youtube.com/embed/' . $params['v']; //  . http_build_query($extPrams); // ?autoplay=1&rel=0
+    }
 }

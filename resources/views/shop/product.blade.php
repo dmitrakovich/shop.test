@@ -5,9 +5,20 @@
 
             <div class="slider-for">
                 @foreach ($product->getMedia() as $image)
-                    <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
-                        <img src="{{ $image->getUrl('normal') }}" class="img-fluid">
-                    </a>
+                    @if ($image->hasCustomProperty('video'))
+                        <div>
+                            <iframe src="{{ UrlHelper::getEmbedVideoUrl($image->getCustomProperty('video')) }}"
+                                class="w-100"
+                                style="min-height: 55vh"
+                                allowfullscreen
+                                frameborder="0">
+                            </iframe>
+                        </div>
+                    @else
+                        <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
+                            <img src="{{ $image->getUrl('normal') }}" class="img-fluid">
+                        </a>
+                    @endif
                 @endforeach
             </div>
             <div class="slider-nav mb-3 row" style="max-width: 720px">
