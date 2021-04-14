@@ -109,6 +109,6 @@ class UrlHelper
     {
         parse_str(parse_url($originalVideoUrl, PHP_URL_QUERY), $params);
 
-        return 'https://www.youtube.com/embed/' . $params['v']; //  . http_build_query($extPrams); // ?autoplay=1&rel=0
+        return 'https://www.youtube.com/embed/' . ($params['v'] ?? 'hrwJvG8kALA'); //  . http_build_query($extPrams); // ?autoplay=1&rel=0
     }
 }
