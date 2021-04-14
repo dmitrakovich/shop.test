@@ -32,6 +32,7 @@ Route::group([
     $router->resource('delivery-methods', DeliveryController::class);
 
     $router->resource('banners', BannerController::class);
+    $router->resource('media', MediaController::class);
 
     // legacy
     $router->any('availability', AvailiabilityController::class);

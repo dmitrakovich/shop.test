@@ -33,7 +33,7 @@ class BannerController extends AdminController
             'index_bottom' => 'На главной снизу',
             'main_menu_catalog' => 'В главном меню | каталог'
         ]);
-        $grid->column('resource', 'Media')->image();;
+        $grid->column('resource', 'Media')->image();
         $grid->column('title', __('Title'))->display(function ($title) {
             return $title;
         });
