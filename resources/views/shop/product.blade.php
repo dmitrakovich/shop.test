@@ -24,7 +24,12 @@
             <div class="slider-nav mb-3 row" style="max-width: 720px">
                 @foreach ($product->getMedia() as $image)
                     <div class="col-auto">
-                        <img src="{{ $image->getUrl('thumb') }}" class="img-fluid">
+                        <div class="position-relative d-inline-block">
+                            <img src="{{ $image->getUrl('thumb') }}" class="img-fluid">
+                            @if ($image->hasCustomProperty('video'))
+                                <span class="youtube-play-icon"></span>
+                            @endif
+                        </div>
                     </div>
                 @endforeach
             </div>
