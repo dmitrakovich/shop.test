@@ -109,7 +109,6 @@ class CatalogController extends BaseController
                 'fabrics',
                 'media',
             ])
-            ->where('publish', true)
             ->search($request->input('search'))
             ->sorting($sort)
             ->paginate(self::PAGE_SIZE);

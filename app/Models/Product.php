@@ -43,6 +43,17 @@ class Product extends Model implements HasMedia
         'photos',
     ];
     /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope('publish', function (Builder $query) {
+            $query->where('publish', true);
+        });
+    }
+    /**
      * Ссылка на товар
      *
      * @var string
