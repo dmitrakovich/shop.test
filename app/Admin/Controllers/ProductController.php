@@ -87,6 +87,7 @@ class ProductController extends AdminController
         // $grid->column('deleted_at', __('Deleted at'));
 
         $grid->model()->orderBy('id', 'desc');
+        $grid->model()->withoutGlobalScope('publish');
         $grid->paginate(30);
 
         return $grid;
