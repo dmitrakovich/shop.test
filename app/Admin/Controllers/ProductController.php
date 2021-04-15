@@ -13,16 +13,16 @@ use App\Models\Season;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Models\Product;
 use App\Models\Category;
 use App\Models\Collection;
-use Database\Seeders\ProductSeeder;
 use Illuminate\Support\Str;
+use App\Admin\Models\Product;
 use Illuminate\Support\Facades\DB;
-use Encore\Admin\Controllers\AdminController;
-use Illuminate\Support\Facades\Http;
+use Database\Seeders\ProductSeeder;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Support\Facades\Http;
+use Encore\Admin\Controllers\AdminController;
 
 class ProductController extends AdminController
 {
@@ -87,7 +87,6 @@ class ProductController extends AdminController
         // $grid->column('deleted_at', __('Deleted at'));
 
         $grid->model()->orderBy('id', 'desc');
-        $grid->model()->withoutGlobalScope('publish');
         $grid->paginate(30);
 
         return $grid;
@@ -261,17 +260,12 @@ class ProductController extends AdminController
         </style>');*/
 
         $form->saving(function (Form $form) {
-
-
-            // dd($form);
-
             if (empty($form->slug)) {
                 $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->title);
             }
         });
 
         $form->saved(function (Form $form) {
-
             // delete
             /*$removeImagesId = $form->input('remove_images') ?? [];
             Media::whereIn('id', $removeImagesId)->delete();
@@ -287,7 +281,9 @@ class ProductController extends AdminController
 
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
 
-            $this->sendToOldSite($form);
+            if (App::environment('production')) {
+                $this->sendToOldSite($form);
+            }
         });
 
         return $form;

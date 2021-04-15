@@ -6,7 +6,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -24,24 +24,11 @@ class Product extends Model implements HasMedia
     // use SoftDeletes;
     use InteractsWithMedia;
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    /*protected $fillable = [
-        'title',
-        '...',
-    ];*/
-    /**
      * The attributes that aren't mass assignable.
      *
      * @var array
      */
     protected $guarded = [];
-    protected $appends = [
-        'path',
-        'photos',
-    ];
     /**
      * The "booted" method of the model.
      *
@@ -196,15 +183,6 @@ class Product extends Model implements HasMedia
         return $this->url ?? ($this->url = $this->category->getUrl() . '/' . $this->slug);
     }
     /**
-     * Геттер для админки
-     *
-     * @return string
-     */
-    public function getPathAttribute()
-    {
-        return $this->getUrl();
-    }
-    /**
      * Размеры изображений
      *
      * @param Media $media
@@ -216,60 +194,6 @@ class Product extends Model implements HasMedia
         $this->addMediaConversion('catalog')->width(300);
         $this->addMediaConversion('normal')->width(700);
         $this->addMediaConversion('full')->width(1200);
-    }
-    /**
-     * Сеттер для фоток
-     *
-     * @param array $photos
-     * @return void
-     */
-    public function setPhotosAttribute($photos)
-    {
-        $currentPhotos = [];
-        $mediaItems = $this->getMedia();
-        foreach ($mediaItems as $key => $image) {
-            $url = $image->getUrl();
-            $currentPhotos[] = $url;
-            $mediaPointer[$url] = $key;
-        }
-
-        $path = public_path('uploads');
-
-        $newPhotos = array_diff($photos, $currentPhotos);
-        $oldPhotos = array_diff($currentPhotos, $photos);
-
-        // sorting (hotfix)
-        if (request()->has('_file_sort_') && empty($newPhotos)) {
-            $ordering = [];
-            foreach ($photos as $value) {
-                $ordering[] = $mediaItems[$mediaPointer[$value]]->id;
-            }
-            return Media::setNewOrder($ordering);
-        }
-
-        foreach ($newPhotos as $photo) {
-            $this->addMedia("$path/$photo")->toMediaCollection();
-        }
-
-        foreach ($oldPhotos as $photo) {
-            $key = $mediaPointer[$photo];
-            $mediaItems[$key]->delete();
-        }
-    }
-    /**
-     * Геттер для фоток
-     *
-     * @return array
-     */
-    public function getPhotosAttribute()
-    {
-        $photos = [];
-        foreach ($this->getMedia() as $image) {
-            $photos[] = $image->getUrl();
-            // $photos[] = $image->getUrl('catalog');
-            // $photos[] = $image->getPath();
-        }
-        return $photos;
     }
     /**
      * Сортировка товаров
