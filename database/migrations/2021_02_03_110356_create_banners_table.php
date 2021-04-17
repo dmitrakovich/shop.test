@@ -18,6 +18,7 @@ class CreateBannersTable extends Migration
 
             $table->enum('position', [
                 'catalog_top',
+                'index_main',
                 'index_top',
                 'index_bottom',
                 'main_menu_catalog',

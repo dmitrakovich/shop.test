@@ -7,8 +7,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Product extends ProductModel
 {
-    // use InteractsWithMedia;
-
     protected $appends = [
         'path',
         'photos',

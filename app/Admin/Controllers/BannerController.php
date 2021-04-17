@@ -2,11 +2,11 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Banner;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Admin\Models\Banner;
+use Encore\Admin\Controllers\AdminController;
 
 class BannerController extends AdminController
 {
@@ -29,6 +29,7 @@ class BannerController extends AdminController
         // $grid->column('id', __('Id'));
         $grid->column('position', 'Позиция')->using([
             'catalog_top' => 'В каталоге',
+            'index_main' => 'На главной главный',
             'index_top' => 'На главной сверху',
             'index_bottom' => 'На главной снизу',
             'main_menu_catalog' => 'В главном меню | каталог'
@@ -81,24 +82,39 @@ class BannerController extends AdminController
      */
     protected function form()
     {
-        // $banner = new Banner();
-        // $banner->setAppends(['resource']);
-
         $form = new Form(new Banner());
 
         $form->select('position', 'Позиция')->options([
             'catalog_top' => 'В каталоге',
+            'index_main' => 'На главной главный',
             'index_top' => 'На главной сверху',
             'index_bottom' => 'На главной снизу',
             'main_menu_catalog' => 'В главном меню | каталог'
         ])->required();
-        $form->image('resource', 'Media');
+
+        $form->radioButton('type','Тип баннера')
+            ->options(['Картинка', 'Видео'])
+            ->when(0, function (Form $form) {
+                $form->image('resource', 'Баннер');
+            })->when(1, function (Form $form) {
+                $form->image('resource', 'Картинка для превью');
+                $form->multipleFile('videos', 'Видео')->removable();
+                // $form->image('video_mp4','Видео в формате mp4');
+                // $form->image('video_webm','Видео в формате webm');
+                // $form->image('video_ogv','Видео в формате ogv');
+            })
+            ->default($form->isCreating() ? 0 : null);
+
         $form->text('title', __('Title'));
         $form->text('url', __('Url'));
         $form->number('priority', 'Приоритет')->default(0);
         $form->switch('active', 'Активный')->default(1);
         $form->datetime('start_datetime', 'Дата начала')->default(date('Y-m-d H:i:s'));
         $form->datetime('end_datetime', 'Дата оконания'); // ->default(date('Y-m-d H:i:s'));
+
+        $form->submitted(function (Form $form) {
+            $form->ignore('type');
+        });
 
         return $form;
     }

@@ -14,22 +14,6 @@ class Banner extends Model implements HasMedia
         InteractsWithMedia,
         SoftDeletes;
 
-    protected $appends = [
-        'resource',
-    ];
-
-    public function setResourceAttribute($resource)
-    {
-        $this->clearMediaCollection()
-            ->addMedia(public_path("uploads/$resource"))
-            ->toMediaCollection();
-    }
-
-    public function getResourceAttribute()
-    {
-        return $this->getFirstMediaUrl();
-    }
-
     public static function getIndexMain()
     {
         $indexTopBanners = self::active()
