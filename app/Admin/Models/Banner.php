@@ -12,7 +12,7 @@ class Banner extends BannerModel
         'videos',
         'type',
     ];
-    protected static array $availablesVideoTypes = [
+    protected static $availablesVideoTypes = [
         'video/mp4',
         'video/webm',
         'video/ogg',
