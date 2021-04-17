@@ -16,20 +16,19 @@ class Banner extends Model implements HasMedia
 
     public static function getIndexMain()
     {
+        $indexMainBanner = self::active()
+            ->where('position', 'index_main')
+            ->with('media')
+            ->orderByDesc('priority')
+            ->first(['id', 'title', 'url']);
+
         $indexTopBanners = self::active()
             ->where('position', 'index_top')
             ->with('media')
             ->orderByDesc('priority')
-            // ->inRandomOrder()
-            // ->limit(3)
             ->get(['id', 'title', 'url']);
 
-        $banners = [
-            'main' => 'main.jpg',
-            'main_mobile' => 'main_mobile.jpg',
-            'index_top' => $indexTopBanners,
-        ];
-        return view('banners.index-main', compact('banners'));
+        return view('banners.index-main', compact('indexMainBanner', 'indexTopBanners'));
     }
 
     public static function getIndexBottom()

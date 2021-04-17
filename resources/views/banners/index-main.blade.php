@@ -1,26 +1,33 @@
-{{-- <div class="col-12 px-main py-main d-none d-lg-block">
-    <a href="{{ route('shop') }}">
-        <img src="/images/banners/{{ $banners['main'] }}" alt="" class="img-fluid">
-    </a>
-</div> --}}
-<div class="col-12">
-    <a href="{{ route('shop', 'catalog') }}">
-        <video id="videoblock" class="img-fluid" autoplay loop preload="metadata" muted playsinline
-            poster="/videos/201016_vitacci{{ Agent::isMobile() ? '_m' : null }}.jpg">
-            <source src="/videos/201016_vitacci.mp4" type="video/mp4" />
-            <source src="/videos/201016_vitacci.webm" type="video/webm" />
-            <source src="/videos/201016_vitacci.ogv" type="video/ogg" />
-        </video>
-    </a>
-</div>
-<div class="col-12 px-0 d-block d-lg-none">
-    <a href="{{ route('shop') }}">
-        <img src="/images/banners/{{ $banners['main_mobile'] }}" alt="" class="img-fluid">
-    </a>
-</div>
+@if (isset($indexMainBanner))
+    <div class="col-12">
+        <a href="{{ $indexMainBanner->url }}">
+            @if ($indexMainBanner->getMedia()->first()->hasCustomProperty('videos'))
+                <video id="videoblock" class="img-fluid" autoplay loop preload="metadata" muted playsinline
+                    poster="{{ $indexMainBanner->getFirstMediaUrl() }}">
 
-@foreach ($banners['index_top'] as $banner)
-    <div class="col-4 p-main d-none d-lg-block">
+                    @foreach ($indexMainBanner->getMedia()->first()->getCustomProperty('videos') as $type => $video)
+                        <source src="/uploads/files/{{ $video }}" type="{{ $type }}" />
+                    @endforeach
+                </video>
+            @else
+                <img src="{{ $indexMainBanner->getFirstMediaUrl() }}"
+                    alt="{{ $indexMainBanner->title }}"
+                    title="{{ $indexMainBanner->title }}"
+                    class="img-fluid"
+                />
+            @endif
+            {{-- <video id="videoblock" class="img-fluid" autoplay loop preload="metadata" muted playsinline
+                poster="/videos/201016_vitacci{{ Agent::isMobile() ? '_m' : null }}.jpg">
+                <source src="/videos/201016_vitacci.mp4" type="video/mp4" />
+                <source src="/videos/201016_vitacci.webm" type="video/webm" />
+                <source src="/videos/201016_vitacci.ogv" type="video/ogg" />
+            </video> --}}
+        </a>
+    </div>
+@endif
+
+@foreach ($indexTopBanners as $banner)
+    <div class="col-12 col-lg-4 p-main">
         <a href="{{ $banner->url }}">
             <img src="{{ $banner->getFirstMediaUrl() }}"
                 alt="{{ $banner->title }}"
