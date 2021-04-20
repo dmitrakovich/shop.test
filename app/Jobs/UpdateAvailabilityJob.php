@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class UpdateAvailabilityJob implements ShouldQueue
+class UpdateAvailabilityJobe extends AbstractJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     /**
@@ -46,6 +46,8 @@ class UpdateAvailabilityJob implements ShouldQueue
      */
     public function handle()
     {
+        $this->debug('Старт');
+
         $availabilityConfig = $this->getConfig();
 
         if (!$this->isManual && $availabilityConfig['auto_del'] == 'off') {
@@ -368,6 +370,7 @@ class UpdateAvailabilityJob implements ShouldQueue
             $this->saveConfig($availabilityConfig);
         }
 
+        $this->complete('Успешно выполнено');
         return "<p class='adminka_message_success'>$service_message.</p>";
     }
 

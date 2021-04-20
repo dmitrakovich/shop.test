@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class UpdateProductsRatingJob implements ShouldQueue
+class UpdateProductsRatingJob extends AbstractJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -33,6 +33,7 @@ class UpdateProductsRatingJob implements ShouldQueue
      */
     public function handle()
     {
+        $this->debug('Старт');
         $ratingConfigFile = database_path('files/rating.conf.php');
         $ratingConfig = require $ratingConfigFile;
 
@@ -322,5 +323,7 @@ class UpdateProductsRatingJob implements ShouldQueue
             $strToFile = "<?php\nreturn " . var_export($ratingConfig, true) . ';';
             file_put_contents(database_path('files/rating.conf.php'), $strToFile);
         }
+
+        $this->complete('Успешно выполнено');
     }
 }
