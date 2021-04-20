@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class UpdateAvailabilityJobe extends AbstractJob
+class UpdateAvailabilityJob extends AbstractJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     /**
