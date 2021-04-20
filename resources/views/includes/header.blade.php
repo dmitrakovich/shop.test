@@ -44,7 +44,8 @@
             </div>
 
             @php
-                $catalogUrl = strpos(url()->current(), 'catalog') !== false ? url()->current() : route('shop');
+                // $catalogUrl = strpos(url()->current(), 'catalog') !== false ? url()->current() : route('shop');
+                $catalogUrl = route('shop');
             @endphp
 
 
