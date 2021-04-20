@@ -18,7 +18,7 @@ abstract class AbstractJob implements ShouldQueue
     /**
      * Имя выполняемой задачи
      */
-    protected ?string $jobName = null;
+    protected $jobName = null;
     /**
      * Переменные, которые нужно отразить в context
      *
