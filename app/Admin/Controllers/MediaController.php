@@ -65,6 +65,7 @@ class MediaController extends AdminController
             $actions->disableEdit();
             $actions->disableView();
         });
+        $grid->disableCreateButton();
 
         return $grid;
     }
