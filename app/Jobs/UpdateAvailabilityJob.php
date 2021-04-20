@@ -51,7 +51,7 @@ class UpdateAvailabilityJobe extends AbstractJob
         $availabilityConfig = $this->getConfig();
 
         if (!$this->isManual && $availabilityConfig['auto_del'] == 'off') {
-            return $this->error('Автоматическое обновление выключено!');
+            return $this->errorWithReturn('Автоматическое обновление выключено!');
         }
         $prodS = array();
         $res_prod = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
@@ -120,11 +120,11 @@ class UpdateAvailabilityJobe extends AbstractJob
                 ->json();
 
         if (empty($infoF)) {
-            return $this->error('Ошибка! Яндекс Диск не отдал данные о файле.');
+            return $this->errorWithReturn('Ошибка! Яндекс Диск не отдал данные о файле.');
         }
         $filedate = explode(',', $availabilityConfig['file']);
         if ($infoF['md5'] == $filedate[1] && (count($availabilityConfig['publish']) + count($availabilityConfig['add_size']) + count($availabilityConfig['del']) + count($availabilityConfig['del_size']) + count($availabilityConfig['new'])) > 0 && !isset($_POST['act'])) {
-            return $this->error('Файл не обновлялся.');
+            return $this->errorWithReturn('Файл не обновлялся.');
         }
         $availabilityConfig['file'] = date("Y-m-d-H:i:s", strtotime($infoF['modified'])) . "," . $infoF['md5'];
 
@@ -135,7 +135,7 @@ class UpdateAvailabilityJobe extends AbstractJob
                 ->json();
 
         if (empty($hrefF)) {
-            return $this->error('Ошибка! Яндекс Диск не получил ссылку на скачивание.');
+            return $this->errorWithReturn('Ошибка! Яндекс Диск не получил ссылку на скачивание.');
         }
 
         $resI = file_get_contents($hrefF['href']);
@@ -401,9 +401,9 @@ class UpdateAvailabilityJobe extends AbstractJob
         return mb_strtolower(str_replace($r, '', $txt));
     }
 
-    protected function error(string $msg): void
+    protected function errorWithReturn(string $msg)
     {
-        $this->debug($msg, 'jobs', 'error');
+        $this->error($msg, 'jobs', 'error');
         return $msg;
     }
 }
