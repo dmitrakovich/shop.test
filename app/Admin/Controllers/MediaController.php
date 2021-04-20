@@ -2,11 +2,11 @@
 
 namespace App\Admin\Controllers;
 
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Admin\Models\Media;
+use Encore\Admin\Controllers\AdminController;
 
 class MediaController extends AdminController
 {
@@ -38,6 +38,7 @@ class MediaController extends AdminController
         $grid->column('link', 'Ссылка на товар')->display(function () {
             return '<a href="' . $this->model->getUrl() . '" target="_blank">' . $this->model->getFullName() . '</a>';
         });
+        // $grid->column('model.slug', 'Slug');
         // $grid->column('uuid', __('Uuid'));
         // $grid->column('collection_name', __('Collection name'));
         // $grid->column('name', __('Name'));
@@ -59,6 +60,14 @@ class MediaController extends AdminController
         $grid->model()->orderBy('id', 'desc');
         // $grid->model()->where('custom_properties', 'like', '%video%');
         $grid->model()->where('model_type', 'App\Models\Product');
+
+        // $grid->filter(function($filter) {
+        //     $filter->where(function ($query) {
+        //         $query->whereHas('model', function ($query) {
+        //             $query->where('slug', $this->input);
+        //         });
+        //     }, 'Slug');
+        // });
 
         $grid->actions(function ($actions) {
             $actions->disableDelete();
