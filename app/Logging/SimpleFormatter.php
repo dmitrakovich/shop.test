@@ -9,11 +9,11 @@ class SimpleFormatter
     /**
      * Формат сообщения
      */
-    protected string $format = "[%datetime%] %level_name% > %message% %context%\n"; //  %extra%
+    protected $format = "[%datetime%] %level_name% > %message% %context%\n"; //  %extra%
     /**
      * Формат даты
      */
-    protected string $dateFormat = 'Y-m-d H:i:s.u';
+    protected $dateFormat = 'Y-m-d H:i:s.u';
 
     public function __invoke($logger)
     {
