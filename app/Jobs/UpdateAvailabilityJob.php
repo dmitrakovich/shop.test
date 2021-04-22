@@ -328,8 +328,10 @@ class UpdateAvailabilityJob extends AbstractJob
                     $act_count = 0;
                 } elseif ($act_count > 0) {
                     foreach ($q_list as $sid) {
-                        DB::where('product_id', $crutchForOldSiteSizes[$sid]['pid'])
-                            ->where('attribute_id', $crutchForOldSiteSizes[$sid]['vid'])
+                        DB::table('product_attributes')
+                            ->where('attribute_type', 'App\Models\Size')
+                            ->where('product_id', $crutchForOldSiteSizes[$sid]->pid)
+                            ->where('attribute_id', $crutchForOldSiteSizes[$sid]->vid)
                             ->delete();
                     }
                     $service_message .= ". Удалено размеров $act_count";
