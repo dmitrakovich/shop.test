@@ -323,7 +323,7 @@ class UpdateAvailabilityJob extends AbstractJob
                         $act_count++;
                     }
                 }
-                if ($act_count > 100) {
+                if ($act_count > 1000) {
                     $service_message .= ". !!! Ошибка. Больше 100 удалить размеров";
                     $act_count = 0;
                 } elseif ($act_count > 0) {
