@@ -405,7 +405,7 @@ class UpdateAvailabilityJob extends AbstractJob
 
     protected function errorWithReturn(string $msg)
     {
-        $this->error($msg, 'jobs', 'error');
+        $this->complete($msg, 'jobs', 'error');
         return $msg;
     }
 }
