@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -22,6 +23,7 @@ class UpdateAvailabilityJob extends AbstractJob
      */
     protected $isManual = false;
     protected $thtime = null;
+    protected $excludedCategories = [2, 6, 10, 15, 19];
 
     const YANDEX_METRIKA_HEADERS = [
         // 'Accept' => 'application/x-yametrika+json',
@@ -53,61 +55,48 @@ class UpdateAvailabilityJob extends AbstractJob
         if (!$this->isManual && $availabilityConfig['auto_del'] == 'off') {
             return $this->errorWithReturn('Автоматическое обновление выключено!');
         }
-        $prodS = array();
-        $res_prod = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
-        ->with('media')
-        ->get([
-            'products.id',
-            'brand_id',
-            'brands.name as brand',
-            'category_id as cat_id',
-            'title as name',
-            'publish',
-            'label_id as label',
-        ]);
 
-        $allAtr = DB::table('product_attributes')
+        $currentProducts = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
+            ->with('media')
+            ->get([
+                'products.id',
+                'brand_id',
+                'brands.name as brand',
+                'category_id',
+                'title as name',
+                'publish',
+                'label_id as label',
+            ]);
+        $productsSizes = DB::table('product_attributes')
             ->where('attribute_type', 'App\Models\Size')
             ->leftJoin('sizes', 'product_attributes.attribute_id', '=', 'sizes.id')
             ->get([
-                // 'pr.id as sid',
-                'product_id as pid',
-                'attribute_id as vid',
-                'name as value'
+                'product_id',
+                'sizes.id',
+                'name'
             ]);
+        $sizesList = Size::pluck('id', 'name')->toArray();
 
-        $attrL = array();
-        $fullProd = array();
-        $attrName = array();
-        foreach ($allAtr as $sid => $atrV) {
-            $attrL[$atrV->pid] = $attrL[$atrV->pid] ?? [];
-            $attrL[$atrV->pid][$atrV->value] = $sid; // $atrV->sid; !!!
-            $attrName[$atrV->value] = $atrV->vid;
+        $allProducts = [];
+        $groupedSizesForProducts = [];
+        foreach ($productsSizes as $size) {
+            $groupedSizesForProducts[$size->product_id][$size->name] = $size->id;
         }
-        foreach ($res_prod as $res_prod_v) {
-            $ibrand = trim($res_prod_v->brand);
-            $sbrand = strtolower($ibrand);
-            $smallN = $this->smallArt($res_prod_v->name);
-            $checkB = str_replace(' ', '', $ibrand);
-            $itemB = array(
-                'id' => $res_prod_v->id,
-                'cat_id' => $res_prod_v->cat_id,
-                'status' => $res_prod_v->publish,
-                'articul' => $res_prod_v->name,
-                'brand' => $ibrand,
-                'size' => $attrL[$res_prod_v->id] ?? 'b',
-                'label' => $res_prod_v->label
-            );
-            if (!empty($checkB)) {
-                if (!isset($prodS[$sbrand])) $prodS[$sbrand] = array();
-                $prodS[$sbrand][$smallN] = $itemB;
-                // общий список
-                if (!isset($fullProd[$sbrand])) $fullProd[$sbrand] = array();
-                $fullProd[$sbrand][$smallN] = $res_prod_v->id;
+        foreach ($currentProducts as $product) {
+            $brandName = trim($product->brand);
+            if (!empty($brandName)) {
+                $allProducts[strtolower($brandName)][$this->smallArt($product->name)] = [
+                    'id' => $product->id,
+                    'cat_id' => $product->category_id,
+                    'status' => $product->publish,
+                    'articul' => $product->name,
+                    'brand' => $brandName,
+                    'size' => $groupedSizesForProducts[$product->id] ?? 'b',
+                    'label' => $product->label
+                ];
             }
         }
-        $crutchForOldSiteSizes = $allAtr->toArray(); // было завязано на id (sid), котрых сейчас нет
-        unset($res_prod, $allAtr, $attrL);
+        unset($currentProducts, $productsSizes, $groupedSizesForProducts);
 
         // Яндекс
         $url = 'https://cloud-api.yandex.net:443/v1/disk/resources';
@@ -115,71 +104,75 @@ class UpdateAvailabilityJob extends AbstractJob
             'path' => '/Ostatki/ostatki.txt',
             'field' => 'modified,md5',
         );
-        $infoF = Http::withHeaders(self::YANDEX_METRIKA_HEADERS)
+        $fileInfo = Http::withHeaders(self::YANDEX_METRIKA_HEADERS)
                 ->get($url, $params)
                 ->json();
 
-        if (empty($infoF)) {
+        if (empty($fileInfo)) {
             return $this->errorWithReturn('Ошибка! Яндекс Диск не отдал данные о файле.');
         }
         $filedate = explode(',', $availabilityConfig['file']);
-        if ($infoF['md5'] == $filedate[1] && (count($availabilityConfig['publish']) + count($availabilityConfig['add_size']) + count($availabilityConfig['del']) + count($availabilityConfig['del_size']) + count($availabilityConfig['new'])) > 0 && !isset($_POST['act'])) {
+        $actionsCount = count($availabilityConfig['publish']);
+            + count($availabilityConfig['add_size'])
+            + count($availabilityConfig['del'])
+            + count($availabilityConfig['del_size'])
+            + count($availabilityConfig['new']);
+        if ($fileInfo['md5'] == $filedate[1] && $actionsCount > 0 && !isset($_POST['act'])) {
             return $this->errorWithReturn('Файл не обновлялся.');
         }
-        $availabilityConfig['file'] = date("Y-m-d-H:i:s", strtotime($infoF['modified'])) . "," . $infoF['md5'];
+        $availabilityConfig['file'] = date('Y-m-d-H:i:s', strtotime($fileInfo['modified'])) . ',' . $fileInfo['md5'];
 
 
         $url = 'https://cloud-api.yandex.net:443/v1/disk/resources/download';
-        $hrefF = Http::withHeaders(self::YANDEX_METRIKA_HEADERS)
+        $downloadLink = Http::withHeaders(self::YANDEX_METRIKA_HEADERS)
                 ->get($url, ['path' => '/Ostatki/ostatki.txt'])
                 ->json();
 
-        if (empty($hrefF)) {
+        if (empty($downloadLink)) {
             return $this->errorWithReturn('Ошибка! Яндекс Диск не получил ссылку на скачивание.');
         }
 
-        $resI = file_get_contents($hrefF['href']);
+        $resI = file_get_contents($downloadLink['href']);
         $resI = mb_convert_encoding($resI, "UTF-8", "windows-1251");
         $resI = explode("\n", $resI);
-        $resD = array();
+        $resD = [];
         for ($i = 5; $i < count($resI); $i++) {
             if (mb_strpos($resI[$i], ' | ') !== false) {
                 $itemA = explode("\t", $resI[$i]);
                 $itemC = explode(' | ', $itemA[2]);
-                $ibrand = trim($itemA[3]);
-                $sbrand = strtolower($ibrand);
-                $checkB = str_replace(' ', '', $ibrand);
-                $smallN = $this->smallArt($itemC[0]);
+                $brandName = trim($itemA[3]);
+                $brandKey = strtolower($brandName);
+                $smallArt = $this->smallArt($itemC[0]);
                 $sizeNotNull = true;
                 if ($itemA[5] == 0) $sizeNotNull = false;
                 $isize = 'b';
                 if ($itemA[4] != "б/р") $isize = array($itemA[4] => $itemA[4]);
-                $itemB = array(
-                    'articul' => $itemC[0],
-                    'brand' => $ibrand,
-                    'size' => $isize,
-                    'cat' => $itemC[1],
-                    'price' => str_replace("'00", "", $itemA[6])
-                );
-                if (!empty($checkB) && !empty($smallN) && $sizeNotNull) {
-                    if (!isset($resD[$sbrand])) $resD[$sbrand] = array();
+
+                if (!empty($brandName) && !empty($smallArt) && $sizeNotNull) {
                     // костыль для русских и английских букв
-                    if (!isset($prodS[$sbrand][$smallN])) {
+                    if (!isset($allProducts[$brandKey][$smallArt])) {
                         $eng_symb = array('a', 'b', 'c', 'e', 'h', 'k', 'm', 'o', 'p', 't', 'x');
                         $rus_symb = array('а', 'в', 'с', 'е', 'н', 'к', 'м', 'о', 'р', 'т', 'х');
-                        $smallNS = str_replace($eng_symb, $rus_symb, $smallN);
-                        if (isset($prodS[$sbrand][$smallNS])) $smallN = $smallNS;
-                        $smallNS = str_replace($rus_symb, $eng_symb, $smallN);
-                        if (isset($prodS[$sbrand][$smallNS])) $smallN = $smallNS;
+                        $smallNS = str_replace($eng_symb, $rus_symb, $smallArt);
+                        if (isset($allProducts[$brandKey][$smallNS])) $smallArt = $smallNS;
+                        $smallNS = str_replace($rus_symb, $eng_symb, $smallArt);
+                        if (isset($allProducts[$brandKey][$smallNS])) $smallArt = $smallNS;
                     }
-                    if (!isset($resD[$sbrand][$smallN])) {
-                        $resD[$sbrand][$smallN] = $itemB;
-                    } elseif (is_array($resD[$sbrand][$smallN]['size'])) {
-                        $resD[$sbrand][$smallN]['size'][$itemA[4]] = $itemA[4];
+                    if (!isset($resD[$brandKey][$smallArt])) {
+                        $resD[$brandKey][$smallArt] = [
+                            'articul' => $itemC[0],
+                            'brand' => $brandName,
+                            'size' => $isize,
+                            'cat' => $itemC[1],
+                            'price' => str_replace("'00", "", $itemA[6])
+                        ];
+                    } elseif (is_array($resD[$brandKey][$smallArt]['size'])) {
+                        $resD[$brandKey][$smallArt]['size'][$itemA[4]] = $itemA[4];
                     }
                     // общий список
-                    if (!isset($fullProd[$sbrand])) $fullProd[$sbrand] = array();
-                    if (!isset($fullProd[$sbrand][$smallN])) $fullProd[$sbrand][$smallN] = 'new';
+                    if (!isset($allProducts[$brandKey][$smallArt])) {
+                        $allProducts[$brandKey][$smallArt] = 'new';
+                    }
                 }
             }
         }
@@ -195,32 +188,34 @@ class UpdateAvailabilityJob extends AbstractJob
             } else foreach ($availabilityConfig[$sbrosv] as $sbrK => $sbrV) if (!isset($sbrV['time']) || $sbrV['time'] < $deadline) unset($availabilityConfig[$sbrosv][$sbrK]);
         }
         // Сравнение
-        foreach ($fullProd as $fbK => $fbV) {
-            foreach ($fbV as $fK => $fV) {
-                $checkIgn = (!isset($prodS[$fbK][$fK]) || $prodS[$fbK][$fK]['label'] != 3);
-                $checkNoM = (!isset($resD[$fbK][$fK]) || (stripos($resD[$fbK][$fK]['cat'], "мужск")) === false);
-                $false_cat = array(4, 5, 16, 21, 31, 32, 39, 40, 48);
-                $checkCat = (!isset($prodS[$fbK][$fK]) || !in_array($prodS[$fbK][$fK]['cat_id'], $false_cat));
+        foreach ($allProducts as $brandKey => $brandProducts) {
+            foreach ($brandProducts as $smallArt => $product) {
+                if ($product === 'new') {
+                    continue;
+                }
+                $checkIgn = (!isset($allProducts[$brandKey][$smallArt]) || $allProducts[$brandKey][$smallArt]['label'] != 3);
+                $checkNoM = (!isset($resD[$brandKey][$smallArt]) || (stripos($resD[$brandKey][$smallArt]['cat'], "мужск")) === false);
+                $checkCat = true; (!isset($allProducts[$brandKey][$smallArt]) || !in_array($allProducts[$brandKey][$smallArt]['cat_id'], $this->excludedCategories));
                 if ($checkIgn && $checkNoM && $checkCat) {
-                    if (isset($prodS[$fbK][$fK]) && $prodS[$fbK][$fK]['status'] != 1 && isset($resD[$fbK][$fK])) {
-                        $it = $prodS[$fbK][$fK];
+                    if (isset($allProducts[$brandKey][$smallArt]) && $allProducts[$brandKey][$smallArt]['status'] != 1 && isset($resD[$brandKey][$smallArt])) {
+                        $it = $allProducts[$brandKey][$smallArt];
                         $availabilityConfig['publish'][] = array('id' => $it['id'], 'name' => $it['brand'] . ' ' . $it['articul'], 'status' => 0, 'time' => $this->thtime);
                     }
-                    if (isset($prodS[$fbK][$fK]) && $prodS[$fbK][$fK]['status'] == 1 && !isset($resD[$fbK][$fK])) {
-                        $it = $prodS[$fbK][$fK];
+                    if (isset($allProducts[$brandKey][$smallArt]) && $allProducts[$brandKey][$smallArt]['status'] == 1 && !isset($resD[$brandKey][$smallArt])) {
+                        $it = $allProducts[$brandKey][$smallArt];
                         $availabilityConfig['del'][] = array('id' => $it['id'], 'name' => $it['brand'] . ' ' . $it['articul'], 'status' => 0, 'time' => $this->thtime);
                     }
-                    if (isset($fullProd[$fbK][$fK]) && $fullProd[$fbK][$fK] == 'new') {
-                        $it = $resD[$fbK][$fK];
+                    if (isset($allProducts[$brandKey][$smallArt]) && $allProducts[$brandKey][$smallArt] == 'new') {
+                        $it = $resD[$brandKey][$smallArt];
                         $it_err = '';
-                        if (!isset($prodS[$fbK])) $it_err = 'нет бренда';
+                        if (!isset($allProducts[$brandKey])) $it_err = 'нет бренда';
                         if (is_array($it['size'])) {
                             $it_err_s = '';
-                            foreach ($it['size'] as $err_s) if (!isset($attrName[$err_s])) $it_err_s = 'нет размера';
+                            foreach ($it['size'] as $err_s) if (!isset($sizesList[$err_s])) $it_err_s = 'нет размера';
                             $it_err .= ((!empty($it_err) && !empty($it_err_s)) ? ', ' : '') . ((!empty($it_err_s)) ? $it_err_s : '');
                         }
-                        $availabilityConfig['new'][$fbK . '-' . $fK] = array(
-                            'id' => $fbK . '-' . $fK,
+                        $availabilityConfig['new'][$brandKey . '-' . $smallArt] = array(
+                            'id' => $brandKey . '-' . $smallArt,
                             'brand' => $it['brand'],
                             'articul' => $it['articul'],
                             'cat' => $it['cat'],
@@ -230,15 +225,20 @@ class UpdateAvailabilityJob extends AbstractJob
                         );
                     }
                     // размеры
-                    if (isset($prodS[$fbK][$fK]) && isset($resD[$fbK][$fK]) && $prodS[$fbK][$fK]['size'] != 'b' && array_keys($prodS[$fbK][$fK]['size']) != array_keys($resD[$fbK][$fK]['size'])) {
-                        $it = $prodS[$fbK][$fK];
-                        $ds = $resD[$fbK][$fK]['size'];
-                        $ss = $prodS[$fbK][$fK]['size'];
+                    if (
+                        isset($allProducts[$brandKey][$smallArt])
+                        && isset($resD[$brandKey][$smallArt])
+                        && $allProducts[$brandKey][$smallArt]['size'] != 'b'
+                        && array_keys($allProducts[$brandKey][$smallArt]['size']) != array_keys($resD[$brandKey][$smallArt]['size'])
+                    ) {
+                        $it = $allProducts[$brandKey][$smallArt];
+                        $ds = $resD[$brandKey][$smallArt]['size'];
+                        $ss = $allProducts[$brandKey][$smallArt]['size'];
                         $fs = $ss + $ds;
                         foreach ($fs as $fsk => $fsv) {
                             if (!isset($ss[$fsk]) && isset($ds[$fsk])) {
-                                if (!isset($attrName[$fsk])) $attrName[$fsk] = 'new';
-                                $availabilityConfig['add_size'][] = array('id' => $it['id'], 'vid' => $attrName[$fsk], 'name' => $it['brand'] . ' ' . $it['articul'], 'size' => $fsk, 'status' => 0, 'time' => $this->thtime);
+                                if (!isset($sizesList[$fsk])) $sizesList[$fsk] = 'new';
+                                $availabilityConfig['add_size'][] = array('id' => $it['id'], 'vid' => $sizesList[$fsk], 'name' => $it['brand'] . ' ' . $it['articul'], 'size' => $fsk, 'status' => 0, 'time' => $this->thtime);
                             } elseif (isset($ss[$fsk]) && !isset($ds[$fsk])) {
                                 $availabilityConfig['del_size'][] = array('id' => $it['id'], 'vid' => $ss[$fsk], 'name' => $it['brand'] . ' ' . $it['articul'], 'size' => $fsk, 'status' => 0, 'time' => $this->thtime);
                             }
@@ -307,7 +307,7 @@ class UpdateAvailabilityJob extends AbstractJob
                     $service_message .= ". !!! Ошибка. Больше 50 снять с публикации";
                     $act_count = 0;
                 } elseif ($act_count > 0) {
-                    Product::whereIn('id', $q_list)->update(['publish' => false]);
+                    Product::whereIn('id', $q_list)->delete();
                     $service_message .= ". Снято с публикации $act_count";
                 }
                 $checkLog += $act_count;
@@ -316,23 +316,29 @@ class UpdateAvailabilityJob extends AbstractJob
             if (count($availabilityConfig['del_size']) > 0) {
                 $act_count = 0;
                 $q_list = array();
-                foreach ($availabilityConfig['del_size'] as $actK => $actV) {
-                    if ($availabilityConfig['del_size'][$actK]['status'] != 1) {
-                        $q_list[] = $actV['vid'];
-                        $availabilityConfig['del_size'][$actK]['status'] = 1;
+                foreach ($availabilityConfig['del_size'] as &$value) {
+                    if ($value['status'] != 1) {
+                        $q_list[$value['id']][] = $value['size'];
+                        $value['status'] = 1;
                         $act_count++;
                     }
                 }
+                unset($value);
                 if ($act_count > 1000) {
                     $service_message .= ". !!! Ошибка. Больше 100 удалить размеров";
                     $act_count = 0;
                 } elseif ($act_count > 0) {
-                    foreach ($q_list as $sid) {
-                        DB::table('product_attributes')
-                            ->where('attribute_type', 'App\Models\Size')
-                            ->where('product_id', $crutchForOldSiteSizes[$sid]->pid)
-                            ->where('attribute_id', $crutchForOldSiteSizes[$sid]->vid)
-                            ->delete();
+                    foreach ($q_list as $productId => $product) {
+                        foreach ($product as $sizeName) {
+                            if (!isset($sizesList[$sizeName])) {
+                                continue;
+                            }
+                            DB::table('product_attributes')
+                                ->where('attribute_type', 'App\Models\Size')
+                                ->where('product_id', $productId)
+                                ->where('attribute_id', $sizesList[$sizeName])
+                                ->delete();
+                        }
                     }
                     $service_message .= ". Удалено размеров $act_count";
                 }
