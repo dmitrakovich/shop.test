@@ -23,7 +23,6 @@ class UpdateAvailabilityJob extends AbstractJob
      */
     protected $isManual = false;
     protected $thtime = null;
-    protected $excludedCategories = [2, 6, 10, 15, 19];
 
     const YANDEX_METRIKA_HEADERS = [
         // 'Accept' => 'application/x-yametrika+json',
@@ -193,10 +192,9 @@ class UpdateAvailabilityJob extends AbstractJob
                 if ($product === 'new') {
                     continue;
                 }
-                $checkIgn = (!isset($allProducts[$brandKey][$smallArt]) || $allProducts[$brandKey][$smallArt]['label'] != 3);
+                $checkIgn = $allProducts[$brandKey][$smallArt]['label'] != 3;
                 $checkNoM = (!isset($resD[$brandKey][$smallArt]) || (stripos($resD[$brandKey][$smallArt]['cat'], "мужск")) === false);
-                $checkCat = true; (!isset($allProducts[$brandKey][$smallArt]) || !in_array($allProducts[$brandKey][$smallArt]['cat_id'], $this->excludedCategories));
-                if ($checkIgn && $checkNoM && $checkCat) {
+                if ($checkIgn && $checkNoM) {
                     if (isset($allProducts[$brandKey][$smallArt]) && $allProducts[$brandKey][$smallArt]['status'] != 1 && isset($resD[$brandKey][$smallArt])) {
                         $it = $allProducts[$brandKey][$smallArt];
                         $availabilityConfig['publish'][] = array('id' => $it['id'], 'name' => $it['brand'] . ' ' . $it['articul'], 'status' => 0, 'time' => $this->thtime);
