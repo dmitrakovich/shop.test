@@ -61,13 +61,16 @@ class MediaController extends AdminController
         // $grid->model()->where('custom_properties', 'like', '%video%');
         $grid->model()->where('model_type', 'App\Models\Product');
 
-        // $grid->filter(function($filter) {
-        //     $filter->where(function ($query) {
-        //         $query->whereHas('model', function ($query) {
-        //             $query->where('slug', $this->input);
-        //         });
-        //     }, 'Slug');
-        // });
+        $grid->filter(function($filter) {
+            $filter->disableIdFilter(); // Remove the default id filter
+            $filter->where(function ($query) {
+                $query->whereRaw("EXISTS (
+                    SELECT * FROM `products`
+                    WHERE `media`.`model_id` = `products`.`id`
+                    AND `slug` LIKE '%{$this->input}%'
+                    AND `products`.`deleted_at` IS NULL )");
+            }, 'Артикул');
+        });
 
         $grid->actions(function ($actions) {
             $actions->disableDelete();
