@@ -89,6 +89,11 @@ class ProductController extends AdminController
         $grid->model()->orderBy('id', 'desc');
         $grid->paginate(30);
 
+        $grid->filter(function($filter) {
+            $filter->disableIdFilter(); // Remove the default id filter
+            $filter->like('title', 'Артикул');
+        });
+
         return $grid;
     }
 

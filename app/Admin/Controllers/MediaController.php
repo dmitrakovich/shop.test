@@ -67,7 +67,7 @@ class MediaController extends AdminController
                 $query->whereRaw("EXISTS (
                     SELECT * FROM `products`
                     WHERE `media`.`model_id` = `products`.`id`
-                    AND `slug` LIKE '%{$this->input}%'
+                    AND `title` LIKE '%{$this->input}%'
                     AND `products`.`deleted_at` IS NULL )");
             }, 'Артикул');
         });
