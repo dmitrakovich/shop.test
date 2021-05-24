@@ -23,12 +23,6 @@ class UpdateAvailabilityJob extends AbstractJob
      */
     protected $isManual = false;
     protected $thtime = null;
-
-    const YANDEX_METRIKA_HEADERS = [
-        // 'Accept' => 'application/x-yametrika+json',
-        // 'Content-Type' => 'application/x-yametrika+json',
-        'Authorization' => 'OAuth AgAAAAAb991aAAW4YjwHjdE_60CZpTWD4C4J64o',
-    ];
     /**
      * Create a new job instance.
      *
@@ -103,12 +97,15 @@ class UpdateAvailabilityJob extends AbstractJob
             'path' => '/Ostatki/ostatki.txt',
             'field' => 'modified,md5',
         );
-        $fileInfo = Http::withHeaders(self::YANDEX_METRIKA_HEADERS)
+        $fileInfo = Http::withToken(config('api.yandex.token'), 'OAuth')
                 ->get($url, $params)
                 ->json();
 
         if (empty($fileInfo)) {
             return $this->errorWithReturn('Ошибка! Яндекс Диск не отдал данные о файле.');
+        }
+        if (isset($fileInfo['error'])) {
+            return $this->errorWithReturn('Ошибка получения данных. ' . ($fileInfo['message'] ?? $fileInfo['error']));
         }
         $filedate = explode(',', $availabilityConfig['file']);
         $actionsCount = count($availabilityConfig['publish']);
@@ -123,7 +120,7 @@ class UpdateAvailabilityJob extends AbstractJob
 
 
         $url = 'https://cloud-api.yandex.net:443/v1/disk/resources/download';
-        $downloadLink = Http::withHeaders(self::YANDEX_METRIKA_HEADERS)
+        $downloadLink = Http::withToken(config('api.yandex.token'), 'OAuth')
                 ->get($url, ['path' => '/Ostatki/ostatki.txt'])
                 ->json();
 
