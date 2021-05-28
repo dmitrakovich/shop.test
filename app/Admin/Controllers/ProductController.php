@@ -18,10 +18,13 @@ use App\Models\Collection;
 use Illuminate\Support\Str;
 use App\Admin\Models\Product;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\MessageBag;
+use App\Admin\Actions\Post\Restore;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use App\Admin\Actions\Post\BatchRestore;
 use Encore\Admin\Controllers\AdminController;
 
 class ProductController extends AdminController
@@ -50,7 +53,6 @@ class ProductController extends AdminController
 
         $grid->column('id', __('Id'))->sortable();
 
-
         $grid->column('media', __('Фото'))->display(function ($pictures) {
             /*$media = [];
             foreach ($this->getMedia() as $image) {
@@ -60,10 +62,10 @@ class ProductController extends AdminController
             return optional($this->getFirstMedia())->getUrl('thumb');
         })->image(); // ->carousel();
 
+        $grid->column('deleted_at', 'Опубликован')->display(function ($deleted) {
+            return !$deleted ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
+        })->sortable();
 
-
-
-        $grid->column('publish', __('Publish'))->bool()->sortable();
         $grid->column('slug', __('Slug'));
         $grid->column('title', __('Title'));
         // $grid->column('buy_price', __('Buy price'));
@@ -87,7 +89,15 @@ class ProductController extends AdminController
         // $grid->column('deleted_at', __('Deleted at'));
 
         $grid->model()->orderBy('id', 'desc');
+        $grid->model()->withTrashed();
         $grid->paginate(30);
+
+        $grid->actions (function ($actions) {
+            $actions->add(new Restore());
+        });
+        $grid->batchActions (function($batch) {
+            $batch->add(new BatchRestore());
+        });
 
         $grid->filter(function($filter) {
             $filter->disableIdFilter(); // Remove the default id filter
@@ -105,32 +115,20 @@ class ProductController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Product::findOrFail($id));
-
-        $show->field('id', __('Id'));
-        $show->field('publish', __('Publish'));
-        $show->field('slug', __('Slug'));
-        $show->field('title', __('Title'));
-        $show->field('buy_price', __('Buy price'));
-        $show->field('price', __('Price'));
-        $show->field('old_price', __('Old price'));
-        $show->field('category_id', __('Category id'));
-        $show->field('season_id', __('Season id'));
-        $show->field('brand_id', __('Brand id'));
-        $show->field('color_txt', __('Color txt'));
-        $show->field('fabric_top_txt', __('Fabric top txt'));
-        $show->field('fabric_inner_txt', __('Fabric inner txt'));
-        $show->field('fabric_insole_txt', __('Fabric insole txt'));
-        $show->field('fabric_outsole_txt', __('Fabric outsole txt'));
-        $show->field('heel_txt', __('Heel txt'));
-        $show->field('description', __('Description'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
-        $show->field('deleted_at', __('Deleted at'));
-
-        return $show;
+        return back();
     }
-
+    /**
+     * Restore product by id
+     *
+     * @param integer $productId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function restore(int $productId)
+    {
+        $product = Product::withTrashed()->findOrFail($productId, ['id']);
+        $product->restore();
+        return back();
+    }
     /**
      * Make a form builder.
      *
@@ -140,8 +138,26 @@ class ProductController extends AdminController
     {
         $form = new Form(new Product());
 
+        if ($form->isEditing()) {
+            $product = Product::withTrashed()->find(request('product'));
+
+            $form->tools(function (Form\Tools $tools) use ($product) {
+                if ($product->trashed()) {
+                    $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
+                        <a href="' . route('admin.products.restore', $product->id) . '" class="btn btn-sm btn-success">
+                        <i class="fa fa-history"></i>&nbsp;&nbsp;Восстановить</a></div>');
+                    $tools->disableDelete();
+                }
+                $tools->disableView();
+            });
+        }
+
         $form->column(6, function ($form) {
-            $form->switch('publish', 'Публиковать');
+            $form->html(function ($form) {
+                if ($form->model()->trashed()) {
+                    return '<h4 class="text-red">Товар удален</h4>';
+                }
+            });
             $form->multipleImage('photos', __('Фотографии'))->removable()->downloadable()->sortable();
 
             /* $form->html(function ($form) {
@@ -193,15 +209,15 @@ class ProductController extends AdminController
             $form->currency('old_price', 'Старая цена')->symbol('BYN');
         });
         $form->column(6, function ($form) {
-            $form->multipleSelect('sizes', 'Размеры')->options(Size::all()->pluck('name', 'id'))->default($this->getSizesIdFormRequest())->required();
-            $form->multipleSelect('colors', 'Цвет для фильтра')->options(Color::all()->pluck('name', 'id'));
-            $form->multipleSelect('fabrics', 'Материал для фильтра')->options(Fabric::all()->pluck('name', 'id'));
-            $form->multipleSelect('styles', 'Стиль')->options(Style::all()->pluck('name', 'id'));
-            $form->multipleSelect('heels', 'Тип каблука/подошвы')->options(Heel::all()->pluck('name', 'id'));
+            $form->multipleSelect('sizes', 'Размеры')->options(Size::pluck('name', 'id'))->default($this->getSizesIdFormRequest())->required();
+            $form->multipleSelect('colors', 'Цвет для фильтра')->options(Color::orderBy('name')->pluck('name', 'id'));
+            $form->multipleSelect('fabrics', 'Материал для фильтра')->options(Fabric::orderBy('name')->pluck('name', 'id'));
+            $form->multipleSelect('styles', 'Стиль')->options(Style::orderBy('name')->pluck('name', 'id'));
+            $form->multipleSelect('heels', 'Тип каблука/подошвы')->options(Heel::pluck('name', 'id'));
             $form->select('category_id', 'Категория')->options(Category::getFormatedTree())->default($this->getCategoryIdFromRequeset())->required();
-            $form->select('season_id', 'Сезон')->options(Season::all()->pluck('name','id'))->required();
-            $form->select('brand_id', 'Бренд')->options(Brand::all()->pluck('name','id'))->required()->default(Brand::where('name', request('brand_name'))->value('id'));
-            $form->select('collection_id', 'Коллекция')->options(Collection::all()->pluck('name','id'))->required();
+            $form->select('season_id', 'Сезон')->options(Season::pluck('name','id'))->required();
+            $form->select('brand_id', 'Бренд')->options(Brand::orderBy('name')->pluck('name','id'))->required()->default(Brand::where('name', request('brand_name'))->value('id'));
+            $form->select('collection_id', 'Коллекция')->options(Collection::pluck('name','id'))->required();
             $form->text('color_txt', 'Цвет');
             $form->text('fabric_top_txt', 'Материал верха');
             $form->text('fabric_inner_txt', 'Материал внутри');
@@ -218,7 +234,7 @@ class ProductController extends AdminController
                 3 => 'не выгружать'
             ]);
             $form->text('rating', 'Рейтинг')->disable();
-            $form->multipleSelect('tags', 'Теги')->options(Tag::all()->pluck('name', 'id'));
+            $form->multipleSelect('tags', 'Теги')->options(Tag::pluck('name', 'id'));
         });
 
         $form->column(12, function ($form) {
@@ -267,6 +283,20 @@ class ProductController extends AdminController
         $form->saving(function (Form $form) {
             if (empty($form->slug)) {
                 $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->title);
+            }
+            if ($form->isCreating()) {
+                $existsProduct = Product::withTrashed()
+                    ->where('slug', $form->slug)
+                    ->first(['id']);
+
+                if ($existsProduct) {
+                    $editLink = route('products.edit', $existsProduct->id);
+                    $error = new MessageBag([
+                        'title'   => 'Товар с таким названием есть',
+                        'message' => '<a href="' . $editLink . '">Cсылка на редактирование этого товара<a>',
+                    ]);
+                    return back()->with(compact('error'));
+                }
             }
         });
 
@@ -357,7 +387,7 @@ class ProductController extends AdminController
                 'product_availability' => '',
                 'product_date_added' => date('Y-m-d H:i:s'),
                 'date_modify' => date('Y-m-d H:i:s'),
-                'product_publish' => $form->model()->publish,
+                'product_publish' => !$form->model()->trashed(),
                 'product_tax_id' => 0,
                 'currency_id' => 1,
                 'product_template' => 'default',
@@ -490,7 +520,7 @@ class ProductController extends AdminController
                 'product_availability' => '',
                 'product_date_added' => date('Y-m-d H:i:s'),
                 'date_modify' => date('Y-m-d H:i:s'),
-                'product_publish' => $form->model()->publish,
+                'product_publish' => !$form->model()->trashed(),
                 'product_tax_id' => 0,
                 'currency_id' => 1,
                 'product_template' => 'default',

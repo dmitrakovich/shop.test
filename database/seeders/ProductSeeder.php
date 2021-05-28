@@ -17,6 +17,8 @@ class ProductSeeder extends Seeder
     protected $oldImagesTable = 'cyizj_jshopping_products_images';
     protected $oldSizesTable = 'cyizj_jshopping_products_attr2';
 
+    protected static $currentDateTime;
+
     public $attributesList = [
         'category' => [
             'column' => 'category_id',
@@ -239,6 +241,8 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
+        self::$currentDateTime = date('Y-m-d H:i:s');
+
         if ($this->startId <= 0) {
             DB::table($this->tableName)->truncate();
             DB::table('product_attributes')->truncate();
@@ -325,6 +329,8 @@ class ProductSeeder extends Seeder
                     }
                 }
             }
+
+            $insertData['deleted_at'] = $insertData['publish'] ? null : self::$currentDateTime;
 
             $product = new Product($insertData);
             $product->save();

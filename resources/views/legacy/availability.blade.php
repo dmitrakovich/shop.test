@@ -26,8 +26,8 @@ if (isset($_POST['act'])) {
             }
 			$act_count = count($_POST['publish_list']);
 			if ($act_count>0) {
-                $publish_list = implode(',',array_keys($_POST['publish_list']));
-                Product::whereIn('id', $publish_list)->update(['publish' => true]);
+                $publish_list = array_keys($_POST['publish_list']);
+                Product::withTrashed()->whereIn('id', $publish_list)->restore();
                 foreach ($availabilityConfig['publish'] as $actK => $actV) {
                     if (isset($_POST['publish_list'][$actV['id']])) {
                         $availabilityConfig['publish'][$actK]['status']=1;
@@ -43,8 +43,8 @@ if (isset($_POST['act'])) {
             }
 			$act_count = count($_POST['del_list']);
 			if ($act_count>0) {
-                $del_list = implode(',',array_keys($_POST['del_list']));
-                Product::whereIn('id', $del_list)->update(['publish' => false]);
+                $del_list = array_keys($_POST['del_list']);
+                Product::whereIn('id', $del_list)->delete();
                 foreach ($availabilityConfig['del'] as $actK => $actV) {
                     if (isset($_POST['del_list'][$actV['id']])) {
                         $availabilityConfig['del'][$actK]['status']=1;

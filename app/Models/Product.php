@@ -36,9 +36,7 @@ class Product extends Model implements HasMedia
      */
     protected static function booted()
     {
-        static::addGlobalScope('publish', function (Builder $query) {
-            $query->where('publish', true);
-        });
+        //
     }
     /**
      * Ссылка на товар

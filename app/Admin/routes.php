@@ -24,9 +24,11 @@ Route::group([
     $router->resource('tags', TagController::class);
     $router->resource('brands', BrandController::class);
     $router->resource('collections', CollectionController::class);
-    $router->resource('products', ProductController::class);
     $router->resource('info-pages', InfoPageController::class);
     $router->resource('admin-orders', OrderController::class);
+
+    $router->resource('products', ProductController::class);
+    $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('admin.products.restore');
 
     $router->resource('payment-methods', PaymentController::class);
     $router->resource('delivery-methods', DeliveryController::class);

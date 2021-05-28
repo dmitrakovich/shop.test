@@ -46,7 +46,7 @@ class UpdateProductsRatingJob extends AbstractJob
         $rating = array();
 
         $res_prod = DB::table('products')
-            ->where('publish', true)
+            ->whereNull('deleted_at')
             ->where('price', '<>', 0)
             ->where('label_id', '<>', 3)
             ->selectRaw('MIN(price) AS price_min, MAX(price) AS price_max,
@@ -70,7 +70,7 @@ class UpdateProductsRatingJob extends AbstractJob
 
 
         $res_prod = DB::table('products')
-            ->where('publish', true)
+            ->whereNull('deleted_at')
             ->where('price', '<>', 0)
             ->where('label_id', '<>', 3)
             ->selectRaw('MAX(100*(old_price - price)/old_price) AS discount_max')
@@ -98,7 +98,7 @@ class UpdateProductsRatingJob extends AbstractJob
             IF(category_id IN($false_category),0,100) as cat";
 
         $products = DB::table('products')
-            ->where('publish', true)
+            ->whereNull('deleted_at')
             ->where('price', '<>', 0)
             ->where('label_id', '<>', 3)
             ->selectRaw($select)

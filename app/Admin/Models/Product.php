@@ -18,9 +18,7 @@ class Product extends ProductModel
      */
     protected static function booted()
     {
-        // static::deleting(function(self $product) {
-        //     $product->url()->delete();
-        // });
+        //
     }
     /**
      * Get the class name for polymorphic relations.

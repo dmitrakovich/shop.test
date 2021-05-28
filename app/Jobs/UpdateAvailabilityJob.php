@@ -50,6 +50,7 @@ class UpdateAvailabilityJob extends AbstractJob
         }
 
         $currentProducts = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
+            ->withTrashed()
             ->with('media')
             ->get([
                 'products.id',
@@ -57,7 +58,7 @@ class UpdateAvailabilityJob extends AbstractJob
                 'brands.name as brand',
                 'category_id',
                 'title as name',
-                'publish',
+                'deleted_at',
                 'label_id as label',
             ]);
         $productsSizes = DB::table('product_attributes')
@@ -81,7 +82,7 @@ class UpdateAvailabilityJob extends AbstractJob
                 $allProducts[strtolower($brandName)][$this->smallArt($product->name)] = [
                     'id' => $product->id,
                     'cat_id' => $product->category_id,
-                    'status' => $product->publish,
+                    'status' => (int)!$product->trashed(),
                     'articul' => $product->name,
                     'brand' => $brandName,
                     'size' => $groupedSizesForProducts[$product->id] ?? 'b',
@@ -282,7 +283,7 @@ class UpdateAvailabilityJob extends AbstractJob
                 }
 
                 if (count($q_list) > 0) {
-                    Product::whereIn('id', $imgL)->update(['publish' => true]);
+                    Product::withTrashed()->whereIn('id', $imgL)->restore();
                     $service_message .= ". Опубликовано $act_count";
                 }
                 $checkLog += $act_count;

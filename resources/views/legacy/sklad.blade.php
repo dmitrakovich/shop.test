@@ -32,6 +32,7 @@ $seasonArr = array('17'=>'Лето','18'=>'Деми','19'=>'Зима');
 
 // Продукты
 $res_prod = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
+    ->withTrashed()
     ->with('media')
     // ->with('category')
     ->get([
@@ -40,7 +41,7 @@ $res_prod = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
         'brands.name as brand',
         'category_id as cat_id',
         'title as name',
-        'publish',
+        'deleted_at',
         'label_id as label',
         'price',
         'season_id as season'
@@ -49,7 +50,7 @@ $res_prod = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
 
 // Модели по дате
 $prod_fordate = DB::table('products')
-    ->where('publish', false)
+    ->whereNotNull('deleted_at')
     ->whereRaw('DATEDIFF(NOW(), created_at) < ' . (int)$fltr['days'])
     ->get(['id', 'created_at as adddate']);
 
@@ -70,7 +71,7 @@ foreach ($res_prod as $product) {
 	$itemB = [
 		'id' => $product->id,
 		'cat' =>  $categories[$product->cat_id] ?? '',
-		'status' => $product->publish,
+		'status' => (int)!$product->trashed(),
 		'articul' => $product->name,
 		'brand' => $ibrand,
 		'img_url' => optional($product->getFirstMedia())->getUrl('thumb'),
