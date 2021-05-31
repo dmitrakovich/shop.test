@@ -158,7 +158,7 @@ class ProductController extends AdminController
                     return '<h4 class="text-red">Товар удален</h4>';
                 }
             });
-            $form->multipleImage('photos', __('Фотографии'))->removable()->downloadable()->sortable();
+            $form->multipleImage('photos', __('Фотографии'))->removable()->downloadable(); // ->sortable();
 
             /* $form->html(function ($form) {
                 $imagesBlock = '';
