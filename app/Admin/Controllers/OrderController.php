@@ -49,12 +49,13 @@ class OrderController extends AdminController
             $items = $model->data()->get()->map(function ($item) {
                 return [
                     'image' => "<img src='{$item->product->getFirstMediaUrl()}' style='width:70px'>",
-                    'product' => "<a href='{$item->product->path}' target='_blank'>{$item->product->getFullName()}</a>",
+                    'product' => "<a href='{$item->product->getUrl()}' target='_blank'>{$item->product->getFullName()}</a>",
+                    'availability' => $item->product->trashed() ? '<i class="fa fa-close text-red"></i>' : '<i class="fa fa-check text-green"></i>',
                     'size' => $item->size->name,
                     'price' => "$item->price BYN",
                 ];
             });
-            return new Table(['Фото', 'Товар', 'Размер', 'Цена'], $items->toArray());
+            return new Table(['Фото', 'Товар', 'Наличие', 'Размер', 'Цена'], $items->toArray());
         });
         $grid->column('comment', 'Коммментарий');
         $grid->column('user_addr', 'Адрес');

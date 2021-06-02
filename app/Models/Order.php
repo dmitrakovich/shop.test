@@ -45,7 +45,7 @@ class Order extends Model
     {
         return $this->hasMany(OrderData::class)
             ->with([
-                'product',
+                'product' => function ($query) { $query->withTrashed(); },
                 'size:id,name'
             ]);
     }
