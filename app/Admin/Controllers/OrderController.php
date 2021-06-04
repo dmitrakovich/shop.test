@@ -44,9 +44,9 @@ class OrderController extends AdminController
         // $grid->column('house', __('House'));
 
 
-
+        $grid->model()->with(['data']);
         $grid->column('goods', 'Товары')->expand(function ($model) {
-            $items = $model->data()->get()->map(function ($item) {
+            $items = $model->data->map(function ($item) {
                 return [
                     'image' => "<img src='{$item->product->getFirstMediaUrl()}' style='width:70px'>",
                     'product' => "<a href='{$item->product->getUrl()}' target='_blank'>{$item->product->getFullName()}</a>",
