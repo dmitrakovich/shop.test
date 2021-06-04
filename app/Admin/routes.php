@@ -38,6 +38,7 @@ Route::group([
     $router->resource('media', MediaController::class);
 
     $router->resource('feedbacks', FeedbackController::class);
+    $router->resource('feedbacks.feedback-answers', FeedbackAnswerController::class);
 
     // legacy
     $router->any('availability', AvailiabilityController::class);

@@ -2,13 +2,15 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Actions\RatingAction;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use App\Models\Feedback;
+use Illuminate\Support\Str;
 use App\Admin\Models\Product;
+use App\Admin\Actions\RatingAction;
 use Encore\Admin\Controllers\AdminController;
+use App\Admin\Actions\Feedbacks\ShowAnswersAction;
 
 class FeedbackController extends AdminController
 {
@@ -31,10 +33,16 @@ class FeedbackController extends AdminController
         // $grid->column('id', __('Id'));
         // $grid->column('user_id', __('User id'));
         // $grid->column('yandex_id', __('Yandex id'));
+        $grid->column('id', 'Ответить')->display(function ($feedbackId) {
+            return '<a href="' . route('admin.feedbacks.feedback-answers.create', $feedbackId) . '" target="_blank">Ответить</a>';
+        });
         $grid->column('user_name', __('Имя'));
         $grid->column('user_email', __('Email'))->email();
-        $grid->column('user_phone', __('Телефон'));
+        // $grid->column('user_phone', __('Телефон'));
         $grid->column('text', 'Текст')->limit(240);
+        $grid->column('answers', 'Последний ответ')->display(function ($answers) {
+            return empty($answers) ? null : Str::limit(end($answers)['text'], 240);
+        });
         $grid->column('rating', 'Оценка')->action(RatingAction::class);
         $grid->column('product.title', 'Товар');/*->display(function ($product) {
             return empty($product) ? 'не найден' : "<a href='$product[path]' target='_blank'>$product[title]</a>";
@@ -48,6 +56,10 @@ class FeedbackController extends AdminController
         // $grid->column('deleted_at', __('Deleted at'));
 
         $grid->model()->orderBy('id', 'desc');
+
+        $grid->actions(function ($actions) {
+            $actions->add(new ShowAnswersAction);
+        });
 
         return $grid;
     }

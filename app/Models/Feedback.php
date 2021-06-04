@@ -51,7 +51,7 @@ class Feedback extends Model implements HasMedia
      */
     public function answers()
     {
-        return $this->hasMany(FeedbackAnswer::class)->with('photos');
+        return $this->hasMany(FeedbackAnswer::class)->with('media');
     }
     /**
      * Товары
