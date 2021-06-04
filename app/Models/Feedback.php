@@ -53,6 +53,15 @@ class Feedback extends Model implements HasMedia
     {
         return $this->hasMany(FeedbackAnswer::class)->with('photos');
     }
+    /**
+     * Товары
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class)->withTrashed();
+    }
     protected static function getType($type)
     {
         return in_array($type, self::$availableTypes) ? $type : self::DEFAULT_TYPE;
@@ -92,5 +101,15 @@ class Feedback extends Model implements HasMedia
     {
         $this->addMediaConversion('thumb')->width(150)->height(150);
         $this->addMediaConversion('full')->width(2000);
+    }
+    /**
+     * Farmat date in admin panel
+     *
+     * @param \DateTimeInterface $date
+     * @return string
+     */
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('d.m.Y H:i:s');
     }
 }

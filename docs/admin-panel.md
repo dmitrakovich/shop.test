@@ -13,7 +13,7 @@ php artisan db:seed --class=AdminPanelSeeder
 ## 1) Add controller
 Use the following command to create a controller for `App\User` model
 ```shell
-php artisan admin:make UserController --model=App\User
+php artisan admin:make UserController --model=App\Models\User
 ```
 
 ## 2) Add route

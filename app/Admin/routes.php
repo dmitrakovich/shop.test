@@ -9,6 +9,7 @@ Admin::routes();
 
 Route::group([
     'prefix'        => config('admin.route.prefix'),
+    'as'            => config('admin.route.prefix') . '.',
     'namespace'     => config('admin.route.namespace'),
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
@@ -35,6 +36,8 @@ Route::group([
 
     $router->resource('banners', BannerController::class);
     $router->resource('media', MediaController::class);
+
+    $router->resource('feedbacks', FeedbackController::class);
 
     // legacy
     $router->any('availability', AvailiabilityController::class);
