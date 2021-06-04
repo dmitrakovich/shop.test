@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\RatingAction;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -34,7 +35,7 @@ class FeedbackController extends AdminController
         $grid->column('user_email', __('Email'))->email();
         $grid->column('user_phone', __('Телефон'));
         $grid->column('text', 'Текст')->limit(240);
-        $grid->column('rating', 'Оценка');
+        $grid->column('rating', 'Оценка')->action(RatingAction::class);
         $grid->column('product.title', 'Товар');/*->display(function ($product) {
             return empty($product) ? 'не найден' : "<a href='$product[path]' target='_blank'>$product[title]</a>";
         });*/
