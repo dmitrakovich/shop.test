@@ -41,7 +41,7 @@ class FeedbackController extends Controller
             'product_id' => 977,
             'type_id' => 1,
             'view_only_posted' => true,
-            'publish' => true,
+            'publish' => false,
             'ip' => $request->ip()
         ]);
 
