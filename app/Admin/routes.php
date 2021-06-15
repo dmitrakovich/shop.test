@@ -14,7 +14,7 @@ Route::group([
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
 
-    $router->get('/', 'HomeController@index')->name('admin.home');
+    $router->get('/', 'HomeController@index')->name('home');
     $router->resource('users', UserController::class);
     $router->resource('categories', CategoryController::class);
     $router->resource('fabrics', FabricController::class);
@@ -26,10 +26,10 @@ Route::group([
     $router->resource('brands', BrandController::class);
     $router->resource('collections', CollectionController::class);
     $router->resource('info-pages', InfoPageController::class);
-    $router->resource('admin-orders', OrderController::class);
+    $router->resource('orders', OrderController::class);
 
     $router->resource('products', ProductController::class);
-    $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('admin.products.restore');
+    $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('products.restore');
 
     $router->resource('payment-methods', PaymentController::class);
     $router->resource('delivery-methods', DeliveryController::class);
