@@ -40,6 +40,8 @@ Route::group([
     $router->resource('feedbacks', FeedbackController::class);
     $router->resource('feedbacks.feedback-answers', FeedbackAnswerController::class);
 
+    $router->resource('sales', SaleController::class);
+
     // legacy
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);
