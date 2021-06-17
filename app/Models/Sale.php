@@ -46,4 +46,15 @@ class Sale extends Model
                 ->orWhereNull('end_datetime');
         });
     }
+
+    /**
+     * Farmat date
+     *
+     * @param \DateTimeInterface $date
+     * @return string
+     */
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('d.m.Y H:i:s');
+    }
 }

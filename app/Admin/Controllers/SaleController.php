@@ -3,10 +3,14 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Sale;
-use Encore\Admin\Controllers\AdminController;
+use App\Models\Style;
+use App\Models\Season;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\Category;
+use App\Models\Collection;
+use Encore\Admin\Controllers\AdminController;
 
 class SaleController extends AdminController
 {
@@ -18,6 +22,16 @@ class SaleController extends AdminController
     protected $title = 'Sale';
 
     /**
+     * Algorithms list
+     */
+    protected const ALGORITHMS_LIST = [
+        'fake' => 'Ложная',
+        'simple' => 'Простая',
+        'count' => 'От кол-ва',
+        'ascending' => 'По возрастанию'
+    ];
+
+    /**
      * Make a grid builder.
      *
      * @return Grid
@@ -27,23 +41,23 @@ class SaleController extends AdminController
         $grid = new Grid(new Sale());
 
         $grid->column('id', __('Id'));
-        $grid->column('title', __('Title'));
-        $grid->column('label_text', __('Label text'));
-        $grid->column('start_datetime', __('Start datetime'));
-        $grid->column('end_datetime', __('End datetime'));
-        $grid->column('algorithm', __('Algorithm'));
-        $grid->column('sale', __('Sale'));
-        $grid->column('categories', __('Categories'));
-        $grid->column('collections', __('Collections'));
-        $grid->column('styles', __('Styles'));
-        $grid->column('seasons', __('Seasons'));
-        $grid->column('only_new', __('Only new'));
-        $grid->column('add_client_sale', __('Add client sale'));
-        $grid->column('has_installment', __('Has installment'));
-        $grid->column('has_fitting', __('Has fitting'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('deleted_at', __('Deleted at'));
+        $grid->column('title', 'Название');
+        $grid->column('label_text', 'Текст на шильде');
+        $grid->column('start_datetime', 'Дата начала');
+        $grid->column('end_datetime', 'Дата завершения');
+        $grid->column('algorithm', 'Алгоритм')->using(self::ALGORITHMS_LIST);
+        $grid->column('sale', 'Скидка');
+        // $grid->column('categories', __('Categories'));
+        // $grid->column('collections', __('Collections'));
+        // $grid->column('styles', __('Styles'));
+        // $grid->column('seasons', __('Seasons'));
+        // $grid->column('only_new', __('Only new'));
+        // $grid->column('add_client_sale', __('Add client sale'));
+        // $grid->column('has_installment', __('Has installment'));
+        // $grid->column('has_fitting', __('Has fitting'));
+        // $grid->column('created_at', __('Created at'));
+        // $grid->column('updated_at', __('Updated at'));
+        // $grid->column('deleted_at', __('Deleted at'));
 
         return $grid;
     }
@@ -56,28 +70,7 @@ class SaleController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Sale::findOrFail($id));
-
-        $show->field('id', __('Id'));
-        $show->field('title', __('Title'));
-        $show->field('label_text', __('Label text'));
-        $show->field('start_datetime', __('Start datetime'));
-        $show->field('end_datetime', __('End datetime'));
-        $show->field('algorithm', __('Algorithm'));
-        $show->field('sale', __('Sale'));
-        $show->field('categories', __('Categories'));
-        $show->field('collections', __('Collections'));
-        $show->field('styles', __('Styles'));
-        $show->field('seasons', __('Seasons'));
-        $show->field('only_new', __('Only new'));
-        $show->field('add_client_sale', __('Add client sale'));
-        $show->field('has_installment', __('Has installment'));
-        $show->field('has_fitting', __('Has fitting'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
-        $show->field('deleted_at', __('Deleted at'));
-
-        return $show;
+        return back();
     }
 
     /**
@@ -89,21 +82,48 @@ class SaleController extends AdminController
     {
         $form = new Form(new Sale());
 
-        $form->text('title', __('Title'));
-        $form->text('label_text', __('Label text'));
-        $form->datetime('start_datetime', __('Start datetime'))->default(date('Y-m-d H:i:s'));
-        $form->datetime('end_datetime', __('End datetime'))->default(date('Y-m-d H:i:s'));
-        $form->text('algorithm', __('Algorithm'))->default('simple');
-        $form->text('sale', __('Sale'));
-        $form->textarea('categories', __('Categories'));
-        $form->textarea('collections', __('Collections'));
-        $form->textarea('styles', __('Styles'));
-        $form->textarea('seasons', __('Seasons'));
-        $form->switch('only_new', __('Only new'));
-        $form->switch('add_client_sale', __('Add client sale'));
-        $form->switch('has_installment', __('Has installment'))->default(1);
-        $form->switch('has_fitting', __('Has fitting'))->default(1);
+        $allCategoriesList = Category::getFormatedTree();
+        $allCollectionsList = Collection::pluck('name','id')->toArray();
+        $allStylesList = Style::orderBy('name')->pluck('name', 'id')->toArray();
+        $allSeasonsList = Season::pluck('name','id')->toArray();
+
+        $form->text('title', 'Название')->required();
+        $form->text('label_text', 'Текст на шильде');
+        $form->datetime('start_datetime', 'Дата начала')->default(date('Y-m-d H:i:s'));
+        $form->datetime('end_datetime', 'Дата завершения')->default(date('Y-m-d 23:59:59'));
+        $form->select('algorithm', 'Алгоритм')->options(self::ALGORITHMS_LIST)->default('simple');
+        $form->text('sale', 'Скидка')->required();
+        $form->listbox('categories', 'Категории')->options($allCategoriesList)->default(array_keys($allCategoriesList));
+        $form->listbox('collections', 'Коллекции')->options($allCollectionsList)->default(array_keys($allCollectionsList));
+        $form->listbox('styles', 'Стиль')->options($allStylesList)->default(array_keys($allStylesList));
+        $form->listbox('seasons', 'Сезон')->options($allSeasonsList)->default(array_keys($allSeasonsList));
+        $form->switch('only_new', 'Участвуют только новинки');
+        $form->switch('add_client_sale', 'Клиентская скидка суммируется');
+        $form->switch('has_installment', 'Действует рассрочка')->default(1);
+        $form->switch('has_fitting', 'Действует примерка')->default(1);
+
+        $form->saving(function (Form $form) use ($allCategoriesList, $allCollectionsList, $allStylesList, $allSeasonsList) {
+            $form->categories = $this->prepareIdList($form->categories, $allCategoriesList);
+            $form->collections = $this->prepareIdList($form->collections, $allCollectionsList);
+            $form->styles = $this->prepareIdList($form->styles, $allStylesList);
+            $form->seasons = $this->prepareIdList($form->seasons, $allSeasonsList);
+        });
 
         return $form;
+    }
+
+    /**
+     * Prepare to save id list
+     *
+     * @param array $ids
+     * @param array $allEntities
+     * @return array
+     */
+    protected function prepareIdList(array $ids, array $allEntities)
+    {
+        if (count($ids) == count($allEntities)) {
+            return null;
+        }
+        return array_map('intval', array_filter($ids));
     }
 }
