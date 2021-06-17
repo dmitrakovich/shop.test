@@ -60,6 +60,7 @@ class MediaController extends AdminController
         $grid->model()->orderBy('id', 'desc');
         // $grid->model()->where('custom_properties', 'like', '%video%');
         $grid->model()->where('model_type', 'App\Models\Product');
+        $grid->model()->with(['model']);
 
         $grid->filter(function($filter) {
             $filter->disableIdFilter(); // Remove the default id filter

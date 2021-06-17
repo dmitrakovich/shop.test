@@ -9,7 +9,7 @@ class Media extends MediaModel
 {
     public function model(): MorphTo
     {
-        return $this->morphTo()->withoutGlobalScope('publish');
+        return $this->morphTo()->withTrashed();
     }
     /**
      * Get the class name for polymorphic relations.
