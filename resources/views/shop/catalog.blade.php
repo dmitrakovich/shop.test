@@ -50,6 +50,11 @@
                     <div class="col-3 js-product-item product-item mb-3 text-center text-lg-left">
                         <a href="{{ $product->getUrl() }}">
                             <div class="mb-3 image position-relative">
+                                @if ($product->getSalePercentage())
+                                    <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 0; background: #D22020;">
+                                        -{{ $product->getSalePercentage() }}%
+                                    </span>
+                                @endif
                                 <img
                                     src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
                                     alt="{{ $product->title }}"
@@ -70,11 +75,11 @@
                             </div>
                         </a>
                         <b>{{ $product->getFullName() }}</b> <br>
-                        @if ($product->price < $product->old_price)
-                            <s>{{ round($product->old_price, 2) }} руб.</s>
-                            <font color="#D22020">{{ round($product->price, 2) }} руб.</font><br>
+                        @if ($product->getPrice() < $product->getOldPrice())
+                            <s>{{ round($product->getOldPrice(), 2) }} руб.</s>
+                            <font color="#D22020">{{ round($product->getPrice(), 2) }} руб.</font><br>
                         @else
-                            {{ round($product->price, 2) }} руб.<br>
+                            {{ round($product->getPrice(), 2) }} руб.<br>
                         @endif
                         <span class="text-mutted">{{ $product->sizes->implode('name', ' | ') }}</span>
                     </div>

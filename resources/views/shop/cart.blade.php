@@ -25,7 +25,17 @@
                                         <div class="col-12 col-md-2 mt-md-2">{{ DeclensionNoun::make($item->count, 'пара') }}</div>
                                         <div class="col-12 col-md-2 mt-md-2">размер {{ $item->size->name}}</div>
                                         <div class="col-12 col-md-2 mt-md-2">{{ $item->product->color_txt }}</div>
-                                        <div class="col-12 col-md-3 mt-md-2 mb-4">{{ $item->product->price }} BYN</div>
+                                        <div class="col-12 col-md-3 mt-md-2 mb-4">
+                                            @if ($item->product->getPrice() < $item->product->getOldPrice())
+                                                <s class="text-muted">{{ round($item->product->getOldPrice(), 2) }} BYN</s>&nbsp;
+                                                <span class="text-white px-1" style="background-color: #D22020">
+                                                    -{{ $item->product->getSalePercentage() }}%
+                                                </span><br>
+                                                <font color="#D22020">{{ round($item->product->getPrice(), 2) }} BYN</font>
+                                            @else
+                                                {{ round($item->product->getPrice(), 2) }} BYN<br>
+                                            @endif
+                                        </div>
 
                                         <div class="col-12 col-auto mt-auto position-absolute fixed-bottom">
                                             <div class="row">
@@ -97,8 +107,14 @@
                             <div class="col-auto">
                                 СТОИМОСТЬ ЗАКАЗА
                             </div>
-                            <div class="col-auto">
-                                {{ Cart::getTotalPrice() }} BYN
+                            <div class="col-auto text-right">
+                                @if (Cart::getTotalPrice() < Cart::getTotalOldPrice())
+                                    <s class="text-muted">{{ round(Cart::getTotalOldPrice(), 2) }} BYN</s>
+                                    <strong>{{ Cart::getTotalPrice() }} BYN</strong><br>
+                                    <font color="#D22020">Вы экономите {{ round(Cart::getTotalOldPrice() - Cart::getTotalPrice(), 2) }} BYN</font>
+                                @else
+                                    <strong>{{ Cart::getTotalPrice() }} BYN</strong>
+                                @endif
                             </div>
                         </div>
                         <div class="row justify-content-between mb-2">

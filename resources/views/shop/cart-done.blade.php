@@ -12,7 +12,7 @@
     </p>
     <h3 class="text-danger">Заказ №{{ session('order_info')['orderNum'] }}</h3>
     <p>
-        от {{ date('j') }} декабря 2020 на сумму {{ session('order_info')['totalPrice'] }} BYN
+        от {{ date('j') }} июля 2021 на сумму {{ session('order_info')['totalPrice'] }} BYN
     </p>
     <div class="row px-5 py-4 text-left" style="background: #FBFBFD">
 

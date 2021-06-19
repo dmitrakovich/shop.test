@@ -269,7 +269,7 @@ class Product extends Model implements HasMedia
      *
      * @return void
      */
-    protected function applySale()
+    public function applySale()
     {
         if (!isset($this->sale)) {
             Sale::applyForProduct($this);
@@ -277,7 +277,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * get product ptice
+     * get product price
      *
      * @return float
      */
@@ -285,5 +285,26 @@ class Product extends Model implements HasMedia
     {
         $this->applySale();
         return $this->sale['price'] ?? $this->price;
+    }
+
+    /**
+     * get product old price
+     *
+     * @return float
+     */
+    public function getOldPrice()
+    {
+        return $this->old_price > $this->price ? $this->old_price : $this->price;
+    }
+
+    /**
+     * Calculate sale percentage
+     *
+     * @return integer
+     */
+    public function getSalePercentage(): int
+    {
+        $this->applySale();
+        return ceil(1 - ($this->getPrice() / $this->getOldPrice()) * 100);
     }
 }

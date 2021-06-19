@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Facades\Cart;
+use App\Facades\Sale;
 use App\Models\Product;
 use App\Models\User;
 use Deliveries\DeliveryMethod;
@@ -15,10 +16,19 @@ class CartController extends BaseController
     public function index()
     {
         $cart = Cart::withData();
+        Sale::applyForCart($cart);
+
         $user = auth()->user() ?? new User();
 
         $deliveriesList = DeliveryMethod::where('active', true)->pluck('name', 'class');
         $paymentsList = PaymentMethod::where('active', true)->pluck('name', 'class');
+
+        if (!Sale::hasFitting()) {
+            unset($deliveriesList['BelpostCourierFitting']);
+        }
+        if (!Sale::hasInstallment()) {
+            unset($paymentsList['Installment']);
+        }
 
         return view('shop.cart', compact('cart', 'user', 'deliveriesList', 'paymentsList'));
     }

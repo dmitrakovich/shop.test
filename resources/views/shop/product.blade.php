@@ -3,6 +3,12 @@
     <div class="row">
         <div class="col-12 col-md-6 col-xl-7">
 
+            @if ($product->getSalePercentage())
+                <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 10px; background: #D22020; z-index: 1;">
+                    -{{ $product->getSalePercentage() }}%
+                </span>
+            @endif
+
             <div class="slider-for">
                 @foreach ($product->getMedia() as $image)
                     @if ($image->hasCustomProperty('video'))
@@ -56,13 +62,13 @@
                 <div class="row mt-4">
                     <div class="col-12 col-lg-6 price-block">
                         <div class="row">
-                            @if ($product->price < $product->old_price)
+                            @if ($product->getPrice() < $product->getOldPrice())
                                 <div class="col-auto price price-old">
-                                    {{ $product->old_price }}
+                                    {{ $product->getOldPrice() }}
                                 </div>
                             @endif
                             <div class="col-auto price price-new">
-                                {{ $product->price }} руб.
+                                {{ $product->getPrice() }} руб.
                             </div>
                         </div>
                     </div>
@@ -92,9 +98,11 @@
                 </div>
 
                 <div class="row my-4">
-                    {{-- <div class="col-12 py-3 py-xl-4 text-center" style="background: #EEF6FC;">
-                        -30% на вторую и -50% на третью пару до конца апреля
-                    </div> --}}
+                    @if (!empty($product->sale['label']))
+                        <div class="col-12 py-3 py-xl-4 text-center" style="background: #EEF6FC;">
+                            {{ $product->sale['label'] }}
+                        </div>
+                    @endif
                 </div>
 
                 {{-- <div class="row">

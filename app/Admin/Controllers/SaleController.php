@@ -109,6 +109,15 @@ class SaleController extends AdminController
             $form->seasons = $this->prepareIdList($form->seasons, $allSeasonsList);
         });
 
+        // hotfix
+        $form->saved(function (Form $form) {
+            $form->model()->categories = empty($form->model()->categories) ? null : $form->model()->categories;
+            $form->model()->collections = empty($form->model()->collections) ? null : $form->model()->collections;
+            $form->model()->styles = empty($form->model()->styles) ? null : $form->model()->styles;
+            $form->model()->seasons = empty($form->model()->seasons) ? null : $form->model()->seasons;
+            $form->model()->save();
+        });
+
         return $form;
     }
 
@@ -121,9 +130,10 @@ class SaleController extends AdminController
      */
     protected function prepareIdList(array $ids, array $allEntities)
     {
+        $ids = array_filter($ids);
         if (count($ids) == count($allEntities)) {
             return null;
         }
-        return array_map('intval', array_filter($ids));
+        return array_map('intval', $ids);
     }
 }

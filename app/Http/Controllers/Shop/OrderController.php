@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Facades\Cart;
+use App\Facades\Sale;
 use App\Models\Order;
 use App\Models\CartData;
 use App\Mail\OrderCreated;
@@ -64,6 +65,7 @@ class OrderController extends BaseController
             $cart = Cart::withData();
             abort_if(empty($cart['items']) || $cart->items->isEmpty(), 404);
         }
+        Sale::applyForCart($cart);
 
         $order = Order::create([
             'user_name' => $userData['name'],
@@ -101,9 +103,9 @@ class OrderController extends BaseController
                 'count' => $item->count,
                 'buy_price' => $item->product->buy_price,
                 'price' => $item->product->price,
-                'old_price' => $item->product->old_price,
-                'current_price' => $item->product->price,
-                'discount' => 0,
+                'old_price' => $item->product->getOldPrice(),
+                'current_price' => $item->product->getPrice(),
+                'discount' => $item->product->getSalePercentage(),
             ]);
         }
 

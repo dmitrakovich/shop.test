@@ -182,16 +182,16 @@
                                 {{-- {{PROMOCODE}} --}}
                             </td>
                             <td width="150px" valign="middle" align="center" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">
-                                @if ($item->old_price > $item->price)
-                                    <span style="color: #C0976B;">{{ ($item->price / $item->old_price) * 100 }}%</span> ({{ $item->old_price - $item->price }})<br>
+                                @if ($item->discount > 0)
+                                    <span style="color: #C0976B;">{{ $item->discount }}%</span> ({{ $item->old_price - $item->current_price }} BYN)<br>
                                 @endif
                                 {{-- <span style="color: #C0976B;">{{MODEL_PROMO_PERCENT}}</span> ({{MODEL_PROMO_SUMM}}) --}}
                             </td>
                             <td width="120px" valign="middle" align="center" style="font-family:Roboto, Verdana; font-size:16px; color:#C0976B; font-weight: bold;">
-                                @if ($item->old_price > $item->price)
+                                @if ($item->old_price > $item->current_price)
                                     <span style="color: #777777; text-decoration: line-through; font-size:14px;">{{ $item->old_price }} BYN</span><br>
                                 @endif
-                                {{ $item->price }} BYN
+                                {{ $item->current_price }} BYN
                             </td>
                             <td style="border-right: 1px solid #DDDDDD" width="10px" valign="top" align="center"></td>
                         </tr>
@@ -211,7 +211,7 @@
 					<tr colspan="5" height="10px;"></tr>
 					<tr>
 						<td width="100"></td>
-						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Стоимость моделей (без скидки)</td>
+						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Стоимость моделей <br> (без скидки)</td>
 						<td width="20"></td>
 						<td width="170" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{{ $order->getMaxItemsPrice() }} BYN</td>
 						<td width="10px"></td>

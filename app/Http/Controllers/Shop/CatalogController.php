@@ -44,6 +44,9 @@ class CatalogController extends BaseController
     {
         // в будущем создать отдельный view для подгрузки только моделей,
         // а не всей страницы целиком
+
+        // cursor
+        // @see https://laravel.demiart.ru/offset-vs-cursor-pagination/
     }
 
     /**
@@ -108,6 +111,7 @@ class CatalogController extends BaseController
                 // 'color',
                 'fabrics',
                 'media',
+                'styles',
             ])
             ->search($request->input('search'))
             ->sorting($sort)

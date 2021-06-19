@@ -54,7 +54,7 @@ class Order extends Model
     {
         $price = 0;
         foreach ($this->data as $item) {
-            $price += ($item->price * $item->count);
+            $price += ($item->current_price * $item->count);
         }
         return $price;
     }
@@ -63,7 +63,7 @@ class Order extends Model
     {
         $price = 0;
         foreach ($this->data as $item) {
-            $price += (($item->old_price > $item->price ? $item->old_price : $item->price) * $item->count);
+            $price += ($item->old_price * $item->count);
         }
         return $price;
     }
