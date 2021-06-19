@@ -25,10 +25,10 @@ class SaleController extends AdminController
      * Algorithms list
      */
     protected const ALGORITHMS_LIST = [
-        'fake' => 'Ложная',
-        'simple' => 'Простая',
-        'count' => 'От кол-ва',
-        'ascending' => 'По возрастанию'
+        Sale::ALGORITHM_FAKE => 'Ложная',
+        Sale::ALGORITHM_SIMPLE => 'Простая',
+        Sale::ALGORITHM_COUNT => 'От кол-ва',
+        Sale::ALGORITHM_ASCENDING => 'По возрастанию'
     ];
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Facades\Sale;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,28 +24,21 @@ class Product extends Model implements HasMedia
 {
     use SoftDeletes;
     use InteractsWithMedia;
+
     /**
      * The attributes that aren't mass assignable.
      *
      * @var array
      */
     protected $guarded = [];
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        //
-    }
+
     /**
      * Ссылка на товар
      *
      * @var string
      */
     protected $url = null;
-    //
+
     /**
      * Категория товара
      *
@@ -268,5 +262,28 @@ class Product extends Model implements HasMedia
             $query->orWhere($column, 'like', "%$value%");
         }
         return $query;
+    }
+
+    /**
+     * Применить акцияю к продукту
+     *
+     * @return void
+     */
+    protected function applySale()
+    {
+        if (!isset($this->sale)) {
+            Sale::applyForProduct($this);
+        }
+    }
+
+    /**
+     * get product ptice
+     *
+     * @return float
+     */
+    public function getPrice()
+    {
+        $this->applySale();
+        return $this->sale['price'] ?? $this->price;
     }
 }
