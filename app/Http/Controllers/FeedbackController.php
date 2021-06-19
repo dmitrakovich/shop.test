@@ -18,6 +18,7 @@ class FeedbackController extends Controller
         $type = Feedback::getType($type);
 
         $feedbacks = Feedback::with(['answers', 'media'])
+            ->where('publish', true)
             ->latest()
             ->type($type)
             ->paginate(50);
