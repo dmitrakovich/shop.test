@@ -305,6 +305,6 @@ class Product extends Model implements HasMedia
     public function getSalePercentage(): int
     {
         $this->applySale();
-        return ceil(1 - ($this->getPrice() / $this->getOldPrice()) * 100);
+        return ceil((1 - ($this->getPrice() / $this->getOldPrice())) * 100);
     }
 }

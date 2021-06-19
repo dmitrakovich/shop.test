@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Sale;
 use App\Mail\OrderCreated;
 use App\Models\Order;
+use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,22 +15,12 @@ class DebugController extends Controller
 {
     public function index()
     {
-
-
         // php artisan make:mail OrderShipped
 
         $email = 'dmitrakovich.andrey@yandex.by';
-        $order = Order::with('data')->find(18);
+        $order = Order::with('data')->find(62);
 
-        // dd(
-        //     $order,
-        //     $order->getMaxItemsPrice(),
-        // );
-
-
-
-        Mail::to($email)->send(new OrderCreated($order));
-
+        // Mail::to($email)->send(new OrderCreated($order));
 
         return view('emails.order-created', compact('order'));
 
