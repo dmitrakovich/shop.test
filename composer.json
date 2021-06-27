@@ -15,7 +15,7 @@
     ],
     "require": {
         "php": "^7.3",
-        "default-089/sxgeo": "0.15.*@dev",
+        "default-089/sxgeo": "0.16.*@dev",
         "diglactic/laravel-breadcrumbs": "^6.0",
         "drandin/declension-nouns": "dev-master",
         "encore/laravel-admin": "^1.8",

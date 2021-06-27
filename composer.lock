@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f4ae8f42f5fa01ab61e03497bf142ca",
+    "content-hash": "d9c699f39c4f4ab2e7333fa8e629186a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -124,12 +124,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/default-089/sxgeo.git",
-                "reference": "666d0de445d583164a28e3ae705e9237ef3a3575"
+                "reference": "2a46aa513727f24af811a46b4115c8ddc73937d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/default-089/sxgeo/zipball/666d0de445d583164a28e3ae705e9237ef3a3575",
-                "reference": "666d0de445d583164a28e3ae705e9237ef3a3575",
+                "url": "https://api.github.com/repos/default-089/sxgeo/zipball/2a46aa513727f24af811a46b4115c8ddc73937d4",
+                "reference": "2a46aa513727f24af811a46b4115c8ddc73937d4",
                 "shasum": ""
             },
             "require": {
@@ -146,7 +146,7 @@
                     }
                 },
                 "branch-alias": {
-                    "dev-master": "0.15-dev"
+                    "dev-master": "0.16-dev"
                 }
             },
             "autoload": {
@@ -169,7 +169,7 @@
                 "laravel 7",
                 "location"
             ],
-            "time": "2021-03-24T11:39:20+00:00"
+            "time": "2021-06-27T16:07:23+00:00"
         },
         {
             "name": "diglactic/laravel-breadcrumbs",
