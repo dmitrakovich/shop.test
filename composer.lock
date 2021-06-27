@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2200acf0612c2c686102127774ca2943",
+    "content-hash": "2f4ae8f42f5fa01ab61e03497bf142ca",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -117,6 +117,59 @@
                 }
             ],
             "time": "2020-08-18T23:57:15+00:00"
+        },
+        {
+            "name": "default-089/sxgeo",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/default-089/sxgeo.git",
+                "reference": "666d0de445d583164a28e3ae705e9237ef3a3575"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/default-089/sxgeo/zipball/666d0de445d583164a28e3ae705e9237ef3a3575",
+                "reference": "666d0de445d583164a28e3ae705e9237ef3a3575",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Scriptixru\\SypexGeo\\SypexGeoServiceProvider"
+                    ],
+                    "aliases": {
+                        "SxGeo": "Scriptixru\\SypexGeo\\SypexGeoFacade"
+                    }
+                },
+                "branch-alias": {
+                    "dev-master": "0.15-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Scriptixru\\SypexGeo\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Dmitrakovich Andrey",
+                    "email": "dmitrievich.a.d@gmail.com"
+                }
+            ],
+            "description": "Supports GeoIP services (sypexgeo.net).",
+            "keywords": [
+                "geoip",
+                "geolocation",
+                "laravel",
+                "laravel 7",
+                "location"
+            ],
+            "time": "2021-03-24T11:39:20+00:00"
         },
         {
             "name": "diglactic/laravel-breadcrumbs",
@@ -9205,6 +9258,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "default-089/sxgeo": 20,
         "drandin/declension-nouns": 20,
         "spatie/laravel-medialibrary": 20
     },
