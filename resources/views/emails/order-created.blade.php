@@ -183,15 +183,15 @@
                             </td>
                             <td width="150px" valign="middle" align="center" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">
                                 @if ($item->discount > 0)
-                                    <span style="color: #C0976B;">{{ $item->discount }}%</span> ({{ $item->old_price - $item->current_price }} BYN)<br>
+                                    <span style="color: #C0976B;">{{ $item->discount }}%</span>({!! Currency::format($item->old_price - $item->current_price, $order->currency) !!})<br>
                                 @endif
                                 {{-- <span style="color: #C0976B;">{{MODEL_PROMO_PERCENT}}</span> ({{MODEL_PROMO_SUMM}}) --}}
                             </td>
                             <td width="120px" valign="middle" align="center" style="font-family:Roboto, Verdana; font-size:16px; color:#C0976B; font-weight: bold;">
                                 @if ($item->old_price > $item->current_price)
-                                    <span style="color: #777777; text-decoration: line-through; font-size:14px;">{{ $item->old_price }} BYN</span><br>
+                                    <span style="color: #777777; text-decoration: line-through; font-size:14px;">{!! Currency::format($item->old_price, $order->currency) !!}</span><br>
                                 @endif
-                                {{ $item->current_price }} BYN
+                                {!! Currency::format($item->current_price, $order->currency) !!}
                             </td>
                             <td style="border-right: 1px solid #DDDDDD" width="10px" valign="top" align="center"></td>
                         </tr>
@@ -213,7 +213,7 @@
 						<td width="100"></td>
 						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Стоимость моделей <br> (без скидки)</td>
 						<td width="20"></td>
-						<td width="170" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{{ $order->getMaxItemsPrice() }} BYN</td>
+						<td width="170" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{!! Currency::format($order->getMaxItemsPrice(), $order->currency) !!}</td>
 						<td width="10px"></td>
 					</tr>
 
@@ -221,7 +221,7 @@
 						<td width="100"></td>
 						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Скидка</td>
 						<td width="20px"></td>
-						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{{ $order->getMaxItemsPrice() - $order->getItemsPrice() }} BYN</td>
+						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{!! Currency::format($order->getMaxItemsPrice() - $order->getItemsPrice(), $order->currency) !!}</td>
 						<td width="10px"></td>
 					</tr>
 
@@ -251,7 +251,7 @@
 						<td width="100"></td>
 						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:20px; color:#222222; font-weight: bold;">ИТОГО</td>
 						<td width="20px"></td>
-						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:20px; color:#C0976B; font-weight: bold;">{{ $order->getTotalPrice() }} BYN</td>
+						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:20px; color:#C0976B; font-weight: bold;">{!! Currency::format($order->getTotalPrice(), $order->currency) !!}</td>
 						<td width="10px"></td>
 					</tr>
 					<tr><td colspan="5" height="10px"></td></tr>

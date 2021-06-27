@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Facades\Currency;
 use App\Facades\Sale;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
@@ -277,14 +278,51 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Get fianl price after apply other sales
+     *
+     * @return float
+     */
+    protected function getFinalPrice()
+    {
+        if (!isset($this->final_price)) {
+            $this->applySale();
+            $this->final_price = $this->sale['price'] ?? $this->price;
+        }
+        return $this->final_price;;
+    }
+
+    /**
      * get product price
      *
      * @return float
      */
     public function getPrice()
     {
-        $this->applySale();
-        return $this->sale['price'] ?? $this->price;
+        return Currency::convert($this->getFinalPrice());
+    }
+
+    /**
+     * get product price
+     *
+     * @return float
+     */
+    public function getFormattedPrice()
+    {
+        return Currency::convertAndFormat($this->getFinalPrice());
+    }
+
+    /**
+     * Get fianl old price after apply other sales
+     *
+     * @return float
+     */
+    protected function getFinalOldPrice()
+    {
+        if (!isset($this->final_old_price)) {
+            $this->applySale();
+            $this->final_old_price = $this->old_price > $this->price ? $this->old_price : $this->price;
+        }
+        return $this->final_old_price;
     }
 
     /**
@@ -294,7 +332,17 @@ class Product extends Model implements HasMedia
      */
     public function getOldPrice()
     {
-        return $this->old_price > $this->price ? $this->old_price : $this->price;
+        return Currency::convert($this->getFinalOldPrice());
+    }
+
+    /**
+     * get product old price
+     *
+     * @return float
+     */
+    public function getFormattedOldPrice()
+    {
+        return Currency::convertAndFormat($this->getFinalOldPrice());
     }
 
     /**
@@ -304,7 +352,6 @@ class Product extends Model implements HasMedia
      */
     public function getSalePercentage(): int
     {
-        $this->applySale();
-        return ceil((1 - ($this->getPrice() / $this->getOldPrice())) * 100);
+        return ceil((1 - ($this->getFinalPrice() / $this->getFinalOldPrice())) * 100);
     }
 }

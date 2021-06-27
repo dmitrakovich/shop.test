@@ -6,8 +6,10 @@ use App\Facades\Cart;
 use App\Facades\Sale;
 use App\Models\Order;
 use App\Models\CartData;
+use App\Facades\Currency;
 use App\Mail\OrderCreated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StoreOrderRequest;
@@ -74,8 +76,8 @@ class OrderController extends BaseController
             'email' => $userData['email'] ?? null,
             'phone' => $userData['phone'],
             // 'comment' => $request->input('comment'),
-            'currency' => 'BYN',
-            'rate' => 1, // CurrencyFacade::getCurrentCurrencyData()->rate,
+            'currency' => Currency::getCurrentCurrency()->code,
+            'rate' => Currency::getCurrentCurrency()->rate,
             // 'promocode_id' => Cart::getPromocodeId(),
             // 'country' => $address['country'] ?? null,
             // 'region' => $address['administrative_area_level_1'] ?? null,
@@ -112,15 +114,17 @@ class OrderController extends BaseController
         if (!empty($order['email'])) {
             Mail::to($order['email'])->send(new OrderCreated($order));
         }
-        Mail::to(config('contacts.email.link', 'info@barocco.by'))
-            ->send(new OrderCreated($order));
+        if (App::environment('production')) {
+            Mail::to(config('contacts.email.link', 'info@barocco.by'))
+                ->send(new OrderCreated($order));
+        }
 
         $orderInfo = [
             'orderNum' => $order->id,
             'totalPrice' => $cart->getTotalPrice(),
             'address' => $userData['user_addr'],
             'delivery' => $userData['delivery_name'],
-            'payment' => $userData['delivery_code'],
+            'payment' => $userData['payment_name'],
         ];
         Cart::clear();
         return redirect()->route('cart-final')->with('order_info', $orderInfo);

@@ -79,10 +79,10 @@
                         </a>
                         <b>{{ $product->getFullName() }}</b> <br>
                         @if ($product->getPrice() < $product->getOldPrice())
-                            <s>{{ round($product->getOldPrice(), 2) }} руб.</s>
-                            <font color="#D22020">{{ round($product->getPrice(), 2) }} руб.</font><br>
+                            <s>{!! $product->getFormattedOldPrice() !!}</s>
+                            <font color="#D22020">{!! $product->getFormattedPrice() !!}</font><br>
                         @else
-                            {{ round($product->getPrice(), 2) }} руб.<br>
+                            {!! $product->getFormattedPrice() !!}<br>
                         @endif
                         <span class="text-mutted">{{ $product->sizes->implode('name', ' | ') }}</span>
                     </div>

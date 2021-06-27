@@ -27,13 +27,13 @@
                                         <div class="col-12 col-md-2 mt-md-2">{{ $item->product->color_txt }}</div>
                                         <div class="col-12 col-md-3 mt-md-2 mb-4">
                                             @if ($item->product->getPrice() < $item->product->getOldPrice())
-                                                <s class="text-muted">{{ round($item->product->getOldPrice(), 2) }} BYN</s>&nbsp;
+                                                <s class="text-muted">{!! $item->product->getFormattedOldPrice() !!}</s>&nbsp;
                                                 <span class="text-white px-1" style="background-color: #D22020">
                                                     -{{ $item->product->getSalePercentage() }}%
                                                 </span><br>
-                                                <font color="#D22020">{{ round($item->product->getPrice(), 2) }} BYN</font>
+                                                <font color="#D22020">{!! $item->product->getFormattedPrice() !!}</font>
                                             @else
-                                                {{ round($item->product->getPrice(), 2) }} BYN<br>
+                                                {!! $item->product->getFormattedPrice() !!}<br>
                                             @endif
                                         </div>
 
@@ -109,11 +109,11 @@
                             </div>
                             <div class="col-auto text-right">
                                 @if (Cart::getTotalPrice() < Cart::getTotalOldPrice())
-                                    <s class="text-muted">{{ round(Cart::getTotalOldPrice(), 2) }} BYN</s>
-                                    <strong>{{ Cart::getTotalPrice() }} BYN</strong><br>
-                                    <font color="#D22020">Вы экономите {{ round(Cart::getTotalOldPrice() - Cart::getTotalPrice(), 2) }} BYN</font>
+                                    <s class="text-muted">{!! Currency::format(Cart::getTotalOldPrice()) !!}</s>
+                                    <strong>{!! Currency::format(Cart::getTotalPrice()) !!}</strong><br>
+                                    <font color="#D22020">Вы экономите {!! Currency::format(Cart::getTotalOldPrice() - Cart::getTotalPrice()) !!}</font>
                                 @else
-                                    <strong>{{ Cart::getTotalPrice() }} BYN</strong>
+                                    <strong>{!! Currency::format(Cart::getTotalPrice()) !!}</strong>
                                 @endif
                             </div>
                         </div>
@@ -122,7 +122,7 @@
                                 ДОСТАВКА
                             </div>
                             <div class="col-auto">
-                                0,00 BYN
+                                {!! Currency::format(0) !!}
                             </div>
                         </div>
                         <div class="row justify-content-between mb-2 border-top border-secondary">
@@ -130,7 +130,7 @@
                                 К оплате
                             </div>
                             <div class="col-auto">
-                                {{ Cart::getTotalPrice() }} BYN
+                                {!! Currency::format(Cart::getTotalPrice()) !!}
                             </div>
                         </div>
                     </div>

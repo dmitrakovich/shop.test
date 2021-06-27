@@ -64,11 +64,11 @@
                         <div class="row">
                             @if ($product->getPrice() < $product->getOldPrice())
                                 <div class="col-auto price price-old">
-                                    {{ $product->getOldPrice() }}
+                                    {!! $product->getFormattedOldPrice() !!}
                                 </div>
                             @endif
                             <div class="col-auto price price-new">
-                                {{ $product->getPrice() }} руб.
+                                {!! $product->getFormattedPrice() !!}
                             </div>
                         </div>
                     </div>

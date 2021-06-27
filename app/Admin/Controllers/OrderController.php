@@ -46,13 +46,13 @@ class OrderController extends AdminController
 
         $grid->model()->with(['data']);
         $grid->column('goods', 'Товары')->expand(function ($model) {
-            $items = $model->data->map(function ($item) {
+            $items = $model->data->map(function ($item) use ($model) {
                 return [
                     'image' => "<img src='{$item->product->getFirstMediaUrl()}' style='width:70px'>",
                     'product' => "<a href='{$item->product->getUrl()}' target='_blank'>{$item->product->getFullName()}</a>",
                     'availability' => $item->product->trashed() ? '<i class="fa fa-close text-red"></i>' : '<i class="fa fa-check text-green"></i>',
                     'size' => $item->size->name,
-                    'price' => "$item->price BYN",
+                    'price' => "$item->current_price $model->currency",
                 ];
             });
             return new Table(['Фото', 'Товар', 'Наличие', 'Размер', 'Цена'], $items->toArray());
