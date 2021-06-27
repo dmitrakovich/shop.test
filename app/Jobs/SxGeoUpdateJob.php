@@ -19,11 +19,11 @@ class SxGeoUpdateJob extends AbstractJob
     /**
      * Директория для сохранения файлов SxGeo
      */
-    protected ?string $sxGeoPath = null;
+    protected $sxGeoPath = null;
     /**
      * Файл в котором хранится дата последнего обновления
      */
-    protected ?string $lastUpdFile = null;
+    protected $lastUpdFile = null;
     /**
      * The number of seconds the job can run before timing out.
      *
