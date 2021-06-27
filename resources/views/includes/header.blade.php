@@ -50,7 +50,7 @@
 
 
             <div class="col-12 navbar-main-menu" id="mainMenu">
-                <div class="row justify-content-center align-items-center text-uppercase font-size-15 position-relative">
+                <div class="navbar-container row justify-content-center align-items-center text-uppercase font-size-15 position-relative">
                     <div class="col-12 col-lg-auto hover-dropdown position-static">
                         <a href="{{ route('shop') }}">Каталог</a>
                         <div class="col-12 custom-dropdown-menu">
@@ -121,6 +121,11 @@
                                 <img src="/images/icons/search.svg" alt="Поиск" class="img-fluid">
                             </button>
                         </form>
+                    </div>
+                    <div class="col-12 d-block d-lg-none">
+                        <div class="row">
+                            {{ Currency::getSwitcher() }}
+                        </div>
                     </div>
                 </div>
             </div>

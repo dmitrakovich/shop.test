@@ -30,11 +30,14 @@
         {{ Banner::getCatalogTop() }}
 
         <div class="col-12 my-4 d-none d-lg-block">
-            <div class="row justify-content-end ">
-                <div class="col-auto align-self-center mr-3">
+            <div class="row justify-content-end align-items-center">
+
+                {{ Currency::getSwitcher() }}
+
+                <div class="col-auto align-self-center ml-3 mr-2">
                     Сортировка:
                 </div>
-                <select onchange="window.location.href = this.value" class="form-control col-6 col-md-4 col-lg-3 col-xl-2">
+                <select onchange="window.location.href = this.value" class="form-control col-4 col-lg-3 col-xl-2">
                     @foreach ($sortingList as $key => $value)
                         <option value="{{ URL::current() . "?sort=$key" }}" {{ $sort == $key ? 'selected' : null }}>
                             {{ $value }}
