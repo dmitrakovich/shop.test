@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\InfoPageController;
 use App\Http\Controllers\DashboardController;
@@ -75,6 +76,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::view('card', 'dashboard.card')->name('dashboard-card');
     Route::get('{orders?}', function () { return redirect()->route('orders.index'); });
 });
+
+Route::post('currency/switch', [CurrencyController::class, 'switch'])->name('currency-switcher');
 
 Route::group(['namespace' => 'Shop'], function () {
     Route::post('/quick/{id}', [ProductController::class, 'quickView'])->name('product.quick');

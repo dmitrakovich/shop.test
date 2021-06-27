@@ -42,6 +42,8 @@ Route::group([
 
     $router->resource('sales', SaleController::class);
 
+    $router->resource('currencies', CurrencyController::class);
+
     // legacy
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);
