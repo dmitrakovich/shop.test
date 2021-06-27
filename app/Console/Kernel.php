@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\SxGeoUpdateJob;
 use App\Jobs\UpdateAvailabilityJob;
 use App\Jobs\UpdateProductsRatingJob;
 use Illuminate\Console\Scheduling\Schedule;
@@ -36,6 +37,9 @@ class Kernel extends ConsoleKernel
         $schedule->job(new UpdateAvailabilityJob)
             ->withoutOverlapping()
             ->everyThirtyMinutes();
+
+        // обновление базы Sypex Geo
+        $schedule->job(new SxGeoUpdateJob)->dailyAt('03:07');
     }
 
     /**
