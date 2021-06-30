@@ -30,6 +30,9 @@
     <script src="{{ mix('js/vendor.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}" defer></script>
 
+    {{-- call center chat --}}
+    <script src="//code-ya.jivosite.com/widget/paEdMIuNNF" async></script>
+
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
