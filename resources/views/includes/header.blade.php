@@ -48,83 +48,92 @@
                 $catalogUrl = route('shop');
             @endphp
 
+            <div class="col-12">
+                <div class="col-12 navbar-main-menu" id="mainMenu">
+                    <div class="navbar-container row justify-content-center align-items-center font-size-15 position-relative">
+                        <div class="col-12 col-lg-auto hover-dropdown position-static">
+                            <a href="{{ route('shop') }}">КАТАЛОГ</a>
+                            <div class="col-12 custom-dropdown-menu">
+                                <div class="row h-100 p-4">
+                                    <div class="col-4 font-size-16" style="height: 13%; color: #000000;">
+                                        <a href="{{ route('shop') }}">Обувь ></a>
+                                    </div>
+                                    <div class="col-4 font-size-16" style="height: 13%; color: #000000">
+                                        Коллекции ></a>
+                                    </div>
+                                    <div class="col-4"></div>
+                                    <div class="col-4 d-flex flex-wrap flex-column font-size-14" style="height: 87%; column-gap: 6px">
+                                        @foreach ($categories as $category)
+                                            <a class="dropdown-menu-item" href="{{ route('shop', $category) }}">{{ $category->title }}</a>
+                                        @endforeach
+                                    </div>
+                                    <div class="col-4 d-flex flex-wrap flex-column font-size-14" style="height: 87%">
+                                        <a class="dropdown-menu-item" href="/catalog/heel-low">На низком каблуке</a>
+                                        <a class="dropdown-menu-item" href="/catalog/krossovki">Спортивная обувь</a>
+                                        <a class="dropdown-menu-item" href="/catalog/eco">Экокожа</a>
+                                        <a class="dropdown-menu-item" href="/catalog?sort=rating">Бестселлеры</a>
+                                        <a class="dropdown-menu-item" href="/catalog/heel-stiletto">На шпильке</a>
+                                        <a class="dropdown-menu-item" href="/catalog/tufli/tufli-na-spilke">Свадебная коллекция</a>
+                                    </div>
+                                    <div class="col-4">
+                                        {{ Banner::getMainMenuCatalog() }}
+                                    </div>
+                                </div>
 
-            <div class="col-12 navbar-main-menu" id="mainMenu">
-                <div class="navbar-container row justify-content-center align-items-center text-uppercase font-size-15 position-relative">
-                    <div class="col-12 col-lg-auto hover-dropdown position-static">
-                        <a href="{{ route('shop') }}">Каталог</a>
-                        <div class="col-12 custom-dropdown-menu">
-                            <div class="row h-100">
-                                <div class="col-4 font-size-16 pt-3 font-weight-bold" style="height: 13%">
-                                    <a href="{{ route('shop') }}">Обувь ></a>
-                                </div>
-                                <div class="col-4 font-size-16 pt-3 font-weight-bold" style="height: 13%">
-                                    Коллекции ></a>
-                                </div>
-                                <div class="col-4"></div>
-                                <div class="col-4 d-flex flex-wrap flex-column font-size-14" style="height: 87%">
-                                    @foreach ($categories as $category)
-                                        <a class="pt-2" href="{{ route('shop', $category) }}">{{ $category->title }}</a>
-                                    @endforeach
-                                </div>
-                                <div class="col-4 d-flex flex-wrap flex-column font-size-14" style="height: 87%">
-                                    <a class="pt-2" href="/catalog/heel-low">На низком каблуке</a>
-                                    <a class="pt-2" href="/catalog/krossovki">Спортивная обувь</a>
-                                    <a class="pt-2" href="/catalog/eco">Экокожа</a>
-                                    <a class="pt-2" href="/catalog?sort=rating">Бестселлеры</a>
-                                    <a class="pt-2" href="/catalog/heel-stiletto">На шпильке</a>
-                                    <a class="pt-2" href="/catalog/tufli/tufli-na-spilke">Свадебная коллекция</a>
-                                </div>
-                                <div class="col-4">
-                                    {{ Banner::getMainMenuCatalog() }}
+                            </div>
+                        </div>
+                        <div class="backdrop"></div>
+                        <div class="col-12 d-lg-none"><hr></div>
+                        <div class="col-12 col-lg-auto">
+                            <a href="{{ route('static-shops') }}">МАГАЗИНЫ</a>
+                        </div>
+                        <div class="col-12 d-lg-none"><hr></div>
+                        <div class="col-12 col-lg-auto hover-dropdown position-static">
+                            <a href="{{ route('info') }}">ОНЛАЙН ПОКУПКИ</a>
+                            <div class="col-12 p-0 custom-dropdown-menu online-shopping-dropdown">
+                                <div class="mx-auto py-4">
+                                    <div class="d-flex flex-wrap flex-column font-size-16">
+                                        @foreach ($infoPagesMenu as $item)
+                                            <a class="dropdown-menu-item" href="{{ route('info', $item['slug']) }}">
+                                                {{ $item['name'] }}
+                                            </a>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
-                    </div>
-                    <div class="backdrop"></div>
-                    <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 col-lg-auto">
-                        <a href="{{ route('static-shops') }}">Магазины</a>
-                    </div>
-                    <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 col-lg-auto hover-dropdown position-static">
-                        <a href="{{ route('info') }}">Онлайн покупки</a>
-                        <div class="col-12 custom-dropdown-menu">
-                            @include('includes.static-pages-menu')
+                        <div class="backdrop"></div>
+                        <div class="col-12 d-lg-none"><hr></div>
+                        <div class="col-12 col-lg-auto">
+                            <a href="{{ route('info', 'installments') }}">РАССРОЧКА</a>
                         </div>
-                    </div>
-                    <div class="backdrop"></div>
-                    <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 col-lg-auto">
-                        <a href="{{ route('info', 'installments') }}">Рассрочка</a>
-                    </div>
-                    <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 col-lg-auto">
-                        <a href="{{ route('feedbacks') }}">Отзывы</a>
-                    </div>
-                    <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 d-lg-none">
-                        <strong class="text-danger">
-                            Распродажа
-                        </strong>
-                    </div>
-                    <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 col-lg-auto">
-                        <a href="{{ route('dashboard-card') }}">Карта клиента</a>
-                    </div>
-                    <div class="col-12 d-lg-none"><hr></div>
-                    <div class="col-12 col-lg-auto d-none d-lg-inline-block">
-                        <form action="{{ $catalogUrl }}" method="get" class="form-inline">
-                            <input type="text" name="search" class="search-input" value="{{ request()->get('search') }}" placeholder="Поиск">
-                            <button type="submit" class="btn p-0 js-search">
-                                <img src="/images/icons/search.svg" alt="Поиск" class="img-fluid">
-                            </button>
-                        </form>
-                    </div>
-                    <div class="col-12 d-block d-lg-none">
-                        <div class="row">
-                            {{ Currency::getSwitcher() }}
+                        <div class="col-12 d-lg-none"><hr></div>
+                        <div class="col-12 col-lg-auto">
+                            <a href="{{ route('feedbacks') }}">ОТЗЫВЫ</a>
+                        </div>
+                        <div class="col-12 d-lg-none"><hr></div>
+                        <div class="col-12 d-lg-none">
+                            <strong class="text-danger">
+                                РАСПРОДАЖА
+                            </strong>
+                        </div>
+                        <div class="col-12 d-lg-none"><hr></div>
+                        <div class="col-12 col-lg-auto">
+                            <a href="{{ route('dashboard-card') }}">КАРТА КЛИЕНТА</a>
+                        </div>
+                        <div class="col-12 d-lg-none"><hr></div>
+                        <div class="col-12 col-lg-auto d-none d-lg-inline-block">
+                            <form action="{{ $catalogUrl }}" method="get" class="form-inline">
+                                <input type="text" name="search" class="search-input" value="{{ request()->get('search') }}" placeholder="Поиск">
+                                <button type="submit" class="btn p-0 js-search">
+                                    <img src="/images/icons/search.svg" alt="Поиск" class="img-fluid">
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-12 d-block d-lg-none">
+                            <div class="row">
+                                {{ Currency::getSwitcher() }}
+                            </div>
                         </div>
                     </div>
                 </div>
