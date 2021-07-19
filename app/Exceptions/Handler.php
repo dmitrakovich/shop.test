@@ -41,12 +41,18 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        //
+        $this->reportable(function (Throwable $e) {
+            if ($this->shouldReport($e) && app()->bound('sentry')) {
+                app('sentry')->captureException($e);
+            }
+        });
     }
 
     public function report(Throwable $e)
     {
-        if ($this->shouldntReport($e)) {
+        // report in telegram bot
+
+        /*if ($this->shouldntReport($e)) {
             return;
         }
 
@@ -110,7 +116,7 @@ class Handler extends ExceptionHandler
             ]);
         } catch (\Throwable $th) {
             //throw $th;
-        }
+        }*/
 
         parent::report($e);
     }
