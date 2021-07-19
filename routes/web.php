@@ -55,6 +55,9 @@ Route::prefix('clear-cache')->group(function () {
 });
 Route::view('/test', 'test');
 Route::get('debug', [DebugController::class, 'index']);
+Route::get('debug-sentry', function () {
+    throw new Exception('Debug Sentry error!');
+});
 
 
 Route::get('/', [IndexController::class, 'index'])->name('index-page');
