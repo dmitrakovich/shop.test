@@ -41,21 +41,26 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            if ($this->shouldReport($e) && app()->bound('sentry')) {
-                app('sentry')->captureException($e);
-            }
-        });
+        //
     }
 
     public function report(Throwable $e)
     {
-        // report in telegram bot
-
-        /*if ($this->shouldntReport($e)) {
+        if ($this->shouldntReport($e)) {
             return;
         }
 
+        if (app()->bound('sentry')) {
+            app('sentry')->captureException($e);
+        } else {
+            $this->sendInTelegram($e);
+        }
+
+        parent::report($e);
+    }
+
+    private function sendInTelegram (Throwable $e)
+    {
         $time = Carbon::now()->format('Y-m-d H:i:s.u');
         $exception = get_class($e);
 
@@ -116,8 +121,6 @@ class Handler extends ExceptionHandler
             ]);
         } catch (\Throwable $th) {
             //throw $th;
-        }*/
-
-        parent::report($e);
+        }
     }
 }
