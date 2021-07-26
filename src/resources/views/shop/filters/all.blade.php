@@ -25,4 +25,6 @@
 @include('shop.filters.brand')
 <br>
 
-<button class="btn btn-dark btn-block">Очистить фильтр</button>
+<a href="{{ route('shop') }}" class="btn btn-dark btn-block" style="margin-bottom: 60px">
+    Очистить фильтр
+</a>
