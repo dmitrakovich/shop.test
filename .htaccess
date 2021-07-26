@@ -2,14 +2,14 @@ RewriteEngine on
 
 RewriteCond %{HTTP_HOST} ^(www.)?barocco.by$
 
-RewriteCond %{REQUEST_URI} !^/public/
+RewriteCond %{REQUEST_URI} !^/src/public/
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule ^(.*)$ /public/$1
+RewriteRule ^(.*)$ /src/public/$1
 RewriteCond %{HTTP_HOST} ^(www.)?barocco.by$
-RewriteRule ^(/)?$ public/index.php [L]
+RewriteRule ^(/)?$ src/public/index.php [L]
 
 php_value upload_max_filesize 256M
 php_value post_max_size 256M
