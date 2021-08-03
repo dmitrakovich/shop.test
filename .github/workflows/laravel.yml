@@ -53,7 +53,8 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         script: |
-          cd /public_html
+          ls -la
+          cd public_html/
           git checkout -f
           git pull
     - name: Upload frontend css on hosting
