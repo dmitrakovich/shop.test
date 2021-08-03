@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="col-4"></div>
                                     <div class="col-4 d-flex flex-wrap flex-column font-size-14" style="height: 87%; column-gap: 6px">
-                                        @foreach ($categories as $category)
+                                        @foreach (App\Models\Category::where('parent_id', 1)->get(['id', 'slug', 'title']) as $category)
                                             <a class="dropdown-menu-item" href="{{ route('shop', $category) }}">{{ $category->title }}</a>
                                         @endforeach
                                     </div>
@@ -93,7 +93,7 @@
                             <div class="col-12 p-0 custom-dropdown-menu online-shopping-dropdown">
                                 <div class="mx-auto py-4">
                                     <div class="d-flex flex-wrap flex-column font-size-16">
-                                        @foreach ($infoPagesMenu as $item)
+                                        @foreach (App\Models\InfoPage::getMenu() as $item)
                                             <a class="dropdown-menu-item" href="{{ route('info', $item['slug']) }}">
                                                 {{ $item['name'] }}
                                             </a>
