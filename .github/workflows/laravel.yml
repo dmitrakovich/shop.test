@@ -50,11 +50,11 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
+        key: ${{ secrets.PRIVATE_KEY }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         script: |
-          ls -la
-          cd public_html/
+          cd /public_html
           git checkout -f
           git pull
     - name: Upload frontend css on hosting
