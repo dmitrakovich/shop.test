@@ -52,7 +52,6 @@ jobs:
         host: ${{ secrets.HOST }}
         key: ${{ secrets.PRIVATE_KEY }}
         username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
         script: |
           cd /public_html
           git checkout -f
@@ -61,15 +60,15 @@ jobs:
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
+        key: ${{ secrets.PRIVATE_KEY }}
         username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
         source: "public/css/*"
         target: "public/css"
     - name: Upload frontend js on hosting
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
+        key: ${{ secrets.PRIVATE_KEY }}
         username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
         source: "public/js/*"
         target: "public/js"
