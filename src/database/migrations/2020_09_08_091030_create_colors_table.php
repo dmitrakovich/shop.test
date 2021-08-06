@@ -17,7 +17,7 @@ class CreateColorsTable extends Migration
             $table->id();
             $table->string('name');
             $table->uuid('slug');
-            $table->text('value')->default('#ffffff');
+            $table->text('value');
             $table->text('seo')->nullable();
             $table->timestamps();
         });
