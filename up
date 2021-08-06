@@ -23,7 +23,9 @@ fi
 
 docker-compose up -d
 
+FIRST_INSTALL=0
 if ! [ -f "src/.env" ]; then
+    FIRST_INSTALL=1
     cp src/.env.example src/.env
 fi
 
@@ -37,4 +39,8 @@ if ! [ -d "src/node_modules" ]; then
 fi
 
 ./artisan migrate
-./artisan db:seed
+# ./artisan db:seed
+
+if [ "$FIRST_INSTALL" -eq 1 ]; then
+    ./artisan job:dispatch SxGeoUpdateJob
+fi
