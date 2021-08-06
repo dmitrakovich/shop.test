@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Read docker .env file
+source ".env"
+
+docker-compose exec -u "${USER_UID}:${USER_GID}" -w /../var/www/app php php artisan $*
