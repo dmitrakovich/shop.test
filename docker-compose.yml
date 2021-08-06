@@ -26,13 +26,14 @@ services:
       PHP_HOST: ${COMPOSE_PROJECT_NAME}-php
     volumes:
       - ./src:/var/www/app:ro
+      - ./.git:/var/www/.git:ro
       - ./docker/data/nginx-logs:/var/log/nginx
     networks:
       - default
       - docker-proxy
 
   php:
-    image: dmitrakovich/php:7.3.29
+    image: dmitrakovich/php-dev:7.3.29
     container_name: ${COMPOSE_PROJECT_NAME}-php
     depends_on:
       - mysql
@@ -89,7 +90,7 @@ services:
   mysql:
     image: mysql:8.0.19
     container_name: ${COMPOSE_PROJECT_NAME}-mysql
-    command: "--innodb_use_native_aio=0 --innodb_file_per_table=1 --expire_logs_days=1 --sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+    command: "--default-authentication-plugin=mysql_native_password --innodb_use_native_aio=0 --innodb_file_per_table=1 --expire_logs_days=1 --sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
     user: ${USER_UID}:${USER_GID}
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
