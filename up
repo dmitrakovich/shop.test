@@ -10,12 +10,12 @@ chmod +x down
 mkdir -p ./docker/data/nginx-logs ./docker/data/php ./docker/data/mysql ./docker/data/redis
 
 # Check if "nginx-proxy" is runnig:
-# NGINX_PROXY_CONTAINER_NAME="docker-proxy-nginx"
-# NGINX_PROXY_CONTAINER_ID=$(docker ps -q --filter "name=${NGINX_PROXY_CONTAINER_NAME}")
-# if [ -z ${NGINX_PROXY_CONTAINER_ID} ]; then
-#   echo "FAIL: You have to download and start '${NGINX_PROXY_CONTAINER_NAME}' container first"
-#   exit 1
-# fi
+NGINX_PROXY_CONTAINER_NAME="docker-proxy-nginx"
+NGINX_PROXY_CONTAINER_ID=$(docker ps -q --filter "name=${NGINX_PROXY_CONTAINER_NAME}")
+if [ -z ${NGINX_PROXY_CONTAINER_ID} ]; then
+  echo "FAIL: You have to download and start '${NGINX_PROXY_CONTAINER_NAME}' container first"
+  exit 1
+fi
 
 if ! [ -f ".env" ]; then
     cp .env.example .env

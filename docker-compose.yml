@@ -16,7 +16,7 @@ networks:
 
 services:
   nginx:
-    image: spurit/nginx:1.18.10
+    image: spurit/nginx:1.18.0
     container_name: ${COMPOSE_PROJECT_NAME}-nginx
     depends_on:
       - php

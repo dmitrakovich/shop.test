@@ -46,29 +46,3 @@ jobs:
     #     DB_CONNECTION: sqlite
     #     DB_DATABASE: database/database.sqlite
     #   run: ./vendor/bin/phpunit
-    - name: Deployment
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        username: ${{ secrets.USERNAME }}
-        script: |
-          cd /public_html
-          git checkout -f
-          git pull
-    - name: Upload frontend css on hosting
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        username: ${{ secrets.USERNAME }}
-        source: "public/css/*"
-        target: "public/css"
-    - name: Upload frontend js on hosting
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        username: ${{ secrets.USERNAME }}
-        source: "public/js/*"
-        target: "public/js"
