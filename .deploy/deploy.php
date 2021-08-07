@@ -14,7 +14,7 @@ set('repository', 'https://github.com/default-089/shop.test.git');
 host('barocco.by')
     ->user('user2099049')
     ->identityFile('~/.ssh/key.pem')
-    ->set('public_html', '~/{{application}}')
+    ->set('deploy_path', '~/public_html')
     ->addSshOption('StrictHostKeyChecking', 'no')
     ->addSshOption('UserKnownHostsFile', '/dev/null');
 
