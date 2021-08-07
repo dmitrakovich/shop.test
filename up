@@ -45,3 +45,8 @@ if [ "$FIRST_INSTALL" -eq 1 ]; then
     ./artisan job:dispatch SxGeoUpdateJob
     ./artisan storage:link
 fi
+
+# ./artisan optimize
+./artisan cache:clear
+./artisan config:clear
+./artisan route:clear

@@ -26,7 +26,6 @@ services:
       PHP_HOST: ${COMPOSE_PROJECT_NAME}-php
     volumes:
       - ./src:/var/www/app:ro
-      - ./.git:/var/www/.git:ro
       - ./docker/data/nginx-logs:/var/log/nginx
     networks:
       - default
@@ -44,6 +43,7 @@ services:
     volumes:
       - ./docker/data/php:/var/php
       - ./src:/var/www/app
+      - ./.git:/var/www/.git:ro
       - ~/.composer/cache:/var/cache/cache-composer
       - ~/.npm:/var/cache/cache-npm
     networks:
