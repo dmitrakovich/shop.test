@@ -4,6 +4,11 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 
+task('test', function () {
+    writeln('Hello world');
+});
+
+/*
 // Project name
 set('application', 'my_project');
 
@@ -38,4 +43,4 @@ after('deploy:failed', 'deploy:unlock');
 // Migrate database before symlink new release.
 
 before('deploy:symlink', 'artisan:migrate');
-
+*/

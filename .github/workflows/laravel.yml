@@ -46,3 +46,7 @@ jobs:
     #     DB_CONNECTION: sqlite
     #     DB_DATABASE: database/database.sqlite
     #   run: ./vendor/bin/phpunit
+    - name: Deploy
+      run: |
+        cd ../.deploy
+        php ./deployer.phar test
