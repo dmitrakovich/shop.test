@@ -12,7 +12,11 @@ set('repository', 'https://github.com/default-089/shop.test.git');
 
 // Hosts
 host('barocco.by')
-    ->set('public_html', '~/{{application}}');
+    ->user('user2099049')
+    ->identityFile('~/.ssh/key.pem')
+    ->set('public_html', '~/{{application}}')
+    ->addSshOption('StrictHostKeyChecking', 'no')
+    ->addSshOption('UserKnownHostsFile', '/dev/null');
 
 // [Optional] Allocate tty for git clone. Default value is false.
 // set('git_tty', true); 
