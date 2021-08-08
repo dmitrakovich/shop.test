@@ -14,12 +14,13 @@ set('repository', 'https://github.com/default-089/shop.test.git');
 host('barocco.by')
     ->user('user2099049')
     ->identityFile('~/.ssh/key.pem')
+    ->forwardAgent(true)
     ->set('deploy_path', '~/public_html')
     ->addSshOption('StrictHostKeyChecking', 'no')
     ->addSshOption('UserKnownHostsFile', '/dev/null');
 
 // [Optional] Allocate tty for git clone. Default value is false.
-set('git_tty', true); 
+// set('git_tty', true); 
 
 // Shared files/dirs between deploys 
 add('shared_files', [
