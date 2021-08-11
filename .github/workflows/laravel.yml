@@ -67,9 +67,27 @@ jobs:
           cd ~/public_html
           git checkout -f
           git pull
-      # composer
-      # cache
-      # js & css (copy)
+          cd src/
+          composer install --optimize-autoloader --no-dev
+          php artisan optimize
+      
+    - name: Upload frontend css on hosting
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        source: "public/css/*"
+        target: "public/css"
+
+    - name: Upload frontend js on hosting
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        source: "public/js/*"
+        target: "public/js"
 
     - name: Send success status
       uses: appleboy/telegram-action@master
