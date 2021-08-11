@@ -202,24 +202,27 @@ class SaleService
      * Apply sale
      *
      * @param float $price
+     * @param float $oldPrice
      * @param integer $index
      * @param integer $count
      * @return float
      */
-    protected function applySale(float $price, int $index = 0, int $count = 1): float
+    private function applySale(float $price, float $oldPrice, int $index = 0, int $count = 1): float
     {
+        $baseDiscount = ($oldPrice - $price) / $oldPrice;
+
         switch ($this->sale->algorithm) {
             case $this->sale::ALGORITHM_FAKE:
                 return $price;
 
             case $this->sale::ALGORITHM_SIMPLE:
-                return ceil($price * (1 - $this->getDiscount()));
+                return ceil($oldPrice * (1 - ($this->getDiscount() + $baseDiscount)));
 
             case $this->sale::ALGORITHM_COUNT:
-                return ceil($price * (1 - $this->getDiscount(--$count)));
+                return ceil($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount)));
 
             case $this->sale::ALGORITHM_ASCENDING:
-                return ceil($price * (1 - $this->getDiscount($index)));
+                return ceil($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount)));
 
             default:
                 return $price;
@@ -230,14 +233,15 @@ class SaleService
      * Get sale data
      *
      * @param float $price
+     * @param float $oldPrice
      * @param integer $index
      * @param integer $count
      * @return array
      */
-    protected function getSaleData(float $price, int $index = 0, int $count = 1): array
+    private function getSaleData(float $price, float $oldPrice, int $index = 0, int $count = 1): array
     {
         return [
-            'price' => $this->applySale($price, $index, $count),
+            'price' => $this->applySale($price, $oldPrice, $index, $count),
             'label' => $this->sale->label_text
         ];
     }
@@ -251,7 +255,7 @@ class SaleService
     public function applyForProduct(Product $product): void
     {
         if ($this->hasSale() && $this->applyForOneProduct() && $this->checkSaleConditions($product)) {
-            $product->sale = $this->getSaleData($product->price);
+            $product->sale = $this->getSaleData($product->price, $product->getFixedOldPrice());
         } else {
             $product->sale = [];
         }
@@ -297,13 +301,16 @@ class SaleService
         $productSaleList = [];
         foreach ($products as $product) {
             if ($this->checkSaleConditions($product)) {
-                $productSaleList[$product->id] = $product->price;
+                $productSaleList[$product->id] = [
+                    'price' => $product->price,
+                    'oldPrice' => $product->getFixedOldPrice()
+                ];
                 $this->hasSaleProductsInCart = true;
             }
         }
         $index = 0;
         foreach ($productSaleList as &$sale) {
-            $sale = $this->getSaleData($sale, $index++, count($productSaleList));
+            $sale = $this->getSaleData($sale['price'], $sale['oldPrice'], $index++, count($productSaleList));
         }
 
         foreach ($cart->items as $item) {

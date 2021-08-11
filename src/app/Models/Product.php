@@ -312,6 +312,16 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Get fixed wrong old price
+     *
+     * @return float
+     */
+    public function getFixedOldPrice()
+    {
+        return $this->old_price > $this->price ? $this->old_price : $this->price;
+    }
+
+    /**
      * Get fianl old price after apply other sales
      *
      * @return float
@@ -320,7 +330,7 @@ class Product extends Model implements HasMedia
     {
         if (!isset($this->final_old_price)) {
             $this->applySale();
-            $this->final_old_price = $this->old_price > $this->price ? $this->old_price : $this->price;
+            $this->final_old_price = $this->getFixedOldPrice();
         }
         return $this->final_old_price;
     }
