@@ -46,11 +46,26 @@ jobs:
     #     DB_CONNECTION: sqlite
     #     DB_DATABASE: database/database.sqlite
     #   run: ./vendor/bin/phpunit
-    - name: Deploy
-      run: |
-        mkdir -p ~/.ssh
-        touch ~/.ssh/key.pem
-        (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
-        chmod 700 ~/.ssh/key.pem
-        cd ../.deploy
-        php ./deployer.phar deploy
+
+    # - name: Deploy
+    #   run: |
+    #     mkdir -p ~/.ssh
+    #     touch ~/.ssh/key.pem
+    #     (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
+    #     chmod 700 ~/.ssh/key.pem
+    #     cd ../.deploy
+    #     php ./deployer.phar deploy
+
+    - name: Deploy on stupid hosting
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        script: |
+          cd /public_html
+          git checkout -f
+          git pull
+      # composer
+      # cache
+      # js & css (copy)
