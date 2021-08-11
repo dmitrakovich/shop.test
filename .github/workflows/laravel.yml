@@ -70,3 +70,9 @@ jobs:
       # composer
       # cache
       # js & css (copy)
+
+    - name: Send success status
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
