@@ -216,17 +216,28 @@ class SaleService
                 return $price;
 
             case $this->sale::ALGORITHM_SIMPLE:
-                return ceil($oldPrice * (1 - ($this->getDiscount() + $baseDiscount)));
+                return $this->round($oldPrice * (1 - ($this->getDiscount() + $baseDiscount)));
 
             case $this->sale::ALGORITHM_COUNT:
-                return ceil($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount)));
+                return $this->round($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount)));
 
             case $this->sale::ALGORITHM_ASCENDING:
-                return ceil($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount)));
+                return $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount)));
 
             default:
                 return $price;
         }
+    }
+
+    /**
+     * Rounding to 5 kopecks
+     *
+     * @param float $num
+     * @return float
+     */
+    protected function round(float $num)
+    {
+        return ceil($num * 20) / 20;
     }
 
     /**
