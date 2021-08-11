@@ -599,6 +599,10 @@ class ProductController extends AdminController
             'images' => $form->model()->getMedia()->map(function ($image) {
                 return $image->getUrl('full');
             })->toArray(),
+
+            'videos' => $form->model()->getMedia()->map(function ($image) {
+                return $image->getCustomProperty('video');
+            })->filter()->toArray()
         ];
 
         $data = [
