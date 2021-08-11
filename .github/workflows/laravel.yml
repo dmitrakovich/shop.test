@@ -64,7 +64,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         debug: true
         script: |
-          cd /public_html
+          cd ~/public_html
           git checkout -f
           git pull
       # composer
