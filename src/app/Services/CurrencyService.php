@@ -169,7 +169,7 @@ class CurrencyService
     {
         $precision = 10 ** $this->currency->decimals;
         $priceInCurrency = $priceInByn * $this->currency->rate;
-        return ceil($priceInCurrency * $precision) / $precision;
+        return ceil(round($priceInCurrency * $precision, $this->currency->decimals)) / $precision;
     }
 
     /**
