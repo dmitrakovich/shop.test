@@ -62,6 +62,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
+        debug: true
         script: |
           cd /public_html
           git checkout -f
