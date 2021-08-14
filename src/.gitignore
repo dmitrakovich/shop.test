@@ -8,6 +8,7 @@
 /storage/*.key
 /vendor
 .env
+.env.prod
 .env.backup
 .phpunit.result.cache
 npm-debug.log
