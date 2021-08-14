@@ -78,7 +78,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         source: "src/public/css/*"
-        target: "test"
+        target: "~/public_html/src/docs"
         debug: true
 
     - name: Upload frontend js on hosting
@@ -87,7 +87,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
-        source: "public/js/*"
+        source: "src/public/js/*"
         target: "public/js"
 
     - name: Send success status
