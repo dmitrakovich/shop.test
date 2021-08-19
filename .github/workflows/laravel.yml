@@ -58,6 +58,8 @@ jobs:
 
     - name: Deploy on stupid hosting
       uses: appleboy/ssh-action@master
+      id: gitpull
+      continue-on-error: true
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -71,12 +73,19 @@ jobs:
           composer install --optimize-autoloader --no-dev
           php artisan optimize
 
+    # - name: retry git pull
+    - uses: nick-invision/retry@v2
+      with:
+        timeout_seconds: 90
+        max_attempts: 3
+        # command: dir
+
     - name: Sleep for 20 seconds
       uses: jakejarvis/wait-action@master
       with:
         time: '20s'
 
-    - name: Upload frontend js on hosting
+    - name: Upload frontend js & css on hosting
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
