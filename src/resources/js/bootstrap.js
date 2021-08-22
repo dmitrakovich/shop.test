@@ -22,7 +22,6 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-// если не понадобится, то удалить !!!
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 

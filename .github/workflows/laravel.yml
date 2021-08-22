@@ -58,8 +58,8 @@ jobs:
 
     - name: Deploy on stupid hosting
       uses: appleboy/ssh-action@master
-      id: gitpull
-      continue-on-error: true
+      # id: gitpull
+      # continue-on-error: true
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -74,11 +74,11 @@ jobs:
           php artisan optimize
 
     # - name: retry git pull
-    - uses: nick-invision/retry@v2
-      with:
-        timeout_seconds: 90
-        max_attempts: 3
-        # command: dir
+    # - uses: nick-invision/retry@v2
+    #   with:
+    #     timeout_seconds: 90
+    #     max_attempts: 3
+    #     command: dir
 
     - name: Sleep for 20 seconds
       uses: jakejarvis/wait-action@master
