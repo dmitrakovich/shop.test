@@ -5,6 +5,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   laravel-tests-and-deploy:
@@ -105,7 +106,7 @@ jobs:
     if: failure()
     needs: laravel-tests-and-deploy
     steps:
-      - name: Sleep for 96 seconds
+      - name: Sleep for 1m 36s
         uses: jakejarvis/wait-action@master
         with:
           time: '96s'
