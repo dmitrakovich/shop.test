@@ -35,6 +35,7 @@ jobs:
         touch database/database.sqlite
         echo ${{ github.event_name }}
         echo ${{ github.ref }}
+        echo ${{ github.event.client_payload.attempt }}
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
@@ -74,10 +75,10 @@ jobs:
           composer install --optimize-autoloader --no-dev
           php artisan optimize
 
-    - name: Sleep for 20 seconds
+    - name: Sleep for 21 seconds
       uses: jakejarvis/wait-action@master
       with:
-        time: '20s'
+        time: '21s'
 
     - name: Upload frontend js & css on hosting
       uses: appleboy/scp-action@master
@@ -93,7 +94,7 @@ jobs:
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: Success deploying 😎
+        message: Success deploying ✅😎
 
 
 
@@ -111,6 +112,13 @@ jobs:
         with:
           time: '96s'
 
+      - name: Send retry status
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: Failure deploy ❌ Rerun 🔄
+
       - name: Retry the workflow
         run: |
           curl -i \
@@ -118,4 +126,4 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: token ${{ secrets.API_WORKFLOW_KEY }}" \
           https://api.github.com/repos/default-089/shop.test/actions/workflows/11868491/dispatches \
-          -d '{"ref": "${{ github.ref }}" }'
+          -d '{"ref": "${{ github.ref }}", "client_payload": {"attempt": 1 + 1} }'
