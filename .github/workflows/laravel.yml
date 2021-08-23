@@ -32,6 +32,8 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
+        echo ${{ github.event_name }}
+        echo ${{ github }}
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
