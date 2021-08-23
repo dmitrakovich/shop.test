@@ -33,7 +33,7 @@ jobs:
         mkdir -p database
         touch database/database.sqlite
         echo ${{ github.event_name }}
-        echo ${{ github }}
+        echo ${{ github.ref }}
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
@@ -100,9 +100,9 @@ jobs:
   ### Run when a schedule failed ###
   ##################################
   restart_when_failed:
-    name: Restarts the scheduled run when it failed
+    name: Restarts workflow if failed
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' && failure()
+    if: failure()
     needs: laravel-tests-and-deploy
     steps:
       - name: Sleep for 96 seconds
