@@ -107,17 +107,17 @@ jobs:
     if: failure()
     needs: laravel-tests-and-deploy
     steps:
-      - name: Sleep for 1m 36s
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '96s'
+      # - name: Sleep for 1m 36s
+      #   uses: jakejarvis/wait-action@master
+      #   with:
+      #     time: '96s'
 
       - name: Send retry status
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Failure deploy (${{ github.event.client_payload.attempt }}) ❌ Rerun 🔄
+          message: Failure deploy (${{ ++github.event.client_payload.attempt }}) ❌ Rerun 🔄
 
       - name: Retry the workflow
         run: |
@@ -126,4 +126,4 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: token ${{ secrets.API_WORKFLOW_KEY }}" \
           https://api.github.com/repos/default-089/shop.test/actions/workflows/11868491/dispatches \
-          -d '{"ref": "${{ github.ref }}", "client_payload": {"attempt": 1 + 1} }'
+          -d '{"ref": "${{ github.ref }}", "client_payload": {"attempt": "${{ github.event.client_payload.attempt}}"} }'
