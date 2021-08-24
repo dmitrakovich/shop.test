@@ -36,6 +36,7 @@ jobs:
         echo ${{ github.event_name }}
         echo ${{ github.ref }}
         echo ${{ github.event.client_payload.attempt }}
+        echo ${{ env.attempt }}
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
@@ -112,12 +113,16 @@ jobs:
       #   with:
       #     time: '96s'
 
+      - name: set attempt
+        run: |
+          echo "attempt=1" >> $GITHUB_ENV
+
       - name: Send retry status
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Failure deploy (${{ ++github.event.client_payload.attempt }}) ❌ Rerun 🔄
+          message: Failure deploy (${{ env.attempt }}) ❌ Rerun 🔄
 
       - name: Retry the workflow
         run: |
@@ -126,4 +131,4 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: token ${{ secrets.API_WORKFLOW_KEY }}" \
           https://api.github.com/repos/default-089/shop.test/actions/workflows/11868491/dispatches \
-          -d '{"ref": "${{ github.ref }}", "client_payload": {"attempt": "${{ github.event.client_payload.attempt}}"} }'
+          -d '{"ref": "${{ github.ref }}", "client_payload": {"attempt": "${{ env.attempt }}"} }'
