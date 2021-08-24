@@ -117,7 +117,7 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Failure deploy ❌ Rerun 🔄
+          message: Failure deploy (${{ github.event.client_payload.attempt }}) ❌ Rerun 🔄
 
       - name: Retry the workflow
         run: |
