@@ -27,7 +27,9 @@ class ProductCarouselController extends AdminController
     {
         $grid = new Grid(new ProductCarousel());
 
-        $grid->column('category_id', 'Категория');
+        $grid->sortable();
+
+        $grid->column('category.title', 'Категория');
         $grid->column('only_sale', 'Только со скидкой');
         $grid->column('only_new', 'Только новинки');
         $grid->column('count', 'Количество товаров');
