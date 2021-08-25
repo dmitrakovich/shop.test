@@ -35,12 +35,13 @@ Route::group([
     $router->resource('delivery-methods', DeliveryController::class);
 
     $router->resource('banners', BannerController::class);
-    $router->resource('media', MediaController::class);
+    $router->resource('product-carousels', ProductCarouselController::class);
+    $router->resource('sales', SaleController::class);
 
     $router->resource('feedbacks', FeedbackController::class);
     $router->resource('feedbacks.feedback-answers', FeedbackAnswerController::class);
 
-    $router->resource('sales', SaleController::class);
+    $router->resource('media', MediaController::class);
 
     $router->resource('currencies', CurrencyController::class);
 
