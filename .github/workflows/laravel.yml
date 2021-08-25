@@ -17,9 +17,6 @@ jobs:
         working-directory: ./src
 
     steps:
-    - name: test retry
-      run: |
-        exit 1
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
@@ -108,27 +105,16 @@ jobs:
     if: failure()
     needs: laravel-tests-and-deploy
     steps:
-      # - name: Sleep for 1m 36s
-      #   uses: jakejarvis/wait-action@master
-      #   with:
-      #     time: '96s'
+      - name: Sleep for 1m 36s
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '96s'
 
       - name: set attempt
         run: |
           ATTEMPT=${{ github.event.client_payload.attempt }}
-          echo $ATTEMPT
-
           ATTEMPT=$([ -n "$ATTEMPT" ] && echo $((++ATTEMPT)) || echo 1)
-          echo $ATTEMPT
-
-          echo "attempt=$ATTEMPT" >> $GITHUB_ENV
-          echo ${{ github.event.client_payload.attempt }}
-          echo ${{ env.attempt }}
-
-      - name: get attempt
-        run: |
-          echo ${{ github.event.client_payload.attempt }}
-          echo ${{ env.attempt }}
+          echo "attempt=1" >> $GITHUB_ENV
 
       - name: Send retry status
         uses: appleboy/telegram-action@master
