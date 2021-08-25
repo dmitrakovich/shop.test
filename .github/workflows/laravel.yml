@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ master ]
   repository_dispatch:
-    types: [ retry, retry-1, retry-2 ]
+    types: [ retry-1, retry-2, retry-3, retry-4, retry-5 ]
 
 jobs:
   laravel-tests-and-deploy:
@@ -112,7 +112,18 @@ jobs:
 
       - name: set attempt
         run: |
+          ATTEMPT=${{ github.event.client_payload.attempt }}
+          echo $ATTEMPT
+
+          ATTEMPT=$([ -n "$ATTEMPT" ] && echo $((++ATTEMPT)) || echo 1)
+          echo $ATTEMPT
+
           echo "attempt=1" >> $GITHUB_ENV
+          echo ${{ github.event.client_payload.attempt }}
+          echo ${{ env.attempt }}
+
+      - name: get attempt
+        run: |
           echo ${{ github.event.client_payload.attempt }}
           echo ${{ env.attempt }}
 
