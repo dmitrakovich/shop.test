@@ -121,7 +121,7 @@ jobs:
           ATTEMPT=$([ -n "$ATTEMPT" ] && echo $((++ATTEMPT)) || echo 1)
           echo $ATTEMPT
 
-          echo "attempt=1" >> $GITHUB_ENV
+          echo "attempt=$ATTEMPT" >> $GITHUB_ENV
           echo ${{ github.event.client_payload.attempt }}
           echo ${{ env.attempt }}
 
