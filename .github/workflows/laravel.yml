@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ master ]
   repository_dispatch:
-    types: [ retry-1, retry-2, retry-3, retry-4, retry-5 ]
+    types: [ retry-1, retry-2, retry-3 ] # [ retry-* ] # check syntax !!!!
 
 jobs:
   laravel-tests-and-deploy:
@@ -84,7 +84,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
-        source: "src/public/js/*,src/public/css/*"
+        source: "src/public/js/*,src/public/css/*,src/public/mix-manifest.json"
         target: "~/public_html"
 
     - name: Send success status
@@ -102,7 +102,7 @@ jobs:
   restart_when_failed:
     name: Restarts workflow if failed
     runs-on: ubuntu-latest
-    if: failure()
+    if: failure() # && ${{ github.event.client_payload.attempt < secrets.DEPLOY_MAX_ATTEMPTS }} # set var !!!!
     needs: laravel-tests-and-deploy
     steps:
       - name: Sleep for 1m 36s
