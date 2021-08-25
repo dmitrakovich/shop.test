@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d3ddec43f42d06974ad12619064c0ced",
+    "content-hash": "c2154798c2b4281c2d2750bf98eb45af",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2089,6 +2089,65 @@
                 "source": "https://github.com/laravel-admin-extensions/ckeditor/tree/master"
             },
             "time": "2018-11-03T06:08:00+00:00"
+        },
+        {
+            "name": "laravel-admin-ext/grid-sortable",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-admin-extensions/grid-sortable.git",
+                "reference": "d7245c250dbfa1d712fdad93dbf435514713a717"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-admin-extensions/grid-sortable/zipball/d7245c250dbfa1d712fdad93dbf435514713a717",
+                "reference": "d7245c250dbfa1d712fdad93dbf435514713a717",
+                "shasum": ""
+            },
+            "require": {
+                "encore/laravel-admin": ">=1.7.2",
+                "php": ">=7.0.0",
+                "spatie/eloquent-sortable": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Encore\\Admin\\GridSortable\\GridSortableServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Encore\\Admin\\GridSortable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "z-song",
+                    "email": "zsong@126.com"
+                }
+            ],
+            "description": "Sort the grid data by drag and drop rows",
+            "homepage": "https://github.com/laravel-admin-ext/grid-sortable",
+            "keywords": [
+                "extension",
+                "grid",
+                "laravel-admin",
+                "sortable"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-admin-extensions/grid-sortable/issues",
+                "source": "https://github.com/laravel-admin-extensions/grid-sortable/tree/master"
+            },
+            "time": "2020-02-18T03:06:20+00:00"
         },
         {
             "name": "laravel/framework",
@@ -4650,6 +4709,74 @@
                 }
             ],
             "time": "2021-06-16T09:26:40+00:00"
+        },
+        {
+            "name": "spatie/eloquent-sortable",
+            "version": "3.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/eloquent-sortable.git",
+                "reference": "b06fa886559f8d40e31c8a69fd32bd45401dc5da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/eloquent-sortable/zipball/b06fa886559f8d40e31c8a69fd32bd45401dc5da",
+                "reference": "b06fa886559f8d40e31c8a69fd32bd45401dc5da",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^6.0|^7.0|^8.0",
+                "illuminate/support": "^6.0|^7.0|^8.0",
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0|^5.0|^6.0",
+                "phpunit/phpunit": "^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\EloquentSortable\\EloquentSortableServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\EloquentSortable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be"
+                }
+            ],
+            "description": "Sortable behaviour for eloquent models",
+            "homepage": "https://github.com/spatie/eloquent-sortable",
+            "keywords": [
+                "behaviour",
+                "eloquent",
+                "laravel",
+                "model",
+                "sort",
+                "sortable"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/eloquent-sortable/issues",
+                "source": "https://github.com/spatie/eloquent-sortable/tree/3.11.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-01-18T00:32:12+00:00"
         },
         {
             "name": "spatie/image",
@@ -10289,5 +10416,5 @@
         "php": "^7.3"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }
