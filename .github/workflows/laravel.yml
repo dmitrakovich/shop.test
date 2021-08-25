@@ -5,9 +5,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  # workflow_dispatch:
   repository_dispatch:
-    types: [ retry ]
+    types: [ retry, retry-1, retry-2 ]
 
 jobs:
   laravel-tests-and-deploy:
@@ -35,10 +34,6 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
-        echo ${{ github.event_name }}
-        echo ${{ github.ref }}
-        echo ${{ github.event.client_payload.attempt }}
-        echo ${{ env.attempt }}
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
@@ -97,7 +92,7 @@ jobs:
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: Success deploying ✅😎
+        message: Success deploying ✅
 
 
 
@@ -118,6 +113,8 @@ jobs:
       - name: set attempt
         run: |
           echo "attempt=1" >> $GITHUB_ENV
+          echo ${{ github.event.client_payload.attempt }}
+          echo ${{ env.attempt }}
 
       - name: Send retry status
         uses: appleboy/telegram-action@master
@@ -130,14 +127,5 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.API_WORKFLOW_KEY }}
-          event-type: retry
+          event-type: retry-${{ env.attempt }}
           client-payload: '{"ref": "${{ github.ref }}", "attempt": "${{ env.attempt }}"}'
-
-      # - name: Retry the workflow
-      #   run: |
-      #     curl -i \
-      #     -X POST \
-      #     -H "Accept: application/vnd.github.v3+json" \
-      #     -H "Authorization: token ${{ secrets.API_WORKFLOW_KEY }}" \
-      #     https://api.github.com/repos/default-089/shop.test/actions/workflows/11868491/dispatches \
-      #     -d '{"ref": "${{ github.ref }}", "attempt": "${{ env.attempt }}" }'
