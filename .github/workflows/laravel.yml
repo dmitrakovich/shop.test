@@ -109,19 +109,19 @@ jobs:
   restart_when_failed:
     name: Restarts workflow if failed
     runs-on: ubuntu-latest
-    if: failure() # && ${{ github.event.client_payload.attempt < secrets.DEPLOY_MAX_ATTEMPTS }} # set var !!!!
+    if: failure() && github.event.client_payload.attempt <= secrets.DEPLOY_MAX_ATTEMPTS
     needs: laravel-tests-and-deploy
     steps:
-      - name: Sleep for 1m 36s
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '96s'
+      # - name: Sleep for 1m 36s
+      #   uses: jakejarvis/wait-action@master
+      #   with:
+      #     time: '96s'
 
       - name: set attempt
         run: |
           ATTEMPT=${{ github.event.client_payload.attempt }}
           ATTEMPT=$([ -n "$ATTEMPT" ] && echo $((++ATTEMPT)) || echo 1)
-          echo "attempt=1" >> $GITHUB_ENV
+          echo "attempt=$ATTEMPT" >> $GITHUB_ENV
 
       - name: Send retry status
         uses: appleboy/telegram-action@master
