@@ -19,6 +19,7 @@ jobs:
     steps:
     - name: test types syntax
       run: |
+        echo ${{ toJSON(env) }}
         exit 1
 
     - name: Setup PHP
