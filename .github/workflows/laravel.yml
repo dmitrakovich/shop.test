@@ -70,7 +70,7 @@ jobs:
           git checkout -f
           git pull
           cd src/
-          php composer.phar install --optimize-autoloader --no-dev
+          php ~/.local/bin/composer install --optimize-autoloader --no-dev
           php artisan optimize
 
     # err: bash: line 4: composer: command not found
