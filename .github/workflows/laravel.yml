@@ -17,11 +17,6 @@ jobs:
         working-directory: ./src
 
     steps:
-    - name: test types syntax
-      run: |
-        echo ${{ toJSON(env) }}
-        exit 1
-
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
@@ -75,7 +70,7 @@ jobs:
           git checkout -f
           git pull
           cd src/
-          composer install --optimize-autoloader --no-dev
+          php composer.phar install --optimize-autoloader --no-dev
           php artisan optimize
 
     # err: bash: line 4: composer: command not found
@@ -110,13 +105,13 @@ jobs:
   restart_when_failed:
     name: Restarts workflow if failed
     runs-on: ubuntu-latest
-    if: failure() && github.event.client_payload.attempt <= 5
+    if: failure() && github.event.client_payload.attempt < 5
     needs: laravel-tests-and-deploy
     steps:
-      # - name: Sleep for 1m 36s
-      #   uses: jakejarvis/wait-action@master
-      #   with:
-      #     time: '96s'
+      - name: Sleep for 1m 36s
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '96s'
 
       - name: set attempt
         run: |
