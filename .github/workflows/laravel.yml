@@ -8,6 +8,9 @@ on:
   repository_dispatch:
     types: [ retry-* ]
 
+env:
+  DEPLOY_MAX_ATTEMPTS: 3
+
 jobs:
   laravel-tests-and-deploy:
 
@@ -110,7 +113,7 @@ jobs:
   restart_when_failed:
     name: Restarts workflow if failed
     runs-on: ubuntu-latest
-    if: failure() # && github.event.client_payload.attempt <= ${{ secrets.DEPLOY_MAX_ATTEMPTS }}
+    if: failure() && github.event.client_payload.attempt <= env.DEPLOY_MAX_ATTEMPTS
     needs: laravel-tests-and-deploy
     steps:
       # - name: Sleep for 1m 36s
