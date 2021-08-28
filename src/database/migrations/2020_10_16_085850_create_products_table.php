@@ -19,9 +19,9 @@ class CreateProductsTable extends Migration
             $table->string('slug', 100)->unique();
             $table->string('title')->index();
 
-            $table->unsignedDecimal('buy_price')->default(0);
-            $table->unsignedDecimal('price')->default(0);
-            $table->unsignedDecimal('old_price')->default(0);
+            $table->decimal('buy_price')->default(0);
+            $table->decimal('price')->default(0);
+            $table->decimal('old_price')->default(0);
 
             $table->foreignId('category_id')->index()->default(0);
             $table->foreignId('season_id')->index()->default(0);

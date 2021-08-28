@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ads\ProductCarousel;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -80,14 +81,20 @@ class IndexController extends Controller
         return Http::post($proxyServer, ['token' => 'fhYvHhfd74Gn4K9Fb08J']);
     }
 
-    protected function getProductCarousels()
+    /**
+     * Get product carousels
+     *
+     * @return array
+     */
+    protected function getProductCarousels(): array
     {
         $productCarousels = [];
         $carousels = ProductCarousel::ordered()
             ->get(['category_id', 'only_sale', 'only_new', 'count']);
 
         foreach ($carousels as $key => $carousel) {
-            $products = Product::where('category_id', $carousel->category_id)
+            $categories = Category::getChildrenCategoriesIdsList($carousel->category_id);
+            $products = Product::whereIn('category_id', $categories)
                 ->when($carousel->only_sale, function ($query) {
                     $query->onlyWithSale();
                 })
@@ -96,8 +103,8 @@ class IndexController extends Controller
                 })
                 ->sorting('rating')
                 ->limit($carousel->count)
-                // with()
-                ->get();
+                ->with(['media', 'category', 'brand'])
+                ->get(['id', 'slug', 'title', 'category_id', 'brand_id', 'price', 'old_price']);
 
             if (count($products)) {
                 $productCarousels[$key] = $products;
