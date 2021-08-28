@@ -6,20 +6,40 @@
 
 {{ Banner::getIndexMain() }}
 
-<div class="col-12 text-center mt-5">
-    {{-- <h1 class="display-4">Популярные категории</h1> --}}
-
-</div>
-
-
 <div class="col-md-12">
 
+    @forelse ($productCarousels as $products)
 
-    <div class="col-12">
-        <hr class="d-none d-sm-block">
+        @if ($loop->index == 1 || ($loop->last && $loop->index <= 1))
+            <hr class="d-none d-sm-block my-4">
+            @include('includes.advantages-block')
+            <hr class="d-none d-sm-block my-4">
+        @endif
+
+        <div data-slick='{"slidesToShow": 6, "slidesToScroll": 6, "autoplay": true}'>
+            @foreach ($products as $product)
+                <div class="col position-relative">
+                    <a href="{{ $product->getUrl() }}">
+                        @if ($product->getSalePercentage())
+                            <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 10px; background: #D22020;">
+                                -{{ $product->getSalePercentage() }}%
+                            </span>
+                        @endif
+                        <img
+                            src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
+                            alt="{{ $product->title }}"
+                            class="img-fluid product-first-image"
+                        >
+                        <span>{{ $product->getFullName() }}</span>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    @empty
+        <hr class="d-none d-sm-block my-4">
         @include('includes.advantages-block')
-        <hr class="d-none d-sm-block">
-    </div>
+        <hr class="d-none d-sm-block my-4">
+    @endforelse
 
     <div class="col-12 mt-5">
         <div class="row align-items-center">
