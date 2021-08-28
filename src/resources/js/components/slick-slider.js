@@ -44,4 +44,6 @@ window.slickRefresh = function () {
 			}
         ]
     });
+
+    $('[data-slick]').slick();
 }

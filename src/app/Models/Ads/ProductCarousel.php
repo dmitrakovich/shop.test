@@ -13,6 +13,16 @@ class ProductCarousel extends Model implements Sortable
     use SortableTrait;
     use HasFactory;
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'only_sale' => 'bool',
+        'only_new' => 'bool',
+    ];
+
     public $sortable = [
         'order_column_name' => 'sorting',
         'sort_when_creating' => true,

@@ -30,8 +30,8 @@ class ProductCarouselController extends AdminController
         $grid->sortable();
 
         $grid->column('category.title', 'Категория');
-        $grid->column('only_sale', 'Только со скидкой');
-        $grid->column('only_new', 'Только новинки');
+        $grid->column('only_sale', 'Только со скидкой')->switch();
+        $grid->column('only_new', 'Только новинки')->switch();
         $grid->column('count', 'Количество товаров');
 
         return $grid;

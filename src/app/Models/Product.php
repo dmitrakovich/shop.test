@@ -247,6 +247,30 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Get only products with sale
+     *
+     * @param Builder $query
+     * @param float $amount
+     * @return Builder
+     */
+    public function scopeOnlyWithSale(Builder $query, float $amount = 0.01)
+    {
+        return $query->whereRaw('((`old_price` - `price`) / `old_price`) > ?', $amount);
+    }
+
+    /**
+     * Get only new products
+     *
+     * @param Builder $query
+     * @param int $days
+     * @return Builder
+     */
+    public function scopeOnlyNew(Builder $query, int $days = 10)
+    {
+        return $query->where('created_at', '>', now()->subDays($days));
+    }
+
+    /**
      * Сгенерировать query для поиска
      *
      * @param Builder $query

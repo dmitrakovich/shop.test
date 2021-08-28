@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ads\ProductCarousel;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
@@ -26,9 +28,9 @@ class IndexController extends Controller
     public function index()
     {
         $instagramPosts = []; // $this->getInstagramPosts();
-        // abort(404);
-        // Log::info('Test log message with data', ['id' => 123]);
-        return view('index', compact('instagramPosts'));
+        $productCarousels = $this->getProductCarousels();
+
+        return view('index', compact('instagramPosts', 'productCarousels'));
     }
 
     protected function getInstagramPosts(int $postsCount = 6)
@@ -76,5 +78,32 @@ class IndexController extends Controller
 
         $proxyServer = 'https://modny.by/yml/parse-insta-HjcvyT7n4.php';
         return Http::post($proxyServer, ['token' => 'fhYvHhfd74Gn4K9Fb08J']);
+    }
+
+    protected function getProductCarousels()
+    {
+        $productCarousels = [];
+        $carousels = ProductCarousel::ordered()
+            ->get(['category_id', 'only_sale', 'only_new', 'count']);
+
+        foreach ($carousels as $key => $carousel) {
+            $products = Product::where('category_id', $carousel->category_id)
+                ->when($carousel->only_sale, function ($query) {
+                    $query->onlyWithSale();
+                })
+                ->when($carousel->only_new, function ($query) {
+                    $query->onlyNew();
+                })
+                ->sorting('rating')
+                ->limit($carousel->count)
+                // with()
+                ->get();
+
+            if (count($products)) {
+                $productCarousels[$key] = $products;
+            }
+        }
+
+        return $productCarousels;
     }
 }
