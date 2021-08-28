@@ -104,7 +104,7 @@ class IndexController extends Controller
                 ->sorting('rating')
                 ->limit($carousel->count)
                 ->with(['media', 'category', 'brand'])
-                ->get(['id', 'slug', 'title', 'category_id', 'brand_id', 'price', 'old_price']);
+                ->get();
 
             if (count($products)) {
                 $productCarousels[$key] = $products;
