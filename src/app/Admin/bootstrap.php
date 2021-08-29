@@ -21,7 +21,5 @@ use Encore\Admin\Facades\Admin;
 
 Encore\Admin\Form::forget(['map', 'editor']);
 
-Admin::js('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js');
-Admin::js('/js/admin.js');
-Admin::css('/css/admin.css');
-Admin::css('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css');
+Admin::js(mix('js/admin.js'));
+Admin::css(mix('css/admin.css'));

@@ -1,0 +1,26 @@
+@import "~cropperjs";
+@import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
+
+.fancybox-content {
+    max-width: 80%;
+    padding: 30px;
+}
+.fancybox-content .btn{
+    padding: 6px 25px;
+}
+.cropper-face {
+    background-color: unset;
+    background-image: url("/images/admin/maska.png");
+    background-size: cover;
+    opacity: 0.8;
+}
+.cropper-face.hide-mask {
+    background-image: unset;
+}
+.shop-file-footer-buttons {
+    text-align: center;
+}
+.krajee-default.file-preview-frame .shop-file-content {
+    width: 185px;
+    height: 130px;
+}

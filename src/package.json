@@ -10,7 +10,6 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "@fancyapps/fancybox": "^3.5.7",
         "axios": "^0.21.1",
         "bootstrap": "^4.5.3",
         "browser-sync": "^2.27.4",
@@ -30,6 +29,8 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "cropperjs": "^1.5.9"
+        "@fancyapps/fancybox": "^3.5.7",
+        "cropperjs": "^1.5.9",
+        "sortablejs": "^1.14.0"
     }
 }

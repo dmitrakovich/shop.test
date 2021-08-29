@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Admin\Actions\Post\BatchRestore;
+use App\Admin\Services\UploadImagesService;
 use Encore\Admin\Controllers\AdminController;
 
 class ProductController extends AdminController
@@ -41,6 +42,16 @@ class ProductController extends AdminController
      * @var [type]
      */
     protected static $productSeederObject = null;
+
+    /**
+     * @var UploadImagesService
+     */
+    private $uploadImagesService;
+
+    public function __construct(UploadImagesService $uploadImagesService)
+    {
+        $this->uploadImagesService = $uploadImagesService;
+    }
 
     /**
      * Make a grid builder.
@@ -158,48 +169,12 @@ class ProductController extends AdminController
                     return '<h4 class="text-red">Товар удален</h4>';
                 }
             });
-            $form->multipleImage('photos', __('Фотографии'))->removable()->downloadable(); // ->sortable();
 
-            /* $form->html(function ($form) {
-                $imagesBlock = '';
-                foreach ( $form->model()->getMedia() as $image) {
-                    $imagesBlock .= '<div class="file-preview-frame krajee-default">
-                        <div class="kv-file-content">
-                            <img src="' . $image->getUrl('catalog') . '"
-                                class="file-preview-image kv-preview-data"
-                                style="max-width:100%;max-height:100%;">
-                        </div>
-                        <div class="file-thumbnail-footer">
-                            <div class="file-footer-caption" title="' . $image->file_name . '">
-                                <div class="file-caption-info">' . $image->file_name . '</div>
-                            </div>
-                            <div class="file-actions">
-                                <div class="file-footer-buttons">
-                                    <button type="button" data-id="' . $image->id . '"
-                                        class="kv-file-remove btn btn-sm btn-kv btn-default btn-outline-secondary">
-                                        <i class="glyphicon glyphicon-trash"></i>
-                                    </button>
-                                    <button type="button" data-full="' . $image->getUrl('full') . '"
-                                        class="kv-file-zoom btn btn-sm btn-kv btn-default btn-outline-secondary">
-                                        <i class="glyphicon glyphicon-zoom-in"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>';
-                }
-                return '<div class="js-images-area">' . $imagesBlock . '</div>';
-            });*/
-
-            /*$form->html('<div class="input-group-btn input-group-append">
-                <div tabindex="500" class="btn btn-primary btn-file">
-                    <i class="glyphicon glyphicon-folder-open"></i>&nbsp;
-                    <span class="hidden-xs">Выбор файла</span>
-                    <input type="file" class="" name="photos[]" multiple id="imageLoader" accept="image/*">
-                </div>
-                <input type="hidden" name="add_images">
-            </div>', 'Картинки');*/
+            $uploadImagesService = $this->uploadImagesService;
+            $form->html(function ($form) use ($uploadImagesService) {
+                return $uploadImagesService->show($form->model()->getMedia());
+            })->setWidth(12, 0);
+            $form->html($this->uploadImagesService->getImagesInput(), 'Картинки');
 
             $form->text('slug', __('Slug'))->default(Str::slug(request('slug')));
             $form->text('path', 'Путь')->disable();
@@ -242,43 +217,6 @@ class ProductController extends AdminController
             $form->ckeditor('description', '');
         });
 
-        /*$form->html('<div style="display: none;" id="crop-image">
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="cropper.setAspectRatio(1)">
-                    1 x 1
-                </button>
-                <button type="button" class="btn btn-primary" onclick="cropper.setAspectRatio(2/3)">
-                    2 x 3
-                </button>
-                <button type="button" class="btn btn-default js-mask-toggler">
-                    Скрыть/показать маску
-                </button>
-            </div>
-            <div class="form-group">
-                <canvas id="imageCanvas" style="max-width: 100%; max-height: 80vh;"></canvas>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary" id="save-cropped-image">Сохранить</button>
-            </div>
-        </div>
-        <style>
-        .fancybox-content {
-            max-width: 80%;
-            padding: 30px;
-        }
-        .fancybox-content .btn{
-            padding: 6px 25px;
-        }
-        .cropper-face {
-            background-color: unset;
-            background-image: url("/images/admin/maska.png");
-            background-size: cover;
-            opacity: 0.8;
-        }
-        .cropper-face.hide-mask {
-            background-image: unset;
-        }
-        </style>');*/
 
         $form->saving(function (Form $form) {
             if (empty($form->slug)) {

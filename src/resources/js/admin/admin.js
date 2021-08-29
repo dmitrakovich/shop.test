@@ -1,3 +1,7 @@
+import Sortable from 'sortablejs';
+import '@fancyapps/fancybox';
+import Cropper from 'cropperjs';
+
 /**
  * object for Cropper
  */
@@ -6,12 +10,14 @@ var cropper;
  * config for cropper
  */
 var cropperConfig = {
-    // viewMode: 2,
-    modal: true,
-    aspectRatio: 1,
-    autoCropArea: 1
+  // viewMode: 2,
+  modal: true,
+  aspectRatio: 1,
+  autoCropArea: 1
 }
 
+
+// заюзать mustach
 var imagePreviewTemplate = '<div class="file-preview-frame krajee-default">'
 +'<div class="kv-file-content">'
     +'<img src="{{src}}"'
@@ -39,83 +45,90 @@ var imagePreviewTemplate = '<div class="file-preview-frame krajee-default">'
 +'</div>';
 
 $(function () {
+  // Sortable
+  var sortableAreaId = document.getElementById('sortable-images-area');
+  if (sortableAreaId) {
+    var sortable = Sortable.create(sortableAreaId, {
+      animation: 150,
+      ghostClass: 'blue-background-class'
+    });
+  }
 
-    $(document).on('change', '#imageLoader', function () {
-        let canvas = document.getElementById("imageCanvas"),
-            ctx = canvas.getContext("2d"),
-            reader = new FileReader;
+  $(document).on('change', '#imageLoader', function () {
+    let canvas = document.getElementById("imageCanvas"),
+      ctx = canvas.getContext("2d"),
+      reader = new FileReader;
 
-        if (typeof cropper !== 'undefined') {
-            cropper.destroy();
+    if (typeof cropper !== 'undefined') {
+      cropper.destroy();
+    }
+    reader.onload = function(event) {
+      var img = new Image;
+      img.onload = function() {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        cropper = new Cropper(canvas, cropperConfig);
+      };
+      img.src = event.target.result
+    };
+    reader.readAsDataURL(this.files[0]);
+    $.fancybox.open($('#crop-image'));
+  });
+
+  // save cropped image
+  $(document).on('click', '#save-cropped-image', function () {
+    $.fancybox.getInstance('showLoading');
+    cropper.getCroppedCanvas().toBlob((blob) => {
+      let formData = new FormData();
+
+      formData.append('croppedImage', blob); // , 'example.png'
+
+      $.ajax('/api/croppic/crop', {
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success(response) {
+          let preview = imagePreviewTemplate;
+
+          $(preview.replace('{{src}}', response)).appendTo('.js-images-area');
+          $('<input>').attr({
+            type: 'hidden',
+            name: 'add_images[]',
+            value: response,
+          }).appendTo('form[class*="model-form-"]');
+          console.log(response);
+        },
+        error() {
+          alert('Upload error: ' + response);
+        },
+        complete() {
+          $.fancybox.getInstance('hideLoading');
+          $.fancybox.getInstance().close();
         }
-        reader.onload = function(event) {
-            var img = new Image;
-            img.onload = function() {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
-
-                cropper = new Cropper(canvas, cropperConfig);
-            };
-            img.src = event.target.result
-        };
-        reader.readAsDataURL(this.files[0]);
-        $.fancybox.open($('#crop-image'));
+      });
     });
+  });
 
+  // remove image
+  $(document).on('click', '.kv-file-remove', function () {
+    let imageId = $(this).data('id');
+    if (imageId) {
+      $('<input>').attr({
+        type: 'hidden',
+        name: 'remove_images[]',
+        value: imageId,
+      }).appendTo('form[class*="model-form-"]');
+    }
+    $(this).parents('.file-preview-frame').remove();
+  });
 
-    // save cropped image
-    $(document).on('click', '#save-cropped-image', function () {
-        $.fancybox.getInstance('showLoading');
-        cropper.getCroppedCanvas().toBlob((blob) => {
-            let formData = new FormData();
-
-            formData.append('croppedImage', blob); // , 'example.png'
-
-            $.ajax('/api/croppic/crop', {
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success(response) {
-                    let preview = imagePreviewTemplate;
-
-                    $(preview.replace('{{src}}', response)).appendTo('.js-images-area');
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: 'add_images[]',
-                        value: response,
-                    }).appendTo('form[class*="model-form-"]');
-                    console.log(response);
-                },
-                error() {
-                    alert('Upload error: ' + response);
-                },
-                complete() {
-                    $.fancybox.getInstance('hideLoading');
-                    $.fancybox.getInstance().close();
-                }
-            });
-        });
-    });
-
-    // remove image
-    $(document).on('click', '.kv-file-remove', function () {
-        let imageId = $(this).data('id');
-        if (imageId) {
-            $('<input>').attr({
-                type: 'hidden',
-                name: 'remove_images[]',
-                value: imageId,
-            }).appendTo('form[class*="model-form-"]');
-        }
-        $(this).parents('.file-preview-frame').remove();
-    });
-
-    // hide/show mask
-    $(document).on('click', '.js-mask-toggler', function () {
-        $('.cropper-face').toggleClass('hide-mask');
-    });
+  // hide/show mask
+  $(document).on('click', '.js-mask-toggler', function () {
+    $('.cropper-face').toggleClass('hide-mask');
+  });
 
 
 });

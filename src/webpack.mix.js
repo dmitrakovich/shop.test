@@ -12,16 +12,12 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .extract()
+    // .extract() // crashed admin js script :(
     .sass('resources/sass/app.scss', 'public/css')
+    // for admin panel
+    .js('resources/js/admin/admin.js', 'public/js')
+    .sass('resources/sass/admin/admin.scss', 'public/css')
     .version();
-
-// for admin panel
-mix.scripts([
-    'node_modules/cropperjs/dist/cropper.min.js',
-    'resources/js/admin/admin.js'
-], 'public/js/admin.js')
-    .postCss('node_modules/cropperjs/dist/cropper.min.css', 'public/css/admin.css');
 
 if (mix.inProduction()) {
     mix.disableNotifications();
