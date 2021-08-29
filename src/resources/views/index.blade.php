@@ -16,7 +16,27 @@
             <hr class="d-none d-sm-block my-4">
         @endif
 
-        <div data-slick='{"slidesToShow": 6, "slidesToScroll": 6, "autoplay": true}'>
+        <div class="js-product-carousel" data-slick='{
+            "slidesToShow": 6,
+            "slidesToScroll": 6,
+            "autoplay": true,
+            "responsive": [
+                {
+                    "breakpoint": 1305,
+                    "settings": {
+                        "slidesToShow": 4,
+                        "slidesToScroll": 4
+                    }
+                },
+                {
+                    "breakpoint": 830,
+                    "settings": {
+                        "slidesToShow": 1,
+                        "slidesToScroll": 1
+                    }
+                }
+            ]
+        }'>
             @foreach ($products as $product)
                 <div class="col position-relative">
                     <a href="{{ $product->getUrl() }}">
