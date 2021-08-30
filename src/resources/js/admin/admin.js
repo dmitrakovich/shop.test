@@ -1,6 +1,7 @@
 import Sortable from 'sortablejs';
 import '@fancyapps/fancybox';
 import Cropper from 'cropperjs';
+import Mustache from 'mustache';
 
 /**
  * object for Cropper
@@ -16,33 +17,7 @@ var cropperConfig = {
   autoCropArea: 1
 }
 
-
-// заюзать mustach
-var imagePreviewTemplate = '<div class="file-preview-frame krajee-default">'
-+'<div class="kv-file-content">'
-    +'<img src="{{src}}"'
-        +'class="file-preview-image kv-preview-data"'
-        +'style="max-width:100%;max-height:100%;">'
-+'</div>'
-+'<div class="file-thumbnail-footer">'
-    +'<div class="file-footer-caption" title="new">'
-        +'<div class="file-caption-info">new</div>'
-    +'</div>'
-    +'<div class="file-actions">'
-        +'<div class="file-footer-buttons">'
-            +'<button type="button"'
-                +'class="kv-file-remove btn btn-sm btn-kv btn-default btn-outline-secondary">'
-                +'<i class="glyphicon glyphicon-trash"></i>'
-            +'</button>'
-            +'<button type="button" data-full="{{src}}"'
-                +'class="kv-file-zoom btn btn-sm btn-kv btn-default btn-outline-secondary">'
-                +'<i class="glyphicon glyphicon-zoom-in"></i>'
-            +'</button>'
-        +'</div>'
-    +'</div>'
-    +'<div class="clearfix"></div>'
-+'</div>'
-+'</div>';
+const IMAGE_PREVIEW_TEMPLATE = require('../../templates/admin/image-preview.html');
 
 $(function () {
   // Sortable
@@ -91,9 +66,13 @@ $(function () {
         processData: false,
         contentType: false,
         success(response) {
-          let preview = imagePreviewTemplate;
+          let previewHtml = Mustache.render(IMAGE_PREVIEW_TEMPLATE, {
+            src: response
+          });
 
-          $(preview.replace('{{src}}', response)).appendTo('.js-images-area');
+          console.log(previewHtml);
+
+          $(previewHtml).appendTo('.js-images-area');
           $('<input>').attr({
             type: 'hidden',
             name: 'add_images[]',
