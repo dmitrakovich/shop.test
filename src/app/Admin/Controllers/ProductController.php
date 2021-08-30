@@ -22,7 +22,6 @@ use Illuminate\Support\MessageBag;
 use App\Admin\Actions\Post\Restore;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Admin\Actions\Post\BatchRestore;
 use App\Admin\Services\UploadImagesService;
@@ -62,45 +61,24 @@ class ProductController extends AdminController
     {
         $grid = new Grid(new Product());
 
-        $grid->column('id', __('Id'))->sortable();
-
-        $grid->column('media', __('Фото'))->display(function ($pictures) {
-            /*$media = [];
-            foreach ($this->getMedia() as $image) {
-                $media[] = $image->getUrl('thumb');
-            }
-            return $media;*/
+        $grid->column('id', 'Id')->sortable();
+        $grid->column('media', 'Фото')->display(function ($pictures) {
             return optional($this->getFirstMedia())->getUrl('thumb');
-        })->image(); // ->carousel();
-
+        })->image();
         $grid->column('deleted_at', 'Опубликован')->display(function ($deleted) {
             return !$deleted ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
         })->sortable();
-
-        $grid->column('slug', __('Slug'));
-        $grid->column('title', __('Title'));
-        // $grid->column('buy_price', __('Buy price'));
-        $grid->column('price', __('Price'))->sortable();
-        $grid->column('old_price', __('Old price'))->sortable();
-        // $grid->column('category_id', __('Category id'));
-        $grid->column('category.title', __('Категория'));
-        // $grid->column('season_id', __('Season id'));
-        $grid->column('season.name', __('Сезон'));
-        // $grid->column('brand_id', __('Brand id'));
-        $grid->column('brand.name', __('Бренд'));
-        $grid->column('color_txt', __('Color txt'));
-        $grid->column('fabric_top_txt', __('Fabric top txt'));
-        $grid->column('fabric_inner_txt', __('Fabric inner txt'));
-        $grid->column('fabric_insole_txt', __('Fabric insole txt'));
-        $grid->column('fabric_outsole_txt', __('Fabric outsole txt'));
-        $grid->column('heel_txt', __('Heel txt'));
-        // $grid->column('description', __('Description'));
-        // $grid->column('created_at', __('Created at'));
-        // $grid->column('updated_at', __('Updated at'));
-        // $grid->column('deleted_at', __('Deleted at'));
+        $grid->column('slug', 'Slug');
+        $grid->column('title', 'Title');
+        $grid->column('price', 'Цена')->sortable();
+        $grid->column('old_price', 'Старая цена')->sortable();
+        $grid->column('category.title', 'Категория');
+        $grid->column('brand.name', 'Бренд');
+        $grid->column('color_txt', 'Цвет');
 
         $grid->model()->orderBy('id', 'desc');
         $grid->model()->withTrashed();
+        $grid->model()->with('media');
         $grid->paginate(30);
 
         $grid->actions (function ($actions) {
