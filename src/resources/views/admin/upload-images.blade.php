@@ -30,10 +30,10 @@
 
 <div style="display: none;" id="crop-image">
     <div class="form-group">
-        <button type="button" class="btn btn-primary" onclick="cropper.setAspectRatio(1)">
+        <button type="button" class="btn btn-primary js-cropper-set-aspect-ratio" data-ratio="1">
             1 x 1
         </button>
-        <button type="button" class="btn btn-primary" onclick="cropper.setAspectRatio(2/3)">
+        <button type="button" class="btn btn-primary js-cropper-set-aspect-ratio" data-ratio="0.6666">
             2 x 3
         </button>
         <button type="button" class="btn btn-default js-mask-toggler">

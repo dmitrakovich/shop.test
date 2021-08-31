@@ -104,11 +104,15 @@ $(function () {
     $(this).parents('.file-preview-frame').remove();
   });
 
+  // set aspect ratio
+  $(document).on('click', '.js-cropper-set-aspect-ratio', function () {
+    cropper.setAspectRatio($(this).data('ratio'));
+  });
+
   // hide/show mask
   $(document).on('click', '.js-mask-toggler', function () {
     $('.cropper-face').toggleClass('hide-mask');
   });
-
 
 });
 
