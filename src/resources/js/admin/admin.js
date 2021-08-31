@@ -24,8 +24,8 @@ $(function () {
   var sortableAreaId = document.getElementById('sortable-images-area');
   if (sortableAreaId) {
     var sortable = Sortable.create(sortableAreaId, {
-      animation: 150,
-      ghostClass: 'blue-background-class'
+      animation: 250,
+      ghostClass: 'sortable-ghost'
     });
   }
 
