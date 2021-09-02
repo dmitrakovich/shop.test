@@ -15,6 +15,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use App\Models\Category;
 use App\Models\Collection;
+use App\Admin\Models\Media;
 use Illuminate\Support\Str;
 use App\Admin\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -218,17 +219,18 @@ class ProductController extends AdminController
 
         $form->saved(function (Form $form) {
             // delete
-            /*$removeImagesId = $form->input('remove_images') ?? [];
+            $removeImagesId = $form->input('remove_images') ?? [];
             Media::whereIn('id', $removeImagesId)->delete();
             // Storage::delete('file.jpg'); // !!!
 
             // add
-            $addImages  = $form->input('add_images') ?? [];
+            $addImages = $form->input('add_images') ?? [];
+            dd($form->input(null));
             foreach ($addImages as $image) {
                 $form->model()
                     ->addMedia(storage_path("app/$image"))
                     ->toMediaCollection();
-            }*/
+            }
 
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
 

@@ -70,6 +70,7 @@ $(function () {
             src: response
           });
 
+          // обновить сортировку
           console.log(previewHtml);
 
           $(previewHtml).appendTo('.js-images-area');

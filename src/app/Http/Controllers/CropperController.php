@@ -49,6 +49,8 @@ class CropperController extends Controller
         $files = $request->allFiles();
         is_array($files) or abort(403, 'Файлы не переданы');
 
+        // сохранять оригинальное расширение
+
         foreach ($files as $file) {
             return '/temp/' . basename($file->move(storage_path('app/temp')));
         }
