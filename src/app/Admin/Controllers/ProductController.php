@@ -224,12 +224,18 @@ class ProductController extends AdminController
             // Storage::delete('file.jpg'); // !!!
 
             // add
+            $sorting = array_filter(explode('|', $form->input('sorting')));
             $addImages = $form->input('add_images') ?? [];
-            dd($form->input(null));
             foreach ($addImages as $image) {
-                $form->model()
+                $media = $form->model()
                     ->addMedia(storage_path("app/$image"))
                     ->toMediaCollection();
+
+                $key = array_search("new-{$media->name}", $sorting);
+                $sorting[$key] = $media->id;
+            }
+            if (!empty($sorting)) {
+                Media::setNewOrder($sorting);
             }
 
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
