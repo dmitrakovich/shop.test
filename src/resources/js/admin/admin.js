@@ -67,11 +67,9 @@ $(function () {
         contentType: false,
         success(response) {
           let previewHtml = Mustache.render(IMAGE_PREVIEW_TEMPLATE, {
-            src: response
+            src: response.src,
+            name: response.name
           });
-
-          // обновить сортировку
-          console.log(previewHtml);
 
           $(previewHtml).appendTo('.js-images-area');
           $('<input>').attr({
@@ -79,7 +77,6 @@ $(function () {
             name: 'add_images[]',
             value: response,
           }).appendTo('form[class*="model-form-"]');
-          console.log(response);
         },
         error() {
           alert('Upload error: ' + response);
