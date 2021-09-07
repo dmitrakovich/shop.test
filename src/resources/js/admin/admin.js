@@ -26,15 +26,11 @@ var sortable;
 const IMAGE_PREVIEW_TEMPLATE = require('../../templates/admin/image-preview.html');
 
 $(function () {
-  // Sortable
-  var sortableAreaId = document.getElementById('sortable-images-area');
-  if (sortableAreaId) {
-    sortable = Sortable.create(sortableAreaId, {
-      animation: 250,
-      ghostClass: 'sortable-ghost',
-      onSort: (event) => updateSorting()
-    });
-  }
+  createSorting(); // Sortable
+
+  $(document).on('pjax:end', function() {
+    createSorting();
+  });
 
   $(document).on('change', '#imageLoader', function () {
     let canvas = document.getElementById("imageCanvas"),
@@ -125,12 +121,26 @@ function appendNewInput(name, value = null) {
 }
 
 /**
+ * Create sorting
+ */
+function createSorting() {
+  let sortableAreaId = document.getElementById('sortable-images-area');
+  if (sortableAreaId) {
+    sortable = Sortable.create(sortableAreaId, {
+      animation: 250,
+      ghostClass: 'sortable-ghost',
+      onSort: (event) => updateSorting()
+    });
+  }
+}
+
+/**
  * Update Sorting
  */
 function updateSorting() {
   if (typeof sortable !== 'undefined') {
     $('input[name="sorting"]').remove();
     appendNewInput('sorting', sortable.toArray().join('|'));
-    // console.log(sortable.toArray().join('|'));
+    // console.log(sortable.toArray());
   }
 }
