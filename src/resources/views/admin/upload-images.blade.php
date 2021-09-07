@@ -1,6 +1,6 @@
 <div class="js-images-area" id="sortable-images-area">
     @foreach ($media as $image)
-        <div class="file-preview-frame krajee-default">
+        <div class="file-preview-frame krajee-default" data-id="{{ $image->id }}">
             <div class="shop-file-content">
                 <img src="{{ $image->getUrl('catalog') }}"
                     class="file-preview-image kv-preview-data"

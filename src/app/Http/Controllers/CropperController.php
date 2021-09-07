@@ -50,10 +50,12 @@ class CropperController extends Controller
         is_array($files) or abort(403, 'Файлы не переданы');
 
         foreach ($files as $file) {
-            $name = time() . '.' . $file->clientExtension();
+            $timestamp = time();
+            $name = $timestamp . '.' . $file->clientExtension();
             $moveResult = $file->move(storage_path('app/temp'), $name);
 
             return [
+                'id' => 'new-' . $timestamp,
                 'src' => '/temp/' . basename($moveResult),
                 'name' => $name
             ];

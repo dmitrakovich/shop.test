@@ -7,6 +7,7 @@ import Mustache from 'mustache';
  * object for Cropper
  */
 var cropper;
+
 /**
  * config for cropper
  */
@@ -17,15 +18,21 @@ var cropperConfig = {
   autoCropArea: 1
 }
 
+/**
+ * object for Sortable
+ */
+var sortable;
+
 const IMAGE_PREVIEW_TEMPLATE = require('../../templates/admin/image-preview.html');
 
 $(function () {
   // Sortable
   var sortableAreaId = document.getElementById('sortable-images-area');
   if (sortableAreaId) {
-    var sortable = Sortable.create(sortableAreaId, {
+    sortable = Sortable.create(sortableAreaId, {
       animation: 250,
-      ghostClass: 'sortable-ghost'
+      ghostClass: 'sortable-ghost',
+      onSort: (event) => updateSorting()
     });
   }
 
@@ -66,17 +73,11 @@ $(function () {
         processData: false,
         contentType: false,
         success(response) {
-          let previewHtml = Mustache.render(IMAGE_PREVIEW_TEMPLATE, {
-            src: response.src,
-            name: response.name
-          });
+          let previewHtml = Mustache.render(IMAGE_PREVIEW_TEMPLATE, {...response});
 
           $(previewHtml).appendTo('.js-images-area');
-          $('<input>').attr({
-            type: 'hidden',
-            name: 'add_images[]',
-            value: response,
-          }).appendTo('form[class*="model-form-"]');
+          appendNewInput('add_images[]', response.src);
+          updateSorting();
         },
         error() {
           alert('Upload error: ' + response);
@@ -93,11 +94,7 @@ $(function () {
   $(document).on('click', '.kv-file-remove', function () {
     let imageId = $(this).data('id');
     if (imageId) {
-      $('<input>').attr({
-        type: 'hidden',
-        name: 'remove_images[]',
-        value: imageId,
-      }).appendTo('form[class*="model-form-"]');
+      appendNewInput('remove_images[]', imageId);
     }
     $(this).parents('.file-preview-frame').remove();
   });
@@ -114,3 +111,26 @@ $(function () {
 
 });
 
+/**
+ * Append new input to form
+ * @param {String} name input name
+ * @param {String} value input value
+ */
+function appendNewInput(name, value = null) {
+  return $('<input>').attr({
+    type: 'hidden',
+    name: name,
+    value: value,
+  }).appendTo('form[class*="model-form-"]');
+}
+
+/**
+ * Update Sorting
+ */
+function updateSorting() {
+  if (typeof sortable !== 'undefined') {
+    $('input[name="sorting"]').remove();
+    appendNewInput('sorting', sortable.toArray().join('|'));
+    // console.log(sortable.toArray().join('|'));
+  }
+}
