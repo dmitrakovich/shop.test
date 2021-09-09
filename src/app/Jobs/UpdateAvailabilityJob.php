@@ -23,6 +23,18 @@ class UpdateAvailabilityJob extends AbstractJob
      */
     protected $isManual = false;
     protected $thtime = null;
+
+    /**
+     * Products on site
+     *
+     * @var array
+     */
+    protected $allProducts = [];
+
+    // варианты букв в артикулах
+    protected static $engSymbols = ['a', 'b', 'c', 'e', 'h', 'k', 'm', 'o', 'p', 't', 'x'];
+    protected static $rusSymbols = ['а', 'в', 'с', 'е', 'н', 'к', 'м', 'о', 'р', 'т', 'х'];
+
     /**
      * Create a new job instance.
      *
@@ -51,7 +63,7 @@ class UpdateAvailabilityJob extends AbstractJob
 
         $currentProducts = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
             ->withTrashed()
-            ->with('media')
+            ->with(['media', 'sizes:id,name'])
             ->get([
                 'products.id',
                 'brand_id',
@@ -61,36 +73,23 @@ class UpdateAvailabilityJob extends AbstractJob
                 'deleted_at',
                 'label_id as label',
             ]);
-        $productsSizes = DB::table('product_attributes')
-            ->where('attribute_type', 'App\Models\Size')
-            ->leftJoin('sizes', 'product_attributes.attribute_id', '=', 'sizes.id')
-            ->get([
-                'product_id',
-                'sizes.id',
-                'name'
-            ]);
         $sizesList = Size::pluck('id', 'name')->toArray();
 
-        $allProducts = [];
-        $groupedSizesForProducts = [];
-        foreach ($productsSizes as $size) {
-            $groupedSizesForProducts[$size->product_id][$size->name] = $size->id;
-        }
         foreach ($currentProducts as $product) {
             $brandName = trim($product->brand);
             if (!empty($brandName)) {
-                $allProducts[strtolower($brandName)][$this->smallArt($product->name)] = [
+                $this->allProducts[strtolower($brandName)][$this->smallArt($product->name)] = [
                     'id' => $product->id,
                     'cat_id' => $product->category_id,
                     'status' => (int)!$product->trashed(),
                     'articul' => $product->name,
                     'brand' => $brandName,
-                    'size' => $groupedSizesForProducts[$product->id] ?? 'b',
+                    'size' => $product->sizes->pluck('id', 'name')->toArray(),
                     'label' => $product->label
                 ];
             }
         }
-        unset($currentProducts, $productsSizes, $groupedSizesForProducts);
+        unset($currentProducts);
 
         // Яндекс
         $url = 'https://cloud-api.yandex.net:443/v1/disk/resources';
@@ -140,26 +139,17 @@ class UpdateAvailabilityJob extends AbstractJob
                 $brandName = trim($itemA[3]);
                 $brandKey = strtolower($brandName);
                 $smallArt = $this->smallArt($itemC[0]);
-                $sizeNotNull = true;
-                if ($itemA[5] == 0) $sizeNotNull = false;
-                $isize = 'b';
-                if ($itemA[4] != "б/р") $isize = array($itemA[4] => $itemA[4]);
+                $sizeNotNull = $itemA[5] =! 0;
 
                 if (!empty($brandName) && !empty($smallArt) && $sizeNotNull) {
-                    // костыль для русских и английских букв
-                    if (!isset($allProducts[$brandKey][$smallArt])) {
-                        $eng_symb = array('a', 'b', 'c', 'e', 'h', 'k', 'm', 'o', 'p', 't', 'x');
-                        $rus_symb = array('а', 'в', 'с', 'е', 'н', 'к', 'м', 'о', 'р', 'т', 'х');
-                        $smallNS = str_replace($eng_symb, $rus_symb, $smallArt);
-                        if (isset($allProducts[$brandKey][$smallNS])) $smallArt = $smallNS;
-                        $smallNS = str_replace($rus_symb, $eng_symb, $smallArt);
-                        if (isset($allProducts[$brandKey][$smallNS])) $smallArt = $smallNS;
-                    }
+
+                    $smallArt = $this->searchVendorCode($smallArt, $brandKey);
+
                     if (!isset($resD[$brandKey][$smallArt])) {
                         $resD[$brandKey][$smallArt] = [
                             'articul' => $itemC[0],
                             'brand' => $brandName,
-                            'size' => $isize,
+                            'size' => $itemA[4] == 'б/р' ? ['без размера' => 'без размера'] : [$itemA[4] => $itemA[4]],
                             'cat' => $itemC[1],
                             'price' => str_replace("'00", "", $itemA[6])
                         ];
@@ -167,8 +157,8 @@ class UpdateAvailabilityJob extends AbstractJob
                         $resD[$brandKey][$smallArt]['size'][$itemA[4]] = $itemA[4];
                     }
                     // общий список
-                    if (!isset($allProducts[$brandKey][$smallArt])) {
-                        $allProducts[$brandKey][$smallArt] = 'new';
+                    if (!isset($this->allProducts[$brandKey][$smallArt])) {
+                        $this->allProducts[$brandKey][$smallArt] = 'new';
                     }
                 }
             }
@@ -185,26 +175,47 @@ class UpdateAvailabilityJob extends AbstractJob
             } else foreach ($availabilityConfig[$sbrosv] as $sbrK => $sbrV) if (!isset($sbrV['time']) || $sbrV['time'] < $deadline) unset($availabilityConfig[$sbrosv][$sbrK]);
         }
         // Сравнение
-        foreach ($allProducts as $brandKey => $brandProducts) {
+        foreach ($this->allProducts as $brandKey => $brandProducts) {
             foreach ($brandProducts as $smallArt => $product) {
                 if ($product === 'new') {
                     continue;
                 }
-                $checkIgn = $allProducts[$brandKey][$smallArt]['label'] != 3;
+                $checkIgn = $this->allProducts[$brandKey][$smallArt]['label'] != 3;
                 $checkNoM = (!isset($resD[$brandKey][$smallArt]) || (stripos($resD[$brandKey][$smallArt]['cat'], "мужск")) === false);
                 if ($checkIgn && $checkNoM) {
-                    if (isset($allProducts[$brandKey][$smallArt]) && $allProducts[$brandKey][$smallArt]['status'] != 1 && isset($resD[$brandKey][$smallArt])) {
-                        $it = $allProducts[$brandKey][$smallArt];
-                        $availabilityConfig['publish'][] = array('id' => $it['id'], 'name' => $it['brand'] . ' ' . $it['articul'], 'status' => 0, 'time' => $this->thtime);
+                    if (
+                        isset($this->allProducts[$brandKey][$smallArt])
+                        && $this->allProducts[$brandKey][$smallArt]['status'] != 1
+                        && isset($resD[$brandKey][$smallArt])
+                    ) {
+                        $it = $this->allProducts[$brandKey][$smallArt];
+                        $availabilityConfig['publish'][] = [
+                            'id' => $it['id'],
+                            'name' => "$it[brand] $it[articul]",
+                            'status' => 0,
+                            'time' => $this->thtime
+                        ];
                     }
-                    if (isset($allProducts[$brandKey][$smallArt]) && $allProducts[$brandKey][$smallArt]['status'] == 1 && !isset($resD[$brandKey][$smallArt])) {
-                        $it = $allProducts[$brandKey][$smallArt];
-                        $availabilityConfig['del'][] = array('id' => $it['id'], 'name' => $it['brand'] . ' ' . $it['articul'], 'status' => 0, 'time' => $this->thtime);
+                    if (
+                        isset($this->allProducts[$brandKey][$smallArt])
+                        && $this->allProducts[$brandKey][$smallArt]['status'] == 1
+                        && !isset($resD[$brandKey][$smallArt])
+                    ) {
+                        $it = $this->allProducts[$brandKey][$smallArt];
+                        $availabilityConfig['del'][] = [
+                            'id' => $it['id'],
+                            'name' => "$it[brand] $it[articul]",
+                            'status' => 0,
+                            'time' => $this->thtime
+                        ];
                     }
-                    if (isset($allProducts[$brandKey][$smallArt]) && $allProducts[$brandKey][$smallArt] == 'new') {
+                    if (
+                        isset($this->allProducts[$brandKey][$smallArt])
+                        && $this->allProducts[$brandKey][$smallArt] == 'new'
+                    ) {
                         $it = $resD[$brandKey][$smallArt];
                         $it_err = '';
-                        if (!isset($allProducts[$brandKey])) $it_err = 'нет бренда';
+                        if (!isset($this->allProducts[$brandKey])) $it_err = 'нет бренда';
                         if (is_array($it['size'])) {
                             $it_err_s = '';
                             foreach ($it['size'] as $err_s) if (!isset($sizesList[$err_s])) $it_err_s = 'нет размера';
@@ -222,21 +233,34 @@ class UpdateAvailabilityJob extends AbstractJob
                     }
                     // размеры
                     if (
-                        isset($allProducts[$brandKey][$smallArt])
+                        isset($this->allProducts[$brandKey][$smallArt])
                         && isset($resD[$brandKey][$smallArt])
-                        && $allProducts[$brandKey][$smallArt]['size'] != 'b'
-                        && array_keys($allProducts[$brandKey][$smallArt]['size']) != array_keys($resD[$brandKey][$smallArt]['size'])
+                        && array_keys($this->allProducts[$brandKey][$smallArt]['size']) != array_keys($resD[$brandKey][$smallArt]['size'])
                     ) {
-                        $it = $allProducts[$brandKey][$smallArt];
+                        $it = $this->allProducts[$brandKey][$smallArt];
                         $ds = $resD[$brandKey][$smallArt]['size'];
-                        $ss = $allProducts[$brandKey][$smallArt]['size'];
+                        $ss = $this->allProducts[$brandKey][$smallArt]['size'];
                         $fs = $ss + $ds;
                         foreach ($fs as $fsk => $fsv) {
                             if (!isset($ss[$fsk]) && isset($ds[$fsk])) {
                                 if (!isset($sizesList[$fsk])) $sizesList[$fsk] = 'new';
-                                $availabilityConfig['add_size'][] = array('id' => $it['id'], 'vid' => $sizesList[$fsk], 'name' => $it['brand'] . ' ' . $it['articul'], 'size' => $fsk, 'status' => 0, 'time' => $this->thtime);
+                                $availabilityConfig['add_size'][] = [
+                                    'id' => $it['id'],
+                                    'vid' => $sizesList[$fsk],
+                                    'name' => "$it[brand] $it[articul]",
+                                    'size' => $fsk,
+                                    'status' => 0,
+                                    'time' => $this->thtime
+                                ];
                             } elseif (isset($ss[$fsk]) && !isset($ds[$fsk])) {
-                                $availabilityConfig['del_size'][] = array('id' => $it['id'], 'vid' => $ss[$fsk], 'name' => $it['brand'] . ' ' . $it['articul'], 'size' => $fsk, 'status' => 0, 'time' => $this->thtime);
+                                $availabilityConfig['del_size'][] = [
+                                    'id' => $it['id'],
+                                    'vid' => $ss[$fsk],
+                                    'name' => "$it[brand]  $it[articul]",
+                                    'size' => $fsk,
+                                    'status' => 0,
+                                    'time' => $this->thtime
+                                ];
                             }
                         }
                     }
@@ -398,7 +422,7 @@ class UpdateAvailabilityJob extends AbstractJob
         $availabilityConfigFile = $this->getConfigFileName();
         if (!file_exists($availabilityConfigFile)) {
             $this->createConfigStub();
-            $this->errorWithReturn('Не найден файл конфигурации');
+            $this->error('Не найден файл конфигурации');
         }
         return require $availabilityConfigFile;
     }
@@ -446,6 +470,29 @@ class UpdateAvailabilityJob extends AbstractJob
     {
         $r = array(' ', '-', '.', '_', '*');
         return mb_strtolower(str_replace($r, '', $txt));
+    }
+
+    /**
+     * Поиск кривых артикулов
+     *
+     * @param string $vendorCode полученный артикул
+     * @param string $brandKey код бренда
+     * @return string|null найденный артикул
+     */
+    protected function searchVendorCode(string $vendorCode, string $brandKey): ?string
+    {
+        if (isset($this->allProducts[$brandKey][$vendorCode])) {
+            return $vendorCode;
+        }
+        $vendorCodeRus = str_replace(self::$engSymbols, self::$rusSymbols, $vendorCode);
+        if (isset($this->allProducts[$brandKey][$vendorCodeRus])) {
+            return $vendorCodeRus;
+        }
+        $vendorCodeEng = str_replace(self::$rusSymbols, self::$engSymbols, $vendorCode);
+        if (isset($this->allProducts[$brandKey][$vendorCodeEng])) {
+            return $vendorCodeEng;
+        }
+        return $vendorCode;
     }
 
     protected function errorWithReturn(string $msg)
