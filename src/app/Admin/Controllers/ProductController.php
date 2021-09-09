@@ -173,7 +173,7 @@ class ProductController extends AdminController
             $form->select('season_id', 'Сезон')->options(Season::pluck('name','id'))->required();
             $form->select('brand_id', 'Бренд')->options(Brand::orderBy('name')->pluck('name','id'))->required()->default(Brand::where('name', request('brand_name'))->value('id'));
             $form->select('collection_id', 'Коллекция')->options(Collection::pluck('name','id'))->required();
-            $form->select('manufacturer_id', 'Производитель')->options(Manufacturer::pluck('name','id'))->required();
+            $form->select('manufacturer_id', 'Производитель')->options(Manufacturer::pluck('name','id'));
             $form->text('color_txt', 'Цвет');
             $form->text('fabric_top_txt', 'Материал верха');
             $form->text('fabric_inner_txt', 'Материал внутри');
@@ -202,6 +202,9 @@ class ProductController extends AdminController
         $form->saving(function (Form $form) {
             if (empty($form->slug)) {
                 $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->title);
+            }
+            if (is_null($form->manufacturer_id)) {
+                $form->manufacturer_id = 0;
             }
             if ($form->isCreating()) {
                 $existsProduct = Product::withTrashed()
