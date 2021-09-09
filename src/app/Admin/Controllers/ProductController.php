@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use App\Admin\Actions\Post\BatchRestore;
 use App\Admin\Services\UploadImagesService;
+use App\Models\ProductAttributes\Manufacturer;
 use Encore\Admin\Controllers\AdminController;
 
 class ProductController extends AdminController
@@ -172,6 +173,7 @@ class ProductController extends AdminController
             $form->select('season_id', 'Сезон')->options(Season::pluck('name','id'))->required();
             $form->select('brand_id', 'Бренд')->options(Brand::orderBy('name')->pluck('name','id'))->required()->default(Brand::where('name', request('brand_name'))->value('id'));
             $form->select('collection_id', 'Коллекция')->options(Collection::pluck('name','id'))->required();
+            $form->select('manufacturer_id', 'Производитель')->options(Manufacturer::pluck('name','id'))->required();
             $form->text('color_txt', 'Цвет');
             $form->text('fabric_top_txt', 'Материал верха');
             $form->text('fabric_inner_txt', 'Материал внутри');
@@ -502,6 +504,7 @@ class ProductController extends AdminController
                 'extra_field_16' => '',
                 'extra_field_17' => '',
                 'extra_field_18' => 0,
+                'extra_field_21' => $form->manufacturer_id,
             ],
             'category' => [
                 'product_id' => $form->model()->id,
