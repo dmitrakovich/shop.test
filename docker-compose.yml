@@ -63,6 +63,7 @@ services:
     volumes:
       - ./docker/data/php:/var/php
       - ./src:/var/www/app
+      - ./.git:/var/www/.git:ro
       - ./docker/stuff/crontab:/cron/crontab
     networks:
       - default
@@ -82,6 +83,7 @@ services:
     volumes:
       - ./docker/data/php:/var/php
       - ./src:/var/www/app
+      - ./.git:/var/www/.git:ro
       - ./docker/stuff/supervisor.conf:/etc/supervisor/conf.d/supervisor.conf
     networks:
       - default
