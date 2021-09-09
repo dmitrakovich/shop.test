@@ -378,19 +378,62 @@ class UpdateAvailabilityJob extends AbstractJob
         return "<p class='adminka_message_success'>$service_message.</p>";
     }
 
-    protected function getConfig()
+    /**
+     * Get availability config file name
+     *
+     * @return string
+     */
+    protected function getConfigFileName(): string
     {
-        $availabilityConfigFile = database_path('files/availability.conf.php');
+        return database_path('files/availability.conf.php');
+    }
+
+    /**
+     * Get availability config
+     *
+     * @return array
+     */
+    protected function getConfig(): array
+    {
+        $availabilityConfigFile = $this->getConfigFileName();
         if (!file_exists($availabilityConfigFile)) {
-            $this->fail(new \Exception('Не найден файл конфигурации'));
+            $this->createConfigStub();
+            $this->errorWithReturn('Не найден файл конфигурации');
         }
         return require $availabilityConfigFile;
     }
 
-    protected function saveConfig($config)
+    /**
+     * Save availability config
+     *
+     * @param array $config
+     * @return void
+     */
+    protected function saveConfig(array $config): void
     {
-        $availabilityConfigFile = database_path('files/availability.conf.php');
-        file_put_contents($availabilityConfigFile, "<?php\nreturn " . var_export($config, true) . ';');
+        file_put_contents($this->getConfigFileName(), "<?php\nreturn " . var_export($config, true) . ';');
+    }
+
+    /**
+     * Create stub for availability config
+     *
+     * @return void
+     */
+    protected function createConfigStub(): void
+    {
+        $config = [
+            'auto_del' => 'off',
+            'ignore' => [],
+            'period' => 10,
+            'publish' => [],
+            'new' => [],
+            'add_size' => [],
+            'del' => [],
+            'del_size' => [],
+            'last_update' => null,
+            'file' => now() . ',stub',
+        ];
+        file_put_contents($this->getConfigFileName(), "<?php\nreturn " . var_export($config, true) . ';');
     }
 
     public function writeLog($msg)
