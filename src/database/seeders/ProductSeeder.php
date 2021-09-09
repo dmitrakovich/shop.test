@@ -233,6 +233,21 @@ class ProductSeeder extends Seeder
                 65 => 56, // BAROCCO style
             ]
         ],
+        'manufacturer' => [
+            'column' => 'manufacturer_id',
+            'new_id' => [
+                87 => 87, // Фабрика №10
+                86 => 86, // Фабрика №9
+                85 => 85, // Фабрика №8
+                84 => 84, // Фабрика №7
+                83 => 83, // Фабрика №6
+                82 => 82, // Фабрика №5
+                81 => 81, // Фабрика №4
+                80 => 80, // Фабрика №3
+                79 => 79, // Фабрика №2
+                78 => 78, // Фабрика №1
+            ]
+        ],
     ];
     /**
      * Run the database seeds.
@@ -288,6 +303,7 @@ class ProductSeeder extends Seeder
                 'extra_field_16 as action', // Акция
                 // 'extra_field_17', // Поднять
                 'extra_field_18 as rating', // Рейтинг
+                'extra_field_21 as manufacturer_id', // Производитель
             ])
             ->keyBy('id');
 

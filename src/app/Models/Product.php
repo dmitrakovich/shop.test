@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Facades\Currency;
 use App\Facades\Sale;
+use App\Models\ProductAttributes;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -148,6 +149,17 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(Brand::class);
     }
+
+    /**
+     * Производитель
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function manufacturer()
+    {
+        return $this->belongsTo(ProductAttributes\Manufacturer::class);
+    }
+
     /**
      * Slug для фильтра
      *

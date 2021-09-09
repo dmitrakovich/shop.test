@@ -27,6 +27,7 @@ class CreateProductsTable extends Migration
             $table->foreignId('season_id')->index()->default(0);
             $table->foreignId('color_id')->index()->default(0);
             $table->foreignId('brand_id')->index()->default(0);
+            $table->foreignId('manufacturer_id')->index()->default(0);
             $table->foreignId('collection_id')->index()->default(0);
 
             $table->string('color_txt')->nullable();
