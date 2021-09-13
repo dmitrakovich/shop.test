@@ -3,11 +3,8 @@
 use App\Models\Url;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\Shop\OrderController;
-use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\DebugController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\CurrencyController;
@@ -34,30 +31,6 @@ use App\Http\Controllers\Shop\ProductController;
 //         dd($domain);
 //     });
 // });
-
-
-// дописать права только для админа
-// вообще в админку перенести !!!
-Route::prefix('clear-cache')->group(function () {
-    Route::get('/app', function () {
-        Artisan::call('cache:clear');
-        return 'App cache is cleared';
-    });
-    // ...
-    Route::get('/all', function () {
-        Artisan::call('cache:clear');
-        Artisan::call('route:clear');
-        Artisan::call('config:clear');
-        Artisan::call('view:clear');
-        Cache::flush();
-        return 'All cache is cleared';
-    });
-});
-Route::view('/test', 'test');
-Route::get('debug', [DebugController::class, 'index']);
-Route::get('debug-sentry', function () {
-    throw new Exception('Debug Sentry error!');
-});
 
 
 Route::get('/', [IndexController::class, 'index'])->name('index-page');

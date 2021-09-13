@@ -3,6 +3,7 @@
 use Illuminate\Routing\Router;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DebugController;
 use App\Admin\Controllers\SkladController;
 
 Admin::routes();
@@ -34,6 +35,8 @@ Route::group([
 
     $router->resource('payment-methods', PaymentController::class);
     $router->resource('delivery-methods', DeliveryController::class);
+    $router->resource('currencies', CurrencyController::class);
+    $router->any('clear-cache', CacheController::class);
 
     $router->resource('banners', BannerController::class);
     $router->resource('product-carousels', ProductCarouselController::class);
@@ -44,10 +47,15 @@ Route::group([
 
     $router->resource('media', MediaController::class);
 
-    $router->resource('currencies', CurrencyController::class);
-
     // legacy
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);
     $router->any('sklad', [SkladController::class, 'index']);
+
+    // debug
+    Route::view('/test', 'test');
+    Route::get('debug', [DebugController::class, 'index']);
+    Route::get('debug-sentry', function () {
+        throw new Exception('Debug Sentry error!');
+    });
 });
