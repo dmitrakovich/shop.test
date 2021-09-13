@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Models\Url;
 use App\Models\Filter;
 use App\Models\Product;
 use App\Models\Category;
 use App\Helpers\UrlHelper;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use App\Http\Requests\FilterRequest;
 
 class CatalogController extends BaseController
 {
@@ -16,10 +15,7 @@ class CatalogController extends BaseController
      * Количество товаров на странице
      */
     protected const PAGE_SIZE = 12;
-    /**
-     * Сортировка по умлочанию
-     */
-    const DEFAULT_SORT = 'newness';
+
     /**
      * Применить фильтры к выборке
      *
@@ -49,71 +45,23 @@ class CatalogController extends BaseController
         // @see https://laravel.demiart.ru/offset-vs-cursor-pagination/
     }
 
-    /**
-     * Получить фильтра
-     *
-     * @return array
-     */
-    public function getFilters($request)
+    public function show(FilterRequest $filterRequest)
     {
-        $slugs = $request->path() ? explode('/', $request->path()) : [];
-        unset($slugs[0]); // catalog
-
-        if (!empty($slugs)) {
-            $filters = [];
-            $filtersTemp = Url::whereIn('slug', $slugs)
-                ->with('filters') // :id,name !!!
-                ->get(['slug', 'model_type', 'model_id']);
-
-            foreach ($filtersTemp as $value) {
-                $filters[$value->model_type][$value->slug] = $value->toArray();
-            }
-            // говнокод на скорую руку для сортировки категорий в правильном порядке
-            if (isset($filters['App\Models\Category'])) {
-                $categoriesFilters = $filters['App\Models\Category'];
-                $filters['App\Models\Category'] = [];
-                foreach ($slugs as $slug) {
-                    if (isset($categoriesFilters[$slug])) {
-                        $filters['App\Models\Category'][$slug] = $categoriesFilters[$slug];
-                    }
-                }
-            }
-            return $filters;
-        } else {
-            return [];
-        }
-    }
-
-    protected function getSorting($request)
-    {
-        $sorting = $request->input('sort') ?? session()->get('sorting', self::DEFAULT_SORT);
-        if (session()->get('sorting') <> $sorting) {
-            session()->put('sorting', $sorting);
-            session()->save();
-        }
-        return $sorting;
-    }
-
-    public function show($request)
-    {
-        $sort = $this->getSorting($request);
-        $currentFilters = $this->getFilters($request);
+        $sort = $filterRequest->getSorting();
+        $currentFilters = $filterRequest->getFilters();
         UrlHelper::setCurrentFilters($currentFilters);
 
         // dump($currentFilters);
 
         $products = $this->applyFilters($currentFilters)
             ->with([
-                'category',
-                'brand',
-                // 'images',
-                'sizes',
-                // 'color',
-                'fabrics',
+                'category:id,title,path',
+                'brand:id,name',
+                'sizes:id,name',
                 'media',
-                'styles',
+                'styles:id,name',
             ])
-            ->search($request->input('search'))
+            ->search($filterRequest->input('search'))
             ->sorting($sort)
             ->paginate(self::PAGE_SIZE);
 

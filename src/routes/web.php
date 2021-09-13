@@ -2,9 +2,10 @@
 
 use App\Models\Url;
 use Illuminate\Support\Str;
+use App\Http\Requests\FilterRequest;
+// use App\Http\Controllers\Shop\OrderController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\Shop\OrderController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\CurrencyController;
@@ -66,7 +67,9 @@ Route::group(['namespace' => 'Shop'], function () {
         if (isset($url) && (new $url['model_type']) instanceof App\Models\Product) {
             return (new ProductController())->show($url, $request->input());
         }
-        return (new CatalogController())->show($request);
+        return (new CatalogController())->show(
+            FilterRequest::createFrom($request)
+        );
     })
         ->where('path', '[a-zA-Z0-9/_-]+')
         ->name('shop');
