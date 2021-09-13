@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
 
             $table->string('slug', 100)->unique();
             $table->string('title')->index();
+            $table->unsignedInteger('label_id')->default(0);
 
             $table->decimal('buy_price')->default(0);
             $table->decimal('price')->default(0);
@@ -40,7 +41,15 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
 
             $table->timestamps();
+
+            $table->boolean('action')->default(false);
+            $table->unsignedInteger('rating')->default(0);
+
             $table->softDeletes();
+
+            $table->index(['price', 'id']);
+            $table->index(['created_at', 'id']);
+            $table->index(['rating', 'id']);
         });
     }
 
