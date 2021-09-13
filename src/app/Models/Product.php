@@ -212,26 +212,20 @@ class Product extends Model implements HasMedia
         switch ($type) {
             case 'newness':
             default:
-                $query->orderBy('created_at', 'desc');
-                break;
+                return $query->orderByDesc('created_at')->orderByDesc('id');
 
             case 'rating':
-                $query->orderBy('rating', 'desc');
-                break;
+                return $query->orderByDesc('rating')->orderByDesc('id');
 
             case 'price-up':
-                $query->orderBy('price', 'asc');
-                break;
+                return $query->orderBy('price')->orderBy('id');
 
             case 'price-down':
-                $query->orderBy('price', 'desc');
-                break;
+                return $query->orderByDesc('price')->orderByDesc('id');
 
             case 'sale':
-                $query->orderByRaw('((old_price - price) / old_price) desc');
-                break;
+                return $query->orderByDesc('sale')->orderByDesc('id');
         }
-        return $query->orderBy('id');
     }
     /**
      * Поиск товаров
