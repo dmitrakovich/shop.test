@@ -45,7 +45,8 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-6 text-muted">
-                        {{ $product->getFullName() }}
+                        {{ $product->getFullName() }} <br>
+                        Код товара: {{ $product->id }}
                     </div>
                     <div class="col-6 text-right rating-result">
                         @for ($i = 1; $i <= 5; $i++)

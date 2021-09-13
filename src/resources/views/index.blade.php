@@ -8,7 +8,7 @@
 
 <div class="col-md-12">
 
-    @forelse ($productCarousels as $products)
+    @forelse ($productCarousels as $productCarousel)
 
         @if ($loop->index == 1 || ($loop->last && $loop->index <= 1))
             <hr class="d-none d-sm-block my-4">
@@ -16,9 +16,10 @@
             <hr class="d-none d-sm-block my-4">
         @endif
 
+        <h4 class="text-center mt-3">{{ $productCarousel['title'] }}</h4>
         <div class="js-product-carousel" data-slick='{
-            "slidesToShow": 6,
-            "slidesToScroll": 6,
+            "slidesToShow": 5,
+            "slidesToScroll": 5,
             "autoplay": true,
             "responsive": [
                 {
@@ -37,7 +38,7 @@
                 }
             ]
         }'>
-            @foreach ($products as $product)
+            @foreach ($productCarousel['products'] as $product)
                 <div class="col position-relative">
                     <a href="{{ $product->getUrl() }}">
                         @if ($product->getSalePercentage())
@@ -61,13 +62,16 @@
         <hr class="d-none d-sm-block my-4">
     @endforelse
 
-    <div class="col-12 mt-5">
+    <div class="col-12 my-5">
         <div class="row align-items-center">
             <div class="col-12 col-sm-auto text-center">
-                <h1 class="display-4">#Barocco_style</h1>
+                <h1 class="display-4">
+                    Наш инстаграм
+                    <a href="{{ config('contacts.instagram.link') }}">@barocco.by</a>
+                </h1>
             </div>
             <div class="col-12 col-sm-auto text-center ml-auto">
-                <a href="{{ config('contacts.instagram.link') }}">Подпишись на наш Instagram</a>
+                <a class="btn btn-dark" href="{{ config('contacts.instagram.link') }}">Подпишись</a>
             </div>
         </div>
         <div class="row mx-n2 js-instagram-posts">
@@ -85,11 +89,11 @@
                 </div>
             @endforeach
         </div>
-        <div class="row mt-4 mb-5">
+        {{-- <div class="row mt-4 mb-5">
             <div class="col text-center">
                 <a href="{{ config('contacts.instagram.link') }}">Больше образов</a>
             </div>
-        </div>
+        </div> --}}
     </div>
 
 
