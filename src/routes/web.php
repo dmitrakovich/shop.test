@@ -2,6 +2,7 @@
 
 use App\Models\Url;
 use Illuminate\Support\Str;
+use App\Services\ProductService;
 use App\Http\Requests\FilterRequest;
 // use App\Http\Controllers\Shop\OrderController;
 use Illuminate\Support\Facades\Auth;
@@ -68,7 +69,7 @@ Route::group(['namespace' => 'Shop'], function () {
             return (new ProductController())->show($url, $request->input());
         }
         return (new CatalogController())->show(
-            FilterRequest::createFrom($request)
+            new ProductService, FilterRequest::createFrom($request)
         );
     })
         ->where('path', '[a-zA-Z0-9/_-]+')

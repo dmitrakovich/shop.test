@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Helpers\UrlHelper;
 use Illuminate\Support\Str;
+use App\Services\ProductService;
 use App\Http\Requests\FilterRequest;
 
 class CatalogController extends BaseController
@@ -16,25 +17,6 @@ class CatalogController extends BaseController
      */
     protected const PAGE_SIZE = 12;
 
-    /**
-     * Применить фильтры к выборке
-     *
-     * @param array $filters
-     * @return Illuminate\Database\Eloquent\Collection
-     */
-    protected function applyFilters(array $filters)
-    {
-        $query = (new Product())->newQuery();
-
-        foreach ($filters as $filterName => $filterValues) {
-            if (class_exists($filterName) && method_exists($filterName, 'applyFilter')) {
-                $query = $filterName::applyFilter($query, array_column($filterValues, 'model_id'));
-            } else {
-                continue;
-            }
-        }
-        return $query;
-    }
 
     public function ajaxNextPage()
     {
@@ -45,7 +27,7 @@ class CatalogController extends BaseController
         // @see https://laravel.demiart.ru/offset-vs-cursor-pagination/
     }
 
-    public function show(FilterRequest $filterRequest)
+    public function show(ProductService $productService, FilterRequest $filterRequest)
     {
         $sort = $filterRequest->getSorting();
         $currentFilters = $filterRequest->getFilters();
@@ -53,7 +35,7 @@ class CatalogController extends BaseController
 
         // dump($currentFilters);
 
-        $products = $this->applyFilters($currentFilters)
+        $products = $productService->applyFilters($currentFilters)
             ->with([
                 'category:id,title,path',
                 'brand:id,name',
