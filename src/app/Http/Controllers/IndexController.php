@@ -90,7 +90,7 @@ class IndexController extends Controller
     {
         $productCarousels = [];
         $carousels = ProductCarousel::ordered()
-            ->get(['category_id', 'only_sale', 'only_new', 'count']);
+            ->get(['title', 'category_id', 'only_sale', 'only_new', 'count']);
 
         foreach ($carousels as $key => $carousel) {
             $categories = Category::getChildrenCategoriesIdsList($carousel->category_id);
@@ -107,7 +107,10 @@ class IndexController extends Controller
                 ->get();
 
             if (count($products)) {
-                $productCarousels[$key] = $products;
+                $productCarousels[$key] = [
+                    'title' => $carousel->title,
+                    'products' => $products
+                ];
             }
         }
 
