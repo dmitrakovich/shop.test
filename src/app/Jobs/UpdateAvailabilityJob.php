@@ -421,8 +421,7 @@ class UpdateAvailabilityJob extends AbstractJob
     {
         $availabilityConfigFile = $this->getConfigFileName();
         if (!file_exists($availabilityConfigFile)) {
-            $this->createConfigStub();
-            $this->error('Не найден файл конфигурации');
+            $this->fail(new \Exception('Не найден файл конфигурации'));
         }
         return require $availabilityConfigFile;
     }
@@ -435,28 +434,6 @@ class UpdateAvailabilityJob extends AbstractJob
      */
     protected function saveConfig(array $config): void
     {
-        file_put_contents($this->getConfigFileName(), "<?php\nreturn " . var_export($config, true) . ';');
-    }
-
-    /**
-     * Create stub for availability config
-     *
-     * @return void
-     */
-    protected function createConfigStub(): void
-    {
-        $config = [
-            'auto_del' => 'off',
-            'ignore' => [],
-            'period' => 10,
-            'publish' => [],
-            'new' => [],
-            'add_size' => [],
-            'del' => [],
-            'del_size' => [],
-            'last_update' => null,
-            'file' => now() . ',stub',
-        ];
         file_put_contents($this->getConfigFileName(), "<?php\nreturn " . var_export($config, true) . ';');
     }
 
