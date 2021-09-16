@@ -223,8 +223,8 @@ class Product extends Model implements HasMedia
             case 'price-down':
                 return $query->orderByDesc('price')->orderByDesc('id');
 
-            case 'sale':
-                return $query->orderByDesc('sale')->orderByDesc('id');
+            // case 'discount':
+            //     return $query->orderByDesc('discount')->orderByDesc('id');
         }
     }
     /**

@@ -23,6 +23,7 @@ class CreateProductsTable extends Migration
             $table->decimal('buy_price')->default(0);
             $table->decimal('price')->default(0);
             $table->decimal('old_price')->default(0);
+            // $table->decimal('discount')->default(0);
 
             $table->foreignId('category_id')->index()->default(0);
             $table->foreignId('season_id')->index()->default(0);
@@ -50,6 +51,7 @@ class CreateProductsTable extends Migration
             $table->index(['price', 'id']);
             $table->index(['created_at', 'id']);
             $table->index(['rating', 'id']);
+            // $table->index(['discount', 'id']);
         });
     }
 
