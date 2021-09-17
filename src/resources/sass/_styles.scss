@@ -140,6 +140,15 @@ footer {
     }
 }
 
+button.scroll-top-btn {
+    position: fixed;
+    padding: 0;
+    bottom: 70px;
+    right: 60px;
+    width: 35px;
+    height: 35px;
+}
+
 .check {
     display: inline-block;
     position: relative;

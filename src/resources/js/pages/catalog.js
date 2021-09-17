@@ -39,6 +39,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // scroll top button
+  $(document).on('click', '.scroll-top-btn', function() {
+    $('html, body').stop().animate({scrollTop: 0}, 800);
+  });
+
   // quick view
   $(document).on('click', '.quick-link a', function (e) {
     e.preventDefault();
