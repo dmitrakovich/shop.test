@@ -59,6 +59,7 @@ Route::post('currency/switch', [CurrencyController::class, 'switch'])->name('cur
 
 Route::group(['namespace' => 'Shop'], function () {
     Route::post('/quick/{id}', [ProductController::class, 'quickView'])->name('product.quick');
+    Route::get('ajax-next-page', [CatalogController::class, 'ajaxNextPage']);
 
     Route::get('catalog/{path?}', function () {
         $request = Route::getCurrentRequest();

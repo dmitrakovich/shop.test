@@ -4,3 +4,4 @@ require('./bootstrap');
 require('./components/slick-slider');
 
 require('./scripts');
+require('./pages/catalog');

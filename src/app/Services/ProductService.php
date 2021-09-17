@@ -12,7 +12,7 @@ class ProductService
      * @param array $filters
      * @return Illuminate\Database\Eloquent\Collection
      */
-    public function applyFilters(array $filters)
+    protected function applyFilters(array $filters)
     {
         $query = (new Product())->newQuery();
 
@@ -24,5 +24,27 @@ class ProductService
             }
         }
         return $query;
+    }
+
+    /**
+     * Return built query
+     *
+     * @param array $filters
+     * @param string $sort
+     * @param string|null $search
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getForCatalog(array $filters, string $sort, ?string $search = null)
+    {
+        return $this->applyFilters($filters)
+            ->with([
+                'category:id,title,path',
+                'brand:id,name',
+                'sizes:id,name',
+                'media',
+                'styles:id,name',
+            ])
+            ->search($search)
+            ->sorting($sort);
     }
 }

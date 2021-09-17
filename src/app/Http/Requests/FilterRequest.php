@@ -33,9 +33,9 @@ class FilterRequest extends FormRequest
     /**
      * Get current sorting
      *
-     * @return void
+     * @return string
      */
-    public function getSorting()
+    public function getSorting(): string
     {
         $session = $this->getSession();
         $sorting = $this->input('sort') ?? $session->get('sorting', Product::DEFAULT_SORT);
@@ -50,7 +50,7 @@ class FilterRequest extends FormRequest
      *
      * @return array
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         $slugs = $this->path() ? explode('/', $this->path()) : [];
         unset($slugs[0]); // catalog

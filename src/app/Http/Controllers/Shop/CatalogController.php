@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Models\Filter;
-use App\Models\Product;
 use App\Models\Category;
 use App\Helpers\UrlHelper;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Http\Requests\FilterRequest;
+use Illuminate\Support\Facades\Cache;
+use Laravie\SerializesQuery\Eloquent;
+use Illuminate\Support\Facades\Session;
 
 class CatalogController extends BaseController
 {
@@ -17,14 +20,31 @@ class CatalogController extends BaseController
      */
     protected const PAGE_SIZE = 12;
 
-
-    public function ajaxNextPage()
+    /**
+     * Render products for next page
+     *
+     * @return array
+     */
+    public function ajaxNextPage(Request $request)
     {
-        // в будущем создать отдельный view для подгрузки только моделей,
-        // а не всей страницы целиком
+        $request->validate(['cursor' => 'required']);
 
-        // cursor
-        // @see https://laravel.demiart.ru/offset-vs-cursor-pagination/
+        $productsQuery = Cache::get($this->getQueryCacheKey());
+        abort_if(empty($productsQuery), 419, 'Query cache not found');
+
+        $productsQuery = Eloquent::unserialize($productsQuery);
+        $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
+
+        $renderedProducts = [];
+        foreach ($products as $product) {
+            $renderedProducts[] = view('shop.catalog-product', compact('product'))->render();
+        }
+
+        return [
+            'rendered_products' => $renderedProducts,
+            'cursor' => optional($products->nextCursor())->encode(),
+            'has_more' => $products->hasMorePages()
+        ];
     }
 
     public function show(ProductService $productService, FilterRequest $filterRequest)
@@ -32,22 +52,17 @@ class CatalogController extends BaseController
         $sort = $filterRequest->getSorting();
         $currentFilters = $filterRequest->getFilters();
         UrlHelper::setCurrentFilters($currentFilters);
-
         // dump($currentFilters);
 
-        $products = $productService->applyFilters($currentFilters)
-            ->with([
-                'category:id,title,path',
-                'brand:id,name',
-                'sizes:id,name',
-                'media',
-                'styles:id,name',
-            ])
-            ->search($filterRequest->input('search'))
-            ->sorting($sort)
-            ->paginate(self::PAGE_SIZE);
+        $productsQuery = $productService->getForCatalog(
+            $currentFilters, $sort, $filterRequest->input('search')
+        );
 
-        abort_if(empty($products), 404);
+        $productsTotal = $productsQuery->count();
+        $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
+
+        // save query in cache (100 minutes)
+        Cache::put($this->getQueryCacheKey(), Eloquent::serialize($productsQuery), 6000);
 
         $filters = Filter::all();
         $sortingList = [
@@ -71,6 +86,7 @@ class CatalogController extends BaseController
 
         $data = compact(
             'products',
+            'productsTotal',
             'category',
             'categoryTitle',
             'currentFilters',
@@ -80,5 +96,15 @@ class CatalogController extends BaseController
         );
 
         return view('shop.catalog', $data);
+    }
+
+    /**
+     * Generate key for set/get query cahce
+     *
+     * @return string
+     */
+    protected function getQueryCacheKey(): string
+    {
+        return 'catalog-query-' . Session::getId();
     }
 }
