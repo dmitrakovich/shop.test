@@ -2,16 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Product;
 use App\Models\Url;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FilterRequest extends FormRequest
 {
-    /**
-     * Default sorting
-     */
-    const DEFAULT_SORT = 'newness';
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -41,10 +37,10 @@ class FilterRequest extends FormRequest
      */
     public function getSorting()
     {
-        $sorting = $this->input('sort') ?? session()->get('sorting', self::DEFAULT_SORT);
-        if (session()->get('sorting') <> $sorting) {
-            session()->put('sorting', $sorting);
-            session()->save();
+        $session = $this->getSession();
+        $sorting = $this->input('sort') ?? $session->get('sorting', Product::DEFAULT_SORT);
+        if ($session->get('sorting') <> $sorting) {
+            $session->put('sorting', $sorting);
         }
         return $sorting;
     }

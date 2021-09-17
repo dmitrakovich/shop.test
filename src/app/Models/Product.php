@@ -28,6 +28,11 @@ class Product extends Model implements HasMedia
     use InteractsWithMedia;
 
     /**
+     * Default sorting
+     */
+    const DEFAULT_SORT = 'rating';
+
+    /**
      * The attributes that aren't mass assignable.
      *
      * @var array
@@ -211,10 +216,10 @@ class Product extends Model implements HasMedia
     {
         switch ($type) {
             case 'newness':
-            default:
                 return $query->orderByDesc('created_at')->orderByDesc('id');
 
             case 'rating':
+            default:
                 return $query->orderByDesc('rating')->orderByDesc('id');
 
             case 'price-up':
