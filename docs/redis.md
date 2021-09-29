@@ -1,7 +1,0 @@
-redis
-
-установить
-
-phpredis
-
-
