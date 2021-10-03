@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Facades\Currency;
 use App\Facades\Sale;
 use App\Models\ProductAttributes;
+use App\Services\SearchService;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -242,20 +243,21 @@ class Product extends Model implements HasMedia
     public function scopeSearch(Builder $query, ?string $search = null)
     {
         if (!empty($search)) {
-            $query->where(function ($query) use ($search) {
-                $search = explode(' ', $search);
-                $this->generateSearchQuery($query, 'title', $search)
-                    ->orWhereHas('brand', function (Builder $query) use ($search) {
-                        $this->generateSearchQuery($query, 'name', $search);
+            $searchService = new SearchService($search);
+            $query->where(function ($query) use ($searchService) {
+                $searchService->generateSearchQuery($query, 'title')
+                    ->orWhereIn('id', $searchService->getIds())
+                    ->orWhereHas('brand', function (Builder $query) use ($searchService) {
+                        $searchService->generateSearchQuery($query, 'name');
                     })
-                    ->orWhereHas('category', function (Builder $query) use ($search) {
-                        $this->generateSearchQuery($query, 'title', $search);
+                    ->orWhereHas('category', function (Builder $query) use ($searchService) {
+                        $searchService->generateSearchQuery($query, 'title');
                     })
-                    ->orWhere(function (Builder $query) use ($search) {
-                        $this->generateSearchQuery($query, 'color_txt', $search);
+                    ->orWhere(function (Builder $query) use ($searchService) {
+                        $searchService->generateSearchQuery($query, 'color_txt');
                     })
-                    ->orWhereHas('tags', function (Builder $query) use ($search) {
-                        $this->generateSearchQuery($query, 'name', $search);
+                    ->orWhereHas('tags', function (Builder $query) use ($searchService) {
+                        $searchService->generateSearchQuery($query, 'name');
                     });
             });
             $query->orderBy('created_at', 'desc');
@@ -285,25 +287,6 @@ class Product extends Model implements HasMedia
     public function scopeOnlyNew(Builder $query, int $days = 10)
     {
         return $query->where('created_at', '>', now()->subDays($days));
-    }
-
-    /**
-     * Сгенерировать query для поиска
-     *
-     * @param Builder $query
-     * @param string $column
-     * @param array $search
-     * @return Builder
-     */
-    protected function generateSearchQuery(Builder $query, string $column, array $search)
-    {
-        $value = current($search);
-        $query->where($column, 'like', "%$value%");
-
-        while ($value = next($search)) {
-            $query->orWhere($column, 'like', "%$value%");
-        }
-        return $query;
     }
 
     /**
