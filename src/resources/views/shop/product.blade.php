@@ -199,6 +199,10 @@
                 Материал подошвы - {{ $product->fabric_outsole_txt }} <br>
             @endif
 
+            @if (!empty($product->bootleg_height_txt))
+                Высота голенища - {{ $product->bootleg_height_txt }} <br>
+            @endif
+
             @if (!empty($product->heel_txt))
                 Высота каблука - {{ $product->heel_txt }} <br>
             @endif
