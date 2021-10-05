@@ -23,11 +23,12 @@ use Illuminate\Support\MessageBag;
 use App\Admin\Actions\Post\Restore;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Admin\Actions\Post\BatchRestore;
 use App\Admin\Services\UploadImagesService;
-use App\Models\ProductAttributes\Manufacturer;
 use Encore\Admin\Controllers\AdminController;
+use App\Models\ProductAttributes\Manufacturer;
 
 class ProductController extends AdminController
 {
@@ -532,6 +533,10 @@ class ProductController extends AdminController
 
             'videos' => $form->model()->getMedia()->map(function ($image) {
                 return $image->getCustomProperty('video');
+            })->filter()->toArray(),
+
+            'imidj' => $form->model()->getMedia()->map(function ($image) {
+                return $image->getCustomProperty('is_imidj');
             })->filter()->toArray()
         ];
 
@@ -541,7 +546,6 @@ class ProductController extends AdminController
         ];
 
         // Log::info($data);
-
         $response = Http::asForm()->post('https://modny.by/saveimg_gRf5lP46jRm8s.php', $data);
         admin_info('Modny.by:', $response->body());
     }

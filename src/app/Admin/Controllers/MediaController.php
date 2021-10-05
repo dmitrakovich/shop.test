@@ -26,36 +26,19 @@ class MediaController extends AdminController
     {
         $grid = new Grid(new Media());
 
-        // $grid->column('id', __('Id'));
-        // $grid->column('model_type', __('Model type'));
-        // $grid->column('model_id', __('Model id'));
-        // $grid->column('model', __('Model'));
-
         $grid->column('picture')->display(function () {
             return $this->getUrl();
         })->image('', 120, 120);
-
         $grid->column('link', 'Ссылка на товар')->display(function () {
             return '<a href="' . $this->model->getUrl() . '" target="_blank">' . $this->model->getFullName() . '</a>';
         });
-        // $grid->column('model.slug', 'Slug');
-        // $grid->column('uuid', __('Uuid'));
-        // $grid->column('collection_name', __('Collection name'));
-        // $grid->column('name', __('Name'));
-        // $grid->column('file_name', __('File name'));
-        // $grid->column('mime_type', __('Mime type'));
-        // $grid->column('disk', __('Disk'));
-        // $grid->column('conversions_disk', __('Conversions disk'));
-        // $grid->column('size', __('Size'));
-        // $grid->column('manipulations', __('Manipulations'));
-        // $grid->column('custom_properties', __('Custom properties'));
         $grid->column('video_url', 'Ссылка на видео')->display(function () {
             return $this->custom_properties['video'] ?? '';
-        })->editable(); // ->copyable()
-        // $grid->column('responsive_images', __('Responsive images'));
+        })->editable();
+        $grid->column('is_imidj', 'Имиджевое')->display(function () {
+            return $this->custom_properties['is_imidj'] ?? false;
+        })->switch();
         $grid->column('order_column', 'Сортировка');
-        // $grid->column('created_at', __('Created at'));
-        // $grid->column('updated_at', __('Updated at'));
 
         $grid->model()->orderBy('id', 'desc');
         // $grid->model()->where('custom_properties', 'like', '%video%');
@@ -91,27 +74,7 @@ class MediaController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Media::findOrFail($id));
-
-        $show->field('id', __('Id'));
-        $show->field('model_type', __('Model type'));
-        $show->field('model_id', __('Model id'));
-        $show->field('uuid', __('Uuid'));
-        $show->field('collection_name', __('Collection name'));
-        $show->field('name', __('Name'));
-        $show->field('file_name', __('File name'));
-        $show->field('mime_type', __('Mime type'));
-        $show->field('disk', __('Disk'));
-        $show->field('conversions_disk', __('Conversions disk'));
-        $show->field('size', __('Size'));
-        $show->field('manipulations', __('Manipulations'));
-        $show->field('custom_properties', __('Custom properties'));
-        $show->field('responsive_images', __('Responsive images'));
-        $show->field('order_column', __('Order column'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
-
-        return $show;
+        return back();
     }
 
     /**
@@ -129,6 +92,13 @@ class MediaController extends AdminController
                 $form->model()->setCustomProperty('video', $videoUrl);
             } else {
                 $form->model()->forgetCustomProperty('video');
+            }
+
+            $isImidj = request()->input('is_imidj');
+            if (!empty($isImidj)) {
+                $form->model()->setCustomProperty('is_imidj', true);
+            } else {
+                $form->model()->forgetCustomProperty('is_imidj');
             }
         });
 
