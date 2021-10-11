@@ -1,0 +1,6 @@
+<?php
+
+return [
+    'url' => 'https://www.google.com/recaptcha/api/siteverify',
+    'secret' => env('CAPTHCA_SECRET'),
+];
