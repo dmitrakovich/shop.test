@@ -107,7 +107,7 @@
         </div>
 
         <div class="row form-group justify-content-end">
-            <button type="submit" class="btn btn-dark px-4">Оставить отзыв</button>
+            <button type="button" class="js-leave-feedback-btn btn btn-dark px-4">Оставить отзыв</button>
         </div>
 
     </form>

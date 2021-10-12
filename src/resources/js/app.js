@@ -5,3 +5,4 @@ require('./components/slick-slider');
 
 require('./scripts');
 require('./pages/catalog');
+require('./pages/feedbacks');

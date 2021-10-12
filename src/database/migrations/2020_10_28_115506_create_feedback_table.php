@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Feedback;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,7 +24,8 @@ class CreateFeedbackTable extends Migration
             $table->text('text');
             $table->tinyInteger('rating')->default(5);
             $table->unsignedBigInteger('product_id')->index()->default(0);
-            $table->tinyInteger('type_id')->default(1);
+            $table->tinyInteger('type_id')->default(Feedback::TYPE_REVIEW);
+            $table->tinyInteger('captcha_score')->default(0);
             $table->boolean('view_only_posted')->default(true);
             $table->boolean('publish')->default(true);
             $table->ipAddress('ip');

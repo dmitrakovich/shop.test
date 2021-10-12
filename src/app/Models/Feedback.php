@@ -28,6 +28,14 @@ class Feedback extends Model implements HasMedia
         'publish',
         'ip',
     ];
+
+    /**
+     * Feedbacks types by ids
+     */
+    const TYPE_SPAM = 0;
+    const TYPE_REVIEW = 1;
+    const TYPE_QUESTION = 2;
+
     /**
      * Тип по умолчанию
      *

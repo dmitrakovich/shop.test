@@ -44,7 +44,7 @@ Route::view('shops', 'static.shops')->name('static-shops');
 Auth::routes(['verify' => true]);
 
 Route::get('feedbacks/{type?}', [FeedbackController::class, 'index'])->name('feedbacks');
-Route::post('feedbacks', [FeedbackController::class, 'store'])->name('feedbacks.store');
+Route::middleware('captcha')->post('feedbacks', [FeedbackController::class, 'store'])->name('feedbacks.store');
 
 // dashboard
 Route::prefix('dashboard')->middleware('auth')->group(function () {
