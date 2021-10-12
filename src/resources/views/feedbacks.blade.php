@@ -106,7 +106,9 @@
             </div>
         </div>
 
-        <div class="row form-group justify-content-end">
+        @include('includes.captcha-privacy-policy')
+
+        <div class="row mt-4 mb-0 form-group justify-content-end">
             <button type="button" class="js-leave-feedback-btn btn btn-dark px-4">Оставить отзыв</button>
         </div>
 
