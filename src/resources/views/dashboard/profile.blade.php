@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Мои заказы')
+@section('title', 'Мои данные')
 
 @section('breadcrumbs', Breadcrumbs::render('dashboard-profile'))
 
@@ -10,7 +10,13 @@
 </div>
 
 
-<div class="col-12 col-lg-9 static-page">    
+<div class="col-12 col-lg-9 static-page">
+    @if ($emailVerified)
+        <div class="alert alert-success" role="alert">
+            Электронная почта успешно подтверждена!
+        </div>
+    @endif
+
     <h3>Мои данные</h3>
 
     @include('includes.result-messages')
@@ -19,8 +25,8 @@
         @method('PATCH')
         @csrf
         <div class="form-group row">
-            <div class="col-12 col-md mt-2">                
-                <input id="last_name" type="text" name="last_name" 
+            <div class="col-12 col-md mt-2">
+                <input id="last_name" type="text" name="last_name"
                     class="form-control @error('last_name') is-invalid @enderror"
                     placeholder="Фамилия" value="{{ old('last_name', $user->last_name) }}">
                 @error('last_name')
@@ -29,8 +35,8 @@
                     </span>
                 @enderror
             </div>
-            <div class="col-12 col-md mt-2">                
-                <input id="first_name" type="text" name="first_name" 
+            <div class="col-12 col-md mt-2">
+                <input id="first_name" type="text" name="first_name"
                     class="form-control @error('first_name') is-invalid @enderror"
                     placeholder="Имя" value="{{ old('first_name', $user->first_name) }}">
                 @error('first_name')
@@ -39,8 +45,8 @@
                     </span>
                 @enderror
             </div>
-            <div class="col-12 col-md mt-2">                
-                <input id="patronymic_name" type="text" name="patronymic_name" 
+            <div class="col-12 col-md mt-2">
+                <input id="patronymic_name" type="text" name="patronymic_name"
                     class="form-control @error('patronymic_name') is-invalid @enderror"
                     placeholder="Отчество" value="{{ old('patronymic_name', $user->patronymic_name) }}">
                 @error('patronymic_name')
@@ -54,7 +60,7 @@
         <div class="form-group row">
             <label for="email" class="d-none d-md-block col-md-3 col-form-label">Ваш e-mail</label>
             <div class="col-12 col-md-3">
-                <input id="email" type="email" name="email" 
+                <input id="email" type="email" name="email"
                     class="form-control @error('email') is-invalid @enderror"
                     placeholder="email" value="{{ $user->email }}">
                 @error('email')
@@ -69,7 +75,7 @@
         <div class="form-group row">
             <label for="password" class="d-none d-md-block col-md-3 col-form-label">Пароль</label>
             <div class="col-12 col-md-3">
-                <input id="password" type="password" name="password" 
+                <input id="password" type="password" name="password"
                     class="form-control @error('password') is-invalid @enderror" autocomplete="new-password">
                 @error('password')
                     <span class="invalid-feedback" role="alert">
@@ -98,7 +104,7 @@
         <div class="form-group row">
             <label for="birth_date" class="d-none d-md-block col-md-3 col-form-label">Дата рождения</label>
             <div class="col-12 col-md-3">
-            <input id="birth_date" type="date" name="birth_date" min="1900-01-01" max="{{ date('Y-m-d') }}" 
+            <input id="birth_date" type="date" name="birth_date" min="1900-01-01" max="{{ date('Y-m-d') }}"
                 class="form-control @error('birth_date') is-invalid @enderror">
                 @error('birth_date')
                     <span class="invalid-feedback" role="alert">
@@ -143,7 +149,7 @@
                 <button type="submit" class="btn btn-dark btn-lg btn-block">Сохранить</button>
             </div>
         </div>
-        
+
     </form>
 
 </div>
