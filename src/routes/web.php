@@ -49,8 +49,8 @@ Route::middleware('captcha')->post('feedbacks', [FeedbackController::class, 'sto
 // dashboard
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::view('saved', 'dashboard.saved')->name('dashboard-saved');
-    Route::get('profile', [DashboardController::class, 'getProfileData'])->name('dashboard-profile');
-    Route::patch('profile/{user}/update', [DashboardController::class, 'updateProfileData'])->name('dashboard-profile-update');
+    Route::get('profile', [DashboardController::class, 'edit'])->name('dashboard-profile');
+    Route::patch('profile/{user}/update', [DashboardController::class, 'update'])->name('dashboard-profile-update');
     Route::view('card', 'dashboard.card')->name('dashboard-card');
     Route::get('{orders?}', function () { return redirect()->route('orders.index'); });
 });

@@ -2,27 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserDataUpdateRequest;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UserDataUpdateRequest;
 
 class DashboardController extends Controller
 {
     /**
-     * Получить данные профиля
+     * Show the form for editing user profile
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function getProfileData()
+    public function edit(Request $request)
     {
-        $user = auth()->user();
-        $countriesList = [
-            'Беларусь',
-            'Украина',
-            'Российская Федерация',
-            'Казахстан'
-        ];
-        return view('dashboard.profile', compact('user', 'countriesList'));
+        return view('dashboard.profile', [
+            'user' => auth()->user(),
+            'emailVerified' => $request->has('verified'),
+            'countriesList' => [
+                'Беларусь',
+                'Украина',
+                'Российская Федерация',
+                'Казахстан'
+            ]
+        ]);
     }
 
     /**
@@ -32,9 +36,19 @@ class DashboardController extends Controller
      * @param Request $request
      * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function updateProfileData(User $user, UserDataUpdateRequest $request)
+    public function update(User $user, UserDataUpdateRequest $request)
     {
         $result = $user->update($request->input());
+
+        if ($request->filled('password')) {
+            $request->validate(['password' => ['required', 'string', 'min:8']]);
+
+            $user->forceFill([
+                'password' => Hash::make($request->input('password')),
+                'remember_token' => Str::random(60),
+            ])->save();
+        }
+
         if ($result) {
             return redirect()
                 ->route('dashboard-profile')
