@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const feedbackForm = document.querySelector('form#leave-feedback');
   const submitButton = document.querySelector('.js-leave-feedback-btn');
 
-  submitButton.addEventListener('click', event => {
+  submitButton?.addEventListener('click', event => {
     submitButton.disabled = true;
     submitButton.classList.add('btn-disabled-load');
 

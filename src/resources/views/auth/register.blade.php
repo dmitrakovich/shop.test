@@ -4,13 +4,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card mt-5">
+            <div class="card my-5">
                 <div class="card-header">
                     <h4>РЕГИСТРАЦИЯ</h4>
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('register') }}" name="register_form">
                         @csrf
 
                         <div class="form-group row">
@@ -62,6 +62,9 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
+
+                        @include('includes.captcha-privacy-policy')
+                        <br>
 
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">
