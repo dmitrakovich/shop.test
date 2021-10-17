@@ -22,6 +22,17 @@ class FeedbackController extends AdminController
     protected $title = 'Feedback';
 
     /**
+     * Feedback types
+     *
+     * @var array
+     */
+    protected $feedbackTypes = [
+        Feedback::TYPE_SPAM => 'спам',
+        Feedback::TYPE_REVIEW => 'отзыв',
+        Feedback::TYPE_QUESTION => 'вопрос',
+    ];
+
+    /**
      * Make a grid builder.
      *
      * @return Grid
@@ -30,9 +41,6 @@ class FeedbackController extends AdminController
     {
         $grid = new Grid(new Feedback());
 
-        // $grid->column('id', __('Id'));
-        // $grid->column('user_id', __('User id'));
-        // $grid->column('yandex_id', __('Yandex id'));
         $grid->column('id', 'Ответить')->display(function ($feedbackId) {
             return '<a href="' . route('admin.feedbacks.feedback-answers.create', $feedbackId) . '" target="_blank">Ответить</a>';
         });
@@ -47,19 +55,22 @@ class FeedbackController extends AdminController
         $grid->column('product.title', 'Товар');/*->display(function ($product) {
             return empty($product) ? 'не найден' : "<a href='$product[path]' target='_blank'>$product[title]</a>";
         });*/
-        $grid->column('type_id', 'Тип')->using([1 => 'отзыв', 2 => 'вопрос']);;
-        // $grid->column('view_only_posted', __('View only posted'));
+        $grid->column('type_id', 'Тип')->using($this->feedbackTypes);
         $grid->column('publish', 'Публиковать')->switch();
         // $grid->column('ip', __('Ip'));
         $grid->column('created_at', 'Дата создния');
-        // $grid->column('updated_at', __('Updated at'));
-        // $grid->column('deleted_at', __('Deleted at'));
 
         $grid->model()->orderBy('id', 'desc');
 
         $grid->actions(function ($actions) {
             $actions->add(new ShowAnswersAction);
         });
+
+        $grid->rows(function ($row) {
+            if ($row->column('type_id') == 'спам') {
+                $row->style("background-color:#cca4a4;");
+            }
+         });
 
         return $grid;
     }
@@ -72,26 +83,7 @@ class FeedbackController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Feedback::findOrFail($id));
-
-        $show->field('id', __('Id'));
-        $show->field('user_id', __('User id'));
-        $show->field('yandex_id', __('Yandex id'));
-        $show->field('user_name', __('User name'));
-        $show->field('user_email', __('User email'));
-        $show->field('user_phone', __('User phone'));
-        $show->field('text', __('Text'));
-        $show->field('rating', __('Rating'));
-        $show->field('product_id', __('Product id'));
-        $show->field('type_id', __('Type id'));
-        $show->field('view_only_posted', __('View only posted'));
-        $show->field('publish', __('Publish'));
-        $show->field('ip', __('Ip'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
-        $show->field('deleted_at', __('Deleted at'));
-
-        return $show;
+        return back();
     }
 
     /**
@@ -105,13 +97,13 @@ class FeedbackController extends AdminController
 
         $form->number('user_id', __('User id'));
         $form->number('yandex_id', __('Yandex id'));
-        $form->text('user_name', __('User name'));
+        $form->text('user_name', 'Имя');
         $form->text('user_email', __('User email'));
         $form->number('user_phone', __('User phone'));
         $form->textarea('text', __('Text'));
-        $form->switch('rating', __('Rating'));
+        $form->select('rating', 'Оценка')->options([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5]);
         $form->number('product_id', __('Product id'));
-        $form->switch('type_id', __('Type id'))->default(1);
+        $form->select('type_id', 'Тип')->options($this->feedbackTypes)->default(1);
         $form->switch('view_only_posted', __('View only posted'))->default(1);
         $form->switch('publish', __('Publish'))->default(1);
         $form->ip('ip', __('Ip'));
