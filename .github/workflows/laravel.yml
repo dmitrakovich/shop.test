@@ -43,7 +43,7 @@ jobs:
         DB_DATABASE: database/database.sqlite
       run: |
         php artisan migrate --force
-        ./vendor/bin/phpuni
+        ./vendor/bin/phpunit
     - name: Install NPM dependencies
       run: npm install
     - name: Minify CSS and JS files
