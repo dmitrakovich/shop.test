@@ -41,16 +41,13 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: php artisan migrate --force
+      run: |
+        php artisan migrate --force
+        ./vendor/bin/phpuni
     - name: Install NPM dependencies
       run: npm install
     - name: Minify CSS and JS files
       run: npm run production
-    # - name: Execute tests (Unit and Feature tests) via PHPUnit
-    #   env:
-    #     DB_CONNECTION: sqlite
-    #     DB_DATABASE: database/database.sqlite
-    #   run: ./vendor/bin/phpunit
 
     # - name: Deploy
     #   run: |
