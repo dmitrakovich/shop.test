@@ -44,7 +44,7 @@ jobs:
       run: |
         php artisan migrate --force
         php artisan job:dispatch SxGeoUpdateJob
-        ./vendor/bin/phpunit
+        php artisan test
     - name: Install NPM dependencies
       run: npm install
     - name: Minify CSS and JS files
