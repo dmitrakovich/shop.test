@@ -2,7 +2,10 @@
 
 namespace Tests;
 
+use App\Facades\Currency;
+use Database\Seeders\CurrencySeeder;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Support\Facades\Cache;
 
 trait CreatesApplication
 {
@@ -17,6 +20,22 @@ trait CreatesApplication
 
         $app->make(Kernel::class)->bootstrap();
 
+        $this->prepareApp($app);
+
         return $app;
+    }
+
+    /**
+     * Prepare app
+     *
+     * @param mixed $app
+     * @return void
+     */
+    private function prepareApp($app)
+    {
+        $app->call(CurrencySeeder::class);
+
+        Cache::flush();
+        Currency::getCurrentCurrency();
     }
 }

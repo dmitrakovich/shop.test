@@ -43,6 +43,7 @@ jobs:
         DB_DATABASE: database/database.sqlite
       run: |
         php artisan migrate --force
+        php artisan job:dispatch SxGeoUpdateJob
         ./vendor/bin/phpunit
     - name: Install NPM dependencies
       run: npm install
