@@ -37,6 +37,10 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
+    - name: Install NPM dependencies
+      run: npm install
+    - name: Minify CSS and JS files
+      run: npm run production
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
@@ -45,10 +49,6 @@ jobs:
         php artisan migrate --force
         php artisan job:dispatch SxGeoUpdateJob
         php artisan test
-    - name: Install NPM dependencies
-      run: npm install
-    - name: Minify CSS and JS files
-      run: npm run production
 
     # - name: Deploy
     #   run: |
