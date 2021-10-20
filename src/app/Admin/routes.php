@@ -38,10 +38,13 @@ Route::group([
     $router->resource('currencies', CurrencyController::class);
     $router->any('clear-cache', CacheController::class);
 
-    $router->resource('banners', BannerController::class);
-    $router->resource('product-carousels', ProductCarouselController::class);
+    $router->group(['prefix' => 'banners'],function ($router) {
+        $router->resource('banners', BannerController::class);
+        $router->resource('product-carousels', ProductCarouselController::class);
+        $router->get('instagram', Forms\Instagram::class);
+    });
+
     $router->resource('sales', SaleController::class);
-    $router->get('instagram', Forms\Instagram::class);
 
     $router->resource('feedbacks', FeedbackController::class);
     $router->resource('feedbacks.feedback-answers', FeedbackAnswerController::class);
