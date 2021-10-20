@@ -28,6 +28,12 @@ class InstagramService
      */
     protected $tokenLifetime = 4320000; // 50 days
 
+    /**
+     * Cache keys
+     */
+    const CACHE_POSTS_KEY = 'instagram_posts';
+    const CACHE_TITLE_KEY = 'instagram_title';
+
     public function __construct()
     {
         $this->accessToken = $this->getAccessToken();;
@@ -110,8 +116,33 @@ class InstagramService
      */
     public function getCachedPosts(): array
     {
-        return Cache::remember('instagram_posts', 3600, function () { // 1h
+        return Cache::remember(self::CACHE_POSTS_KEY, 3600, function () { // 1h
             return $this->getPosts();
         });
+    }
+
+    /**
+     * Get title from admin panel
+     *
+     * @return string|null
+     */
+    public function getTitle(): ?string
+    {
+        return Cache::get(self::CACHE_TITLE_KEY);
+    }
+
+    /**
+     * Set new title for instagram
+     *
+     * @param string|null $title
+     * @return void
+     */
+    public function setTitle(?string $title): void
+    {
+        if (empty($title)) {
+            Cache::forget(self::CACHE_TITLE_KEY);
+        } else {
+            Cache::forever(self::CACHE_TITLE_KEY, $title);
+        }
     }
 }

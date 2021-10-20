@@ -30,6 +30,7 @@ class IndexController extends Controller
     {
         return view('index', [
             'instagramPosts' => array_slice($instagramService->getCachedPosts(), 0, 6),
+            'instagramTitle' => $instagramService->getTitle(),
             'productCarousels' => $this->getProductCarousels()
         ]);
     }
