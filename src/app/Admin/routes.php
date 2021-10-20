@@ -38,8 +38,8 @@ Route::group([
     $router->resource('currencies', CurrencyController::class);
     $router->any('clear-cache', CacheController::class);
 
-    $router->group(['prefix' => 'banners'],function ($router) {
-        $router->resource('banners', BannerController::class);
+    $router->group(['prefix' => 'bnrs'],function ($router) {
+        $router->resource('bnrs', BannerController::class);
         $router->resource('product-carousels', ProductCarouselController::class);
         $router->get('instagram', Forms\Instagram::class);
     });
