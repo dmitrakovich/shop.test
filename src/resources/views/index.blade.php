@@ -63,39 +63,8 @@
     @endforelse
 
     <div class="col-12 my-5">
-        <div class="row align-items-center">
-            <div class="col-12 col-sm-auto text-center">
-                <h1 class="display-4">
-                    Наш инстаграм
-                    <a href="{{ config('contacts.instagram.link') }}">@barocco.by</a>
-                </h1>
-            </div>
-            <div class="col-12 col-sm-auto text-center ml-auto">
-                <a class="btn btn-dark" href="{{ config('contacts.instagram.link') }}">Подпишись</a>
-            </div>
-        </div>
-        <div class="row mx-n2 js-instagram-posts">
-            @foreach ($instagramPosts as $post)
-                <div class="col-12 col-sm-4">
-                    <a href="{{ $post['url'] }}" rel="noopener" target="_blank">
-                        <img src="{{ $post['image'] }}" alt="" class="img-fluid" />
-                    </a>
-                    <div class="row">
-                        <div class="col-auto">@barocco</div>
-                        <div class="col-auto ml-auto">
-                            &#10084;&nbsp;{{ $post['likes'] }}
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-        {{-- <div class="row mt-4 mb-5">
-            <div class="col text-center">
-                <a href="{{ config('contacts.instagram.link') }}">Больше образов</a>
-            </div>
-        </div> --}}
+        @include('includes.instagram-block')
     </div>
-
 
 </div>
 
