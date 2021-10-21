@@ -19,13 +19,13 @@ class Banner extends Model implements HasMedia
         $indexMainBanner = self::active()
             ->where('position', 'index_main')
             ->with('media')
-            ->orderByDesc('priority')
+            ->orderByPriority()
             ->first(['id', 'title', 'url']);
 
         $indexTopBanners = self::active()
             ->where('position', 'index_top')
             ->with('media')
-            ->orderByDesc('priority')
+            ->orderByPriority()
             ->get(['id', 'title', 'url']);
 
         return view('banners.index-main', compact('indexMainBanner', 'indexTopBanners'));
@@ -37,7 +37,7 @@ class Banner extends Model implements HasMedia
             ->where('position', 'index_bottom')
             ->with('media')
             ->orderByDesc('priority')
-            // ->inRandomOrder()
+            ->orderByPriority()
             // ->limit(4)
             ->get(['id', 'title', 'url']);
 
@@ -49,7 +49,7 @@ class Banner extends Model implements HasMedia
         $catalogBanner = self::active()
             ->where('position', 'catalog_top')
             ->with('media')
-            ->inRandomOrder()
+            ->orderByPriority()
             ->first(['id', 'title', 'url']);
 
         return view('banners.catalog-top', compact('catalogBanner'));
@@ -60,12 +60,18 @@ class Banner extends Model implements HasMedia
         $mainMenuCatalog = self::active()
             ->where('position', 'main_menu_catalog')
             ->with('media')
-            ->inRandomOrder()
+            ->orderByPriority()
             ->first(['id', 'title', 'url']);
 
         return view('banners.main-menu-catalog', compact('mainMenuCatalog'));
     }
 
+    /**
+     * Scope a query to only active banners.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeActive($query)
     {
         return $query->where('active', true)
@@ -77,5 +83,16 @@ class Banner extends Model implements HasMedia
                 return $query->where('end_datetime', '>=', now())
                     ->orWhereNull('end_datetime');
             });
+    }
+
+    /**
+     * Scope a query to order by priority.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOrderByPriority($query)
+    {
+        return $query->orderByRaw('RAND() * ( priority + 2 ) DESC');
     }
 }
