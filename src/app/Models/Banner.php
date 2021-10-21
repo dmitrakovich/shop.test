@@ -93,6 +93,8 @@ class Banner extends Model implements HasMedia
      */
     public function scopeOrderByPriority($query)
     {
-        return $query->orderByRaw('RAND() * ( priority + 2 ) DESC');
+        return $query->orderByRaw(
+            $query->getGrammar()->compileRandom('') . ' * ( priority + 2 ) DESC'
+        );
     }
 }
