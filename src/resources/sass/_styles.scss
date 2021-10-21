@@ -405,7 +405,13 @@ span.youtube-play-icon {
             @include media-breakpoint-down(sm) {
                 padding: 0 0.2rem;
             }
+            @include media-breakpoint-down(xs) {
+                font-size: 16px;
+            }
             letter-spacing: 0.3px;
+        }
+        @include media-breakpoint-down(xs) {
+            margin: 12px 0px;
         }
         @include media-breakpoint-up(sm) {
             + .nav-item::before {
