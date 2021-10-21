@@ -213,7 +213,7 @@ class ProductController extends AdminController
                     ->first(['id']);
 
                 if ($existsProduct) {
-                    $editLink = route('products.edit', $existsProduct->id);
+                    $editLink = route('admin.products.edit', $existsProduct->id);
                     $error = new MessageBag([
                         'title'   => 'Товар с таким названием есть',
                         'message' => '<a href="' . $editLink . '">Cсылка на редактирование этого товара<a>',

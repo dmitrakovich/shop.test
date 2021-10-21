@@ -15,7 +15,7 @@ class UploadImagesService
             <div tabindex="500" class="btn btn-primary btn-file">
                 <i class="glyphicon glyphicon-folder-open"></i>&nbsp;
                 <span class="hidden-xs">Выбор файла</span>
-                <input type="file" class="" name="photos[]" multiple id="imageLoader" accept="image/*">
+                <input type="file" class="" name="photos[]" multiple id="imageLoader" accept="image/jpeg">
             </div>
             <input type="hidden" name="add_images">
         </div>';

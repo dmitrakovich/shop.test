@@ -33,6 +33,15 @@ $(function () {
   });
 
   $(document).on('change', '#imageLoader', function () {
+    let file = this.files[0];
+
+    if ((file.size >> 20) >= 5) {
+      return alert('Размер файла превышает 5 мегабайт!');
+    }
+    if (file.type != 'image/jpeg') {
+      return alert('Изображение должно быть в формате JPG!');
+    }
+
     let canvas = document.getElementById("imageCanvas"),
       ctx = canvas.getContext("2d"),
       reader = new FileReader;
@@ -51,7 +60,7 @@ $(function () {
       };
       img.src = event.target.result
     };
-    reader.readAsDataURL(this.files[0]);
+    reader.readAsDataURL(file);
     $.fancybox.open($('#crop-image'));
   });
 
