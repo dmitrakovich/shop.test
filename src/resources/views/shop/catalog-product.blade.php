@@ -12,7 +12,7 @@
                 class="img-fluid product-first-image"
             >
             <img
-                src="{{ $product->getMedia()->get(1)->getUrl('catalog') }}"
+                src="{{ ($product->getMedia()->get(1) ?? $product->getFirstMedia())->getUrl('catalog') }}"
                 alt="{{ $product->title }}"
                 class="img-fluid product-second-image"
             >
