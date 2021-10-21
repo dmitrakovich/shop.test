@@ -398,4 +398,22 @@ span.youtube-play-icon {
     cursor: wait;
 }
 
+.index-links-block {
+    .nav-item {
+        a {
+            padding: 0.5rem 1.2rem;
+            @include media-breakpoint-down(sm) {
+                padding: 0 0.2rem;
+            }
+            letter-spacing: 0.3px;
+        }
+        @include media-breakpoint-up(sm) {
+            + .nav-item::before {
+                padding-left: 6px;
+                content: "/";
+            }
+        }
+    }
+}
+
 // jdiv { display: none !important; }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ads\IndexLink;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ class IndexController extends Controller
         return view('index', [
             'instagramPosts' => array_slice($instagramService->getCachedPosts(), 0, 6),
             'instagramTitle' => $instagramService->getTitle(),
+            'linksBlocks' => IndexLink::get(['id', 'title', 'links']),
             'productCarousels' => $this->getProductCarousels()
         ]);
     }
