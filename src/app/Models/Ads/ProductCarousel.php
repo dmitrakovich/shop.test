@@ -7,11 +7,17 @@ use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 
 class ProductCarousel extends Model implements Sortable
 {
     use SortableTrait;
     use HasFactory;
+    use HasJsonRelationships;
+
+    protected $appends = [
+        'categories_list'
+    ];
 
     /**
      * The attributes that should be cast.
@@ -19,6 +25,7 @@ class ProductCarousel extends Model implements Sortable
      * @var array
      */
     protected $casts = [
+        'categories' => 'json',
         'only_sale' => 'bool',
         'only_new' => 'bool',
     ];
@@ -28,13 +35,33 @@ class ProductCarousel extends Model implements Sortable
         'sort_when_creating' => true,
     ];
 
-    /**
-     * Category products
-     *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function category()
+    public function getCategoriesListAttribute($value)
     {
-        return $this->belongsTo(Category::class);
+        return $this->categories;
+    }
+
+    public function setCategoriesListAttribute($value)
+    {
+        $this->attributes['categories'] = json_encode(array_values(array_map('intval', $value)));
+    }
+
+    /**
+     * Categories products
+     *
+     * @return \Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson
+     */
+    public function categories()
+    {
+        return $this->belongsToJson(Category::class, 'categories');
+    }
+
+    /**
+     * Categories products
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function categoriesList()
+    {
+        return $this->belongsToMany(Category::class);
     }
 }

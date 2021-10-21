@@ -30,7 +30,11 @@ class ProductCarouselController extends AdminController
         $grid->sortable();
 
         $grid->column('title', 'Заголовок');
-        $grid->column('category.title', 'Категория');
+        $grid->column('categories', 'Категории')->display(function ($categories) {
+            return join(' ', array_map(function ($role) {
+                return "<span class='label label-success'>$role[title]</span>";
+            }, $categories));
+        });
         $grid->column('only_sale', 'Только со скидкой')->switch();
         $grid->column('only_new', 'Только новинки')->switch();
         $grid->column('count', 'Количество товаров');
@@ -59,7 +63,7 @@ class ProductCarouselController extends AdminController
         $form = new Form(new ProductCarousel());
 
         $form->text('title', 'Заголовок');
-        $form->select('category_id', 'Категория')->options(Category::getFormatedTree())->required();
+        $form->multipleSelect('categories_list', 'Категории')->options(Category::getFormatedTree())->required();
         $form->switch('only_sale', 'Только товары со скидкой');
         $form->switch('only_new', 'Только новинки');
         $form->number('count', 'Количество выводимых товаров')->default(15);

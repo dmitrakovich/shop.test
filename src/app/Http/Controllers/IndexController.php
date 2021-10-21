@@ -46,10 +46,17 @@ class IndexController extends Controller
     {
         $productCarousels = [];
         $carousels = ProductCarousel::ordered()
-            ->get(['title', 'category_id', 'only_sale', 'only_new', 'count']);
+            ->get(['title', 'categories', 'only_sale', 'only_new', 'count']);
 
         foreach ($carousels as $key => $carousel) {
-            $categories = Category::getChildrenCategoriesIdsList($carousel->category_id);
+            $categories = [];
+            foreach ($carousel->categories as $category_id) {
+                $categories = array_merge(
+                    $categories,
+                    Category::getChildrenCategoriesIdsList($category_id)
+                );
+            }
+
             $products = Product::whereIn('category_id', $categories)
                 ->when($carousel->only_sale, function ($query) {
                     $query->onlyWithSale();

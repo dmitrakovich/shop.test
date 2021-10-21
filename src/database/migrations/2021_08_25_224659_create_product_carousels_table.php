@@ -16,7 +16,7 @@ class CreateProductCarouselsTable extends Migration
         Schema::create('product_carousels', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('category_id')->index();
+            $table->json('categories');
             $table->boolean('only_sale')->default(false);
             $table->boolean('only_new')->default(false);
             $table->unsignedSmallInteger('count')->default(15);
