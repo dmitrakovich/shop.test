@@ -107,6 +107,10 @@ return [
             'tap' => [SimpleFormatter::class],
             'level' => 'debug',
         ],
+
+        'sentry' => [
+            'driver' => 'sentry',
+        ],
     ],
 
 ];
