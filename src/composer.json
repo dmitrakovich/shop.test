@@ -31,7 +31,7 @@
         "laravel/tinker": "^2.0",
         "laravie/serialize-queries": "^1.0",
         "predis/predis": "^1.1",
-        "sentry/sentry-laravel": "^2.7",
+        "sentry/sentry-laravel": "^2.9",
         "spatie/laravel-medialibrary": "dev-downgrade-to-php-7.3",
         "staudenmeir/eloquent-json-relations": "^1.5"
     },
