@@ -244,7 +244,8 @@ class ProductController extends AdminController
                 Media::setNewOrder($sorting);
             }
 
-            $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
+            $form->model()->url()->delete();
+            $form->model()->url()->create(['slug' => $form->slug]);
 
             if (App::environment('production')) {
                 $this->sendToOldSite($form);
