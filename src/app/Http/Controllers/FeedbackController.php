@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FeedbackRequest;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
@@ -29,26 +29,27 @@ class FeedbackController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\FeedbackRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FeedbackRequest $feedbackRequest)
     {
-        $captchaScore = $request->input('captcha_score') ?? 0;
+        $data = $feedbackRequest->validated();
+        $feedback = Feedback::create($data);
 
-        Feedback::create([
-            'user_id' => Auth::user() ? Auth::id() : 0,
-            'user_name' => $request->input('name'),
-            'user_email' => 'INFO@MODNY.BY',
-            'text' => $request->input('text'),
-            'rating' => 5,
-            'product_id' => 977,
-            'type_id' => $captchaScore > 4 ? Feedback::TYPE_REVIEW : Feedback::TYPE_SPAM,
-            'captcha_score' => $captchaScore,
-            'view_only_posted' => true,
-            'publish' => false,
-            'ip' => $request->ip()
-        ]);
+        foreach (($data['photos'] ?? []) as $photo) {
+            if ($photo->getSize() > Feedback::MAX_PHOTO_SIZE) {
+                continue;
+            }
+            $feedback->addMedia($photo->getPathname())->toMediaCollection();
+        }
+
+        // foreach (($data['videos'] ?? []) as $video) {
+        //     if ($video->getSize() > Feedback::MAX_VIDEO_SIZE) {
+        //         continue;
+        //     }
+        //     $feedback->addMedia($video->getPathname())->toMediaCollection();
+        // }
 
         return 'После модерации Ваш отзыв будет опубликован на сайте.';
     }

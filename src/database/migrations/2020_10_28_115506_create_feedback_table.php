@@ -19,7 +19,7 @@ class CreateFeedbackTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->unsignedBigInteger('yandex_id')->nullable()->index();
             $table->string('user_name');
-            $table->string('user_email');
+            $table->string('user_email')->nullable();
             $table->unsignedBigInteger('user_phone')->nullable();
             $table->text('text');
             $table->tinyInteger('rating')->default(5);
@@ -27,7 +27,7 @@ class CreateFeedbackTable extends Migration
             $table->tinyInteger('type_id')->default(Feedback::TYPE_REVIEW);
             $table->tinyInteger('captcha_score')->default(0);
             $table->boolean('view_only_posted')->default(true);
-            $table->boolean('publish')->default(true);
+            $table->boolean('publish')->default(false);
             $table->ipAddress('ip');
             $table->timestamps();
             $table->softDeletes();

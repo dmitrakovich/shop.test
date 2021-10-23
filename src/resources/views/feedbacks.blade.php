@@ -80,8 +80,8 @@
         </div> --}}
 
         <div class="row form-group">
-            <label for="inputName" class="col-12 col-md-4 col-form-label">
-                <b>Оставьте комментарий</b>
+            <label for="textareaText" class="col-12 col-md-4 col-form-label">
+                <b>Оставьте комментарий</b>&nbsp;<font color="red">*</font>
             </label>
             <div class="col-12 col-md-8">
                 <textarea rows="5" class="form-control" name="text" id="textareaText" placeholder="Что вам понравилось в этом товаре?"></textarea>
@@ -90,21 +90,30 @@
 
         <div class="row form-group">
             <label for="inputName" class="col-12 col-md-4 col-form-label">
-                <b>Представьтесь, пожалуйста</b>
+                <b>Представьтесь, пожалуйста</b>&nbsp;<font color="red">*</font>
             </label>
             <div class="col-12 col-md-8">
-                <input type="text" name="name" id="inputName" class="form-control" placeholder="Имя" required>
+                <input type="text" name="user_name" id="inputName" class="form-control" placeholder="Имя" required>
             </div>
         </div>
 
         <div class="row form-group">
-            <label for="inputMedia" class="col-12 col-md-4 col-form-label">
+            <label for="inputPhotos" class="col-12 col-md-4 col-form-label">
                 <b>Загрузите фотографии</b>
             </label>
             <div class="col-12 col-md-8">
-                <input type="file"  accept="image/*, video/*" name="media" id="inputMedia" class="form-control-file" multiple>
+                <input type="file"  accept="image/*" name="photos[]" id="inputPhotos" class="form-control-file" multiple>
             </div>
         </div>
+
+        {{-- <div class="row form-group">
+            <label for="inputVideos" class="col-12 col-md-4 col-form-label">
+                <b>Загрузите видео</b>
+            </label>
+            <div class="col-12 col-md-8">
+                <input type="file"  accept="video/*" name="videos[]" id="inputVideos" class="form-control-file" multiple>
+            </div>
+        </div> --}}
 
         @include('includes.captcha-privacy-policy')
 

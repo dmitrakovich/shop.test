@@ -42,6 +42,13 @@ class Feedback extends Model implements HasMedia
      * @var string
      */
     protected const DEFAULT_TYPE = 'reviews';
+
+    /**
+     * Max media sizes
+     */
+    const MAX_PHOTO_SIZE = 5242880; // 5 MB
+    const MAX_VIDEO_SIZE = 52428800; // 50 MB
+
     /**
      * Доступные типы обратной связи
      *

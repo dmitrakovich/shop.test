@@ -15,8 +15,20 @@ document.addEventListener("DOMContentLoaded", function () {
       data.append('captcha_token', token);
 
       axios.post('/feedbacks', data).then((response) => {
-        // console.log(response.data);
         feedbackForm.outerHTML = response.data;
+      }).catch((error) => {
+        if (error.response.status != 422) {
+          return false;
+        }
+        const errors = error.response.data.errors;
+        let errorMessages = [];
+        for (const inputName in errors) {
+          errorMessages.push(errors[inputName]);
+        }
+        alert(errorMessages.join('\n'))
+      }).finally(() => {
+        submitButton.disabled = false;
+        submitButton.classList.remove('btn-disabled-load');
       });
     });
   });
