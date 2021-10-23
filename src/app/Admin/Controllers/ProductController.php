@@ -207,19 +207,19 @@ class ProductController extends AdminController
             if (is_null($form->manufacturer_id)) {
                 $form->manufacturer_id = 0;
             }
-            if ($form->isCreating()) {
-                $existsProduct = Product::withTrashed()
-                    ->where('slug', $form->slug)
-                    ->first(['id']);
 
-                if ($existsProduct) {
-                    $editLink = route('admin.products.edit', $existsProduct->id);
-                    $error = new MessageBag([
-                        'title'   => 'Товар с таким названием есть',
-                        'message' => '<a href="' . $editLink . '">Cсылка на редактирование этого товара<a>',
-                    ]);
-                    return back()->with(compact('error'));
-                }
+            $existsProduct = Product::withTrashed()
+                ->where('slug', $form->slug)
+                ->when($form->isEditing(), function ($query) use ($form) { $query->where('id', '!=', $form->id); })
+                ->first(['id']);
+
+            if ($existsProduct) {
+                $editLink = route('admin.products.edit', $existsProduct->id);
+                $error = new MessageBag([
+                    'title'   => 'Товар с таким названием есть',
+                    'message' => '<a href="' . $editLink . '">Cсылка на редактирование этого товара<a>',
+                ]);
+                return back()->with(compact('error'));
             }
         });
 
