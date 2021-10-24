@@ -6,6 +6,8 @@
 
 {{ Banner::getIndexMain() }}
 
+@include('partials.index.imidj-slider')
+
 <div class="col-md-12 index-links-block">
     @foreach ($linksBlocks as $linksBlock)
     <div class="my-3" id="index-link-{{ $linksBlock->id }}">
@@ -23,59 +25,7 @@
 
 <div class="col-md-12">
 
-    @forelse ($productCarousels as $productCarousel)
-
-        @if ($loop->index == 1 || ($loop->last && $loop->index <= 1))
-            <hr class="d-none d-sm-block my-4">
-            @include('includes.advantages-block')
-            <hr class="d-none d-sm-block my-4">
-        @endif
-
-        <h4 class="text-center mt-3">{{ $productCarousel['title'] }}</h4>
-        <div class="js-product-carousel" data-slick='{
-            "slidesToShow": 5,
-            "slidesToScroll": 5,
-            "autoplay": true,
-            "responsive": [
-                {
-                    "breakpoint": 1305,
-                    "settings": {
-                        "slidesToShow": 4,
-                        "slidesToScroll": 4
-                    }
-                },
-                {
-                    "breakpoint": 830,
-                    "settings": {
-                        "slidesToShow": 1,
-                        "slidesToScroll": 1
-                    }
-                }
-            ]
-        }'>
-            @foreach ($productCarousel['products'] as $product)
-                <div class="col position-relative">
-                    <a href="{{ $product->getUrl() }}">
-                        @if ($product->getSalePercentage())
-                            <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 10px; background: #D22020;">
-                                -{{ $product->getSalePercentage() }}%
-                            </span>
-                        @endif
-                        <img
-                            src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
-                            alt="{{ $product->title }}"
-                            class="img-fluid product-first-image"
-                        >
-                        <span>{{ $product->getFullName() }}</span>
-                    </a>
-                </div>
-            @endforeach
-        </div>
-    @empty
-        <hr class="d-none d-sm-block my-4">
-        @include('includes.advantages-block')
-        <hr class="d-none d-sm-block my-4">
-    @endforelse
+    @include('partials.index.simple-slider')
 
     <div class="col-12 my-5">
         @include('includes.instagram-block')

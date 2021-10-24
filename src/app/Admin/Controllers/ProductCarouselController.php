@@ -38,6 +38,9 @@ class ProductCarouselController extends AdminController
         $grid->column('only_sale', 'Только со скидкой')->switch();
         $grid->column('only_new', 'Только новинки')->switch();
         $grid->column('count', 'Количество товаров');
+        $grid->column('speed', 'Скорость (мс)');
+
+        $grid->model()->where('is_imidj', false);
 
         return $grid;
     }
@@ -67,6 +70,7 @@ class ProductCarouselController extends AdminController
         $form->switch('only_sale', 'Только товары со скидкой');
         $form->switch('only_new', 'Только новинки');
         $form->number('count', 'Количество выводимых товаров')->default(15);
+        $form->number('speed', 'Скорость (мс)')->default(3000);
 
         return $form;
     }

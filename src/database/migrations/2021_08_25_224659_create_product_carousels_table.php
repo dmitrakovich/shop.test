@@ -15,10 +15,12 @@ class CreateProductCarouselsTable extends Migration
     {
         Schema::create('product_carousels', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->json('categories');
+            $table->boolean('is_imidj')->default(false);
             $table->boolean('only_sale')->default(false);
             $table->boolean('only_new')->default(false);
+            $table->unsignedInteger('speed')->default(3000);
             $table->unsignedSmallInteger('count')->default(15);
             $table->unsignedTinyInteger('sorting')->default(0);
             $table->timestamps();

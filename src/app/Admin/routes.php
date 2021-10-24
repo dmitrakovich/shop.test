@@ -42,6 +42,7 @@ Route::group([
         $router->resource('bnrs', BannerController::class);
         $router->resource('index-links', IndexLinkController::class);
         $router->resource('product-carousels', ProductCarouselController::class);
+        $router->get('imidj', Forms\ImidjSlider::class);
         $router->get('instagram', Forms\Instagram::class);
     });
 
