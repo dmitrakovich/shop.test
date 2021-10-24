@@ -73,6 +73,7 @@ jobs:
           cd src/
           php ~/.local/bin/composer install --optimize-autoloader --no-dev
           php artisan optimize
+          php artisan cache:clear
           find ~ -type f -name "*.tar" -exec rm {} \;
 
     - name: Sleep for 27 seconds
