@@ -54,9 +54,11 @@ class SliderService
                         'products' => $products->map(function ($product) {
                             return [
                                 'title' => $product->title,
-                                'full_name' => $product->getFullName(),
-                                'url' => $product->getUrl(),
+                                'full_name' => "{$product->category->title} {$product->brand->name}",
                                 'sale_percentage' => $product->getSalePercentage(),
+                                'formatted_price' => $product->getFormattedPrice(),
+                                'formatted_old_price' => $product->getFormattedOldPrice(),
+                                'url' => $product->getUrl(),
                                 'first_media' => $product->getFirstMedia()->getUrl('catalog')
                             ];
                         })->toArray()
@@ -110,9 +112,11 @@ class SliderService
                 'products' => $products->map(function ($product) {
                     return [
                         'title' => $product->title,
-                        'full_name' => $product->getFullName(),
-                        'url' => $product->getUrl(),
+                        'full_name' => "{$product->category->title} {$product->brand->name}",
                         'sale_percentage' => $product->getSalePercentage(),
+                        'formatted_price' => $product->getFormattedPrice(),
+                        'formatted_old_price' => $product->getFormattedOldPrice(),
+                        'url' => $product->getUrl(),
                         'imidj_media' => $product->getMedia('default', ['is_imidj' => true])
                             ->first()->getUrl('normal')
                     ];

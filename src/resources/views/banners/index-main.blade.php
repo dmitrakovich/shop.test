@@ -26,6 +26,12 @@
     </div>
 @endif
 
+<div class="col-12">
+    <hr class="d-none d-sm-block my-4">
+    @include('includes.advantages-block')
+    <hr class="d-none d-sm-block my-4">
+</div>
+
 @foreach ($indexTopBanners as $banner)
     <div class="col-12 col-lg-4 p-main">
         <a href="{{ $banner->url }}">

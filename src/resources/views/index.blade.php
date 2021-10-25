@@ -6,31 +6,24 @@
 
 {{ Banner::getIndexMain() }}
 
-@include('partials.index.imidj-slider')
-
 <div class="col-md-12 index-links-block">
-    @foreach ($linksBlocks as $linksBlock)
-    <div class="my-3" id="index-link-{{ $linksBlock->id }}">
-        <h4 class="display-4 text-center mb-4">{{ $linksBlock->title }}</h4>
-        <ul class="nav flex-column flex-sm-row justify-content-center text-center">
-            @foreach ($linksBlock->links as $link)
-                <li class="nav-item">
-                    <a href="{{ $link['href'] ?? '' }}">{{ $link['text'] }}</a>
-                </li>
-            @endforeach
-        </ul>
-    </div>
-    @endforeach
+    @include('partials.index.links')
 </div>
 
-<div class="col-md-12">
+<div class="col-md-12 my-3">
+    @includeWhen(isset($simpleSliders[0]), 'partials.index.simple-slider', ['simpleSlider' => ($simpleSliders[0] ?? null)])
+</div>
 
-    @include('partials.index.simple-slider')
+<div class="col-md-12 my-4">
+    @include('partials.index.imidj-slider')
+</div>
 
-    <div class="col-12 my-5">
-        @include('includes.instagram-block')
-    </div>
+<div class="col-md-12 my-3">
+    @includeWhen(isset($simpleSliders[1]), 'partials.index.simple-slider', ['simpleSlider' => ($simpleSliders[1] ?? null)])
+</div>
 
+<div class="col-md-12 my-3">
+    @includeWhen(isset($simpleSliders[2]), 'partials.index.simple-slider', ['simpleSlider' => ($simpleSliders[2] ?? null)])
 </div>
 
 {{ Banner::getIndexBottom() }}
@@ -39,24 +32,15 @@
 </div>
 <div class="row my-5">
     <div class="col-12 bg-danger py-5">
-        <div class="row wrapper">
-            <div class="col-12 col-md-6 text-center text-md-left">
-                <h1 class="display-4">BAROCCO club</h1>
-                <p class="font-size-18">Зарегистрируйся в программе лояльности и получи приветственный бонус</p>
-            </div>
-            <div class="col-12 col-md-6 mt-4 mt-md-0">
-                <div class="row justify-content-center align-items-center h-100">
-                    <a href="{{ route('dashboard-card') }}" class="btn btn-white col-10 col-lg-8 col-xl-6 p-2">
-                        Присоединиться
-                    </a>
-                </div>
-            </div>
-        </div>
+        @include('partials.index.subscribe')
     </div>
 </div>
 <div class="row wrapper justify-content-center">
 {{-- wrapper open --}}
 
+<div class="col-12 my-3">
+    @include('includes.instagram-block')
+</div>
 
 <div class="col-12 text-justify my-5">
     BAROCCO.BY - ведущий интернет магазин по продаже обуви из натуральной кожи и замши в Беларуси.<br>
@@ -68,9 +52,9 @@
         <li>100% оригинальные бренды</li>
     </ul>
     <br>
-    Мы создали свой бренд обуви BAROCCO STYLE. В наших изделиях используются только натуральные материалы, такие как кожа, мех и замша.<br>
-    Мы производим женские коллекции ОБУВИ согласно последним веяниям моды.<br>
-    Наша обувь идеальна в носке и  подойдёт каждому, так как она подобрана с учетом особенностей строения женской ступни.<br>
+    BAROCCO.BY - единственный официальный интернет-магазин бренда BAROCCO в Беларуси, России и Казахстане. БАРОККО - это итальянский дизайн воплощенный в изделиях из натуральных материалов, таких как кожа, мех и замша.<br>
+    В каталоге Вы найдете женские коллекции обуви согласно последним веяниям моды.<br>
+    Обувь BAROCCO идеальна в носке и  подойдёт каждому, так как она подобрана с учетом особенностей строения женской ступни.<br>
     <br>
     Также BAROCCO.BY является официальным поставщиком именитых обувных брендов VITACCI, Basconi, Sasha Fabiani. Благодаря многолетнему сотрудничеству с производителями у нас лучшие цены в Беларуси.<br>
     <br>

@@ -26,6 +26,7 @@ class Banner extends Model implements HasMedia
             ->where('position', 'index_top')
             ->with('media')
             ->orderByPriority()
+            ->limit(3)
             ->get(['id', 'title', 'url']);
 
         return view('banners.index-main', compact('indexMainBanner', 'indexTopBanners'));
@@ -37,8 +38,6 @@ class Banner extends Model implements HasMedia
             ->where('position', 'index_bottom')
             ->with('media')
             ->orderByDesc('priority')
-            ->orderByPriority()
-            // ->limit(4)
             ->get(['id', 'title', 'url']);
 
         return view('banners.index-bottom', compact('indexBottomBanners'));
