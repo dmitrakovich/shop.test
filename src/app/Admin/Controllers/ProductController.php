@@ -210,7 +210,9 @@ class ProductController extends AdminController
 
             $existsProduct = Product::withTrashed()
                 ->where('slug', $form->slug)
-                ->when($form->isEditing(), function ($query) use ($form) { $query->where('id', '!=', $form->id); })
+                ->when($form->isEditing(), function ($query) use ($form) {
+                    $query->where('id', '!=', $form->model()->id);
+                })
                 ->first(['id']);
 
             if ($existsProduct) {
