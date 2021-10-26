@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Facades\Currency;
 use App\Models\Ads\ProductCarousel;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,7 +21,7 @@ class SliderService
      */
     public function getSimple(): array
     {
-        return Cache::remember('simple_slider', 1800, function () { // 0.5h
+        $sliders = Cache::remember('simple_slider', 1800, function () { // 0.5h
             $productCarousels = [];
             $carousels = ProductCarousel::ordered()
                 ->where('is_imidj', false)
@@ -56,8 +57,8 @@ class SliderService
                                 'title' => $product->title,
                                 'full_name' => "{$product->category->title} {$product->brand->name}",
                                 'sale_percentage' => $product->getSalePercentage(),
-                                'formatted_price' => $product->getFormattedPrice(),
-                                'formatted_old_price' => $product->getFormattedOldPrice(),
+                                'price_byn' => $product->getFinalPrice(),
+                                'old_price_byn' => $product->getFinalOldPrice(),
                                 'url' => $product->getUrl(),
                                 'first_media' => $product->getFirstMedia()->getUrl('catalog')
                             ];
@@ -68,6 +69,11 @@ class SliderService
             return $productCarousels;
         });
 
+        foreach ($sliders as &$slider) {
+            $this->addConvertedAndFormattedPrice($slider['products']);
+        }
+
+        return $sliders;
     }
 
     /**
@@ -77,7 +83,7 @@ class SliderService
      */
     public function getImidj(): array
     {
-        return Cache::remember('imidj_slider', 1800, function () { // 0.5h
+        $slider = Cache::remember('imidj_slider', 1800, function () { // 0.5h
             $slider = ProductCarousel::where('is_imidj', true)
                 ->first(['title', 'categories', 'count', 'speed']);
 
@@ -114,8 +120,8 @@ class SliderService
                         'title' => $product->title,
                         'full_name' => "{$product->category->title} {$product->brand->name}",
                         'sale_percentage' => $product->getSalePercentage(),
-                        'formatted_price' => $product->getFormattedPrice(),
-                        'formatted_old_price' => $product->getFormattedOldPrice(),
+                        'price_byn' => $product->getFinalPrice(),
+                        'old_price_byn' => $product->getFinalOldPrice(),
                         'url' => $product->getUrl(),
                         'imidj_media' => $product->getMedia('default', ['is_imidj' => true])
                             ->first()->getUrl('normal')
@@ -123,5 +129,23 @@ class SliderService
                 })->toArray()
             ];
         });
+
+        $this->addConvertedAndFormattedPrice($slider['products']);
+
+        return $slider;
+    }
+
+    /**
+     * Add in products array converted and formatted price
+     *
+     * @param array $products
+     * @return void
+     */
+    protected function addConvertedAndFormattedPrice(array &$products): void
+    {
+        foreach ($products as &$product) {
+            $product['formatted_price'] = Currency::convertAndFormat($product['price_byn']);
+            $product['formatted_old_price'] = Currency::convertAndFormat($product['old_price_byn']);
+        }
     }
 }

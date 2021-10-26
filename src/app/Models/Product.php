@@ -306,7 +306,7 @@ class Product extends Model implements HasMedia
      *
      * @return float
      */
-    protected function getFinalPrice()
+    public function getFinalPrice()
     {
         if (!isset($this->final_price)) {
             $this->applySale();
@@ -350,7 +350,7 @@ class Product extends Model implements HasMedia
      *
      * @return float
      */
-    protected function getFinalOldPrice()
+    public function getFinalOldPrice()
     {
         if (!isset($this->final_old_price)) {
             $this->applySale();
