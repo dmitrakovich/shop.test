@@ -37,7 +37,7 @@ class Cart extends Model
      *
      * @return int
      */
-    public function itemsCount()
+    public function itemsCount(): int
     {
         $counter = 0;
         foreach ($this->items as $item) {
@@ -51,7 +51,7 @@ class Cart extends Model
      *
      * @return float
      */
-    public function getTotalOldPrice()
+    public function getTotalOldPrice(): float
     {
         $price = 0;
         foreach ($this->items as $item) {
@@ -65,7 +65,7 @@ class Cart extends Model
      *
      * @return float
      */
-    public function getTotalPrice()
+    public function getTotalPrice(): float
     {
         $price = 0;
         foreach ($this->items as $item) {
@@ -82,7 +82,7 @@ class Cart extends Model
      * @param integer $colorId
      * @return void
      */
-    public function addItem(int $productId, int $sizeId, int $colorId)
+    public function addItem(int $productId, int $sizeId, int $colorId): void
     {
         $this->createIfNotExists();
 
@@ -102,6 +102,8 @@ class Cart extends Model
                 'color_id' => $colorId
             ]);
         }
+
+        $this->load('items'); // refresh;
     }
 
     /**
@@ -111,7 +113,7 @@ class Cart extends Model
      * @param integer $count количество удаляемых товаров
      * @return void
      */
-    public function removeItem(int $itemId, int $count = 1)
+    public function removeItem(int $itemId, int $count = 1): void
     {
         $item = $this->items()->where('id', $itemId)->first();
         if (isset($item)) {
@@ -121,6 +123,8 @@ class Cart extends Model
                 $item->decrement('count', $count);
             }
         }
+
+        $this->load('items'); // refresh;
     }
 
     /**
@@ -128,11 +132,12 @@ class Cart extends Model
      *
      * @return void
      */
-    public function createIfNotExists()
+    public function createIfNotExists(): void
     {
         if (!$this->exists) {
             $this->save();
             if (Auth::check()) {
+                /** @var \App\Models\User */
                 $user = Auth::user();
                 $user->cart_token = $this->id;
                 $user->save();
@@ -147,7 +152,7 @@ class Cart extends Model
      *
      * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $this->items()->delete();
     }
