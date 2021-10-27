@@ -13,14 +13,18 @@
                         <div class="col-12 py-3 border-bottom border-secondary">
                             <div class="row">
                                 <div class="pl-0 col-6 col-md-2 ">
-                                    <img src="{{ $item->product->getFirstMedia()->getUrl('catalog') }}"
-                                        alt="{{ $item->product->title }}" class="img-fluid">
+                                    <a href="{{ $item->product->getUrl() }}" target="_blank">
+                                        <img src="{{ $item->product->getFirstMedia()->getUrl('catalog') }}"
+                                            alt="{{ $item->product->title }}" class="img-fluid">
+                                    </a>
                                 </div>
                                 <div class="col-6 col-md-10">
                                     <div class="row position-relative h-100">
                                         <div class="col-12 col-md-3">
-                                            {{ $item->product->getFullName() }} <br>
-                                        <small>{{ $item->product->category->title }}</small>
+                                            <a href="{{ $item->product->getUrl() }}" target="_blank">
+                                                {{ $item->product->getFullName() }}
+                                            </a><br>
+                                            <small>{{ $item->product->category->title }}</small>
                                         </div>
                                         <div class="col-12 col-md-2 mt-md-2">{{ DeclensionNoun::make($item->count, 'пара') }}</div>
                                         <div class="col-12 col-md-2 mt-md-2">размер {{ $item->size->name}}</div>

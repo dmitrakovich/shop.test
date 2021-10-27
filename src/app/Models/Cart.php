@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cookie;
 class Cart extends Model
 {
     use HasFactory;
+
     /**
      * Инициализация корзины
      *
@@ -20,6 +21,7 @@ class Cart extends Model
         $cartId = Auth::user() ? Auth::user()->cart_token : Cookie::get('cart_token');
         return self::findOrNew($cartId);
     }
+
     /**
      * Содержимое корзины
      *
@@ -29,6 +31,7 @@ class Cart extends Model
     {
         return $this->hasMany(CartData::class);
     }
+
     /**
      * Количество товаров в корзине
      *
@@ -100,6 +103,7 @@ class Cart extends Model
             ]);
         }
     }
+
     /**
      * Удалить товар из корзины
      *
@@ -118,6 +122,7 @@ class Cart extends Model
             }
         }
     }
+
     /**
      * Создать корзину, если она еще не создана
      *
@@ -136,6 +141,7 @@ class Cart extends Model
             }
         }
     }
+
     /**
      * Очистить содержимое корзины
      *
@@ -145,6 +151,7 @@ class Cart extends Model
     {
         $this->items()->delete();
     }
+
     /**
      * Получить содержимое корзины
      *
@@ -154,6 +161,14 @@ class Cart extends Model
     {
         $this->load('items');
         $this->items->load('product');
+
+        foreach ($this->items as $key => $item) {
+            if (empty($item->product)) {
+                $item->delete();
+                $this->items->forget($key);
+            }
+        }
+
         $this->items->load('size:id,name');
         return $this;
     }
