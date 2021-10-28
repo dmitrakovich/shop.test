@@ -63,7 +63,7 @@ class UpdateAvailabilityJob extends AbstractJob
 
         $currentProducts = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
             ->withTrashed()
-            ->with(['media', 'sizes:id,name'])
+            ->with(['sizes:id,name'])
             ->get([
                 'products.id',
                 'brand_id',
