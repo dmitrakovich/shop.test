@@ -1,3 +1,5 @@
+<?php /** @var $product \App\Models\Product */ ?>
+
 <div class="col-3 js-product-item product-item mb-3 text-center text-lg-left">
     <a href="{{ $product->getUrl() }}">
         <div class="mb-3 image position-relative">
@@ -25,7 +27,7 @@
                 </div>
         </div>
     </a>
-    <b>{{ $product->getFullName() }}</b> <br>
+    <b>{{ $product->simpleName() }}</b> <br>
     @if ($product->getPrice() < $product->getOldPrice())
         <s>{!! $product->getFormattedOldPrice() !!}</s>
         <font color="#D22020">{!! $product->getFormattedPrice() !!}</font><br>

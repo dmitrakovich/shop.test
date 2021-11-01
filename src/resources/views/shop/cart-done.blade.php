@@ -63,7 +63,7 @@
                                     class="img-fluid" style="max-width: 180px">
                     </p>
                 </a>
-                <b>{{ $product->getFullName() }}</b> <br>
+                <b>{{ $product->brand->name }} {{ $product->id }}</b> <br>
                 <span class="text-mutted">{{ $product->category->title }}</span> <br>
                 @if ($product->price < $product->old_price)
                     <s>{{ round($product->old_price, 2) }} руб.</s>

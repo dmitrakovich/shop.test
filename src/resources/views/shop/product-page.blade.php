@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $product->category->title . ' ' . $product->getFullName())
+@section('title', $product->category->title . ' ' . $product->extendedName())
 
 @section('breadcrumbs', Breadcrumbs::render('product', $product))
 

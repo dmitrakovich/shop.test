@@ -1,3 +1,4 @@
+<?php /** @var $product \App\Models\Product */ ?>
 
 <div class="col-12 product-page">
     <div class="row">
@@ -45,8 +46,7 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-6 text-muted">
-                        {{ $product->getFullName() }} <br>
-                        Код товара: {{ $product->id }}
+                        {{ $product->extendedName() }}
                     </div>
                     <div class="col-6 text-right rating-result">
                         @for ($i = 1; $i <= 5; $i++)

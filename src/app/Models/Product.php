@@ -18,9 +18,11 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @package App
  *
- * @property \App\Category      $category
- * @property string             $title
- * @property string             $slug
+ * @property int $id
+ * @property \App\Models\Category $category
+ * @property \App\Models\Brand $brand
+ * @property string $title
+ * @property string $slug
  * ...
  */
 class Product extends Model implements HasMedia
@@ -175,6 +177,27 @@ class Product extends Model implements HasMedia
     {
         return $this->morphOne(Url::class, 'model');
     }
+
+    /**
+     * Get product simple name (category name + brand name)
+     *
+     * @return string
+     */
+    public function simpleName(): string
+    {
+        return $this->category->title . ' ' . $this->brand->name;
+    }
+
+    /**
+     * Simple name + id
+     *
+     * @return string
+     */
+    public function extendedName(): string
+    {
+        return $this->simpleName() . ' ' . $this->id;
+    }
+
     /**
      * Получить полное название продукта
      *
@@ -182,8 +205,9 @@ class Product extends Model implements HasMedia
      */
     public function getFullName()
     {
-        return ($this->brand->name ?? 'VITACCI'). ' ' . $this->title;
+        return $this->brand->name . ' ' . $this->title;
     }
+
     /**
      * Получить ссылку на товар
      *

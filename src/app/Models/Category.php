@@ -8,7 +8,15 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
+/**
+ * Product category class
+ *
+ * @property int $id
+ * @property string $slug
+ * @property string $path
+ * @property string $title
+ * @property string $description
+ */
 class Category extends Model
 {
     use SoftDeletes, NodeTrait, AttributeFilterTrait;

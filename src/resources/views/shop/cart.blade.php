@@ -22,7 +22,7 @@
                                     <div class="row position-relative h-100">
                                         <div class="col-12 col-md-3">
                                             <a href="{{ $item->product->getUrl() }}" target="_blank">
-                                                {{ $item->product->getFullName() }}
+                                                {{ $item->product->brand->name }} {{ $item->product->id }}
                                             </a><br>
                                             <small>{{ $item->product->category->title }}</small>
                                         </div>
