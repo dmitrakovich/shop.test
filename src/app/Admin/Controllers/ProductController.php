@@ -23,7 +23,6 @@ use Illuminate\Support\MessageBag;
 use App\Admin\Actions\Post\Restore;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Admin\Actions\Post\BatchRestore;
 use App\Admin\Services\UploadImagesService;
@@ -93,7 +92,10 @@ class ProductController extends AdminController
 
         $grid->filter(function($filter) {
             $filter->disableIdFilter(); // Remove the default id filter
-            $filter->like('title', 'Артикул');
+            $filter->where(function ($query) {
+                $query->where('id', 'like', "%{$this->input}%")
+                    ->orWhere('title', 'like', "%{$this->input}%");
+            }, 'Код товара / артикул');
         });
 
         return $grid;
