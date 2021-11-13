@@ -175,4 +175,9 @@ class OrderController extends BaseController
     {
         //
     }
+
+    public function print(Order $order)
+    {
+        return view('admin.order-print', compact('order'));
+    }
 }

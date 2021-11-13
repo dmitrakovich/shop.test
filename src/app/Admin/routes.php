@@ -5,6 +5,7 @@ use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DebugController;
 use App\Admin\Controllers\SkladController;
+use App\Http\Controllers\Shop\OrderController;
 
 Admin::routes();
 
@@ -28,7 +29,8 @@ Route::group([
     $router->resource('manufacturers', ManufacturerController::class);
     $router->resource('collections', CollectionController::class);
     $router->resource('info-pages', InfoPageController::class);
-    $router->resource('orders', OrderController::class);
+    $router->resource('orders', \OrderController::class);
+    $router->get('orders/print/{order}', [OrderController::class, 'print'])->name('orders.print');
 
     $router->resource('products', ProductController::class);
     $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('products.restore');

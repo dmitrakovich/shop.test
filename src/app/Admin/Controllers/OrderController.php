@@ -3,11 +3,12 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Order;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use App\Admin\Actions\Order\PrintOrder;
+use Encore\Admin\Controllers\AdminController;
 
 class OrderController extends AdminController
 {
@@ -27,22 +28,10 @@ class OrderController extends AdminController
     {
         $grid = new Grid(new Order());
 
-        // $grid->column('id', __('Id'));
         $grid->column('user_name', 'ФИО');
-        // $grid->column('user_id', __('User id'));
-        // $grid->column('promocode_id', __('Promocode id'));
         $grid->column('type', 'Тип заказа');
         $grid->column('email', __('Email'));
         $grid->column('phone', 'Телефон');
-        // $grid->column('currency', __('Currency'));
-        // $grid->column('rate', __('Rate'));
-        // $grid->column('country', __('Country'));
-        // $grid->column('region', __('Region'));
-        // $grid->column('city', __('City'));
-        // $grid->column('zip', 'Индекс');
-        // $grid->column('street', __('Street'));
-        // $grid->column('house', __('House'));
-
 
         $grid->model()->with(['data']);
         $grid->column('goods', 'Товары')->expand(function ($model) {
@@ -60,16 +49,12 @@ class OrderController extends AdminController
         $grid->column('comment', 'Коммментарий');
         $grid->column('user_addr', 'Адрес');
         $grid->column('payment', 'Способ оплаты');
-        // $grid->column('payment_code', __('Payment code'));
-        // $grid->column('payment_cost', __('Payment cost'));
         $grid->column('delivery', 'Способ доставки');
-        // $grid->column('delivery_code', __('Delivery code'));
-        // $grid->column('delivery_cost', __('Delivery cost'));
-        // $grid->column('delivery_point', __('Delivery point'));
-        // $grid->column('delivery_point_code', __('Delivery point code'));
-        // $grid->column('source', __('Source'));
         $grid->column('created_at', 'Создан');
-        // $grid->column('updated_at', __('Updated at'));
+
+        $grid->actions (function ($actions) {
+            $actions->add(new PrintOrder());
+        });
 
         $grid->model()->orderBy('id', 'desc');
         $grid->paginate(15);
@@ -86,6 +71,8 @@ class OrderController extends AdminController
     protected function detail($id)
     {
         $show = new Show(Order::findOrFail($id));
+
+        $show->panel()->tools($this->getPrintTool());
 
         $show->field('id', __('Id'));
         $show->field('user_name', __('User name'));
@@ -128,6 +115,10 @@ class OrderController extends AdminController
     {
         $form = new Form(new Order());
 
+        if ($form->isEditing()) {
+            $form->tools($this->getPrintTool());
+        }
+
         $form->text('user_name', __('User name'));
         $form->number('user_id', __('User id'));
         $form->number('promocode_id', __('Promocode id'));
@@ -155,5 +146,14 @@ class OrderController extends AdminController
         $form->switch('source', __('Source'));
 
         return $form;
+    }
+
+    protected function getPrintTool()
+    {
+        return function ($tools) {
+            $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
+                <a onclick="' . PrintOrder::printScript(request('order')) . '" class="btn btn-sm btn-success">
+                <i class="fa fa-print"></i>&nbsp;&nbsp;Печать</a></div>');
+        };
     }
 }
