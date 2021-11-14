@@ -7,11 +7,9 @@ use App\Facades\Sale;
 use App\Models\Order;
 use App\Models\CartData;
 use App\Facades\Currency;
-use App\Mail\OrderCreated;
+use App\Events\OrderCreated;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StoreOrderRequest;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
@@ -110,13 +108,7 @@ class OrderController extends BaseController
             ]);
         }
 
-        if (!empty($order['email'])) {
-            Mail::to($order['email'])->send(new OrderCreated($order));
-        }
-        if (App::environment('production')) {
-            Mail::to(config('contacts.email.link', 'info@barocco.by'))
-                ->send(new OrderCreated($order));
-        }
+        event(new OrderCreated($order));
 
         $orderInfo = [
             'orderNum' => $order->id,
