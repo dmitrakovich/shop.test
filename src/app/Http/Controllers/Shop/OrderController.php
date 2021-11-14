@@ -24,10 +24,9 @@ class OrderController extends BaseController
      */
     public function index()
     {
-        $orders = Order::where('user_id', Auth::id())->get();
-        // dd($orders);
-
-        return view('dashboard.orders', compact('orders'));
+        return view('dashboard.orders', [
+            'orders' => Order::where('user_id', Auth::id())->get()
+        ]);
     }
 
     /**
@@ -127,8 +126,8 @@ class OrderController extends BaseController
             'payment' => $userData['payment_name'],
         ];
         Cart::clear();
-        return redirect()->route('cart-final')->with('order_info', $orderInfo);
 
+        return redirect()->route('cart-final')->with('order_info', $orderInfo);
     }
 
     /**
@@ -176,8 +175,27 @@ class OrderController extends BaseController
         //
     }
 
+    /**
+     * Get print view
+     *
+     * @param Order $order
+     * @return \Illuminate\Contracts\View\View
+     */
     public function print(Order $order)
     {
         return view('admin.order-print', compact('order'));
+    }
+
+    /**
+     * Sync order with another DB
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sync(Request $request)
+    {
+        dd($request->input());
+
+        return response()->json('ok', 200);
     }
 }

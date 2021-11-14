@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DebugController;
 use App\Http\Controllers\CropperController;
+use App\Http\Controllers\Shop\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +17,10 @@ use App\Http\Controllers\CropperController;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-Route::get('debug', [DebugController::class, 'index']);
-Route::get('phpinfo', function () { phpinfo(); });
+Route::middleware('auth:sanctum')->group( function () {
+    Route::post('users', [RegisteredUserController:: class, 'sync']);
+    Route::post('orders', [OrderController::class, 'sync']);
+});
 
 // Route::post('croppic/save', [CropperController::class, 'save']);
 Route::post('croppic/crop', [CropperController::class, 'crop']);
