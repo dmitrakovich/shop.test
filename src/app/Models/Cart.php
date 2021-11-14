@@ -75,21 +75,19 @@ class Cart extends Model
     }
 
     /**
-     * Добавить товар в корзину
+     * Add item to cart
      *
      * @param integer $productId
      * @param integer $sizeId
-     * @param integer $colorId
      * @return void
      */
-    public function addItem(int $productId, int $sizeId, int $colorId): void
+    public function addItem(int $productId, int $sizeId): void
     {
         $this->createIfNotExists();
 
         $item = $this->items
             ->where('product_id', $productId)
             ->where('size_id', $sizeId)
-            ->where('color_id', $colorId)
             ->first();
 
         if (isset($item)) {
@@ -98,8 +96,7 @@ class Cart extends Model
             $this->items()->create([
                 'product_id' => $productId,
                 'count' => 1,
-                'size_id' => $sizeId,
-                'color_id' => $colorId
+                'size_id' => $sizeId
             ]);
         }
 

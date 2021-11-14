@@ -18,7 +18,6 @@ class CreateOrderDataTable extends Migration
             $table->foreignId('order_id')->index();
             $table->foreignId('product_id');
             $table->foreignId('size_id');
-            $table->foreignId('color_id')->nullable();
             $table->integer('count');
             $table->float('buy_price');
             $table->float('price');

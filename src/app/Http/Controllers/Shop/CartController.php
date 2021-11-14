@@ -58,12 +58,10 @@ class CartController extends BaseController
     {
         $productId = $request->input('product_id') ?? abort(404);
         $sizes = $request->input('sizes') ?? abort(404);
-        // $colorId = $request->input('color_id') ?? abort(404);
-        $colorId = 17;
 
         $product = Product::findOrFail($productId);
         foreach ($sizes as $sizeId => $state) {
-            Cart::addItem($product->id, $sizeId, $colorId);
+            Cart::addItem($product->id, $sizeId);
         }
 
         return [

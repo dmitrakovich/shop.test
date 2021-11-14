@@ -14,7 +14,6 @@ class CartData extends Model
         'cart_id',
         'product_id',
         'size_id',
-        'color_id',
         'count',
     ];
     /**

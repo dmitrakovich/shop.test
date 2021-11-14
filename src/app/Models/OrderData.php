@@ -14,7 +14,6 @@ class OrderData extends Model
     protected $fillable = [
         'product_id',
         'size_id',
-        'color_id',
         'count',
         'buy_price',
         'price',

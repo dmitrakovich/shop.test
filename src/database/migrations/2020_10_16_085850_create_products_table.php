@@ -23,11 +23,10 @@ class CreateProductsTable extends Migration
             $table->decimal('buy_price')->default(0);
             $table->decimal('price')->default(0);
             $table->decimal('old_price')->default(0);
-            // $table->decimal('discount')->default(0);
+            // $table->decimal('discount')->default(0); // для сортировки (надо высчитывать при добавлении товара)
 
             $table->foreignId('category_id')->index()->default(0);
             $table->foreignId('season_id')->index()->default(0);
-            $table->foreignId('color_id')->index()->default(0);
             $table->foreignId('brand_id')->index()->default(0);
             $table->foreignId('manufacturer_id')->index()->default(0);
             $table->foreignId('collection_id')->index()->default(0);

@@ -55,7 +55,6 @@ class OrderController extends BaseController
                 $items[] = CartData::make([
                     'product_id' => (int)$request->input('product_id'),
                     'size_id' => $sizeId,
-                    'color_id' => 17,
                     'count' => 1,
                 ]);
             }
@@ -98,7 +97,6 @@ class OrderController extends BaseController
             $order->data()->create([
                 'product_id' => $item->product_id,
                 'size_id' => $item->size_id,
-                'color_id' => $item->color_id,
                 'count' => $item->count,
                 'buy_price' => $item->product->buy_price,
                 'price' => $item->product->price,

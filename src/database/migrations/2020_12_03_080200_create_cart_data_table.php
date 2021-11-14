@@ -19,7 +19,6 @@ class CreateCartDataTable extends Migration
             $table->foreignId('product_id');
             $table->integer('count');
             $table->foreignId('size_id');
-            $table->foreignId('color_id');
             $table->timestamps();
         });
     }
