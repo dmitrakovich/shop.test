@@ -2,15 +2,21 @@
 
 namespace App\Providers;
 
+use App\Contracts\OrderServiceIntarface;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use App\Observers\UserObserver;
+use App\Services\OrderService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public $bindings = [
+        OrderServiceIntarface::class => OrderService::class,
+    ];
+
     /**
      * Register any application services.
      *
