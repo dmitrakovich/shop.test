@@ -10,9 +10,10 @@
     <p>
         Ваш заказ принят!
     </p>
-    <h3 class="text-danger">Заказ №{{ session('order_info')['orderNum'] }}</h3>
+    <h3 class="text-danger">Заказ №{{ $order->id }}</h3>
     <p>
-        от {{ date('j F') }} 2021 на сумму {!! Currency::format(session('order_info')['totalPrice']) !!}
+        от {{ date('j F') }} 2021 на сумму
+        {!! Currency::format($order->getTotalPrice(), $order->currency) !!}
     </p>
     <div class="row px-5 py-4 text-left" style="background: #FBFBFD">
 
@@ -27,18 +28,18 @@
             Способ получения
         </div>
         <div class="col-6 py-2">
-            @if (!empty(session('order_info')['delivery']))
-                {{ session('order_info')['delivery'] }} <br>
+            @if (!empty($order->delivery))
+                {{ $order->delivery }} <br>
             @endif
-            {{ session('order_info')['address'] }}
+            {{ $order->user_addr }}
         </div>
 
-        @if (!empty(session('order_info')['payment']))
+        @if (!empty($order->payment))
             <div class="col-6 py-2 font-weight-bold">
                 Способ оплаты
             </div>
             <div class="col-6 py-2">
-                {{ session('order_info')['payment'] }}
+                {{ $order->payment }}
             </div>
         @endif
 

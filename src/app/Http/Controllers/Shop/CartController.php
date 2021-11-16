@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Models\User;
 use App\Facades\Cart;
 use App\Facades\Sale;
+use App\Models\Order;
 use App\Models\Product;
-use App\Models\User;
-use Deliveries\DeliveryMethod;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Payments\PaymentMethod;
+use Illuminate\Http\Request;
+use Deliveries\DeliveryMethod;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends BaseController
 {
@@ -45,15 +46,6 @@ class CartController extends BaseController
         return back();
     }
 
-    public function final()
-    {
-        if (!Session::has('order_info')) {
-            return redirect()->route('orders.index');
-        }
-        $recomended = Product::inRandomOrder()->limit(5)->get();
-        return view('shop.cart-done', compact('recomended'));
-    }
-
     public function addToCart(Request $request)
     {
         $productId = $request->input('product_id') ?? abort(404);
@@ -68,5 +60,22 @@ class CartController extends BaseController
             'result' => 'ok',
             'total_count' => Cart::itemsCount()
         ];
+    }
+
+    /**
+     * Final cart page (order info)
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function final()
+    {
+        if (!Session::has('order_id')) {
+            return redirect()->route('orders.index');
+        }
+
+        return view('shop.cart-done', [
+            'order' => Order::findOrFail(Session::get('order_id')),
+            'recomended' => Product::inRandomOrder()->limit(5)->get()
+        ]);
     }
 }

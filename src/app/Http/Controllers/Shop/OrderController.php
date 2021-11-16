@@ -108,16 +108,9 @@ class OrderController extends BaseController
 
         event(new OrderCreated($order));
 
-        $orderInfo = [
-            'orderNum' => $order->id,
-            'totalPrice' => $cart->getTotalPrice(),
-            'address' => $userData['user_addr'],
-            'delivery' => $userData['delivery_name'],
-            'payment' => $userData['payment_name'],
-        ];
         Cart::clear();
 
-        return redirect()->route('cart-final')->with('order_info', $orderInfo);
+        return redirect()->route('cart-final')->with('order_id', $order->id);
     }
 
     /**
