@@ -8,7 +8,11 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use App\Admin\Actions\Order\PrintOrder;
+use App\Models\Country;
+use App\Models\Enum\OrderMethod;
+use Deliveries\DeliveryMethod;
 use Encore\Admin\Controllers\AdminController;
+use Payments\PaymentMethod;
 
 class OrderController extends AdminController
 {
@@ -20,6 +24,20 @@ class OrderController extends AdminController
     protected $title = 'Order';
 
     /**
+     * Order methods list
+     *
+     * @var array
+     */
+    protected $orderMethods = [
+        OrderMethod::DEFAULT => 'через корзину',
+        OrderMethod::ONECLICK => 'в один клик',
+        OrderMethod::PHONE => 'по телефону',
+        OrderMethod::VIBER => 'через viber',
+        OrderMethod::INSTAGRAM => 'через instagram',
+        OrderMethod::OTHER => 'другое',
+    ];
+
+    /**
      * Make a grid builder.
      *
      * @return Grid
@@ -29,7 +47,7 @@ class OrderController extends AdminController
         $grid = new Grid(new Order());
 
         $grid->column('user_name', 'ФИО');
-        $grid->column('type', 'Тип заказа');
+        // $grid->column('type', 'Тип заказа');
         $grid->column('email', __('Email'));
         $grid->column('phone', 'Телефон');
 
@@ -118,11 +136,14 @@ class OrderController extends AdminController
         $form->textarea('comment', __('Comment'));
         $form->text('currency', __('Currency'));
         $form->decimal('rate', __('Rate'));
-        $form->text('country', __('Country'));
+        $form->select('country_id', 'Страна')->options(Country::pluck('name', 'id'));
         $form->text('region', __('Region'));
         $form->text('city', __('City'));
         $form->text('zip', __('Zip'));
         $form->text('user_addr', __('User addr'));
+        $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
+        $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));
+        $form->select('order_method', 'Способ заказа')->options($this->orderMethods);
 
         return $form;
     }
