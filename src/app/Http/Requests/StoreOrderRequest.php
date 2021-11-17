@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Facades\Currency;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreOrderRequest extends FormRequest
@@ -18,15 +20,20 @@ class StoreOrderRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        list($deliveryCode, $deliveryName) = explode('|', $this->delivery ?? '|');
-        list($paymentCode, $paymentName) = explode('|', $this->payment ?? '|');
-
         $this->merge([
-            'payment_name' => $paymentName,
-            'payment_code' => $paymentCode,
-            'delivery_name' => $deliveryName,
-            'delivery_code' => $deliveryCode,
+            'user_name' => $this->user_name ?? $this->name,
+            'type' => 'retail',
+            'status' => $this->status ?? 0,
         ]);
+
+        if (!$this->wantsJson()) {
+            $this->merge([
+                'user_id' => Auth::check() ? Auth::id() : null,
+                'currency' => Currency::getCurrentCurrency()->code,
+                'rate' => Currency::getCurrentCurrency()->rate,
+                'created_at' => now()
+            ]);
+        }
     }
     /**
      * Get the validation rules that apply to the request.
@@ -36,15 +43,22 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:191',
-            'email' => 'email|nullable|max:50',
-            'phone' => 'required|max:20',
-            'payment_name' => 'nullable',
-            'payment_code' => 'nullable',
-            'delivery_name' => 'nullable',
-            'delivery_code' => 'nullable',
-            'city' =>'nullable|max:50',
-            'user_addr' => 'nullable|max:191',
+            'user_id' => ['integer', 'nullable'],
+            'user_name' => ['required', 'max:191'],
+            'email' => ['email', 'nullable', 'max:50'],
+            'phone' => ['required', 'max:191'],
+            'comment' => ['nullable'],
+            'currency' => ['required', 'string', 'max:5'],
+            'rate' => ['required'],
+            'payment_id' => ['integer', 'nullable'],
+            'delivery_id' => ['integer', 'nullable'],
+            'country_id' => ['integer', 'nullable'],
+            'region' => ['nullable', 'max:50'],
+            'city' => ['nullable', 'max:50'],
+            'zip' => ['nullable', 'max:10'],
+            'user_addr' => ['nullable', 'max:191'],
+            'status' => ['integer'],
+            'created_at' => ['date']
         ];
     }
 }

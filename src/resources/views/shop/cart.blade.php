@@ -65,8 +65,13 @@
                         <p class="font-size-18"><b>Способ доставки:</b></p>
                         @foreach ($deliveriesList as $key => $value)
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="delivery" id="{{ $key }}" value="{{ $key . '|' . $value }}" {{ $loop->first ? 'checked' : null }}>
-                                <label class="form-check-label" for="{{ $key }}">{{ $value }}</label>
+                                <input class="form-check-input"
+                                    type="radio"
+                                    name="delivery_id"
+                                    id="delivery-{{ $key }}"
+                                    value="{{ $key }}" {{ $loop->first ? 'checked' : null }}
+                                />
+                                <label class="form-check-label" for="delivery-{{ $key }}">{{ $value }}</label>
                             </div>
                         @endforeach
                     </div>
@@ -74,8 +79,13 @@
                         <p class="font-size-18"><b>Способ оплаты:</b></p>
                         @foreach ($paymentsList as $key => $value)
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment" id="{{ $key }}" value="{{ $key . '|' . $value }}" {{ $loop->first ? 'checked' : null }}>
-                                <label class="form-check-label" for="{{ $key }}">
+                                <input class="form-check-input"
+                                    type="radio"
+                                    name="payment_id"
+                                    id="payment-{{ $key }}"
+                                    value="{{ $key }}" {{ $loop->first ? 'checked' : null }}
+                                />
+                                <label class="form-check-label" for="payment-{{ $key }}">
                                     {{ $value }}
                                     @if ($key == 'Installment')
                                         <br>
@@ -145,24 +155,23 @@
                     <div class="col-12 mb-4">
                         <h5>ЗАПОЛНИТЕ ДАННЫЕ ДОСТАВКИ</h5>
                     </div>
-                    {{-- <div class="col-12 col-md-4 form-group">
-                        <label for="city">Город</label>
-                        <select name="city" id="city"
-                            class="form-control @error('city') is-invalid @enderror">
-                            <option value="1">Брест</option>
-                            <option value="2">Витебск</option>
-                            <option value="3">Гомель</option>
-                            <option value="4">Гродно</option>
-                            <option value="5">Минск</option>
-                            <option value="6">Могилев</option>
+                    <div class="col-12 col-md-4 form-group">
+                        <label for="country_id">Город</label>
+                        <select name="country_id" id="country_id"
+                            class="form-control @error('country_id') is-invalid @enderror">
+                            @foreach ($countries as $country)
+                                <option value="{{ $country->id }}" {{ $country->id == $currentCountry->id ? 'selected' : null }}>
+                                    {{ $country->name }}
+                                </option>
+                            @endforeach
                         </select>
-                        @error('city')
+                        @error('country_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                    </div> --}}
-                    <div class="col-12 {{-- col-md-8 --}} form-group">
+                    </div>
+                    <div class="col-12 col-md-8 form-group">
                         <label for="user_addr">Адрес</label>
                         <input id="user_addr" type="text" name="user_addr"
                             class="form-control @error('user_addr') is-invalid @enderror"
@@ -188,7 +197,7 @@
                         <label for="city">Телефон</label>
                         <input id="phone" type="tel" name="phone"
                             class="form-control @error('phone') is-invalid @enderror"
-                            value="{{ old('phone', $user->phone ?? '+375') }}">
+                            value="{{ old('phone', $user->phone ?? $currentCountry->prefix) }}">
                         @error('phone')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

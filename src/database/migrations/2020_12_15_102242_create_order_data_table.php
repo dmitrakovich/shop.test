@@ -25,7 +25,7 @@ class CreateOrderDataTable extends Migration
             $table->float('current_price');
             $table->float('discount')->default(0);
             $table->boolean('promocode_applied')->default(false);
-            $table->foreignId('status_id')->default(1);
+            $table->foreignId('status_id')->default(0);
             $table->date('release_date')->nullable();
             $table->unsignedTinyInteger('pred_period')->nullable();
         });

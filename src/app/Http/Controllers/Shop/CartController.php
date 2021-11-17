@@ -5,15 +5,22 @@ namespace App\Http\Controllers\Shop;
 use App\Models\User;
 use App\Facades\Cart;
 use App\Facades\Sale;
+use App\Models\Country;
 use App\Models\Order;
 use App\Models\Product;
 use Payments\PaymentMethod;
 use Illuminate\Http\Request;
 use Deliveries\DeliveryMethod;
 use Illuminate\Support\Facades\Session;
+use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 class CartController extends BaseController
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $cart = Cart::withData();
@@ -21,8 +28,8 @@ class CartController extends BaseController
 
         $user = auth()->user() ?? new User();
 
-        $deliveriesList = DeliveryMethod::where('active', true)->pluck('name', 'class');
-        $paymentsList = PaymentMethod::where('active', true)->pluck('name', 'class');
+        $deliveriesList = DeliveryMethod::where('active', true)->pluck('name', 'id');
+        $paymentsList = PaymentMethod::where('active', true)->pluck('name', 'id');
 
         if (!Sale::hasFitting()) {
             unset($deliveriesList['BelpostCourierFitting']);
@@ -31,7 +38,12 @@ class CartController extends BaseController
             unset($paymentsList['Installment']);
         }
 
-        return view('shop.cart', compact('cart', 'user', 'deliveriesList', 'paymentsList'));
+        $countries = Country::get(['id', 'name', 'code', 'prefix']);
+        $currentCountry = $countries->where('code', SxGeo::getCountry())->first();
+
+        return view('shop.cart', compact(
+            'cart', 'user', 'deliveriesList', 'paymentsList', 'countries', 'currentCountry'
+        ));
     }
 
     public function delete(Request $request, int $itemId)

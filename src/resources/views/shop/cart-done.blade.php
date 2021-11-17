@@ -29,7 +29,7 @@
         </div>
         <div class="col-6 py-2">
             @if (!empty($order->delivery))
-                {{ $order->delivery }} <br>
+                {{ $order->delivery->name }} <br>
             @endif
             {{ $order->user_addr }}
         </div>
@@ -39,7 +39,7 @@
                 Способ оплаты
             </div>
             <div class="col-6 py-2">
-                {{ $order->payment }}
+                {{ $order->payment->name }}
             </div>
         @endif
 

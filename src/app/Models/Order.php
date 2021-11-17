@@ -2,39 +2,78 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Deliveries\DeliveryMethod;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Payments\PaymentMethod;
 
+/**
+ * class Order
+ *
+ * @property integer $id
+ * @property string $user_name
+ * @property integer $user_id
+ * @property integer $promocode_id
+ * @property string $type ('retail', 'wholesale')
+ * @property string $email
+ * @property string $phone
+ * @property string $comment
+ * @property float $total_price
+ * @property string $currency
+ * @property float $rate
+ * @property string $country
+ * @property string $region
+ * @property string $city
+ * @property string $zip
+ * @property string $user_addr
+ * @property integer $payment_id
+ * @property float $payment_cost
+ * @property integer $delivery_id
+ * @property float $delivery_cost
+ * @property integer $delivery_point_id
+ * @property string $order_method
+ * @property string $utm_medium
+ * @property string $utm_source
+ * @property string $utm_campaign
+ * @property string $utm_content
+ * @property string $utm_term
+ * @property integer $status_id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_name',
-        'type',
+        'user_id',
         'promocode_id',
+        'type',
         'email',
         'phone',
         'comment',
+        'total_price',
         'currency',
         'rate',
-        'source',
-        'country',
+        'country_id',
         'region',
         'city',
         'zip',
-        'street',
-        'house',
         'user_addr',
-        'payment',
-        'payment_code',
+        'payment_id',
         'payment_cost',
-        'delivery',
-        'delivery_code',
+        'delivery_id',
         'delivery_cost',
-        'delivery_point',
-        'delivery_point_code',
-        'user_id',
+        'delivery_point_id',
+        'order_method',
+        'utm_medium',
+        'utm_source',
+        'utm_campaign',
+        'utm_content',
+        'utm_term',
+        'status_id',
     ];
     /**
      * Товары заказа
@@ -48,6 +87,36 @@ class Order extends Model
                 'product' => function ($query) { $query->withTrashed(); },
                 'size:id,name'
             ]);
+    }
+
+    /**
+     * Order country
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    /**
+     * Order delivery method
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function delivery()
+    {
+        return $this->belongsTo(DeliveryMethod::class);
+    }
+
+    /**
+     * Order payment method
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function payment()
+    {
+        return $this->belongsTo(PaymentMethod::class);
     }
 
     public function getItemsPrice()
@@ -71,7 +140,7 @@ class Order extends Model
 
     public function getTotalPrice()
     {
-        $price = $this->getItemsPrice();
+        $price = $this->total_price > 0 ? $this->total_price : $this->getItemsPrice();
 
         // учесть стоимость доставки
         // учесть коммиссию оплаты

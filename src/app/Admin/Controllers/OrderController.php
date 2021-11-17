@@ -46,10 +46,11 @@ class OrderController extends AdminController
             });
             return new Table(['Фото', 'Товар', 'Наличие', 'Размер', 'Цена'], $items->toArray());
         });
-        $grid->column('comment', 'Коммментарий');
+        // $grid->column('comment', 'Коммментарий');
+        $grid->column('country.name', 'Страна');
         $grid->column('user_addr', 'Адрес');
-        $grid->column('payment', 'Способ оплаты');
-        $grid->column('delivery', 'Способ доставки');
+        $grid->column('payment.name', 'Способ оплаты');
+        $grid->column('delivery.name', 'Способ доставки');
         $grid->column('created_at', 'Создан');
 
         $grid->actions (function ($actions) {
@@ -88,18 +89,7 @@ class OrderController extends AdminController
         $show->field('region', __('Region'));
         $show->field('city', __('City'));
         $show->field('zip', __('Zip'));
-        $show->field('street', __('Street'));
-        $show->field('house', __('House'));
         $show->field('user_addr', __('User addr'));
-        $show->field('payment', __('Payment'));
-        $show->field('payment_code', __('Payment code'));
-        $show->field('payment_cost', __('Payment cost'));
-        $show->field('delivery', __('Delivery'));
-        $show->field('delivery_code', __('Delivery code'));
-        $show->field('delivery_cost', __('Delivery cost'));
-        $show->field('delivery_point', __('Delivery point'));
-        $show->field('delivery_point_code', __('Delivery point code'));
-        $show->field('source', __('Source'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -132,18 +122,7 @@ class OrderController extends AdminController
         $form->text('region', __('Region'));
         $form->text('city', __('City'));
         $form->text('zip', __('Zip'));
-        $form->text('street', __('Street'));
-        $form->text('house', __('House'));
         $form->text('user_addr', __('User addr'));
-        $form->text('payment', __('Payment'));
-        $form->text('payment_code', __('Payment code'));
-        $form->decimal('payment_cost', __('Payment cost'));
-        $form->text('delivery', __('Delivery'));
-        $form->text('delivery_code', __('Delivery code'));
-        $form->decimal('delivery_cost', __('Delivery cost'));
-        $form->text('delivery_point', __('Delivery point'));
-        $form->text('delivery_point_code', __('Delivery point code'));
-        $form->switch('source', __('Source'));
 
         return $form;
     }

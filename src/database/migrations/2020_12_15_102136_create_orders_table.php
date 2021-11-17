@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Enum\OrderMethod;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateOrdersTable extends Migration
 {
@@ -22,28 +23,35 @@ class CreateOrdersTable extends Migration
             $table->string('email', 50)->nullable();
             $table->string('phone', 20);
             $table->text('comment')->nullable();
-            $table->string('currency', 20);
+
+            $table->unsignedFloat('total_price')->default(0);
+            $table->string('currency', 5);
             $table->float('rate');
 
-            $table->string('country', 50)->nullable();
+            $table->foreignId('country_id')->nullable();
             $table->string('region', 50)->nullable();
             $table->string('city', 50)->nullable();
             $table->string('zip', 10)->nullable();
-            $table->string('street')->nullable();
-            $table->string('house', 30)->nullable();
             $table->string('user_addr')->nullable();
 
-            $table->string('payment')->nullable();
-            $table->string('payment_code', 30)->nullable();
+            $table->foreignId('payment_id')->nullable();
             $table->float('payment_cost')->nullable();
-
-            $table->string('delivery')->nullable();
-            $table->string('delivery_code', 30)->nullable();
+            $table->foreignId('delivery_id')->nullable();
             $table->float('delivery_cost')->nullable();
-            $table->string('delivery_point')->nullable();
-            $table->string('delivery_point_code', 30)->nullable();
+            $table->foreignId('delivery_point_id')->nullable();
 
-            $table->unsignedTinyInteger('source')->default(0);
+            $table->enum('order_method', [
+                (new \ReflectionClass(OrderMethod::class))->getConstants()
+            ])->default(OrderMethod::DEFAULT);
+
+            $table->string('utm_medium', 40)->nullable();
+            $table->string('utm_source', 40)->nullable();
+            $table->string('utm_campaign', 40)->nullable();
+            $table->string('utm_content', 40)->nullable();
+            $table->string('utm_term', 40)->nullable();
+
+            $table->foreignId('status_id')->default(0);
+
             $table->timestamps();
         });
     }
