@@ -128,29 +128,46 @@
 
 					<tr><td height="10"></td></tr>
 
-					<tr>
-						<td style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">ПОЛУЧАТЕЛЬ</td>
-					</tr>
-					<tr>
-						<td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;"><b>ФИО</b>: {{ $order->user_name }}</td>
-					</tr>
-					<tr>
-						<td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;"><b>Email</b>: {{ $order->email }}</td>
-					</tr>
-					<tr>
-						<td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;"><b>Телефон</b>: {{ $order->phone }}</td>
-					</tr>
-					<tr>
-						<td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;"><b>Адрес</b>: {{ $order->user_addr }}</td>
-					</tr>
-					<tr>
-						<td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;"><b>Способ доставки</b>: {{ $order->delivery }}</td>
-					</tr>
-					<tr>
-						<td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;"><b>Способ оплаты</b>: {{ $order->payment }}</td>
-					</tr>
-
-					<tr><td colspan="3" height="20"></td></tr>
+                    <tr>
+                        <td style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">
+                            ПОЛУЧАТЕЛЬ
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                            <b>ФИО</b>: {{ $order->user_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                            <b>Email</b>: {{ $order->email }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                            <b>Телефон</b>: {{ $order->phone }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                            <b>Адрес</b>: {{ $order->user_addr }}
+                        </td>
+                    </tr>
+                    @if (!empty($order->delivery))
+                        <tr>
+                            <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                                <b>Способ доставки</b>: {{ $order->delivery->name }}
+                            </td>
+                        </tr>
+                    @endif
+                    @if (!empty($order->payment))
+                        <tr>
+                            <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                                <b>Способ оплаты</b>: {{ $order->payment->name }}
+                            </td>
+                        </tr>
+                    @endif
+                    <tr><td colspan="3" height="20"></td></tr>
 
 				</tbody></table>
 
@@ -208,22 +225,31 @@
 				</tbody></table>
 
 				<table width="600" style="margin: 0 auto; border-radius: 2px;" cellspacing="0" cellpadding="0" border="0"><tbody>
-					<tr colspan="5" height="10px;"></tr>
-					<tr>
-						<td width="100"></td>
-						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Стоимость моделей <br> (без скидки)</td>
-						<td width="20"></td>
-						<td width="170" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{!! Currency::format($order->getMaxItemsPrice(), $order->currency) !!}</td>
-						<td width="10px"></td>
-					</tr>
+                    <tr colspan="5" height="10px;"></tr>
+                    <tr>
+                        <td width="100"></td>
+                        <td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">
+                            Стоимость моделей <br>
+                            (без скидки)
+                        </td>
+                        <td width="20"></td>
+                        <td width="170" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">
+                            {!! Currency::format($order->getMaxItemsPrice(), $order->currency) !!}
+                        </td>
+                        <td width="10px"></td>
+                    </tr>
 
-					<tr>
-						<td width="100"></td>
-						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Скидка</td>
-						<td width="20px"></td>
-						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{!! Currency::format($order->getMaxItemsPrice() - $order->getItemsPrice(), $order->currency) !!}</td>
-						<td width="10px"></td>
-					</tr>
+                    <tr>
+                        <td width="100"></td>
+                        <td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">
+                            Скидка
+                        </td>
+                        <td width="20px"></td>
+                        <td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">
+                            {!! Currency::format($order->getMaxItemsPrice() - $order->getItemsPrice(), $order->currency) !!}
+                        </td>
+                        <td width="10px"></td>
+                    </tr>
 
 					{{-- <tr>
 						<td width="100"></td>
