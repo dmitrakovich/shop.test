@@ -40,9 +40,8 @@ class CreateOrdersTable extends Migration
             $table->float('delivery_cost')->nullable();
             $table->foreignId('delivery_point_id')->nullable();
 
-            $table->enum('order_method', [
-                (new \ReflectionClass(OrderMethod::class))->getConstants()
-            ])->default(OrderMethod::DEFAULT);
+            $table->enum('order_method', OrderMethod::getValues())
+                ->default(OrderMethod::DEFAULT);
 
             $table->string('utm_medium', 40)->nullable();
             $table->string('utm_source', 40)->nullable();

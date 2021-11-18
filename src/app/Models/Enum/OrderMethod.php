@@ -2,7 +2,7 @@
 
 namespace App\Models\Enum;
 
-class OrderMethod
+class OrderMethod extends EnumAbstract
 {
     const DEFAULT = 'default';
     const ONECLICK = 'oneclick';
