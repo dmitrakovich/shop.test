@@ -15,7 +15,6 @@ use Payments\PaymentMethod;
  * @property string $user_name
  * @property integer $user_id
  * @property integer $promocode_id
- * @property string $type ('retail', 'wholesale')
  * @property string $email
  * @property string $phone
  * @property string $comment
@@ -50,7 +49,6 @@ class Order extends Model
         'user_name',
         'user_id',
         'promocode_id',
-        'type',
         'email',
         'phone',
         'comment',

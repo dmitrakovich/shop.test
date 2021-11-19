@@ -123,7 +123,9 @@
 					</tr>
 
 					<tr>
-                        <td colspan="3" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">{{ $order->type == 'retail' ? 'Розничный' : 'Оптовый' }} заказ на {{ DeclensionNoun::make($order->getItemsCount(), 'товар') }}</td>
+                        <td colspan="3" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">
+                            Розничный заказ на {{ DeclensionNoun::make($order->getItemsCount(), 'товар') }}
+                        </td>
 					</tr>
 
 					<tr><td height="10"></td></tr>

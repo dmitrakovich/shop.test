@@ -15,7 +15,6 @@ class CreateCartsTable extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->enum('order_type', ['wholesale', 'retail'])->default('retail');
             $table->foreignId('promocode_id')->nullable();
             $table->boolean('cancel_promocode')->default(false);
             $table->timestamps();

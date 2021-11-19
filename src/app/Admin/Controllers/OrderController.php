@@ -47,7 +47,6 @@ class OrderController extends AdminController
         $grid = new Grid(new Order());
 
         $grid->column('user_name', 'ФИО');
-        // $grid->column('type', 'Тип заказа');
         $grid->column('email', __('Email'));
         $grid->column('phone', 'Телефон');
 
@@ -97,7 +96,6 @@ class OrderController extends AdminController
         $show->field('user_name', __('User name'));
         $show->field('user_id', __('User id'));
         $show->field('promocode_id', __('Promocode id'));
-        $show->field('type', __('Type'));
         $show->field('email', __('Email'));
         $show->field('phone', __('Phone'));
         $show->field('comment', __('Comment'));
@@ -130,7 +128,6 @@ class OrderController extends AdminController
         $form->text('user_name', __('User name'));
         $form->number('user_id', __('User id'));
         $form->number('promocode_id', __('Promocode id'));
-        $form->text('type', __('Type'));
         $form->email('email', __('Email'));
         $form->mobile('phone', __('Phone'));
         $form->textarea('comment', __('Comment'));

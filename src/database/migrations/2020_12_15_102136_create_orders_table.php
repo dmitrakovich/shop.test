@@ -19,7 +19,6 @@ class CreateOrdersTable extends Migration
             $table->string('user_name', 200);
             $table->foreignId('user_id')->nullable()->index();
             $table->foreignId('promocode_id')->nullable()->index();
-            $table->enum('type', ['retail', 'wholesale']);
             $table->string('email', 50)->nullable();
             $table->string('phone', 20);
             $table->text('comment')->nullable();
