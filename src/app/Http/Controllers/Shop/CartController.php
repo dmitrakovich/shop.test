@@ -26,6 +26,7 @@ class CartController extends BaseController
         $cart = Cart::withData();
         Sale::applyForCart($cart);
 
+        /** @var \App\Models\User */
         $user = auth()->user() ?? new User();
 
         $deliveriesList = DeliveryMethod::where('active', true)->pluck('name', 'id');
@@ -39,7 +40,8 @@ class CartController extends BaseController
         }
 
         $countries = Country::get(['id', 'name', 'code', 'prefix']);
-        $currentCountry = $countries->where('code', SxGeo::getCountry())->first();
+        $currentCountry = $countries->where('id', $user->getFirstAddress()->country_id)->first()
+            ?? $countries->where('code', SxGeo::getCountry())->first();
 
         return view('shop.cart', compact(
             'cart', 'user', 'deliveriesList', 'paymentsList', 'countries', 'currentCountry'

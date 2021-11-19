@@ -24,37 +24,14 @@ class UserDataUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'last_name' => ['max:255'],
-            'first_name' => ['required', 'string', 'max:255'],
-            'patronymic_name' => ['max:255'],
+            'last_name' => ['max:191'],
+            'first_name' => ['required', 'string', 'max:191'],
+            'patronymic_name' => ['max:191'],
             'email' => ['email:filter', 'unique:users,email,' . auth()->id()],
-            // 'phone' => [],
+            'phone' => ['nullable', 'min:7', 'max:20', 'unique:users,phone,' . auth()->id()],
             'birth_date' => ['date', 'nullable'],
-            'country' => ['integer'],
-            // 'address' => []
-        ];
-    }
-    /**
-     * Свои сообщения об ошибках
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'first_name.required' => 'Поле имя обязательно для заполнения',
-            // 'first_name.required' => 'Поле имя обязательно для заполнения',
-        ];
-    }
-    /**
-     * Свои названия для полей
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return [
-            'birth_date' => 'дата рождения'
+            'country_id' => ['integer'],
+            'address' => ['nullable', 'max:191'],
         ];
     }
 }

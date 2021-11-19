@@ -30,8 +30,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'phone',
         'birth_date',
-        'country',
-        'address',
     ];
 
     /**
@@ -51,6 +49,27 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * User addresses
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function addresses()
+    {
+        return $this->hasMany(UserAddress::class);
+    }
+
+    /**
+     * Get fisrt user address if exist
+     *
+     * @return \App\Models\UserAddress
+     */
+    public function getFirstAddress()
+    {
+        return optional($this->addresses[0] ?? null);
+    }
+
     /**
      * Get the user's full name.
      *

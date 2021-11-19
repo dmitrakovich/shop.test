@@ -175,7 +175,7 @@
                         <label for="user_addr">Адрес</label>
                         <input id="user_addr" type="text" name="user_addr"
                             class="form-control @error('user_addr') is-invalid @enderror"
-                            value="{{ old('user_addr', $user->address) }}">
+                            value="{{ old('user_addr', $user->getFirstAddress()->address) }}">
                         @error('user_addr')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

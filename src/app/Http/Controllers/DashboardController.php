@@ -7,6 +7,8 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserDataUpdateRequest;
+use App\Models\Country;
+use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 class DashboardController extends Controller
 {
@@ -17,15 +19,16 @@ class DashboardController extends Controller
      */
     public function edit(Request $request)
     {
+        /** @var \App\Models\User */
+        $user = auth()->user();
+        $countries = Country::get(['id', 'name', 'code', 'prefix']);
+
         return view('dashboard.profile', [
             'user' => auth()->user(),
             'emailVerified' => $request->has('verified'),
-            'countriesList' => [
-                'Беларусь',
-                'Украина',
-                'Российская Федерация',
-                'Казахстан'
-            ]
+            'userCountryId' => $user->getFirstAddress()->country_id
+                ?? $countries->where('code', SxGeo::getCountry())->first()->id,
+            'countriesList' => $countries->pluck('name', 'id')
         ]);
     }
 
@@ -38,7 +41,15 @@ class DashboardController extends Controller
      */
     public function update(User $user, UserDataUpdateRequest $request)
     {
-        $result = $user->update($request->input());
+        $validatedData = $request->validated();
+        $result = $user->update($validatedData);
+
+        $userAddress = $user->getFirstAddress();
+        if ($userAddress->id) {
+            $userAddress->update($validatedData);
+        } else {
+            $user->addresses()->create($validatedData);
+        }
 
         if ($request->filled('password')) {
             $request->validate(['password' => ['required', 'string', 'min:8']]);

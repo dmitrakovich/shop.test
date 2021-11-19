@@ -115,14 +115,16 @@
         </div>
 
         <div class="form-group row">
-            <label for="country" class="d-none d-md-block col-md-3 col-form-label">Страна</label>
+            <label for="country_id" class="d-none d-md-block col-md-3 col-form-label">Страна</label>
             <div class="col-12 col-md-3">
-                <select id="country" name="country" class="form-control @error('country') is-invalid @enderror">
+                <select id="country_id" name="country_id" class="form-control @error('country_id') is-invalid @enderror">
                     @foreach ($countriesList as $countryId => $countryName)
-                    <option value="{{ $countryId }}">{{ $countryName }}</option>
+                        <option value="{{ $countryId }}" {{ $countryId == $userCountryId ? 'selected' : null }}>
+                            {{ $countryName }}
+                        </option>
                     @endforeach
                 </select>
-                @error('country')
+                @error('country_id')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -135,7 +137,7 @@
             <div class="col-12 col-md-6">
                 <input id="address" type="text" name="address"
                     class="form-control @error('address') is-invalid @enderror"
-                    placeholder="Адрес" value="{{ old('address', $user->address) }}">
+                    placeholder="Адрес" value="{{ old('address', $user->getFirstAddress()->address) }}">
                 @error('address')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
