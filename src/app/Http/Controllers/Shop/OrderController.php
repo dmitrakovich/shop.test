@@ -45,9 +45,7 @@ class OrderController extends BaseController
      */
     public function store(StoreOrderRequest $request)
     {
-        $isOneClick = $request->has(['product_id', 'sizes']);
-
-        if ($isOneClick) {
+        if ($request->isOneClick()) {
             $cart = Cart::make();
             $items = [];
             foreach ($request->input('sizes') as $sizeId => $state) {

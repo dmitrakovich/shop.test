@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Facades\Currency;
+use Illuminate\Validation\Rule;
+use App\Models\Enum\OrderMethod;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,8 +24,8 @@ class StoreOrderRequest extends FormRequest
     {
         $this->merge([
             'user_name' => $this->user_name ?? $this->name,
-            'type' => 'retail',
-            'status' => $this->status ?? 0,
+            'order_method' => $this->getOrderMethod(),
+            'status_id' => $this->status ?? 0,
         ]);
 
         if (!$this->wantsJson()) {
@@ -32,6 +34,8 @@ class StoreOrderRequest extends FormRequest
                 'currency' => Currency::getCurrentCurrency()->code,
                 'rate' => Currency::getCurrentCurrency()->rate,
                 'created_at' => now()
+
+                // utm
             ]);
         }
     }
@@ -45,6 +49,7 @@ class StoreOrderRequest extends FormRequest
         return [
             'user_id' => ['integer', 'nullable'],
             'user_name' => ['required', 'max:191'],
+            'order_method' => [Rule::in(OrderMethod::getValues())],
             'email' => ['email', 'nullable', 'max:50'],
             'phone' => ['required', 'max:191'],
             'comment' => ['nullable'],
@@ -60,5 +65,27 @@ class StoreOrderRequest extends FormRequest
             'status' => ['integer'],
             'created_at' => ['date']
         ];
+    }
+
+    /**
+     * Get order method
+     *
+     * @return string
+     */
+    protected function getOrderMethod(): string
+    {
+        return $this->order_method
+            ?? ($this->has(['product_id', 'sizes']) ? OrderMethod::ONECLICK : null)
+            ?? OrderMethod::DEFAULT;
+    }
+
+    /**
+     * Check is this order made in one click
+     *
+     * @return boolean
+     */
+    public function isOneClick(): bool
+    {
+        return $this->order_method == OrderMethod::ONECLICK;
     }
 }

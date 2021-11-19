@@ -5,11 +5,11 @@ namespace App\Services;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Contracts\OrderServiceIntarface;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\StoreOrderRequest;
 
 class OrderService implements OrderServiceIntarface
 {
-    public function store(FormRequest $request, Cart $cart)
+    public function store(StoreOrderRequest $request, Cart $cart)
     {
         $userData = $request->validated();
         $userData['total_price'] = $cart->getTotalPrice();
