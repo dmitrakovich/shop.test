@@ -13,7 +13,7 @@ class OldSiteSyncService
      * @param integer $code
      * @return \Illuminate\Http\JsonResponse
      */
-    public function successResponse($data, $code = 200)
+    static public function successResponse($data, $code = 200)
     {
         return self::jsonResponse([
             'success' => true,

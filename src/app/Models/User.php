@@ -24,12 +24,14 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'last_name',
+        'usergroup_id',
         'first_name',
         'patronymic_name',
-        'email',
+        'last_name',
         'phone',
+        'email',
         'birth_date',
+        'created_at',
     ];
 
     /**
@@ -68,6 +70,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getFirstAddress()
     {
         return optional($this->addresses[0] ?? null);
+    }
+
+    /**
+     * Check user has addresses
+     *
+     * @return boolean
+     */
+    public function hasAddresses(): bool
+    {
+        return !empty($this->getFirstAddress()->id);
     }
 
     /**

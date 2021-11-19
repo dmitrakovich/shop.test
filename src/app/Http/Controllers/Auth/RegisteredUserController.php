@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\OldSiteSyncService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
+use App\Http\Requests\Auth\SyncRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use Illuminate\Support\Arr;
 
 class RegisteredUserController extends Controller
 {
@@ -48,19 +52,36 @@ class RegisteredUserController extends Controller
     /**
      * Sync users with another DB
      *
-     * @param Request $request
+     * @param SyncRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sync(Request $request)
+    public function sync(SyncRequest $syncRequest)
     {
-        dd($request->input());
+        $oldId = (int)$syncRequest->input('id');
+        $userData = $syncRequest->validated();
 
-        $user = User::forceCreate([
-            'first_name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $existUser = User::when(!empty($userData['phone']), function ($query) use ($userData) {
+            $query->where('phone', $userData['phone']);
+        })->when(!empty($userData['email']), function ($query) use ($userData) {
+            $query->orWhere('email', $userData['email']);
+        })->first();
 
-        return response()->json('ok', 200);
+        if ($user = $existUser) {
+            $user->usergroup_id = $userData['usergroup_id'];
+            $user->email = $user->email ?? $userData['email'];
+
+            if ($user->hasAddresses()) {
+                $user->getFirstAddress()->update($userData);
+            } else {
+                $user->addresses()->create($userData);
+            }
+            $user->save();
+        } else {
+            $fillable = (new User)->mergeFillable(['password', 'remember_token']);
+            $user = User::forceCreate(Arr::only($userData, $fillable->getFillable()));
+            $user->addresses()->create($userData);
+        }
+
+        return OldSiteSyncService::successResponse([$oldId => $user->id]);
     }
 }
