@@ -12,7 +12,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  *
  * @package App
  *
- * @property-read string $fullName
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $patronymic_name
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -26,8 +28,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'usergroup_id',
         'first_name',
-        'patronymic_name',
         'last_name',
+        'patronymic_name',
         'phone',
         'email',
         'birth_date',
@@ -87,10 +89,11 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return string
      */
-    public function getFullNameAttribute()
+    public function getFullName()
     {
-        return "{$this->first_name} {$this->last_name}";
+        return "{$this->last_name} {$this->first_name} {$this->patronymic_name}";
     }
+
     /**
      * Аксессуар для поля, которе есть в БД
      *

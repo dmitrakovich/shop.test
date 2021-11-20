@@ -18,9 +18,9 @@ class CreateUsersTable extends Migration
             $table->foreignId('cart_token')->nullable()->unique();
             $table->foreignId('usergroup_id')->default(0);
             $table->string('email')->unique();
-            $table->string('first_name');
-            $table->string('last_name')->nullable();
-            $table->string('patronymic_name')->nullable();
+            $table->string('first_name', 50);
+            $table->string('last_name', 50)->nullable();
+            $table->string('patronymic_name', 50)->nullable();
             $table->string('phone', 20)->nullable();
             $table->date('birth_date')->nullable();
 

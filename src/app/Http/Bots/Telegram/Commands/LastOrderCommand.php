@@ -25,8 +25,8 @@ class LastOrderCommand extends Command
      */
     public function handle()
     {
-        $order = Order::latest()->first(['id', 'user_name', 'created_at']);
-        $text = "заказ №$order->id, на имя $order->user_name, создан в $order->created_at";
+        $order = Order::latest()->first(['id', 'first_name', 'created_at']);
+        $text = "заказ №$order->id, на имя $order->first_name, создан в $order->created_at";
 
         $this->replyWithMessage(compact('text'));
     }

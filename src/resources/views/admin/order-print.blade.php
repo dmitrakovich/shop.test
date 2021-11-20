@@ -3,7 +3,7 @@
 <title>Заказ</title>
 </head>
 <body style="margin: 0px; padding: 0px; background: rgb(255, 255, 255); cursor: auto;">
-<div style="display:none;font-size:1px;color:#FFFFFF;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">Здравствуйте, {{ $order->user_name }}. Спасибо за заказ!</div>
+<div style="display:none;font-size:1px;color:#FFFFFF;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">Здравствуйте, {{ $order->first_name }}. Спасибо за заказ!</div>
 <table border="0" cellpadding="0" cellspacing="0" style="border:none; border-collapse:collapse; border-spacing:0; " width="100%">
   <tbody>
     <tr>
@@ -40,7 +40,7 @@
                     </tr>
                     <tr>
                         <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
-                            <b>ФИО</b>: {{ $order->user_name }}
+                            <b>ФИО</b>: {{ $order->first_name }}
                         </td>
                     </tr>
                     <tr>

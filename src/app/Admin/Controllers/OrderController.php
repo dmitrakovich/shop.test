@@ -46,7 +46,7 @@ class OrderController extends AdminController
     {
         $grid = new Grid(new Order());
 
-        $grid->column('user_name', 'ФИО');
+        $grid->column('user_full_name', 'ФИО');
         $grid->column('email', __('Email'));
         $grid->column('phone', 'Телефон');
 
@@ -93,7 +93,9 @@ class OrderController extends AdminController
         $show->panel()->tools($this->getPrintTool());
 
         $show->field('id', __('Id'));
-        $show->field('user_name', __('User name'));
+        $show->field('first_name', 'Имя');
+        $show->field('last_name', 'Фамилия');
+        $show->field('patronymic_name', 'Отчество');
         $show->field('user_id', __('User id'));
         $show->field('promocode_id', __('Promocode id'));
         $show->field('email', __('Email'));
@@ -125,7 +127,9 @@ class OrderController extends AdminController
             $form->tools($this->getPrintTool());
         }
 
-        $form->text('user_name', __('User name'));
+        $form->text('first_name', 'Имя');
+        $form->text('last_name', 'Фамилия');
+        $form->text('patronymic_name', 'Отчество');
         $form->number('user_id', __('User id'));
         $form->number('promocode_id', __('Promocode id'));
         $form->email('email', __('Email'));

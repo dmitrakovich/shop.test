@@ -12,8 +12,10 @@ use Payments\PaymentMethod;
  * class Order
  *
  * @property integer $id
- * @property string $user_name
  * @property integer $user_id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $patronymic_name
  * @property integer $promocode_id
  * @property string $email
  * @property string $phone
@@ -40,14 +42,18 @@ use Payments\PaymentMethod;
  * @property string $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ *
+ * @property-read string $user_full_name
  */
 class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_name',
         'user_id',
+        'first_name',
+        'last_name',
+        'patronymic_name',
         'promocode_id',
         'email',
         'phone',
@@ -73,6 +79,11 @@ class Order extends Model
         'utm_term',
         'status',
     ];
+
+    protected $appends = [
+        'user_full_name',
+    ];
+
     /**
      * Товары заказа
      *
@@ -115,6 +126,16 @@ class Order extends Model
     public function payment()
     {
         return $this->belongsTo(PaymentMethod::class);
+    }
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getUserFullNameAttribute()
+    {
+        return "{$this->last_name} {$this->first_name} {$this->patronymic_name}";
     }
 
     public function getItemsPrice()

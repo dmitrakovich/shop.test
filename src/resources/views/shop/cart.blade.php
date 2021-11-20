@@ -156,7 +156,7 @@
                         <h5>ЗАПОЛНИТЕ ДАННЫЕ ДОСТАВКИ</h5>
                     </div>
                     <div class="col-12 col-md-4 form-group">
-                        <label for="country_id">Город</label>
+                        <label for="country_id">Страна</label>
                         <select name="country_id" id="country_id"
                             class="form-control @error('country_id') is-invalid @enderror">
                             @foreach ($countries as $country)
@@ -183,17 +183,42 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-4 form-group">
-                        <label for="name">ФИО</label>
-                        <input id="name" type="text" name="name"
-                            class="form-control @error('name') is-invalid @enderror"
-                            value="{{ old('name', $user->full_name) }}" required>
-                        @error('name')
+                        <label for="first_name">Имя</label>
+                        <input id="first_name" type="text" name="first_name"
+                            autocomplete="given-name"
+                            class="form-control @error('first_name') is-invalid @enderror"
+                            value="{{ old('first_name', $user->first_name) }}" required>
+                        @error('first_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
                     </div>
                     <div class="col-12 col-md-4 form-group">
+                        <label for="last_name">Фамилия</label>
+                        <input id="last_name" type="text" name="last_name"
+                            autocomplete="additional-name"
+                            class="form-control @error('last_name') is-invalid @enderror"
+                            value="{{ old('last_name', $user->last_name) }}" required>
+                        @error('last_name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-12 col-md-4 form-group">
+                        <label for="patronymic_name">Отчество</label>
+                        <input id="patronymic_name" type="text" name="patronymic_name"
+                            autocomplete="family-name"
+                            class="form-control @error('patronymic_name') is-invalid @enderror"
+                            value="{{ old('patronymic_name', $user->patronymic_name) }}" required>
+                        @error('patronymic_name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-12 col-md-6 form-group">
                         <label for="city">Телефон</label>
                         <input id="phone" type="tel" name="phone"
                             class="form-control @error('phone') is-invalid @enderror"
@@ -204,7 +229,7 @@
                             </span>
                         @enderror
                     </div>
-                    <div class="col-12 col-md-4 form-group">
+                    <div class="col-12 col-md-6 form-group">
                         <label for="city">E-mail</label>
                         <input id="email" type="email" name="email"
                             class="form-control @error('email') is-invalid @enderror"

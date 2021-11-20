@@ -224,7 +224,7 @@
         <input type="hidden" name="product_id" value="{{ $product->id }}">
         <h3 class="mx-5 mb-4">Купить в один клик</h3>
         <div class="form-group">
-            <input type="text" class="form-control" name="name" placeholder="Имя" required>
+            <input type="text" class="form-control" name="first_name" placeholder="Имя" autocomplete="given-name" required>
         </div>
         <div class="form-group">
             <input type="text" class="form-control" name="phone" placeholder="Телефон" required>

@@ -24,7 +24,6 @@ class StoreOrderRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'user_name' => $this->user_name ?? $this->name,
             'order_method' => $this->getOrderMethod(),
             'status' => $this->status ?? OrderStatus::CREATED,
         ]);
@@ -49,7 +48,9 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'user_id' => ['integer', 'nullable'],
-            'user_name' => ['required', 'max:191'],
+            'first_name' => ['required', 'max:50'],
+            'patronymic_name' => ['nullable', 'max:50'],
+            'last_name' => ['nullable', 'max:50'],
             'order_method' => [Rule::in(OrderMethod::getValues())],
             'email' => ['email', 'nullable', 'max:50'],
             'phone' => ['required', 'max:191'],
