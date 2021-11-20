@@ -8,8 +8,11 @@ use App\Models\Order;
 use App\Models\CartData;
 use App\Events\OrderCreated;
 use Illuminate\Http\Request;
+use Database\Seeders\ProductSeeder;
+use App\Services\OldSiteSyncService;
 use Illuminate\Support\Facades\Auth;
 use App\Contracts\OrderServiceIntarface;
+use App\Http\Requests\Order\SyncRequest;
 use App\Http\Requests\Order\StoreRequest;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
@@ -130,13 +133,28 @@ class OrderController extends BaseController
     /**
      * Sync order with another DB
      *
-     * @param Request $request
+     * @param SyncRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sync(Request $request)
+    public function sync(SyncRequest $request)
     {
-        dd($request->input());
+        $oldId = (int)$request->input('id');
+        $oldSizes = (new ProductSeeder)->attributesList['sizes']['new_id'];
+        $cart = Cart::make();
+        $items = [];
+        foreach ($request->input('items') as $item) {
+            $item['size_id'] = $oldSizes[$item['size']] ?? 1;
+            $items[] = CartData::make($item);
+        }
+        $cart->setRelation('items', new EloquentCollection($items));
 
-        return response()->json('ok', 200);
+        try {
+            $order = app(OrderServiceIntarface::class)
+                ->store($request, $cart);
+        } catch (\Throwable $th) {
+            abort(OldSiteSyncService::errorResponse($th->getMessage()));
+        }
+
+        return OldSiteSyncService::successResponse([$oldId => $order->id]);
     }
 }

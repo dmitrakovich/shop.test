@@ -15,6 +15,10 @@ class CartData extends Model
         'product_id',
         'size_id',
         'count',
+
+        // mock for sync
+        'price',
+        'status',
     ];
     /**
      * Связть с товарами
