@@ -63,7 +63,7 @@ $(function () {
         $('.js-sizes').clone().appendTo('form#oneclick-form').hide();
 
         let phone = $('input[name="phone"]').val();
-        let name = $('input[name="name"]').val();
+        let name = $('input[name="first_name"]').val();
         // let address = $('input[name="address"]').val();
 
         if (phone.length < 4) {

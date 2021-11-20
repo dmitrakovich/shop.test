@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\OldSiteSyncService;
 use Illuminate\Support\Facades\Auth;
@@ -66,20 +64,24 @@ class RegisteredUserController extends Controller
             $query->orWhere('email', $userData['email']);
         })->first();
 
-        if ($user = $existUser) {
-            $user->usergroup_id = $userData['usergroup_id'];
-            $user->email = $user->email ?? $userData['email'];
+        try {
+            if ($user = $existUser) {
+                $user->usergroup_id = $userData['usergroup_id'];
+                $user->email = $user->email ?? $userData['email'];
 
-            if ($user->hasAddresses()) {
-                $user->getFirstAddress()->update($userData);
+                if ($user->hasAddresses()) {
+                    $user->getFirstAddress()->update($userData);
+                } else {
+                    $user->addresses()->create($userData);
+                }
+                $user->save();
             } else {
+                $fillable = (new User)->mergeFillable(['password', 'remember_token']);
+                $user = User::forceCreate(Arr::only($userData, $fillable->getFillable()));
                 $user->addresses()->create($userData);
             }
-            $user->save();
-        } else {
-            $fillable = (new User)->mergeFillable(['password', 'remember_token']);
-            $user = User::forceCreate(Arr::only($userData, $fillable->getFillable()));
-            $user->addresses()->create($userData);
+        } catch (\Throwable $th) {
+            abort(OldSiteSyncService::errorResponse($th->getMessage()));
         }
 
         return OldSiteSyncService::successResponse([$oldId => $user->id]);
