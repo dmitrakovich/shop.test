@@ -21,7 +21,7 @@ class RegistrationTest extends TestCase
         $this->withoutMiddleware(\App\Http\Middleware\Captcha::class);
 
         $response = $this->post('/register', [
-            'name' => 'Test User',
+            'first_name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
