@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Http\Requests\SyncRequestTrait;
 use Illuminate\Support\Str;
-use App\Http\Requests\AbstractSyncRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class SyncRequest extends AbstractSyncRequest
+class SyncRequest extends FormRequest
 {
+    use SyncRequestTrait;
+
     /**
      * Prepare the data for validation.
      *

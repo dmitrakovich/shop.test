@@ -4,10 +4,9 @@ namespace App\Http\Requests;
 
 use App\Services\OldSiteSyncService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 
-abstract class AbstractSyncRequest extends FormRequest
+trait SyncRequestTrait
 {
     /**
      * Determine if the user is authorized to make this request.
