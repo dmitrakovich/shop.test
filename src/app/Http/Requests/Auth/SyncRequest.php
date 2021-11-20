@@ -3,22 +3,10 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Support\Str;
-use App\Services\OldSiteSyncService;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
+use App\Http\Requests\AbstractSyncRequest;
 
-class SyncRequest extends FormRequest
+class SyncRequest extends AbstractSyncRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /**
      * Prepare the data for validation.
      *
@@ -56,18 +44,5 @@ class SyncRequest extends FormRequest
             'city' => ['nullable', 'max:191'],
             'address' => ['nullable', 'max:191'],
         ];
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        abort(OldSiteSyncService::errorResponse($validator->errors()->all()));
     }
 }
