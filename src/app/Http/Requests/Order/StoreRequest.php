@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Order;
 
 use App\Facades\Currency;
 use Illuminate\Validation\Rule;
@@ -9,7 +9,7 @@ use App\Models\Enum\OrderStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreOrderRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,20 +24,13 @@ class StoreOrderRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
+            'user_id' => Auth::check() ? Auth::id() : null,
+            'currency' => Currency::getCurrentCurrency()->code,
+            'rate' => Currency::getCurrentCurrency()->rate,
             'order_method' => $this->getOrderMethod(),
-            'status' => $this->status ?? OrderStatus::CREATED,
+
+            // utm
         ]);
-
-        if (!$this->wantsJson()) {
-            $this->merge([
-                'user_id' => Auth::check() ? Auth::id() : null,
-                'currency' => Currency::getCurrentCurrency()->code,
-                'rate' => Currency::getCurrentCurrency()->rate,
-                'created_at' => now()
-
-                // utm
-            ]);
-        }
     }
     /**
      * Get the validation rules that apply to the request.
@@ -64,8 +57,6 @@ class StoreOrderRequest extends FormRequest
             'city' => ['nullable', 'max:50'],
             'zip' => ['nullable', 'max:10'],
             'user_addr' => ['nullable', 'max:191'],
-            'status' => [Rule::in(OrderStatus::getValues())],
-            'created_at' => ['date']
         ];
     }
 

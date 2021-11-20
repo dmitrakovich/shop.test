@@ -3,16 +3,16 @@
 namespace App\Contracts;
 
 use App\Models\Cart;
-use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\Order\StoreRequest;
 
 interface OrderServiceIntarface
 {
     /**
      * Store order (create new)
      *
-     * @param StoreOrderRequest $request
+     * @param StoreRequest $request
      * @param Cart $cart
      * @return \App\Models\Order
      */
-    public function store(StoreOrderRequest $request, Cart $cart);
+    public function store(StoreRequest $request, Cart $cart);
 }

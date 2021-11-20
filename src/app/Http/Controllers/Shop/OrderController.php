@@ -10,7 +10,7 @@ use App\Events\OrderCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Contracts\OrderServiceIntarface;
-use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\Order\StoreRequest;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class OrderController extends BaseController
@@ -40,10 +40,10 @@ class OrderController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  StoreOrderRequest $request
+     * @param  StoreRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(StoreOrderRequest $request)
+    public function store(StoreRequest $request)
     {
         if ($request->isOneClick()) {
             $cart = Cart::make();
