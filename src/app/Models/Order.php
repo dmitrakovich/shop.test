@@ -37,7 +37,7 @@ use Payments\PaymentMethod;
  * @property string $utm_campaign
  * @property string $utm_content
  * @property string $utm_term
- * @property integer $status_id
+ * @property string $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -71,7 +71,7 @@ class Order extends Model
         'utm_campaign',
         'utm_content',
         'utm_term',
-        'status_id',
+        'status',
     ];
     /**
      * Товары заказа

@@ -3,10 +3,10 @@
 namespace App\Models\Api;
 
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class ApiUser extends Model
+class ApiUser extends Authenticatable
 {
     use HasApiTokens, HasFactory;
 }

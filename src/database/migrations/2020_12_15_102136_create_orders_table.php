@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Enum\OrderMethod;
+use App\Models\Enum\OrderStatus;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -48,7 +49,8 @@ class CreateOrdersTable extends Migration
             $table->string('utm_content', 40)->nullable();
             $table->string('utm_term', 40)->nullable();
 
-            $table->foreignId('status_id')->default(0);
+            $table->enum('status', OrderStatus::getValues())
+                ->default(OrderStatus::CREATED);
 
             $table->timestamps();
         });

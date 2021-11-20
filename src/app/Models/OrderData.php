@@ -20,10 +20,11 @@ class OrderData extends Model
         'old_price',
         'current_price',
         'discount',
+        'status',
     ];
 
     /**
-     * Товар заказ
+     * Product from order item
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -32,8 +33,9 @@ class OrderData extends Model
         return $this->belongsTo(Product::class)
             ->with(['brand', 'category', 'media']);
     }
+
     /**
-     * Товар заказ
+     * Product size
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

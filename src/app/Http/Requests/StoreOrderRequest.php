@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Facades\Currency;
 use Illuminate\Validation\Rule;
 use App\Models\Enum\OrderMethod;
+use App\Models\Enum\OrderStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,7 +26,7 @@ class StoreOrderRequest extends FormRequest
         $this->merge([
             'user_name' => $this->user_name ?? $this->name,
             'order_method' => $this->getOrderMethod(),
-            'status_id' => $this->status ?? 0,
+            'status' => $this->status ?? OrderStatus::CREATED,
         ]);
 
         if (!$this->wantsJson()) {
@@ -62,7 +63,7 @@ class StoreOrderRequest extends FormRequest
             'city' => ['nullable', 'max:50'],
             'zip' => ['nullable', 'max:10'],
             'user_addr' => ['nullable', 'max:191'],
-            'status' => ['integer'],
+            'status' => [Rule::in(OrderStatus::getValues())],
             'created_at' => ['date']
         ];
     }
