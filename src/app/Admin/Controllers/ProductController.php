@@ -287,12 +287,13 @@ class ProductController extends AdminController
         }
         return null;
     }
+
     /**
      * Получить id размеров из запроса
      *
      * @return array|null
      */
-    public function getSizesIdFormRequest()
+    public function getSizesIdFormRequest(): ?array
     {
         if (empty($sizes = request('new_sizes'))) {
             return null;
@@ -300,143 +301,21 @@ class ProductController extends AdminController
         $sizes = explode(';', $sizes);
         return Size::whereIn('name', $sizes)->pluck('id')->toArray();
     }
+
     /**
-     * Сохранить товар в старую базу баддых
+     * Get olt attribute id from product seeder
      *
-     * @param \Encore\Admin\Form $form
-     * @return void
+     * @param string $type
+     * @param integer $newId
+     * @return integer
      */
-    protected function saveInOldDB(Form $form)
-    {
-        DB::connection('old_mysql')
-            ->table('cyizj_jshopping_products')
-            ->updateOrInsert(
-            [
-                'product_id' => $form->model()->id,
-            ],
-            [
-                'parent_id' => 0,
-                'product_ean' => '',
-                'product_quantity' => 0,
-                'unlimited' => 0,
-                'product_availability' => '',
-                'product_date_added' => date('Y-m-d H:i:s'),
-                'date_modify' => date('Y-m-d H:i:s'),
-                'product_publish' => !$form->model()->trashed(),
-                'product_tax_id' => 0,
-                'currency_id' => 1,
-                'product_template' => 'default',
-                'product_url' => '',
-                'product_old_price' => $form->old_price,
-                'product_buy_price' => $form->buy_price,
-                'product_price' => $form->price,
-                'min_price' => $form->price,
-                'different_prices' => 0,
-                'product_weight' => 0,
-                'image' => '',
-                'product_manufacturer_id' => $this->getOldId('brand',  $form->brand_id),
-                'product_is_add_price' => 0,
-                'add_price_unit_id' => 3,
-                'average_rating' => 0,
-                'reviews_count' => 0,
-                'delivery_times_id' => 0,
-                'hits' => 0,
-                'weight_volume_units' => 0,
-                'basic_price_unit_id' => 0,
-                'label_id' => $form->label_id,
-                'vendor_id' => 0,
-                'access' => 1,
-                'name_en-GB' => '',
-                'alias_en-GB' => '',
-                'short_description_en-GB' => '',
-                'description_en-GB' => '',
-                'meta_title_en-GB' => '',
-                'meta_description_en-GB' => '',
-                'meta_keyword_en-GB' => '',
-                'name_ru-RU' => $form->title,
-                'alias_ru-RU' => $form->slug,
-                'short_description_ru-RU' => '',
-                'description_ru-RU' => $form->description ?? '',
-                'meta_title_ru-RU' => '',
-                'meta_description_ru-RU' => '',
-                'meta_keyword_ru-RU' => '',
-                'extra_field_1' => $form->color_txt ?? '',
-                'extra_field_2' => $form->fabric_top_txt ?? '',
-                'extra_field_3' => $form->collection_id,
-                'extra_field_6' => 14,
-                'extra_field_7' => $this->getOldId('season',  $form->season_id),
-                'extra_field_8' => $form->fabric_inner_txt ?? '',
-                'extra_field_9' => $form->fabric_insole_txt ?? '',
-                'extra_field_10' => $form->fabric_outsole_txt ?? '',
-                'extra_field_11' => $form->heel_txt ?? '',
-                'extra_field_12' => '',
-                'extra_field_13' => implode(',', array_filter(array_map(function ($value) {
-                    return $this->getOldId('colors', $value);
-                }, $form->colors))),
-                'extra_field_14' => implode(',', array_filter(array_map(function ($value) {
-                    return $this->getOldId('fabrics', $value);
-                }, $form->fabrics))),
-                'extra_field_15' => '',
-                'extra_field_16' => '',
-                'extra_field_17' => '',
-                'extra_field_18' => 0,
-            ]);
-
-        $this->sendImagesAnOldSite($form);
-
-        DB::connection('old_mysql')
-            ->table('cyizj_jshopping_products_to_categories')
-            ->updateOrInsert(
-            [
-                'product_id' => $form->model()->id,
-            ],
-            [
-                'category_id' => $this->getOldId('category', $form->category_id),
-                'product_ordering' => 1
-            ]);
-
-        $sizes = [];
-        foreach ($form->sizes as $size) {
-            $sizes[] = [
-                'product_id' => $form->model()->id,
-                'attr_id' => 2,
-                'attr_value_id' => $this->getOldId('category', $size),
-                'price_mod' => '+',
-                'addprice ' => 0
-            ];
-        }
-        DB::connection('old_mysql')
-            ->table('cyizj_jshopping_products_attr2')
-            ->where('product_id', $form->model()->id)
-            ->delete();
-
-        DB::connection('old_mysql')
-            ->table('cyizj_jshopping_products_attr2')
-            ->insert($sizes);
-    }
-
-    protected function getOldId($type, $newId)
+    protected function getOldId($type, $newId): int
     {
         $seeder = self::$productSeederObject ?? (self::$productSeederObject = new ProductSeeder);
         $oldIds = array_flip($seeder->attributesList[$type]['new_id'] ?? []);
         return $oldIds[$newId] ?? 0;
     }
 
-    protected function sendImagesAnOldSite($form)
-    {
-        $data = [
-            'token' => 'vTnD57Pdq45lkU',
-            'id' => $form->model()->id,
-            'update' => $form->isEditing(),
-        ];
-        foreach ($form->model()->getMedia() as $image) {
-            $data['img'][] = $image->getUrl();
-        }
-        if (!empty($data['img'])) {
-            $response = Http::asForm()->post('https://modny.by/saveimg_gRf5lP46jRm8s.php', $data);
-            admin_info('Modny.by:', $response->body());
-        }
-    }
     /**
      * Отправить товары на старый сайт
      *
@@ -509,7 +388,9 @@ class ProductController extends AdminController
                 'extra_field_14' => implode(',', array_filter(array_map(function ($value) {
                     return $this->getOldId('fabrics', $value);
                 }, $form->fabrics))),
-                'extra_field_15' => '',
+                'extra_field_15' => implode(',', array_filter(array_map(function ($value) {
+                    return $this->getOldId('tags', $value);
+                }, $form->tags))),
                 'extra_field_16' => '',
                 'extra_field_17' => '',
                 'extra_field_18' => 0,
@@ -544,6 +425,7 @@ class ProductController extends AdminController
                 return $image->getCustomProperty('is_imidj');
             })->filter()->toArray()
         ];
+        // dd($data);
 
         $data = [
             'token' => 'vTnD57Pdq45lkU',
