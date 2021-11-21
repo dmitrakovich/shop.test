@@ -90,11 +90,18 @@ class OrderController extends AdminController
         $show->field('comment', __('Comment'));
         $show->field('currency', __('Currency'));
         $show->field('rate', __('Rate'));
-        $show->field('country', __('Country'));
+        $show->field('country.name', __('Country'));
         $show->field('region', __('Region'));
         $show->field('city', __('City'));
         $show->field('zip', __('Zip'));
         $show->field('user_addr', __('User addr'));
+
+        $show->field('utm_medium', 'utm_medium');
+        $show->field('utm_source', 'utm_source');
+        $show->field('utm_campaign', 'utm_campaign');
+        $show->field('utm_content', 'utm_content');
+        $show->field('utm_term', 'utm_term');
+
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
