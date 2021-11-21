@@ -5,7 +5,6 @@ namespace App\Http\Requests\Order;
 use App\Facades\Currency;
 use Illuminate\Validation\Rule;
 use App\Models\Enum\OrderMethod;
-use App\Models\Enum\OrderStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,13 +22,19 @@ class StoreRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        $utm = json_decode($this->cookie('utm'), true);
+
         $this->merge([
             'user_id' => Auth::check() ? Auth::id() : null,
             'currency' => Currency::getCurrentCurrency()->code,
             'rate' => Currency::getCurrentCurrency()->rate,
             'order_method' => $this->getOrderMethod(),
 
-            // utm
+            'utm_medium' => $utm['utm_medium'] ?? null,
+            'utm_source' => $utm['utm_source'] ?? null,
+            'utm_campaign' => $utm['utm_campaign'] ?? null,
+            'utm_content' => $utm['utm_content'] ?? null,
+            'utm_term' => $utm['utm_term'] ?? null,
         ]);
     }
     /**
@@ -57,6 +62,11 @@ class StoreRequest extends FormRequest
             'city' => ['nullable', 'max:50'],
             'zip' => ['nullable', 'max:10'],
             'user_addr' => ['nullable', 'max:191'],
+            'utm_medium' => ['nullable'],
+            'utm_source' => ['nullable'],
+            'utm_campaign' => ['nullable'],
+            'utm_content' => ['nullable'],
+            'utm_term' => ['nullable'],
         ];
     }
 

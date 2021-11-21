@@ -9,6 +9,7 @@ use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Models\Country;
+use App\Models\Currency;
 use App\Models\Enum\OrderMethod;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Controllers\AdminController;
@@ -22,20 +23,6 @@ class OrderController extends AdminController
      * @var string
      */
     protected $title = 'Order';
-
-    /**
-     * Order methods list
-     *
-     * @var array
-     */
-    protected $orderMethods = [
-        OrderMethod::DEFAULT => 'через корзину',
-        OrderMethod::ONECLICK => 'в один клик',
-        OrderMethod::PHONE => 'по телефону',
-        OrderMethod::VIBER => 'через viber',
-        OrderMethod::INSTAGRAM => 'через instagram',
-        OrderMethod::OTHER => 'другое',
-    ];
 
     /**
      * Make a grid builder.
@@ -127,7 +114,7 @@ class OrderController extends AdminController
             $form->tools($this->getPrintTool());
         }
 
-        $form->text('first_name', 'Имя');
+        $form->text('first_name', 'Имя')->required();;
         $form->text('last_name', 'Фамилия');
         $form->text('patronymic_name', 'Отчество');
         $form->number('user_id', __('User id'));
@@ -135,8 +122,17 @@ class OrderController extends AdminController
         $form->email('email', __('Email'));
         $form->mobile('phone', __('Phone'));
         $form->textarea('comment', __('Comment'));
-        $form->text('currency', __('Currency'));
-        $form->decimal('rate', __('Rate'));
+        $form->select('currency', 'Валюта')->options(Currency::pluck('code', 'code'))
+            ->when('BYN', function (Form $form) {
+                $form->decimal('rate', 'Курс')->default(Currency::where('code', 'BYN')->value('rate'));
+            })->when('KZT', function (Form $form) {
+                $form->decimal('rate', 'Курс')->default(Currency::where('code', 'KZT')->value('rate'));
+            })->when('RUB', function (Form $form) {
+                $form->decimal('rate', 'Курс')->default(Currency::where('code', 'RUB')->value('rate'));
+            })->when('USD', function (Form $form) {
+                $form->decimal('rate', 'Курс')->default(Currency::where('code', 'USD')->value('rate'));
+            })->default('BYN')->required();
+
         $form->select('country_id', 'Страна')->options(Country::pluck('name', 'id'));
         $form->text('region', __('Region'));
         $form->text('city', __('City'));
@@ -144,7 +140,20 @@ class OrderController extends AdminController
         $form->text('user_addr', __('User addr'));
         $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
         $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));
-        $form->select('order_method', 'Способ заказа')->options($this->orderMethods);
+        $form->select('order_method', 'Способ заказа')
+            ->options(OrderMethod::getOptionsForSelect())
+            ->default(OrderMethod::DEFAULT);
+
+        $form->hidden('utm_source');
+        $form->hidden('utm_medium');
+        $form->hidden('utm_campaign');
+
+        $form->saving(function (Form $form) {
+            list($utmSource, $utmMedium, $utmCampaign) = OrderMethod::getUtmSources($form->order_method);
+            $form->utm_source = $utmSource;
+            $form->utm_medium = $utmMedium;
+            $form->utm_campaign = $utmCampaign;
+        });
 
         return $form;
     }
