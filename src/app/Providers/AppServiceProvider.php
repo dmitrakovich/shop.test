@@ -3,9 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\OrderServiceIntarface;
-use App\Models\User;
 use Illuminate\Support\Carbon;
-use App\Observers\UserObserver;
 use App\Services\OrderService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
@@ -40,7 +38,5 @@ class AppServiceProvider extends ServiceProvider
 
         setlocale(LC_TIME, 'ru_RU.UTF-8');
         Carbon::setLocale(config('app.locale'));
-
-        User::observe(UserObserver::class);
     }
 }
