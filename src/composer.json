@@ -27,6 +27,7 @@
         "kalnoy/nestedset": "^5.0",
         "laravel-admin-ext/ckeditor": "^1.0",
         "laravel-admin-ext/grid-sortable": "^1.1",
+        "laravel-admin-ext/log-viewer": "^1.0",
         "laravel/framework": "^8.0",
         "laravel/sanctum": "^2.12",
         "laravel/tinker": "^2.0",
