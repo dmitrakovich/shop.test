@@ -60,10 +60,10 @@ abstract class AbstractJob implements ShouldQueue
             MSG;
         // Trace: {$exception->getTraceAsString()};
         $this->complete("{$exception->getMessage()} [{$this->getName()}]", 'jobs', 'error');
-        Telegram::sendMessage([
-            'chat_id' => config('telegram.chat_id_for_errors'),
-            'text' => $errorMsg
-        ]);
+        // Telegram::sendMessage([
+        //     'chat_id' => config('telegram.chat_id_for_errors'),
+        //     'text' => $errorMsg
+        // ]);
     }
     /**
      * Получить имя текущей задачи
@@ -118,7 +118,7 @@ abstract class AbstractJob implements ShouldQueue
     protected function complete(string $msg, string $channel = 'jobs', string $type = 'info'): void
     {
         $this->debug($msg, $channel, $type);
-        Log::channel($channel)->info(str_repeat('-', 40));
+        // Log::channel($channel)->info(str_repeat('-', 40));
     }
     /**
      * Получить форматированное кол-во использованной памяти

@@ -9,7 +9,7 @@ class SimpleFormatter
     /**
      * Формат сообщения
      */
-    protected $format = "[%datetime%] %level_name% > %message% %context%\n"; //  %extra%
+    protected $format = "[%datetime%] %channel%.%level_name%: %message% %context%\n"; //  %extra%
     /**
      * Формат даты
      */
