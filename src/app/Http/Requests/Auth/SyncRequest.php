@@ -41,7 +41,7 @@ class SyncRequest extends FormRequest
             'last_name' => ['nullable', 'max:50'],
             'phone' => ['nullable', 'max:20'],
             'created_at' => ['date', 'nullable'],
-            'email' => ['email', 'nullable'],
+            'email' => ['email', 'max:191', 'nullable'],
             'country_id' => ['integer', 'nullable'],
             'region' => ['nullable', 'max:191'],
             'city' => ['nullable', 'max:191'],

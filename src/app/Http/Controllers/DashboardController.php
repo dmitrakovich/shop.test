@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Country;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\UserDataUpdateRequest;
-use App\Models\Country;
+use App\Http\Requests\Auth\UpdateRequest;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 class DashboardController extends Controller
@@ -39,7 +39,7 @@ class DashboardController extends Controller
      * @param Request $request
      * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function update(User $user, UserDataUpdateRequest $request)
+    public function update(User $user, UpdateRequest $request)
     {
         $validatedData = $request->validated();
         $result = $user->update($validatedData);
