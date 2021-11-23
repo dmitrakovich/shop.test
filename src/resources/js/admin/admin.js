@@ -78,7 +78,7 @@ $(function () {
         processData: false,
         contentType: false,
         success(response) {
-          let previewHtml = Mustache.render(IMAGE_PREVIEW_TEMPLATE, {...response});
+          let previewHtml = Mustache.render(IMAGE_PREVIEW_TEMPLATE, response);
 
           $(previewHtml).appendTo('.js-images-area');
           appendNewInput('add_images[]', response.src);
