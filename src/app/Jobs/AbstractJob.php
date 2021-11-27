@@ -19,31 +19,14 @@ abstract class AbstractJob implements ShouldQueue
      * Имя выполняемой задачи
      */
     protected $jobName = null;
+
     /**
      * Переменные, которые нужно отразить в context
      *
      * @var array
      */
     protected $contextVars = [];
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
-    {
-        //
-    }
     /**
      * Handle a job failure.
      *
@@ -65,6 +48,7 @@ abstract class AbstractJob implements ShouldQueue
         //     'text' => $errorMsg
         // ]);
     }
+
     /**
      * Получить имя текущей задачи
      *
@@ -74,6 +58,7 @@ abstract class AbstractJob implements ShouldQueue
     {
         return $this->jobName ?? static::class;
     }
+
     /**
      * Запись отадочных сообщений в лог
      *
@@ -99,6 +84,7 @@ abstract class AbstractJob implements ShouldQueue
         }
         Log::channel($channel)->$type($msg, $context);
     }
+
     /**
      * Запись сообщения об ошибке в лог
      *
@@ -109,6 +95,7 @@ abstract class AbstractJob implements ShouldQueue
     {
         $this->debug($msg, 'jobs', 'error');
     }
+
     /**
      * Запись сообщения об окончании работы
      *
@@ -120,6 +107,7 @@ abstract class AbstractJob implements ShouldQueue
         $this->debug($msg, $channel, $type);
         // Log::channel($channel)->info(str_repeat('-', 40));
     }
+    
     /**
      * Получить форматированное кол-во использованной памяти
      *

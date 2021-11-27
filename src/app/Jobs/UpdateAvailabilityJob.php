@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Product;
 use App\Models\Size;
+use App\Services\Api\YandexApiService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -51,7 +52,7 @@ class UpdateAvailabilityJob extends AbstractJob
      *
      * @return void
      */
-    public function handle()
+    public function handle(YandexApiService $yandexApiService)
     {
         $this->debug('Старт');
 
@@ -91,20 +92,10 @@ class UpdateAvailabilityJob extends AbstractJob
         }
         unset($currentProducts);
 
-        // Яндекс
-        $url = 'https://cloud-api.yandex.net:443/v1/disk/resources';
-        $params = array(
-            'path' => '/Ostatki/ostatki.txt',
-            'field' => 'modified,md5',
-        );
-        $fileInfo = Http::withToken(config('api.yandex.token'), 'OAuth')
-                ->get($url, $params)
-                ->json();
-
+        $fileInfo = $yandexApiService->getLeftoversFileInfo();
         if (empty($fileInfo)) {
             return $this->errorWithReturn('Ошибка! Яндекс Диск не отдал данные о файле.');
-        }
-        if (isset($fileInfo['error'])) {
+        } elseif (isset($fileInfo['error'])) {
             return $this->errorWithReturn('Ошибка получения данных. ' . ($fileInfo['message'] ?? $fileInfo['error']));
         }
         $filedate = explode(',', $availabilityConfig['file']);
@@ -118,12 +109,7 @@ class UpdateAvailabilityJob extends AbstractJob
         }
         $availabilityConfig['file'] = date('Y-m-d-H:i:s', strtotime($fileInfo['modified'])) . ',' . $fileInfo['md5'];
 
-
-        $url = 'https://cloud-api.yandex.net:443/v1/disk/resources/download';
-        $downloadLink = Http::withToken(config('api.yandex.token'), 'OAuth')
-                ->get($url, ['path' => '/Ostatki/ostatki.txt'])
-                ->json();
-
+        $downloadLink = $yandexApiService->getLeftoversDownloadLink();
         if (empty($downloadLink)) {
             return $this->errorWithReturn('Ошибка! Яндекс Диск не получил ссылку на скачивание.');
         }
