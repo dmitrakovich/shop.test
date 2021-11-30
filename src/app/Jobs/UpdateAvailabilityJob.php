@@ -264,10 +264,10 @@ class UpdateAvailabilityJob extends AbstractJob
         $this->writeLog( "Файл $filedate[0]. Наличие сверено в $availabilityConfig[last_update]");
 
         if ($availabilityConfig['auto_del'] === 'on') {
-            $this->restoreOldProducts($config);
-            $this->deleteProducts($config);
-            $this->deleteSizes($config, $sizesList);
-            $this->addNewSizes($config);
+            $this->restoreOldProducts($availabilityConfig);
+            $this->deleteProducts($availabilityConfig);
+            $this->deleteSizes($availabilityConfig, $sizesList);
+            $this->addNewSizes($availabilityConfig);
         }
 
         if (!isset($_POST['act'])) {
