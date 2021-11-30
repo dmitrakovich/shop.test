@@ -7,12 +7,9 @@ use App\Models\Size;
 use App\Services\Api\YandexApiService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Facades\Log;
 
 class UpdateAvailabilityJob extends AbstractJob
@@ -123,7 +120,7 @@ class UpdateAvailabilityJob extends AbstractJob
             return $this->errorWithReturn('Ошибка! Яндекс Диск не получил ссылку на скачивание.');
         }
 
-        $resI = file_get_contents($downloadLink['href']);
+        $resI = file_get_contents($downloadLink);
         $resI = mb_convert_encoding($resI, "UTF-8", "windows-1251");
         $resI = explode("\n", $resI);
         $resD = [];
@@ -264,7 +261,7 @@ class UpdateAvailabilityJob extends AbstractJob
         };
         $availabilityConfig['last_update'] = $this->thtime;
         $filedate = explode(",", $availabilityConfig['file']);
-        $this->writeLog( "Файл $filedate[0] . Наличие сверено в $availabilityConfig[last_update].");
+        $this->writeLog( "Файл $filedate[0]. Наличие сверено в $availabilityConfig[last_update]");
 
         if ($availabilityConfig['auto_del'] === 'on') {
             $this->restoreOldProducts($config);
@@ -487,7 +484,7 @@ class UpdateAvailabilityJob extends AbstractJob
      */
     protected function pushLogMessage(string $message, string $level): void
     {
-        $this->logMessages[] = compact('message', 'type');
+        $this->logMessages[] = compact('message', 'level');
     }
 
     /**

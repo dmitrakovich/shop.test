@@ -44,7 +44,7 @@ class YandexApiService
         return $this->get(
             'https://cloud-api.yandex.net:443/v1/disk/resources/download',
             ['path' => '/Ostatki/ostatki.txt']
-        );
+        )['href'] ?? null;
     }
 
     /**
