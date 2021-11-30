@@ -13,10 +13,12 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Log;
 
 class UpdateAvailabilityJob extends AbstractJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     /**
      * Ручной способ обновления
      *
@@ -31,6 +33,13 @@ class UpdateAvailabilityJob extends AbstractJob
      * @var array
      */
     protected $allProducts = [];
+
+    /**
+     * Log Messages
+     *
+     * @var array
+     */
+    protected $logMessages = [];
 
     // варианты букв в артикулах
     protected static $engSymbols = ['a', 'b', 'c', 'e', 'h', 'k', 'm', 'o', 'p', 't', 'x'];
@@ -253,131 +262,15 @@ class UpdateAvailabilityJob extends AbstractJob
                 }
             };
         };
-        $checkLog = 0;
         $availabilityConfig['last_update'] = $this->thtime;
         $filedate = explode(",", $availabilityConfig['file']);
-        $service_message = "Файл $filedate[0] . Наличие сверено в $availabilityConfig[last_update]";
-        if ($availabilityConfig['auto_del'] == 'on') {
-            $act_count = 0;
-            // публикации
-            if (count($availabilityConfig['publish']) > 0) {
-                $act_count = 0;
-                $img_list = array();
-                $q_list = array();
-                $imgL = array();
-                foreach ($availabilityConfig['publish'] as $actV) {
-                    if ($actV['status'] != 1) {
-                        $img_list[] = $actV['id'];
-                    } else {
-                        $imgL[] = $actV['id'];
-                    }
-                }
+        $this->writeLog( "Файл $filedate[0] . Наличие сверено в $availabilityConfig[last_update].");
 
-                if (count($img_list) > 0) {
-                    $imgFL = Product::whereIn('id', $img_list)
-                        ->whereHas('media')
-                        ->get('id as pid');
-
-                    foreach ($imgFL as $imgV) {
-                        if (!in_array($imgV->pid, $imgL)) $imgL[] = $imgV->pid;
-                    }
-                    foreach ($availabilityConfig['publish'] as $errK => $errV) {
-                        if (!in_array($errV['id'], $imgL)) {
-                            $availabilityConfig['publish'][$errK]['err'] = 'нет фото';
-                        } elseif ($availabilityConfig['publish'][$errK]['status'] != 1) {
-                            $q_list[] = $errV['id'];
-                            $availabilityConfig['publish'][$errK]['status'] = 1;
-                            $act_count++;
-                        }
-                    }
-                }
-
-                if (count($q_list) > 0) {
-                    Product::withTrashed()->whereIn('id', $imgL)->restore();
-                    $service_message .= ". Опубликовано $act_count";
-                }
-                $checkLog += $act_count;
-            }
-            // снятие с публикации
-            if (count($availabilityConfig['del']) > 0) {
-                $act_count = 0;
-                $q_list = array();
-                foreach ($availabilityConfig['del'] as $actK => $actV) {
-                    if ($availabilityConfig['del'][$actK]['status'] != 1) {
-                        $q_list[] = $actV['id'];
-                        $availabilityConfig['del'][$actK]['status'] = 1;
-                        $act_count++;
-                    }
-                }
-                if ($act_count > 50) {
-                    $service_message .= ". !!! Ошибка. Больше 50 снять с публикации";
-                    $act_count = 0;
-                } elseif ($act_count > 0) {
-                    Product::whereIn('id', $q_list)->delete();
-                    $service_message .= ". Снято с публикации $act_count";
-                }
-                $checkLog += $act_count;
-            }
-            // удаление размеров
-            if (count($availabilityConfig['del_size']) > 0) {
-                $act_count = 0;
-                $q_list = array();
-                foreach ($availabilityConfig['del_size'] as &$value) {
-                    if ($value['status'] != 1) {
-                        $q_list[$value['id']][] = $value['size'];
-                        $value['status'] = 1;
-                        $act_count++;
-                    }
-                }
-                unset($value);
-                if ($act_count > 1000) {
-                    $service_message .= ". !!! Ошибка. Больше 100 удалить размеров";
-                    $act_count = 0;
-                } elseif ($act_count > 0) {
-                    foreach ($q_list as $productId => $product) {
-                        foreach ($product as $sizeName) {
-                            if (!isset($sizesList[$sizeName])) {
-                                continue;
-                            }
-                            DB::table('product_attributes')
-                                ->where('attribute_type', 'App\Models\Size')
-                                ->where('product_id', $productId)
-                                ->where('attribute_id', $sizesList[$sizeName])
-                                ->delete();
-                        }
-                    }
-                    $service_message .= ". Удалено размеров $act_count";
-                }
-                $checkLog += $act_count;
-            }
-            // добавление размеров
-            if (count($availabilityConfig['add_size']) > 0) {
-                $act_count = 0;
-                $insertData = [];
-                foreach ($availabilityConfig['add_size'] as $actK => $actV) {
-                    if ($availabilityConfig['add_size'][$actK]['status'] != 1 && $actV['vid'] != 'new') {
-                        $insertData[] = [
-                            'product_id' => $actV['id'],
-                            'attribute_type' => 'App\Models\Size',
-                            'attribute_id' => $actV['vid'],
-                        ];
-                        $availabilityConfig['add_size'][$actK]['status'] = 1;
-                        $act_count++;
-                    }
-                }
-                if ($act_count > 0) {
-                    DB::table('product_attributes')->insert($insertData);
-                    $service_message .= ". Добавлено размеров $act_count";
-                }
-                $checkLog += $act_count;
-            }
-
-            // Запись в log
-            if ($checkLog > 0) {
-                $this->writeLog($service_message);
-            }
-        } else {
-            $this->writeLog($service_message);
+        if ($availabilityConfig['auto_del'] === 'on') {
+            $this->restoreOldProducts($config);
+            $this->deleteProducts($config);
+            $this->deleteSizes($config, $sizesList);
+            $this->addNewSizes($config);
         }
 
         if (!isset($_POST['act'])) {
@@ -385,7 +278,154 @@ class UpdateAvailabilityJob extends AbstractJob
         }
 
         $this->complete('Успешно выполнено');
-        return "<p class='adminka_message_success'>$service_message.</p>";
+        return '<p class="adminka_message_success">' . $this->getLogsInHtml() . '</p>';
+    }
+
+    /**
+     * Restore old products
+     *
+     * @param array $config
+     * @return void
+     */
+    protected function restoreOldProducts(array &$config): void
+    {
+        if (count($config['publish']) <= 0) {
+            return;
+        }
+        $restoreCount = 0;
+        $img_list = $q_list = $imgL = [];
+        foreach ($config['publish'] as $actV) {
+            if ($actV['status'] != 1) {
+                $img_list[] = $actV['id'];
+            } else {
+                $imgL[] = $actV['id'];
+            }
+        }
+
+        if (count($img_list) > 0) {
+            $imgFL = Product::whereIn('id', $img_list)
+                ->whereHas('media')
+                ->get('id as pid');
+
+            foreach ($imgFL as $imgV) {
+                if (!in_array($imgV->pid, $imgL)) $imgL[] = $imgV->pid;
+            }
+            foreach ($config['publish'] as $errK => $errV) {
+                if (!in_array($errV['id'], $imgL)) {
+                    $config['publish'][$errK]['err'] = 'нет фото';
+                } elseif ($config['publish'][$errK]['status'] != 1) {
+                    $q_list[] = $errV['id'];
+                    $config['publish'][$errK]['status'] = 1;
+                    $restoreCount++;
+                }
+            }
+        }
+
+        if (count($q_list) > 0) {
+            Product::withTrashed()->whereIn('id', $imgL)->restore();
+            $this->writeLog("Восстановлено $restoreCount удаленных товаров.");
+        }
+    }
+
+    /**
+     * Delete products
+     *
+     * @param array $config
+     * @return void
+     */
+    protected function deleteProducts(array &$config): void
+    {
+        if (count($config['del']) <= 0) {
+            return;
+        }
+        $deleteCount = 0;
+        $deleteListId = [];
+        foreach ($config['del'] as $actK => $actV) {
+            if ($config['del'][$actK]['status'] != 1) {
+                $deleteListId[] = $actV['id'];
+                $config['del'][$actK]['status'] = 1;
+                $deleteCount++;
+            }
+        }
+        if ($deleteCount > 50) {
+            $this->writeLog("!!! Ошибка. Больше 50 снять с публикации", 'error');
+        } elseif ($deleteCount > 0) {
+            Product::whereIn('id', $deleteListId)->delete();
+            $this->writeLog("Снято с публикации $deleteCount");
+        }
+    }
+
+    /**
+     * Delete sizes
+     *
+     * @param array $config
+     * @param array $sizesList
+     * @return void
+     */
+    protected function deleteSizes(array &$config, array $sizesList): void
+    {
+        if (count($config['del_size']) <= 0) {
+            return;
+        }
+
+        // !!! не тестировал работу, хз работает ли...
+
+        $deleteCount = 0;
+        $deleteListId = [];
+        foreach ($config['del_size'] as &$value) {
+            if ($value['status'] != 1) {
+                $deleteListId[$value['id']][] = $value['size'];
+                $value['status'] = 1;
+                $deleteCount++;
+            }
+        }
+        if ($deleteCount > 1000) {
+            $this->writeLog("!!! Ошибка. Больше 1000 удалить размеров");
+        } elseif ($deleteCount > 0) {
+            foreach ($deleteListId as $productId => $product) {
+                foreach ($product as $sizeName) {
+                    if (!isset($sizesList[$sizeName])) {
+                        continue;
+                    }
+                    DB::table('product_attributes')
+                        ->where('attribute_type', 'App\Models\Size')
+                        ->where('product_id', $productId)
+                        ->where('attribute_id', $sizesList[$sizeName])
+                        ->delete();
+                }
+            }
+            $this->writeLog("Удалено размеров $deleteCount");
+        }
+    }
+
+    /**
+     * Add new sizes to products
+     *
+     * @param array $config
+     * @return void
+     */
+    public function addNewSizes(array &$config)
+    {
+        if (count($config['add_size']) <= 0) {
+            return;
+        }
+        $addCount = 0;
+        $insertData = [];
+        foreach ($config['add_size'] as $actK => $actV) {
+            if ($config['add_size'][$actK]['status'] != 1 && $actV['vid'] != 'new') {
+                $insertData[] = [
+                    'product_id' => $actV['id'],
+                    'attribute_type' => 'App\Models\Size',
+                    'attribute_id' => $actV['vid'],
+                ];
+                $config['add_size'][$actK]['status'] = 1;
+                $addCount++;
+            }
+        }
+        if ($addCount > 0) {
+            DB::table('product_attributes')->insert($insertData);
+            $this->writeLog("Добавлено размеров $addCount");
+        }
     }
 
     /**
@@ -423,10 +463,46 @@ class UpdateAvailabilityJob extends AbstractJob
         file_put_contents($this->getConfigFileName(), "<?php\nreturn " . var_export($config, true) . ';');
     }
 
-    public function writeLog($msg)
+    /**
+     * Write message in logs
+     *
+     * @param string $message
+     * @param string $level
+     * @return void
+     */
+    public function writeLog(string $message, string $level = 'info'): void
     {
-        $log_type = $this->isManual ? 'РУЧНОЕ' : 'АВТО';
-        file_put_contents(database_path('files/availability.log.txt'), "{$this->thtime} [$log_type]: $msg\n", FILE_APPEND);
+        $this->pushLogMessage($message, $level);
+
+        $type = $this->isManual ? 'РУЧНОЕ' : 'АВТО';
+        Log::channel('update_availability')->log($level, $message, compact('type'));
+    }
+
+    /**
+     * Push message in logs
+     *
+     * @param string $message
+     * @param string $level
+     * @return void
+     */
+    protected function pushLogMessage(string $message, string $level): void
+    {
+        $this->logMessages[] = compact('message', 'type');
+    }
+
+    /**
+     * Render log messages in html
+     *
+     * @return string
+     */
+    public function getLogsInHtml(): string
+    {
+        $html = '';
+        foreach ($this->logMessages as $log) {
+            // todo учитывать $log['level']
+            $html .= $log['message'] . ';<br>';
+        }
+        return $html;
     }
 
     protected function smallArt($txt)

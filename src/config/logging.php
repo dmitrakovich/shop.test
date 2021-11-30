@@ -108,6 +108,13 @@ return [
             'level' => 'debug',
         ],
 
+        'update_availability' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/update_availability.log'),
+            'tap' => [SimpleFormatter::class],
+            'level' => 'debug',
+        ],
+
         'sentry' => [
             'driver' => 'sentry',
         ],
