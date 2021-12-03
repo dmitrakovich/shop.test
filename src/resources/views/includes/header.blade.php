@@ -14,8 +14,18 @@
             <div class="col-auto d-none d-lg-block">
                 <p style="line-height: 1.15rem;"><small>
                     Ежедневно&nbsp;с 10:00&nbsp;до&nbsp;22:00<br>
-                    +375&nbsp;(29)&nbsp;179&nbsp;37&nbsp;90<br>
-                    Viber / Telegram / What’s App
+                    <a href="{{ config('contacts.phone.link') }}">
+                        {{ config('contacts.phone.name') }}
+                    </a><br/>
+                    <a href="{{ config('contacts.viber.link') }}">
+                        {{ config('contacts.viber.name') }}
+                    </a> /
+                    <a href="{{ config('contacts.telegram.link') }}">
+                        {{ config('contacts.telegram.name') }}
+                    </a> /
+                    <a href="{{ config('contacts.whats-app.link') }}">
+                        {{ config('contacts.whats-app.name') }}
+                    </a>
                 </small></p>
 
             </div>
