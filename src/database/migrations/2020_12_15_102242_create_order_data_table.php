@@ -27,7 +27,7 @@ class CreateOrderDataTable extends Migration
             $table->float('discount')->default(0);
             $table->boolean('promocode_applied')->default(false);
             $table->enum('status', OrderItemStatus::getValues())
-                ->default(OrderItemStatus::CREATED);
+                ->default(OrderItemStatus::getDefaultValue());
             $table->date('release_date')->nullable();
             $table->unsignedTinyInteger('pred_period')->nullable();
         });

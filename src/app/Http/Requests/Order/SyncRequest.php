@@ -22,7 +22,7 @@ class SyncRequest extends StoreRequest
             'country_id' => empty($this->country) ? null : 1,
             'region' => $this->state,
             'order_method' => $this->getOrderMethod(),
-            'status' => $this->status ?? OrderStatus::CREATED,
+            'status' => $this->status ?? OrderStatus::getDefaultValue(),
         ]);
     }
 

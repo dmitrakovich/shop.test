@@ -52,7 +52,7 @@ class CreateOrdersTable extends Migration
             $table->string('utm_term', 40)->nullable();
 
             $table->enum('status', OrderStatus::getValues())
-                ->default(OrderStatus::CREATED);
+                ->default(OrderStatus::getDefaultValue());
 
             $table->timestamps();
         });
