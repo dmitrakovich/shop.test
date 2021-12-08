@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 abstract class AbstractSeeder extends Seeder
 {
     protected $useTimestamps = true;
+    protected $sortColumn = null;
     protected $tableName;
     protected $values;
 
@@ -49,6 +50,21 @@ abstract class AbstractSeeder extends Seeder
     }
 
     /**
+     * Set sort values
+     *
+     * @return void
+     */
+    protected function setSort()
+    {
+        if (!$this->sortColumn) {
+            return;
+        }
+        foreach ($this->values as $key => &$value) {
+            $value[$this->sortColumn] = $key + 1;
+        }
+    }
+
+    /**
      * Prepare values before inserting
      *
      * @return void
@@ -67,6 +83,7 @@ abstract class AbstractSeeder extends Seeder
     {
         $this->checkRequireParams();
         $this->setTimestamps();
+        $this->setSort();
         $this->prepareValues();
 
         DB::table($this->tableName)->truncate();
