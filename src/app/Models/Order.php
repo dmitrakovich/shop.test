@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Payments\PaymentMethod;
 use Deliveries\DeliveryMethod;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Encore\Admin\Auth\Database\Administrator;
+use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Payments\PaymentMethod;
 
 /**
  * class Order
@@ -40,10 +42,12 @@ use Payments\PaymentMethod;
  * @property string $utm_content
  * @property string $utm_term
  * @property string $status
+ * @property integer $admin_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
  * @property-read string $user_full_name
+ * @property-read Administrator $admin
  */
 class Order extends Model
 {
@@ -78,6 +82,7 @@ class Order extends Model
         'utm_content',
         'utm_term',
         'status',
+        'admin_id',
     ];
 
     protected $appends = [
@@ -87,7 +92,7 @@ class Order extends Model
     /**
      * Товары заказа
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return Relations\HasMany
      */
     public function data()
     {
@@ -101,7 +106,7 @@ class Order extends Model
     /**
      * Order country
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return Relations\BelongsTo
      */
     public function country()
     {
@@ -111,7 +116,7 @@ class Order extends Model
     /**
      * Order delivery method
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return Relations\BelongsTo
      */
     public function delivery()
     {
@@ -121,11 +126,21 @@ class Order extends Model
     /**
      * Order payment method
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return Relations\BelongsTo
      */
     public function payment()
     {
         return $this->belongsTo(PaymentMethod::class);
+    }
+
+    /**
+     * Admin user
+     *
+     * @return Relations\BelongsTo
+     */
+    public function admin()
+    {
+        return $this->belongsTo(Administrator::class);
     }
 
     /**

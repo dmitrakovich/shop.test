@@ -161,10 +161,20 @@ class UpdateAvailabilityJob extends AbstractJob
         $sbros = array('publish', 'new', 'add_size', 'del', 'del_size');
         foreach ($sbros as $sbrosv) {
             if ($availabilityConfig['auto_del'] == 'on' && $sbrosv == 'publish') {
-                foreach ($availabilityConfig[$sbrosv] as $sbrK => $sbrV) if ($sbrV['status'] == 0 || $sbrV['time'] < $deadline) unset($availabilityConfig[$sbrosv][$sbrK]);
+                foreach ($availabilityConfig[$sbrosv] as $sbrK => $sbrV) {
+                    if ($sbrV['status'] == 0 || $sbrV['time'] < $deadline) {
+                        unset($availabilityConfig[$sbrosv][$sbrK]);
+                    }
+                }
             } elseif ($availabilityConfig['auto_del'] == 'off' || $sbrosv == 'new') {
                 $availabilityConfig[$sbrosv] = array();
-            } else foreach ($availabilityConfig[$sbrosv] as $sbrK => $sbrV) if (!isset($sbrV['time']) || $sbrV['time'] < $deadline) unset($availabilityConfig[$sbrosv][$sbrK]);
+            } else {
+                foreach ($availabilityConfig[$sbrosv] as $sbrK => $sbrV) {
+                    if (!isset($sbrV['time']) || $sbrV['time'] < $deadline) {
+                        unset($availabilityConfig[$sbrosv][$sbrK]);
+                    }
+                }
+            }
         }
         // Сравнение
         foreach ($this->allProducts as $brandKey => $brandProducts) {

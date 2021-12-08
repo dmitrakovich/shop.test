@@ -53,6 +53,7 @@ class CreateOrdersTable extends Migration
 
             $table->enum('status', OrderStatus::getValues())
                 ->default(OrderStatus::getDefaultValue());
+            $table->foreignId('admin_id')->index()->nullable();
 
             $table->timestamps();
         });

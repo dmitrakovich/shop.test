@@ -6,14 +6,16 @@ use App\Models\Order;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use Encore\Admin\Widgets\Table;
-use App\Admin\Actions\Order\PrintOrder;
 use App\Models\Country;
 use App\Models\Currency;
-use App\Models\Enum\OrderMethod;
-use Deliveries\DeliveryMethod;
-use Encore\Admin\Controllers\AdminController;
 use Payments\PaymentMethod;
+use Deliveries\DeliveryMethod;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Widgets\Table;
+use App\Models\Enum\OrderMethod;
+use App\Admin\Actions\Order\PrintOrder;
+use Encore\Admin\Auth\Database\Administrator;
+use Encore\Admin\Controllers\AdminController;
 
 class OrderController extends AdminController
 {
@@ -33,6 +35,7 @@ class OrderController extends AdminController
     {
         $grid = new Grid(new Order());
 
+        $grid->column('id', 'Номер заказа');
         $grid->column('user_full_name', 'ФИО');
         $grid->column('email', __('Email'));
         $grid->column('phone', 'Телефон');
@@ -55,6 +58,13 @@ class OrderController extends AdminController
         $grid->column('user_addr', 'Адрес');
         $grid->column('payment.name', 'Способ оплаты');
         $grid->column('delivery.name', 'Способ доставки');
+
+        if (Admin::user()->inRoles(['administrator', 'director'])) {
+            $grid->column('admin_id', 'Менеджер')->editable('select', Administrator::pluck('name', 'id'));
+        } else {
+            $grid->column('admin.name', 'Менеджер');
+        }
+
         $grid->column('created_at', 'Создан');
 
         $grid->actions (function ($actions) {
@@ -155,11 +165,19 @@ class OrderController extends AdminController
         $form->hidden('utm_medium');
         $form->hidden('utm_campaign');
 
+        if (Admin::user()->inRoles(['administrator', 'director'])) {
+            $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
+        } else {
+            $form->display('admin.name', 'Менеджер');
+        }
+
         $form->saving(function (Form $form) {
-            list($utmSource, $utmMedium, $utmCampaign) = OrderMethod::getUtmSources($form->order_method);
-            $form->utm_source = $utmSource;
-            $form->utm_medium = $utmMedium;
-            $form->utm_campaign = $utmCampaign;
+            if (!empty($form->order_method)) {
+                list($utmSource, $utmMedium, $utmCampaign) = OrderMethod::getUtmSources($form->order_method);
+                $form->utm_source = $utmSource;
+                $form->utm_medium = $utmMedium;
+                $form->utm_campaign = $utmCampaign;
+            }
         });
 
         return $form;
