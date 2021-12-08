@@ -14,6 +14,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Widgets\Table;
 use App\Models\Enum\OrderMethod;
 use App\Admin\Actions\Order\PrintOrder;
+use App\Models\Orders\OrderStatus;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 
@@ -58,6 +59,8 @@ class OrderController extends AdminController
         $grid->column('user_addr', 'Адрес');
         $grid->column('payment.name', 'Способ оплаты');
         $grid->column('delivery.name', 'Способ доставки');
+
+        $grid->column('status_key', 'Статус')->editable('select', OrderStatus::pluck('name_for_admin', 'key'));
 
         if (Admin::user()->inRoles(['administrator', 'director'])) {
             $grid->column('admin_id', 'Менеджер')->editable('select', Administrator::pluck('name', 'id'));
@@ -164,6 +167,8 @@ class OrderController extends AdminController
         $form->hidden('utm_source');
         $form->hidden('utm_medium');
         $form->hidden('utm_campaign');
+
+        $form->select('status_key', 'Статус')->options(OrderStatus::pluck('name_for_admin', 'key'));
 
         if (Admin::user()->inRoles(['administrator', 'director'])) {
             $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
