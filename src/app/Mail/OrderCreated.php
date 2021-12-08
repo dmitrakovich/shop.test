@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Order;
+use App\Models\Orders\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -15,7 +15,7 @@ class OrderCreated extends Mailable
     /**
      * The order instance.
      *
-     * @var \App\Models\Order
+     * @var Order
      */
     public $order;
 

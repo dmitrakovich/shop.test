@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Orders;
 
-use App\Models\Orders\OrderItemStatus;
+use App\Models\Size;
+use App\Admin\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
- * class OrderData
+ * class OrderItem
  *
  * @property-read OrderItemStatus $status
  */
-class OrderData extends Model
+class OrderItem extends Model
 {
     use HasFactory;
 

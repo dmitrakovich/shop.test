@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Order;
+use App\Models\Orders\Order;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -18,14 +18,14 @@ class OrderCreated
     /**
      * The order instance.
      *
-     * @var \App\Models\Order
+     * @var Order
      */
     public $order;
 
     /**
      * Create a new event instance.
      *
-     * @param \App\Models\Order $order
+     * @param Order $order
      * @return void
      */
     public function __construct(Order $order)

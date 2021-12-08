@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Facades\Sale;
 use App\Mail\OrderCreated;
-use App\Models\Order;
+use App\Models\Orders\Order;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Bots\Telegram\Commands;
 
-use App\Models\Order;
+use App\Models\Orders\Order;
 use Telegram\Bot\Commands\Command;
 
 /**

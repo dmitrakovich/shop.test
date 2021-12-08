@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Orders;
 
-use App\Models\Orders\OrderStatus;
+use App\Models\Country;
 use Payments\PaymentMethod;
 use Deliveries\DeliveryMethod;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Relations;
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -94,11 +94,26 @@ class Order extends Model
     /**
      * Товары заказа
      *
+     * @deprecated
      * @return Relations\HasMany
      */
     public function data()
     {
-        return $this->hasMany(OrderData::class)
+        return $this->hasMany(OrderItem::class)
+            ->with([
+                'product' => function ($query) { $query->withTrashed(); },
+                'size:id,name'
+            ]);
+    }
+
+    /**
+     * Order items
+     *
+     * @return Relations\HasMany
+     */
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class)
             ->with([
                 'product' => function ($query) { $query->withTrashed(); },
                 'size:id,name'

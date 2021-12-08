@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cart;
-use App\Models\Order;
+use App\Models\Orders\Order;
 use App\Contracts\OrderServiceIntarface;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Requests\Order\SyncRequest;

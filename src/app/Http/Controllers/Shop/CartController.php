@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Facades\Cart;
 use App\Facades\Sale;
 use App\Models\Country;
-use App\Models\Order;
+use App\Models\Orders\Order;
 use App\Models\Product;
 use Payments\PaymentMethod;
 use Illuminate\Http\Request;
