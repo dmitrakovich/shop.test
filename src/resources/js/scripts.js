@@ -1,3 +1,6 @@
+import Mustache from 'mustache';
+import TEMPLATE_ADDED_TO_CART from '../templates/modals/added-to-cart.html';
+
 $(function () {
     //#region боковое меню в мобильной версии
 
@@ -43,9 +46,15 @@ $(function () {
             data: $form.serialize(),
             success: function (response) {
                 if (response.result != 'ok') {
-                    $.fancybox.open('<h3 class="py-5 text-danger">Ошибка добавления в корзину</h3>');
+                    $.fancybox.open(Mustache.render(TEMPLATE_ADDED_TO_CART, {
+                      text: 'Ошибка добавления в корзину',
+                      type: 'danger',
+                    }));
                 } else {
-                    $.fancybox.open('<h3 class="py-5 text-success">Товар успешно добавлен в корзину</h3>');
+                    $.fancybox.open(Mustache.render(TEMPLATE_ADDED_TO_CART, {
+                      text: 'Товар успешно добавлен в корзину',
+                      type: 'success',
+                    }));
                     $('.js-cart-count').text(response.total_count);
                 }
             }
