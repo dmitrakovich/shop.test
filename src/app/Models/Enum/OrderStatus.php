@@ -2,8 +2,10 @@
 
 namespace App\Models\Enum;
 
-class OrderStatus extends EnumAbstract
+class OrderStatus implements Enum
 {
+    use EnumTrait;
+
     const CREATED = 'new';
     const CANCELED = 'canceled';
     const IN_WORK = 'in_work';

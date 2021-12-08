@@ -2,8 +2,10 @@
 
 namespace App\Models\Enum;
 
-class OrderMethod extends EnumAbstract
+class OrderMethod implements Enum
 {
+    use EnumTrait;
+
     const DEFAULT = 'default';
     const ONECLICK = 'oneclick';
     const CHAT = 'chat';

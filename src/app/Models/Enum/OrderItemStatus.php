@@ -2,8 +2,10 @@
 
 namespace App\Models\Enum;
 
-class OrderItemStatus extends EnumAbstract
+class OrderItemStatus implements Enum
 {
+    use EnumTrait;
+
     const CREATED = 'new';
     const DELETE = 'delete';
     const CONFIRMED = 'confirmed';

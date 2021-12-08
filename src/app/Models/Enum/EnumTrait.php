@@ -6,7 +6,7 @@ namespace App\Models\Enum;
  * Class Enum
  * @package App\Models\Enum
  */
-abstract class EnumAbstract
+trait EnumTrait
 {
     /**
      * @return array
