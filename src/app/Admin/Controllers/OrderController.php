@@ -14,6 +14,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Widgets\Table;
 use App\Models\Enum\OrderMethod;
 use App\Admin\Actions\Order\PrintOrder;
+use App\Admin\Actions\Order\ProcessOrder;
 use App\Models\Orders\OrderStatus;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
@@ -60,7 +61,7 @@ class OrderController extends AdminController
         $grid->column('payment.name', 'Способ оплаты');
         $grid->column('delivery.name', 'Способ доставки');
 
-        $grid->column('status_key', 'Статус')->editable('select', OrderStatus::pluck('name_for_admin', 'key'));
+        $grid->column('status_key', 'Статус')->editable('select', OrderStatus::ordered()->pluck('name_for_admin', 'key'));
 
         if (Admin::user()->inRoles(['administrator', 'director'])) {
             $grid->column('admin_id', 'Менеджер')->editable('select', Administrator::pluck('name', 'id'));
@@ -71,6 +72,7 @@ class OrderController extends AdminController
         $grid->column('created_at', 'Создан');
 
         $grid->actions (function ($actions) {
+            $actions->add(new ProcessOrder());
             $actions->add(new PrintOrder());
         });
 
@@ -91,6 +93,7 @@ class OrderController extends AdminController
         $show = new Show(Order::findOrFail($id));
 
         $show->panel()->tools($this->getPrintTool());
+        $show->panel()->tools($this->getProcessTool($id));
 
         $show->field('id', __('Id'));
         $show->field('first_name', 'Имя');
@@ -132,6 +135,7 @@ class OrderController extends AdminController
 
         if ($form->isEditing()) {
             $form->tools($this->getPrintTool());
+            $form->tools($this->getProcessTool((int)request('order')));
         }
 
         $form->text('first_name', 'Имя')->required();;
@@ -168,7 +172,7 @@ class OrderController extends AdminController
         $form->hidden('utm_medium');
         $form->hidden('utm_campaign');
 
-        $form->select('status_key', 'Статус')->options(OrderStatus::pluck('name_for_admin', 'key'));
+        $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'));
 
         if (Admin::user()->inRoles(['administrator', 'director'])) {
             $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
@@ -188,6 +192,39 @@ class OrderController extends AdminController
         return $form;
     }
 
+    /**
+     * Handle process order action
+     *
+     * @param Order $order
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function process(Order $order)
+    {
+        (new ProcessOrder())->process($order);
+
+        return redirect()->route('admin.orders.edit', $order->id);
+    }
+
+    /**
+     * Render process tool
+     *
+     * @param integer $orderId
+     * @return \Closure
+     */
+    protected function getProcessTool(int $orderId)
+    {
+        return function ($tools) use ($orderId) {
+            $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
+                <a  href="' . route('admin.orders.process', $orderId) . '" class="btn btn-sm" style="color: #fff; background-color: #800080; border-color: #730d73;">
+                <i class="fa fa-archive"></i>&nbsp;&nbsp;' . (new ProcessOrder)->name . '</a></div>');
+        };
+    }
+
+    /**
+     * Render print tool
+     *
+     * @return \Closure
+     */
     protected function getPrintTool()
     {
         return function ($tools) {

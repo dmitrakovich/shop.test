@@ -30,7 +30,8 @@ Route::group([
     $router->resource('collections', CollectionController::class);
     $router->resource('info-pages', InfoPageController::class);
     $router->resource('orders', \OrderController::class);
-    $router->get('orders/print/{order}', [OrderController::class, 'print'])->name('orders.print');
+    $router->get('orders/{order}/process', [\App\Admin\Controllers\OrderController::class, 'process'])->name('orders.process');
+    $router->get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
 
     $router->resource('products', ProductController::class);
     $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('products.restore');
