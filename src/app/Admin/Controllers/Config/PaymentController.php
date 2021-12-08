@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace App\Admin\Controllers\Config;
 
-use Deliveries\DeliveryMethod;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Payments\PaymentMethod;
 
-class DeliveryController extends AdminController
+class PaymentController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'DeliveryMethod';
+    protected $title = 'PaymentMethod';
 
     /**
      * Make a grid builder.
@@ -24,7 +24,7 @@ class DeliveryController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new DeliveryMethod());
+        $grid = new Grid(new PaymentMethod());
 
         // $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
@@ -45,7 +45,7 @@ class DeliveryController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(DeliveryMethod::findOrFail($id));
+        $show = new Show(PaymentMethod::findOrFail($id));
 
         $show->field('id', __('Id'));
         $show->field('name', __('Name'));
@@ -65,7 +65,7 @@ class DeliveryController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new DeliveryMethod());
+        $form = new Form(new PaymentMethod());
 
         $form->text('name', __('Name'));
         $form->text('class', __('Class'));

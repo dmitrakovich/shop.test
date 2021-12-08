@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace App\Admin\Controllers\Config;
 
 use App\Models\Currency;
 use Encore\Admin\Controllers\AdminController;

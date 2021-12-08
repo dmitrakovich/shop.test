@@ -35,10 +35,12 @@ Route::group([
     $router->resource('products', ProductController::class);
     $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('products.restore');
 
-    $router->resource('payment-methods', PaymentController::class);
-    $router->resource('delivery-methods', DeliveryController::class);
-    $router->resource('currencies', CurrencyController::class);
-    $router->any('clear-cache', CacheController::class);
+    $router->group(['prefix' => 'config', 'namespace' => 'Config'],function ($router) {
+        $router->resource('payment-methods', PaymentController::class);
+        $router->resource('delivery-methods', DeliveryController::class);
+        $router->resource('currencies', CurrencyController::class);
+        $router->any('clear-cache', CacheController::class);
+    });
 
     $router->group(['prefix' => 'bnrs'],function ($router) {
         $router->resource('bnrs', BannerController::class);
