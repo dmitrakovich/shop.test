@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Enum\OrderItemStatus;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Orders\OrderItemStatus;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateOrderDataTable extends Migration
 {
@@ -26,7 +26,7 @@ class CreateOrderDataTable extends Migration
             $table->float('current_price');
             $table->float('discount')->default(0);
             $table->boolean('promocode_applied')->default(false);
-            $table->enum('status', OrderItemStatus::getValues())
+            $table->string('status_key', 20)->index()
                 ->default(OrderItemStatus::getDefaultValue());
             $table->date('release_date')->nullable();
             $table->unsignedTinyInteger('pred_period')->nullable();

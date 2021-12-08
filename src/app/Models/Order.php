@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Orders\OrderStatus;
 use Payments\PaymentMethod;
 use Deliveries\DeliveryMethod;
 use Illuminate\Support\Carbon;
@@ -41,12 +42,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $utm_campaign
  * @property string $utm_content
  * @property string $utm_term
- * @property string $status
+ * @property string $status_key
  * @property integer $admin_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
  * @property-read string $user_full_name
+ * @property-read OrderStatus $status
  * @property-read Administrator $admin
  */
 class Order extends Model
@@ -81,7 +83,7 @@ class Order extends Model
         'utm_campaign',
         'utm_content',
         'utm_term',
-        'status',
+        'status_key',
         'admin_id',
     ];
 
@@ -131,6 +133,16 @@ class Order extends Model
     public function payment()
     {
         return $this->belongsTo(PaymentMethod::class);
+    }
+
+    /**
+     * Order status
+     *
+     * @return Relations\BelongsTo
+     */
+    public function status()
+    {
+        return $this->belongsTo(OrderStatus::class);
     }
 
     /**

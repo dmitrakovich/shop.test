@@ -18,7 +18,7 @@ class CartData extends Model
 
         // mock for sync
         'price',
-        'status',
+        'status_key',
     ];
     /**
      * Связть с товарами

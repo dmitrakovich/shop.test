@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Orders\OrderItemStatus;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+/**
+ * class OrderData
+ *
+ * @property-read OrderItemStatus $status
+ */
 class OrderData extends Model
 {
     use HasFactory;
@@ -20,7 +25,7 @@ class OrderData extends Model
         'old_price',
         'current_price',
         'discount',
-        'status',
+        'status_key',
     ];
 
     /**
@@ -44,4 +49,13 @@ class OrderData extends Model
         return $this->belongsTo(Size::class);
     }
 
+    /**
+     * Order item status
+     *
+     * @return Relations\BelongsTo
+     */
+    public function status()
+    {
+        return $this->belongsTo(OrderItemStatus::class);
+    }
 }

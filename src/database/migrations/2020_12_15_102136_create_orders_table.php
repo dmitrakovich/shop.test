@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Enum\OrderMethod;
-use App\Models\Enum\OrderStatus;
+use App\Models\Orders\OrderStatus;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -51,7 +51,7 @@ class CreateOrdersTable extends Migration
             $table->string('utm_content', 40)->nullable();
             $table->string('utm_term', 40)->nullable();
 
-            $table->enum('status', OrderStatus::getValues())
+            $table->string('status_key', 20)->index()
                 ->default(OrderStatus::getDefaultValue());
             $table->foreignId('admin_id')->index()->nullable();
 
