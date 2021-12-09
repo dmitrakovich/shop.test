@@ -3,12 +3,13 @@
 namespace App\Models\Orders;
 
 use App\Models\Enum\Enum;
+use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class OrderStatus extends Model implements Enum
+class OrderStatus extends Model implements Enum, Sortable
 {
     use SortableTrait;
     use HasFactory;

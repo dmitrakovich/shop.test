@@ -32,8 +32,6 @@ class OrderStatusController extends AdminController
         $grid->column('name_for_admin', 'Название для админки');
         $grid->column('name_for_user', 'Название для клиента');
 
-        $grid->model()->ordered();
-
         return $grid;
     }
 

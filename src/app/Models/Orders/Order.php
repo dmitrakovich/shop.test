@@ -85,6 +85,7 @@ class Order extends Model
         'utm_term',
         'status_key',
         'admin_id',
+        'created_at',
     ];
 
     protected $appends = [
