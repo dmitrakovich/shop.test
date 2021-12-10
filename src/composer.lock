@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6da8b9e0bdd395c044b54e8dfd07d03",
+    "content-hash": "5235396a12e82ed6961f315ab31fae18",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2200,6 +2200,58 @@
                 "source": "https://github.com/laravel-admin-extensions/grid-sortable/tree/master"
             },
             "time": "2020-02-18T03:06:20+00:00"
+        },
+        {
+            "name": "laravel-admin-ext/helpers",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-admin-extensions/helpers.git",
+                "reference": "b5ee6173794797d665b5baf7cc2713b523c2dd33"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-admin-extensions/helpers/zipball/b5ee6173794797d665b5baf7cc2713b523c2dd33",
+                "reference": "b5ee6173794797d665b5baf7cc2713b523c2dd33",
+                "shasum": ""
+            },
+            "require": {
+                "encore/laravel-admin": "~1.6",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Encore\\Admin\\Helpers\\HelpersServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Encore\\Admin\\Helpers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "z-song",
+                    "email": "zosong@126.com"
+                }
+            ],
+            "description": "Helpers extension for laravel-admin",
+            "homepage": "https://github.com/laravel-admin-extensions/helpers",
+            "keywords": [
+                "helpers",
+                "laravel-admin"
+            ],
+            "time": "2021-10-11T09:41:51+00:00"
         },
         {
             "name": "laravel-admin-ext/log-viewer",
