@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\Controllers\Config;
+namespace App\Admin\Controllers\Debug;
 
 use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Artisan;

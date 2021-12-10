@@ -36,16 +36,15 @@ Route::group([
     $router->resource('products', ProductController::class);
     $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('products.restore');
 
-    $router->group(['prefix' => 'config', 'namespace' => 'Config'],function ($router) {
+    $router->group(['prefix' => 'config', 'namespace' => 'Config'], function ($router) {
         $router->resource('payment-methods', PaymentController::class);
         $router->resource('delivery-methods', DeliveryController::class);
         $router->resource('currencies', CurrencyController::class);
         $router->resource('order-statuses', OrderStatusController::class);
         $router->resource('order-item-statuses', OrderItemStatusController::class);
-        $router->any('clear-cache', CacheController::class);
     });
 
-    $router->group(['prefix' => 'bnrs'],function ($router) {
+    $router->group(['prefix' => 'bnrs'], function ($router) {
         $router->resource('bnrs', BannerController::class);
         $router->resource('index-links', IndexLinkController::class);
         $router->resource('product-carousels', ProductCarouselController::class);
@@ -66,6 +65,9 @@ Route::group([
     $router->any('sklad', [SkladController::class, 'index']);
 
     // debug
+    $router->group(['prefix' => 'debug', 'namespace' => 'Debug'], function ($router) {
+        $router->any('clear-cache', CacheController::class);
+    });
     Route::view('/test', 'test');
     Route::get('debug', [DebugController::class, 'index']);
     Route::get('debug-sentry', function () {
