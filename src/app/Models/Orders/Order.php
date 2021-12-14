@@ -117,6 +117,7 @@ class Order extends Model
         return $this->hasMany(OrderItem::class)
             ->with([
                 'product' => function ($query) { $query->withTrashed(); },
+                'status:key,name_for_admin,name_for_user',
                 'size:id,name'
             ]);
     }

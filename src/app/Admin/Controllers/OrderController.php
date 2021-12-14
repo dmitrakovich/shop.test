@@ -2,20 +2,20 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Orders\Order;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use App\Models\Country;
 use App\Models\Currency;
 use Payments\PaymentMethod;
+use App\Models\Orders\Order;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Widgets\Table;
 use App\Models\Enum\OrderMethod;
+use App\Models\Orders\OrderStatus;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
-use App\Models\Orders\OrderStatus;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 
@@ -42,18 +42,20 @@ class OrderController extends AdminController
         $grid->column('email', __('Email'));
         $grid->column('phone', 'Телефон');
 
-        $grid->model()->with(['data']);
+        $grid->model()->with(['items']);
         $grid->column('goods', 'Товары')->expand(function ($model) {
-            $items = $model->data->map(function ($item) use ($model) {
+            $items = $model->items->map(function ($item) use ($model) {
                 return [
                     'image' => "<img src='{$item->product->getFirstMediaUrl()}' style='width:70px'>",
                     'product' => "<a href='{$item->product->getUrl()}' target='_blank'>{$item->product->getFullName()}</a>",
                     'availability' => $item->product->trashed() ? '<i class="fa fa-close text-red"></i>' : '<i class="fa fa-check text-green"></i>',
+                    'status' => $item->status->name_for_admin,
                     'size' => $item->size->name,
                     'price' => "$item->current_price $model->currency",
                 ];
-            });
-            return new Table(['Фото', 'Товар', 'Наличие', 'Размер', 'Цена'], $items->toArray());
+            })->toArray();
+
+            return new Table(['Фото', 'Товар', 'Наличие', 'Статус', 'Размер', 'Цена'], $items);
         });
         // $grid->column('comment', 'Коммментарий');
         $grid->column('country.name', 'Страна');
