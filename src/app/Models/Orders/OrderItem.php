@@ -3,7 +3,7 @@
 namespace App\Models\Orders;
 
 use App\Models\Size;
-use App\Admin\Models\Product;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
@@ -37,6 +37,9 @@ class OrderItem extends Model
     public function product()
     {
         return $this->belongsTo(Product::class)
+            ->withDefault(function ($product, $orderItem) {
+                $product->setDefaultValues($orderItem->product_id);
+            })
             ->with(['brand', 'category', 'media']);
     }
 

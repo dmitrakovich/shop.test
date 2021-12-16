@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use App\Facades\Currency;
 use App\Facades\Sale;
-use App\Models\ProductAttributes;
+use App\Facades\Currency;
+use Illuminate\Support\Carbon;
 use App\Services\SearchService;
+use App\Models\ProductAttributes;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,12 +24,17 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \App\Models\Brand $brand
  * @property string $title
  * @property string $slug
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $deleted_at
  * ...
  */
 class Product extends Model implements HasMedia
 {
     use SoftDeletes;
-    use InteractsWithMedia;
+    use InteractsWithMedia {
+        getFirstMediaUrl as traitGetFirstMediaUrl;
+    }
 
     /**
      * Default sorting
@@ -411,5 +417,36 @@ class Product extends Model implements HasMedia
     public function getSalePercentage(): int
     {
         return ceil((1 - ($this->getFinalPrice() / $this->getFinalOldPrice())) * 100);
+    }
+
+    /**
+     * getFirstMediaUrl & check empty media
+     *
+     * @param string $collectionName
+     * @param string $conversionName
+     * @return string
+     */
+    public function getFirstMediaUrl(string $collectionName = 'default', string $conversionName = ''): string
+    {
+        if (!($url = $this->traitGetFirstMediaUrl($collectionName, $conversionName))) {
+            $url = '/storage/products/0/delete.jpg';
+        }
+        return $url;
+    }
+
+    /**
+     * Set default values for product
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function setDefaultValues(int $id = 0)
+    {
+        $this->id = $id;
+        $this->title = 'Товар удалён';
+        $this->deleted_at = $this->created_at = Carbon::createFromDate(2017);
+
+        $this->setRelation('category', Category::getDefault());
+        $this->setRelation('brand', Brand::getDefault());
     }
 }

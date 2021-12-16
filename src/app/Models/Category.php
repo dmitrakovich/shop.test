@@ -22,7 +22,14 @@ class Category extends Model
     use SoftDeletes, NodeTrait, AttributeFilterTrait;
 
     public $timestamps = false;
-    //
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
+
     /**
      * Get the route key for the model.
      *
@@ -136,5 +143,20 @@ class Category extends Model
         };
 
         return $traverse($nodes);
+    }
+
+    /**
+     * Make dafault category
+     *
+     * @return self
+     */
+    public static function getDefault()
+    {
+        return self::make([
+            'id' => 1,
+            'slug' => 'catalog',
+            'path' => 'catalog',
+            'title' => 'Каталог',
+        ]);
     }
 }

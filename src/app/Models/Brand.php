@@ -11,6 +11,13 @@ class Brand extends Model
 
     public $timestamps = false;
 
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
+
     protected static function getRelationColumn()
     {
         return 'brand_id';
@@ -24,4 +31,18 @@ class Brand extends Model
     // {
     //     return "brand_logos/$logo";
     // }
+
+    /**
+     * Make dafault brand
+     *
+     * @return self
+     */
+    public static function getDefault()
+    {
+        return self::make([
+            'id' => 57,
+            'name' => 'BAROCCO',
+            'slug' => 'barocco',
+        ]);
+    }
 }
