@@ -123,6 +123,21 @@ class Order extends Model
     }
 
     /**
+     * Order items extended
+     *
+     * @return Relations\HasMany
+     */
+    public function itemsExtended()
+    {
+        return $this->hasMany(OrderItemExtended::class)
+            ->with([
+                'product' => function ($query) { $query->withTrashed(); },
+                'status:key,name_for_admin,name_for_user',
+                'size:id,name'
+            ]);
+    }
+
+    /**
      * Order country
      *
      * @return Relations\BelongsTo
