@@ -429,7 +429,7 @@ class Product extends Model implements HasMedia
     public function getFirstMediaUrl(string $collectionName = 'default', string $conversionName = ''): string
     {
         if (!($url = $this->traitGetFirstMediaUrl($collectionName, $conversionName))) {
-            $url = '/storage/products/0/delete.jpg';
+            $url = '/storage/products/0/deleted.jpg';
         }
         return $url;
     }
