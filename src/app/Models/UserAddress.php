@@ -32,4 +32,14 @@ class UserAddress extends Model
         'country_id',
         'address',
     ];
+
+    /**
+     * Address country
+     *
+     * @return Relations\BelongsTo
+     */
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 }
