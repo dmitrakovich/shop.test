@@ -86,10 +86,10 @@
                             </p>
                             <p>
                                 Первый взнос<br>
-                                <b>{{ $product->price * 0.4 }} руб.</b><br>
+                                <b>{{ $product->getPrice() * 0.4 }} руб.</b><br>
                                 Оставшиеся 2 платежа<br>
                                 <b class="border-bottom border-danger font-size-14">
-                                    {{ $product->price * 0.3 }} руб. в месяц
+                                    {{ $product->getPrice() * 0.3 }} руб. в месяц
                                 </b>
                             </p>
                             &#9989; Без увеличения цены <br>
