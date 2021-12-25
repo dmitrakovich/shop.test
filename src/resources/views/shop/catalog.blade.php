@@ -11,7 +11,7 @@
                 Фильтр
             </button>
             <span class="text-muted font-size-12">
-                {{ DeclensionNoun::make($productsTotal, 'модель') }}
+                {{ DeclensionNoun::make($products->totalCount, 'модель') }}
             </span>
         </div>
         <select onchange="window.location.href = this.value" class="form-control col-6">

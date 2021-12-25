@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Product;
 use App\Models\Url;
+use App\Models\Product;
+use App\Models\ProductAttributes\Top;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FilterRequest extends FormRequest
@@ -52,11 +53,11 @@ class FilterRequest extends FormRequest
      */
     public function getFilters(): array
     {
+        $filters = [];
         $slugs = $this->path() ? explode('/', $this->path()) : [];
         unset($slugs[0]); // catalog
 
         if (!empty($slugs)) {
-            $filters = [];
             $filtersTemp = Url::whereIn('slug', $slugs)
                 ->with('filters') // :id,name !!!
                 ->get(['slug', 'model_type', 'model_id']);
@@ -74,9 +75,26 @@ class FilterRequest extends FormRequest
                     }
                 }
             }
-            return $filters;
-        } else {
-            return [];
+        }
+
+        $this->addTopProducts($filters);
+
+        return $filters;
+    }
+
+    /**
+     * @param array $filters
+     * @return void
+     */
+    protected function addTopProducts(array &$filters)
+    {
+        $top = $this->input('top', '');
+        $top = array_filter(explode(',', $top));
+
+        if (!empty($top)) {
+            $filters[Top::class] = array_map(function (int $value) {
+                return ['model_id' => $value];
+            }, $top);
         }
     }
 }

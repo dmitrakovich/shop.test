@@ -10,7 +10,7 @@ class ProductService
      * Применить фильтры к выборке
      *
      * @param array $filters
-     * @return Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     protected function applyFilters(array $filters)
     {
@@ -46,5 +46,20 @@ class ProductService
             ])
             ->search($search)
             ->sorting($sort);
+    }
+
+    /**
+     * @param array $ids
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getById(array $ids)
+    {
+        return Product::whereIn('id', $ids)->with([
+            'category:id,title,path',
+            'brand:id,name',
+            'sizes:id,name',
+            'media',
+            'styles:id,name',
+        ])->get();
     }
 }
