@@ -26,7 +26,8 @@ class OrderController extends BaseController
     public function index()
     {
         return view('dashboard.orders', [
-            'orders' => Order::where('user_id', Auth::id())->get()
+            'orders' => Order::with(['country', 'status:key,name_for_user'])
+                ->where('user_id', Auth::id())->get()
         ]);
     }
 

@@ -60,7 +60,6 @@ class OrderController extends AdminController
 
             return new Table(['Фото', 'Товар', 'Наличие', 'Статус', 'Размер', 'Цена'], $items);
         });
-        // $grid->column('comment', 'Коммментарий');
         $grid->column('country.name', 'Страна');
         $grid->column('city', 'Город');
         $grid->column('user_addr', 'Адрес');
@@ -119,12 +118,12 @@ class OrderController extends AdminController
         $show->field('promocode_id', __('Promocode id'));
         $show->field('email', __('Email'));
         $show->field('phone', __('Phone'));
-        $show->field('comment', __('Comment'));
+        $show->field('comment', 'Коммментарий');
         $show->field('currency', __('Currency'));
         $show->field('rate', __('Rate'));
         $show->field('country.name', __('Country'));
         $show->field('region', __('Region'));
-        $show->field('city', __('City'));
+        $show->field('city', 'Город');
         $show->field('zip', __('Zip'));
         $show->field('user_addr', __('User addr'));
 
@@ -161,7 +160,7 @@ class OrderController extends AdminController
         $form->number('promocode_id', __('Promocode id'));
         $form->email('email', __('Email'));
         $form->mobile('phone', __('Phone'));
-        $form->textarea('comment', __('Comment'));
+        $form->textarea('comment', 'Коммментарий');
         $form->select('currency', 'Валюта')->options(Currency::pluck('code', 'code'))
             ->when('BYN', function (Form $form) {
                 $form->decimal('rate', 'Курс')->default(Currency::where('code', 'BYN')->value('rate'));
@@ -175,7 +174,7 @@ class OrderController extends AdminController
 
         $form->select('country_id', 'Страна')->options(Country::pluck('name', 'id'));
         $form->text('region', __('Region'));
-        $form->text('city', __('City'));
+        $form->text('city', 'Город');
         $form->text('zip', __('Zip'));
         $form->text('user_addr', __('User addr'));
         $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));

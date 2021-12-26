@@ -28,12 +28,15 @@
                         {!! Currency::format($order->getTotalPrice(), $order->currency) !!}
                     </div>
                     <div class="col-12 col-md-3 order-3">
-                        {{ $order->user_addr }}
+                        {{ $order->country->name }}, {{ $order->user_addr }}
+                        @if (!empty($order->comment))
+                            <hr>
+                            {{ $order->comment }}
+                        @endif
                     </div>
                     <div class="col-12 col-md-3 order-2 order-md-4 text-left text-md-right">
                         <span class="text-primary">
-                            {{-- <b>{{ $order->status }}</b> --}}
-                            <b>Ожидает подтверждения менеджером</b>
+                            <b>{{ $order->status->name_for_user }}</b>
                         </span>
                     </div>
                 </div>

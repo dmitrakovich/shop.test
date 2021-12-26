@@ -7,7 +7,7 @@
 @section('content')
     <div class="col-10 my-5">
         @if ($cart->items->isNotEmpty())
-            <form action="{{ route('orders.store') }}" id="cartData" method="post">
+            <form action="{{ route('orders.store', '#user-data-validate') }}" id="cartData" method="post">
                 <div class="row">
                     @foreach ($cart->items as $item)
                         <div class="col-12 py-3 border-bottom border-secondary">
@@ -152,9 +152,10 @@
 
                 <div class="row mt-5">
                     @csrf
-                    <div class="col-12 mb-4">
+                    <div class="col-12 mb-4" id="user-data-validate">
                         <h5>ЗАПОЛНИТЕ ДАННЫЕ ДОСТАВКИ</h5>
                     </div>
+
                     <div class="col-12 col-md-4 form-group">
                         <label for="country_id">Страна</label>
                         <select name="country_id" id="country_id"
@@ -171,7 +172,18 @@
                             </span>
                         @enderror
                     </div>
-                    <div class="col-12 col-md-8 form-group">
+                    <div class="col-12 col-md-4 form-group">
+                        <label for="city">Город</label>
+                        <input id="city" type="text" name="city"
+                            class="form-control @error('city') is-invalid @enderror"
+                            value="{{ old('city', $user->getFirstAddress()->city) }}">
+                        @error('city')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-12 col-md-4 form-group">
                         <label for="user_addr">Адрес</label>
                         <input id="user_addr" type="text" name="user_addr"
                             class="form-control @error('user_addr') is-invalid @enderror"
@@ -182,6 +194,7 @@
                             </span>
                         @enderror
                     </div>
+
                     <div class="col-12 col-md-4 form-group">
                         <label for="first_name">Имя</label>
                         <input id="first_name" type="text" name="first_name"
@@ -218,8 +231,9 @@
                             </span>
                         @enderror
                     </div>
+
                     <div class="col-12 col-md-6 form-group">
-                        <label for="city">Телефон</label>
+                        <label for="phone">Телефон</label>
                         <input id="phone" type="tel" name="phone"
                             class="form-control @error('phone') is-invalid @enderror"
                             value="{{ old('phone', $user->phone ?? $currentCountry->prefix) }}">
@@ -230,7 +244,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 form-group">
-                        <label for="city">E-mail</label>
+                        <label for="email">E-mail</label>
                         <input id="email" type="email" name="email"
                             class="form-control @error('email') is-invalid @enderror"
                             value="{{ old('email', $user->email) }}">
@@ -240,6 +254,19 @@
                             </span>
                         @enderror
                     </div>
+
+                    <div class="col-12 form-group">
+                        <label for="comment">Комментарий к заказу</label>
+                        <textarea id="comment" rows="4" name="comment"
+                            class="form-control @error('comment') is-invalid @enderror"
+                        >{{ old('comment') }}</textarea>
+                        @error('comment')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
                 </div>
                 <div class="row mt-3 my-md-5 justify-content-center">
                     <button type="submit" form="cartData" class="btn btn-dark col-12 col-sm-6 col-md-4 col-lg-3 py-2">
