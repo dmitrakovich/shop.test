@@ -38,9 +38,11 @@ class OrderController extends AdminController
     {
         $grid = new Grid(new Order());
 
+        $orderStatuses = OrderStatus::ordered()->pluck('name_for_admin', 'key');
+        $admins = Administrator::pluck('name', 'id');
+
         $grid->column('id', 'Номер заказа');
         $grid->column('user_full_name', 'ФИО');
-        $grid->column('email', __('Email'));
         $grid->column('phone', 'Телефон');
 
         $grid->model()->with(['items']);
@@ -60,14 +62,15 @@ class OrderController extends AdminController
         });
         // $grid->column('comment', 'Коммментарий');
         $grid->column('country.name', 'Страна');
+        $grid->column('city', 'Город');
         $grid->column('user_addr', 'Адрес');
         $grid->column('payment.name', 'Способ оплаты');
         $grid->column('delivery.name', 'Способ доставки');
 
-        $grid->column('status_key', 'Статус')->editable('select', OrderStatus::ordered()->pluck('name_for_admin', 'key'));
+        $grid->column('status_key', 'Статус')->editable('select', $orderStatuses);
 
         if (Admin::user()->inRoles(['administrator', 'director'])) {
-            $grid->column('admin_id', 'Менеджер')->editable('select', Administrator::pluck('name', 'id'));
+            $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
         } else {
             $grid->column('admin.name', 'Менеджер');
         }
@@ -81,6 +84,16 @@ class OrderController extends AdminController
 
         $grid->model()->orderBy('id', 'desc');
         $grid->paginate(15);
+
+        $grid->filter(function($filter) use ($orderStatuses, $admins) {
+            $filter->disableIdFilter();
+            $filter->equal('id', 'Номер заказа');
+            $filter->like('last_name', 'Фамилия');
+            $filter->equal('status_key', 'Статус')->select($orderStatuses);
+            $filter->equal('admin_id', 'Менеджер')->select($admins);
+            $filter->between('created_at', 'Дата заказа')->datetime();
+            $filter->equal('order_method', 'Способ заказа')->select(OrderMethod::getOptionsForSelect());
+        });
 
         return $grid;
     }
