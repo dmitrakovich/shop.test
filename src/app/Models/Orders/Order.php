@@ -188,6 +188,16 @@ class Order extends Model
     }
 
     /**
+     * Admin comments log
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function adminComments()
+    {
+        return $this->hasMany(OrderAdminComment::class);
+    }
+
+    /**
      * Get the user's full name.
      *
      * @return string

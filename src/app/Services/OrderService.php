@@ -30,6 +30,9 @@ class OrderService implements OrderServiceIntarface
                     'current_price' => $item->price,
                 ]);
             }
+            $order->adminComments()->create([
+                'comment' => 'Заказ импортирован из modny.by. Старый номер ' . intval($request->input('id')),
+            ]);
         } else {
             foreach ($cart->items as $item) {
                 $order->data()->create([

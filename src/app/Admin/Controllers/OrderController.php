@@ -195,7 +195,11 @@ class OrderController extends AdminController
             $form->display('admin.name', 'Менеджер');
         }
 
-        // Subtable fields
+        $form->hasMany('adminComments', 'Комментарии менеджера', function (Form\NestedForm $form) {
+            $form->text('comment', 'Комментарий')->rules(['required', 'max:500']);
+            $form->display('created_at', 'Дата');
+        });
+
         $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $form) {
             $form->display('product_name', 'Название модели');
             $form->image('product_photo', 'Фото товара')->readonly();
@@ -203,7 +207,7 @@ class OrderController extends AdminController
             $form->select('status_key', 'Статус модели')->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'));
             // 'product' => "<a href='{$item->product->getUrl()}' target='_blank'>{$item->product->getFullName()}</a>",
             // 'availability' => $item->product->trashed() ? '<i class="fa fa-close text-red"></i>' : '<i class="fa fa-check text-green"></i>',
-            $form->currency('current_price')->symbol($form->getForm()->model()->currency)->readonly();;
+            $form->currency('current_price')->symbol($form->getForm()->model()->currency)->readonly();
         });
 
         $form->saving(function (Form $form) {
