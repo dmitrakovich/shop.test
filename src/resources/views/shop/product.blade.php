@@ -23,16 +23,16 @@
                         </div>
                     @else
                         <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
-                            <img src="{{ $image->getUrl('normal') }}" class="img-fluid">
+                            <img src="{{ $image->getUrl('normal') }}" alt="{{ $product->extendedName() }}" class="img-fluid">
                         </a>
                     @endif
                 @endforeach
             </div>
             <div class="slider-nav mb-3 row" style="max-width: 720px">
-                @foreach ($product->getMedia() as $image)
+                @foreach ($product->getMedia() as $key => $image)
                     <div class="col-auto">
                         <div class="position-relative d-inline-block">
-                            <img src="{{ $image->getUrl('thumb') }}" class="img-fluid">
+                            <img src="{{ $image->getUrl('thumb') }}" alt="{{ $product->extendedName() }} миниатюра {{ ++$key }}" class="img-fluid">
                             @if ($image->hasCustomProperty('video'))
                                 <span class="youtube-play-icon"></span>
                             @endif
@@ -150,15 +150,15 @@
 
                 <div class="col-12 text-center text-muted mt-5">
                     <p>
-                        <img src="/images/icons/installments.svg" class="pr-2">
+                        <img src="/images/icons/installments.svg" alt="" role="presentation" class="pr-2">
                         Без переплат в рассрочку
                     </p>
                     <p>
-                        <img src="/images/icons/delivery.svg" class="pr-2">
+                        <img src="/images/icons/delivery.svg" alt="" role="presentation" class="pr-2">
                         Примерка по Беларуси
                     </p>
                     <p>
-                        <img src="/images/icons/return.svg" class="pr-2">
+                        <img src="/images/icons/return.svg" alt="" role="presentation" class="pr-2">
                         Возврат 14 дней
                     </p>
                 </div>
