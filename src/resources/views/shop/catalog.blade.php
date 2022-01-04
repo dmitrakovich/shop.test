@@ -34,16 +34,18 @@
 
                 {{ Currency::getSwitcher() }}
 
-                <div class="col-auto align-self-center ml-3 mr-2">
+                <label for="select-sorting" class="mb-0 ml-3 mr-2">
                     Сортировка:
+                </label>
+                <div class="m-0 col-md-4 col-lg-3 col-xl-2">
+                    <select onchange="window.location.href = this.value" id="select-sorting" class="form-control">
+                        @foreach ($sortingList as $key => $value)
+                            <option value="{{ URL::current() . "?sort=$key" }}" {{ $sort == $key ? 'selected' : null }}>
+                                {{ $value }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
-                <select onchange="window.location.href = this.value" class="form-control col-4 col-lg-3 col-xl-2">
-                    @foreach ($sortingList as $key => $value)
-                        <option value="{{ URL::current() . "?sort=$key" }}" {{ $sort == $key ? 'selected' : null }}>
-                            {{ $value }}
-                        </option>
-                    @endforeach
-                </select>
             </div>
         </div>
 

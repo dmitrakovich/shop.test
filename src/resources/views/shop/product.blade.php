@@ -106,12 +106,6 @@
                     @endif
                 </div>
 
-                {{-- <div class="row">
-                    <div class="col-12 py-3">
-                        Цвет / {{ $product->color->name }}
-                    </div>
-                </div> --}}
-
                 <div class="row mb-4">
                     <div class="col-12 product-size">
                         <div class="row justify-content-between">
@@ -127,10 +121,15 @@
                         <ul class="p-0 mt-3 js-sizes">
                             @foreach ($product->sizes as $size)
                                 <li class="d-inline-block pr-3">
-                                    <label class="check">
-                                        <input type="checkbox" class="d-none" name="sizes[{{ $size->id }}]">
+                                    <label for="input-size-{{ $size->id }}" class="check">
                                         <span class="checkmark">{{ $size->name }}</span>
                                     </label>
+                                    <input
+                                        type="checkbox"
+                                        id="input-size-{{ $size->id }}"
+                                        class="visually-hidden"
+                                        name="sizes[{{ $size->id }}]"
+                                    />
                                 </li>
                             @endforeach
                         </ul>
