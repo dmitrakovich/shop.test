@@ -78,3 +78,4 @@ nmp run production
 // перенести эту инстркцию целиком в докер и удалить её
 // sftp:
 // get -r public_html/src/storage/app/public/products/3/34/349/ /home/ondemand-dev/docker-app-images/www/shop.test/src/storage/app/public/products/3/34
+// get -r public_html/src/storage/app/public/products/ /mnt/d/my-projects/shop.test/src/storage/app/public/
