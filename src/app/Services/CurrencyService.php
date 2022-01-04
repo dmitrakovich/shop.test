@@ -182,7 +182,7 @@ class CurrencyService
     public function format(float $price, ?string $currency = null): string
     {
         $currency = $this->allCurrencies[$currency] ?? $this->currency;
-        return number_format($price, $currency->decimals, '.', '&nbsp') . '&nbsp' . $currency->symbol;
+        return number_format($price, $currency->decimals, '.', '&nbsp;') . '&nbsp;' . $currency->symbol;
     }
 
     /**

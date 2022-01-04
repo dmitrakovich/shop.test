@@ -152,6 +152,7 @@ button.scroll-top-btn {
 .check {
     display: inline-block;
     position: relative;
+    margin-bottom: 0.5rem;
     cursor: pointer;
     user-select: none;
 }
@@ -233,16 +234,14 @@ button.scroll-top-btn {
             width: 20px;
             border: 1px solid #E8E8E8;
         }
-        &.categories {
-
-        }
+        // &.categories { }
         &.colors {
             .list li {
                 width: auto;
-                padding-right: 35px;
-                padding-bottom: 15px;
-                // padding: 10px;
-                // margin-top: 20px;
+                padding-right: 30px;
+                padding-bottom: 30px;
+                margin-right: 13px;
+                margin-bottom: 11px;
             }
             .checkmark {
                 height: 30px;
@@ -252,9 +251,7 @@ button.scroll-top-btn {
                 border: 1px solid #E8E8E8;
             }
         }
-        &.brand {
-            // max-height: 100px;
-        }
+        // &.brand { }
     }
 }
 
@@ -422,6 +419,17 @@ span.youtube-play-icon {
                 content: "/";
             }
         }
+    }
+}
+
+// prices
+span {
+    // &.price { }
+    &.new_price {
+        color: #D22020;
+    }
+    &.old_price {
+        text-decoration: line-through;
     }
 }
 

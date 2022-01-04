@@ -31,13 +31,13 @@
                                         <div class="col-12 col-md-2 mt-md-2">{{ $item->product->color_txt }}</div>
                                         <div class="col-12 col-md-3 mt-md-2 mb-4">
                                             @if ($item->product->getPrice() < $item->product->getOldPrice())
-                                                <s class="text-muted">{!! $item->product->getFormattedOldPrice() !!}</s>&nbsp;
+                                                <span class="old_price text-muted">{!! $item->product->getFormattedOldPrice() !!}</span>&nbsp;
                                                 <span class="text-white px-1" style="background-color: #D22020">
                                                     -{{ $item->product->getSalePercentage() }}%
                                                 </span><br>
-                                                <font color="#D22020">{!! $item->product->getFormattedPrice() !!}</font>
+                                                <span class="new_price">{!! $item->product->getFormattedPrice() !!}</span>
                                             @else
-                                                {!! $item->product->getFormattedPrice() !!}<br>
+                                                <span class="price">{!! $item->product->getFormattedPrice() !!}</span>
                                             @endif
                                         </div>
 
@@ -123,11 +123,11 @@
                             </div>
                             <div class="col-auto text-right">
                                 @if (Cart::getTotalPrice() < Cart::getTotalOldPrice())
-                                    <s class="text-muted">{!! Currency::format(Cart::getTotalOldPrice()) !!}</s>
-                                    <strong>{!! Currency::format(Cart::getTotalPrice()) !!}</strong><br>
-                                    <font color="#D22020">Вы экономите {!! Currency::format(Cart::getTotalOldPrice() - Cart::getTotalPrice()) !!}</font>
+                                    <span class="old_price text-muted">{!! Currency::format(Cart::getTotalOldPrice()) !!}</span>
+                                    <strong class="price">{!! Currency::format(Cart::getTotalPrice()) !!}</strong><br>
+                                    <span class="new_price">Вы экономите {!! Currency::format(Cart::getTotalOldPrice() - Cart::getTotalPrice()) !!}</span>
                                 @else
-                                    <strong>{!! Currency::format(Cart::getTotalPrice()) !!}</strong>
+                                    <strong class="price">{!! Currency::format(Cart::getTotalPrice()) !!}</strong>
                                 @endif
                             </div>
                         </div>

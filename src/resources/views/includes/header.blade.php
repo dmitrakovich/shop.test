@@ -69,7 +69,7 @@
                                         <a href="{{ route('shop') }}">Обувь ></a>
                                     </div>
                                     <div class="col-4 font-size-16" style="height: 13%; color: #000000">
-                                        Коллекции ></a>
+                                        <a href="{{ route('shop') }}">Коллекции ></a>
                                     </div>
                                     <div class="col-4"></div>
                                     <div class="col-4 d-flex flex-wrap flex-column font-size-14" style="height: 87%; column-gap: 6px">

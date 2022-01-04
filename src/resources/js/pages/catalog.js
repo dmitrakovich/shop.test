@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // quick view
-  $(document).on('click', '.quick-link a', function (e) {
+  $(document).on('click', '.quick-link', function (e) {
     e.preventDefault();
     let url = $(this).data('src');
     $.fancybox.open({

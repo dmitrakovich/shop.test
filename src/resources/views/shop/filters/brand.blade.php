@@ -3,12 +3,10 @@
     <div class="list" {{-- style="display: none" --}}>
         <ul>
             @foreach ($filters['brands'] as $slug => $filter)
-                <li>
+                <li class="check {{ isset($currentFilters[$filter['model']][$slug]) ? 'checked' : null }}">
                     <a href="{{ isset($currentFilters[$filter['model']][$slug]) ? UrlHelper::generate([], [$filter]) : UrlHelper::generate([$filter]) }}">
-                        <label class="check {{ isset($currentFilters[$filter['model']][$slug]) ? 'checked' : null }}">
-                            <span>{{ $filter['name'] }}</span>
-                            <i class="checkmark"></i>
-                        </label>
+                        <span>{{ $filter['name'] }}</span>
+                        <i class="checkmark"></i>
                     </a>
                 </li>
             @endforeach

@@ -1,7 +1,7 @@
 <?php /** @var $product \App\Models\Product */ ?>
 
 <div class="col-3 js-product-item product-item mb-3 text-center text-lg-left">
-   
+
     <div class="mb-3 image position-relative">
         <a href="{{ $product->getUrl() }}">
             @if ($product->getSalePercentage())
@@ -26,13 +26,14 @@
             class="quick-link btn btn-block btn-outline-dark d-none d-lg-block"
         >быстрый просмотр</button>
     </div>
-    
+
     <b>{{ $product->simpleName() }}</b> <br>
     @if ($product->getPrice() < $product->getOldPrice())
-        <s>{!! $product->getFormattedOldPrice() !!}</s>
-        <font color="#D22020">{!! $product->getFormattedPrice() !!}</font><br>
+        <span class="old_price">{!! $product->getFormattedOldPrice() !!}</span>
+        <span class="new_price">{!! $product->getFormattedPrice() !!}</span>
     @else
-        {!! $product->getFormattedPrice() !!}<br>
+        <span class="price">{!! $product->getFormattedPrice() !!}</span>
     @endif
+    <br/>
     <span class="text-mutted">{{ $product->sizes->implode('name', ' | ') }}</span>
 </div>

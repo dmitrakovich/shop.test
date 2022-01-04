@@ -36,10 +36,10 @@
             >
             <div>{{ $product['full_name'] }}<br>
                 @if ($product['sale_percentage'])
-                    <s>{!! $product['formatted_old_price'] !!}</s>
-                    <font color="#D22020">{!! $product['formatted_price'] !!}</font><br>
+                    <span class="old_price">{!! $product['formatted_old_price'] !!}</span>
+                    <span class="new_price">{!! $product['formatted_price'] !!}</span>
                 @else
-                    {!! $product['formatted_price'] !!}<br>
+                    <span class="price">{!! $product['formatted_price'] !!}</span>
                 @endif
             </div>
         </a>
