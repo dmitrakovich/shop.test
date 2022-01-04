@@ -269,12 +269,15 @@ button.scroll-top-btn {
         position: absolute;
         left: 50%;
         top: 50%;
-        width: 80%;
-        margin-left: -40%;
+        width: 70%;
+        margin-left: -35%;
         margin-top: -20px;
         transition: all .3s;
         z-index: 5;
         opacity: 0;
+        &:focus {
+            opacity: 1;
+        }
     }
     &:hover {
         .quick-link {

@@ -31,7 +31,7 @@
             </div>
             <div class="col col-sm-auto ml-auto">
                 <a href="{{ route('index-page') }}">
-                    <img src="/images/icons/barocco.svg" alt="" class="img-fluid w-100">
+                    <img src="/images/icons/barocco.svg" alt="Barocco" class="img-fluid w-100">
                 </a>
             </div>
             <div class="col-auto ml-auto account-btns d-flex">

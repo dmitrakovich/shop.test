@@ -62,7 +62,7 @@
 
     </div>
 
-    <button type="button" class="btn btn-secondary scroll-top-btn">
+    <button type="button" class="btn btn-secondary scroll-top-btn" aria-label="Back to top">
         <svg width="21" height="12" viewBox="0 0 21 12" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.4065 11.7137L10.2637 4.57087L3.12081 11.7137L0.263672 10.2852L10.2637 0.285156L20.2637 10.2852L17.4065 11.7137Z" fill="white"/>
         </svg>
