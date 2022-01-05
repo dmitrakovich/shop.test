@@ -6,7 +6,7 @@
 
 ## Клонируем проект с гита
 ```shell
-git clone https://default-089@github.com/default-089/shop.test.git
+git clone https://dmitrakovich@github.com/dmitrakovich/shop.test.git
 ```
 
 Настроить окружение в файле .env

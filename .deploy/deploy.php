@@ -8,7 +8,7 @@ require 'recipe/laravel.php';
 set('application', 'Barocco');
 
 // Project repository
-set('repository', 'https://github.com/default-089/shop.test.git');
+set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
 // Hosts
 host('barocco.by')
