@@ -3,12 +3,12 @@
         <div class="row wrapper justify-content-center">
             <div class="col-12 col-md-4 col-xl-3 text-center text-sm-left">
                 <div class="h2 mt-5 mb-3">BAROCCO</div>
-                ИП Ермаков Игорь Вячеславович, УНП 291311363
-                РЕСПУБЛИКА БЕЛАРУСЬ, 224019,г. Брест, ул. Ландышевая, д.4
+                ООО «БароккоСтайл», УНП 291711523,
+                РЕСПУБЛИКА БЕЛАРУСЬ, 224030, г. Брест, ул. Буденного, 17-1
                 Интернет магазин внесен в торговый реестр
-                Республики Беларусь 31 августа 2015 года
-                Свидетельство о государственной регистрации № 291311363
-                выдано Администрацией Московского р-на г. Бреста
+                Республики Беларусь 4 января 2022 года
+                Свидетельство о государственной регистрации № 291711523
+                выдано Администрацией Ленинского р-на г. Бреста
             </div>
             <div class="col-12 col-sm text-center text-sm-left">
                 <div class="h5 mt-5 mb-4">Время работы</div>
@@ -19,7 +19,7 @@
                 <h5 class="mt-5 mb-4">Контакты</h5>
                 <a href="tel:+375291793790">+375&nbsp;(29)&nbsp;179-37-90</a><br>
                 <a href="tel:88001007769">8-800-100-77-69&nbsp;(РФ)</a><br>
-                <a href="mailto:info@modny.by">info@modny.by</a>
+                <a href="mailto:info@barocco.by">info@barocco.by</a>
             </div>
             <div class="col-7 col-sm text-center text-sm-left">
                 <div class="h5 mt-5 mb-4">Способы оплаты</div>
