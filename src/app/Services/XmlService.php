@@ -17,10 +17,33 @@ class XmlService
      */
     private $currency;
 
+    /**
+     * @var string
+     */
+    protected $filePath;
+
     public function __construct(AbstractXml $xmlInstance, Currency $currency)
     {
         $this->xmlInstance = $xmlInstance;
         $this->currency = $currency;
+        $this->filePath = $this->getFilePath();
+    }
+
+    /**
+     * Return xml file path by instance & currency
+     *
+     * @param string $prefix
+     * @param string $postfix
+     * @return string
+     */
+    protected function getFilePath(string $prefix = '', string $postfix = ''): string
+    {
+        return storage_path('app')
+                . DIRECTORY_SEPARATOR . 'xml'
+                . DIRECTORY_SEPARATOR . $prefix
+                . $this->xmlInstance->getPartFilename()
+                . strtolower($this->currency->code)
+                . $postfix . '.xml';
     }
 
     /**
@@ -30,7 +53,16 @@ class XmlService
      */
     public function backup(): void
     {
-        # code..
+        if (!file_exists($this->filePath)) {
+            return;
+        }
+
+        $backupFilePath = $this->getFilePath('', '.backup');
+        if (file_exists($backupFilePath)) {
+            unlink($backupFilePath);
+        }
+
+        copy($this->filePath, $backupFilePath);
     }
 
     /**
