@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Currency;
 use App\Models\Xml\AbstractXml;
+use App\Services\XmlService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -43,6 +44,8 @@ class XmlGeneratorJob implements ShouldQueue
      */
     public function handle()
     {
-        //
+        $xmlService = new XmlService($this->xmlInstance, $this->currency);
+        $xmlService->backup();
+        $xmlService->generate();
     }
 }
