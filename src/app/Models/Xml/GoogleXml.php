@@ -19,11 +19,11 @@ class GoogleXml extends AbstractXml
     /**
      * Prepare data for xml file
      *
-     * @return array
+     * @return object
      */
-    public function getPreparedData(): array
+    public function getPreparedData(): object
     {
-        return [
+        return (object)[
             'channel' => $this->getChannelData(),
             'items' => $this->getItemsData(),
         ];
@@ -32,11 +32,11 @@ class GoogleXml extends AbstractXml
     /**
      * Data for header
      *
-     * @return array
+     * @return object
      */
-    protected function getChannelData(): array
+    protected function getChannelData(): object
     {
-        return [
+        return (object)[
             'title' => 'Барокко',
             'link' => $this->getHost(),
             'description' => 'Интернет магазин брендовой обуви',
@@ -50,6 +50,22 @@ class GoogleXml extends AbstractXml
      */
     protected function getItemsData(): array
     {
-        return Product::with(['category'])->get()->toArray();
+        return Product::with([
+                'category',
+                'media',
+            ])
+            ->withTrashed()
+            ->limit(5) // !!!
+            ->get()
+            ->map(function ($item) {
+                return (object)[
+                    'id' => $item->id,
+                    'link' => $this->getHost() . $item->getUrl(),
+
+                    'availability' => $item->trashed() ? 'out of stock' : 'in stock',
+
+                    'images' => $this->getProductImages($item->getMedia()),
+                ];
+            })->toArray();
     }
 }

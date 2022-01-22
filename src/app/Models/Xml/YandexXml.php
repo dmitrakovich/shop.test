@@ -17,11 +17,11 @@ class YandexXml extends AbstractXml
     /**
      * Prepare data for xml file
      *
-     * @return array
+     * @return object
      */
-    public function getPreparedData(): array
+    public function getPreparedData(): object
     {
-        return [
+        return (object)[
             //
         ];
     }
