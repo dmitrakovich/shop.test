@@ -118,6 +118,13 @@ return [
         'sentry' => [
             'driver' => 'sentry',
         ],
+
+        'xml' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/xml.log'),
+            'tap' => [SimpleFormatter::class],
+            'level' => 'debug',
+        ],
     ],
 
 ];

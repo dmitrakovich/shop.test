@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Currency;
 use App\Models\Xml\AbstractXml;
+use Illuminate\Support\Facades\Log;
 
 class XmlService
 {
@@ -72,6 +73,10 @@ class XmlService
      */
     public function generate(): void
     {
+        Log::channel('xml')->info('Start generate', [basename($this->filePath)]);
+
         # code...
+
+        Log::channel('xml')->info('Finish generate', [basename($this->filePath)]);
     }
 }

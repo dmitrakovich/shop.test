@@ -29,7 +29,6 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        // обновление рейтинга товаров
         $schedule->job(new UpdateProductsRatingJob)
             ->withoutOverlapping()
             ->cron('15 5,11,17,23 * * *');
@@ -38,8 +37,9 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()
             ->everyThirtyMinutes();
 
-        // обновление базы Sypex Geo
         $schedule->job(new SxGeoUpdateJob)->dailyAt('03:07');
+
+        $schedule->command('xml:generate')->everySixHours();
     }
 
     /**
