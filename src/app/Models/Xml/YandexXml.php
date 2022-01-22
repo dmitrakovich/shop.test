@@ -9,8 +9,8 @@ class YandexXml extends AbstractXml
      *
      * @return string
      */
-    public function getPartFilename(): string
+    public function getKey(): string
     {
-        return 'yandex_';
+        return 'yandex';
     }
 }

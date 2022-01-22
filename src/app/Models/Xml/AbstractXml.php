@@ -9,5 +9,5 @@ abstract class AbstractXml
      *
      * @return string
      */
-    abstract function getPartFilename(): string;
+    abstract function getKey(): string;
 }

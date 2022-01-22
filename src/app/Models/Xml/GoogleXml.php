@@ -9,8 +9,8 @@ class GoogleXml extends AbstractXml
      *
      * @return string
      */
-    public function getPartFilename(): string
+    public function getKey(): string
     {
-        return 'google_';
+        return 'google';
     }
 }

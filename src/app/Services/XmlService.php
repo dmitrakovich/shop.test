@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Currency;
 use App\Models\Xml\AbstractXml;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 
 class XmlService
@@ -42,7 +43,7 @@ class XmlService
         return storage_path('app')
                 . DIRECTORY_SEPARATOR . 'xml'
                 . DIRECTORY_SEPARATOR . $prefix
-                . $this->xmlInstance->getPartFilename()
+                . $this->xmlInstance->getKey() . '_'
                 . strtolower($this->currency->code)
                 . $postfix . '.xml';
     }
@@ -75,8 +76,14 @@ class XmlService
     {
         Log::channel('xml')->info('Start generate', [basename($this->filePath)]);
 
-        # code...
+        $data = view('xml.' . $this->xmlInstance->getKey());
+        $this->saveToFile($data);
 
         Log::channel('xml')->info('Finish generate', [basename($this->filePath)]);
+    }
+
+    protected function saveToFile(View $data): void
+    {
+        file_put_contents($this->filePath, $data->render(), LOCK_EX);
     }
 }
