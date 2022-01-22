@@ -9,5 +9,22 @@ abstract class AbstractXml
      *
      * @return string
      */
-    abstract function getKey(): string;
+    abstract public function getKey(): string;
+
+    /**
+     * Prepare data for xml file
+     *
+     * @return array
+     */
+    abstract public function getPreparedData(): array;
+
+    /**
+     * Return host url
+     *
+     * @return string
+     */
+    public function getHost(): string
+    {
+        return 'https://' . request()->getHost();
+    }
 }

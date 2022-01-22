@@ -76,12 +76,21 @@ class XmlService
     {
         Log::channel('xml')->info('Start generate', [basename($this->filePath)]);
 
-        $data = view('xml.' . $this->xmlInstance->getKey());
+        $data = view('xml.' . $this->xmlInstance->getKey(), [
+            'data' => $this->xmlInstance->getPreparedData()
+        ]);
+
         $this->saveToFile($data);
 
         Log::channel('xml')->info('Finish generate', [basename($this->filePath)]);
     }
 
+    /**
+     * Save xml data to file
+     *
+     * @param View $data
+     * @return void
+     */
     protected function saveToFile(View $data): void
     {
         file_put_contents($this->filePath, $data->render(), LOCK_EX);
