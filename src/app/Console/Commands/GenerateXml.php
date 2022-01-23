@@ -101,6 +101,7 @@ class GenerateXml extends Command
             }
         }
 
+        $this->info('Tasks created');
         return 0;
     }
 }

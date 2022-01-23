@@ -9,7 +9,7 @@
     <item>
         <g:id>{{ $item->id }}</g:id>
         <g:link>{{ $item->link }}</g:link>
-        <g:size>gsize</g:size>
+        <g:size>{{ $item->size }}</g:size>
         <g:size_system>EU</g:size_system>
         <g:availability>{{ $item->availability }}</g:availability>
         <g:condition>new</g:condition>
@@ -25,8 +25,8 @@
         <g:brand>brand</g:brand>
         <g:google_product_category>gcat</g:google_product_category>
         <g:product_type>gtype</g:product_type>
-        <g:age_group>mage_group</g:age_group>
-        <g:gender>mgender</g:gender>
+        <g:age_group>adult</g:age_group>
+        <g:gender>female</g:gender>
         <g:description>description</g:description>
         <g:title>mcat mbrand mname</g:title>
         <g:material>model->mato</g:material>

@@ -2,6 +2,7 @@
 
 namespace App\Models\Xml;
 
+use App\Models\Product;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
 abstract class AbstractXml
@@ -53,5 +54,16 @@ abstract class AbstractXml
         return  array_slice($media->map(function ($image) {
             return $image->getUrl('full');
         })->toArray(), 0, self::MAX_IMAGE_COUNT);
+    }
+
+    /**
+     * Return old & current price & currency data
+     *
+     * @param Product $product
+     * @return array
+     */
+    public function getPrices(Product $product): array
+    {
+        return [];
     }
 }
