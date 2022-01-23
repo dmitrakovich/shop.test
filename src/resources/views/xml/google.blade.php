@@ -27,15 +27,15 @@
 @endif
 @endforeach
         <g:brand>{{ $item->brand }}</g:brand>
-        <g:google_product_category>gcat</g:google_product_category>
-        <g:product_type>gtype</g:product_type>
+        <g:google_product_category>{{ $item->google_product_category }}</g:google_product_category>
+        <g:product_type>{{ $item->product_type }}</g:product_type>
         <g:age_group>adult</g:age_group>
         <g:gender>female</g:gender>
-        <g:description>description</g:description>
-        <g:title>mcat mbrand mname</g:title>
-        <g:material>model->mato</g:material>
-        <g:color>color</g:color>
-        <g:target_country>region</g:target_country>
+        <g:description><![CDATA[{!! $item->description !!}]]></g:description>
+        <g:title>{{ $item->title }}</g:title>
+        <g:material>{{ $item->material }}</g:material>
+        <g:color>{{ $item->color }}</g:color>
+        <g:target_country>{{ $currency->country }}</g:target_country>
     </item>
 @endforeach
 </rss>

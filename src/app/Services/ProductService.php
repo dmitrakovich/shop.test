@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class ProductService
@@ -11,9 +12,9 @@ class ProductService
      * Применить фильтры к выборке
      *
      * @param array $filters
-     * @return EloquentCollection
+     * @return Builder
      */
-    protected function applyFilters(array $filters): EloquentCollection
+    protected function applyFilters(array $filters): Builder
     {
         $query = (new Product())->newQuery();
 
@@ -33,9 +34,9 @@ class ProductService
      * @param array $filters
      * @param string $sort
      * @param string|null $search
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
-    public function getForCatalog(array $filters, string $sort, ?string $search = null)
+    public function getForCatalog(array $filters, string $sort, ?string $search = null): Builder
     {
         return $this->applyFilters($filters)
             ->with([
@@ -76,10 +77,11 @@ class ProductService
             'sizes:id,name',
             'media',
             'brand:id,name',
+            'colors:id,name',
         ])
             ->withTrashed()
             ->limit(5) // !!!
-            ->whereIn('id', ['3415', /*'3015'*/])
+            ->whereIn('id', [3415, 3489])
             ->get();
     }
 }

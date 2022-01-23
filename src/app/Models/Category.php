@@ -24,6 +24,16 @@ class Category extends Model
     public $timestamps = false;
 
     /**
+     * @var int
+     */
+    const ROOT_CATEGORY_ID = 1;
+
+    /**
+     * @var int
+     */
+    const ACCESSORIES_PARENT_ID = 25;
+
+    /**
      * The attributes that aren't mass assignable.
      *
      * @var array

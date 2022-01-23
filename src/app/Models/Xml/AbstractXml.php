@@ -2,7 +2,8 @@
 
 namespace App\Models\Xml;
 
-use App\Models\Product;
+use App\Models\Category;
+use Kalnoy\Nestedset\Collection as NestedsetCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
 abstract class AbstractXml
@@ -65,6 +66,19 @@ abstract class AbstractXml
         return  array_slice($media->map(function ($image) {
             return $image->getUrl('full');
         })->toArray(), 0, self::MAX_IMAGE_COUNT);
+    }
+
+    /**
+     * Return categories list with keys by id
+     *
+     * @return NestedsetCollection
+     */
+    public function getCategoriesList(): NestedsetCollection
+    {
+        if (empty($this->cache['product_categories'])) {
+            $this->cache['product_categories'] = Category::all()->keyBy('id');
+        }
+        return $this->cache['product_categories'];
     }
 
 }
