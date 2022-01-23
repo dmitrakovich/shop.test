@@ -44,6 +44,17 @@ abstract class AbstractXml
     }
 
     /**
+     * Prepare string to xml format
+     *
+     * @param string $string
+     * @return string
+     */
+    public function xmlSpecialChars(string $string): string
+    {
+        return htmlspecialchars($string, ENT_QUOTES | ENT_XML1 | ENT_DISALLOWED);
+    }
+
+    /**
      * Return product image urls
      *
      * @param MediaCollection $media
@@ -56,14 +67,4 @@ abstract class AbstractXml
         })->toArray(), 0, self::MAX_IMAGE_COUNT);
     }
 
-    /**
-     * Return old & current price & currency data
-     *
-     * @param Product $product
-     * @return array
-     */
-    public function getPrices(Product $product): array
-    {
-        return [];
-    }
 }

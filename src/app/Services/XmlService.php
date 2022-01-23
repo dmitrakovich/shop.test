@@ -6,6 +6,7 @@ use App\Models\Currency;
 use App\Models\Xml\AbstractXml;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
+use App\Facades\Currency as CurrencyFacade;
 
 class XmlService
 {
@@ -76,7 +77,10 @@ class XmlService
     {
         Log::channel('xml')->info('Start generate', [basename($this->filePath)]);
 
+        CurrencyFacade::setCurrentCurrency($this->currency->code);
+
         $data = view('xml.' . $this->xmlInstance->getKey(), [
+            'currency' => $this->currency,
             'data' => $this->xmlInstance->getPreparedData()
         ]);
 

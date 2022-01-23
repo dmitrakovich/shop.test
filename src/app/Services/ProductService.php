@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class ProductService
 {
@@ -10,9 +11,9 @@ class ProductService
      * Применить фильтры к выборке
      *
      * @param array $filters
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return EloquentCollection
      */
-    protected function applyFilters(array $filters)
+    protected function applyFilters(array $filters): EloquentCollection
     {
         $query = (new Product())->newQuery();
 
@@ -50,9 +51,9 @@ class ProductService
 
     /**
      * @param array $ids
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return EloquentCollection
      */
-    public function getById(array $ids)
+    public function getById(array $ids): EloquentCollection
     {
         return Product::whereIn('id', $ids)->with([
             'category:id,title,path',
@@ -61,5 +62,24 @@ class ProductService
             'media',
             'styles:id,name',
         ])->get();
+    }
+
+    /**
+     * Get products collection for xml
+     *
+     * @return EloquentCollection
+     */
+    public function getForXml(): EloquentCollection
+    {
+        return Product::with([
+            'category',
+            'sizes:id,name',
+            'media',
+            'brand:id,name',
+        ])
+            ->withTrashed()
+            ->limit(5) // !!!
+            ->whereIn('id', ['3415', /*'3015'*/])
+            ->get();
     }
 }

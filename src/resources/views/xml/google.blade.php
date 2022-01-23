@@ -13,8 +13,12 @@
         <g:size_system>EU</g:size_system>
         <g:availability>{{ $item->availability }}</g:availability>
         <g:condition>new</g:condition>
-        <g:price>mprice currISO</g:price>
-        <g:sale_price>mprice currISO</g:sale_price>
+@if ($item->price < $item->old_price)
+        <g:price>{{ $item->old_price }} {{ $currency->code }}</g:price>
+        <g:sale_price>{{ $item->price }} {{ $currency->code }}</g:sale_price>
+@else
+        <g:price>{{ $item->price }} {{ $currency->code }}</g:price>
+@endif
 @foreach ($item->images as $image)
 @if ($loop->first)
         <g:image_link>{{ $image }}</g:image_link>
@@ -22,7 +26,7 @@
         <g:additional_image_link>{{ $image }}</g:additional_image_link>
 @endif
 @endforeach
-        <g:brand>brand</g:brand>
+        <g:brand>{{ $item->brand }}</g:brand>
         <g:google_product_category>gcat</g:google_product_category>
         <g:product_type>gtype</g:product_type>
         <g:age_group>adult</g:age_group>

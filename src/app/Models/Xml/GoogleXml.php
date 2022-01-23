@@ -3,6 +3,7 @@
 namespace App\Models\Xml;
 
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class GoogleXml extends AbstractXml
@@ -51,25 +52,17 @@ class GoogleXml extends AbstractXml
      */
     protected function getItemsData(): array
     {
-        return Product::with([
-            'category',
-            'sizes:id,name',
-            'media',
-        ])
-            ->withTrashed()
-            ->limit(5) // !!!
-            ->whereIn('id', ['3415', /*'3015'*/])
-            ->get()
-            ->map(function ($item) {
+        return (new ProductService)->getForXml()
+            ->map(function (Product $item) {
                 return (object)[
                     'id' => $item->id,
                     'link' => $this->getHost() . $item->getUrl(),
                     'size' => $item->sizes->implode('name', '/'),
-
                     'availability' => $item->trashed() ? 'out of stock' : 'in stock',
-
+                    'price' => $item->getPrice(),
+                    'old_price' => $item->getOldPrice(),
                     'images' => $this->getProductImages($item->getMedia()),
-
+                    'brand' => $this->xmlSpecialChars($item->brand->name),
 
                     // $this->prepareSizes($item->sizes)
                 ];

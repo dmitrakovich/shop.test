@@ -64,6 +64,7 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(Category::class);
     }
+
     /**
      * коллекция
      *
@@ -73,15 +74,7 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(Collection::class);
     }
-    // /**
-    //  * Картинки товара
-    //  *
-    //  * @return Illuminate\Database\Eloquent\Relations\MorphMany
-    //  */
-    // public function images()
-    // {
-    //     return $this->morphMany(Images::class, 'entity')->orderBy('sorting');
-    // }
+
     /**
      * Получить шильды для продукта
      *
@@ -91,6 +84,7 @@ class Product extends Model implements HasMedia
     {
         return 'labels';
     }
+
     /**
      * Размеры
      *
@@ -100,6 +94,7 @@ class Product extends Model implements HasMedia
     {
         return $this->morphedByMany(Size::class, 'attribute', 'product_attributes');
     }
+
     /**
      * Цвет
      *
@@ -109,6 +104,7 @@ class Product extends Model implements HasMedia
     {
         return $this->morphedByMany(Color::class, 'attribute', 'product_attributes');
     }
+
     /**
      * материалы
      *
@@ -118,6 +114,7 @@ class Product extends Model implements HasMedia
     {
         return $this->morphedByMany(Fabric::class, 'attribute', 'product_attributes');
     }
+
     /**
      * Типы каблука
      *
@@ -127,6 +124,7 @@ class Product extends Model implements HasMedia
     {
         return $this->morphedByMany(Heel::class, 'attribute', 'product_attributes');
     }
+
     /**
      * Стили
      *
@@ -136,6 +134,7 @@ class Product extends Model implements HasMedia
     {
         return $this->morphedByMany(Style::class, 'attribute', 'product_attributes');
     }
+
     /**
      * Сезон
      *
@@ -145,6 +144,7 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(Season::class);
     }
+
     /**
      * Теги
      *
@@ -154,6 +154,7 @@ class Product extends Model implements HasMedia
     {
         return $this->morphedByMany(Tag::class, 'attribute', 'product_attributes');
     }
+
     /**
      * Бренд
      *
