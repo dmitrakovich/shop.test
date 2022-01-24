@@ -68,9 +68,10 @@ class ProductService
     /**
      * Get products collection for xml
      *
+     * @param boolean $withTrashed
      * @return EloquentCollection
      */
-    public function getForXml(): EloquentCollection
+    public function getForXml($withTrashed = false): EloquentCollection
     {
         return Product::with([
             'category',
@@ -79,12 +80,10 @@ class ProductService
             'brand:id,name',
             'colors:id,name',
         ])
-            ->withTrashed()
+            ->when($withTrashed, function ($query) { $query->withTrashed(); })
             ->has('brand')
             ->has('colors')
             ->where('price', '>', 0)
-            // ->limit(5) // !!!
-            // ->whereIn('id', [5303, 3415, 3489])
             ->get();
     }
 }

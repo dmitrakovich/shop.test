@@ -33,8 +33,8 @@ class GoogleXml extends AbstractXml
     public function getPreparedData(): object
     {
         return (object)[
-            'channel' => $this->getChannelData(),
-            'items' => $this->getItemsData(),
+            'channel' => $this->getChannel(),
+            'items' => $this->getItems(),
         ];
     }
 
@@ -43,7 +43,7 @@ class GoogleXml extends AbstractXml
      *
      * @return object
      */
-    protected function getChannelData(): object
+    protected function getChannel(): object
     {
         return (object)[
             'title' => 'Барокко',
@@ -57,7 +57,7 @@ class GoogleXml extends AbstractXml
      *
      * @return array
      */
-    protected function getItemsData(): array
+    protected function getItems(): array
     {
         return (new ProductService)->getForXml()
             ->map(function (Product $item) {
