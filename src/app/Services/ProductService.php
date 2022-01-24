@@ -82,6 +82,7 @@ class ProductService
             ->withTrashed()
             ->has('brand')
             ->has('colors')
+            ->where('price', '>', 0)
             // ->limit(5) // !!!
             // ->whereIn('id', [5303, 3415, 3489])
             ->get();
