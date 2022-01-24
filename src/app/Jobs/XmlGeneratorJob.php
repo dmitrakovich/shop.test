@@ -7,12 +7,11 @@ use App\Models\Xml\AbstractXml;
 use App\Services\XmlService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class XmlGeneratorJob implements ShouldQueue
+class XmlGeneratorJob extends AbstractJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -25,6 +24,11 @@ class XmlGeneratorJob implements ShouldQueue
      * @var Currency
      */
     private $currency;
+
+    /**
+     * @var array
+     */
+    protected $contextVars = ['usedMemory'];
 
     /**
      * Create a new job instance.

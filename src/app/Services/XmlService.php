@@ -27,6 +27,8 @@ class XmlService
 
     public function __construct(AbstractXml $xmlInstance, Currency $currency)
     {
+        ini_set('memory_limit', '512M');
+
         $this->xmlInstance = $xmlInstance;
         $this->currency = $currency;
         $this->filePath = $this->getFilePath();
