@@ -2,6 +2,9 @@
 
 namespace App\Models\Xml;
 
+use App\Models\Color;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+
 class YandexXml extends AbstractXml
 {
     /**
@@ -24,5 +27,22 @@ class YandexXml extends AbstractXml
         return (object)[
             //
         ];
+    }
+
+
+
+
+
+    /**
+     * Prepare color from colors for filters
+     *
+     * @param EloquentCollection $colors
+     * @return array
+     */
+    public function getColors(EloquentCollection $colors): array
+    {
+        return $colors->map(function (Color $color) {
+            return $color->name;
+        })->toArray();
     }
 }

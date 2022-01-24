@@ -114,10 +114,6 @@ class GoogleXml extends AbstractXml
         return implode(' > ', $type);
     }
 
-
-
-
-
     /**
      * Prepare color from colors for filters
      *
@@ -126,8 +122,7 @@ class GoogleXml extends AbstractXml
      */
     public function getColor(EloquentCollection $colors): string
     {
-        return 'разноцветный';
-        dd($colors);
+        return count($colors) == 1 ? $colors[0]->name : 'разноцветный';
     }
 
     /**
