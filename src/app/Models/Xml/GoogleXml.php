@@ -2,14 +2,19 @@
 
 namespace App\Models\Xml;
 
-use App\Models\Color;
 use App\Models\Product;
 use App\Models\Category;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Str;
 
 class GoogleXml extends AbstractXml
 {
+    /**
+     * @var int
+     */
+    const DESCRIPTION_MAX_WIDTH = 5000;
+
     /**
      * Return part of a filename
      *
@@ -106,7 +111,7 @@ class GoogleXml extends AbstractXml
             $type[] = 'Женские аксессуары';
         } else {
             $type[] = 'Женская обувь';
-            if ($category->parent_id != Category::ROOT_CATEGORY_ID) {
+            if (!in_array($category->parent_id, [null, Category::ROOT_CATEGORY_ID])) {
                 $type[] = $this->getCategoriesList()[$category->parent_id]->title;
             }
         }
@@ -133,45 +138,35 @@ class GoogleXml extends AbstractXml
      */
     public function getDescription(Product $product): string
     {
-        // $this->prepareSizes($item->sizes)
-        return 'product description';
-    }
+        $description = $product->extendedName() . '. ';
+        $description .= $this->sizesToString($product->sizes) . '. ';
+        $description .= "Цвет: {$product->color_txt}. ";
 
-
-
-
-
-
-
-
-
-    /**
-     * Prepare sizes string from sizes list
-     *
-     * @param EloquentCollection $sizes
-     * @return string
-     */
-    protected function prepareSizes(EloquentCollection $sizes): string
-    {
-        $sizesList = $sizes->pluck('name');
-        $sizesStr = 'Размеры: ' . ($sizesList[0] ?? 'без размера');
-
-        $useDash = false;
-        $sizesListCount = count($sizesList);
-        for ($i = 1; $i < $sizesListCount; $i++) {
-            if (
-                ($i + 1) < $sizesListCount
-                && $sizesList[$i - 1] == ((int)$sizesList[$i] - 1)
-                && $sizesList[$i + 1] == ((int)$sizesList[$i] + 1)
-            ) {
-                $sizesStr .= $useDash ? '' : '-';
-                $useDash = true;
-            } else {
-                $sizesStr .= ($useDash ? '' : ',') . $sizesList[$i];
-                $useDash = false;
+        if (!empty($product->fabric_top_txt)) {
+            $description .= 'Материал';
+            if ($product->category->parent_id != Category::ACCESSORIES_PARENT_ID) {
+                $description .= ' верха';
             }
+            $description .= ": {$product->fabric_top_txt}. ";
         }
 
-        return $sizesStr;
+        if (!empty($product->fabric_insole_txt)) {
+            $description .= "Материал подкладки: {$product->fabric_insole_txt}. ";
+        }
+
+        if (!empty($product->fabric_outsole_txt)) {
+            $description .= "Материал подошвы: {$product->fabric_outsole_txt}. ";
+        }
+
+        if (!empty($product->heel_txt)) {
+            $description .=  "Высота каблука: {$product->heel_txt}. ";
+        }
+
+        $description .= $product->description;
+
+        $description = trim(strip_tags($description));
+        $description = Str::limit($description, self::DESCRIPTION_MAX_WIDTH - 3, '...');
+
+        return $description;
     }
 }

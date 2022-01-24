@@ -24,6 +24,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \App\Models\Brand $brand
  * @property string $title
  * @property string $slug
+ * @property string $color_txt
+ * @property string $fabric_top_txt
+ * @property string $fabric_inner_txt
+ * @property string $fabric_insole_txt
+ * @property string $fabric_outsole_txt
+ * @property string $heel_txt
+ * @property string $description
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at

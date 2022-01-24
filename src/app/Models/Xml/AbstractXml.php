@@ -3,6 +3,7 @@
 namespace App\Models\Xml;
 
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Kalnoy\Nestedset\Collection as NestedsetCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
@@ -81,4 +82,33 @@ abstract class AbstractXml
         return $this->cache['product_categories'];
     }
 
+    /**
+     * Prepare sizes string from sizes list
+     *
+     * @param EloquentCollection $sizes
+     * @return string
+     */
+    protected function sizesToString(EloquentCollection $sizes): string
+    {
+        $sizesList = $sizes->pluck('name');
+        $sizesStr = 'Размеры: ' . ($sizesList[0] ?? 'без размера');
+
+        $useDash = false;
+        $sizesListCount = count($sizesList);
+        for ($i = 1; $i < $sizesListCount; $i++) {
+            if (
+                ($i + 1) < $sizesListCount
+                && $sizesList[$i - 1] == ((int)$sizesList[$i] - 1)
+                && $sizesList[$i + 1] == ((int)$sizesList[$i] + 1)
+            ) {
+                $sizesStr .= $useDash ? '' : '-';
+                $useDash = true;
+            } else {
+                $sizesStr .= ($useDash ? '' : ',') . $sizesList[$i];
+                $useDash = false;
+            }
+        }
+
+        return $sizesStr;
+    }
 }

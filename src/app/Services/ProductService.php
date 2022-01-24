@@ -80,9 +80,10 @@ class ProductService
             'colors:id,name',
         ])
             ->withTrashed()
+            ->has('brand')
             ->has('colors')
-            ->limit(5) // !!!
-            ->whereIn('id', [5303, 3415, 3489])
+            // ->limit(5) // !!!
+            // ->whereIn('id', [5303, 3415, 3489])
             ->get();
     }
 }
