@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $slug
  * @property string $path
  * @property string $title
+ * @property-read string $name
  * @property string $description
  */
 class Category extends Model
@@ -168,5 +169,15 @@ class Category extends Model
             'path' => 'catalog',
             'title' => 'Каталог',
         ]);
+    }
+
+    /**
+     * Get category name (accessor)
+     *
+     * @return string
+     */
+    public function getNameAttribute(): string
+    {
+        return $this->title;
     }
 }
