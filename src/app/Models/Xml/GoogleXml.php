@@ -59,7 +59,7 @@ class GoogleXml extends AbstractXml
      */
     protected function getItems(): array
     {
-        return (new ProductService)->getForXml()
+        return (new ProductService)->getForXml(true)
             ->map(function (Product $item) {
                 return (object)[
                     'id' => $item->id,

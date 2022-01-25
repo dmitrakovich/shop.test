@@ -24,6 +24,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \App\Models\Brand $brand
  * @property string $title
  * @property string $slug
+ * @property integer $category_id
  * @property string $color_txt
  * @property string $fabric_top_txt
  * @property string $fabric_inner_txt
