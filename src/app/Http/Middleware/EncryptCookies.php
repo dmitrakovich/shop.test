@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Device;
 use Illuminate\Cookie\Middleware\EncryptCookies as Middleware;
 
 class EncryptCookies extends Middleware
@@ -12,6 +13,8 @@ class EncryptCookies extends Middleware
      * @var array
      */
     protected $except = [
-        'utm'
+        'utm',
+        Device::YANDEX_ID_COOKIE_NAME,
+        Device::GOOGLE_ID_COOKIE_NAME,
     ];
 }
