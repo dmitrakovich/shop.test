@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 /**
@@ -15,6 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $first_name
  * @property string $last_name
  * @property string $patronymic_name
+ * @property-read Cart $cart
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -53,6 +55,16 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * User's cart
+     *
+     * @return BelongsTo
+     */
+    public function cart(): BelongsTo
+    {
+        return $this->belongsTo(Cart::class, 'cart_token');
+    }
 
     /**
      * User addresses

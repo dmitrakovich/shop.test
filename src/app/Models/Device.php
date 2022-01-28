@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Jenssegers\Agent\Facades\Agent;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -19,8 +19,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $google_id
  * @property string $type
  * @property string $agent
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read User $user
+ * @property-read Cart $cart
  */
 class Device extends Model
 {
@@ -118,6 +120,27 @@ class Device extends Model
             $device->setTypeAttribute();
             $device->setAgentAttribute();
         });
+    }
+
+    /**
+     * Get the user that owns the device.
+     *
+     * @todo need many to many relation
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the cart that owns the device.
+     *
+     * @return BelongsTo
+     */
+    public function cart(): BelongsTo
+    {
+        return $this->belongsTo(Cart::class);
     }
 
     /**
