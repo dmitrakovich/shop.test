@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Models\Device;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Auth;
 
 class SaveDevice
 {
@@ -27,14 +28,16 @@ class SaveDevice
     public function handle($event): void
     {
         $device = Device::getOrNew();
+        $user = $event->user ?? Auth::user();
 
-        if (!empty($event->user)) {
-            $device->user()->associate($event->user);
-            $device->cart()->associate($event->user->cart);
+        if (!empty($user)) {
+            $device->user()->associate($user);
+            $device->cart()->associate($user->cart);
         }
 
         if (!empty($event->order)) {
-            //
+            $event->order->device()->associate($device);
+            $event->order->save();
         }
 
         $device->save();

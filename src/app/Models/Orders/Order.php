@@ -3,6 +3,7 @@
 namespace App\Models\Orders;
 
 use App\Models\Country;
+use App\Models\Device;
 use Payments\PaymentMethod;
 use Deliveries\DeliveryMethod;
 use Illuminate\Support\Carbon;
@@ -47,6 +48,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
+ * @property-read Device $device
  * @property-read string $user_full_name
  * @property-read OrderStatus $status
  * @property-read Administrator $admin
@@ -135,6 +137,16 @@ class Order extends Model
                 'status:key,name_for_admin,name_for_user',
                 'size:id,name'
             ]);
+    }
+
+    /**
+     * The device from which the order was made
+     *
+     * @return Relations\BelongsTo
+     */
+    public function device(): Relations\BelongsTo
+    {
+        return $this->belongsTo(Device::class);
     }
 
     /**
