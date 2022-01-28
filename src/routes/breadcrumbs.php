@@ -75,9 +75,9 @@ Breadcrumbs::for('dashboard-orders', function ($trail) {
 });
 
 // Index > dashboard > saved
-Breadcrumbs::for('dashboard-saved', function ($trail) {
+Breadcrumbs::for('dashboard.favorites', function ($trail) {
     $trail->parent('dashboard');
-    $trail->push('Избранное', route('dashboard-saved'));
+    $trail->push('Избранное', route('dashboard.favorites'));
 });
 
 // Index > dashboard > profile

@@ -38,9 +38,9 @@
                 <a href="{{ route('orders.index') }}" class="btn border-right-0 p-0">
                     <img src="/images/icons/account.svg" alt="личный кабинет" class="img-fluid">
                 </a><!--
-                --><button class="btn border-right-0  p-0 d-none d-md-inline-block">
+                --><a href="{{ route('dashboard.favorites') }}" class="btn border-right-0 p-0 d-none d-md-flex">
                     <img src="/images/icons/favorites.svg" alt="избранное" class="img-fluid">
-                </button><!--
+                </a><!--
                 --><a href="{{ route('cart') }}" class="btn p-0 ml-2 ml-md-0">
                     <div class="position-relative">
                         <img src="/images/icons/cart.svg" alt="корзина" class="img-fluid">

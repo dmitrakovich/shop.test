@@ -28,7 +28,7 @@
                         {!! Currency::format($order->getTotalPrice(), $order->currency) !!}
                     </div>
                     <div class="col-12 col-md-3 order-3">
-                        {{ $order->country->name }}, {{ $order->user_addr }}
+                        {{ optional($order->country)->name }}, {{ $order->user_addr }}
                         @if (!empty($order->comment))
                             <hr>
                             {{ $order->comment }}

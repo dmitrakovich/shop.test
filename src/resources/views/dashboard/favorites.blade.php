@@ -2,7 +2,7 @@
 
 @section('title', 'Мои заказы')
 
-@section('breadcrumbs', Breadcrumbs::render('dashboard-card'))
+@section('breadcrumbs', Breadcrumbs::render('dashboard.favorites'))
 
 @section('content')
 <div class="col-3 d-none d-lg-block">
@@ -11,7 +11,7 @@
 
 
 <div class="col-12 col-lg-9 static-page">
-    
+
 
     избранное
 
