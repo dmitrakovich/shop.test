@@ -2,7 +2,7 @@
 
 @section('title', 'Мои заказы')
 
-@section('breadcrumbs', Breadcrumbs::render('dashboard.favorites'))
+@section('breadcrumbs', Breadcrumbs::render('dashboard-favorites'))
 
 @section('content')
 <div class="col-3 d-none d-lg-block">

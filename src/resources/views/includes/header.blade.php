@@ -38,7 +38,7 @@
                 <a href="{{ route('orders.index') }}" class="btn border-right-0 p-0">
                     <img src="/images/icons/account.svg" alt="личный кабинет" class="img-fluid">
                 </a><!--
-                --><a href="{{ route('dashboard.favorites') }}" class="btn border-right-0 p-0 d-none d-md-flex">
+                --><a href="{{ route('favorites.index') }}" class="btn border-right-0 p-0 d-none d-md-flex">
                     <img src="/images/icons/favorites.svg" alt="избранное" class="img-fluid">
                 </a><!--
                 --><a href="{{ route('cart') }}" class="btn p-0 ml-2 ml-md-0">

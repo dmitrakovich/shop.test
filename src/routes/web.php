@@ -3,7 +3,6 @@
 use App\Models\Url;
 use Illuminate\Support\Str;
 use App\Http\Requests\FilterRequest;
-// use App\Http\Controllers\Shop\OrderController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
@@ -52,10 +51,11 @@ Route::prefix('dashboard')->group(function () {
         Route::get('profile', [DashboardController::class, 'edit'])->name('dashboard-profile');
         Route::patch('profile/{user}/update', [DashboardController::class, 'update'])->name('dashboard-profile-update');
     });
-    Route::view('favorites', 'dashboard.favorites')->name('dashboard.favorites');
+    Route::resource('favorites', FavoriteController::class)->only('index');
     Route::view('card', 'dashboard.card')->name('dashboard-card');
     Route::get('{orders?}', function () { return redirect()->route('orders.index'); });
 });
+Route::resource('favorites', FavoriteController::class)->only(['store', 'destroy']);
 
 Route::post('currency/switch', [CurrencyController::class, 'switch'])->name('currency-switcher');
 
