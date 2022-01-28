@@ -102,9 +102,19 @@ class Device extends Model
      */
     public static function getOrNew(): self
     {
-        $id = Cookie::get(self::DEVICE_ID_COOKIE_NAME);
+        $id = Cookie::get(self::DEVICE_ID_COOKIE_NAME, self::getDefaultId());
 
         return self::firstOrNew(compact('id'));
+    }
+
+    /**
+     * Generate default id for undefineds
+     *
+     * @return string
+     */
+    protected static function getDefaultId(): string
+    {
+        return 'undefined_' . time();
     }
 
     /**
