@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -191,6 +192,16 @@ class Product extends Model implements HasMedia
     public function url()
     {
         return $this->morphOne(Url::class, 'model');
+    }
+
+    /**
+     * Get the favorite associated with the product.
+     *
+     * @return Relations\HasOne
+     */
+    public function favorite(): Relations\HasOne
+    {
+        return $this->hasOne(Favorite::class);
     }
 
     /**

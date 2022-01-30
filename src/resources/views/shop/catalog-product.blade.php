@@ -8,6 +8,12 @@
                 -{{ $product->getSalePercentage() }}%
             </span>
         @endif
+
+        @include('partials.buttons.favorite', [
+            'favoriteProductId' => $product->id,
+            'favoriteState' => isset($product->favorite)
+        ])
+
         <a href="{{ $product->getUrl() }}">
             <img
                 src="{{ $product->getFirstMedia()->getUrl('catalog') }}"

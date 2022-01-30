@@ -118,6 +118,16 @@ class Device extends Model
     }
 
     /**
+     * Return device id
+     *
+     * @return string
+     */
+    public static function getId(): string
+    {
+        return Cookie::get(self::DEVICE_ID_COOKIE_NAME) ?? self::getDefaultId();
+    }
+
+    /**
      * The "booted" method of the model.
      *
      * @return void
