@@ -421,16 +421,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.3.0",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "a4b37db6f186b6843474189b424aed6a7cc5de4b"
+                "reference": "5b6eb6c8ce65ebdc60b0c0960a676cf76758dbf2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/a4b37db6f186b6843474189b424aed6a7cc5de4b",
-                "reference": "a4b37db6f186b6843474189b424aed6a7cc5de4b",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/5b6eb6c8ce65ebdc60b0c0960a676cf76758dbf2",
+                "reference": "5b6eb6c8ce65ebdc60b0c0960a676cf76758dbf2",
                 "shasum": ""
             },
             "require": {
@@ -512,7 +512,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.3.0"
+                "source": "https://github.com/doctrine/dbal/tree/3.3.1"
             },
             "funding": [
                 {
@@ -528,7 +528,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-18T00:13:52+00:00"
+            "time": "2022-01-30T17:50:59+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -2779,26 +2779,26 @@
         },
         {
             "name": "laravie/serialize-queries",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravie/serialize-queries.git",
-                "reference": "28a02c387f04bf167db816a9fce87e5d80bbe0e6"
+                "reference": "11093aa3d2c646a5492d4b81f716b8bbdc654117"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravie/serialize-queries/zipball/28a02c387f04bf167db816a9fce87e5d80bbe0e6",
-                "reference": "28a02c387f04bf167db816a9fce87e5d80bbe0e6",
+                "url": "https://api.github.com/repos/laravie/serialize-queries/zipball/11093aa3d2c646a5492d4b81f716b8bbdc654117",
+                "reference": "11093aa3d2c646a5492d4b81f716b8bbdc654117",
                 "shasum": ""
             },
             "require": {
-                "illuminate/database": "^5.8 || ^6.0 || ^7.0 || ^8.0",
-                "illuminate/queue": "^5.8 || ^6.0 || ^7.0 || ^8.0",
+                "illuminate/database": "^5.8.35 || ^6.20.26 || ^7.30.3 || ^8.63",
+                "illuminate/queue": "^5.8.35 || ^6.20.26 || ^7.30.3 || ^8.63",
                 "opis/closure": "^3.4.2",
                 "php": "^7.1 || ^8.0"
             },
             "require-dev": {
-                "orchestra/testbench": "~3.8.6 || ^4.16 || ^5.18 || ^6.17"
+                "orchestra/testbench": "~3.8.6 || ^4.16 || ^5.18 || ^6.22"
             },
             "type": "library",
             "extra": {
@@ -2827,7 +2827,7 @@
             "description": "Serializable Laravel Query Builder",
             "support": {
                 "issues": "https://github.com/laravie/serialize-queries/issues",
-                "source": "https://github.com/laravie/serialize-queries/tree/v1.0.0"
+                "source": "https://github.com/laravie/serialize-queries/tree/v1.0.1"
             },
             "funding": [
                 {
@@ -2839,7 +2839,7 @@
                     "type": "liberapay"
                 }
             ],
-            "time": "2021-08-01T10:00:52+00:00"
+            "time": "2021-12-12T15:18:21+00:00"
         },
         {
             "name": "league/commonmark",
@@ -6601,16 +6601,16 @@
         },
         {
             "name": "symfony/http-kernel",
-            "version": "v5.4.3",
+            "version": "v5.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "936ca1ba7fb197c9e100a68d7e963b93d99db26e"
+                "reference": "49f40347228c773688a0488feea0175aa7f4d268"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/936ca1ba7fb197c9e100a68d7e963b93d99db26e",
-                "reference": "936ca1ba7fb197c9e100a68d7e963b93d99db26e",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/49f40347228c773688a0488feea0175aa7f4d268",
+                "reference": "49f40347228c773688a0488feea0175aa7f4d268",
                 "shasum": ""
             },
             "require": {
@@ -6693,7 +6693,7 @@
             "description": "Provides a structured process for converting a Request into a Response",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-kernel/tree/v5.4.3"
+                "source": "https://github.com/symfony/http-kernel/tree/v5.4.4"
             },
             "funding": [
                 {
@@ -6709,7 +6709,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-28T11:06:03+00:00"
+            "time": "2022-01-29T18:08:07+00:00"
         },
         {
             "name": "symfony/mime",
@@ -8704,26 +8704,26 @@
     "packages-dev": [
         {
             "name": "barryvdh/laravel-debugbar",
-            "version": "v3.6.5",
+            "version": "v3.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-debugbar.git",
-                "reference": "ccf109f8755dcc7e58779d1aeb1051b04e0b4bef"
+                "reference": "f92fe967b40b36ad1ee8ed2fd59c05ae67a1ebba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/ccf109f8755dcc7e58779d1aeb1051b04e0b4bef",
-                "reference": "ccf109f8755dcc7e58779d1aeb1051b04e0b4bef",
+                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/f92fe967b40b36ad1ee8ed2fd59c05ae67a1ebba",
+                "reference": "f92fe967b40b36ad1ee8ed2fd59c05ae67a1ebba",
                 "shasum": ""
             },
             "require": {
-                "illuminate/routing": "^6|^7|^8",
-                "illuminate/session": "^6|^7|^8",
-                "illuminate/support": "^6|^7|^8",
+                "illuminate/routing": "^6|^7|^8|^9",
+                "illuminate/session": "^6|^7|^8|^9",
+                "illuminate/support": "^6|^7|^8|^9",
                 "maximebf/debugbar": "^1.17.2",
                 "php": ">=7.2",
-                "symfony/debug": "^4.3|^5",
-                "symfony/finder": "^4.3|^5"
+                "symfony/debug": "^4.3|^5|^6",
+                "symfony/finder": "^4.3|^5|^6"
             },
             "require-dev": {
                 "mockery/mockery": "^1.3.3",
@@ -8773,7 +8773,7 @@
             ],
             "support": {
                 "issues": "https://github.com/barryvdh/laravel-debugbar/issues",
-                "source": "https://github.com/barryvdh/laravel-debugbar/tree/v3.6.5"
+                "source": "https://github.com/barryvdh/laravel-debugbar/tree/v3.6.6"
             },
             "funding": [
                 {
@@ -8785,7 +8785,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-14T14:45:18+00:00"
+            "time": "2021-12-21T18:20:10+00:00"
         },
         {
             "name": "doctrine/instantiator",
