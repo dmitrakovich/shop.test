@@ -3,44 +3,49 @@
 <div class="col-12 product-page">
     <div class="row">
         <div class="col-12 col-md-6 col-xl-7">
+            <div class="position-relative">
+                @include('partials.buttons.favorite', [
+                    'favoriteProductId' => $product->id,
+                    'favoriteState' => isset($product->favorite)
+                ])
 
-            @if ($product->getSalePercentage())
-                <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 10px; background: #D22020; z-index: 1;">
-                    -{{ $product->getSalePercentage() }}%
-                </span>
-            @endif
+                @if ($product->getSalePercentage())
+                    <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 0px; background: #D22020; z-index: 1;">
+                        -{{ $product->getSalePercentage() }}%
+                    </span>
+                @endif
 
-            <div class="slider-for">
-                @foreach ($product->getMedia() as $image)
-                    @if ($image->hasCustomProperty('video'))
-                        <div>
-                            <iframe src="{{ UrlHelper::getEmbedVideoUrl($image->getCustomProperty('video')) }}"
-                                class="w-100"
-                                style="min-height: 55vh"
-                                allowfullscreen
-                                frameborder="0">
-                            </iframe>
+                <div class="slider-for">
+                    @foreach ($product->getMedia() as $image)
+                        @if ($image->hasCustomProperty('video'))
+                            <div>
+                                <iframe src="{{ UrlHelper::getEmbedVideoUrl($image->getCustomProperty('video')) }}"
+                                    class="w-100"
+                                    style="min-height: 55vh"
+                                    allowfullscreen
+                                    frameborder="0">
+                                </iframe>
+                            </div>
+                        @else
+                            <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
+                                <img src="{{ $image->getUrl('normal') }}" alt="{{ $product->extendedName() }}" class="img-fluid">
+                            </a>
+                        @endif
+                    @endforeach
+                </div>
+                <div class="slider-nav mb-3 row" style="max-width: 720px">
+                    @foreach ($product->getMedia() as $key => $image)
+                        <div class="col-auto">
+                            <div class="position-relative d-inline-block">
+                                <img src="{{ $image->getUrl('thumb') }}" alt="{{ $product->extendedName() }} миниатюра {{ ++$key }}" class="img-fluid">
+                                @if ($image->hasCustomProperty('video'))
+                                    <span class="youtube-play-icon"></span>
+                                @endif
+                            </div>
                         </div>
-                    @else
-                        <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
-                            <img src="{{ $image->getUrl('normal') }}" alt="{{ $product->extendedName() }}" class="img-fluid">
-                        </a>
-                    @endif
-                @endforeach
+                    @endforeach
+                </div>
             </div>
-            <div class="slider-nav mb-3 row" style="max-width: 720px">
-                @foreach ($product->getMedia() as $key => $image)
-                    <div class="col-auto">
-                        <div class="position-relative d-inline-block">
-                            <img src="{{ $image->getUrl('thumb') }}" alt="{{ $product->extendedName() }} миниатюра {{ ++$key }}" class="img-fluid">
-                            @if ($image->hasCustomProperty('video'))
-                                <span class="youtube-play-icon"></span>
-                            @endif
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-
         </div>
         <div class="col-12 col-md-6 col-xl-5">
             <div class="col-12">

@@ -3,16 +3,16 @@
 <div class="col-3 js-product-item product-item mb-3 text-center text-lg-left">
 
     <div class="mb-3 image position-relative">
+        @include('partials.buttons.favorite', [
+            'favoriteProductId' => $product->id,
+            'favoriteState' => isset($product->favorite)
+        ])
+
         @if ($product->getSalePercentage())
             <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 0; background: #D22020;">
                 -{{ $product->getSalePercentage() }}%
             </span>
         @endif
-
-        @include('partials.buttons.favorite', [
-            'favoriteProductId' => $product->id,
-            'favoriteState' => isset($product->favorite)
-        ])
 
         <a href="{{ $product->getUrl() }}">
             <img
