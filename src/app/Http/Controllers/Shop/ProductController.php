@@ -3,27 +3,34 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Models\Product;
+use App\Models\Url;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class ProductController extends BaseController
 {
-
-    public function show($slug, $params)
+    /**
+     * Display the specified product.
+     *
+     * @param Url $url
+     * @param array $params
+     * @return View
+     */
+    public function show(Url $url, array $params): View
     {
-        $product = Product::findOrFail($slug->model_id);
+        $product = Product::findOrFail($url->model_id);
 
         return view('shop.product-page', compact('product'));
     }
-    /**
-     * Быстрый просмотр
-     *
-     * @param integer $id
-     * @return void
-     */
-    public function quickView(int $id)
-    {
-        $product = Product::findOrFail($id);
 
+    /**
+     * Quick view
+     *
+     * @param Product $product
+     * @return View
+     */
+    public function quickView(Product $product): View
+    {
         return view('shop.product', compact('product'));
     }
 }
