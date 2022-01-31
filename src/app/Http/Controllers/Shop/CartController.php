@@ -8,9 +8,11 @@ use App\Facades\Sale;
 use App\Models\Country;
 use App\Models\Orders\Order;
 use App\Models\Product;
+use App\Services\ProductService;
 use Payments\PaymentMethod;
 use Illuminate\Http\Request;
 use Deliveries\DeliveryMethod;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Session;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
@@ -79,17 +81,20 @@ class CartController extends BaseController
     /**
      * Final cart page (order info)
      *
-     * @return \Illuminate\Contracts\View\View
+     * @param ProductService $productService
+     * @return View
      */
-    public function final()
+    public function final(ProductService $productService): View
     {
+        Session::flash('order_id', 1);
+
         if (!Session::has('order_id')) {
             return redirect()->route('orders.index');
         }
 
         return view('shop.cart-done', [
             'order' => Order::findOrFail(Session::get('order_id')),
-            'recomended' => Product::inRandomOrder()->limit(5)->get()
+            'recommended' => $productService->getRecommended(),
         ]);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Facades\Currency;
 use App\Models\Ads\ProductCarousel;
+use App\Models\Favorite;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -54,13 +55,14 @@ class SliderService
                         'speed' => $carousel->speed,
                         'products' => $products->map(function ($product) {
                             return [
+                                'id' => $product->id,
                                 'title' => $product->title,
                                 'full_name' => "{$product->category->title} {$product->brand->name}",
                                 'sale_percentage' => $product->getSalePercentage(),
                                 'price_byn' => $product->getFinalPrice(),
                                 'old_price_byn' => $product->getFinalOldPrice(),
                                 'url' => $product->getUrl(),
-                                'first_media' => $product->getFirstMedia()->getUrl('catalog')
+                                'first_media' => $product->getFirstMedia()->getUrl('catalog'),
                             ];
                         })->toArray()
                     ];
@@ -71,6 +73,7 @@ class SliderService
 
         foreach ($sliders as &$slider) {
             $this->addConvertedAndFormattedPrice($slider['products']);
+            $this->addFavorites($slider['products']);
         }
 
         return $sliders;
@@ -117,6 +120,7 @@ class SliderService
                 'speed' => $slider->speed,
                 'products' => $products->map(function ($product) {
                     return [
+                        'id' => $product->id,
                         'title' => $product->title,
                         'full_name' => "{$product->category->title} {$product->brand->name}",
                         'sale_percentage' => $product->getSalePercentage(),
@@ -124,13 +128,14 @@ class SliderService
                         'old_price_byn' => $product->getFinalOldPrice(),
                         'url' => $product->getUrl(),
                         'imidj_media' => $product->getMedia('default', ['is_imidj' => true])
-                            ->first()->getUrl('normal')
+                            ->first()->getUrl('normal'),
                     ];
                 })->toArray()
             ];
         });
 
         $this->addConvertedAndFormattedPrice($slider['products']);
+        $this->addFavorites($slider['products']);
 
         return $slider;
     }
@@ -146,6 +151,22 @@ class SliderService
         foreach ($products as &$product) {
             $product['formatted_price'] = Currency::convertAndFormat($product['price_byn']);
             $product['formatted_old_price'] = Currency::convertAndFormat($product['old_price_byn']);
+        }
+    }
+
+    /**
+     * Add favorites to products
+     *
+     * @param array $products
+     * @return void
+     */
+    protected function addFavorites(array &$products): void
+    {
+        $favorites = Favorite::whereIn('product_id', array_column($products, 'id'))
+                        ->pluck('product_id')->toArray();
+
+        foreach ($products as &$product) {
+            $product['favorite'] = in_array($product['id'], $favorites);
         }
     }
 }

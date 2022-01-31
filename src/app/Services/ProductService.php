@@ -87,4 +87,23 @@ class ProductService
             ->where('price', '>', 0)
             ->get();
     }
+
+    /**
+     * Return recommended products
+     *
+     * @return EloquentCollection
+     */
+    public function getRecommended(): EloquentCollection
+    {
+        return Product::with([
+            'category',
+            'media',
+            'brand:id,name',
+            'colors:id,name',
+            'favorite:product_id',
+        ])
+            ->inRandomOrder()
+            ->limit(5)
+            ->get();
+    }
 }

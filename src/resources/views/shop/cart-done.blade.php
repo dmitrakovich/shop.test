@@ -55,25 +55,9 @@
     <h3 class="font-weight-light">
         Специально для вас / Недавно просмотренные
     </h3>
-    <div class="row justify-content-center align-items-end">
-        @foreach ($recomended as $product)
-            <div class="col-12 col-md-auto js-product-item product-item mb-3 px-3 text-left">
-                <a href="{{ $product->category->getUrl() . '/' . $product->slug }}">
-                    <p>
-                        <img src="{{ $product->getFirstMedia()->getUrl('catalog') }}" alt="{{ $product->title }}"
-                                    class="img-fluid" style="max-width: 180px">
-                    </p>
-                </a>
-                <b>{{ $product->brand->name }} {{ $product->id }}</b> <br>
-                <span class="text-mutted">{{ $product->category->title }}</span> <br>
-                @if ($product->price < $product->old_price)
-                    <span class="old_price">{!! $product->getFormattedOldPrice() !!}</span>
-                    <span class="new_price">{!! $product->getFormattedPrice() !!}</span>
-                @else
-                    <span class="price">{!! $product->getFormattedPrice() !!}</span>
-                @endif
-
-            </div>
+    <div class="row justify-content-center mt-3 cart-done-recommended">
+        @foreach ($recommended as $product)
+            @include('shop.catalog-product', compact('product'))
         @endforeach
     </div>
     <div class="col-12 my-5 text-center">

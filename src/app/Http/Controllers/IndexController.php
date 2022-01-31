@@ -3,22 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ads\IndexLink;
-use Illuminate\Http\Request;
 use App\Services\InstagramService;
 use App\Services\SliderService;
 
 class IndexController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        // $this->middleware('auth');
-    }
-
     /**
      * Show the application dashboard.
      *

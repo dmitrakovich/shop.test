@@ -23,12 +23,17 @@
 }'>
     @foreach ($simpleSlider['products'] as $product)
     <div class="col position-relative">
+        @include('partials.buttons.favorite', [
+            'favoriteProductId' => $product['id'],
+            'favoriteState' => $product['favorite']
+        ])
+        @if ($product['sale_percentage'])
+            <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 10px; background: #D22020;">
+                -{{ $product['sale_percentage'] }}%
+            </span>
+        @endif
+
         <a href="{{ $product['url'] }}">
-            @if ($product['sale_percentage'])
-                <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 10px; background: #D22020;">
-                    -{{ $product['sale_percentage'] }}%
-                </span>
-            @endif
             <img
                 src="{{ $product['first_media'] }}"
                 alt="{{ $product['title'] }}"
