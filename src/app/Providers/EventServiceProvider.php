@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\OrderCreated;
+use App\Listeners\MergeFavorites;
 use App\Listeners\SaveDevice;
 use App\Listeners\SendOrderInformationNotification;
 use Illuminate\Auth\Events\Login;
@@ -24,6 +25,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         Login::class => [
             SaveDevice::class,
+            MergeFavorites::class,
         ],
         OrderCreated::class => [
             SendOrderInformationNotification::class,
