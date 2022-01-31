@@ -9,12 +9,11 @@
     @include('includes.dashboard-menu')
 </div>
 
-
-<div class="col-12 col-lg-9 static-page">
-
-
-    избранное
-
-
+<div class="col-12 col-lg-9 static-page favorites-page">
+    <div class="row justify-content-start">
+        @foreach ($products as $product)
+            @include('shop.catalog-product', compact('product'))
+        @endforeach
+    </div>
 </div>
 @endsection

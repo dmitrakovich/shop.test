@@ -45,7 +45,7 @@ class ProductService
                 'sizes:id,name',
                 'media',
                 'styles:id,name',
-                'favorite:product_id'
+                'favorite:product_id',
             ])
             ->search($search)
             ->sorting($sort);
@@ -63,6 +63,7 @@ class ProductService
             'sizes:id,name',
             'media',
             'styles:id,name',
+            'favorite:product_id',
         ])->get();
     }
 

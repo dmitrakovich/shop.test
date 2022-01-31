@@ -108,7 +108,7 @@ footer {
     }
 }
 
-.catalog-page {
+.catalog-page, .favorites-page {
     @include media-breakpoint-up(lg) {
         margin-bottom: 100px;
     }

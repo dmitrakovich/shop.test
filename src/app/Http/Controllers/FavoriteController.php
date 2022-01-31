@@ -4,19 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Device;
 use App\Models\Favorite;
+use App\Services\ProductService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the favorites.
      *
-     * @return \Illuminate\Http\Response
+     * @param ProductService $productService
+     * @return View
      */
-    public function index()
+    public function index(ProductService $productService): View
     {
-        return view('dashboard.favorites');
+        $favorites = Favorite::limit(100)->pluck('product_id')->toArray();
+        $products = $productService->getById($favorites);
+
+        return view('dashboard.favorites', compact('products'));
     }
 
     /**
