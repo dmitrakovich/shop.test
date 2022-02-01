@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\OrderCreated;
+use App\Listeners\MergeCart;
 use App\Listeners\MergeFavorites;
 use App\Listeners\SaveDevice;
 use App\Listeners\SendOrderInformationNotification;
@@ -26,6 +27,7 @@ class EventServiceProvider extends ServiceProvider
         Login::class => [
             SaveDevice::class,
             MergeFavorites::class,
+            MergeCart::class,
         ],
         OrderCreated::class => [
             SendOrderInformationNotification::class,

@@ -127,9 +127,9 @@ class Cart extends Model
     /**
      * Создать корзину, если она еще не создана
      *
-     * @return void
+     * @return self
      */
-    public function createIfNotExists(): void
+    public function createIfNotExists(): self
     {
         if (!$this->exists) {
             $this->save();
@@ -142,6 +142,8 @@ class Cart extends Model
                 Cookie::queue(cookie('cart_token', $this->id, 60 * 24 * 30, '/'));
             }
         }
+
+        return $this;
     }
 
     /**
