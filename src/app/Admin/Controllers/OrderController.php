@@ -17,6 +17,7 @@ use App\Models\Orders\OrderStatus;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
 use App\Models\Orders\OrderItemStatus;
+use App\Models\Size;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 
@@ -200,15 +201,32 @@ class OrderController extends AdminController
             $form->display('created_at', 'Дата');
         });
 
-        $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $form) {
-            $form->display('product_name', 'Название модели');
-            $form->image('product_photo', 'Фото товара')->readonly();
-            $form->display('size.name', 'Размер');
-            $form->select('status_key', 'Статус модели')->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'));
-            // 'product' => "<a href='{$item->product->getUrl()}' target='_blank'>{$item->product->getFullName()}</a>",
-            // 'availability' => $item->product->trashed() ? '<i class="fa fa-close text-red"></i>' : '<i class="fa fa-check text-green"></i>',
-            $form->currency('current_price')->symbol($form->getForm()->model()->currency)->readonly();
-        });
+        $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $nestedForm) {
+            $nestedForm->select('product_id', 'Id модели')->options(function ($id) {
+                return [$id => $id];
+            })->ajax('/api/product/product')
+                ->loads(
+                    ['size_id', 'product_name'],
+                    ['/api/product/sizes', '/api/product/name']
+                );
+
+
+
+            $nestedForm->select('product_name', 'Название модели')->options(function ($name) {
+                return [$name];
+            })->readOnly();
+            // $nestedForm->image('product_photo', 'Фото товара')->readonly();
+            $nestedForm->select('size_id', 'Размер')->options(function ($id) {
+                if ($size = Size::find($id)) {
+                    return [$size->id => $size->name];
+                }
+            })->required();
+            $nestedForm->select('status_key', 'Статус модели')
+                ->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'))
+                ->default(OrderItemStatus::DEFAULT_VALUE)
+                ->required();
+            $nestedForm->currency('current_price', 'Стоимость')->symbol($nestedForm->getForm()->model()->currency)->readonly();
+        })->setScript($this->getScriptForExtendedItems());
 
         $form->saving(function (Form $form) {
             if (!empty($form->order_method)) {
@@ -262,5 +280,16 @@ class OrderController extends AdminController
                 <a onclick="' . PrintOrder::printScript(request('order')) . '" class="btn btn-sm btn-success">
                 <i class="fa fa-print"></i>&nbsp;&nbsp;Печать</a></div>');
         };
+    }
+
+    protected function getScriptForExtendedItems()
+    {
+        return <<<JS
+// $("input.product_id, select.size_id").attr("disabled", true);
+
+// $(document).on(events, function () {
+
+// });
+JS;
     }
 }
