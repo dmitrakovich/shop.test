@@ -76,20 +76,24 @@ class CurrencyService
     }
 
     /**
-     * Set current currency
+     * Set & save current currency
      *
-     * @param string $currency
+     * @param string|null $currencyCode
+     * @param boolean $save
      * @return void
      */
-    public function setCurrentCurrency(?string $currencyCode = null)
+    public function setCurrentCurrency(?string $currencyCode = null, $save = true): void
     {
         if ($currencyCode) {
             $this->setCurrencyByCode($currencyCode);
-            $this->saveCurrentCurrency();
         } elseif (Cookie::has('current_currency')) {
             $this->setCurrencyByCode(Cookie::get('current_currency'));
+            $save = false;
         } else {
             $this->setCurrencyByCode($this->getCurrencyCodeByCountry());
+        }
+
+        if ($save) {
             $this->saveCurrentCurrency();
         }
     }
