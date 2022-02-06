@@ -2,10 +2,12 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Size;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use App\Models\Country;
+use App\Models\Product;
 use App\Models\Currency;
 use Payments\PaymentMethod;
 use App\Models\Orders\Order;
@@ -14,10 +16,10 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Widgets\Table;
 use App\Models\Enum\OrderMethod;
 use App\Models\Orders\OrderStatus;
+use App\Models\Orders\OrderItemStatus;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
-use App\Models\Orders\OrderItemStatus;
-use App\Models\Size;
+use App\Facades\Currency as CurrencyFacade;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 
@@ -184,9 +186,7 @@ class OrderController extends AdminController
             ->options(OrderMethod::getOptionsForSelect())
             ->default(OrderMethod::DEFAULT);
 
-        $form->hidden('utm_source');
-        $form->hidden('utm_medium');
-        $form->hidden('utm_campaign');
+        $this->setUtmSources($form);
 
         $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'));
 
@@ -202,20 +202,23 @@ class OrderController extends AdminController
         });
 
         $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $nestedForm) {
-            $nestedForm->select('product_id', 'Id модели')->options(function ($id) {
-                return [$id => $id];
-            })->ajax('/api/product/product')
+            $nestedForm->select('product_id', 'Id модели')
+                ->options(function ($id) { return [$id => $id]; })
+                ->ajax('/api/product/product')
+                ->attribute(['data-js-trigger' => 'product_id'])
                 ->loads(
                     ['size_id', 'product_name'],
                     ['/api/product/sizes', '/api/product/name']
                 );
-
-
-
-            $nestedForm->select('product_name', 'Название модели')->options(function ($name) {
-                return [$name];
-            })->readOnly();
-            // $nestedForm->image('product_photo', 'Фото товара')->readonly();
+            $nestedForm->hidden('count')->default(1);
+            $nestedForm->hidden('buy_price')->default(0);
+            $nestedForm->hidden('price');
+            $nestedForm->hidden('old_price');
+            $nestedForm->hidden('current_price');
+            $nestedForm->select('product_name', 'Название модели')
+                ->options(function ($name) { return [$name]; })
+                ->disable();
+            $nestedForm->image('product_photo', 'Фото товара')->readonly();
             $nestedForm->select('size_id', 'Размер')->options(function ($id) {
                 if ($size = Size::find($id)) {
                     return [$size->id => $size->name];
@@ -225,8 +228,38 @@ class OrderController extends AdminController
                 ->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'))
                 ->default(OrderItemStatus::DEFAULT_VALUE)
                 ->required();
-            $nestedForm->currency('current_price', 'Стоимость')->symbol($nestedForm->getForm()->model()->currency)->readonly();
+            $nestedForm->currency('current_price', 'Стоимость')->symbol($nestedForm->getForm()->model()->currency)->disable();
         })->setScript($this->getScriptForExtendedItems());
+
+        $form->saving(function (Form $form) {
+            CurrencyFacade::setCurrentCurrency($form->input('currency'), false);
+            foreach ($form->itemsExtended as $key => $item) {
+                if (str_starts_with($key, 'new')) {
+                    $product = Product::findOrFail($item['product_id']);
+                    $form->input("itemsExtended.$key.price", $product->getPrice());
+                    $form->input("itemsExtended.$key.old_price", $product->getOldPrice());
+                    $form->input("itemsExtended.$key.current_price", $product->getPrice());
+                }
+            }
+            /**
+             * @todo recalc order total price
+             */
+        });
+
+        return $form;
+    }
+
+    /**
+     * Set utm sources in form
+     *
+     * @param Form $form
+     * @return void
+     */
+    protected function setUtmSources(Form $form): void
+    {
+        $form->hidden('utm_source');
+        $form->hidden('utm_medium');
+        $form->hidden('utm_campaign');
 
         $form->saving(function (Form $form) {
             if (!empty($form->order_method)) {
@@ -236,8 +269,6 @@ class OrderController extends AdminController
                 $form->utm_campaign = $utmCampaign;
             }
         });
-
-        return $form;
     }
 
     /**
@@ -282,14 +313,36 @@ class OrderController extends AdminController
         };
     }
 
-    protected function getScriptForExtendedItems()
+    /**
+     * Js crutch
+     *
+     * @return string
+     */
+    protected function getScriptForExtendedItems(): string
     {
         return <<<JS
-// $("input.product_id, select.size_id").attr("disabled", true);
+$(function () {
+    // disable editing for current items in order
+    $('select.product_id, select.size_id').attr('disabled', true);
 
-// $(document).on(events, function () {
+    // prepare current images
+    $('#has-many-itemsExtended .file-input').each(function (index, element) {
+        let img = $(element).find('img').first().height(150);
+        $(this).empty().append(img);
+    });
 
-// });
+    // get product data for new item in order
+    $(document).on('change', '.itemsExtended.product_id', function () {
+        let itemBlock = $(this).parents('.has-many-itemsExtended-form');
+
+        $.get('/api/product/data', {q: $(this).val()}, function (response) {
+            let img = $('<img>').attr('src', response.image).height(150);
+            $(itemBlock).find('.file-input').empty().append(img)
+            // console.log(itemBlock);
+            // console.log(response);
+        });
+    });
+});
 JS;
     }
 }

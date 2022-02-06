@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group( function () {
 
 Route::prefix('product')->group(function () {
     Route::get('product', [ProductController::class, 'getById']);
+    Route::get('data', [ProductController::class, 'getProductDataById']);
     Route::get('name', [ProductController::class, 'getProductNameById']);
     Route::get('sizes', [ProductController::class, 'sizesByProductId']);
 });

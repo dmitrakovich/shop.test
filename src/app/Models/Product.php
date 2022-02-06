@@ -227,9 +227,9 @@ class Product extends Model implements HasMedia
     /**
      * Получить полное название продукта
      *
-     * @return void
+     * @return string
      */
-    public function getFullName()
+    public function getFullName(): string
     {
         return $this->brand->name . ' ' . $this->title;
     }
@@ -239,7 +239,7 @@ class Product extends Model implements HasMedia
      *
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url ?? ($this->url = $this->category->getUrl() . '/' . $this->slug);
     }

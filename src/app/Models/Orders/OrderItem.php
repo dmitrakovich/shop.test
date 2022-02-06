@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * class OrderItem
  *
+ * @property-read Product $product
  * @property-read OrderItemStatus $status
  */
 class OrderItem extends Model

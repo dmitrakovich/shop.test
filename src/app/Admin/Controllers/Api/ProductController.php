@@ -2,17 +2,17 @@
 
 namespace App\Admin\Controllers\Api;
 
-
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class ProductController extends Controller
 {
     /**
-     * Return products for select by id
+     * Return paginated products by id
      *
      * @param Request $request
      * @return LengthAwarePaginator
@@ -24,33 +24,55 @@ class ProductController extends Controller
         return Product::where('id', 'like', "%$id%")->paginate(null, ['id', 'id as text']);
     }
 
-    public function getProductNameById(Request $request)
+    /**
+     * Return product data
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function getProductDataById(Request $request): array
     {
         $product = $this->getProduct($request);
 
         return [
-            'text' => $product->extendedName()
+            /**
+             * @todo Remove getProductNameById()
+             */
+            // 'name' => $product->extendedName(),
+            'image' => $product->getFirstMediaUrl()
         ];
     }
 
     /**
-     * Undocumented function
+     * Return product name [text => name]
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function getProductNameById(Request $request): array
+    {
+    return ['text' => $this->getProduct($request)->extendedName()];
+    }
+
+    /**
+     * Return product sizes [id => text]
      *
      * @param Request $request
      * @return EloquentCollection
      */
     public function sizesByProductId(Request $request): EloquentCollection
     {
-        $product = $this->getProduct($request);
-
-        return $product->sizes()->get(['id', 'name as text']);
+        return $this->getProduct($request)->sizes()->get(['id', 'name as text']);
     }
 
-
-
-
-
-    protected function getProduct(Request $request)
+    /**
+     * Get Product model from request
+     *
+     * @param Request $request
+     * @throws ModelNotFoundException
+     * @return Product
+     */
+    protected function getProduct(Request $request): Product
     {
         $productId = $request->get('q');
 
