@@ -86,8 +86,6 @@ class CartController extends BaseController
      */
     public function final(ProductService $productService): View
     {
-        Session::flash('order_id', 1);
-
         if (!Session::has('order_id')) {
             return redirect()->route('orders.index');
         }
