@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Kalnoy\Nestedset\NodeTrait;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Support\Facades\Cache;
@@ -80,7 +81,12 @@ class Category extends Model
 
     public static function beforeApplyFilter(&$builder, &$values)
     {
-        $values = self::getChildrenCategoriesIdsList(end($values));
+        $currentCategoryId = end($values);
+        if ($currentCategoryId === self::ROOT_CATEGORY_ID) {
+            $values = false;
+        } else {
+            $values = self::getChildrenCategoriesIdsList($currentCategoryId);
+        }
     }
     /**
      * Получить список идентификаторов дочерних категорий
@@ -179,5 +185,26 @@ class Category extends Model
     public function getNameAttribute(): string
     {
         return $this->title;
+    }
+
+    /**
+     * Check category is root
+     *
+     * @return boolean
+     */
+    protected function isRoot(): bool
+    {
+        return $this->id === self::ROOT_CATEGORY_ID;
+    }
+
+    /**
+     * Prepare name for catalog page title
+     *
+     * @return string
+     */
+    public function getNameForCatalogTitle(): string
+    {
+        $name = $this->isRoot() ? 'женскую обувь' : $this->name;
+        return Str::lower($name);
     }
 }

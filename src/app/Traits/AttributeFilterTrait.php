@@ -17,25 +17,27 @@ trait AttributeFilterTrait
      */
     public static function applyFilter(Builder $builder, array $values)
     {
-        $IdList = $values; // array_keys($values);
+        self::beforeApplyFilter($builder, $values);
 
-        self::beforeApplyFilter($builder, $IdList);
+        if ($values === false) {
+            return $builder;
+        }
 
         if ($relationColumn = self::getRelationColumn()) {
-            if (count($IdList) == 1) {
-                return $builder->where($relationColumn, $IdList[0]);
+            if (count($values) == 1) {
+                return $builder->where($relationColumn, $values[0]);
             } else {
-                return $builder->whereIn($relationColumn, $IdList);
+                return $builder->whereIn($relationColumn, $values);
             }
         }
 
         $relationTable = $relationName = self::getRelationNameByClass();
 
-        return $builder->whereHas($relationName, function ($query) use ($IdList, $relationTable) {
-            if (count($IdList) == 1) {
-                $query->where("$relationTable.id", $IdList[0]);
+        return $builder->whereHas($relationName, function ($query) use ($values, $relationTable) {
+            if (count($values) == 1) {
+                $query->where("$relationTable.id", $values[0]);
             } else {
-                $query->whereIn("$relationTable.id", $IdList);
+                $query->whereIn("$relationTable.id", $values);
             }
         });
     }

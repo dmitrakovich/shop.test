@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Category;
 use App\Models\Url;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
@@ -55,27 +56,18 @@ class FilterRequest extends FormRequest
     {
         $filters = [];
         $slugs = $this->path() ? explode('/', $this->path()) : [];
-        unset($slugs[0]); // catalog
 
-        if (!empty($slugs)) {
-            $filtersTemp = Url::whereIn('slug', $slugs)
-                ->with('filters') // :id,name !!!
-                ->get(['slug', 'model_type', 'model_id']);
+        $filtersTemp = Url::whereIn('slug', $slugs)
+            ->with('filters')
+            ->get(['slug', 'model_type', 'model_id']);
 
-            foreach ($filtersTemp as $value) {
-                $filters[$value->model_type][$value->slug] = $value->toArray();
-            }
-            // говнокод на скорую руку для сортировки категорий в правильном порядке
-            if (isset($filters['App\Models\Category'])) {
-                $categoriesFilters = $filters['App\Models\Category'];
-                $filters['App\Models\Category'] = [];
-                foreach ($slugs as $slug) {
-                    if (isset($categoriesFilters[$slug])) {
-                        $filters['App\Models\Category'][$slug] = $categoriesFilters[$slug];
-                    }
-                }
-            }
+        foreach ($filtersTemp as $value) {
+            $filters[$value->model_type][$value->slug] = $value;
         }
+
+        uksort($filters[Category::class], function($a, $b) use ($slugs) {
+            return array_search($a, $slugs) > array_search($b, $slugs);
+        });
 
         $this->addTopProducts($filters);
 

@@ -35,4 +35,14 @@ class Url extends Model
     {
         return $this->morphTo('filters', 'model_type', 'model_id');
     }
+
+    /**
+     * Return ralation model
+     *
+     * @return Model
+     */
+    public function getFilterModel(): Model
+    {
+        return $this->filters;
+    }
 }

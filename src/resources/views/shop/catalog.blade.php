@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', "Купить {$categoryTitle} с примеркой по Беларуси")
+@section('title', "Купить {$category->getNameForCatalogTitle()} с примеркой по Беларуси")
 
 @section('breadcrumbs', Breadcrumbs::render('category', $category))
 

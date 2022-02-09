@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Shop;
 use App\Models\Filter;
 use App\Models\Category;
 use App\Helpers\UrlHelper;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\CatalogService;
 use App\Http\Requests\FilterRequest;
@@ -53,19 +52,11 @@ class CatalogController extends BaseController
             'price-down' => 'по убыванию цены',
         ];
 
-        // временное решение
-        if (isset($currentFilters['App\Models\Category'])) {
-            $category = Category::find(end($currentFilters['App\Models\Category'])['model_id']);
-            $categoryTitle = $category->title;
-        } else {
-            $category = Category::first();
-            $categoryTitle = 'женскую обувь';
-        }
+        $category = end($currentFilters[Category::class])->getFilterModel();
 
         return view('shop.catalog', [
             'products' => $products,
             'category' => $category,
-            'categoryTitle' => Str::lower($categoryTitle),
             'currentFilters' => $currentFilters,
             'filters' => Filter::all(),
             'sort' => $sort,

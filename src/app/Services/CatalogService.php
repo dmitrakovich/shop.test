@@ -28,7 +28,7 @@ class CatalogService
      * @param array $filters
      * @param string $sort
      * @param string|null $search
-     * @return \Illuminate\Contracts\Pagination\Paginator
+     * @return \Illuminate\Contracts\Pagination\CursorPaginator
      */
     public function getProducts(array $filters, string $sort, ?string $search = null)
     {
