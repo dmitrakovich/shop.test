@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FeedbackRequest;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
+use App\Http\Requests\FeedbackRequest;
+use App\Services\GoogleTagManagerService;
 
 class FeedbackController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param GoogleTagManagerService $gtmService
+     * @param string|null $type
      * @return \Illuminate\Http\Response
      */
-    public function index(?string $type = null)
+    public function index(GoogleTagManagerService $gtmService, ?string $type = null)
     {
         $type = Feedback::getType($type);
 
@@ -22,6 +25,8 @@ class FeedbackController extends Controller
             ->latest()
             ->type($type)
             ->paginate(50);
+
+        $gtmService->setViewForOther();
 
         return view('feedbacks', compact('type', 'feedbacks'));
     }

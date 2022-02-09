@@ -1,7 +1,5 @@
 <?php
 
-use App\Helpers\UrlHelper;
-
 return [
 
     /*
@@ -178,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Drandin\DeclensionNouns\DeclensionNounsServiceProvider::class,
         App\Providers\CartServiceProvider::class,
+        App\Providers\GoogleTagManagerProvider::class,
 
     ],
 

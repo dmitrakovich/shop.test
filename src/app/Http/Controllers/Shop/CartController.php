@@ -6,12 +6,13 @@ use App\Models\User;
 use App\Facades\Cart;
 use App\Facades\Sale;
 use App\Models\Country;
-use App\Models\Orders\Order;
 use App\Models\Product;
-use App\Services\ProductService;
 use Payments\PaymentMethod;
+use App\Models\Orders\Order;
+use App\Services\GoogleTagManagerService;
 use Illuminate\Http\Request;
 use Deliveries\DeliveryMethod;
+use App\Services\ProductService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Session;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
@@ -21,9 +22,10 @@ class CartController extends BaseController
     /**
      * Display a listing of the resource.
      *
+     * @param GoogleTagManagerService $gtmService
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(GoogleTagManagerService $gtmService)
     {
         $cart = Cart::withData();
         Sale::applyForCart($cart);
@@ -44,6 +46,8 @@ class CartController extends BaseController
         $countries = Country::get(['id', 'name', 'code', 'prefix']);
         $currentCountry = $countries->where('id', $user->getFirstAddress()->country_id)->first()
             ?? $countries->where('code', SxGeo::getCountry())->first();
+
+        $gtmService->setViewForCart($cart);
 
         return view('shop.cart', compact(
             'cart', 'user', 'deliveriesList', 'paymentsList', 'countries', 'currentCountry'
@@ -82,13 +86,16 @@ class CartController extends BaseController
      * Final cart page (order info)
      *
      * @param ProductService $productService
+     * @param GoogleTagManagerService $gtmService
      * @return View
      */
-    public function final(ProductService $productService): View
+    public function final(ProductService $productService, GoogleTagManagerService $gtmService): View
     {
         if (!Session::has('order_id')) {
             return redirect()->route('orders.index');
         }
+
+        $gtmService->setViewForOrder();
 
         return view('shop.cart-done', [
             'order' => Order::findOrFail(Session::get('order_id')),
