@@ -6,6 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
   if (!!productsContainer) {
     let cursor = document.getElementsByName('cursor')[0].value;
     let hasMoreProducts = document.getElementsByName('has_more')[0].value;
+    let gtmData = {
+      category: document.getElementsByName('gtm_category_name')[0].value,
+      search: document.getElementsByName('gtm_search_query')[0].value,
+    };
     let isLoading = false;
 
     document.addEventListener('scroll', function (e) {
@@ -18,13 +22,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         isLoading = true;
 
-        axios.get('/ajax-next-page', {params: {cursor}})
+        axios.get('/ajax-next-page', {params: {cursor, ...gtmData}})
           .then(function (response) {
             hasMoreProducts = response.data.has_more;
             cursor = response.data.cursor;
             response.data.rendered_products.forEach(productHtml => {
               productsContainer.insertAdjacentHTML('beforeend', productHtml);
             });
+            dataLayer.push(response.data.data_layer);
             isLoading = false;
           })
           .catch(function (error) {

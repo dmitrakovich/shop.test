@@ -29,8 +29,6 @@ class GoogleTagManagerProvider extends ServiceProvider
                 'page_content' => $content,
                 'event' => 'view_page',
             ]));
-
-
         });
 
 

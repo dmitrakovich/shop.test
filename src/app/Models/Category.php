@@ -207,4 +207,14 @@ class Category extends Model
         $name = $this->isRoot() ? 'женскую обувь' : $this->name;
         return Str::lower($name);
     }
+
+    /**
+     * Prepare name for GTM
+     *
+     * @return string
+     */
+    public function getNameForGTM(): string
+    {
+        return $this->isRoot() ? 'Женская обувь' : $this->name;
+    }
 }

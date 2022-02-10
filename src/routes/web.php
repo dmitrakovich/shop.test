@@ -15,6 +15,7 @@ use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
 use App\Http\Controllers\Shop\ProductController;
 use App\Services\CatalogService;
+use App\Services\GoogleTagManagerService;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,7 +73,7 @@ Route::group(['namespace' => 'Shop'], function () {
             return (new ProductController())->show($url, $request->input());
         }
         return (new CatalogController())->show(
-            new CatalogService(), FilterRequest::createFrom($request)
+            new CatalogService(), FilterRequest::createFrom($request), new GoogleTagManagerService
         );
     })
         ->where('path', '[a-zA-Z0-9/_-]+')

@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Facades\Currency;
-use App\Models\Cart;
-use App\Models\Product;
+use Illuminate\Support\Collection;
+use Spatie\GoogleTagManager\DataLayer;
+use App\Models\{Cart, Category, Product};
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class GoogleTagManagerService
@@ -67,5 +68,47 @@ class GoogleTagManagerService
     public function setViewForOther(): void
     {
         GoogleTagManagerFacade::view('other');
+    }
+
+    /**
+     * Generate & return dataLayer script for view event for index page
+     *
+     * @param Collection $products
+     * @param string|Category $category
+     * @param string|null $searchQuery
+     * @return DataLayer
+     */
+    public function getViewForCatalog($products, $category, ?string $searchQuery = null): DataLayer
+    {
+        $this->setViewForCatalog($products, $category, $searchQuery);
+
+        return GoogleTagManagerFacade::getDataLayer();
+    }
+
+    /**
+     * Set GTM view event for index page
+     *
+     * @param Collection $products
+     * @param string|Category $category
+     * @param string|null $searchQuery
+     * @return void
+     */
+    public function setViewForCatalog($products, $category, ?string $searchQuery = null): void
+    {
+        if ($category instanceof Category) {
+            $category = $category->getNameForGTM();
+        }
+
+        if (!empty($searchQuery)) {
+            GoogleTagManagerFacade::view('search_result', [
+                'query' => $searchQuery,
+                'ids' => $products->implode('id', ',')
+            ]);
+        } else {
+            GoogleTagManagerFacade::view('catalog', [
+                'category' => $category,
+                'ids' => $products->implode('id', ',')
+            ]);
+        }
     }
 }
