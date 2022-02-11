@@ -39,7 +39,14 @@ class GoogleTagManagerProvider extends ServiceProvider
             ]));
         });
 
-
+        GoogleTagManagerFacade::macro('user', function (string $action) {
+            GoogleTagManagerFacade::flash([
+                'event' => 'user_event',
+                'event_label' => $action,
+                'event_category' => 'user',
+                'event_action' => $action,
+            ]);
+        });
     }
 
     /**

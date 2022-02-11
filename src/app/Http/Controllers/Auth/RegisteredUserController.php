@@ -11,6 +11,7 @@ use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\Auth\SyncRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Support\Arr;
+use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class RegisteredUserController extends Controller
 {
@@ -41,6 +42,8 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+
+        GoogleTagManagerFacade::user('userRegistration');
 
         Auth::login($user);
 

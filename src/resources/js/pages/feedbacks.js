@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
       data.append('captcha_token', token);
 
       axios.post('/feedbacks', data).then((response) => {
-        feedbackForm.outerHTML = response.data;
+        feedbackForm.outerHTML = response.data.result;
+        dataLayer.push(response.data.dataLayer);
       }).catch((error) => {
         if (error.response.status != 422) {
           return false;

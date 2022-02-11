@@ -6,6 +6,7 @@ use App\Models\Feedback;
 use Illuminate\Http\Request;
 use App\Http\Requests\FeedbackRequest;
 use App\Services\GoogleTagManagerService;
+use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class FeedbackController extends Controller
 {
@@ -56,6 +57,11 @@ class FeedbackController extends Controller
         //     $feedback->addMedia($video->getPathname())->toMediaCollection();
         // }
 
-        return 'После модерации Ваш отзыв будет опубликован на сайте.';
+        GoogleTagManagerFacade::user('userReview');
+
+        return [
+            'result' => 'После модерации Ваш отзыв будет опубликован на сайте.',
+            'dataLayer' => GoogleTagManagerFacade::getFlashData()
+        ];
     }
 }
