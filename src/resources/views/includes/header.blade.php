@@ -14,16 +14,16 @@
             <div class="col-auto d-none d-lg-block">
                 <p style="line-height: 1.15rem;"><small>
                     Ежедневно&nbsp;с 10:00&nbsp;до&nbsp;22:00<br>
-                    <a href="{{ config('contacts.phone.link') }}">
+                    <a href="{{ config('contacts.phone.link') }}" data-gtm-user-event="callPhone">
                         {{ config('contacts.phone.name') }}
                     </a><br/>
-                    <a href="{{ config('contacts.viber.link') }}">
+                    <a href="{{ config('contacts.viber.link') }}" data-gtm-user-event="callViber">
                         {{ config('contacts.viber.name') }}
                     </a> /
-                    <a href="{{ config('contacts.telegram.link') }}">
+                    <a href="{{ config('contacts.telegram.link') }}" data-gtm-user-event="callTelegram">
                         {{ config('contacts.telegram.name') }}
                     </a> /
-                    <a href="{{ config('contacts.whats-app.link') }}">
+                    <a href="{{ config('contacts.whats-app.link') }}" data-gtm-user-event="callWhatsApp">
                         {{ config('contacts.whats-app.name') }}
                     </a>
                 </small></p>
