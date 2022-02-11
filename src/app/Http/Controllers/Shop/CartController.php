@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Models\User;
-use App\Facades\Cart;
-use App\Facades\Sale;
-use App\Models\Country;
-use App\Models\Product;
+use App\Facades\{Cart, Sale};
+use App\Models\{User, Guest, Country, Product};
 use Payments\PaymentMethod;
 use App\Models\Orders\Order;
-use App\Services\GoogleTagManagerService;
 use Illuminate\Http\Request;
 use Deliveries\DeliveryMethod;
 use App\Services\ProductService;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Session;
+use App\Services\GoogleTagManagerService;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 class CartController extends BaseController
@@ -87,18 +83,19 @@ class CartController extends BaseController
      *
      * @param ProductService $productService
      * @param GoogleTagManagerService $gtmService
-     * @return View
+     * @return \Illuminate\Http\Response
      */
-    public function final(ProductService $productService, GoogleTagManagerService $gtmService): View
+    public function final(ProductService $productService, GoogleTagManagerService $gtmService)
     {
         if (!Session::has('order_id')) {
             return redirect()->route('orders.index');
         }
-
+        $order = Order::findOrFail(Session::get('order_id'));
+        Guest::setData($order->only(['first_name', 'last_name', 'email', 'phone']));
         $gtmService->setViewForOrder();
 
         return view('shop.cart-done', [
-            'order' => Order::findOrFail(Session::get('order_id')),
+            'order' => $order,
             'recommended' => $productService->getRecommended(),
         ]);
     }
