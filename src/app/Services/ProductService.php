@@ -40,7 +40,7 @@ class ProductService
     {
         return $this->applyFilters($filters)
             ->with([
-                'category:id,title,path',
+                'category:id,parent_id,title,path',
                 'brand:id,name',
                 'sizes:id,name',
                 'media',

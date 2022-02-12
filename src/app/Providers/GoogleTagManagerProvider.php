@@ -20,7 +20,7 @@ class GoogleTagManagerProvider extends ServiceProvider
         GoogleTagManagerFacade::macro('view', function (string $page, ?array $content = null) {
             $currency = Currency::getCurrentCurrency();
             $userData = Auth::check() ?  Auth::user() : Guest::getData();
-            GoogleTagManagerFacade::set(array_filter([
+            GoogleTagManagerFacade::push(array_filter([
                 'pageType' => $page,
                 'user_type' => Auth::check() ? Auth::user()->usergroup_id : 'guest',
                 'user_id' => Auth::id(),
@@ -37,6 +37,16 @@ class GoogleTagManagerProvider extends ServiceProvider
                 'page_content' => $content,
                 'event' => 'view_page',
             ]));
+        });
+
+        GoogleTagManagerFacade::macro('ecommerce', function (string $action, array $ecommerce) {
+            GoogleTagManagerFacade::push([
+                'ecommerce' => $ecommerce,
+                'event' => 'ecom_event',
+                'event_label' => $action,
+                'event_category' => 'ecommerce',
+                'event_action' => $action,
+            ]);
         });
 
         GoogleTagManagerFacade::macro('user', function (string $action) {

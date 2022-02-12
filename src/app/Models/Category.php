@@ -184,7 +184,7 @@ class Category extends Model
      */
     public function getNameAttribute(): string
     {
-        return $this->title;
+        return $this->isRoot() ? 'Женская обувь' : $this->title;
     }
 
     /**
@@ -215,6 +215,12 @@ class Category extends Model
      */
     public function getNameForGTM(): string
     {
-        return $this->isRoot() ? 'Женская обувь' : $this->name;
+        $category = $this;
+        $name = $category->name;
+        while ($category->parentCategory) {
+            $category = $category->parentCategory;
+            $name = $category->name . '/' . $name;
+        }
+        return $name;
     }
 }

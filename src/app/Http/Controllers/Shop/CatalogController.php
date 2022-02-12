@@ -68,7 +68,7 @@ class CatalogController extends BaseController
 
         $category = end($currentFilters[Category::class])->getFilterModel();
 
-        $gtmService->setViewForCatalog($products, $category, $searchQuery);
+        $gtmService->setForCatalog($products, $category, $searchQuery);
 
         return view('shop.catalog', [
             'products' => $products,

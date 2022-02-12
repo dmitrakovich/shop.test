@@ -71,7 +71,7 @@ class GoogleTagManagerService
     }
 
     /**
-     * Generate & return dataLayer script for view event for index page
+     * Generate & return dataLayer script for view event for catalog page
      *
      * @param Collection $products
      * @param string|Category $category
@@ -86,7 +86,7 @@ class GoogleTagManagerService
     }
 
     /**
-     * Set GTM view event for index page
+     * Set GTM view event for catalog page
      *
      * @param Collection $products
      * @param string|Category $category
@@ -110,5 +110,61 @@ class GoogleTagManagerService
                 'ids' => $products->implode('id', ',')
             ]);
         }
+    }
+
+    /**
+     * Prepare products array
+     *
+     * @param Collection $products
+     * @param integer|null $quantity
+     * @return array
+     */
+    protected function prepareProductsArray($products, ?int $quantity = null): array
+    {
+        $currentCurrencyCode = Currency::getCurrentCurrency()->code;
+        Currency::setCurrentCurrency('USD', false);
+
+        $preparedProducts = $products->map(function (Product $product) {
+            return [
+                'name' => $product->brand->name . ' '. $product->id,
+                'id' => $product->id,
+                'price' => $product->getPrice(),
+                'brand' => $product->brand->name,
+                'category' => $product->category->getNameForGTM(),
+                // 'quantity' => $quantity,
+            ];
+        })->toArray();
+
+        Currency::setCurrentCurrency($currentCurrencyCode, false);
+
+        return $preparedProducts;
+    }
+
+    /**
+     * Set GTM ecommerce event for catalog page
+     *
+     * @param Collection $products
+     * @return void
+     */
+    public function setEcommerceForCatalog($products): void
+    {
+        GoogleTagManagerFacade::ecommerce('productImpressions', [
+            'currencyCode' => 'USD',
+            'impressions' => $this->prepareProductsArray($products),
+        ]);
+    }
+
+    /**
+     * Set events for catalog page
+     *
+     * @param Collection $products
+     * @param string|Category $category
+     * @param string|null $searchQuery
+     * @return void
+     */
+    public function setForCatalog($products, $category, ?string $searchQuery = null): void
+    {
+        $this->setViewForCatalog($products, $category, $searchQuery);
+        $this->setEcommerceForCatalog($products);
     }
 }
