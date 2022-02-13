@@ -163,17 +163,19 @@ class CurrencyService
         return $this->currency;
     }
 
-    /**
-     * Convert price in current currency
-     *
-     * @param float $priceInByn
-     * @return float
-     */
-    public function convert(float $priceInByn): float
+   /**
+    * Convert price in needed or current currency
+    *
+    * @param float $priceInByn
+    * @param string|null $currencyCode
+    * @return float
+    */
+    public function convert(float $priceInByn, ?string $currencyCode = null): float
     {
-        $precision = 10 ** $this->currency->decimals;
-        $priceInCurrency = $priceInByn * $this->currency->rate;
-        return ceil(round($priceInCurrency * $precision, $this->currency->decimals)) / $precision;
+        $currency = $this->allCurrencies[$currencyCode] ?? $this->currency;
+        $precision = 10 ** $currency->decimals;
+        $priceInCurrency = $priceInByn * $currency->rate;
+        return ceil(round($priceInCurrency * $precision, $currency->decimals)) / $precision;
     }
 
     /**

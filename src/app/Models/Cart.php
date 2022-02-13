@@ -61,15 +61,16 @@ class Cart extends Model
     }
 
     /**
-     * Получить общую стоимость товаров в корзине
+     * Get all items cart price
      *
+     * @param string|null $currencyCode
      * @return float
      */
-    public function getTotalPrice(): float
+    public function getTotalPrice(?string $currencyCode = null): float
     {
         $price = 0;
         foreach ($this->items as $item) {
-            $price += ($item->product->getPrice() * $item->count);
+            $price += ($item->product->getPrice($currencyCode) * $item->count);
         }
         return $price;
     }

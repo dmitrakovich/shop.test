@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Facades\Currency;
 use Illuminate\Support\Collection;
 use Spatie\GoogleTagManager\DataLayer;
 use App\Models\{Cart, Category, Product};
@@ -29,15 +28,10 @@ class GoogleTagManagerService
      */
     public function setViewForCart(Cart $cart): void
     {
-        $currentCurrencyCode = Currency::getCurrentCurrency()->code;
-        Currency::setCurrentCurrency('USD', false);
-
         GoogleTagManagerFacade::view('cart', [
             'ids' => $cart->items->implode('product_id', ','),
-            'value' => $cart->getTotalPrice(),
+            'value' => $cart->getTotalPrice('USD'),
         ]);
-
-        Currency::setCurrentCurrency($currentCurrencyCode, false);
     }
 
     /**
@@ -96,7 +90,7 @@ class GoogleTagManagerService
     public function setViewForCatalog($products, $category, ?string $searchQuery = null): void
     {
         if ($category instanceof Category) {
-            $category = $category->getNameForGTM();
+            $category = $category->getNameWithParents();
         }
 
         if (!empty($searchQuery)) {
@@ -115,29 +109,32 @@ class GoogleTagManagerService
     /**
      * Prepare products array
      *
+     * @param Product $product
+     * @return Collection
+     */
+    public function prepareProduct(Product $product): Collection
+    {
+        return new Collection([
+            'name' => $product->brand->name . ' '. $product->id,
+            'id' => $product->id,
+            'price' => $product->getPrice('USD'),
+            'brand' => $product->brand->name,
+            'category' => $product->category->getNameWithParents(),
+        ]);
+    }
+
+    /**
+     * Prepare products array
+     *
      * @param Collection $products
      * @param integer|null $quantity
      * @return array
      */
-    protected function prepareProductsArray($products, ?int $quantity = null): array
+    public function prepareProductsArray($products, ?int $quantity = null): array
     {
-        $currentCurrencyCode = Currency::getCurrentCurrency()->code;
-        Currency::setCurrentCurrency('USD', false);
-
-        $preparedProducts = $products->map(function (Product $product) {
-            return [
-                'name' => $product->brand->name . ' '. $product->id,
-                'id' => $product->id,
-                'price' => $product->getPrice(),
-                'brand' => $product->brand->name,
-                'category' => $product->category->getNameForGTM(),
-                // 'quantity' => $quantity,
-            ];
+        return $products->map(function (Product $product) {
+            return $this->prepareProduct($product)->toArray();
         })->toArray();
-
-        Currency::setCurrentCurrency($currentCurrencyCode, false);
-
-        return $preparedProducts;
     }
 
     /**

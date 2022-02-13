@@ -52,7 +52,7 @@
         <div class="col-12 scrolling-pagination px-0">
             <input type="hidden" name="cursor" value="{{{ optional($products->nextCursor())->encode() }}}">
             <input type="hidden" name="has_more" value="@json($products->hasMorePages())">
-            <input type="hidden" name="gtm_category_name" value="{{ $category->getNameForGTM() }}">
+            <input type="hidden" name="gtm_category_name" value="{{ $category->getNameWithParents() }}">
             <input type="hidden" name="gtm_search_query" value="{{ $searchQuery }}">
             <div class="row justify-content-start" id="catalog-endless-scroll">
                 @forelse($products as $product)

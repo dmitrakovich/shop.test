@@ -209,11 +209,11 @@ class Category extends Model
     }
 
     /**
-     * Prepare name for GTM
+     * Get category name with parents categories names
      *
      * @return string
      */
-    public function getNameForGTM(): string
+    public function getNameWithParents(): string
     {
         $category = $this;
         $name = $category->name;

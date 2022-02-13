@@ -8,11 +8,8 @@ use Illuminate\Support\Carbon;
 use App\Services\SearchService;
 use App\Models\ProductAttributes;
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\{Model, Builder, Relations, SoftDeletes};
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -366,13 +363,14 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * get product price
+     * Get product price
      *
+     * @param string|null $currencyCode
      * @return float
      */
-    public function getPrice()
+    public function getPrice(?string $currencyCode = null): float
     {
-        return Currency::convert($this->getFinalPrice());
+        return Currency::convert($this->getFinalPrice(), $currencyCode);
     }
 
     /**
@@ -410,13 +408,14 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * get product old price
+     * Get product old price
      *
+     * @param string|null $currencyCode
      * @return float
      */
-    public function getOldPrice()
+    public function getOldPrice(?string $currencyCode = null): float
     {
-        return Currency::convert($this->getFinalOldPrice());
+        return Currency::convert($this->getFinalOldPrice(), $currencyCode);
     }
 
     /**
