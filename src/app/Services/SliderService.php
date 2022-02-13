@@ -63,6 +63,7 @@ class SliderService
                                 'old_price_byn' => $product->getFinalOldPrice(),
                                 'url' => $product->getUrl(),
                                 'first_media' => $product->getFirstMedia()->getUrl('catalog'),
+                                'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                             ];
                         })->toArray()
                     ];
@@ -129,6 +130,7 @@ class SliderService
                         'url' => $product->getUrl(),
                         'imidj_media' => $product->getMedia('default', ['is_imidj' => true])
                             ->first()->getUrl('normal'),
+                        'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                     ];
                 })->toArray()
             ];

@@ -26,7 +26,10 @@
     ]
 }'>
     @foreach ($imidjSlider['products'] as $product)
-        <div class="col mb-main">
+        <div
+            class="col mb-main js-product-item"
+            data-gtm-product='{!! $product['dataLayer']->toJson() !!}'
+        >
             <div class="position-relative">
                 @include('partials.buttons.favorite', [
                     'favoriteProductId' => $product['id'],
@@ -37,7 +40,7 @@
                         -{{ $product['sale_percentage'] }}%
                     </span>
                 @endif
-                <a href="{{ $product['url'] }}">
+                <a href="{{ $product['url'] }}" data-gtm-click="productClick">
                     <img
                         src="{{ $product['imidj_media'] }}"
                         alt="{{ $product['title'] }}"

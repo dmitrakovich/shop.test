@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
+use App\Models\Product;
+use Illuminate\Support\Collection;
 use App\Models\ProductAttributes\Top;
 use Illuminate\Support\Facades\Cache;
 use Laravie\SerializesQuery\Eloquent;
 use Illuminate\Support\Facades\Session;
+use App\Services\GoogleTagManagerService;
 
 class CatalogService
 {
@@ -40,6 +43,8 @@ class CatalogService
         $this->addTopProducts($products, $filters);
         $products->totalCount = $productsQuery->count() + $this->topProductsCount($products);
 
+        $this->addGtmData($products);
+
         // save query in cache (1 hour)
         Cache::put($this->getQueryCacheKey(), Eloquent::serialize($productsQuery), 3600);
 
@@ -53,7 +58,11 @@ class CatalogService
         abort_if(empty($productsQuery), 419, 'Query cache not found');
 
         $productsQuery = Eloquent::unserialize($productsQuery);
-        return $productsQuery->cursorPaginate(self::PAGE_SIZE);
+        $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
+
+        $this->addGtmData($products);
+
+        return $products;
     }
 
     /**
@@ -98,5 +107,18 @@ class CatalogService
     protected function topProductsCount($products): int
     {
         return $products->count() - self::PAGE_SIZE;
+    }
+
+    /**
+     * Add GTM data to products
+     *
+     * @param Collection $products
+     * @return void
+     */
+    protected function addGtmData($products): void
+    {
+        $products->each(function (Product $product) {
+            $product->dataLayer = GoogleTagManagerService::prepareProduct($product);
+        });
     }
 }

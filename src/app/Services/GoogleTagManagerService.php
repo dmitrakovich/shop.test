@@ -110,11 +110,11 @@ class GoogleTagManagerService
      * Prepare products array
      *
      * @param Product $product
-     * @return Collection
+     * @return DataLayer
      */
-    public function prepareProduct(Product $product): Collection
+    public static function prepareProduct(Product $product): DataLayer
     {
-        return new Collection([
+        return new DataLayer([
             'name' => $product->brand->name . ' '. $product->id,
             'id' => $product->id,
             'price' => $product->getPrice('USD'),
@@ -133,7 +133,7 @@ class GoogleTagManagerService
     public function prepareProductsArray($products, ?int $quantity = null): array
     {
         return $products->map(function (Product $product) {
-            return $this->prepareProduct($product)->toArray();
+            return self::prepareProduct($product)->toArray();
         })->toArray();
     }
 

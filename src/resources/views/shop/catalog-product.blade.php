@@ -1,7 +1,9 @@
 <?php /** @var $product \App\Models\Product */ ?>
 
-<div class="col-3 js-product-item product-item mb-3 text-center text-lg-left">
-
+<div
+    class="col-3 js-product-item product-item mb-3 text-center text-lg-left"
+    data-gtm-product='{!! $product->dataLayer->toJson() !!}'
+>
     <div class="mb-3 image position-relative">
         @include('partials.buttons.favorite', [
             'favoriteProductId' => $product->id,
@@ -14,7 +16,7 @@
             </span>
         @endif
 
-        <a href="{{ $product->getUrl() }}">
+        <a href="{{ $product->getUrl() }}" data-gtm-click="productClick">
             <img
                 src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
                 alt="{{ $product->extendedName() }}"

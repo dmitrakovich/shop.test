@@ -22,7 +22,10 @@
     ]
 }'>
     @foreach ($simpleSlider['products'] as $product)
-    <div class="col position-relative">
+    <div
+        class="col position-relative js-product-item"
+        data-gtm-product='{!! $product['dataLayer']->toJson() !!}'
+    >
         @include('partials.buttons.favorite', [
             'favoriteProductId' => $product['id'],
             'favoriteState' => $product['favorite']
@@ -33,7 +36,7 @@
             </span>
         @endif
 
-        <a href="{{ $product['url'] }}">
+        <a href="{{ $product['url'] }}" data-gtm-click="productClick">
             <img
                 src="{{ $product['first_media'] }}"
                 alt="{{ $product['title'] }}"
