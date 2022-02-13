@@ -17,13 +17,14 @@ class ProductController extends BaseController
      * @param array $params
      * @return View
      */
-    public function show(Url $url, array $params): View
+    public function show(Url $url, array $params, GoogleTagManagerService $gtmService): View
     {
         $product = Product::findOrFail($url->model_id);
 
-        (new GoogleTagManagerService)->setViewForProduct($product);
+        $gtmService->setViewForProduct($product);
+        $dataLayer = $gtmService->prepareProduct($product);
 
-        return view('shop.product-page', compact('product'));
+        return view('shop.product-page', compact('product', 'dataLayer'));
     }
 
     /**
@@ -32,8 +33,10 @@ class ProductController extends BaseController
      * @param Product $product
      * @return View
      */
-    public function quickView(Product $product): View
+    public function quickView(Product $product, GoogleTagManagerService $gtmService): View
     {
-        return view('shop.product', compact('product'));
+        $dataLayer = $gtmService->prepareProduct($product);
+
+        return view('shop.product', compact('product', 'dataLayer'));
     }
 }

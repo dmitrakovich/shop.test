@@ -1,4 +1,9 @@
 $(function () {
+
+  if (typeof productDetail !== 'undefined') {
+    gtmProductDetailEvent(productDetail);
+  }
+
   $(document).on('click', '[data-gtm-click]', function (event) {
     event.preventDefault();
     let eventName = $(this).data('gtm-click');
@@ -22,12 +27,11 @@ $(function () {
 });
 
 /**
- *
  * @param {string} eventName
  * @param {Object} ecommerce
  * @param {Function} eventCallback
  */
-function gtmEcomEvent(eventName, ecommerce, eventCallback = () => {}) {
+gtmEcomEvent = function (eventName, ecommerce, eventCallback = () => {}) {
   dataLayer.push({
     'ecommerce': {
       'currencyCode': 'USD',
@@ -39,4 +43,13 @@ function gtmEcomEvent(eventName, ecommerce, eventCallback = () => {}) {
     'event_action': eventName,
     'eventCallback': eventCallback
   });
+}
+
+/**
+ * @param {Object} product
+ */
+gtmProductDetailEvent = function (product) {
+  gtmEcomEvent('productDetail', {'detail': {
+    'products': [product]
+  }});
 }

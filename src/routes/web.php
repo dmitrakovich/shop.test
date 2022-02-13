@@ -70,7 +70,7 @@ Route::group(['namespace' => 'Shop'], function () {
         $url = Url::search($slug);
 
         if (isset($url) && (new $url['model_type']) instanceof App\Models\Product) {
-            return (new ProductController())->show($url, $request->input());
+            return (new ProductController())->show($url, $request->input(), new GoogleTagManagerService);
         }
         return (new CatalogController())->show(
             new CatalogService(), FilterRequest::createFrom($request), new GoogleTagManagerService

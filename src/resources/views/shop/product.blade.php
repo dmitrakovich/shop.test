@@ -266,3 +266,7 @@
         </tbody></table>
     </div>
 </div>
+
+<script>
+    var productDetail = {!! $dataLayer->toJson() !!};
+</script>

@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       afterShow: function () {
         slickRefresh();
+        gtmProductDetailEvent(productDetail);
       }
     });
   });
