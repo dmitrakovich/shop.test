@@ -34,15 +34,13 @@ class CatalogController extends BaseController
             $renderedProducts[] = view('shop.catalog-product', compact('product'))->render();
         }
 
-        $dataLayer = $gtmService->getViewForCatalog(
-            $products, $request->input('category'), $request->input('search')
-        );
-
         return [
             'rendered_products' => $renderedProducts,
             'cursor' => optional($products->nextCursor())->encode(),
             'has_more' => $products->hasMorePages(),
-            'data_layer' => $dataLayer->toArray(),
+            'data_layers' => $gtmService->getForCatalogArrays(
+                $products, $request->input('category'), $request->input('search')
+            ),
         ];
     }
 

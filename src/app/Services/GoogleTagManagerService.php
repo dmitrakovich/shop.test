@@ -65,21 +65,6 @@ class GoogleTagManagerService
     }
 
     /**
-     * Generate & return dataLayer script for view event for catalog page
-     *
-     * @param Collection $products
-     * @param string|Category $category
-     * @param string|null $searchQuery
-     * @return DataLayer
-     */
-    public function getViewForCatalog($products, $category, ?string $searchQuery = null): DataLayer
-    {
-        $this->setViewForCatalog($products, $category, $searchQuery);
-
-        return GoogleTagManagerFacade::getDataLayer();
-    }
-
-    /**
      * Set GTM view event for catalog page
      *
      * @param Collection $products
@@ -145,10 +130,7 @@ class GoogleTagManagerService
      */
     public function setEcommerceForCatalog($products): void
     {
-        GoogleTagManagerFacade::ecommerce('productImpressions', [
-            'currencyCode' => 'USD',
-            'impressions' => $this->prepareProductsArray($products),
-        ]);
+        self::setEcommerceImpressions($this->prepareProductsArray($products));
     }
 
     /**
@@ -163,5 +145,36 @@ class GoogleTagManagerService
     {
         $this->setViewForCatalog($products, $category, $searchQuery);
         $this->setEcommerceForCatalog($products);
+    }
+
+    /**
+     * Generate & return dataLayer script for catalog page
+     *
+     * @param Collection $products
+     * @param string|Category $category
+     * @param string|null $searchQuery
+     * @return array
+     */
+    public function getForCatalogArrays($products, $category, ?string $searchQuery = null): array
+    {
+        $this->setForCatalog($products, $category, $searchQuery);
+
+        return GoogleTagManagerFacade::getPushData()->map(function (DataLayer $dataLayer) {
+            return $dataLayer->toArray();
+        })->toArray();
+    }
+
+    /**
+     * Set GTM ecommerce product impressions event
+     *
+     * @param array $impressions
+     * @return void
+     */
+    public static function setEcommerceImpressions(array $impressions): void
+    {
+        GoogleTagManagerFacade::ecommerce('productImpressions', [
+            'currencyCode' => 'USD',
+            'impressions' => $impressions,
+        ]);
     }
 }

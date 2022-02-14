@@ -73,6 +73,7 @@ class SliderService
         });
 
         foreach ($sliders as &$slider) {
+            $this->setDataLayerForPage($slider['products']);
             $this->addConvertedAndFormattedPrice($slider['products']);
             $this->addFavorites($slider['products']);
         }
@@ -136,6 +137,7 @@ class SliderService
             ];
         });
 
+        $this->setDataLayerForPage($slider['products']);
         $this->addConvertedAndFormattedPrice($slider['products']);
         $this->addFavorites($slider['products']);
 
@@ -170,5 +172,20 @@ class SliderService
         foreach ($products as &$product) {
             $product['favorite'] = in_array($product['id'], $favorites);
         }
+    }
+
+    /**
+     * Prepare impressions data & call GTR Service
+     *
+     * @param array $products
+     * @return void
+     */
+    protected function setDataLayerForPage(array $products): void
+    {
+        $impressions = [];
+        foreach ($products as $product) {
+            $impressions[] = $product['dataLayer']->toArray();
+        }
+        GoogleTagManagerService::setEcommerceImpressions($impressions);
     }
 }

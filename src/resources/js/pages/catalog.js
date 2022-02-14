@@ -29,7 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
             response.data.rendered_products.forEach(productHtml => {
               productsContainer.insertAdjacentHTML('beforeend', productHtml);
             });
-            dataLayer.push(response.data.data_layer);
+            response.data.data_layers.forEach(function (data) {
+              dataLayer.push(data);
+            });
             isLoading = false;
           })
           .catch(function (error) {
