@@ -162,7 +162,7 @@ class OrderController extends AdminController
         $form->number('user_id', __('User id'));
         $form->number('promocode_id', __('Promocode id'));
         $form->email('email', __('Email'));
-        $form->mobile('phone', __('Phone'));
+        $form->mobile('phone', __('Phone'))->rules(['integer'])->options(['mask' => null]);
         $form->textarea('comment', 'Коммментарий');
         $form->select('currency', 'Валюта')->options(Currency::pluck('code', 'code'))
             ->when('BYN', function (Form $form) {
