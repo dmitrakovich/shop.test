@@ -100,18 +100,8 @@ class ProductService
      */
     public function getRecommended(): EloquentCollection
     {
-        return Product::with([
-            'category',
-            'media',
-            'brand:id,name',
-            'colors:id,name',
-            'favorite:product_id',
-        ])
-            ->inRandomOrder()
-            ->limit(5)
-            ->get()
-            ->each(function (Product $product) {
-                $product->dataLayer = GoogleTagManagerService::prepareProduct($product);
-            });
+        return $this->getById(
+            Product::inRandomOrder()->limit(5)->pluck('id')->toArray()
+        );
     }
 }
