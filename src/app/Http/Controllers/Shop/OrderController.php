@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Contracts\OrderServiceIntarface;
 use App\Http\Requests\Order\SyncRequest;
 use App\Http\Requests\Order\StoreRequest;
+use App\Services\GoogleTagManagerService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class OrderController extends BaseController
@@ -45,9 +46,10 @@ class OrderController extends BaseController
      * Store a newly created resource in storage.
      *
      * @param  StoreRequest $request
+     * @param  GoogleTagManagerService $gtmService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request, GoogleTagManagerService $gtmService)
     {
         if ($request->isOneClick()) {
             $cart = Cart::make();
@@ -67,6 +69,8 @@ class OrderController extends BaseController
         Sale::applyForCart($cart);
 
         $order = app(OrderServiceIntarface::class)->store($request, $cart);
+
+        $gtmService->setPurchaseFlashEvent($order->items, $order->id, $request->isOneClick());
 
         Cart::clear();
 

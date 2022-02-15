@@ -40,7 +40,19 @@ class GoogleTagManagerProvider extends ServiceProvider
         });
 
         GoogleTagManagerFacade::macro('ecommerce', function (string $action, array $ecommerce) {
+            $ecommerce['currencyCode'] = 'USD';
             GoogleTagManagerFacade::push([
+                'ecommerce' => $ecommerce,
+                'event' => 'ecom_event',
+                'event_label' => $action,
+                'event_category' => 'ecommerce',
+                'event_action' => $action,
+            ]);
+        });
+
+        GoogleTagManagerFacade::macro('ecommerceFlash', function (string $action, array $ecommerce) {
+            $ecommerce['currencyCode'] = 'USD';
+            GoogleTagManagerFacade::flash([
                 'ecommerce' => $ecommerce,
                 'event' => 'ecom_event',
                 'event_label' => $action,

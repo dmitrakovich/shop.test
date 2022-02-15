@@ -105,6 +105,9 @@ class ProductService
         ])
             ->inRandomOrder()
             ->limit(5)
-            ->get();
+            ->get()
+            ->each(function (Product $product) {
+                $product->dataLayer = GoogleTagManagerService::prepareProduct($product);
+            });
     }
 }

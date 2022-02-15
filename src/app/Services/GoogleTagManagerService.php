@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Orders\OrderItem;
 use Illuminate\Support\Collection;
 use Spatie\GoogleTagManager\DataLayer;
 use App\Models\{Cart, Category, Product};
@@ -95,27 +96,28 @@ class GoogleTagManagerService
      * Prepare products array
      *
      * @param Product $product
+     * @param integer|null $quantity
      * @return DataLayer
      */
-    public static function prepareProduct(Product $product): DataLayer
+    public static function prepareProduct(Product $product, ?int $quantity = null): DataLayer
     {
-        return new DataLayer([
+        return new DataLayer(array_filter([
             'name' => $product->brand->name . ' '. $product->id,
             'id' => $product->id,
             'price' => $product->getPrice('USD'),
             'brand' => $product->brand->name,
             'category' => $product->category->getNameWithParents(),
-        ]);
+            'quantity' => $quantity,
+        ]));
     }
 
     /**
      * Prepare products array
      *
      * @param Collection $products
-     * @param integer|null $quantity
      * @return array
      */
-    public function prepareProductsArray($products, ?int $quantity = null): array
+    public function prepareProductsArray($products): array
     {
         return $products->map(function (Product $product) {
             return self::prepareProduct($product)->toArray();
@@ -173,34 +175,71 @@ class GoogleTagManagerService
     public static function setEcommerceImpressions(array $impressions): void
     {
         GoogleTagManagerFacade::ecommerce('productImpressions', [
-            'currencyCode' => 'USD',
             'impressions' => $impressions,
         ]);
     }
 
     /**
-     * Remove from cart flash event
+     * Set GTM ecommerce add to cart flash event
      *
      * @param Product $product
      * @param integer $quantity
      * @return void
      */
-    public function removeFromCartFlashEvent(Product $product, int $quantity): void
+    public function setAddToCartFlashEvent(Product $product, int $quantity): void
     {
-        $gtmProduct = self::prepareProduct($product)->toArray();
-        $gtmProduct['quantity'] = $quantity;
-
-        GoogleTagManagerFacade::flash([
-            'ecommerce' => [
-                'currencyCode' => 'USD',
-                'removeFromCart' => [
-                    'products' => [$gtmProduct]
+        GoogleTagManagerFacade::ecommerceFlash('productAdd', [
+            'addToCart' => [
+                'products' => [
+                    self::prepareProduct($product, $quantity)->toArray()
                 ]
             ],
-            'event' => 'ecom_event',
-            'event_label' => 'productRemove',
-            'event_category' => 'ecommerce',
-            'event_action' => 'productRemove',
+        ]);
+    }
+
+    /**
+     * Set GTM ecommerce remove from cart flash event
+     *
+     * @param Product $product
+     * @param integer $quantity
+     * @return void
+     */
+    public function setRemoveFromCartFlashEvent(Product $product, int $quantity): void
+    {
+        GoogleTagManagerFacade::ecommerceFlash('productRemove', [
+            'removeFromCart' => [
+                'products' => [
+                    self::prepareProduct($product, $quantity)->toArray()
+                ]
+            ],
+        ]);
+    }
+
+    /**
+     * Set GTM ecommerce purchase event
+     *
+     * @param Collection $orderItems
+     * @param integer $orderId
+     * @param boolean $isOneClick
+     * @return void
+     */
+    public function setPurchaseFlashEvent($orderItems, int $orderId, bool $isOneClick): void
+    {
+        $gtmProducts = $orderItems->map(function (OrderItem $item) {
+            return self::prepareProduct($item->product, $item->count)->toArray();
+        })->toArray();
+
+        if ($isOneClick) {
+            $item = $orderItems->first();
+            $this->setAddToCartFlashEvent($item->product, $item->count);
+            GoogleTagManagerFacade::ecommerceFlash('productOneClickOrder', []);
+        }
+
+        GoogleTagManagerFacade::ecommerceFlash('productPurchase', [
+            'purchase' => [
+                'actionField' => ['id' => $orderId],
+                'products' => $gtmProducts
+            ],
         ]);
     }
 }
