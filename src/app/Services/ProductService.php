@@ -64,7 +64,11 @@ class ProductService
             'media',
             'styles:id,name',
             'favorite:product_id',
-        ])->get();
+        ])
+        ->get()
+        ->each(function (Product $product) {
+            $product->dataLayer = GoogleTagManagerService::prepareProduct($product);
+        });
     }
 
     /**

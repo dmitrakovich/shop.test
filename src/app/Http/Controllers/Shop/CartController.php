@@ -95,9 +95,11 @@ class CartController extends BaseController
         if (!Session::has('order_id')) {
             return redirect()->route('orders.index');
         }
-        $order = Order::findOrFail(Session::get('order_id'));
+        $order = Order::with('items')->findOrFail(Session::get('order_id'));
         Guest::setData($order->only(['first_name', 'last_name', 'email', 'phone']));
+
         $gtmService->setViewForOrder();
+        $gtmService->setPurchaseEvent($order->items, $order->id, $order->isOneClick());
 
         return view('shop.cart-done', [
             'order' => $order,

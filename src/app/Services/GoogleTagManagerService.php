@@ -223,7 +223,7 @@ class GoogleTagManagerService
      * @param boolean $isOneClick
      * @return void
      */
-    public function setPurchaseFlashEvent($orderItems, int $orderId, bool $isOneClick): void
+    public function setPurchaseEvent($orderItems, int $orderId, bool $isOneClick): void
     {
         $gtmProducts = $orderItems->map(function (OrderItem $item) {
             return self::prepareProduct($item->product, $item->count)->toArray();
@@ -232,14 +232,17 @@ class GoogleTagManagerService
         if ($isOneClick) {
             $item = $orderItems->first();
             $this->setAddToCartFlashEvent($item->product, $item->count);
-            GoogleTagManagerFacade::ecommerceFlash('productOneClickOrder', []);
         }
 
-        GoogleTagManagerFacade::ecommerceFlash('productPurchase', [
+        GoogleTagManagerFacade::ecommerce('productPurchase', [
             'purchase' => [
                 'actionField' => ['id' => $orderId],
                 'products' => $gtmProducts
             ],
         ]);
+
+        if ($isOneClick) {
+            GoogleTagManagerFacade::ecommerce('productOneClickOrder', []);
+        }
     }
 }

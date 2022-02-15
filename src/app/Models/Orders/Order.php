@@ -2,11 +2,12 @@
 
 namespace App\Models\Orders;
 
-use App\Models\Country;
 use App\Models\Device;
+use App\Models\Country;
 use Payments\PaymentMethod;
 use Deliveries\DeliveryMethod;
 use Illuminate\Support\Carbon;
+use App\Models\Enum\OrderMethod;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Encore\Admin\Auth\Database\Administrator;
@@ -265,5 +266,15 @@ class Order extends Model
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('d.m.Y H:i:s');
+    }
+
+    /**
+     * Check is this order made in one click
+     *
+     * @return boolean
+     */
+    public function isOneClick(): bool
+    {
+        return $this->order_method == OrderMethod::ONECLICK;
     }
 }
