@@ -101,28 +101,17 @@ class Cart extends Model
             ]);
         }
 
-        $this->load('items'); // refresh;
+        $this->refreshItems();
     }
 
     /**
-     * Удалить товар из корзины
+     * Refresh car items
      *
-     * @param integer $itemId идентификатор удаляемого товара
-     * @param integer $count количество удаляемых товаров
      * @return void
      */
-    public function removeItem(int $itemId, int $count = 1): void
+    protected function refreshItems(): void
     {
-        $item = $this->items()->where('id', $itemId)->first();
-        if (isset($item)) {
-            if ($count == 0 || $item->count <= $count) {
-                $item->delete();
-            } else {
-                $item->decrement('count', $count);
-            }
-        }
-
-        $this->load('items'); // refresh;
+        $this->load('items');
     }
 
     /**

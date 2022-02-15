@@ -53,3 +53,25 @@ gtmProductDetailEvent = function (product) {
     'products': [product]
   }});
 }
+
+/**
+ * @param {Object} product
+ * @param {Number} quantity
+ */
+gtmProductAddEvent = function (product, quantity = 1) {
+  product['quantity'] = quantity;
+  gtmEcomEvent('productAdd', {'addToCart': {
+    'products': [product]
+  }});
+}
+
+/**
+ * @param {Object} product
+ * @param {Number} quantity
+ */
+gtmProductRemoveEvent = function (product, quantity = 1) {
+  product['quantity'] = quantity;
+  gtmEcomEvent('productRemove', {'removeFromCart': {
+    'products': [product]
+  }});
+}

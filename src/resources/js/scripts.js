@@ -51,6 +51,7 @@ $(function () {
                       type: 'danger',
                     }));
                 } else {
+                    gtmProductAddEvent(productDetail);
                     $.fancybox.open(Mustache.render(TEMPLATE_ADDED_TO_CART, {
                       text: 'Товар успешно добавлен в корзину',
                       type: 'success',
@@ -83,23 +84,6 @@ $(function () {
         }
 
         $('form#oneclick-form').trigger('submit');
-
-        /*let $form = $('form#product-info');
-        let $modal = $('#buy-one-click .col-12');
-
-        $modal.find('#buy-one-click-submit').prop('disabled', true);
-        $.fancybox.getInstance('showLoading');
-
-        $.ajax({
-            method: "post",
-            url: '/orders',
-            data: $form.serialize() + '&phone=' + phone + '&name=' + name + '&user_addr=' + address,
-            success: function (response) {
-                $modal.html(response).wrapInner('<h3>');
-                $.fancybox.getInstance('hideLoading');
-            }
-        });*/
-
     });
     //#endregion
 

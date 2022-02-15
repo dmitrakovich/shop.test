@@ -177,4 +177,30 @@ class GoogleTagManagerService
             'impressions' => $impressions,
         ]);
     }
+
+    /**
+     * Remove from cart flash event
+     *
+     * @param Product $product
+     * @param integer $quantity
+     * @return void
+     */
+    public function removeFromCartFlashEvent(Product $product, int $quantity): void
+    {
+        $gtmProduct = self::prepareProduct($product)->toArray();
+        $gtmProduct['quantity'] = $quantity;
+
+        GoogleTagManagerFacade::flash([
+            'ecommerce' => [
+                'currencyCode' => 'USD',
+                'removeFromCart' => [
+                    'products' => [$gtmProduct]
+                ]
+            ],
+            'event' => 'ecom_event',
+            'event_label' => 'productRemove',
+            'event_category' => 'ecommerce',
+            'event_action' => 'productRemove',
+        ]);
+    }
 }

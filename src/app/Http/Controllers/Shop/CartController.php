@@ -50,14 +50,19 @@ class CartController extends BaseController
         ));
     }
 
-    public function delete(Request $request, int $itemId)
+    /**
+     * Delete cart item
+     *
+     * @param Request $request
+     * @param GoogleTagManagerService $gtmService
+     * @param integer $itemId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete(Request $request, GoogleTagManagerService $gtmService, int $itemId)
     {
-        Cart::items()->where('id', $itemId)->delete();
-        Cart::removeItem($itemId);
-
-        /*if (Cart::availableItemsCount() < 1) {
-            Cart::removePromocodeAuto();
-        }*/
+        $item = Cart::items()->findOrFail($itemId);
+        $gtmService->removeFromCartFlashEvent($item->product, $item->count);
+        $item->delete();
 
         return back();
     }
