@@ -1,4 +1,4 @@
-<?php /** @var $product \App\Models\Product */ ?>
+<?php /** @var \App\Models\Product $product */ ?>
 
 <div class="col-12 product-page">
     <div class="row">

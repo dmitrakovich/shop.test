@@ -124,7 +124,7 @@ class Cart extends Model
         if (!$this->exists) {
             $this->save();
             if (Auth::check()) {
-                /** @var \App\Models\User */
+                /** @var \App\Models\User $user */
                 $user = Auth::user();
                 $user->cart_token = $this->id;
                 $user->save();

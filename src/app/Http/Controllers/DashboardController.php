@@ -19,7 +19,7 @@ class DashboardController extends Controller
      */
     public function edit(Request $request)
     {
-        /** @var \App\Models\User */
+        /** @var User $user */
         $user = auth()->user();
         $countries = Country::get(['id', 'name', 'code', 'prefix']);
 

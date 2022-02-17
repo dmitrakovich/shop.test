@@ -26,7 +26,7 @@ class CartController extends BaseController
         $cart = Cart::withData();
         Sale::applyForCart($cart);
 
-        /** @var \App\Models\User */
+        /** @var User $user */
         $user = auth()->user() ?? new User();
 
         $deliveriesList = DeliveryMethod::where('active', true)->pluck('name', 'id');

@@ -1,4 +1,4 @@
-<?php /** @var $product \App\Models\Product */ ?>
+<?php /** @var \App\Models\Product $product */ ?>
 
 <div
     class="col-3 js-product-item product-item mb-3 text-center text-lg-left"
