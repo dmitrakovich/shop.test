@@ -186,10 +186,10 @@ class GoogleTagManagerService
      * @param integer $quantity
      * @return void
      */
-    public function setAddToCartFlashEvent(Product $product, int $quantity): void
+    public function setProductAddFlashEvent(Product $product, int $quantity): void
     {
         GoogleTagManagerFacade::ecommerceFlash('productAdd', [
-            'addToCart' => [
+            'add' => [
                 'products' => [
                     self::prepareProduct($product, $quantity)->toArray()
                 ]
@@ -204,10 +204,10 @@ class GoogleTagManagerService
      * @param integer $quantity
      * @return void
      */
-    public function setRemoveFromCartFlashEvent(Product $product, int $quantity): void
+    public function setProductRemoveFlashEvent(Product $product, int $quantity): void
     {
         GoogleTagManagerFacade::ecommerceFlash('productRemove', [
-            'removeFromCart' => [
+            'remove' => [
                 'products' => [
                     self::prepareProduct($product, $quantity)->toArray()
                 ]
@@ -231,12 +231,15 @@ class GoogleTagManagerService
 
         if ($isOneClick) {
             $item = $orderItems->first();
-            $this->setAddToCartFlashEvent($item->product, $item->count);
+            $this->setProductAddFlashEvent($item->product, $item->count);
         }
 
         GoogleTagManagerFacade::ecommerce('productPurchase', [
             'purchase' => [
-                'actionField' => ['id' => $orderId],
+                'actionField' => [
+                    'id' => $orderId,
+                    'goal_id'=> 230549930,
+                ],
                 'products' => $gtmProducts
             ],
         ]);

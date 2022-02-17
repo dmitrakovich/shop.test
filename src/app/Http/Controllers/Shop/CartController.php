@@ -61,7 +61,7 @@ class CartController extends BaseController
     public function delete(Request $request, GoogleTagManagerService $gtmService, int $itemId)
     {
         $item = Cart::items()->findOrFail($itemId);
-        $gtmService->setRemoveFromCartFlashEvent($item->product, $item->count);
+        $gtmService->setProductRemoveFlashEvent($item->product, $item->count);
         $item->delete();
 
         return back();

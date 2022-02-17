@@ -60,7 +60,7 @@ gtmProductDetailEvent = function (product) {
  */
 gtmProductAddEvent = function (product, quantity = 1) {
   product['quantity'] = quantity;
-  gtmEcomEvent('productAdd', {'addToCart': {
+  gtmEcomEvent('productAdd', {'add': {
     'products': [product]
   }});
 }
@@ -71,7 +71,7 @@ gtmProductAddEvent = function (product, quantity = 1) {
  */
 gtmProductRemoveEvent = function (product, quantity = 1) {
   product['quantity'] = quantity;
-  gtmEcomEvent('productRemove', {'removeFromCart': {
+  gtmEcomEvent('productRemove', {'remove': {
     'products': [product]
   }});
 }
