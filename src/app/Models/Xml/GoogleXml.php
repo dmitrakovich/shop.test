@@ -34,7 +34,7 @@ class GoogleXml extends AbstractXml
     {
         return (object)[
             'channel' => $this->getChannel(),
-            // 'items' => $this->getItems(),
+            'items' => $this->getItems(),
         ];
     }
 
@@ -49,7 +49,6 @@ class GoogleXml extends AbstractXml
             'title' => 'Барокко',
             'link' => $this->getHost(),
             'description' => 'Интернет магазин брендовой обуви',
-            'items' => $this->getItems(),
         ];
     }
 
