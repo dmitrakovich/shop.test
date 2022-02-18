@@ -4,7 +4,6 @@
         <title>{{ $data->channel->title }}</title>
         <link>{{ $data->channel->link }}</link>
         <description>{{ $data->channel->description }}</description>
-    </channel>
 @foreach ($data->items as $item)
     <item>
         <g:id>{{ $item->id }}</g:id>
@@ -38,4 +37,5 @@
         <g:target_country>{{ $currency->country }}</g:target_country>
     </item>
 @endforeach
+</channel>
 </rss>
