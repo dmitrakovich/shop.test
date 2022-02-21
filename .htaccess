@@ -1,5 +1,11 @@
 RewriteEngine on
 
+#instagram
+RewriteRule ^insta?$ https://barocco.by/catalog/?utm_source=instagram&utm_medium=social&utm_campaign=accaunt_link [NC,L,R=301]
+
+#tiktok
+RewriteRule ^tiktok?$ https://barocco.by/catalog/?utm_source=tiktok&utm_medium=social&utm_campaign=accaunt_link [NC,L,R=301]
+
 RewriteCond %{HTTP_HOST} ^(www.)?barocco.by$
 
 RewriteCond %{REQUEST_URI} !^/src/public/
