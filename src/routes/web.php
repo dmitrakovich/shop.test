@@ -34,6 +34,10 @@ use App\Services\GoogleTagManagerService;
 //     });
 // });
 
+// redirects
+// TODO: if > 5 create separate file redirects.php
+Route::permanentRedirect('/insta', '/catalog?utm_source=instagram&utm_medium=social&utm_campaign=accaunt_link');
+Route::permanentRedirect('/tiktok', '/catalog?utm_source=tiktok&utm_medium=social&utm_campaign=accaunt_link');
 
 Route::get('/', [IndexController::class, 'index'])->name('index-page');
 
