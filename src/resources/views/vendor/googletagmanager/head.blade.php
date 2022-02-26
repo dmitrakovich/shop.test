@@ -6,13 +6,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','{{ $id }}');</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    window.dataLayer = window.dataLayer || [];
-    @unless(empty($dataLayer->toArray()))
-    window.dataLayer.push({!! $dataLayer->toJson() !!});
-    @endunless
-    @foreach($pushData as $item)
-    window.dataLayer.push({!! $item->toJson() !!});
-    @endforeach
+    setTimeout(() => {
+        window.dataLayer = window.dataLayer || [];
+        @unless(empty($dataLayer->toArray()))
+        window.dataLayer.push({!! $dataLayer->toJson() !!});
+        @endunless
+        @foreach($pushData as $item)
+        window.dataLayer.push({!! $item->toJson() !!});
+        @endforeach
+    }, 500);
 });
 </script>
 @endif
