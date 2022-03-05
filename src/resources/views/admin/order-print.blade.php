@@ -29,9 +29,27 @@
                         <td colspan="3" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">
                             Розничный заказ на {{ DeclensionNoun::make($order->getItemsCount(), 'товар') }}
                         </td>
-					</tr>
+                    </tr>
 
-					<tr><td height="10"></td></tr>
+                    <tr><td height="15"></td></tr>
+
+                    <tr>
+                        <td colspan="3" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                            <b>Дата и время</b>: {{ $order->created_at->format('d.m.Y H:i:s') }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                            <b>Менеджер</b>: {{ optional($order->admin)->name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                            <b>Статус</b>: {{ $order->status->name_for_admin }}
+                        </td>
+                    </tr>
+
+					<tr><td height="15"></td></tr>
 
                     <tr>
                         <td style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">
@@ -53,6 +71,20 @@
                             <b>Телефон</b>: {{ $order->phone }}
                         </td>
                     </tr>
+                    @if (!empty($order->country))
+                        <tr>
+                            <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                                <b>Страна</b>: {{ $order->country->name }}
+                            </td>
+                        </tr>
+                    @endif
+                    @if (!empty($order->city))
+                        <tr>
+                            <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                                <b>Город</b>: {{ $order->city }}
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
                             <b>Адрес</b>: {{ $order->user_addr }}
@@ -69,6 +101,13 @@
                         <tr>
                             <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
                                 <b>Способ оплаты</b>: {{ $order->payment->name }}
+                            </td>
+                        </tr>
+                    @endif
+                    @if (!empty($order->comment))
+                        <tr>
+                            <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                                <b>Комментарий</b>: {{ $order->comment }}
                             </td>
                         </tr>
                     @endif
@@ -101,6 +140,7 @@
                             <td width="200px" valign="middle" align="left" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">
                                 <a href="{{ $item->product->getUrl() }}" target="_blank">{{ $item->product->getFullName() }}</a><br>
                                 Размер: <b>{{ $item->size->name }}</b><br>
+                                Код: <b>{{ $item->product_id }}</b>
                                 {{-- {{PROMOCODE}} --}}
                             </td>
                             <td width="150px" valign="middle" align="center" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">

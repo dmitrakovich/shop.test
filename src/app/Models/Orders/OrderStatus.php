@@ -3,12 +3,24 @@
 namespace App\Models\Orders;
 
 use App\Models\Enum\Enum;
+use Illuminate\Support\Carbon;
 use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * OrderStatus class
+ *
+ * @property string $key
+ * @property string $name_for_admin
+ * @property string $name_for_user
+ * @property integer $sorting
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $deleted_at
+ */
 class OrderStatus extends Model implements Enum, Sortable
 {
     use SortableTrait;

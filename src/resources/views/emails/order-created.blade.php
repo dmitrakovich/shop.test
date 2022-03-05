@@ -150,6 +150,20 @@
                             <b>Телефон</b>: {{ $order->phone }}
                         </td>
                     </tr>
+                    @if (!empty($order->country))
+                        <tr>
+                            <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                                <b>Страна</b>: {{ $order->country->name }}
+                            </td>
+                        </tr>
+                    @endif
+                    @if (!empty($order->city))
+                        <tr>
+                            <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                                <b>Город</b>: {{ $order->city }}
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
                             <b>Адрес</b>: {{ $order->user_addr }}
@@ -166,6 +180,13 @@
                         <tr>
                             <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
                                 <b>Способ оплаты</b>: {{ $order->payment->name }}
+                            </td>
+                        </tr>
+                    @endif
+                    @if (!empty($order->comment))
+                        <tr>
+                            <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
+                                <b>Комментарий</b>: {{ $order->comment }}
                             </td>
                         </tr>
                     @endif
