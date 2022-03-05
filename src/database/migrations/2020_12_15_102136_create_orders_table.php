@@ -41,6 +41,7 @@ class CreateOrdersTable extends Migration
             $table->float('payment_cost')->nullable();
             $table->foreignId('delivery_id')->nullable();
             $table->float('delivery_cost')->nullable();
+            $table->float('delivery_price')->nullable();
             $table->foreignId('delivery_point_id')->nullable();
 
             $table->enum('order_method', OrderMethod::getValues())

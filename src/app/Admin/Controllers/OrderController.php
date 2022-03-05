@@ -181,6 +181,8 @@ class OrderController extends AdminController
         $form->text('zip', __('Zip'));
         $form->text('user_addr', __('User addr'));
         $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
+        $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
+        $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
         $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));
         $form->select('order_method', 'Способ заказа')
             ->options(OrderMethod::getOptionsForSelect())
@@ -202,22 +204,16 @@ class OrderController extends AdminController
         });
 
         $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $nestedForm) {
-            $nestedForm->select('product_id', 'Id модели')
+            $currencyCode = $nestedForm->getForm()->model()->currency;
+            $nestedForm->select('product_id', 'Код товара')
                 ->options(function ($id) { return [$id => $id]; })
                 ->ajax('/api/product/product')
                 ->attribute(['data-js-trigger' => 'product_id'])
-                ->loads(
-                    ['size_id', 'product_name'],
-                    ['/api/product/sizes', '/api/product/name']
-                );
+                ->load('size_id', '/api/product/sizes');
             $nestedForm->hidden('count')->default(1);
             $nestedForm->hidden('buy_price')->default(0);
             $nestedForm->hidden('price');
-            $nestedForm->hidden('old_price');
-            $nestedForm->hidden('current_price');
-            $nestedForm->select('product_name', 'Название модели')
-                ->options(function ($name) { return [$name]; })
-                ->disable();
+            $nestedForm->display('product_link', 'Название модели');
             $nestedForm->image('product_photo', 'Фото товара')->readonly();
             $nestedForm->select('size_id', 'Размер')->options(function ($id) {
                 if ($size = Size::find($id)) {
@@ -228,7 +224,9 @@ class OrderController extends AdminController
                 ->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'))
                 ->default(OrderItemStatus::DEFAULT_VALUE)
                 ->required();
-            $nestedForm->currency('current_price', 'Стоимость')->symbol($nestedForm->getForm()->model()->currency);
+            $nestedForm->currency('old_price', 'Старая цена')->symbol($currencyCode);
+            $nestedForm->currency('current_price', 'Стоимость')->symbol($currencyCode);
+            $nestedForm->currency('discount', 'Скидка')->symbol('%');
         })->setScript($this->getScriptForExtendedItems());
 
         $form->saving(function (Form $form) {
@@ -327,7 +325,7 @@ $(function () {
 
     // prepare current images
     $('#has-many-itemsExtended .file-input').each(function (index, element) {
-        let img = $(element).find('img').first().height(150);
+        let img = $(element).find('img').first().height(105);
         $(this).empty().append(img);
     });
 
@@ -336,8 +334,14 @@ $(function () {
         let itemBlock = $(this).parents('.has-many-itemsExtended-form');
 
         $.get('/api/product/data', {q: $(this).val()}, function (response) {
-            let img = $('<img>').attr('src', response.image).height(150);
-            $(itemBlock).find('.file-input').empty().append(img)
+            let img = $('<img>').attr('src', response.image).height(105);
+            let link = $('<a>', {
+                text: response.name,
+                href: response.link,
+                target: '_blank',
+            });
+            $(itemBlock).find('.file-input').empty().append(img);
+            $(itemBlock).find('.box.box-solid.box-default .box-body').html(link);
             // console.log(itemBlock);
             // console.log(response);
         });

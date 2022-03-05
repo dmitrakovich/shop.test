@@ -11,6 +11,7 @@ class OrderItemExtended extends OrderItem
 {
     protected $appends = [
         'product_name',
+        'product_link',
         'product_photo',
     ];
 
@@ -34,11 +35,22 @@ class OrderItemExtended extends OrderItem
     /**
      * Product name
      *
+     * @deprecated
      * @return string
      */
     public function getProductNameAttribute(): string
     {
         return $this->product->getFullName();
+    }
+
+    /**
+     * Product link
+     *
+     * @return string
+     */
+    public function getProductLinkAttribute(): string
+    {
+        return "<a href='{$this->product->getUrl()}' target='_blank'>{$this->product->extendedName()}</a>";
     }
 
     /**

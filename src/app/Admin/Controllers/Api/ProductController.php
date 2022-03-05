@@ -35,23 +35,10 @@ class ProductController extends Controller
         $product = $this->getProduct($request);
 
         return [
-            /**
-             * @todo Remove getProductNameById()
-             */
-            // 'name' => $product->extendedName(),
+            'name' => $product->extendedName(),
+            'link' => $product->getUrl(),
             'image' => $product->getFirstMediaUrl()
         ];
-    }
-
-    /**
-     * Return product name [text => name]
-     *
-     * @param Request $request
-     * @return array
-     */
-    public function getProductNameById(Request $request): array
-    {
-    return ['text' => $this->getProduct($request)->extendedName()];
     }
 
     /**

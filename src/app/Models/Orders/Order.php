@@ -37,6 +37,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property float $payment_cost
  * @property integer $delivery_id
  * @property float $delivery_cost
+ * @property float $delivery_price
  * @property integer $delivery_point_id
  * @property string $order_method
  * @property string $utm_medium
@@ -79,6 +80,7 @@ class Order extends Model
         'payment_cost',
         'delivery_id',
         'delivery_cost',
+        'delivery_price',
         'delivery_point_id',
         'order_method',
         'utm_medium',
