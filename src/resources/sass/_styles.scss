@@ -459,6 +459,27 @@ span {
     }
 }
 
+.product-labels {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 20;
+}
+.product-label {
+    color: $white;
+    font-size: 14px;
+    padding: 0 0.5rem;
+    + .product-label {
+        margin-top: 0.3rem;
+    }
+    &.product-label-sale {
+        background: $red;
+    }
+    &.product-label-new {
+        background: $success
+    }
+}
+
 .cart-done-recommended {
     .product-item {
         max-width: 180px;

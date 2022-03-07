@@ -32,7 +32,7 @@
                                         <div class="col-12 col-md-3 mt-md-2 mb-4">
                                             @if ($item->product->getPrice() < $item->product->getOldPrice())
                                                 <span class="old_price text-muted">{!! $item->product->getFormattedOldPrice() !!}</span>&nbsp;
-                                                <span class="text-white px-1" style="background-color: #D22020">
+                                                <span class="product-label product-label-sale px-1">
                                                     -{{ $item->product->getSalePercentage() }}%
                                                 </span><br>
                                                 <span class="new_price">{!! $item->product->getFormattedPrice() !!}</span>

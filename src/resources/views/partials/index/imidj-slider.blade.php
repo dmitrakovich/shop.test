@@ -26,36 +26,8 @@
     ]
 }'>
     @foreach ($imidjSlider['products'] as $product)
-        <div
-            class="col mb-main js-product-item"
-            data-gtm-product='{!! $product['dataLayer']->toJson() !!}'
-        >
-            <div class="position-relative">
-                @include('partials.buttons.favorite', [
-                    'favoriteProductId' => $product['id'],
-                    'favoriteState' => $product['favorite']
-                ])
-                @if ($product['sale_percentage'])
-                    <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 0px; background: #D22020;">
-                        -{{ $product['sale_percentage'] }}%
-                    </span>
-                @endif
-                <a href="{{ $product['url'] }}" data-gtm-click="productClick">
-                    <img
-                        src="{{ $product['imidj_media'] }}"
-                        alt="{{ $product['title'] }}"
-                        class="img-fluid product-first-image"
-                    >
-                    <div>{{ $product['full_name'] }}<br>
-                        @if ($product['sale_percentage'])
-                            <span class="old_price">{!! $product['formatted_old_price'] !!}</span>
-                            <span class="new_price">{!! $product['formatted_price'] !!}</span>
-                        @else
-                            <span class="price">{!! $product['formatted_price'] !!}</span>
-                        @endif
-                    </div>
-                </a>
-            </div>
+        <div class="col mb-main">
+            @include('shop.slider-product', compact('product'))
         </div>
     @endforeach
 </div>

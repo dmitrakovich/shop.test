@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @todo Refactor DRY
+ * @todo Refactor DRY !!!!
  */
 class SliderService
 {
@@ -59,10 +59,11 @@ class SliderService
                                 'title' => $product->title,
                                 'full_name' => "{$product->category->title} {$product->brand->name}",
                                 'sale_percentage' => $product->getSalePercentage(),
+                                'is_new' => $product->isNew(),
                                 'price_byn' => $product->getFinalPrice(),
                                 'old_price_byn' => $product->getFinalOldPrice(),
                                 'url' => $product->getUrl(),
-                                'first_media' => $product->getFirstMedia()->getUrl('catalog'),
+                                'image' => $product->getFirstMedia()->getUrl('catalog'),
                                 'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                             ];
                         })->toArray()
@@ -126,10 +127,11 @@ class SliderService
                         'title' => $product->title,
                         'full_name' => "{$product->category->title} {$product->brand->name}",
                         'sale_percentage' => $product->getSalePercentage(),
+                        'is_new' => $product->isNew(),
                         'price_byn' => $product->getFinalPrice(),
                         'old_price_byn' => $product->getFinalOldPrice(),
                         'url' => $product->getUrl(),
-                        'imidj_media' => $product->getMedia('default', ['is_imidj' => true])
+                        'image' => $product->getMedia('default', ['is_imidj' => true])
                             ->first()->getUrl('normal'),
                         'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                     ];

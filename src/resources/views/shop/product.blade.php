@@ -9,11 +9,18 @@
                     'favoriteState' => isset($product->favorite)
                 ])
 
-                @if ($product->getSalePercentage())
-                    <span class="position-absolute text-white font-size-14 px-2" style="top: 0; right: 0px; background: #D22020; z-index: 1;">
-                        -{{ $product->getSalePercentage() }}%
-                    </span>
-                @endif
+                <div class="product-labels">
+                    @if ($product->isNew())
+                        <div class="product-label product-label-new">
+                            new
+                        </div>
+                    @endif
+                    @if ($product->getSalePercentage())
+                        <div class="product-label product-label-sale">
+                            -{{ $product->getSalePercentage() }}%
+                        </div>
+                    @endif
+                </div>
 
                 <div class="slider-for">
                     @foreach ($product->getMedia() as $image)

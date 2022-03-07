@@ -22,6 +22,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \App\Models\Brand $brand
  * @property string $title
  * @property string $slug
+ * @property float $price
+ * @property float $old_price
  * @property integer $category_id
  * @property string $color_txt
  * @property string $fabric_top_txt
@@ -467,5 +469,15 @@ class Product extends Model implements HasMedia
 
         $this->setRelation('category', Category::getDefault());
         $this->setRelation('brand', Brand::getDefault());
+    }
+
+    /**
+     * Is the model new
+     *
+     * @return boolean
+     */
+    public function isNew(): bool
+    {
+        return $this->old_price == 0;
     }
 }
