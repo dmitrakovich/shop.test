@@ -2,44 +2,42 @@
 
 namespace App\Models;
 
+use App\Models\{
+    Tag,
+    Heel,
+    Size,
+    Brand,
+    Color,
+    Fabric,
+    Season,
+    Category,
+    Collection
+};
 use Illuminate\Support\Facades\Cache;
+use App\Models\ProductAttributes\Status;
 
 class Filter
 {
-    /**
-     * Список фильтров
-     *
-     * @var array
-     */
-    protected static $filtersList = [
-        'categories',
-        'fabrics',
-        'collections',
-        'sizes',
-        'colors',
-        'heels',
-        'seasons',
-        'tags',
-        'brands',
-    ];
     /**
      * связанные с фильтрами классы
      *
      * @var array
      */
     protected static $filtersModels = [
-        'categories' => 'App\Models\Category',
-        'fabrics' => 'App\Models\Fabric',
-        'collections' => 'App\Models\Collection',
-        'sizes' => 'App\Models\Size',
-        'colors' => 'App\Models\Color',
-        'heels' => 'App\Models\Heel',
-        'seasons' => 'App\Models\Season',
-        'tags' => 'App\Models\Tag',
-        'brands' => 'App\Models\Brand',
+        'categories' => Category::class,
+        'statuses' => Status::class,
+        'fabrics' => Fabric::class,
+        'collections' => Collection::class,
+        'sizes' => Size::class,
+        'colors' => Color::class,
+        'heels' => Heel::class,
+        'seasons' => Season::class,
+        'tags' => Tag::class,
+        'brands' => Brand::class,
     ];
+
     /**
-     * префиксы для выьранных фильтров
+     * префиксы для выбранных фильтров
      *
      * @var array
      */
@@ -47,6 +45,7 @@ class Filter
         'App\Size' => 'Размер ',
         'App\Height' => 'Рост ',
     ];
+
     /**
      * Получить все фильтра
      *
@@ -60,7 +59,7 @@ class Filter
         }
 
         if (!isset($filters)) {
-            $filtersList = $filtersList ?? self::$filtersList;
+            $filtersList = $filtersList ?? array_keys(self::$filtersModels);
             foreach ($filtersList as $filterName) {
                 $model = self::$filtersModels[$filterName];
                 $query = (new $model)->newQuery();
@@ -78,6 +77,7 @@ class Filter
         }
         return $filters;
     }
+
     /**
      * Префикс для отображаемого названия выбранного фильтра
      *

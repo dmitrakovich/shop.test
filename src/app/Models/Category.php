@@ -81,7 +81,7 @@ class Category extends Model
 
     public static function beforeApplyFilter(&$builder, &$values)
     {
-        $currentCategoryId = end($values);
+        $currentCategoryId = end($values)['model_id'];
         if ($currentCategoryId === self::ROOT_CATEGORY_ID) {
             $values = false;
         } else {

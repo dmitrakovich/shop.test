@@ -2,26 +2,36 @@
 
 namespace App\Helpers;
 
-use Illuminate\Support\Facades\Cookie;
+use App\Models\{
+    Tag,
+    Heel,
+    Size,
+    Brand,
+    Color,
+    Fabric,
+    Season,
+    Category,
+    Collection
+};
+use App\Models\ProductAttributes\Status;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\URL;
 
 class UrlHelper
 {
     protected static $canonicalOrder = [
         # model => св-ва [уникальный, ]
-        // 1. prstatus (новинка, на распродаже или акция)
-        'App\Models\Category' => [true,],          // 2. Категория
-        'App\Models\Size' => [false,],             // 3. Размер
-        'App\Models\Color' => [false,],            // 4. Цвет
-        'App\Models\Fabric' => [false,],           // 5. Материал
-        'App\Models\Style' => [false,],            // 6. Стиль
-        'App\Models\Heel' => [false,],             // 7. Каблук
-        'App\Models\Tag' => [false,],              // 8. Теги
-        'App\Models\Season' => [false,],           // 9. Сезон
-        'App\Models\Collection' => [false,],       // 10. Коллекция
+        Category::class => [true,],                // 1. Категория
+        Status::class => [false,],                 // 2. Статус
+        Size::class => [false,],                   // 3. Размер
+        Color::class => [false,],                  // 4. Цвет
+        Fabric::class => [false,],                 // 5. Материал
+        Style::class => [false,],                  // 6. Стиль
+        Heel::class => [false,],                   // 7. Каблук
+        Tag::class => [false,],                    // 8. Теги
+        Season::class => [false,],                 // 9. Сезон
+        Collection::class => [false,],             // 10. Коллекция
         // 11. Город
-        'App\Models\Brand' => [false,],            // 12. Бренд
+        Brand::class => [false,],                  // 12. Бренд
     ];
     protected static $params = null;
     protected static $availableParams = [
@@ -50,7 +60,7 @@ class UrlHelper
         $sorted = [];
         foreach (self::$canonicalOrder as $model => list($single)) {
             if (isset($filters[$model])) {
-                if ($model == 'App\Models\Category') {
+                if ($model == Category::class) {
                     array_unshift($sorted, end($filters[$model])['filters']['path']);
                 } elseif ($single) {
                     if (!empty(end($filters[$model]))) {
@@ -66,6 +76,7 @@ class UrlHelper
         }
         return route('shop', implode('/', $sorted) . self::buildParams($params));
     }
+
     /**
      * Получить параметры из запроса
      *
@@ -83,6 +94,7 @@ class UrlHelper
         }
         return self::$params;
     }
+
     /**
      * Построить Url кодированный запрос из параметров
      *

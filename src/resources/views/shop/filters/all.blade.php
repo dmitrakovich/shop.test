@@ -1,6 +1,9 @@
 @include('shop.filters.categories')
 <hr>
 
+@include('shop.filters.status')
+<hr>
+
 @include('shop.filters.fabric')
 <hr>
 

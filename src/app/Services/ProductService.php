@@ -20,7 +20,7 @@ class ProductService
 
         foreach ($filters as $filterName => $filterValues) {
             if (class_exists($filterName) && method_exists($filterName, 'applyFilter')) {
-                $query = $filterName::applyFilter($query, array_column($filterValues, 'model_id'));
+                $query = $filterName::applyFilter($query, $filterValues);
             } else {
                 continue;
             }

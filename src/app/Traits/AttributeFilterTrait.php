@@ -80,6 +80,6 @@ trait AttributeFilterTrait
      */
     public static function beforeApplyFilter(Builder &$builder, array &$values)
     {
-        # code...
+        $values = array_column($values, 'model_id');
     }
 }
