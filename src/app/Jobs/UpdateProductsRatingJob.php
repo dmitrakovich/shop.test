@@ -36,6 +36,7 @@ class UpdateProductsRatingJob extends AbstractJob
         $this->debug('Старт');
         $ratingConfigFile = database_path('files/rating.conf.php');
         $ratingConfig = require $ratingConfigFile;
+        $counterYandexId = '86365748'; // id счётчика Яндекс, поменял на новый. Старый был '31699806'
 
         // Предустановки
         $cur_season = $ratingConfig['cur_season']; // текущие сезоны
@@ -210,7 +211,7 @@ class UpdateProductsRatingJob extends AbstractJob
 
         // popular & purshase
         $params = array(
-            'ids'         => '31699806',
+            'ids'         => $counterYandexId,
             'metrics'     => 'ym:s:productImpressionsUniq,ym:s:productPurchasedUniq',
             'dimensions'  => 'ym:s:productID',
             'date1'       => '30daysAgo',
@@ -257,7 +258,7 @@ class UpdateProductsRatingJob extends AbstractJob
 
         // trand
         $params = array(
-            'ids'         => '31699806',
+            'ids'         => $counterYandexId,
             'metrics'     => 'ym:s:productBasketsUniq',
             'dimensions'  => 'ym:s:productID',
             'date1'       => '7daysAgo',
