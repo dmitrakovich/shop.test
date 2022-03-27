@@ -234,14 +234,7 @@
 
                     <div class="col-12 col-md-6 form-group">
                         <label for="phone">Телефон</label>
-                        <input id="phone" type="tel" name="phone"
-                            class="form-control @error('phone') is-invalid @enderror"
-                            value="{{ old('phone', $user->phone ?? $currentCountry->prefix) }}">
-                        @error('phone')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        @include('partials.inputs.phone', compact('countries', 'currentCountry'))
                     </div>
                     <div class="col-12 col-md-6 form-group">
                         <label for="email">E-mail</label>

@@ -238,7 +238,7 @@
             <input type="text" class="form-control" name="first_name" placeholder="Имя" autocomplete="given-name" required>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="phone" placeholder="Телефон" required>
+            @include('partials.inputs.phone')
         </div>
         <div class="form-group">
             <input type="text" class="form-control" name="user_addr" placeholder="Населенный пункт" autocomplete="address" required>

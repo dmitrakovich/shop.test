@@ -71,8 +71,8 @@ return [
     ],
 
 
-    'default_country' => 'RU',
-    'default_iso_country_code' => 'RU',
+    'default_country' => 'BY',
+    'default_iso_country_code' => 'BY',
 
     'ignored_ip' => [
         '127.0.0.1',

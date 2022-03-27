@@ -4,8 +4,7 @@ require('./bootstrap');
 require('./components/slick-slider');
 require('./components/favorites');
 require('./components/gtm-datalayer');
+require('./components/inputs')
 
 require('./scripts');
-require('./pages/catalog');
-require('./pages/feedbacks');
-require('./pages/auth');
+require('./pages');

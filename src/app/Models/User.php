@@ -87,6 +87,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get fisrt user address country id if exist
+     *
+     * @return integer|null
+     */
+    public function getFirstAddressCountryId(): ?int
+    {
+        return $this->getFirstAddress()->country_id;
+    }
+
+    /**
      * Check user has addresses
      *
      * @return boolean

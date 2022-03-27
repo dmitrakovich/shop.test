@@ -1,5 +1,6 @@
 import Mustache from 'mustache';
 import TEMPLATE_ADDED_TO_CART from '../templates/modals/added-to-cart.html';
+import { validatePhone } from './components/inputs/phone';
 
 $(function () {
     //#region боковое меню в мобильной версии
@@ -72,14 +73,10 @@ $(function () {
         // подтянуть в форму размеры
         $('.js-sizes').clone().appendTo('form#oneclick-form').hide();
 
-        let phone = $('input[name="phone"]').val();
-        let name = $('input[name="first_name"]').val();
-        // let address = $('input[name="address"]').val();
-
-        if (phone.length < 4) {
-            return $.fancybox.open('<h3 class="py-3 text-danger">Введите корректный номер телефона</h3>');
+        if (!validatePhone($('input[name="phone"]'))) {
+            return false;
         }
-        if (name.length < 2) {
+        if ($('input[name="first_name"]').val().length < 2) {
             return $.fancybox.open('<h3 class="py-3 text-danger">Введите имя</h3>');
         }
 

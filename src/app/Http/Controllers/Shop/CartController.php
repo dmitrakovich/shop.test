@@ -11,7 +11,6 @@ use Deliveries\DeliveryMethod;
 use App\Services\ProductService;
 use Illuminate\Support\Facades\Session;
 use App\Services\GoogleTagManagerService;
-use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 class CartController extends BaseController
 {
@@ -39,9 +38,8 @@ class CartController extends BaseController
             unset($paymentsList['Installment']);
         }
 
-        $countries = Country::get(['id', 'name', 'code', 'prefix']);
-        $currentCountry = $countries->where('id', $user->getFirstAddress()->country_id)->first()
-            ?? $countries->where('code', SxGeo::getCountry())->first();
+        $countries = Country::getAll();
+        $currentCountry = Country::getCurrent();
 
         $gtmService->setViewForCart($cart);
 
