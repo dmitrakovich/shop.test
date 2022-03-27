@@ -50,7 +50,7 @@ class DebugController extends Controller
             $phone = $model->$phoneFileldName;
             $phoneUtil = PhoneNumberUtil::getInstance();
 
-            if (empty($phone)) {
+            if (empty($phone) && strlen($phone) > 6) {
                 return;
             }
 
