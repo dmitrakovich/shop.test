@@ -3,6 +3,8 @@ import '@fancyapps/fancybox';
 import Cropper from 'cropperjs';
 import Mustache from 'mustache';
 
+require('./../components/inputs/phone');
+
 /**
  * object for Cropper
  */

@@ -1,6 +1,12 @@
 @import "~cropperjs";
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 
+// Bootstrap
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/forms";
+
 .fancybox-content {
     max-width: 80%;
     padding: 30px;

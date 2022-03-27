@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\Field;
 use Encore\Admin\Facades\Admin;
 /**
  * Laravel-admin - admin builder based on Laravel.
@@ -20,6 +21,8 @@ use Encore\Admin\Facades\Admin;
  */
 
 Encore\Admin\Form::forget(['map', 'editor']);
+
+Encore\Admin\Form::extend('phone', Field\Phone::class);
 
 Admin::js(mix('js/admin.js'));
 Admin::css(mix('css/admin.css'));

@@ -68,7 +68,7 @@ class UserController extends AdminController
         $form->text('last_name', 'Фамилия');
         $form->text('patronymic_name', 'Отчество');
         $form->email('email', __('Email'));
-        $form->mobile('phone', 'Телефон');
+        $form->phone('phone', 'Телефон');
         $form->date('birth_date', 'Дата рождения')->default(date('Y-m-d'));
 
         $form->hasMany('addresses', 'Адреса', function (Form\NestedForm $form) {
