@@ -94,14 +94,14 @@
 
                         <div class="dropdown-menu p-3">
                             <p class="font-size-15">
-                                <b>РАССРОЧКА НА 3 ПЛАТЕЖА</b>
+                                <b>РАССРОЧКА НА 2 ПЛАТЕЖА</b>
                             </p>
                             <p>
                                 Первый взнос<br>
-                                <b>{{ $product->getPrice() * 0.4 }} руб.</b><br>
-                                Оставшиеся 2 платежа<br>
+                                <b>{{ $product->getPrice() * 0.5 }} руб.</b><br>
+                                Оставшиеся платеж<br>
                                 <b class="border-bottom border-danger font-size-14">
-                                    {{ $product->getPrice() * 0.3 }} руб. в месяц
+                                    {{ $product->getPrice() * 0.5 }} руб. в месяц
                                 </b>
                             </p>
                             &#9989; Без увеличения цены <br>
