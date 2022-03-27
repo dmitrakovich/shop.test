@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
 
             $table->string('slug', 100)->unique();
-            $table->string('title')->index();
+            $table->string('sku')->index(); // stock keeping unit
             $table->unsignedInteger('label_id')->default(0);
 
             $table->decimal('buy_price')->default(0);

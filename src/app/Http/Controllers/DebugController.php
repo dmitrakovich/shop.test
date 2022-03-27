@@ -13,14 +13,23 @@ class DebugController extends Controller
 {
     public function index()
     {
-        $this->formatPhones();
-        dd(0000);
+        // $this->formatPhones();
+        // dd(0000);
 
         // php artisan make:mail OrderShipped
 
-        $email = 'dmitrakovich.andrey@yandex.by';
-        $order = Order::with('data')->find(62);
+        return $this->printOrder(Order::with('data')->find(3));
+    }
 
+    /**
+     * @param Order $order
+     * @return void
+     */
+    public function printOrder(Order $order)
+    {
+        // TODO: create route if needed
+
+        // $email = 'dmitrakovich.andrey@yandex.by';
         // Mail::to($email)->send(new OrderCreated($order));
 
         return view('emails.order-created', compact('order'));
@@ -69,7 +78,8 @@ class DebugController extends Controller
                 $model->save();
             }
         } catch (\Throwable $th) {
-            dd($th);
+            dump($th->getMessage());
+            return;
         }
     }
 }
