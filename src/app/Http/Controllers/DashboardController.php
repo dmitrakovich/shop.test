@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Auth\UpdateRequest;
-use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 class DashboardController extends Controller
 {
@@ -19,16 +18,11 @@ class DashboardController extends Controller
      */
     public function edit(Request $request)
     {
-        /** @var User $user */
-        $user = auth()->user();
-        $countries = Country::get(['id', 'name', 'code', 'prefix']);
-
         return view('dashboard.profile', [
             'user' => auth()->user(),
             'emailVerified' => $request->has('verified'),
-            'userCountryId' => $user->getFirstAddress()->country_id
-                ?? $countries->where('code', SxGeo::getCountry())->first()->id,
-            'countriesList' => $countries->pluck('name', 'id')
+            'countries' => Country::getAll(),
+            'currentCountry' => Country::getCurrent(),
         ]);
     }
 
