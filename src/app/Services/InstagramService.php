@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class InstagramService
 {
@@ -106,7 +107,14 @@ class InstagramService
             'access_token' => $this->accessToken
         ]);
 
-        return $response->json('data');
+        $data = $response->json();
+
+        if ($response->failed() || isset($data['error']) || empty($data['data'])) {
+            Log::error(new \Exception($data['error']['message'] ?? 'Unknown instagram api error'));
+            return [];
+        }
+
+        return $data['data'];
     }
 
     /**
