@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\Xml;
+namespace App\Models\Feeds;
 
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Kalnoy\Nestedset\Collection as NestedsetCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
-abstract class AbstractXml
+abstract class AbstractFeed
 {
     /**
      * Array with cached data
@@ -15,6 +15,11 @@ abstract class AbstractXml
      * @var array
      */
     protected $cache = [];
+
+    /**
+     * @var string
+     */
+    const FILE_TYPE = 'xml';
 
     /**
      * @var int

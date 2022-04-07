@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Log;
 use App\Contracts\FeedServiceInterface;
 use App\Facades\Currency as CurrencyFacade;
 
-class XmlService implements FeedServiceInterface
+class CsvService implements FeedServiceInterface
 {
     /**
      * @var AbstractFeed
      */
-    private $xmlInstance;
+    private $csvInstance;
 
     /**
      * @var Currency
@@ -26,11 +26,11 @@ class XmlService implements FeedServiceInterface
      */
     protected $filePath;
 
-    public function __construct(AbstractFeed $xmlInstance, Currency $currency)
+    public function __construct(AbstractFeed $csvInstance, Currency $currency)
     {
         ini_set('memory_limit', '512M');
 
-        $this->xmlInstance = $xmlInstance;
+        $this->csvInstance = $csvInstance;
         $this->currency = $currency;
         $this->filePath = $this->getFilePath();
     }
@@ -59,16 +59,17 @@ class XmlService implements FeedServiceInterface
      */
     public function backup(): void
     {
-        if (!file_exists($this->filePath)) {
-            return;
-        }
+        return;
+        // if (!file_exists($this->filePath)) {
+        //     return;
+        // }
 
-        $backupFilePath = $this->getFilePath('', '.backup');
-        if (file_exists($backupFilePath)) {
-            unlink($backupFilePath);
-        }
+        // $backupFilePath = $this->getFilePath('', '.backup');
+        // if (file_exists($backupFilePath)) {
+        //     unlink($backupFilePath);
+        // }
 
-        copy($this->filePath, $backupFilePath);
+        // copy($this->filePath, $backupFilePath);
     }
 
     /**
@@ -78,18 +79,19 @@ class XmlService implements FeedServiceInterface
      */
     public function generate(): void
     {
-        Log::channel('feeds')->info('Start generate', [basename($this->filePath)]);
+        return;
+        // Log::channel('feeds')->info('Start generate', [basename($this->filePath)]);
 
-        CurrencyFacade::setCurrentCurrency($this->currency->code);
+        // CurrencyFacade::setCurrentCurrency($this->currency->code);
 
-        $data = view('xml.' . $this->xmlInstance->getKey(), [
-            'currency' => $this->currency,
-            'data' => $this->xmlInstance->getPreparedData()
-        ]);
+        // $data = view('xml.' . $this->xmlInstance->getKey(), [
+        //     'currency' => $this->currency,
+        //     'data' => $this->xmlInstance->getPreparedData()
+        // ]);
 
-        $this->saveToFile($data);
+        // $this->saveToFile($data);
 
-        Log::channel('feeds')->info('Finish generate', [basename($this->filePath)]);
+        // Log::channel('feeds')->info('Finish generate', [basename($this->filePath)]);
     }
 
     /**

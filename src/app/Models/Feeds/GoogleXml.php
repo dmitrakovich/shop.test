@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Xml;
+namespace App\Models\Feeds;
 
 use App\Models\Product;
 use App\Models\Category;
@@ -8,7 +8,7 @@ use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Str;
 
-class GoogleXml extends AbstractXml
+class GoogleXml extends AbstractFeed
 {
     /**
      * @var int

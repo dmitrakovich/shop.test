@@ -119,9 +119,9 @@ return [
             'driver' => 'sentry',
         ],
 
-        'xml' => [
+        'feeds' => [
             'driver' => 'single',
-            'path' => storage_path('logs/xml.log'),
+            'path' => storage_path('logs/feeds.log'),
             'tap' => [SimpleFormatter::class],
             'level' => 'debug',
         ],

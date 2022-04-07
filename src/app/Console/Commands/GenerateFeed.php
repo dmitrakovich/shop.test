@@ -4,29 +4,31 @@ namespace App\Console\Commands;
 
 use App\Models\Currency;
 use Illuminate\Support\Arr;
-use App\Jobs\XmlGeneratorJob;
-use App\Models\Xml\GoogleXml;
-use App\Models\Xml\YandexXml;
+use App\Jobs\FeedGeneratorJob;
+use App\Models\Feeds\GoogleCsv;
+use App\Models\Feeds\GoogleXml;
+use App\Models\Feeds\YandexXml;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
-class GenerateXml extends Command
+class GenerateFeed extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'xml:generate
-                            {instance? : Xml instance name}
-                            {currency? : Currency for xml}';
+    protected $signature = 'feed:generate
+                            {instance? : Feed instance name}
+                            {currency? : Currency for feed}';
 
     /**
      * @var array
      */
     const INSTANCES = [
-        'yandex' => YandexXml::class,
-        'google' => GoogleXml::class,
+        'yandex_xml' => YandexXml::class,
+        'google_xml' => GoogleXml::class,
+        'google_csv' => GoogleCsv::class,
     ];
 
     /**
@@ -97,7 +99,7 @@ class GenerateXml extends Command
     {
         foreach ($this->getInstances() as $instance) {
             foreach ($this->getCurrencies() as $currency) {
-                dispatch(new XmlGeneratorJob(new $instance, $currency));
+                dispatch(new FeedGeneratorJob(new $instance, $currency));
             }
         }
 

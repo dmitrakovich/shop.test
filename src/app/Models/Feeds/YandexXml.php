@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Xml;
+namespace App\Models\Feeds;
 
 use App\Models\Color;
 use App\Models\Product;
@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 use App\Facades\Currency as CurrencyFacade;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
-class YandexXml extends AbstractXml
+class YandexXml extends AbstractFeed
 {
     /**
      * @var int
