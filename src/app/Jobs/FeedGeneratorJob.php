@@ -3,10 +3,10 @@
 namespace App\Jobs;
 
 use App\Models\Currency;
-use App\Services\CsvService;
-use App\Services\XmlService;
 use Illuminate\Bus\Queueable;
 use App\Models\Feeds\AbstractFeed;
+use App\Services\Feeds\CsvService;
+use App\Services\Feeds\XmlService;
 use Illuminate\Queue\SerializesModels;
 use App\Contracts\FeedServiceInterface;
 use Illuminate\Queue\InteractsWithQueue;
