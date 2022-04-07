@@ -31,26 +31,26 @@ class GoogleCsv extends AbstractFeed
     }
 
     /**
-     * Prepare data for xml file
+     * Prepare data for csv file
      *
      * @return object
      */
     public function getPreparedData(): object
     {
         return (object)[
-            'channel' => $this->getChannel(),
-            'items' => $this->getItems(),
+            'headers' => $this->getHeaders(),
+            'rows' => $this->getRows(),
         ];
     }
 
     /**
-     * Data for header
+     * Columns headers
      *
-     * @return object
+     * @return array
      */
-    protected function getChannel(): object
+    protected function getHeaders(): array
     {
-        return (object)[
+        return [
             'title' => 'Барокко',
             'link' => $this->getHost(),
             'description' => 'Интернет магазин брендовой обуви',
@@ -58,13 +58,20 @@ class GoogleCsv extends AbstractFeed
     }
 
     /**
-     * Items data
+     * Rows data
      *
      * @return array
      */
-    protected function getItems(): array
+    protected function getRows(): array
     {
-        return (new ProductService)->getForXml(true)
+        return [
+            [ '100','2','43'],
+            [ '1','32','3dfg'],
+            [ '12','2','dfg3'],
+            [ '1','42','fgh3'],
+        ];
+
+        /*return (new ProductService)->getForXml(true)
             ->map(function (Product $item) {
                 return (object)[
                     'id' => $item->id,
@@ -82,7 +89,7 @@ class GoogleCsv extends AbstractFeed
                     'material' => $item->fabric_top_txt,
                     'color' => $this->getColor($item->colors),
                 ];
-            })->toArray();
+            })->toArray();*/
     }
 
     /**

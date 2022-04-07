@@ -18,12 +18,12 @@ abstract class AbstractFeedService implements FeedServiceInterface
     /**
      * @var AbstractFeed
      */
-    private $feedInstance;
+    protected $feedInstance;
 
     /**
      * @var Currency
      */
-    private $currency;
+    protected $currency;
 
     /**
      * @var string

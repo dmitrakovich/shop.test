@@ -2,9 +2,6 @@
 
 namespace App\Services\Feeds;
 
-use Illuminate\Contracts\View\View;
-use App\Facades\Currency as CurrencyFacade;
-
 class CsvService extends AbstractFeedService
 {
     /**
@@ -14,24 +11,25 @@ class CsvService extends AbstractFeedService
      */
     public function generate(): void
     {
-        return;
-
-        // $data = view('xml.' . $this->feedInstance->getKey(), [
-        //     'currency' => $this->currency,
-        //     'data' => $this->feedInstance->getPreparedData()
-        // ]);
-
-        // $this->saveToFile($data);
+        $this->saveToFile($this->feedInstance->getPreparedData());
     }
 
     /**
      * Save csv data to file
      *
-     * @param View $data
+     * @param object $data
      * @return void
      */
-    protected function saveToFile(View $data): void
+    protected function saveToFile(object $data): void
     {
-        file_put_contents($this->filePath, $data->render(), LOCK_EX);
+        $stream = fopen($this->filePath, 'w');
+
+        fputcsv($stream, $data->headers);
+
+        foreach ($data->rows as $row) {
+            fputcsv($stream, $row);
+        }
+
+        fclose($stream);
     }
 }
