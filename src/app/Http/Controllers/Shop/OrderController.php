@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Database\Seeders\ProductSeeder;
 use App\Services\OldSiteSyncService;
 use Illuminate\Support\Facades\Auth;
-use App\Contracts\OrderServiceIntarface;
+use App\Contracts\OrderServiceInterface;
 use App\Http\Requests\Order\SyncRequest;
 use App\Http\Requests\Order\StoreRequest;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -66,7 +66,7 @@ class OrderController extends BaseController
         }
         Sale::applyForCart($cart);
 
-        $order = app(OrderServiceIntarface::class)->store($request, $cart);
+        $order = app(OrderServiceInterface::class)->store($request, $cart);
 
         Cart::clear();
 
@@ -150,7 +150,7 @@ class OrderController extends BaseController
         $cart->setRelation('items', new EloquentCollection($items));
 
         try {
-            $order = app(OrderServiceIntarface::class)
+            $order = app(OrderServiceInterface::class)
                 ->store($request, $cart);
         } catch (\Throwable $th) {
             abort(OldSiteSyncService::errorResponse($th->getMessage()));

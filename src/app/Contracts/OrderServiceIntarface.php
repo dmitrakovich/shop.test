@@ -5,7 +5,7 @@ namespace App\Contracts;
 use App\Models\Cart;
 use App\Http\Requests\Order\StoreRequest;
 
-interface OrderServiceIntarface
+interface OrderServiceInterface
 {
     /**
      * Store order (create new)

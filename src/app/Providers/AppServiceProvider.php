@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Contracts\OrderServiceIntarface;
+use App\Contracts\OrderServiceInterface;
 use Illuminate\Support\Carbon;
 use App\Services\OrderService;
 use Illuminate\Pagination\Paginator;
@@ -12,7 +12,7 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     public $bindings = [
-        OrderServiceIntarface::class => OrderService::class,
+        OrderServiceInterface::class => OrderService::class,
     ];
 
     /**

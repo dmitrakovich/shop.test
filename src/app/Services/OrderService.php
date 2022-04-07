@@ -4,11 +4,11 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\Orders\Order;
-use App\Contracts\OrderServiceIntarface;
+use App\Contracts\OrderServiceInterface;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Requests\Order\SyncRequest;
 
-class OrderService implements OrderServiceIntarface
+class OrderService implements OrderServiceInterface
 {
     public function store(StoreRequest $request, Cart $cart)
     {
