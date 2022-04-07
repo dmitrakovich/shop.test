@@ -16,11 +16,9 @@ class CsvService extends AbstractFeedService
     {
         return;
 
-        // CurrencyFacade::setCurrentCurrency($this->currency->code);
-
-        // $data = view('xml.' . $this->xmlInstance->getKey(), [
+        // $data = view('xml.' . $this->feedInstance->getKey(), [
         //     'currency' => $this->currency,
-        //     'data' => $this->xmlInstance->getPreparedData()
+        //     'data' => $this->feedInstance->getPreparedData()
         // ]);
 
         // $this->saveToFile($data);

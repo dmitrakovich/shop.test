@@ -6,6 +6,7 @@ use App\Models\Currency;
 use App\Models\Feeds\AbstractFeed;
 use Illuminate\Support\Facades\Log;
 use App\Contracts\FeedServiceInterface;
+use App\Facades\Currency as CurrencyFacade;
 
 abstract class AbstractFeedService implements FeedServiceInterface
 {
@@ -38,6 +39,8 @@ abstract class AbstractFeedService implements FeedServiceInterface
         $this->filePath = $this->getFilePath();
 
         Log::channel('feeds')->info('Start generate', [basename($this->filePath)]);
+
+        CurrencyFacade::setCurrentCurrency($this->currency->code);
     }
 
     /**
@@ -50,10 +53,10 @@ abstract class AbstractFeedService implements FeedServiceInterface
     protected function getFilePath(string $prefix = '', string $postfix = ''): string
     {
         return storage_path('app') . DIRECTORY_SEPARATOR
-                . self::FEEDS_DIR . DIRECTORY_SEPARATOR
-                . $prefix . $this->xmlInstance->getKey() . '_'
-                . strtolower($this->currency->code) . $postfix
-                . '.' . $this->feedInstance::FILE_TYPE;
+            . self::FEEDS_DIR . DIRECTORY_SEPARATOR
+            . $prefix . $this->feedInstance->getKey() . '_'
+            . strtolower($this->currency->code) . $postfix
+            . '.' . $this->feedInstance::FILE_TYPE;
     }
 
     /**
