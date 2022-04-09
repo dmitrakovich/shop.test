@@ -72,12 +72,12 @@ class ProductService
     }
 
     /**
-     * Get products collection for xml
+     * Get products collection for feed
      *
      * @param boolean $withTrashed
      * @return EloquentCollection
      */
-    public function getForXml($withTrashed = false): EloquentCollection
+    public function getForFeed($withTrashed = false): EloquentCollection
     {
         return Product::with([
             'category',

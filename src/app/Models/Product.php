@@ -20,6 +20,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $id
  * @property \App\Models\Category $category
  * @property \App\Models\Brand $brand
+ * @property-read string $sku (new title)
  * @property string $title
  * @property string $slug
  * @property float $price
@@ -201,6 +202,16 @@ class Product extends Model implements HasMedia
     public function favorite(): Relations\HasOne
     {
         return $this->hasOne(Favorite::class);
+    }
+
+    /**
+     * Get SKU (stock keeping unit) (accessor)
+     *
+     * @return string
+     */
+    public function getSkuAttribute(): string
+    {
+        return $this->title;
     }
 
     /**

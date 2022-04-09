@@ -59,7 +59,7 @@ class GoogleXml extends AbstractFeed
      */
     protected function getItems(): array
     {
-        return (new ProductService)->getForXml(true)
+        return (new ProductService)->getForFeed(true)
             ->map(function (Product $item) {
                 return (object)[
                     'id' => $item->id,

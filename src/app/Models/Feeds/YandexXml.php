@@ -93,7 +93,7 @@ class YandexXml extends AbstractFeed
      */
     protected function getOffers(): array
     {
-        return (new ProductService)->getForXml()
+        return (new ProductService)->getForFeed()
             ->map(function (Product $item) {
                 return (object)[
                     'id' => $item->id,

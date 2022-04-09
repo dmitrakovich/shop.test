@@ -2,12 +2,15 @@
 
 namespace App\Models\Feeds;
 
+use App\Facades\Currency;
 use App\Models\Product;
-use App\Models\Category;
 use App\Services\ProductService;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Support\Str;
 
+/**
+ * Class GoogleCsv
+ *
+ * @see https://support.google.com/google-ads/answer/6053288#zippy=%2Ccustom
+ */
 class GoogleCsv extends AbstractFeed
 {
     /**
@@ -18,7 +21,12 @@ class GoogleCsv extends AbstractFeed
     /**
      * @var int
      */
-    const DESCRIPTION_MAX_WIDTH = 5000;
+    const MAX_IMAGE_COUNT = 1;
+
+    /**
+     * @var \App\Models\Currency
+     */
+    protected $currency;
 
     /**
      * Return part of a filename
@@ -51,9 +59,14 @@ class GoogleCsv extends AbstractFeed
     protected function getHeaders(): array
     {
         return [
-            'title' => 'Барокко',
-            'link' => $this->getHost(),
-            'description' => 'Интернет магазин брендовой обуви',
+            'ID',
+            'Item title',
+            'Final URL',
+            'Image URL',
+            'Item description',
+            'Item category',
+            'Price',
+            'Sale price',
         ];
     }
 
@@ -64,82 +77,55 @@ class GoogleCsv extends AbstractFeed
      */
     protected function getRows(): array
     {
-        return [
-            [ '100','2','43'],
-            [ '1','32','3dfg'],
-            [ '12','2','dfg3'],
-            [ '1','42','fgh3'],
-        ];
+        $this->currency = Currency::getCurrentCurrency();
 
-        /*return (new ProductService)->getForXml(true)
+        return (new ProductService)->getForFeed()
             ->map(function (Product $item) {
-                return (object)[
-                    'id' => $item->id,
-                    'link' => $this->getHost() . $item->getUrl(),
-                    'size' => $item->sizes->implode('name', '/'),
-                    'availability' => $item->trashed() ? 'out of stock' : 'in stock',
-                    'price' => $item->getPrice(),
-                    'old_price' => $item->getOldPrice(),
-                    'images' => $this->getProductImages($item->getMedia()),
-                    'brand' => $this->xmlSpecialChars($item->brand->name),
-                    'google_product_category' => $this->getGoogleCategory($item->category),
-                    'product_type' => $this->getProductType($item->category),
-                    'description' => $this->getDescription($item),
-                    'title' => $this->xmlSpecialChars($item->extendedName()),
-                    'material' => $item->fabric_top_txt,
-                    'color' => $this->getColor($item->colors),
+                return [
+                    $item->id,
+                    $this->getItemTitle($item),
+                    $this->getHost() . $item->getUrl(),
+                    $this->getProductImages($item->getMedia())[0],
+                    $this->getDescription($item),
+                    $item->category->name,
+                    $this->formatPrice($item->getOldPrice()),
+                    $this->getSalePrice($item->getPrice(), $item->getOldPrice()),
                 ];
-            })->toArray();*/
+            })->toArray();
     }
 
     /**
-     * Return google product category
+     * Get sale price if exist
      *
-     * @see https://support.google.com/merchants/answer/6324436?hl=ru
-     * @param Category $category
-     * @return integer
+     * @param float $price
+     * @param float $oldPrice
+     * @return string|null
      */
-    protected function getGoogleCategory(Category $category): int
+    protected function getSalePrice(float $price, float $oldPrice): ?string
     {
-        if ($category->id == 28) {
-            return 100;
-        } elseif ($category->parent_id == Category::ACCESSORIES_PARENT_ID) {
-            return 3032;
-        } else {
-            return 187;
-        }
+        return $price < $oldPrice ? $this->formatPrice($price) : null;
     }
 
     /**
-     * Generate & return product type
+     * Format price for google csv
      *
-     * @param Category $category
+     * @param float $price
      * @return string
      */
-    protected function getProductType(Category $category): string
+    protected function formatPrice(float $price): string
     {
-        $type = ['Женщинам'];
-        if ($category->parent_id == Category::ACCESSORIES_PARENT_ID) {
-            $type[] = 'Женские аксессуары';
-        } else {
-            $type[] = 'Женская обувь';
-            if (!in_array($category->parent_id, [null, Category::ROOT_CATEGORY_ID])) {
-                $type[] = $this->getCategoriesList()[$category->parent_id]->title;
-            }
-        }
-        $type[] = $category->title;
-        return implode(' > ', $type);
+        return number_format($price, 2) . ' ' . $this->currency->code;
     }
 
     /**
-     * Prepare color from colors for filters
+     * Prepared item title
      *
-     * @param EloquentCollection $colors
+     * @param Product $item
      * @return string
      */
-    public function getColor(EloquentCollection $colors): string
+    protected function getItemTitle(Product $item): string
     {
-        return count($colors) == 1 ? $colors[0]->name : 'разноцветный';
+        return $item->category->name . ' ' . $item->sku;
     }
 
     /**
@@ -150,35 +136,6 @@ class GoogleCsv extends AbstractFeed
      */
     public function getDescription(Product $product): string
     {
-        $description = $product->extendedName() . '. ';
-        $description .= $this->sizesToString($product->sizes) . '. ';
-        $description .= "Цвет: {$product->color_txt}. ";
-
-        if (!empty($product->fabric_top_txt)) {
-            $description .= 'Материал';
-            if ($product->category->parent_id != Category::ACCESSORIES_PARENT_ID) {
-                $description .= ' верха';
-            }
-            $description .= ": {$product->fabric_top_txt}. ";
-        }
-
-        if (!empty($product->fabric_insole_txt)) {
-            $description .= "Материал подкладки: {$product->fabric_insole_txt}. ";
-        }
-
-        if (!empty($product->fabric_outsole_txt)) {
-            $description .= "Материал подошвы: {$product->fabric_outsole_txt}. ";
-        }
-
-        if (!empty($product->heel_txt)) {
-            $description .=  "Высота каблука: {$product->heel_txt}. ";
-        }
-
-        $description .= $product->description;
-
-        $description = trim(strip_tags($description));
-        $description = Str::limit($description, self::DESCRIPTION_MAX_WIDTH - 3, '...');
-
-        return $description;
+        return "Цвет: {$product->color_txt}. {$this->sizesToString($product->sizes)}";
     }
 }
