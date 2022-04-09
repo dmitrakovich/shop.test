@@ -41,6 +41,8 @@ Route::permanentRedirect('/tiktok', '/catalog?utm_source=tiktok&utm_medium=socia
 
 Route::get('/', [IndexController::class, 'index'])->name('index-page');
 
+Route::get('terms', [InfoPageController::class, 'terms'])->name('info.terms');
+Route::get('policy', [InfoPageController::class, 'policy'])->name('info.policy');
 Route::get('online-shopping/{slug?}', [InfoPageController::class, 'index'])->name('info');
 
 Route::view('shops', 'static.shops')->name('static-shops');

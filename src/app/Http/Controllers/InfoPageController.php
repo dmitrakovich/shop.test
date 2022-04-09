@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\InfoPage;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use App\Services\GoogleTagManagerService;
 
@@ -27,5 +26,31 @@ class InfoPageController extends Controller
         $gtmService->setViewForOther();
 
         return view('static.template', compact('currentInfoPage'));
+    }
+
+    /**
+     * Display terms info page.
+     *
+     * @param GoogleTagManagerService $gtmService
+     * @return View
+     */
+    public function terms(GoogleTagManagerService $gtmService): View
+    {
+        $gtmService->setViewForOther();
+
+        return view('static.terms');
+    }
+
+    /**
+     * Display private policy info page.
+     *
+     * @param GoogleTagManagerService $gtmService
+     * @return View
+     */
+    public function policy(GoogleTagManagerService $gtmService): View
+    {
+        $gtmService->setViewForOther();
+
+        return view('static.policy');
     }
 }

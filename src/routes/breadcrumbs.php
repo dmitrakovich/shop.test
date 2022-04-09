@@ -51,6 +51,16 @@ Breadcrumbs::for('static-shops', function ($trail) {
     $trail->parent('index');
     $trail->push('Магазины', route('static-shops'));
 });
+
+Breadcrumbs::for('terms', function ($trail) {
+    $trail->parent('index');
+    $trail->push('Публичная оферта', route('info.terms'));
+});
+
+Breadcrumbs::for('policy', function ($trail) {
+    $trail->parent('index');
+    $trail->push('Политика конфиденциальности', route('info.policy'));
+});
 #endregion
 
 
