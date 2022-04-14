@@ -14,10 +14,14 @@
                 <div class="h5 mt-5 mb-4">Время работы</div>
                 с 10.00 до 22.00<br>
                 ежедневно
+                <div class="h5 mt-5 mb-4">Информация</div>
+                <a href="/term" title="Публичная оферта">Публичная оферта</a><br>
+                <a href="/politic" title="Политика конфиденциальности">Политика конфиденциальности</a><br>
             </div>
             <div class="col-12 col-sm text-center text-sm-left">
                 <h5 class="mt-5 mb-4">Контакты</h5>
                 <a href="tel:+375291793790">+375&nbsp;(29)&nbsp;179-37-90</a><br>
+                <a href="tel:+375295227722">+375&nbsp;(29)&nbsp;522-77-22</a><br>
                 <a href="tel:88001007769">8-800-100-77-69&nbsp;(РФ)</a><br>
                 <a href="mailto:info@barocco.by">info@barocco.by</a>
             </div>
