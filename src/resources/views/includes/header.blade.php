@@ -16,7 +16,9 @@
                     Ежедневно&nbsp;с 10:00&nbsp;до&nbsp;22:00<br>
                     <a href="{{ config('contacts.phone.link') }}" data-gtm-user-event="callPhone">
                         {{ config('contacts.phone.name') }}
-                    </a><br/>
+                    </a>&nbsp;
+                    <a href="tel:+375295227722" data-gtm-user-event="callPhone">+375 (29) 522 77 22</a>
+                    <br/>
                     <a href="{{ config('contacts.viber.link') }}" data-gtm-user-event="callViber">
                         {{ config('contacts.viber.name') }}
                     </a> /
