@@ -101,8 +101,8 @@ if (isset($_POST['act'])) {
 			break;
 
 		case "save":
-			$availabilityConfig['auto_del'] = (empty($_POST['auto_del']))?'off':'on';
-			$availabilityConfig['ignore'] = array_map(trim,explode(',',$_POST['ignore']));
+			$availabilityConfig['auto_del'] = empty($_POST['auto_del']) ? 'off' : 'on';
+			$availabilityConfig['ignore'] = array_map('trim', explode(',', $_POST['ignore']));
 			$availabilityConfig['period'] = intval($_POST['period']);
 			$sbros = array('publish','new','add_size','del','del_size');
 			foreach ($sbros as $sbrosv) {
