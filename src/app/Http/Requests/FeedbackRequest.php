@@ -65,6 +65,7 @@ class FeedbackRequest extends FormRequest
             'type_id' => [],
             'captcha_score' => ['integer', 'between:0,10'],
             'photos' => ['array'],
+            'photos.*' => ['image'],
             'videos' => ['array'],
         ];
     }

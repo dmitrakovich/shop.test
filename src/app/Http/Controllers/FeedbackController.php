@@ -44,6 +44,7 @@ class FeedbackController extends Controller
         $feedback = Feedback::create($data);
 
         foreach (($data['photos'] ?? []) as $photo) {
+            /** @var \Illuminate\Http\UploadedFile $photo */
             if ($photo->getSize() > Feedback::MAX_PHOTO_SIZE) {
                 continue;
             }
