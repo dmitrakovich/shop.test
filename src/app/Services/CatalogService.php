@@ -51,14 +51,23 @@ class CatalogService
         return $products;
     }
 
+    /**
+     * load next products
+     *
+     * @return \Illuminate\Contracts\Pagination\CursorPaginator
+     */
     public function getNextProducts()
     {
         $productsQuery = Cache::get($this->getQueryCacheKey());
 
         abort_if(empty($productsQuery), 419, 'Query cache not found');
 
-        $productsQuery = Eloquent::unserialize($productsQuery);
-        $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
+        try {
+            $productsQuery = Eloquent::unserialize($productsQuery);
+            $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
+        } catch (\Throwable $th) {
+            abort(419, 'Page maby expired. Error: ' . $th->getMessage());
+        }
 
         $this->addGtmData($products);
 
