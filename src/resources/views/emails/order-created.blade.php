@@ -137,7 +137,7 @@
                     </tr>
                     <tr>
                         <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
-                            <b>ФИО</b>: {{ $order->first_name }}
+                            <b>ФИО</b>: {{ $order->last_name }} {{ $order->first_name }} {{ $order->patronymic_name }}
                         </td>
                     </tr>
                     <tr>
@@ -219,6 +219,7 @@
                             <td width="200px" valign="middle" align="left" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">
                                 <a href="{{ $item->product->getUrl() }}" target="_blank">{{ $item->product->getFullName() }}</a><br>
                                 Размер: <b>{{ $item->size->name }}</b><br>
+                                Код: <b>{{ $item->product_id }}</b>
                                 {{-- {{PROMOCODE}} --}}
                             </td>
                             <td width="150px" valign="middle" align="center" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">

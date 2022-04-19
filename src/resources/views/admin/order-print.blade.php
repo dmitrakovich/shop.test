@@ -58,7 +58,7 @@
                     </tr>
                     <tr>
                         <td width="320" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
-                            <b>ФИО</b>: {{ $order->first_name }}
+                            <b>ФИО</b>: {{ $order->last_name }} {{ $order->first_name }} {{ $order->patronymic_name }}
                         </td>
                     </tr>
                     <tr>
