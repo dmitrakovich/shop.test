@@ -11,6 +11,8 @@ class Country extends Model
 {
     use HasFactory;
 
+    const DEFAULT_COUNTRY_CODE = 'BY';
+
     /**
      * Countries cache list
      *
@@ -29,6 +31,16 @@ class Country extends Model
     }
 
     /**
+     * Return default country
+     *
+     * @return self
+     */
+    public static function getDefaultCountry(): self
+    {
+        return self::getAll()->where('code', self::DEFAULT_COUNTRY_CODE)->first();
+    }
+
+    /**
      * Return current country by user addr or ip
      *
      * @return self
@@ -38,6 +50,7 @@ class Country extends Model
         $userCountryId = optional(auth()->user())->getFirstAddressCountryId();
 
         return self::getAll()->where('id', $userCountryId)->first()
-            ?? self::getAll()->where('code', SxGeo::getCountry())->first();
+            ?? self::getAll()->where('code', SxGeo::getCountry())->first()
+            ?? self::getDefaultCountry();
     }
 }
