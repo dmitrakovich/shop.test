@@ -47,11 +47,11 @@ class CreateOrdersTable extends Migration
             $table->enum('order_method', OrderMethod::getValues())
                 ->default(OrderMethod::DEFAULT);
 
-            $table->string('utm_medium', 40)->nullable();
-            $table->string('utm_source', 40)->nullable();
-            $table->string('utm_campaign', 40)->nullable();
-            $table->string('utm_content', 40)->nullable();
-            $table->string('utm_term', 40)->nullable();
+            $table->string('utm_medium')->index()->nullable();
+            $table->string('utm_source')->index()->nullable();
+            $table->string('utm_campaign')->index()->nullable();
+            $table->string('utm_content')->index()->nullable();
+            $table->string('utm_term')->index()->nullable();
 
             $table->string('status_key', 20)->index()
                 ->default(OrderStatus::getDefaultValue());
