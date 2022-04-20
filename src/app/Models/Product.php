@@ -241,7 +241,7 @@ class Product extends Model implements HasMedia
      */
     public function getFullName(): string
     {
-        return $this->brand->name . ' ' . $this->title;
+        return $this->brand->name . ' ' . $this->sku;
     }
 
     /**

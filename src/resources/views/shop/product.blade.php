@@ -218,8 +218,8 @@
                 Высота каблука - {{ $product->heel_txt }} <br>
             @endif
 
-            @if (!empty($product->title))
-                Артикул - {{ $product->title }} <br>
+            @if (!empty($product->sku))
+                Артикул - {{ $product->sku }} <br>
             @endif
 
         </div>
