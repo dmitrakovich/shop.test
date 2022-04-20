@@ -17,7 +17,7 @@
             </div>
             <div class="col col-md-5 col-lg">
                 Рассрочка<br>
-                <small class="text-muted">на 3 платежа без переплаты</small>
+                <small class="text-muted">на 2 платежа без переплаты</small>
             </div>
         </div>
     </div>
