@@ -35,7 +35,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $description
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property Carbon $deleted_at
+ * @property Carbon|null $deleted_at
  * ...
  */
 class Product extends Model implements HasMedia
@@ -302,27 +302,33 @@ class Product extends Model implements HasMedia
      */
     public function scopeSearch(Builder $query, ?string $search = null)
     {
-        if (!empty($search)) {
-            $searchService = new SearchService($search);
-            $query->where(function ($query) use ($searchService) {
-                $searchService->generateSearchQuery($query, 'title')
-                    ->orWhereIn('id', $searchService->getIds())
-                    ->orWhereHas('brand', function (Builder $query) use ($searchService) {
-                        $searchService->generateSearchQuery($query, 'name');
-                    })
-                    ->orWhereHas('category', function (Builder $query) use ($searchService) {
-                        $searchService->generateSearchQuery($query, 'title');
-                    })
-                    ->orWhere(function (Builder $query) use ($searchService) {
-                        $searchService->generateSearchQuery($query, 'color_txt');
-                    })
-                    ->orWhereHas('tags', function (Builder $query) use ($searchService) {
-                        $searchService->generateSearchQuery($query, 'name');
-                    });
-            });
-            $query->orderBy('created_at', 'desc');
+        if (empty($search)) {
+            return $query;
         }
-        return $query;
+        $searchService = new SearchService($search);
+
+        if ($searchService->useSimpleSearch()) {
+            return $query->where('id', $searchService->getIds()[0]);
+        }
+
+        $query->where(function ($query) use ($searchService) {
+            $searchService->generateSearchQuery($query, 'title')
+                ->orWhereIn('id', $searchService->getIds())
+                ->orWhereHas('brand', function (Builder $query) use ($searchService) {
+                    $searchService->generateSearchQuery($query, 'name');
+                })
+                ->orWhereHas('category', function (Builder $query) use ($searchService) {
+                    $searchService->generateSearchQuery($query, 'title');
+                })
+                ->orWhere(function (Builder $query) use ($searchService) {
+                    $searchService->generateSearchQuery($query, 'color_txt');
+                })
+                ->orWhereHas('tags', function (Builder $query) use ($searchService) {
+                    $searchService->generateSearchQuery($query, 'name');
+                });
+        });
+
+        return $query->orderBy('created_at', 'desc');
     }
 
     /**

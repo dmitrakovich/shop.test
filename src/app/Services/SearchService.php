@@ -49,4 +49,14 @@ class SearchService
         });
         return array_values(array_map('intval', $idList));
     }
+
+    /**
+     * Use product id search
+     *
+     * @return boolean
+     */
+    public function useSimpleSearch(): bool
+    {
+        return count($this->searchKeys) === 1 && is_numeric($this->searchKeys[0]);
+    }
 }
