@@ -39,6 +39,7 @@
         "laravel/sanctum": "^2.12",
         "laravel/tinker": "^2.0",
         "laravie/serialize-queries": "^1.0",
+        "phpoffice/phpspreadsheet": "^1.23",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^2.9",
         "spatie/laravel-googletagmanager": "^2.6",
