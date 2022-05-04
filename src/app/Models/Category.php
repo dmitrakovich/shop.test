@@ -8,6 +8,8 @@ use App\Traits\AttributeFilterTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Product category class
@@ -62,21 +64,28 @@ class Category extends Model
         $this->generatePath();
     }
 
-    public function parentCategory()
+    /**
+     * @return BelongsTo
+     */
+    public function parentCategory(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
     }
 
-    public function categories()
+    /**
+     * @return HasMany
+     */
+    public function categories(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    public function childrenCategories()
+    /**
+     * @return HasMany
+     */
+    public function childrenCategories(): HasMany
     {
-        return $this->hasMany(Category::class, 'parent_id')
-            // ->where('active', true)
-            ->with('childrenCategories');
+        return $this->hasMany(Category::class, 'parent_id')->with('childrenCategories');
     }
 
     public static function beforeApplyFilter(&$builder, &$values)
@@ -88,6 +97,7 @@ class Category extends Model
             $values = self::getChildrenCategoriesIdsList($currentCategoryId);
         }
     }
+
     /**
      * Получить список идентификаторов дочерних категорий
      *
@@ -102,6 +112,7 @@ class Category extends Model
             );
         });
     }
+
     /**
      * Сделать одноуровневый массив из дерева
      *
@@ -116,6 +127,7 @@ class Category extends Model
         }
         return $descendants;
     }
+
     // Получение ссылки
     public function getUrl()
     {
@@ -141,6 +153,7 @@ class Category extends Model
             $model->generatePath()->save();
         }
     }
+
     /**
      * Получить форматированное дерево категорий
      *
