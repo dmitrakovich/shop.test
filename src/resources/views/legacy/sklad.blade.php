@@ -356,13 +356,6 @@ ksort($brandArr);
 @if ($fltr['excel'] == 1) @php
 /*********EXCEL*************/
 
-// Подключаем класс для работы с excel
-require_once app_path('Admin/legacy/PHPExcel.php');
-
-// Подключаем класс для вывода данных в формате excel
-require_once app_path('Admin/legacy/PHPExcel/Writer/Excel2007.php');
-
-
 $xls = new PHPExcel(); // Создаем объект класса PHPExcel
 $xls->setActiveSheetIndex(0); // Устанавливаем индекс активного листа
 $sheet = $xls->getActiveSheet(); // Получаем активный лист
@@ -377,18 +370,18 @@ $style_title = array(
         'color' => array ('rgb' => 'FFFFFF')
 	),
     'fill' => array(
-        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+        'type' => PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
         'color' => array ('rgb' => '777777')
     ),
 	'borders' => array(
 		'allborders' => array(
-			'style' => PHPExcel_Style_Border::BORDER_THIN,
+			'style' => PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
 			'color' => array('rgb' => '000000')
 		)
 	),
     'alignment' => array (
-		'horizontal' 	=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-		'vertical'   	=> PHPExcel_Style_Alignment::VERTICAL_CENTER,
+		'horizontal' 	=> PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+		'vertical'   	=> PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
 		'wrap'       	=> true,
 	)
 );
@@ -401,13 +394,13 @@ $style_normal = array(
 	),
 	'borders' => array(
 		'allborders' => array(
-			'style' => PHPExcel_Style_Border::BORDER_THIN,
+			'style' => PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
 			'color' => array('rgb' => '000000')
 		)
 	),
     'alignment' => array (
-		'horizontal' 	=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-		'vertical'   	=> PHPExcel_Style_Alignment::VERTICAL_CENTER,
+		'horizontal' 	=> PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+		'vertical'   	=> PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
 		'wrap'       	=> true,
 	)
 );
@@ -419,18 +412,18 @@ $style_none = array(
         'color' => array ('rgb' => '000000')
 	),
     'fill' => array(
-        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+        'type' => PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
         'color' => array ('rgb' => 'CCCCCC')
     ),
 	'borders' => array(
 		'allborders' => array(
-			'style' => PHPExcel_Style_Border::BORDER_THIN,
+			'style' => PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
 			'color' => array('rgb' => '000000')
 		)
 	),
     'alignment' => array (
-		'horizontal' 	=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-		'vertical'   	=> PHPExcel_Style_Alignment::VERTICAL_CENTER,
+		'horizontal' 	=> PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+		'vertical'   	=> PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
 		'wrap'       	=> true,
 	)
 );
@@ -442,18 +435,18 @@ $style_sold = array(
         'color' => array('rgb' => '000000')
 	),
     'fill' => array(
-        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+        'type' => PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
         'color' => array('rgb' => 'FF0000')
     ),
 	'borders' => array(
 		'allborders' => array(
-			'style' => PHPExcel_Style_Border::BORDER_THIN,
+			'style' => PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
 			'color' => array('rgb' => '000000')
 		)
 	),
     'alignment' => array(
-		'horizontal' 	=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-		'vertical'   	=> PHPExcel_Style_Alignment::VERTICAL_CENTER,
+		'horizontal' 	=> PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+		'vertical'   	=> PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
 		'wrap'       	=> true,
 	)
 );
@@ -465,18 +458,18 @@ $style_sale = array(
         'color' => array('rgb' => '000000')
 	),
     'fill' => array(
-        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+        'type' => PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
         'color' => array('rgb' => 'FFFF00')
     ),
 	'borders' => array(
 		'allborders' => array(
-			'style' => PHPExcel_Style_Border::BORDER_THIN,
+			'style' => PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
 			'color' => array('rgb' => '000000')
 		)
 	),
     'alignment' => array(
-		'horizontal' 	=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-		'vertical'   	=> PHPExcel_Style_Alignment::VERTICAL_CENTER,
+		'horizontal' 	=> PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+		'vertical'   	=> PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
 		'wrap'       	=> true,
 	)
 );
@@ -578,7 +571,7 @@ foreach($dSklad as $kBrand => $dBrand) {
 		}
 
 		$sheet->getStyle('A'.$rw.':'.$cN[$cl].$rw)->applyFromArray($style_row);
-		$sheet->getStyle('B'.$rw.':'.$cN[$cl - 3].$rw)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+		$sheet->getStyle('B'.$rw.':'.$cN[$cl - 3].$rw)->getAlignment()->setHorizontal(PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 	}
 }
 
