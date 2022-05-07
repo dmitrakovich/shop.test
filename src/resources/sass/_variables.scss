@@ -38,7 +38,7 @@ $grid-columns:		12;
 $grid-gutter-width:	20px;
 
 $spacers: (
-	main: $grid-gutter-width / 2,
+	main: $grid-gutter-width * .5,
 	// 6: 4rem
 );
 

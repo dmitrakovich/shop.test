@@ -22,8 +22,14 @@ mix.js('resources/js/app.js', 'public/js')
 if (mix.inProduction()) {
     mix.disableNotifications();
 } else {
-    mix.browserSync({
-        proxy: 'shop.test',
-    });
+    // mix.browserSync({
+    //     proxy: 'shop.test',
+    // });
     mix.sourceMaps(true, 'source-map');
 }
+
+// mix.webpackConfig({
+//   stats: {
+//        children: true
+//   }
+// })
