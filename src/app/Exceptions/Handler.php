@@ -6,7 +6,6 @@ use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Jenssegers\Agent\Facades\Agent;
-use Telegram\Bot\Laravel\Facades\Telegram;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -69,7 +68,7 @@ class Handler extends ExceptionHandler
 
     private function sendInTelegram (Throwable $e)
     {
-        $time = Carbon::now()->format('Y-m-d H:i:s.u');
+        /*$time = Carbon::now()->format('Y-m-d H:i:s.u');
         $exception = get_class($e);
 
         $request = request();
@@ -129,6 +128,6 @@ class Handler extends ExceptionHandler
             ]);
         } catch (\Throwable $th) {
             //throw $th;
-        }
+        }*/
     }
 }

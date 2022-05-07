@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use Throwable;
-use Telegram\Bot\Laravel\Facades\Telegram;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -43,10 +42,6 @@ abstract class AbstractJob implements ShouldQueue
             MSG;
         // Trace: {$exception->getTraceAsString()};
         $this->complete("{$exception->getMessage()} [{$this->getName()}]", 'jobs', 'error');
-        // Telegram::sendMessage([
-        //     'chat_id' => config('telegram.chat_id_for_errors'),
-        //     'text' => $errorMsg
-        // ]);
     }
 
     /**
@@ -107,7 +102,7 @@ abstract class AbstractJob implements ShouldQueue
         $this->debug($msg, $channel, $type);
         // Log::channel($channel)->info(str_repeat('-', 40));
     }
-    
+
     /**
      * Получить форматированное кол-во использованной памяти
      *
