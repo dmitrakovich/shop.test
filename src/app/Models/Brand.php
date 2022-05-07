@@ -22,15 +22,6 @@ class Brand extends Model
     {
         return 'brand_id';
     }
-    // public function setLogoAttribute($logo)
-    // {
-    //     $this->attributes['logo'] = strtr($logo, ['brand_logos/' => '']);
-    // }
-
-    // public function getLogoAttribute($logo)
-    // {
-    //     return "brand_logos/$logo";
-    // }
 
     /**
      * Make dafault brand

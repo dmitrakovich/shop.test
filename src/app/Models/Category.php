@@ -8,6 +8,7 @@ use App\Traits\AttributeFilterTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -59,9 +60,16 @@ class Category extends Model
         return 'category_id';
     }
 
-    public function setPathAttribute($path)
+    /**
+     * Generate path mutator
+     *
+     * @return Attribute
+     */
+    public function path(): Attribute
     {
-        $this->generatePath();
+        return Attribute::make(
+            set: fn () => $this->generatePath()
+        );
     }
 
     /**
@@ -193,11 +201,14 @@ class Category extends Model
     /**
      * Get category name (accessor)
      *
-     * @return string
+     * @param string $value
+     * @return Attribute
      */
-    public function getNameAttribute(): string
+    public function name(): Attribute
     {
-        return $this->isRoot() ? 'Женская обувь' : $this->title;
+        return Attribute::make(
+            get: fn () => $this->isRoot() ? 'Женская обувь' : $this->title
+        );
     }
 
     /**

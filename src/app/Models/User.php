@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 /**
  * Class User
  *
@@ -20,12 +23,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'usergroup_id',
@@ -39,18 +42,19 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -117,15 +121,18 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Аксессуар для поля, которе есть в БД
+     * Interact with the user's first name.
      *
-     * @param string $valueFromDB
-     * @return mixed
+     * @param string $firstName
+     * @return Attribute
      */
-    public function getFirstNameAttribute($valueFromDB)
+    public function firstName(): Attribute
     {
-        return Str::ucfirst($valueFromDB);
+        return Attribute::make(
+            get: fn ($firstName) => Str::ucfirst($firstName)
+        );
     }
+
     /**
      * Farmat date in admin panel
      *

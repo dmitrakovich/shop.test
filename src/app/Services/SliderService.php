@@ -57,7 +57,7 @@ class SliderService
                             return [
                                 'id' => $product->id,
                                 'title' => $product->sku,
-                                'full_name' => "{$product->category->title} {$product->brand->name}",
+                                'full_name' => "{$product->category->name} {$product->brand->name}",
                                 'sale_percentage' => $product->getSalePercentage(),
                                 'is_new' => $product->isNew(),
                                 'price_byn' => $product->getFinalPrice(),
@@ -125,7 +125,7 @@ class SliderService
                     return [
                         'id' => $product->id,
                         'title' => $product->sku,
-                        'full_name' => "{$product->category->title} {$product->brand->name}",
+                        'full_name' => "{$product->category->name} {$product->brand->name}",
                         'sale_percentage' => $product->getSalePercentage(),
                         'is_new' => $product->isNew(),
                         'price_byn' => $product->getFinalPrice(),

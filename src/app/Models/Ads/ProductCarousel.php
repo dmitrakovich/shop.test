@@ -35,7 +35,7 @@ class ProductCarousel extends Model implements Sortable
         'sort_when_creating' => true,
     ];
 
-    public function getCategoriesListAttribute($value)
+    public function getCategoriesListAttribute()
     {
         return $this->categories;
     }

@@ -2,8 +2,9 @@
 
 namespace App\Admin\Models;
 
-use App\Models\Banner as BannerModel;
 use Illuminate\Support\Facades\File;
+use App\Models\Banner as BannerModel;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Banner extends BannerModel
 {
@@ -31,24 +32,47 @@ class Banner extends BannerModel
         return BannerModel::class;
     }
 
-    public function setResourceAttribute($resource)
+    /**
+     * Interact with the banner's resource.
+     *
+     * @return Attribute
+     */
+    public function path(): Attribute
     {
-        $this->clearMediaCollection()
-            ->addMedia(public_path("uploads/$resource"))
-            ->toMediaCollection();
+        return Attribute::make(
+            get: fn () => $this->getFirstMediaUrl(),
+            set: fn ($resource) => $this->clearMediaCollection()
+                ->addMedia(public_path("uploads/$resource"))
+                ->toMediaCollection()
+        );
     }
 
-    public function getResourceAttribute()
+    /**
+     * Interact with the banner's type.
+     *
+     * @return Attribute
+     */
+    public function type(): Attribute
     {
-        return $this->getFirstMediaUrl();
+        return Attribute::make(
+            get: fn () => intval(optional($this->getMedia()->first())->hasCustomProperty('videos'))
+        );
     }
 
-    public function getTypeAttribute()
+    /**
+     * Interact with the banner's videos.
+     *
+     * @return Attribute
+     */
+    public function videos(): Attribute
     {
-        return intval(optional($this->getMedia()->first())->hasCustomProperty('videos'));
+        return Attribute::make(
+            get: fn () => $this->getVideos(),
+            set: fn ($videos) => $this->setVideos($videos)
+        );
     }
 
-    public function setVideosAttribute($videos)
+    public function setVideos(array $videos)
     {
         if ($this->getMedia()->isEmpty()) {
             admin_error(self::ERRORS['empty_preview']);
@@ -71,7 +95,7 @@ class Banner extends BannerModel
         }
     }
 
-    public function getVideosAttribute()
+    public function getVideos()
     {
         $videos = optional($this->getMedia()->first())->getCustomProperty('videos');
 
@@ -79,7 +103,7 @@ class Banner extends BannerModel
             return null;
         }
 
-        return array_map(function($video) {
+        return array_map(function ($video) {
             return "files/$video";
         }, $videos);
     }

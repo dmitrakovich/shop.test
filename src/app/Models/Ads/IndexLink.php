@@ -3,6 +3,7 @@
 namespace App\Models\Ads;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class IndexLink extends Model
@@ -13,14 +14,17 @@ class IndexLink extends Model
         'links' =>'json',
     ];
 
-    public function getLinksAttribute($value)
+    /**
+     * Interact with the index page's links.
+     *
+     * @return Attribute
+     */
+    public function links(): Attribute
     {
-        return array_values(json_decode($value, true) ?: []);
-    }
-
-    public function setLinksAttribute($value)
-    {
-        $this->attributes['links'] = json_encode(array_values($value));
+        return Attribute::make(
+            get: fn ($value) => array_values(json_decode($value, true) ?: []),
+            set: fn ($value) => $this->attributes['links'] = json_encode(array_values($value))
+        );
     }
 
     protected function serializeDate(\DateTimeInterface $date)

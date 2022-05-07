@@ -40,7 +40,7 @@ class FeedbackRequest extends FormRequest
      *
      * @return array
      */
-    public function validated()
+    public function validated($key = null, $default = null)
     {
         return array_merge($this->validator->validated(), [
             'user_id' => Auth::id(),

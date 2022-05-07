@@ -135,10 +135,10 @@ class Device extends Model
     protected static function booted()
     {
         static::saving(function (self $device) {
-            $device->setYandexIdAttribute();
-            $device->setGoogleIdAttribute();
-            $device->setTypeAttribute();
-            $device->setAgentAttribute();
+            $device->setYandexId();
+            $device->setGoogleId();
+            $device->setType();
+            $device->setAgent();
         });
     }
 
@@ -169,7 +169,7 @@ class Device extends Model
      * @param integer|null $yandexId
      * @return void
      */
-    public function setYandexIdAttribute(?int $yandexId = null): void
+    public function setYandexId(?int $yandexId = null): void
     {
         $yandexId = $yandexId ?? (int)Cookie::get(self::YANDEX_ID_COOKIE_NAME);
 
@@ -182,7 +182,7 @@ class Device extends Model
      * @param string|null $googleId
      * @return void
      */
-    public function setGoogleIdAttribute(?string $googleId = null): void
+    public function setGoogleId(?string $googleId = null): void
     {
         if ($googleId) {
             $this->attributes['google_id'] = $googleId;
@@ -200,7 +200,7 @@ class Device extends Model
      * @param string|null $type
      * @return void
      */
-    public function setTypeAttribute(?string $type = null): void
+    public function setType(?string $type = null): void
     {
         if ($type && in_array($type, self::TYPES)) {
             $this->attributes['type'] = $type;
@@ -215,7 +215,7 @@ class Device extends Model
      * @param string|null $agent
      * @return void
      */
-    public function setAgentAttribute(?string $agent = null): void
+    public function setAgent(?string $agent = null): void
     {
         if ($agent) {
             $this->attributes['agent'] = $agent;

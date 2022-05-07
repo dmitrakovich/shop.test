@@ -3,6 +3,7 @@
 namespace App\Admin\Models;
 
 use App\Models\Product as ProductModel;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Product extends ProductModel
@@ -29,22 +30,37 @@ class Product extends ProductModel
     {
         return ProductModel::class;
     }
+
     /**
-     * Геттер для админки
+     * Accessor for admin panel
      *
-     * @return string
+     * @return Attribute
      */
-    public function getPathAttribute()
+    public function path(): Attribute
     {
-        return $this->getUrl();
+        return Attribute::make(
+            get: fn () => $this->getUrl()
+        );
     }
+
     /**
-     * Сеттер для фоток
+     * Interact with the product's photos.
      *
+     * @return Attribute
+     */
+    public function photos(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->getPhotos(),
+            set: fn ($photos) => $this->setPhotos($photos)
+        );
+    }
+
+    /**
      * @param array $photos
      * @return void
      */
-    public function setPhotosAttribute($photos)
+    public function setPhotos(array $photos): void
     {
         $currentPhotos = [];
         $mediaItems = $this->getMedia();
@@ -77,12 +93,11 @@ class Product extends ProductModel
             $mediaItems[$key]->delete();
         }
     }
+
     /**
-     * Геттер для фоток
-     *
      * @return array
      */
-    public function getPhotosAttribute()
+    public function getPhotos(): array
     {
         $photos = [];
         foreach ($this->getMedia() as $image) {

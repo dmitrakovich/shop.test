@@ -39,7 +39,7 @@ class FilterRequest extends FormRequest
      */
     public function getSorting(): string
     {
-        $session = $this->getSession();
+        $session = $this->session();
         $sorting = $this->input('sort') ?? $session->get('sorting', Product::DEFAULT_SORT);
         if ($session->get('sorting') <> $sorting) {
             $session->put('sorting', $sorting);

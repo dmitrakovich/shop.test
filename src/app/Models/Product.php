@@ -8,9 +8,10 @@ use Illuminate\Support\Carbon;
 use App\Services\SearchService;
 use App\Models\ProductAttributes;
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\{Model, Builder, Relations, SoftDeletes};
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Database\Eloquent\{Model, Builder, Relations, SoftDeletes};
 
 /**
  * Class Product
@@ -82,16 +83,6 @@ class Product extends Model implements HasMedia
     public function collection()
     {
         return $this->belongsTo(Collection::class);
-    }
-
-    /**
-     * Получить шильды для продукта
-     *
-     * @return string
-     */
-    public function getLabelsAttribute()
-    {
-        return 'labels';
     }
 
     /**
@@ -207,11 +198,13 @@ class Product extends Model implements HasMedia
     /**
      * Get SKU (stock keeping unit) (accessor)
      *
-     * @return string
+     * @return Attribute
      */
-    public function getSkuAttribute(): string
+    public function sku(): Attribute
     {
-        return $this->title;
+        return Attribute::make(
+            get: fn () => $this->title
+        );
     }
 
     /**

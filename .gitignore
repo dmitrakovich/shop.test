@@ -1,4 +1,5 @@
-.vscode/
+/.idea
+/.vscode
 *.log
 .env
 .env.testing
