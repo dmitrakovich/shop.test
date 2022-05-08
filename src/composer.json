@@ -29,7 +29,6 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "laravie/serialize-queries": "^2.0",
-        "phpoffice/phpspreadsheet": "dev-NumberFormatMask-Helpers",
         "sentry/sentry-laravel": "^2.12",
         "spatie/laravel-googletagmanager": "^2.6",
         "spatie/laravel-medialibrary": "^10.3",

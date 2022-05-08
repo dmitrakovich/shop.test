@@ -8,20 +8,23 @@ require 'recipe/laravel.php';
 set('application', 'Barocco');
 
 // Project repository
-set('repository', 'https://github.com/dmitrakovich/shop.test.git');
+// set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
 // Hosts
-host('barocco.by')
-    ->user('user2099049')
-    ->identityFile('~/.ssh/key.pem')
-    ->set('deploy_path', '~/public_html')
+host('testing', 'production')
     ->addSshOption('StrictHostKeyChecking', 'no')
-    ->addSshOption('UserKnownHostsFile', '/dev/null');
+    ->addSshOption('UserKnownHostsFile', '/dev/null')
+    ->identityFile('~/.ssh/key.pem');
+host('production')
+    ->hostname(getenv('PRODUCTION_HOST'))
+    ->user(getenv('PRODUCTION_USERNAME'))
+    ->port(getenv('PRODUCTION_PORT'));
 
-// [Optional] Allocate tty for git clone. Default value is false.
-// set('git_tty', true); 
+task('deploy:upload', function () {
+    upload('src/', '{{release_path}}/');
+});
 
-// Shared files/dirs between deploys 
+// Shared files/dirs between deploys
 add('shared_files', [
     '.env'
 ]);
@@ -35,11 +38,11 @@ add('shared_dirs', [
     'database/sxgeo',
 ]);
 
-// Writable dirs by web server 
+// Writable dirs by web server
 add('writable_dirs', [
     'storage',
     'bootstrap/cache'
-]);  
+]);
 
 
 // Tasks
@@ -55,10 +58,12 @@ task('deploy:update_code', function () {
 // Migrate database before symlink new release.
 
 task('deploy', [
+    'deploy:info',
     'deploy:prepare',
     'deploy:lock',
     'deploy:release',
-    'deploy:update_code',
+    'deploy:upload',
+    // 'deploy:update_code',
     'deploy:shared',
     'deploy:writable',
     // 'deploy:vendors',
