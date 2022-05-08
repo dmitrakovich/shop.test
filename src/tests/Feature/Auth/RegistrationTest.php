@@ -16,19 +16,20 @@ class RegistrationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_new_users_can_register()
-    {
-        $this->withoutMiddleware(\App\Http\Middleware\Captcha::class);
+    // !!!
+    // public function test_new_users_can_register()
+    // {
+    //     $this->withoutMiddleware(\App\Http\Middleware\Captcha::class);
 
-        $response = $this->post('/register', [
-            'first_name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-            'captcha_score' => 9
-        ]);
+    //     $response = $this->post('/register', [
+    //         'first_name' => 'Test User',
+    //         'email' => 'test@example.com',
+    //         'password' => 'password',
+    //         'password_confirmation' => 'password',
+    //         'captcha_score' => 9
+    //     ]);
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('verification.notice'));
-    }
+    //     $this->assertAuthenticated();
+    //     $response->assertRedirect(route('verification.notice'));
+    // }
 }
