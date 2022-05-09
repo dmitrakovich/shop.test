@@ -11,6 +11,7 @@ set('application', 'Barocco');
 // set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
 var_dump(getenv());
+var_dump(get_defined_vars());
 
 // Hosts
 host('production')
