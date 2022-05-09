@@ -12,7 +12,7 @@ jobs:
   laravel-tests-and-deploy:
 
     runs-on: ubuntu-latest
-    environment: deploy
+    environment: production
     defaults:
       run:
         working-directory: ./src
