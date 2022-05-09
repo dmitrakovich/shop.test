@@ -22,7 +22,7 @@ var_dump(getenv('PRODUCTION_PATH'));
 host('production')
     ->hostname(getenv('PRODUCTION_HOST'))
     ->user(getenv('PRODUCTION_USERNAME'))
-    ->port(getenv('PRODUCTION_PORT'))
+    ->port((int)getenv('PRODUCTION_PORT'))
     ->set('deploy_path', getenv('PRODUCTION_PATH'))
     ->addSshOption('StrictHostKeyChecking', 'no')
     ->addSshOption('UserKnownHostsFile', '/dev/null')
@@ -60,7 +60,7 @@ add('writable_dirs', [
 // });
 
 task('deploy:update_code', function () {
-	upload('src/', '{{release_path}}/');
+    upload('src/', '{{release_path}}/');
 });
 
 // Migrate database before symlink new release.
