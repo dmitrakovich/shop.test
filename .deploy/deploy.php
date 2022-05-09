@@ -10,6 +10,8 @@ set('application', 'Barocco');
 // Project repository
 // set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
+var_dump(getenv());
+
 // Hosts
 host('production')
     ->hostname(getenv('PRODUCTION_HOST'))

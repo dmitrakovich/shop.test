@@ -51,6 +51,8 @@ jobs:
         php artisan test
 
     - name: Deploy
+      env:
+        TEST_ENV_VAR: deploy123
       run: |
         mkdir -p ~/.ssh
         touch ~/.ssh/key.pem
