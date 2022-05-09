@@ -11,14 +11,14 @@ set('application', 'Barocco');
 // set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
 // Hosts
-host('testing', 'production')
-    ->addSshOption('StrictHostKeyChecking', 'no')
-    ->addSshOption('UserKnownHostsFile', '/dev/null')
-    ->identityFile('~/.ssh/key.pem');
 host('production')
     ->hostname(getenv('PRODUCTION_HOST'))
     ->user(getenv('PRODUCTION_USERNAME'))
-    ->port(getenv('PRODUCTION_PORT'));
+    ->port(getenv('PRODUCTION_PORT'))
+    ->set('deploy_path', getenv('PRODUCTION_PATH'))
+    ->addSshOption('StrictHostKeyChecking', 'no')
+    ->addSshOption('UserKnownHostsFile', '/dev/null')
+    ->identityFile('~/.ssh/key.pem');
 
 task('deploy:upload', function () {
     upload('src/', '{{release_path}}/');
