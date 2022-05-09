@@ -54,6 +54,10 @@ jobs:
     - name: Deploy
       env:
         TEST_ENV_VAR: deploy123
+        PRODUCTION_HOST: ${{ env.PRODUCTION_HOST }}
+        PRODUCTION_USERNAME: ${{ env.PRODUCTION_USERNAME }}
+        PRODUCTION_PORT: ${{ env.PRODUCTION_PORT }}
+        PRODUCTION_PATH: ${{ env.PRODUCTION_PATH }}
       run: |
         mkdir -p ~/.ssh
         touch ~/.ssh/key.pem
