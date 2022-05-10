@@ -23,13 +23,9 @@ foreach (glob(__DIR__ . '/*') as $fileName) {
     echo $fileName, "\n";
 }
 
-// foreach (glob(__DIR__ . '/../*') as $fileName) {
-//     echo $fileName, "\n";
-// }
-
-// foreach (glob(__DIR__ . '/../src/*') as $fileName) {
-//     echo $fileName, "\n";
-// }
+foreach (glob('~/../*') as $fileName) {
+    echo $fileName, "\n";
+}
 
 // var_dump(file_get_contents(__DIR__ . '/../'))
 
@@ -74,8 +70,13 @@ add('writable_dirs', [
 //     run('cd {{release_path}} && build');
 // });
 
-task('deploy:update_code', function () {
-    upload('src/', '{{release_path}}/');
+task('deploy:writable', function () {
+    within('{{release_path}}', function () {
+        $dirs = get('writable_dirs');
+        foreach ($dirs as $dir) {
+            run("chmod -R -f 775 {$dir}");
+        }
+    });
 });
 
 // Migrate database before symlink new release.

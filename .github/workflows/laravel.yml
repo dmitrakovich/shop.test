@@ -51,9 +51,6 @@ jobs:
     #     php artisan job:dispatch SxGeoUpdateJob
     #     php artisan test
 
-    - name: Echo secrets
-      run: echo '${{ toJSON(secrets) }}'
-
     - name: Deploy
       env:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
