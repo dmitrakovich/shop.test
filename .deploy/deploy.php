@@ -12,7 +12,7 @@ set('application', 'Barocco');
 
 // var_dump(getenv('TEST_ENV_VAR'));
 var_dump(getenv('DEPLOY_HOST'));
-var_dump(getenv('DEPLOY_USERNAME'));
+var_dump(getenv('DEPLOY_USER'));
 var_dump(getenv('DEPLOY_PORT'));
 var_dump(getenv('DEPLOY_PATH'));
 
@@ -24,12 +24,16 @@ foreach (glob(__DIR__ . '/../*') as $fileName) {
     echo $fileName, "\n";
 }
 
+foreach (glob(__DIR__ . '/../src/*') as $fileName) {
+    echo $fileName, "\n";
+}
+
 // var_dump(file_get_contents(__DIR__ . '/../'))
 
 // Hosts
 host('production')
     ->hostname(getenv('DEPLOY_HOST'))
-    ->user(getenv('DEPLOY_USERNAME'))
+    ->user(getenv('DEPLOY_USER'))
     ->port((int)getenv('DEPLOY_PORT'))
     ->set('deploy_path', getenv('DEPLOY_PATH'))
     ->addSshOption('StrictHostKeyChecking', 'no')
