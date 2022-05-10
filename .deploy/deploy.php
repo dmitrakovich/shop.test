@@ -10,15 +10,15 @@ set('application', 'Barocco');
 // Project repository
 // set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
-var_dump(getenv());
+// var_dump(getenv());
 
-var_dump(getenv('TEST_ENV_VAR'));
-var_dump(getenv('PRODUCTION_HOST'));
-var_dump(getenv('PRODUCTION_USERNAME'));
-var_dump(getenv('USERNAME'));
-var_dump(getenv('PRODUCTION_PORT'));
-var_dump(getenv('PRODUCTION_PORT123'));
-var_dump(getenv('PRODUCTION_PATH'));
+// var_dump(getenv('TEST_ENV_VAR'));
+// var_dump(getenv('PRODUCTION_HOST'));
+// var_dump(getenv('PRODUCTION_USERNAME'));
+// var_dump(getenv('USERNAME'));
+// var_dump(getenv('PRODUCTION_PORT'));
+// var_dump(getenv('PRODUCTION_PORT123'));
+// var_dump(getenv('PRODUCTION_PATH'));
 
 // Hosts
 host('production')

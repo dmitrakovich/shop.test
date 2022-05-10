@@ -51,9 +51,23 @@ jobs:
     #     php artisan job:dispatch SxGeoUpdateJob
     #     php artisan test
 
-    - name: Echo contex
+    - name: Echo github
       run: echo '${{ toJSON(github) }}'
-      # run: echo "$GITHUB_CONTEXT"
+
+    - name: Echo env
+      run: echo '${{ toJSON(env) }}'
+
+    - name: Echo secrets
+      run: echo '${{ toJSON(secrets) }}'
+
+    - name: Echo job
+      run: echo '${{ toJSON(job) }}'
+
+    - name: Echo steps
+      run: echo '${{ toJSON(steps) }}'
+
+    - name: Echo runner
+      run: echo '${{ toJSON(runner) }}'
 
     - name: Deploy
       env:
