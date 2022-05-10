@@ -52,7 +52,8 @@ jobs:
     #     php artisan test
 
     - name: Echo contex
-      run: echo "$GITHUB_CONTEXT"
+      run: echo '${{ toJSON(github) }}'
+      # run: echo "$GITHUB_CONTEXT"
 
     - name: Deploy
       env:
