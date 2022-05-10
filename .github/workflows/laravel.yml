@@ -53,18 +53,22 @@ jobs:
 
     - name: Deploy
       env:
-        TEST_ENV_VAR: deploy123
-        PRODUCTION_HOST: ${{ env.PRODUCTION_HOST }}
-        PRODUCTION_USERNAME: ${{ secrets.PRODUCTION_USERNAME }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PRODUCTION_PORT: ${{ github.PRODUCTION_PORT }}
-        PRODUCTION_PATH: ${{ github.PRODUCTION_PATH }}
+        TEST_ENV_VAR: deploy123 // string(9) "deploy123"
+        PRODUCTION_HOST: ${{ env.PRODUCTION_HOST }} // string(0) ""
+        PRODUCTION_USERNAME: ${{ secrets.PRODUCTION_USERNAME }} // string(0) ""
+        USERNAME: ${{ secrets.USERNAME }} // string(11) "***"
+        PRODUCTION_PORT: ${{ github.PRODUCTION_PORT }} // string(0) ""
+        PRODUCTION_PATH: ${{ github.PRODUCTION_PATH }} // string(0) ""
       run: |
         mkdir -p ~/.ssh
         touch ~/.ssh/key.pem
         (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
         chmod 700 ~/.ssh/key.pem
         cd ../.deploy
+        echo $GITHUB_ACTION_PATH
+        echo $PRODUCTION_PORT
+        echo $PRODUCTION_USERNAME
+        echo $USERNAME
         php ./deployer.phar deploy
 
     # - name: Deploy on stupid hosting
