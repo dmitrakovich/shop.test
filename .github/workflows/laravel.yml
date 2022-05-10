@@ -42,14 +42,14 @@ jobs:
     #   run: npm install
     # - name: Minify CSS and JS files
     #   run: npm run production
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: |
-        php artisan migrate --force
-        php artisan job:dispatch SxGeoUpdateJob
-        php artisan test
+    # - name: Execute tests (Unit and Feature tests) via PHPUnit
+    #   env:
+    #     DB_CONNECTION: sqlite
+    #     DB_DATABASE: database/database.sqlite
+    #   run: |
+    #     php artisan migrate --force
+    #     php artisan job:dispatch SxGeoUpdateJob
+    #     php artisan test
 
     - name: Echo contex
       run: echo "$GITHUB_CONTEXT"
