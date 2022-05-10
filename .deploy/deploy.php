@@ -10,23 +10,26 @@ set('application', 'Barocco');
 // Project repository
 // set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
-// var_dump(getenv('TEST_ENV_VAR'));
 var_dump(getenv('DEPLOY_HOST'));
 var_dump(getenv('DEPLOY_USER'));
 var_dump(getenv('DEPLOY_PORT'));
 var_dump(getenv('DEPLOY_PATH'));
 
+echo getcwd() . "\n";
+chdir(__DIR__ . '/../');
+echo getcwd() . "\n";
+
 foreach (glob(__DIR__ . '/*') as $fileName) {
     echo $fileName, "\n";
 }
 
-foreach (glob(__DIR__ . '/../*') as $fileName) {
-    echo $fileName, "\n";
-}
+// foreach (glob(__DIR__ . '/../*') as $fileName) {
+//     echo $fileName, "\n";
+// }
 
-foreach (glob(__DIR__ . '/../src/*') as $fileName) {
-    echo $fileName, "\n";
-}
+// foreach (glob(__DIR__ . '/../src/*') as $fileName) {
+//     echo $fileName, "\n";
+// }
 
 // var_dump(file_get_contents(__DIR__ . '/../'))
 
