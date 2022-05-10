@@ -10,21 +10,18 @@ set('application', 'Barocco');
 // Project repository
 // set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
-var_dump(getenv());
-
 // var_dump(getenv('TEST_ENV_VAR'));
 var_dump(getenv('DEPLOY_HOST'));
 var_dump(getenv('DEPLOY_USERNAME'));
-// var_dump(getenv('USERNAME'));
 var_dump(getenv('DEPLOY_PORT'));
 var_dump(getenv('DEPLOY_PATH'));
 
 // Hosts
 host('production')
-    ->hostname(getenv('PRODUCTION_HOST'))
-    ->user(getenv('PRODUCTION_USERNAME'))
-    ->port((int)getenv('PRODUCTION_PORT'))
-    ->set('deploy_path', getenv('PRODUCTION_PATH'))
+    ->hostname(getenv('DEPLOY_HOST'))
+    ->user(getenv('DEPLOY_USERNAME'))
+    ->port((int)getenv('DEPLOY_PORT'))
+    ->set('deploy_path', getenv('DEPLOY_PATH'))
     ->addSshOption('StrictHostKeyChecking', 'no')
     ->addSshOption('UserKnownHostsFile', '/dev/null')
     ->identityFile('~/.ssh/key.pem');

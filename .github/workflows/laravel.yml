@@ -58,7 +58,6 @@ jobs:
       env:
         DEPLOY_HOST: ${{ secrets.PRODUCTION_HOST }}
         DEPLOY_USERNAME: ${{ secrets.PRODUCTION_USERNAME }}
-        USERNAME: ${{ secrets.USERNAME }}
         DEPLOY_PORT: ${{ secrets.PRODUCTION_PORT }}
         DEPLOY_PATH: ${{ secrets.PRODUCTION_PATH }}
       run: |
