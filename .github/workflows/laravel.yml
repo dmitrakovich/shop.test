@@ -51,32 +51,16 @@ jobs:
     #     php artisan job:dispatch SxGeoUpdateJob
     #     php artisan test
 
-    - name: Echo github
-      run: echo '${{ toJSON(github) }}'
-
-    - name: Echo env
-      run: echo '${{ toJSON(env) }}'
-
     - name: Echo secrets
       run: echo '${{ toJSON(secrets) }}'
 
-    - name: Echo job
-      run: echo '${{ toJSON(job) }}'
-
-    - name: Echo steps
-      run: echo '${{ toJSON(steps) }}'
-
-    - name: Echo runner
-      run: echo '${{ toJSON(runner) }}'
-
     - name: Deploy
       env:
-        TEST_ENV_VAR: deploy123
-        PRODUCTION_HOST: ${{ env.PRODUCTION_HOST }}
-        PRODUCTION_USERNAME: ${{ secrets.PRODUCTION_USERNAME }}
+        DEPLOY_HOST: ${{ secrets.PRODUCTION_HOST }}
+        DEPLOY_USERNAME: ${{ secrets.PRODUCTION_USERNAME }}
         USERNAME: ${{ secrets.USERNAME }}
-        PRODUCTION_PORT: ${{ github.PRODUCTION_PORT }}
-        PRODUCTION_PATH: ${{ github.env.PRODUCTION_PATH }}
+        DEPLOY_PORT: ${{ secrets.PRODUCTION_PORT }}
+        DEPLOY_PATH: ${{ secrets.PRODUCTION_PATH }}
       run: |
         mkdir -p ~/.ssh
         touch ~/.ssh/key.pem
