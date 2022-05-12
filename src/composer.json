@@ -13,6 +13,7 @@
     "require": {
         "php": "^8.0.2",
         "default-089/sxgeo": "0.16.*@dev",
+        "deployer/deployer": "v7.0.0-rc.8",
         "diglactic/laravel-breadcrumbs": "^7.2",
         "drandin/declension-nouns": "dev-master",
         "encore/laravel-admin": "^1.8",
