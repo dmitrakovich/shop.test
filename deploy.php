@@ -61,13 +61,6 @@ task('deploy:writable', function () {
     });
 });
 
-// Migrate database before symlink new release.
-
-
-//  !!!
-// php artisan optimize
-// php artisan cache:clear
-
 task('deploy', [
     'deploy:info',
     'deploy:setup',
@@ -76,8 +69,12 @@ task('deploy', [
     'deploy:upload',
     'deploy:shared',
     'deploy:writable',
-    // 'deploy:clear_paths',
     'deploy:symlink',
+    'artisan:storage:link',
+    'artisan:config:cache',
+    'artisan:route:cache',
+    'artisan:view:cache',
+    'artisan:event:cache',
     'deploy:unlock',
     'deploy:cleanup',
     'deploy:success',
