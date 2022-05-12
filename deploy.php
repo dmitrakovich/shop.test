@@ -48,7 +48,7 @@ host('production')
     ->setIdentityFile('~/.ssh/key.pem');
 
 task('deploy:upload', function () {
-    upload('src/', '{{release_path}}/');
+    upload('', '{{release_path}}/');
 });
 
 // Tasks
