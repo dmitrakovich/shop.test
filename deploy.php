@@ -70,14 +70,16 @@ task('deploy:upload', function () {
 
 // Migrate database before symlink new release.
 
+
+// current !!!!
+
 task('deploy', [
     'deploy:info',
     'deploy:setup',
     'deploy:lock',
     'deploy:release',
-    'deploy:copy_dirs',
     // 'deploy:upload',
-    // 'deploy:update_code',
+    'deploy:update_code',
     'deploy:shared',
     'deploy:writable',
     // 'deploy:vendors',
