@@ -6,40 +6,45 @@ require 'recipe/laravel.php';
 
 // Config
 
+// Number of releases to preserve in releases folder.
+set('keep_releases', 4); // default 10
+
 // Project name
 set('application', 'Barocco');
 
 // Project repository
 set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
-add('shared_files', [
-    '.env'
-]);
+set('shared_files', ['.env']);
 add('shared_dirs', [
-    'storage/app',
-    'storage/framework/sessions',
-    'storage/logs',
+    'storage',
     'public/uploads',
     'database/files',
     'database/sxgeo',
 ]);
 add('writable_dirs', [
+    'bootstrap/cache',
     'storage',
-    'bootstrap/cache'
+    'storage/app',
+    'storage/app/public',
+    'storage/framework',
+    'storage/framework/cache',
+    'storage/framework/sessions',
+    'storage/framework/views',
+    'storage/logs',
 ]);
 
 // Hosts
 
 host('production')
-    ->hostname(getenv('DEPLOY_HOST'))
-    ->user(getenv('DEPLOY_USER'))
-    ->port((int)getenv('DEPLOY_PORT'))
-    ->set('deploy_path', getenv('DEPLOY_PATH'))
-    ->addSshOption('StrictHostKeyChecking', 'no')
-    ->addSshOption('UserKnownHostsFile', '/dev/null')
-    ->identityFile('~/.ssh/key.pem');
-    // ->set('remote_user', 'deployer')
-    // ->set('deploy_path', '~/shop.test');
+    ->setHostname(getenv('DEPLOY_HOST'))
+    ->setRemoteUser(getenv('DEPLOY_USER'))
+    ->setPort((int)getenv('DEPLOY_PORT'))
+    ->setDeployPath(getenv('DEPLOY_PATH'))
+    // ->addSshOption('StrictHostKeyChecking', 'no')
+    // ->addSshOption('UserKnownHostsFile', '/dev/null')
+    // setSshArguments
+    ->setIdentityFile('~/.ssh/key.pem');
 
 task('deploy:upload', function () {
     upload('src/', '{{release_path}}/');
