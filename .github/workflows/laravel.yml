@@ -38,6 +38,8 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
+    - name: Install composer dependencies
+      run: composer install --no-scripts
     # - name: Install NPM dependencies
     #   run: npm install
     # - name: Minify CSS and JS files

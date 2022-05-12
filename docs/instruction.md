@@ -79,3 +79,10 @@ nmp run production
 // sftp -P {port} {user}@{host}:
 // get -r public_html/src/storage/app/public/products/3/34/349/ /home/ondemand-dev/docker-app-images/www/shop.test/src/storage/app/public/products/3/34
 // get -r public_html/src/storage/app/public/products/ /mnt/d/my-projects/shop.test/src/storage/app/public/
+
+
+// generate ssh key
+```shell
+ssh-keygen -t ed25519 -C "dmitrakovich.andrey@yandex.by"
+ssh-keygen -t rsa -b 4096 -C "dmitrakovich.andrey@yandex.by"
+```
