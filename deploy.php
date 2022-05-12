@@ -13,7 +13,7 @@ set('keep_releases', 4); // default 10
 set('application', 'Barocco');
 
 // Project repository
-set('repository', 'https://github.com/dmitrakovich/shop.test.git');
+// set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
 set('shared_files', ['.env']);
 add('shared_dirs', [
@@ -70,22 +70,22 @@ task('deploy:upload', function () {
 
 // Migrate database before symlink new release.
 
-// task('deploy', [
-//     'deploy:info',
-//     'deploy:prepare',
-//     'deploy:lock',
-//     'deploy:release',
-//     'deploy:upload',
-//     // 'deploy:update_code',
-//     'deploy:shared',
-//     'deploy:writable',
-//     // 'deploy:vendors',
-//     // 'deploy:clear_paths',
-//     'deploy:symlink',
-//     'deploy:unlock',
-//     'cleanup',
-//     'success'
-// ]);
+task('deploy', [
+    'deploy:info',
+    'deploy:setup',
+    'deploy:lock',
+    'deploy:release',
+    'deploy:upload',
+    // 'deploy:update_code',
+    'deploy:shared',
+    'deploy:writable',
+    // 'deploy:vendors',
+    // 'deploy:clear_paths',
+    'deploy:symlink',
+    'deploy:unlock',
+    'cleanup',
+    'success'
+]);
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
