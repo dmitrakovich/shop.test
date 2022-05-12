@@ -13,7 +13,7 @@ set('keep_releases', 4); // default 10
 set('application', 'Barocco');
 
 // Project repository
-// set('repository', 'https://github.com/dmitrakovich/shop.test.git');
+set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
 set('shared_files', ['.env']);
 add('shared_dirs', [
