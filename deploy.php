@@ -41,9 +41,10 @@ host('production')
     ->setRemoteUser(getenv('DEPLOY_USER'))
     ->setPort((int)getenv('DEPLOY_PORT'))
     ->setDeployPath(getenv('DEPLOY_PATH'))
-    // ->addSshOption('StrictHostKeyChecking', 'no')
-    // ->addSshOption('UserKnownHostsFile', '/dev/null')
-    // setSshArguments
+    ->setSshArguments([
+        '-o StrictHostKeyChecking=no',
+        '-o UserKnownHostsFile=/dev/null',
+    ])
     ->setIdentityFile('~/.ssh/key.pem');
 
 task('deploy:upload', function () {
