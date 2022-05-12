@@ -75,6 +75,7 @@ task('deploy', [
     'artisan:route:cache',
     'artisan:view:cache',
     'artisan:event:cache',
+    // 'artisan:migrate',
     'deploy:unlock',
     'deploy:cleanup',
     'deploy:success',
@@ -83,8 +84,3 @@ task('deploy', [
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
 
-// before('deploy:symlink', 'artisan:migrate');
-
-// Deployer config
-// set('keep_releases', 4); // default 10
-// set('allow_anonymous_stats', false);

@@ -1,4 +1,4 @@
-name: Laravel
+name: Production
 
 on:
   push:
