@@ -25,13 +25,6 @@ add('shared_dirs', [
 add('writable_dirs', [
     'bootstrap/cache',
     'storage',
-    'storage/app',
-    'storage/app/public',
-    'storage/framework',
-    'storage/framework/cache',
-    'storage/framework/sessions',
-    'storage/framework/views',
-    'storage/logs',
 ]);
 
 // Hosts
@@ -48,7 +41,7 @@ host('production')
     ->setIdentityFile('~/.ssh/key.pem');
 
 task('deploy:upload', function () {
-    upload('', '{{release_path}}/');
+    upload('', '{{release_path}}', ['options' => ['--bwlimit=4096']]);
 });
 
 // Tasks
@@ -59,14 +52,14 @@ task('deploy:upload', function () {
 //     // run('cd {{release_path}} && build');
 // });
 
-// task('deploy:writable', function () {
-//     within('{{release_path}}', function () {
-//         $dirs = get('writable_dirs');
-//         foreach ($dirs as $dir) {
-//             run("chmod -R -f 775 {$dir}");
-//         }
-//     });
-// });
+task('deploy:writable', function () {
+    within('{{release_path}}', function () {
+        $dirs = get('writable_dirs');
+        foreach ($dirs as $dir) {
+            run("chmod -R -f 775 {$dir}");
+        }
+    });
+});
 
 // Migrate database before symlink new release.
 
