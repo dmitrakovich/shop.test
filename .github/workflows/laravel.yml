@@ -34,19 +34,21 @@ jobs:
       run: php artisan key:generate
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
-    - name: Create Database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
-    # - name: Install NPM dependencies
-    #   run: npm install
-    # - name: Minify CSS and JS files
-    #   run: npm run production
+
+    - name: Install NPM dependencies
+      run: npm install
+    - name: Minify CSS and JS files
+      run: npm run production
+    - name: Remove node_modules folder
+      run: rm -R node_modules
+
     # - name: Execute tests (Unit and Feature tests) via PHPUnit
     #   env:
     #     DB_CONNECTION: sqlite
     #     DB_DATABASE: database/database.sqlite
     #   run: |
+    #     mkdir -p database
+    #     touch database/database.sqlite
     #     php artisan migrate --force
     #     php artisan job:dispatch SxGeoUpdateJob
     #     php artisan test
@@ -62,38 +64,7 @@ jobs:
         touch ~/.ssh/key.pem
         (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
         chmod 700 ~/.ssh/key.pem
-        php ./vendor/bin/deployer.phar deploy -vvv
-
-    # - name: Deploy on stupid hosting
-    #   uses: appleboy/ssh-action@master
-    #   with:
-    #     host: ${{ secrets.HOST }}
-    #     username: ${{ secrets.USERNAME }}
-    #     password: ${{ secrets.PASSWORD }}
-    #     debug: true
-    #     script: |
-    #       cd ~/public_html
-    #       git checkout -f
-    #       git pull
-    #       cd src/
-    #       php ~/.local/bin/composer install --optimize-autoloader --no-dev
-    #       php artisan optimize
-    #       php artisan cache:clear
-    #       find ~ -type f -name "*.tar" -exec rm {} \;
-
-    # - name: Sleep for 27 seconds
-    #   uses: jakejarvis/wait-action@master
-    #   with:
-    #     time: '27s'
-
-    # - name: Upload frontend js & css on hosting
-    #   uses: appleboy/scp-action@master
-    #   with:
-    #     host: ${{ secrets.HOST }}
-    #     username: ${{ secrets.USERNAME }}
-    #     password: ${{ secrets.PASSWORD }}
-    #     source: "src/public/js/*,src/public/css/*,src/public/mix-manifest.json"
-    #     target: "~/public_html"
+        php ./vendor/bin/deployer.phar deploy
 
     - name: Send success status
       uses: appleboy/telegram-action@master
@@ -101,7 +72,6 @@ jobs:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         message: Success deploying ✅
-
 
 
   ##################################

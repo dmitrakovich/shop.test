@@ -71,7 +71,9 @@ task('deploy:upload', function () {
 // Migrate database before symlink new release.
 
 
-// current !!!!
+//  !!!
+// php artisan optimize
+// php artisan cache:clear
 
 task('deploy', [
     'deploy:info',
