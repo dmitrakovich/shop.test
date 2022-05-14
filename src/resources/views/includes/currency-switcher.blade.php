@@ -5,7 +5,7 @@
     @csrf
     <select onchange="this.form.submit()" id="currency-switcher" name="currency" class="form-control">
         @foreach ($currenciesList as $key => $value)
-            <option value="{{ $key }}" {{ $currentCurrency == $key ? 'selected' : null }}>
+            <option value="{{ $key }}" @selected($currentCurrency == $key)>
                 {{ $key }}
             </option>
         @endforeach

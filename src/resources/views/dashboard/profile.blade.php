@@ -114,7 +114,7 @@
             <div class="col-12 col-md-8 col-lg-4 col-xl-3">
                 <select id="country_id" name="country_id" class="form-control @error('country_id') is-invalid @enderror">
                     @foreach ($countries as $country)
-                        <option value="{{ $country->id }}" {{ $country->id == $currentCountry->id ? 'selected' : null }}>
+                        <option value="{{ $country->id }}" @selected($country->id == $currentCountry->id)>
                             {{ $country->name }}
                         </option>
                     @endforeach

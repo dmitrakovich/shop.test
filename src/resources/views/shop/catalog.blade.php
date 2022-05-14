@@ -16,7 +16,7 @@
         </div>
         <select onchange="window.location.href = this.value" class="form-control col-6">
             @foreach ($sortingList as $key => $value)
-                <option value="{{ URL::current() . "?sort=$key" }}" {{ $sort == $key ? 'selected' : null }}>
+                <option value="{{ URL::current() . "?sort=$key" }}" @selected($sort == $key)>
                     {{ $value }}
                 </option>
             @endforeach
@@ -40,7 +40,7 @@
                 <div class="m-0 col-md-4 col-lg-3 col-xl-2">
                     <select onchange="window.location.href = this.value" id="select-sorting" class="form-control">
                         @foreach ($sortingList as $key => $value)
-                            <option value="{{ URL::current() . "?sort=$key" }}" {{ $sort == $key ? 'selected' : null }}>
+                            <option value="{{ URL::current() . "?sort=$key" }}" @selected($sort == $key)>
                                 {{ $value }}
                             </option>
                         @endforeach

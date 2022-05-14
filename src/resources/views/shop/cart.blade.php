@@ -161,7 +161,7 @@
                         <select name="country_id" id="country_id"
                             class="form-control @error('country_id') is-invalid @enderror">
                             @foreach ($countries as $country)
-                                <option value="{{ $country->id }}" {{ $country->id == $currentCountry->id ? 'selected' : null }}>
+                                <option value="{{ $country->id }}" @selected($country->id == $currentCountry->id)>
                                     {{ $country->name }}
                                 </option>
                             @endforeach
