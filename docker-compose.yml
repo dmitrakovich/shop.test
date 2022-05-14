@@ -43,7 +43,7 @@ services:
     volumes:
       - ./docker/data/php:/var/php
       - ./src:/var/www/app
-      - ./.git:/var/www/.git:ro
+      - ./.dep:/var/www/.dep:ro
       - ~/.composer/cache:/var/cache/cache-composer
       - ~/.npm:/var/cache/cache-npm
     networks:
