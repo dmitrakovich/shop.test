@@ -46,12 +46,6 @@ task('deploy:upload', function () {
 
 // Tasks
 
-// task('build', function () {
-//     cd('{{release_path}}');
-//     run('npm run build');
-//     // run('cd {{release_path}} && build');
-// });
-
 task('deploy:writable', function () {
     within('{{release_path}}', function () {
         $dirs = get('writable_dirs');
@@ -70,12 +64,14 @@ task('deploy', [
     'deploy:shared',
     'deploy:writable',
     'deploy:symlink',
-    'artisan:storage:link',
-    'artisan:config:cache',
-    'artisan:route:cache',
-    'artisan:view:cache',
-    'artisan:event:cache',
+    // !!!
+    // 'artisan:storage:link',
     // 'artisan:migrate',
+    // 'artisan:cache:clear',
+    // 'artisan:config:cache',
+    // 'artisan:route:cache',
+    // 'artisan:view:cache',
+    // 'artian:event:cache',
     'deploy:unlock',
     'deploy:cleanup',
     'deploy:success',

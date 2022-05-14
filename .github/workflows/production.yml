@@ -42,16 +42,16 @@ jobs:
     - name: Remove node_modules folder
       run: rm -R node_modules
 
-    # - name: Execute tests (Unit and Feature tests) via PHPUnit
-    #   env:
-    #     DB_CONNECTION: sqlite
-    #     DB_DATABASE: database/database.sqlite
-    #   run: |
-    #     mkdir -p database
-    #     touch database/database.sqlite
-    #     php artisan migrate --force
-    #     php artisan job:dispatch SxGeoUpdateJob
-    #     php artisan test
+    - name: Execute tests (Unit and Feature tests) via PHPUnit
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
+      run: |
+        mkdir -p database
+        touch database/database.sqlite
+        php artisan migrate --force
+        php artisan job:dispatch SxGeoUpdateJob
+        php artisan test
 
     - name: Deploy
       env:
@@ -77,33 +77,33 @@ jobs:
   ##################################
   ### Run when a schedule failed ###
   ##################################
-  restart_when_failed:
-    name: Restarts workflow if failed
-    runs-on: ubuntu-latest
-    if: failure() && github.event.client_payload.attempt < 5
-    needs: laravel-tests-and-deploy
-    steps:
-      - name: Sleep for 1m 36s
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '96s'
+  # restart_when_failed:
+  #   name: Restarts workflow if failed
+  #   runs-on: ubuntu-latest
+  #   if: failure() && github.event.client_payload.attempt < 5
+  #   needs: laravel-tests-and-deploy
+  #   steps:
+  #     - name: Sleep for 1m 36s
+  #       uses: jakejarvis/wait-action@master
+  #       with:
+  #         time: '96s'
 
-      - name: set attempt
-        run: |
-          ATTEMPT=${{ github.event.client_payload.attempt }}
-          ATTEMPT=$([ -n "$ATTEMPT" ] && echo $((++ATTEMPT)) || echo 1)
-          echo "attempt=$ATTEMPT" >> $GITHUB_ENV
+  #     - name: set attempt
+  #       run: |
+  #         ATTEMPT=${{ github.event.client_payload.attempt }}
+  #         ATTEMPT=$([ -n "$ATTEMPT" ] && echo $((++ATTEMPT)) || echo 1)
+  #         echo "attempt=$ATTEMPT" >> $GITHUB_ENV
 
-      - name: Send retry status
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Failure deploy (${{ env.attempt }}) ❌ Rerun 🔄
+  #     - name: Send retry status
+  #       uses: appleboy/telegram-action@master
+  #       with:
+  #         to: ${{ secrets.TELEGRAM_TO }}
+  #         token: ${{ secrets.TELEGRAM_TOKEN }}
+  #         message: Failure deploy (${{ env.attempt }}) ❌ Rerun 🔄
 
-      - name: Retry the workflow
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.API_WORKFLOW_KEY }}
-          event-type: retry-${{ env.attempt }}
-          client-payload: '{"ref": "${{ github.ref }}", "attempt": "${{ env.attempt }}"}'
+  #     - name: Retry the workflow
+  #       uses: peter-evans/repository-dispatch@v1
+  #       with:
+  #         token: ${{ secrets.API_WORKFLOW_KEY }}
+  #         event-type: retry-${{ env.attempt }}
+  #         client-payload: '{"ref": "${{ github.ref }}", "attempt": "${{ env.attempt }}"}'
