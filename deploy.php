@@ -70,7 +70,7 @@ task('deploy', [
     'artisan:config:cache',
     'artisan:route:cache',
     'artisan:view:cache',
-    'artian:event:cache',
+    'artisan:event:cache',
     'deploy:unlock',
     'deploy:cleanup',
     'deploy:success',
