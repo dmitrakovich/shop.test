@@ -65,7 +65,7 @@ jobs:
         touch ~/.ssh/key.pem
         (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
         chmod 700 ~/.ssh/key.pem
-        php ./vendor/bin/deployer.phar deploy -vvv
+        php ./vendor/bin/deployer.phar deploy
 
     - name: Send success status
       uses: appleboy/telegram-action@master

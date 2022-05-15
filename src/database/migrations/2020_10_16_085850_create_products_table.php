@@ -40,11 +40,10 @@ class CreateProductsTable extends Migration
             $table->string('bootleg_height_txt')->nullable();
             $table->text('description')->nullable();
 
-            $table->timestamps();
-
             $table->boolean('action')->default(false);
             $table->unsignedInteger('rating')->default(0);
 
+            $table->timestamps();
             $table->softDeletes();
 
             $table->index(['price', 'id']);
