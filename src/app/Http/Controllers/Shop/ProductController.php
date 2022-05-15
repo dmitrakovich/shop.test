@@ -12,10 +12,6 @@ class ProductController extends BaseController
 {
     /**
      * Display the specified product.
-     *
-     * @param Url $url
-     * @param array $params
-     * @return View
      */
     public function show(Url $url, array $params, GoogleTagManagerService $gtmService): View
     {
@@ -29,9 +25,6 @@ class ProductController extends BaseController
 
     /**
      * Quick view
-     *
-     * @param Product $product
-     * @return View
      */
     public function quickView(Product $product, GoogleTagManagerService $gtmService): View
     {

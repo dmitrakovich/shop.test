@@ -32,9 +32,9 @@ class Feedback extends Model implements HasMedia
     /**
      * Feedbacks types by ids
      */
-    const TYPE_SPAM = 0;
-    const TYPE_REVIEW = 1;
-    const TYPE_QUESTION = 2;
+    final const TYPE_SPAM = 0;
+    final const TYPE_REVIEW = 1;
+    final const TYPE_QUESTION = 2;
 
     /**
      * Тип по умолчанию
@@ -46,8 +46,8 @@ class Feedback extends Model implements HasMedia
     /**
      * Max media sizes
      */
-    const MAX_PHOTO_SIZE = 5242880; // 5 MB
-    const MAX_VIDEO_SIZE = 52428800; // 50 MB
+    final const MAX_PHOTO_SIZE = 5_242_880; // 5 MB
+    final const MAX_VIDEO_SIZE = 52_428_800; // 50 MB
 
     /**
      * Доступные типы обратной связи
@@ -83,17 +83,11 @@ class Feedback extends Model implements HasMedia
     }
     public function scopeType($query, $type)
     {
-        switch (self::getType($type)) {
-            case 'reviews':
-            default:
-                return $query->where('type_id', 1);
-
-            case 'models':
-                return $query->where('product_id', '>', 0);
-
-            case 'questions':
-                return $query->where('type_id', 2);
-        }
+        return match (self::getType($type)) {
+            'reviews' => $query->where('type_id', 1),
+            'models' => $query->where('product_id', '>', 0),
+            'questions' => $query->where('type_id', 2),
+        };
     }
     /**
      * Отзывы для товаров
@@ -108,9 +102,6 @@ class Feedback extends Model implements HasMedia
     }
     /**
      * Размеры изображений
-     *
-     * @param Media $media
-     * @return void
      */
     public function registerMediaConversions(Media $media = null): void
     {
@@ -120,7 +111,6 @@ class Feedback extends Model implements HasMedia
     /**
      * Farmat date in admin panel
      *
-     * @param \DateTimeInterface $date
      * @return string
      */
     protected function serializeDate(\DateTimeInterface $date)

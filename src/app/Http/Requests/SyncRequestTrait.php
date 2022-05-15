@@ -10,8 +10,6 @@ trait SyncRequestTrait
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -21,12 +19,10 @@ trait SyncRequestTrait
     /**
      * Handle a failed validation attempt.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
-     *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator): never
     {
         abort(OldSiteSyncService::errorResponse($validator->errors()->all()));
     }

@@ -31,12 +31,12 @@ class Category extends Model
     /**
      * @var int
      */
-    const ROOT_CATEGORY_ID = 1;
+    final const ROOT_CATEGORY_ID = 1;
 
     /**
      * @var int
      */
-    const ACCESSORIES_PARENT_ID = 25;
+    final const ACCESSORIES_PARENT_ID = 25;
 
     /**
      * The attributes that aren't mass assignable.
@@ -62,8 +62,6 @@ class Category extends Model
 
     /**
      * Generate path mutator
-     *
-     * @return Attribute
      */
     public function path(): Attribute
     {
@@ -108,36 +106,32 @@ class Category extends Model
 
     /**
      * Получить список идентификаторов дочерних категорий
-     *
-     * @param integer $categoryId
-     * @return array
      */
     public static function getChildrenCategoriesIdsList(int $categoryId): array
     {
-        return Cache::rememberForever("categoryChilds.$categoryId", function () use ($categoryId) {
-            return self::traverseTree(
-                self::with('childrenCategories')->find($categoryId)->toArray()
-            );
-        });
+        return Cache::rememberForever("categoryChilds.$categoryId", fn() => self::traverseTree(
+            self::with('childrenCategories')->find($categoryId)->toArray()
+        ));
     }
 
     /**
      * Сделать одноуровневый массив из дерева
      *
-     * @param array $subtree
      * @return array
      */
     protected static function traverseTree(array $subtree)
     {
-        $descendants[] = $subtree['id'];
+        $descendants = [$subtree['id']];
         foreach ($subtree['children_categories'] as $child) {
             $descendants = array_merge($descendants, self::traverseTree($child));
         }
         return $descendants;
     }
 
-    // Получение ссылки
-    public function getUrl()
+    /**
+     * Return category url
+     */
+    public function getUrl(): string
     {
         return '/' . $this->path;
     }
@@ -202,7 +196,6 @@ class Category extends Model
      * Get category name (accessor)
      *
      * @param string $value
-     * @return Attribute
      */
     public function name(): Attribute
     {
@@ -213,8 +206,6 @@ class Category extends Model
 
     /**
      * Check category is root
-     *
-     * @return boolean
      */
     protected function isRoot(): bool
     {
@@ -223,8 +214,6 @@ class Category extends Model
 
     /**
      * Prepare name for catalog page title
-     *
-     * @return string
      */
     public function getNameForCatalogTitle(): string
     {
@@ -234,8 +223,6 @@ class Category extends Model
 
     /**
      * Get category name with parents categories names
-     *
-     * @return string
      */
     public function getNameWithParents(): string
     {

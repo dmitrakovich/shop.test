@@ -19,7 +19,7 @@ class Banner extends BannerModel
         'video/ogg',
     ];
 
-    const ERRORS = [
+    final const ERRORS = [
         'empty_preview' => 'Превью для видео не может быть пустым!',
     ];
     /**
@@ -34,8 +34,6 @@ class Banner extends BannerModel
 
     /**
      * Interact with the banner's resource.
-     *
-     * @return Attribute
      */
     public function path(): Attribute
     {
@@ -49,8 +47,6 @@ class Banner extends BannerModel
 
     /**
      * Interact with the banner's type.
-     *
-     * @return Attribute
      */
     public function type(): Attribute
     {
@@ -61,8 +57,6 @@ class Banner extends BannerModel
 
     /**
      * Interact with the banner's videos.
-     *
-     * @return Attribute
      */
     public function videos(): Attribute
     {
@@ -103,8 +97,6 @@ class Banner extends BannerModel
             return null;
         }
 
-        return array_map(function ($video) {
-            return "files/$video";
-        }, $videos);
+        return array_map(fn ($video) => "files/$video", $videos);
     }
 }

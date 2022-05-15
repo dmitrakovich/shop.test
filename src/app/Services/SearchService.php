@@ -21,8 +21,6 @@ class SearchService
     /**
      * Generate search query
      *
-     * @param Builder $query
-     * @param string $column
      * @param array $search
      * @return Builder
      */
@@ -39,21 +37,15 @@ class SearchService
 
     /**
      * Prepare id list from serach query
-     *
-     * @return array
      */
     public function getIds(): array
     {
-        $idList = array_filter($this->searchKeys, function($value) {
-            return is_numeric($value);
-        });
+        $idList = array_filter($this->searchKeys, fn($value) => is_numeric($value));
         return array_values(array_map('intval', $idList));
     }
 
     /**
      * Use product id search
-     *
-     * @return boolean
      */
     public function useSimpleSearch(): bool
     {

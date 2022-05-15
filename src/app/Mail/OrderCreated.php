@@ -13,20 +13,12 @@ class OrderCreated extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * The order instance.
-     *
-     * @var Order
-     */
-    public $order;
-
-    /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Order $order)
+    public function __construct(public Order $order)
     {
-        $this->order = $order;
     }
 
     /**

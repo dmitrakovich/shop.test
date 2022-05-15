@@ -13,7 +13,7 @@ class OrderService implements OrderServiceInterface
     public function store(StoreRequest $request, Cart $cart)
     {
         $userData = $request->validated();
-        $userData['total_price'] = $userData['total_price'] ?? $cart->getTotalPrice();
+        $userData['total_price'] ??= $cart->getTotalPrice();
         // dd($userData);
 
         $order = Order::create($userData);

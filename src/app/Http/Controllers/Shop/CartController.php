@@ -17,7 +17,6 @@ class CartController extends BaseController
     /**
      * Display a listing of the resource.
      *
-     * @param GoogleTagManagerService $gtmService
      * @return \Illuminate\Http\Response
      */
     public function index(GoogleTagManagerService $gtmService)
@@ -51,9 +50,6 @@ class CartController extends BaseController
     /**
      * Delete cart item
      *
-     * @param Request $request
-     * @param GoogleTagManagerService $gtmService
-     * @param integer $itemId
      * @return \Illuminate\Http\RedirectResponse
      */
     public function delete(Request $request, GoogleTagManagerService $gtmService, int $itemId)
@@ -84,8 +80,6 @@ class CartController extends BaseController
     /**
      * Final cart page (order info)
      *
-     * @param ProductService $productService
-     * @param GoogleTagManagerService $gtmService
      * @return \Illuminate\Http\Response
      */
     public function final(ProductService $productService, GoogleTagManagerService $gtmService)

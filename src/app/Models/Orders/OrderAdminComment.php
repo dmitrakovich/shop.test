@@ -25,7 +25,6 @@ class OrderAdminComment extends Model
     /**
      * Format date for admin panel
      *
-     * @param \DateTimeInterface $date
      * @return string
      */
     protected function serializeDate(\DateTimeInterface $date)

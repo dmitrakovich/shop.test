@@ -58,7 +58,7 @@ class UrlHelper
         }
 
         $sorted = [];
-        foreach (self::$canonicalOrder as $model => list($single)) {
+        foreach (self::$canonicalOrder as $model => [$single]) {
             if (isset($filters[$model])) {
                 if ($model == Category::class) {
                     array_unshift($sorted, end($filters[$model])['filters']['path']);
@@ -79,8 +79,6 @@ class UrlHelper
 
     /**
      * Получить параметры из запроса
-     *
-     * @return array
      */
     protected static function getParams(): array
     {
@@ -97,9 +95,6 @@ class UrlHelper
 
     /**
      * Построить Url кодированный запрос из параметров
-     *
-     * @param array $params
-     * @return string|null
      */
     protected static function buildParams(array $params): ?string
     {

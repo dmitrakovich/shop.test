@@ -62,8 +62,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * User's cart
-     *
-     * @return BelongsTo
      */
     public function cart(): BelongsTo
     {
@@ -92,8 +90,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Get fisrt user address country id if exist
-     *
-     * @return integer|null
      */
     public function getFirstAddressCountryId(): ?int
     {
@@ -102,8 +98,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Check user has addresses
-     *
-     * @return boolean
      */
     public function hasAddresses(): bool
     {
@@ -124,7 +118,6 @@ class User extends Authenticatable implements MustVerifyEmail
      * Interact with the user's first name.
      *
      * @param string $firstName
-     * @return Attribute
      */
     public function firstName(): Attribute
     {
@@ -136,7 +129,6 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Farmat date in admin panel
      *
-     * @param \DateTimeInterface $date
      * @return string
      */
     protected function serializeDate(\DateTimeInterface $date)

@@ -31,27 +31,27 @@ class Device extends Model
     /**
      * @var string
      */
-    const DEVICE_ID_COOKIE_NAME = 'device_id';
+    final const DEVICE_ID_COOKIE_NAME = 'device_id';
 
     /**
      * @var string
      */
-    const YANDEX_ID_COOKIE_NAME = '_ym_uid';
+    final const YANDEX_ID_COOKIE_NAME = '_ym_uid';
 
     /**
      * @var string
      */
-    const GOOGLE_ID_COOKIE_NAME = '_ga';
+    final const GOOGLE_ID_COOKIE_NAME = '_ga';
 
     /**
      * @var integer 1 year
      */
-    const COOKIE_LIFE_TIME = 525600;
+    final const COOKIE_LIFE_TIME = 525600;
 
     /**
      * @var array
      */
-    const TYPES = ['mobile', 'desktop'];
+    final const TYPES = ['mobile', 'desktop'];
 
     /**
      * Indicates if the model's ID is auto-incrementing.
@@ -84,9 +84,6 @@ class Device extends Model
 
     /**
      * Generate device id for new device
-     *
-     * @param Request $request
-     * @return string
      */
     public static function generateId(Request $request): string
     {
@@ -97,8 +94,6 @@ class Device extends Model
 
     /**
      * Get exists device or make new
-     *
-     * @return self
      */
     public static function getOrNew(): self
     {
@@ -109,8 +104,6 @@ class Device extends Model
 
     /**
      * Generate default id for undefineds
-     *
-     * @return string
      */
     protected static function getDefaultId(): string
     {
@@ -119,8 +112,6 @@ class Device extends Model
 
     /**
      * Return device id
-     *
-     * @return string
      */
     public static function getId(): string
     {
@@ -146,7 +137,6 @@ class Device extends Model
      * Get the user that owns the device.
      *
      * @todo need many to many relation
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -155,8 +145,6 @@ class Device extends Model
 
     /**
      * Get the cart that owns the device.
-     *
-     * @return BelongsTo
      */
     public function cart(): BelongsTo
     {
@@ -165,22 +153,16 @@ class Device extends Model
 
     /**
      * Set the device's yandex id
-     *
-     * @param integer|null $yandexId
-     * @return void
      */
     public function setYandexId(?int $yandexId = null): void
     {
-        $yandexId = $yandexId ?? (int)Cookie::get(self::YANDEX_ID_COOKIE_NAME);
+        $yandexId ??= (int)Cookie::get(self::YANDEX_ID_COOKIE_NAME);
 
         $this->attributes['yandex_id'] = $yandexId;
     }
 
     /**
      * Set the device's google id
-     *
-     * @param string|null $googleId
-     * @return void
      */
     public function setGoogleId(?string $googleId = null): void
     {
@@ -196,9 +178,6 @@ class Device extends Model
 
     /**
      * Set the device's type
-     *
-     * @param string|null $type
-     * @return void
      */
     public function setType(?string $type = null): void
     {
@@ -211,9 +190,6 @@ class Device extends Model
 
     /**
      * Set the device's user agent
-     *
-     * @param string|null $agent
-     * @return void
      */
     public function setAgent(?string $agent = null): void
     {

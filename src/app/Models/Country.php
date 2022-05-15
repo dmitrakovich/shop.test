@@ -11,21 +11,19 @@ class Country extends Model
 {
     use HasFactory;
 
-    const DEFAULT_COUNTRY_CODE = 'BY';
+    final const DEFAULT_COUNTRY_CODE = 'BY';
 
     /**
      * Countries cache list
-     *
-     * @var array
      */
-    public static $countries = null;
+    public static ?EloquentCollection $countries = null;
 
     /**
      * Get countries collection
      *
-     * @return EloquentCollection
+     * @return EloquentCollection<self>
      */
-    public static function getAll(): EloquentCollection
+    public static function getAll()
     {
         return self::$countries ?? (self::$countries = self::all());
     }
@@ -35,15 +33,13 @@ class Country extends Model
      *
      * @return self
      */
-    public static function getDefaultCountry(): self
+    public static function getDefaultCountry()
     {
         return self::getAll()->where('code', self::DEFAULT_COUNTRY_CODE)->first();
     }
 
     /**
      * Return current country by user addr or ip
-     *
-     * @return self
      */
     public static function getCurrent(): self
     {

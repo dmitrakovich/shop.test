@@ -44,7 +44,6 @@ class OrderController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  StoreRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRequest $request)
@@ -100,7 +99,6 @@ class OrderController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -123,7 +121,6 @@ class OrderController extends BaseController
     /**
      * Get print view
      *
-     * @param Order $order
      * @return \Illuminate\Contracts\View\View
      */
     public function print(Order $order)
@@ -134,7 +131,6 @@ class OrderController extends BaseController
     /**
      * Sync order with another DB
      *
-     * @param SyncRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function sync(SyncRequest $request)

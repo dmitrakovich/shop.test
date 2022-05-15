@@ -44,14 +44,8 @@ class ProductController extends AdminController
      */
     protected static $productSeederObject = null;
 
-    /**
-     * @var UploadImagesService
-     */
-    private $uploadImagesService;
-
-    public function __construct(UploadImagesService $uploadImagesService)
+    public function __construct(private readonly UploadImagesService $uploadImagesService)
     {
-        $this->uploadImagesService = $uploadImagesService;
     }
 
     /**
@@ -64,12 +58,10 @@ class ProductController extends AdminController
         $grid = new Grid(new Product());
 
         $grid->column('id', 'Id')->sortable();
-        $grid->column('media', 'Фото')->display(function ($pictures) {
-            return optional($this->getFirstMedia())->getUrl('thumb');
-        })->image();
-        $grid->column('deleted_at', 'Опубликован')->display(function ($deleted) {
-            return !$deleted ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
-        })->sortable();
+        $grid->column('media', 'Фото')->display(fn ($pictures) => optional($this->getFirstMedia())->getUrl('thumb'))->image();
+        $grid->column('deleted_at', 'Опубликован')->display(
+            fn ($deleted) => !$deleted ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>'
+        )->sortable();
         $grid->column('slug', 'Slug');
         $grid->column('title', 'Title');
         $grid->column('price', 'Цена')->sortable();
@@ -83,14 +75,14 @@ class ProductController extends AdminController
         $grid->model()->with('media');
         $grid->paginate(30);
 
-        $grid->actions (function ($actions) {
+        $grid->actions(function ($actions) {
             $actions->add(new Restore());
         });
-        $grid->batchActions (function($batch) {
+        $grid->batchActions(function ($batch) {
             $batch->add(new BatchRestore());
         });
 
-        $grid->filter(function($filter) {
+        $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // Remove the default id filter
             $filter->where(function ($query) {
                 $query->where('id', 'like', "%{$this->input}%")
@@ -114,7 +106,6 @@ class ProductController extends AdminController
     /**
      * Restore product by id
      *
-     * @param integer $productId
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(int $productId)
@@ -154,9 +145,7 @@ class ProductController extends AdminController
             });
 
             $uploadImagesService = $this->uploadImagesService;
-            $form->html(function ($form) use ($uploadImagesService) {
-                return $uploadImagesService->show($form->model()->getMedia());
-            })->setWidth(12, 0);
+            $form->html(fn ($form) => $uploadImagesService->show($form->model()->getMedia()))->setWidth(12, 0);
             $form->html($this->uploadImagesService->getImagesInput(), 'Картинки');
 
             $form->text('slug', __('Slug'))->default(Str::slug(request('slug')));
@@ -173,10 +162,10 @@ class ProductController extends AdminController
             $form->multipleSelect('styles', 'Стиль')->options(Style::orderBy('name')->pluck('name', 'id'));
             $form->multipleSelect('heels', 'Тип каблука/подошвы')->options(Heel::pluck('name', 'id'));
             $form->select('category_id', 'Категория')->options(Category::getFormatedTree())->default($this->getCategoryIdFromRequeset())->required();
-            $form->select('season_id', 'Сезон')->options(Season::pluck('name','id'))->required();
-            $form->select('brand_id', 'Бренд')->options(Brand::orderBy('name')->pluck('name','id'))->required()->default(Brand::where('name', request('brand_name'))->value('id'));
-            $form->select('collection_id', 'Коллекция')->options(Collection::pluck('name','id'))->required();
-            $form->select('manufacturer_id', 'Производитель')->options(Manufacturer::pluck('name','id'));
+            $form->select('season_id', 'Сезон')->options(Season::pluck('name', 'id'))->required();
+            $form->select('brand_id', 'Бренд')->options(Brand::orderBy('name')->pluck('name', 'id'))->required()->default(Brand::where('name', request('brand_name'))->value('id'));
+            $form->select('collection_id', 'Коллекция')->options(Collection::pluck('name', 'id'))->required();
+            $form->select('manufacturer_id', 'Производитель')->options(Manufacturer::pluck('name', 'id'));
             $form->text('color_txt', 'Цвет');
             $form->text('fabric_top_txt', 'Материал верха');
             $form->text('fabric_inner_txt', 'Материал внутри');
@@ -234,7 +223,7 @@ class ProductController extends AdminController
             // Storage::delete('file.jpg'); // !!!
 
             // add
-            $sorting = array_filter(explode('|', $form->input('sorting')));
+            $sorting = array_filter(explode('|', (string) $form->input('sorting')));
             $addImages = $form->input('add_images') ?? [];
             foreach ($addImages as $image) {
                 $media = $form->model()
@@ -290,15 +279,13 @@ class ProductController extends AdminController
 
     /**
      * Получить id размеров из запроса
-     *
-     * @return array|null
      */
     public function getSizesIdFormRequest(): ?array
     {
         if (empty($sizes = request('new_sizes'))) {
             return null;
         }
-        $sizes = explode(';', $sizes);
+        $sizes = explode(';', (string) $sizes);
         return Size::whereIn('name', $sizes)->pluck('id')->toArray();
     }
 
@@ -307,7 +294,6 @@ class ProductController extends AdminController
      *
      * @param string $type
      * @param integer $newId
-     * @return integer
      */
     protected function getOldId($type, $newId): int
     {
@@ -319,7 +305,6 @@ class ProductController extends AdminController
     /**
      * Отправить товары на старый сайт
      *
-     * @param \Encore\Admin\Form $form
      * @return void
      */
     protected function sendToOldSite(Form $form)
@@ -382,15 +367,9 @@ class ProductController extends AdminController
                 'extra_field_10' => $form->fabric_outsole_txt ?? '',
                 'extra_field_11' => $form->heel_txt ?? '',
                 'extra_field_12' => '',
-                'extra_field_13' => implode(',', array_filter(array_map(function ($value) {
-                    return $this->getOldId('colors', $value);
-                }, $form->colors))),
-                'extra_field_14' => implode(',', array_filter(array_map(function ($value) {
-                    return $this->getOldId('fabrics', $value);
-                }, $form->fabrics))),
-                'extra_field_15' => implode(',', array_filter(array_map(function ($value) {
-                    return $this->getOldId('tags', $value);
-                }, $form->tags))),
+                'extra_field_13' => implode(',', array_filter(array_map(fn ($value) => $this->getOldId('colors', $value), $form->colors))),
+                'extra_field_14' => implode(',', array_filter(array_map(fn ($value) => $this->getOldId('fabrics', $value), $form->fabrics))),
+                'extra_field_15' => implode(',', array_filter(array_map(fn ($value) => $this->getOldId('tags', $value), $form->tags))),
                 'extra_field_16' => '',
                 'extra_field_17' => '',
                 'extra_field_18' => 0,
@@ -401,29 +380,19 @@ class ProductController extends AdminController
                 'category_id' => $this->getOldId('category', $form->category_id),
                 'product_ordering' => 1
             ],
-            'sizes' => array_map(function ($oldSizeId) use ($form) {
-                return [
-                    'product_id' => $form->model()->id,
-                    'attr_id' => 2,
-                    'attr_value_id' => $oldSizeId,
-                    'price_mod' => '+',
-                    'addprice ' => 0
-                ];
-            }, array_filter(array_map(function ($size) {
-                return $this->getOldId('sizes', $size);
-            }, $form->sizes))),
+            'sizes' => array_map(fn ($oldSizeId) => [
+                'product_id' => $form->model()->id,
+                'attr_id' => 2,
+                'attr_value_id' => $oldSizeId,
+                'price_mod' => '+',
+                'addprice ' => 0
+            ], array_filter(array_map(fn ($size) => $this->getOldId('sizes', $size), $form->sizes))),
 
-            'images' => $form->model()->getMedia()->map(function ($image) {
-                return $image->getUrl('full');
-            })->toArray(),
+            'images' => $form->model()->getMedia()->map(fn ($image) => $image->getUrl('full'))->toArray(),
 
-            'videos' => $form->model()->getMedia()->map(function ($image) {
-                return $image->getCustomProperty('video');
-            })->filter()->toArray(),
+            'videos' => $form->model()->getMedia()->map(fn ($image) => $image->getCustomProperty('video'))->filter()->toArray(),
 
-            'imidj' => $form->model()->getMedia()->map(function ($image) {
-                return $image->getCustomProperty('is_imidj');
-            })->filter()->toArray()
+            'imidj' => $form->model()->getMedia()->map(fn ($image) => $image->getCustomProperty('is_imidj'))->filter()->toArray()
         ];
         // dd($data);
 

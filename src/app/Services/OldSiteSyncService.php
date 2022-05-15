@@ -4,7 +4,7 @@ namespace App\Services;
 
 class OldSiteSyncService
 {
-    const JSON_OPTIONS = JSON_UNESCAPED_UNICODE;
+    final const JSON_OPTIONS = JSON_UNESCAPED_UNICODE;
 
     /**
      * Make success response
@@ -25,7 +25,6 @@ class OldSiteSyncService
      * Make error json response
      *
      * @param mixed $errorMessages
-     * @param integer $code
      * @return \Illuminate\Http\JsonResponse
      */
     static public function errorResponse($errorMessages, int $code = 422)
@@ -42,8 +41,6 @@ class OldSiteSyncService
     /**
      * Make json response
      *
-     * @param array $data
-     * @param integer $code
      * @return \Illuminate\Http\JsonResponse
      */
     static protected function jsonResponse(array $data, int $code = 200)

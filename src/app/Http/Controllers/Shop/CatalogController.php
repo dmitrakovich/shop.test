@@ -14,11 +14,6 @@ class CatalogController extends BaseController
 {
     /**
      * Render products for next page
-     *
-     * @param CatalogService $catalogService
-     * @param Request $request
-     * @param GoogleTagManagerService $gtmService
-     * @return array
      */
     public function ajaxNextPage(
         CatalogService $catalogService,

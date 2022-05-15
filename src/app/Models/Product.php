@@ -49,7 +49,7 @@ class Product extends Model implements HasMedia
     /**
      * Default sorting
      */
-    const DEFAULT_SORT = 'rating';
+    public const DEFAULT_SORT = 'rating';
 
     /**
      * The attributes that aren't mass assignable.
@@ -268,23 +268,13 @@ class Product extends Model implements HasMedia
      */
     public function scopeSorting(Builder $query, string $type)
     {
-        switch ($type) {
-            case 'newness':
-                return $query->orderByDesc('created_at')->orderByDesc('id');
-
-            case 'rating':
-            default:
-                return $query->orderByDesc('rating')->orderByDesc('id');
-
-            case 'price-up':
-                return $query->orderBy('price')->orderBy('id');
-
-            case 'price-down':
-                return $query->orderByDesc('price')->orderByDesc('id');
-
-            // case 'discount':
-            //     return $query->orderByDesc('discount')->orderByDesc('id');
-        }
+        return match ($type) {
+            'newness' => $query->orderByDesc('created_at')->orderByDesc('id'),
+            'price-up' => $query->orderBy('price')->orderBy('id'),
+            'price-down' => $query->orderByDesc('price')->orderByDesc('id'),
+            default => $query->orderByDesc('rating')->orderByDesc('id'), // rating
+            // 'discount' => $query->orderByDesc('discount')->orderByDesc('id'),
+        };
     }
     /**
      * Поиск товаров

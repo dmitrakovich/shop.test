@@ -10,9 +10,6 @@ class ProductService
 {
     /**
      * Применить фильтры к выборке
-     *
-     * @param array $filters
-     * @return Builder
      */
     protected function applyFilters(array $filters): Builder
     {
@@ -30,11 +27,6 @@ class ProductService
 
     /**
      * Return built query
-     *
-     * @param array $filters
-     * @param string $sort
-     * @param string|null $search
-     * @return Builder
      */
     public function getForCatalog(array $filters, string $sort, ?string $search = null): Builder
     {
@@ -51,10 +43,6 @@ class ProductService
             ->sorting($sort);
     }
 
-    /**
-     * @param array $ids
-     * @return EloquentCollection
-     */
     public function getById(array $ids): EloquentCollection
     {
         return Product::whereIn('id', $ids)->with([
@@ -75,7 +63,6 @@ class ProductService
      * Get products collection for feed
      *
      * @param boolean $withTrashed
-     * @return EloquentCollection
      */
     public function getForFeed($withTrashed = false): EloquentCollection
     {
@@ -95,8 +82,6 @@ class ProductService
 
     /**
      * Return recommended products
-     *
-     * @return EloquentCollection
      */
     public function getRecommended(): EloquentCollection
     {

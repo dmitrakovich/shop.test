@@ -34,8 +34,6 @@ class FilterRequest extends FormRequest
 
     /**
      * Get current sorting
-     *
-     * @return string
      */
     public function getSorting(): string
     {
@@ -49,8 +47,6 @@ class FilterRequest extends FormRequest
 
     /**
      * Get filters
-     *
-     * @return array
      */
     public function getFilters(): array
     {
@@ -65,9 +61,7 @@ class FilterRequest extends FormRequest
             $filters[$value->model_type][$value->slug] = $value;
         }
 
-        uksort($filters[Category::class], function($a, $b) use ($slugs) {
-            return array_search($a, $slugs) > array_search($b, $slugs);
-        });
+        uksort($filters[Category::class], fn($a, $b) => array_search($a, $slugs) > array_search($b, $slugs));
 
         $this->addTopProducts($filters);
 
@@ -75,7 +69,6 @@ class FilterRequest extends FormRequest
     }
 
     /**
-     * @param array $filters
      * @return void
      */
     protected function addTopProducts(array &$filters)
@@ -84,9 +77,7 @@ class FilterRequest extends FormRequest
         $top = array_filter(explode(',', $top));
 
         if (!empty($top)) {
-            $filters[Top::class] = array_map(function (int $value) {
-                return ['model_id' => $value];
-            }, $top);
+            $filters[Top::class] = array_map(fn(int $value) => ['model_id' => $value], $top);
         }
     }
 }

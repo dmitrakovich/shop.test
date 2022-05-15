@@ -104,12 +104,12 @@ class UpdateAvailabilityJob extends AbstractJob
         } elseif (isset($fileInfo['error'])) {
             return $this->errorWithReturn('Ошибка получения данных. ' . ($fileInfo['message'] ?? $fileInfo['error']));
         }
-        $filedate = explode(',', $availabilityConfig['file']);
-        $actionsCount = count($availabilityConfig['publish']);
-            + count($availabilityConfig['add_size'])
-            + count($availabilityConfig['del'])
-            + count($availabilityConfig['del_size'])
-            + count($availabilityConfig['new']);
+        $filedate = explode(',', (string) $availabilityConfig['file']);
+        $actionsCount = is_countable($availabilityConfig['publish']) ? count($availabilityConfig['publish']) : 0;
+        + (is_countable($availabilityConfig['add_size']) ? count($availabilityConfig['add_size']) : 0)
+            + (is_countable($availabilityConfig['del']) ? count($availabilityConfig['del']) : 0)
+            + (is_countable($availabilityConfig['del_size']) ? count($availabilityConfig['del_size']) : 0)
+            + (is_countable($availabilityConfig['new']) ? count($availabilityConfig['new']) : 0);
         if ($fileInfo['md5'] == $filedate[1] && $actionsCount > 0 && !isset($_POST['act'])) {
             return $this->errorWithReturn('Файл не обновлялся.');
         }
@@ -270,8 +270,8 @@ class UpdateAvailabilityJob extends AbstractJob
             };
         };
         $availabilityConfig['last_update'] = $this->thtime;
-        $filedate = explode(",", $availabilityConfig['file']);
-        $this->writeLog( "Файл $filedate[0]. Наличие сверено в $availabilityConfig[last_update]");
+        $filedate = explode(",", (string) $availabilityConfig['file']);
+        $this->writeLog("Файл $filedate[0]. Наличие сверено в $availabilityConfig[last_update]");
 
         if ($availabilityConfig['auto_del'] === 'on') {
             $this->restoreOldProducts($availabilityConfig);
@@ -290,13 +290,10 @@ class UpdateAvailabilityJob extends AbstractJob
 
     /**
      * Restore old products
-     *
-     * @param array $config
-     * @return void
      */
     protected function restoreOldProducts(array &$config): void
     {
-        if (count($config['publish']) <= 0) {
+        if ((is_countable($config['publish']) ? count($config['publish']) : 0) <= 0) {
             return;
         }
         $restoreCount = 0;
@@ -336,13 +333,10 @@ class UpdateAvailabilityJob extends AbstractJob
 
     /**
      * Delete products
-     *
-     * @param array $config
-     * @return void
      */
     protected function deleteProducts(array &$config): void
     {
-        if (count($config['del']) <= 0) {
+        if ((is_countable($config['del']) ? count($config['del']) : 0) <= 0) {
             return;
         }
         $deleteCount = 0;
@@ -364,14 +358,10 @@ class UpdateAvailabilityJob extends AbstractJob
 
     /**
      * Delete sizes
-     *
-     * @param array $config
-     * @param array $sizesList
-     * @return void
      */
     protected function deleteSizes(array &$config, array $sizesList): void
     {
-        if (count($config['del_size']) <= 0) {
+        if ((is_countable($config['del_size']) ? count($config['del_size']) : 0) <= 0) {
             return;
         }
 
@@ -395,7 +385,7 @@ class UpdateAvailabilityJob extends AbstractJob
                         continue;
                     }
                     DB::table('product_attributes')
-                        ->where('attribute_type', 'App\Models\Size')
+                        ->where('attribute_type', \App\Models\Size::class)
                         ->where('product_id', $productId)
                         ->where('attribute_id', $sizesList[$sizeName])
                         ->delete();
@@ -408,12 +398,11 @@ class UpdateAvailabilityJob extends AbstractJob
     /**
      * Add new sizes to products
      *
-     * @param array $config
      * @return void
      */
     public function addNewSizes(array &$config)
     {
-        if (count($config['add_size']) <= 0) {
+        if ((is_countable($config['add_size']) ? count($config['add_size']) : 0) <= 0) {
             return;
         }
         $addCount = 0;
@@ -422,7 +411,7 @@ class UpdateAvailabilityJob extends AbstractJob
             if ($config['add_size'][$actK]['status'] != 1 && $actV['vid'] != 'new') {
                 $insertData[] = [
                     'product_id' => $actV['id'],
-                    'attribute_type' => 'App\Models\Size',
+                    'attribute_type' => \App\Models\Size::class,
                     'attribute_id' => $actV['vid'],
                 ];
                 $config['add_size'][$actK]['status'] = 1;
@@ -437,8 +426,6 @@ class UpdateAvailabilityJob extends AbstractJob
 
     /**
      * Get availability config file name
-     *
-     * @return string
      */
     protected function getConfigFileName(): string
     {
@@ -447,8 +434,6 @@ class UpdateAvailabilityJob extends AbstractJob
 
     /**
      * Get availability config
-     *
-     * @return array
      */
     protected function getConfig(): array
     {
@@ -461,9 +446,6 @@ class UpdateAvailabilityJob extends AbstractJob
 
     /**
      * Save availability config
-     *
-     * @param array $config
-     * @return void
      */
     protected function saveConfig(array $config): void
     {
@@ -472,10 +454,6 @@ class UpdateAvailabilityJob extends AbstractJob
 
     /**
      * Write message in logs
-     *
-     * @param string $message
-     * @param string $level
-     * @return void
      */
     public function writeLog(string $message, string $level = 'info'): void
     {
@@ -487,10 +465,6 @@ class UpdateAvailabilityJob extends AbstractJob
 
     /**
      * Push message in logs
-     *
-     * @param string $message
-     * @param string $level
-     * @return void
      */
     protected function pushLogMessage(string $message, string $level): void
     {
@@ -499,8 +473,6 @@ class UpdateAvailabilityJob extends AbstractJob
 
     /**
      * Render log messages in html
-     *
-     * @return string
      */
     public function getLogsInHtml(): string
     {

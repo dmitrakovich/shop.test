@@ -13,23 +13,30 @@ class SxGeoUpdateJob extends AbstractJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    const URL = 'https://sypexgeo.net/files/SxGeoCountry.zip';  // Путь к скачиваемому файлу
+    /**
+     * Путь к скачиваемому файлу
+     */
+    final const URL = 'https://sypexgeo.net/files/SxGeoCountry.zip';
 
     protected $jobName = 'Обновление базы Sypex Geo';
+
     /**
      * Директория для сохранения файлов SxGeo
      */
     protected $sxGeoPath = null;
+
     /**
      * Файл в котором хранится дата последнего обновления
      */
     protected $lastUpdFile = null;
+
     /**
      * The number of seconds the job can run before timing out.
      *
      * @var int
      */
     public $timeout = 600;
+
     /**
      * Create a new job instance.
      *

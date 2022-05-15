@@ -28,9 +28,7 @@ class RegisteredUserController extends Controller
     /**
      * Handle an incoming registration request.
      *
-     * @param  \App\Http\Requests\Auth\RegisterRequest $request
      * @return \Illuminate\Http\RedirectResponse
-     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(RegisterRequest $request)
@@ -70,7 +68,7 @@ class RegisteredUserController extends Controller
         try {
             if ($user = $existUser) {
                 $user->usergroup_id = $userData['usergroup_id'];
-                $user->email = $user->email ?? $userData['email'];
+                $user->email ??= $userData['email'];
 
                 if ($user->hasAddresses()) {
                     $user->getFirstAddress()->update($userData);

@@ -59,7 +59,7 @@ class Filter
         }
 
         if (!isset($filters)) {
-            $filtersList = $filtersList ?? array_keys(self::$filtersModels);
+            $filtersList ??= array_keys(self::$filtersModels);
             foreach ($filtersList as $filterName) {
                 $model = self::$filtersModels[$filterName];
                 $query = (new $model)->newQuery();
@@ -81,7 +81,6 @@ class Filter
     /**
      * Префикс для отображаемого названия выбранного фильтра
      *
-     * @param string $filterType
      * @return string
      */
     public static function getNamePrefix(string $filterType)

@@ -10,18 +10,12 @@ class InfoPageController extends Controller
 {
     /**
      * Display the specified info page.
-     *
-     * @param GoogleTagManagerService $gtmService
-     * @param string|null $slug
-     * @return View
      */
     public function index(GoogleTagManagerService $gtmService, ?string $slug = null): View
     {
-        $currentInfoPage = InfoPage::when($slug, function ($query) use ($slug) {
-            return $query->where('slug', $slug);
-        })
-        ->firstOrFail(['slug', 'name', 'html'])
-        ->toArray();
+        $currentInfoPage = InfoPage::when($slug, fn($query) => $query->where('slug', $slug))
+            ->firstOrFail(['slug', 'name', 'html'])
+            ->toArray();
 
         $gtmService->setViewForOther();
 
@@ -30,9 +24,6 @@ class InfoPageController extends Controller
 
     /**
      * Display terms info page.
-     *
-     * @param GoogleTagManagerService $gtmService
-     * @return View
      */
     public function terms(GoogleTagManagerService $gtmService): View
     {
@@ -43,9 +34,6 @@ class InfoPageController extends Controller
 
     /**
      * Display private policy info page.
-     *
-     * @param GoogleTagManagerService $gtmService
-     * @return View
      */
     public function policy(GoogleTagManagerService $gtmService): View
     {

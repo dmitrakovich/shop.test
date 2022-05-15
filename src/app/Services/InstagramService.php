@@ -32,8 +32,8 @@ class InstagramService
     /**
      * Cache keys
      */
-    const CACHE_POSTS_KEY = 'instagram_posts';
-    const CACHE_TITLE_KEY = 'instagram_title';
+    final const CACHE_POSTS_KEY = 'instagram_posts';
+    final const CACHE_TITLE_KEY = 'instagram_title';
 
     public function __construct()
     {
@@ -42,8 +42,6 @@ class InstagramService
 
     /**
      * Get access token
-     *
-     * @return string
      */
     protected function getAccessToken(): string
     {
@@ -59,9 +57,6 @@ class InstagramService
 
     /**
      * Update access token if needed
-     *
-     * @param string $file
-     * @return void
      */
     protected function updateIfNeeded(string $file): void
     {
@@ -73,9 +68,6 @@ class InstagramService
 
     /**
      * Update access token
-     *
-     * @param string $oldToken
-     * @return string
      */
     protected function updateToken(string $oldToken): string
     {
@@ -89,8 +81,6 @@ class InstagramService
 
     /**
      * Get last 25 instagram posts
-     *
-     * @return array
      */
     public function getPosts(): array
     {
@@ -119,20 +109,14 @@ class InstagramService
 
     /**
      * Get last 25 instagram posts use cache
-     *
-     * @return array
      */
     public function getCachedPosts(): array
     {
-        return Cache::remember(self::CACHE_POSTS_KEY, 3600, function () { // 1h
-            return $this->getPosts();
-        });
+        return Cache::remember(self::CACHE_POSTS_KEY, 3600, fn() => $this->getPosts()); // 1h
     }
 
     /**
      * Get title from admin panel
-     *
-     * @return string|null
      */
     public function getTitle(): ?string
     {
@@ -141,9 +125,6 @@ class InstagramService
 
     /**
      * Set new title for instagram
-     *
-     * @param string|null $title
-     * @return void
      */
     public function setTitle(?string $title): void
     {

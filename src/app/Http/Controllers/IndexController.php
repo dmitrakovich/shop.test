@@ -12,8 +12,6 @@ class IndexController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @param InstagramService $instagramService
-     * @param SliderService $sliderService
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(

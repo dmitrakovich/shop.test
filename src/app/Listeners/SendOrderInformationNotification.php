@@ -23,11 +23,8 @@ class SendOrderInformationNotification
 
     /**
      * Handle the event.
-     *
-     * @param  OrderCreated  $event
-     * @return void
      */
-    public function handle(OrderCreated $event)
+    public function handle(OrderCreated $event): void
     {
         $order = $event->order;
 

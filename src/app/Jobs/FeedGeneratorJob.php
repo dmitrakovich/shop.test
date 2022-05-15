@@ -18,16 +18,6 @@ class FeedGeneratorJob extends AbstractJob
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var AbstractFeed
-     */
-    private $feedInstance;
-
-    /**
-     * @var Currency
-     */
-    private $currency;
-
-    /**
      * @var array
      */
     protected $contextVars = ['usedMemory'];
@@ -37,29 +27,22 @@ class FeedGeneratorJob extends AbstractJob
      *
      * @return void
      */
-    public function __construct(AbstractFeed $feedInstance, Currency $currency)
-    {
-        $this->feedInstance = $feedInstance;
-        $this->currency = $currency;
+    public function __construct(
+        private readonly AbstractFeed $feedInstance,
+        private readonly Currency $currency
+    ) {
     }
 
     /**
      * Return feed service
-     *
-     * @return FeedServiceInterface
      */
     protected function getFeedService(): FeedServiceInterface
     {
-        switch ($this->feedInstance::FILE_TYPE) {
-            case 'xml':
-                return new XmlService($this->feedInstance, $this->currency);
-
-            case 'csv':
-                return new CsvService($this->feedInstance, $this->currency);
-
-            default:
-                throw new \Exception('Unknown needed feed file type');
-        }
+        return match ($this->feedInstance::FILE_TYPE) {
+            'xml' => new XmlService($this->feedInstance, $this->currency),
+            'csv' => new CsvService($this->feedInstance, $this->currency),
+            default => throw new \Exception('Unknown needed feed file type'),
+        };
     }
 
     /**

@@ -9,20 +9,11 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class SaleService
 {
-    /**
-     * @var Sale
-     */
-    private $sale;
+    private ?Sale $sale;
 
-    /**
-     * @var array
-     */
-    private $discounts = [];
+    private array $discounts = [];
 
-    /**
-     * @var boolean|null
-     */
-    private $hasSaleProductsInCart = null;
+    private ?bool $hasSaleProductsInCart = null;
 
     public function __construct()
     {
@@ -32,8 +23,6 @@ class SaleService
 
     /**
      * Prepare discounts list
-     *
-     * @return void
      */
     protected function prepareDiscounts(): void
     {
@@ -54,8 +43,6 @@ class SaleService
 
     /**
      * Check has sale
-     *
-     * @return boolean
      */
     protected function hasSale(): bool
     {
@@ -64,47 +51,28 @@ class SaleService
 
     /**
      * Check nedding aplly for product
-     *
-     * @return boolean
      */
     protected function applyForOneProduct(): bool
     {
-        switch ($this->sale->algorithm) {
-            case $this->sale::ALGORITHM_FAKE:
-            case $this->sale::ALGORITHM_SIMPLE:
-                return true;
-
-            case $this->sale::ALGORITHM_COUNT:
-            case $this->sale::ALGORITHM_ASCENDING:
-            default:
-                return false;
-        }
+        return match ($this->sale->algorithm) {
+            $this->sale::ALGORITHM_FAKE, $this->sale::ALGORITHM_SIMPLE => true,
+            default => false,
+        };
     }
 
     /**
      * Check special for algorithm conditions
-     *
-     * @return boolean
      */
     protected function checkSpecialConditions(float $price, float $oldPrice): bool
     {
-        switch ($this->sale->algorithm) {
-            case $this->sale::ALGORITHM_FAKE:
-                return $price < $oldPrice;
-
-            case $this->sale::ALGORITHM_SIMPLE:
-            case $this->sale::ALGORITHM_COUNT:
-            case $this->sale::ALGORITHM_ASCENDING:
-            default:
-                return true;
-        }
+        return match ($this->sale->algorithm) {
+            $this->sale::ALGORITHM_FAKE => $price < $oldPrice,
+            default => true,
+        };
     }
 
     /**
      * Check categories condition
-     *
-     * @param integer $categoryId
-     * @return boolean
      */
     protected function checkCategory(int $categoryId): bool
     {
@@ -113,9 +81,6 @@ class SaleService
 
     /**
      * Check collections condition
-     *
-     * @param integer $collectionId
-     * @return boolean
      */
     protected function checkCollection(int $collectionId): bool
     {
@@ -124,9 +89,6 @@ class SaleService
 
     /**
      * Check styles condition
-     *
-     * @param EloquentCollection $styles
-     * @return boolean
      */
     protected function checkStyles(EloquentCollection $styles): bool
     {
@@ -135,9 +97,6 @@ class SaleService
 
     /**
      * Check season condition
-     *
-     * @param integer $seasonId
-     * @return boolean
      */
     protected function checkSeason(int $seasonId): bool
     {
@@ -146,10 +105,6 @@ class SaleService
 
     /**
      * Check new item
-     *
-     * @param float $price
-     * @param float $oldPrice
-     * @return boolean
      */
     protected function checkNew(float $price, float $oldPrice): bool
     {
@@ -158,9 +113,6 @@ class SaleService
 
     /**
      * Mix check sale conditions
-     *
-     * @param Product $product
-     * @return boolean
      */
     protected function checkSaleConditions(Product $product): bool
     {
@@ -174,9 +126,6 @@ class SaleService
 
     /**
      * get sale discount
-     *
-     * @param integer $index
-     * @return float
      */
     protected function getDiscount(int $index = 0): float
     {
@@ -185,9 +134,6 @@ class SaleService
 
     /**
      * get overflow sale discount
-     *
-     * @param integer $index
-     * @return float
      */
     protected function getOverflowDiscount(): float
     {
@@ -200,39 +146,23 @@ class SaleService
 
     /**
      * Apply sale
-     *
-     * @param float $price
-     * @param float $oldPrice
-     * @param integer $index
-     * @param integer $count
-     * @return float
      */
     private function applySale(float $price, float $oldPrice, int $index = 0, int $count = 1): float
     {
         $baseDiscount = ($oldPrice - $price) / $oldPrice;
 
-        switch ($this->sale->algorithm) {
-            case $this->sale::ALGORITHM_FAKE:
-                return $price;
-
-            case $this->sale::ALGORITHM_SIMPLE:
-                return $this->round($oldPrice * (1 - ($this->getDiscount() + $baseDiscount)));
-
-            case $this->sale::ALGORITHM_COUNT:
-                return $this->round($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount)));
-
-            case $this->sale::ALGORITHM_ASCENDING:
-                return $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount)));
-
-            default:
-                return $price;
-        }
+        return match ($this->sale->algorithm) {
+            $this->sale::ALGORITHM_FAKE => $price,
+            $this->sale::ALGORITHM_SIMPLE => $this->round($oldPrice * (1 - ($this->getDiscount() + $baseDiscount))),
+            $this->sale::ALGORITHM_COUNT => $this->round($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount))),
+            $this->sale::ALGORITHM_ASCENDING => $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount))),
+            default => $price,
+        };
     }
 
     /**
      * Rounding to 5 kopecks
      *
-     * @param float $num
      * @return float
      */
     protected function round(float $num)
@@ -242,12 +172,6 @@ class SaleService
 
     /**
      * Get sale data
-     *
-     * @param float $price
-     * @param float $oldPrice
-     * @param integer $index
-     * @param integer $count
-     * @return array
      */
     private function getSaleData(float $price, float $oldPrice, int $index = 0, int $count = 1): array
     {
@@ -259,9 +183,6 @@ class SaleService
 
     /**
      * Apply sale for Product model
-     *
-     * @param Product $product
-     * @return void
      */
     public function applyForProduct(Product $product): void
     {
@@ -274,8 +195,6 @@ class SaleService
 
     /**
      * Check has delivery with fittng for sale
-     *
-     * @return boolean
      */
     public function hasFitting(): bool
     {
@@ -287,8 +206,6 @@ class SaleService
 
     /**
      * Check has payment with installment for sale
-     *
-     * @return boolean
      */
     public function hasInstallment(): bool
     {
@@ -304,9 +221,7 @@ class SaleService
 
         if (!$this->hasSale()) return;
 
-        $products = $cart->items->map(function ($item, $key) {
-            return $item->product;
-        });
+        $products = $cart->items->map(fn($item, $key) => $item->product);
         $products = $products->sortBy('price');
 
         $productSaleList = [];

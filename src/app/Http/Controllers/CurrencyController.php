@@ -10,7 +10,6 @@ class CurrencyController extends Controller
     /**
      * Переключить валюту
      *
-     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function switch(Request $request)

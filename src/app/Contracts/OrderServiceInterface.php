@@ -10,8 +10,6 @@ interface OrderServiceInterface
     /**
      * Store order (create new)
      *
-     * @param StoreRequest $request
-     * @param Cart $cart
      * @return \App\Models\Orders\Order
      */
     public function store(StoreRequest $request, Cart $cart);

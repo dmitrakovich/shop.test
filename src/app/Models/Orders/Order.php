@@ -144,8 +144,6 @@ class Order extends Model
 
     /**
      * The device from which the order was made
-     *
-     * @return Relations\BelongsTo
      */
     public function device(): Relations\BelongsTo
     {
@@ -262,7 +260,6 @@ class Order extends Model
     /**
      * Farmat date in admin panel
      *
-     * @param \DateTimeInterface $date
      * @return string
      */
     protected function serializeDate(\DateTimeInterface $date)
@@ -272,8 +269,6 @@ class Order extends Model
 
     /**
      * Check is this order made in one click
-     *
-     * @return boolean
      */
     public function isOneClick(): bool
     {

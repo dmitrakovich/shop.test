@@ -25,7 +25,7 @@ class GenerateFeed extends Command
     /**
      * @var array
      */
-    const INSTANCES = [
+    final const INSTANCES = [
         'yandex_xml' => YandexXml::class,
         'google_xml' => GoogleXml::class,
         'google_csv' => GoogleCsv::class,
@@ -50,8 +50,6 @@ class GenerateFeed extends Command
 
     /**
      * Get all instances or instance from arguments
-     *
-     * @return array
      */
     protected function getInstances(): array
     {
@@ -72,9 +70,9 @@ class GenerateFeed extends Command
     /**
      * Get all currencies or currency from argument
      *
-     * @return EloquentCollection
+     * @return EloquentCollection<Currency>
      */
-    protected function getCurrencies(): EloquentCollection
+    protected function getCurrencies()
     {
         $allCurrencies = Currency::all(['code', 'country', 'rate', 'decimals', 'symbol'])->keyBy('code');
 

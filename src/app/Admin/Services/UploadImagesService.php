@@ -21,7 +21,7 @@ class UploadImagesService
         </div>';
     }
 
-    public function test()
+    public function test(): never
     {
         dd('test');
     }

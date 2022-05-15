@@ -11,20 +11,21 @@ use App\Models\Product;
 class SitemapController extends Controller
 {
     protected $attributesModels = [
-        'categories' => 'App\Models\Category',
-        'brands' => 'App\Models\Brand',
-        'sizes' => 'App\Models\Size',
-        'fabrics' => 'App\Models\Fabric',
-        'colors' => 'App\Models\Color',
-        'collections' => 'App\Models\Tag',
-        'tags' => 'App\Models\Tag',
-        'heels' => 'App\Models\Heel',
+        'categories' => \App\Models\Category::class,
+        'brands' => \App\Models\Brand::class,
+        'sizes' => \App\Models\Size::class,
+        'fabrics' => \App\Models\Fabric::class,
+        'colors' => \App\Models\Color::class,
+        'collections' => \App\Models\Tag::class,
+        'tags' => \App\Models\Tag::class,
+        'heels' => \App\Models\Heel::class,
     ];
-    //
+
     public function __construct()
     {
         $this->date = date('Y-m-d');
     }
+
     /**
      * Index
      *
@@ -52,6 +53,7 @@ class SitemapController extends Controller
             'date' => $this->date
         ]);
     }
+
     /**
      * Товары
      *
@@ -64,6 +66,7 @@ class SitemapController extends Controller
             'date' => $this->date
         ]);
     }
+
     /**
      * Категории
      *
@@ -76,6 +79,7 @@ class SitemapController extends Controller
             'date' => $this->date
         ]);
     }
+
     /**
      * Бренды
      *
@@ -88,10 +92,10 @@ class SitemapController extends Controller
             'date' => $this->date
         ]);
     }
+
     /**
      * Категория + {еще один}
      *
-     * @param string $another
      * @return Response
      */
     public function catalog2(string $another)
@@ -104,10 +108,10 @@ class SitemapController extends Controller
             'date' => $this->date
         ]);
     }
+
     /**
      * Категория + {еще один} + {еще один}
      *
-     * @param string $another
      * @return Response
      */
     public function catalog3(string $another, string $another2)
@@ -122,6 +126,7 @@ class SitemapController extends Controller
             'date' => $this->date
         ]);
     }
+
     /**
      * Статика
      *
@@ -141,12 +146,9 @@ class SitemapController extends Controller
             ]
         ]);
     }
+
     /**
      * Сформировать XML
-     *
-     * @param string $viewName
-     * @param array $data
-     * @return Response
      */
     public function render(string $viewName, array $data = []) : Response
     {

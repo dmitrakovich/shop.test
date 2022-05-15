@@ -33,8 +33,6 @@ class Product extends ProductModel
 
     /**
      * Accessor for admin panel
-     *
-     * @return Attribute
      */
     public function path(): Attribute
     {
@@ -45,8 +43,6 @@ class Product extends ProductModel
 
     /**
      * Interact with the product's photos.
-     *
-     * @return Attribute
      */
     public function photos(): Attribute
     {
@@ -57,10 +53,9 @@ class Product extends ProductModel
     }
 
     /**
-     * @param array $photos
      * @return void
      */
-    public function setPhotos(array $photos): void
+    public function setPhotos(array $photos)
     {
         $currentPhotos = [];
         $mediaItems = $this->getMedia();

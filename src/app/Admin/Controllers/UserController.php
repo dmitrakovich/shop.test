@@ -33,9 +33,7 @@ class UserController extends AdminController
         $grid->column('email', __('Email'));
         $grid->column('phone', 'Телефон');
         // $grid->column('birth_date', 'Дата рождения');
-        $grid->column('addresses', 'Адрес')->display(function ($addresses) {
-            return $addresses[0]['address'] ?? null;
-        });
+        $grid->column('addresses', 'Адрес')->display(fn($addresses) => $addresses[0]['address'] ?? null);
         $grid->column('created_at', 'Дата регистрации');
 
         $grid->model()->orderBy('id', 'desc');

@@ -13,18 +13,15 @@ class Guest
     /**
      * @var string
      */
-    const COOKIE_NAME = 'guest_data';
+    final const COOKIE_NAME = 'guest_data';
 
     /**
      * @var integer 1 year
      */
-    const COOKIE_LIFE_TIME = 525600;
+    final const COOKIE_LIFE_TIME = 525600;
 
     /**
      * Save guest data
-     *
-     * @param array $data
-     * @return void
      */
     public static function setData(array $data): void
     {
@@ -39,8 +36,6 @@ class Guest
 
     /**
      * Return guest data
-     *
-     * @return array
      */
     public static function getData(): array
     {
@@ -49,9 +44,6 @@ class Guest
 
     /**
      * Check data before save
-     *
-     * @param array $data
-     * @return boolean
      */
     protected static function checkData(array $data): bool
     {

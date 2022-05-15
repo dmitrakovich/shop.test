@@ -34,8 +34,6 @@ class Cart extends Model
 
     /**
      * Количество товаров в корзине
-     *
-     * @return int
      */
     public function itemsCount(): int
     {
@@ -48,8 +46,6 @@ class Cart extends Model
 
     /**
      * Получить общую стоимость товаров в корзине
-     *
-     * @return float
      */
     public function getTotalOldPrice(): float
     {
@@ -62,9 +58,6 @@ class Cart extends Model
 
     /**
      * Get all items cart price
-     *
-     * @param string|null $currencyCode
-     * @return float
      */
     public function getTotalPrice(?string $currencyCode = null): float
     {
@@ -77,10 +70,6 @@ class Cart extends Model
 
     /**
      * Add item to cart
-     *
-     * @param integer $productId
-     * @param integer $sizeId
-     * @return void
      */
     public function addItem(int $productId, int $sizeId): void
     {
@@ -106,8 +95,6 @@ class Cart extends Model
 
     /**
      * Refresh car items
-     *
-     * @return void
      */
     protected function refreshItems(): void
     {
@@ -116,8 +103,6 @@ class Cart extends Model
 
     /**
      * Создать корзину, если она еще не создана
-     *
-     * @return self
      */
     public function createIfNotExists(): self
     {
@@ -138,8 +123,6 @@ class Cart extends Model
 
     /**
      * Очистить содержимое корзины
-     *
-     * @return void
      */
     public function clear(): void
     {

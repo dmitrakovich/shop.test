@@ -13,8 +13,6 @@ class FeedbackController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param GoogleTagManagerService $gtmService
-     * @param string|null $type
      * @return \Illuminate\Http\Response
      */
     public function index(GoogleTagManagerService $gtmService, ?string $type = null)

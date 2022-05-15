@@ -124,8 +124,6 @@ class SaleController extends AdminController
     /**
      * Prepare to save id list
      *
-     * @param array $ids
-     * @param array $allEntities
      * @return array
      */
     protected function prepareIdList(array $ids, array $allEntities)

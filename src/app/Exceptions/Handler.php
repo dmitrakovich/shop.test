@@ -10,7 +10,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
-    const MAX_MESSAGE_LENGTH = 4000;
+    final const MAX_MESSAGE_LENGTH = 4000;
 
     /**
      * A list of exception types with their corresponding custom log levels.

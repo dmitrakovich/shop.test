@@ -6,21 +6,19 @@ class OrderMethod implements Enum
 {
     use EnumTrait;
 
-    const DEFAULT = 'default';
-    const ONECLICK = 'oneclick';
-    const CHAT = 'chat';
-    const PHONE = 'phone';
-    const EMAIL = 'email';
-    const VIBER = 'viber';
-    const TELEGRAM = 'telegram';
-    const WHATSAPP = 'whatsapp';
-    const INSTAGRAM = 'insta';
-    const OTHER = 'other';
+    final const DEFAULT = 'default';
+    final const ONECLICK = 'oneclick';
+    final const CHAT = 'chat';
+    final const PHONE = 'phone';
+    final const EMAIL = 'email';
+    final const VIBER = 'viber';
+    final const TELEGRAM = 'telegram';
+    final const WHATSAPP = 'whatsapp';
+    final const INSTAGRAM = 'insta';
+    final const OTHER = 'other';
 
     /**
      * Generate key => rus value for select box
-     *
-     * @return array
      */
     public static function getOptionsForSelect(): array
     {
@@ -41,51 +39,22 @@ class OrderMethod implements Enum
     /**
      * Return umt sources for selected order method
      *
-     * @param string $orderMethod
-     * @return array utm sources:
+     * @return array<string> utm sources:
      * - utm_source
      * - utm_medium
      * - utm_campaign
      */
     public static function getUtmSources(string $orderMethod): array
     {
-        switch ($orderMethod) {
-            default:
-            case self::OTHER:
-                return ['none', 'none', 'manager'];
-
-            case self::INSTAGRAM:
-                return ['instagram', 'social', 'manager'];
-
-            case self::PHONE:
-                return ['phone', 'offline', 'manager'];
-
-            case self::CHAT:
-                return ['site', 'chat', 'manager'];
-
-            case self::EMAIL:
-                return ['email', 'email', 'manager'];
-
-            case self::VIBER:
-                return ['viber', 'messenger', 'manager'];
-
-            case self::TELEGRAM:
-                return ['telegram', 'messenger', 'manager'];
-
-            case self::WHATSAPP:
-                return ['whatsapp', 'messenger', 'manager'];
-        }
-
-        // PHP > 8
-        // return match ($orderMethod) {
-        //     self::OTHER => ['none', 'none', 'manager'],
-        //     self::INSTAGRAM => ['instagram', 'social', 'manager'],
-        //     self::PHONE => ['phone', 'offline', 'manager'],
-        //     self::CHAT => ['site', 'chat', 'manager'],
-        //     self::EMAIL => ['email', 'email', 'manager'],
-        //     self::VIBER => ['viber', 'messenger', 'manager'],
-        //     self::TELEGRAM => ['telegram', 'messenger', 'manager'],
-        //     self::WHATSAPP => ['whatsapp', 'messenger', 'manager'],
-        // };
+        return match ($orderMethod) {
+            self::INSTAGRAM => ['instagram', 'social', 'manager'],
+            self::PHONE => ['phone', 'offline', 'manager'],
+            self::CHAT => ['site', 'chat', 'manager'],
+            self::EMAIL => ['email', 'email', 'manager'],
+            self::VIBER => ['viber', 'messenger', 'manager'],
+            self::TELEGRAM => ['telegram', 'messenger', 'manager'],
+            self::WHATSAPP => ['whatsapp', 'messenger', 'manager'],
+            default => ['none', 'none', 'manager'],
+        };
     }
 }

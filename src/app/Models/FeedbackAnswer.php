@@ -17,9 +17,6 @@ class FeedbackAnswer extends Model implements HasMedia
 
     /**
      * Размеры изображений
-     *
-     * @param Media $media
-     * @return void
      */
     public function registerMediaConversions(Media $media = null): void
     {
