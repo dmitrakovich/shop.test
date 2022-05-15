@@ -21,7 +21,7 @@
     <a href="{{ $product['url'] }}" data-gtm-click="productClick">
         <img
             src="{{ $product['image'] }}"
-            alt="{{ $product['title'] }}"
+            alt="{{ $product['sku'] }}"
             class="img-fluid product-first-image"
         >
         <div>{{ $product['full_name'] }}<br>

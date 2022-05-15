@@ -21,8 +21,7 @@ use Illuminate\Database\Eloquent\{Model, Builder, Relations, SoftDeletes};
  * @property int $id
  * @property \App\Models\Category $category
  * @property \App\Models\Brand $brand
- * @property-read string $sku (new title)
- * @property string $title
+ * @property string $sku (new title)
  * @property string $slug
  * @property float $price
  * @property float $old_price
@@ -53,142 +52,112 @@ class Product extends Model implements HasMedia
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Ссылка на товар
-     *
-     * @var string
      */
-    protected $url = null;
+    protected ?string $url = null;
 
     /**
      * Категория товара
-     *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function category()
+    public function category(): Relations\BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
     /**
      * коллекция
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function collection()
+    public function collection(): Relations\BelongsTo
     {
         return $this->belongsTo(Collection::class);
     }
 
     /**
      * Размеры
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function sizes()
+    public function sizes(): Relations\MorphToMany
     {
         return $this->morphedByMany(Size::class, 'attribute', 'product_attributes');
     }
 
     /**
      * Цвет
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function colors()
+    public function colors(): Relations\MorphToMany
     {
         return $this->morphedByMany(Color::class, 'attribute', 'product_attributes');
     }
 
     /**
      * материалы
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function fabrics()
+    public function fabrics(): Relations\MorphToMany
     {
         return $this->morphedByMany(Fabric::class, 'attribute', 'product_attributes');
     }
 
     /**
      * Типы каблука
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function heels()
+    public function heels(): Relations\MorphToMany
     {
         return $this->morphedByMany(Heel::class, 'attribute', 'product_attributes');
     }
 
     /**
      * Стили
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function styles()
+    public function styles(): Relations\MorphToMany
     {
         return $this->morphedByMany(Style::class, 'attribute', 'product_attributes');
     }
 
     /**
      * Сезон
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function season()
+    public function season(): Relations\BelongsTo
     {
         return $this->belongsTo(Season::class);
     }
 
     /**
      * Теги
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function tags()
+    public function tags(): Relations\MorphToMany
     {
         return $this->morphedByMany(Tag::class, 'attribute', 'product_attributes');
     }
 
     /**
      * Бренд
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function brand()
+    public function brand(): Relations\BelongsTo
     {
         return $this->belongsTo(Brand::class);
     }
 
     /**
      * Производитель
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function manufacturer()
+    public function manufacturer(): Relations\BelongsTo
     {
         return $this->belongsTo(ProductAttributes\Manufacturer::class);
     }
 
     /**
      * Slug для фильтра
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
-    public function url()
+    public function url(): Relations\MorphOne
     {
         return $this->morphOne(Url::class, 'model');
     }
 
     /**
      * Get the favorite associated with the product.
-     *
-     * @return Relations\HasOne
      */
     public function favorite(): Relations\HasOne
     {
@@ -196,21 +165,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Get SKU (stock keeping unit) (accessor)
-     *
-     * @return Attribute
-     */
-    public function sku(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->title
-        );
-    }
-
-    /**
      * Get product simple name (category name + brand name)
-     *
-     * @return string
      */
     public function simpleName(): string
     {
@@ -219,8 +174,6 @@ class Product extends Model implements HasMedia
 
     /**
      * Simple name + id
-     *
-     * @return string
      */
     public function extendedName(): string
     {
@@ -229,8 +182,6 @@ class Product extends Model implements HasMedia
 
     /**
      * Получить полное название продукта
-     *
-     * @return string
      */
     public function getFullName(): string
     {
@@ -239,18 +190,14 @@ class Product extends Model implements HasMedia
 
     /**
      * Получить ссылку на товар
-     *
-     * @return string
      */
     public function getUrl(): string
     {
         return $this->url ?? ($this->url = $this->category->getUrl() . '/' . $this->slug);
     }
+
     /**
      * Размеры изображений
-     *
-     * @param Media $media
-     * @return void
      */
     public function registerMediaConversions(Media $media = null): void
     {
@@ -295,7 +242,7 @@ class Product extends Model implements HasMedia
         }
 
         $query->where(function ($query) use ($searchService) {
-            $searchService->generateSearchQuery($query, 'title')
+            $searchService->generateSearchQuery($query, 'sku')
                 ->orWhereIn('id', $searchService->getIds())
                 ->orWhereHas('brand', function (Builder $query) use ($searchService) {
                     $searchService->generateSearchQuery($query, 'name');
@@ -464,7 +411,7 @@ class Product extends Model implements HasMedia
     public function setDefaultValues(int $id = 0)
     {
         $this->id = $id;
-        $this->title = 'Товар удалён';
+        $this->sku = 'Товар удалён';
         $this->deleted_at = $this->created_at = Carbon::createFromDate(2017);
 
         $this->setRelation('category', Category::getDefault());

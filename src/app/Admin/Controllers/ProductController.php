@@ -63,7 +63,7 @@ class ProductController extends AdminController
             fn ($deleted) => !$deleted ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>'
         )->sortable();
         $grid->column('slug', 'Slug');
-        $grid->column('title', 'Title');
+        $grid->column('sku', 'Артикул');
         $grid->column('price', 'Цена')->sortable();
         $grid->column('old_price', 'Старая цена')->sortable();
         $grid->column('category.title', 'Категория');
@@ -86,7 +86,7 @@ class ProductController extends AdminController
             $filter->disableIdFilter(); // Remove the default id filter
             $filter->where(function ($query) {
                 $query->where('id', 'like', "%{$this->input}%")
-                    ->orWhere('title', 'like', "%{$this->input}%");
+                    ->orWhere('sku', 'like', "%{$this->input}%");
             }, 'Код товара / артикул');
         });
 
@@ -150,7 +150,7 @@ class ProductController extends AdminController
 
             $form->text('slug', __('Slug'))->default(Str::slug(request('slug')));
             $form->text('path', 'Путь')->disable();
-            $form->text('title', 'Артикул')->required()->default(request('title'));
+            $form->text('sku', 'Артикул')->required()->default(request('title'));
             $form->currency('buy_price', 'Цена покупки')->symbol('BYN');
             $form->currency('price', 'Цена')->symbol('BYN')->required();
             $form->currency('old_price', 'Старая цена')->symbol('BYN');
@@ -193,7 +193,7 @@ class ProductController extends AdminController
 
         $form->saving(function (Form $form) {
             if (empty($form->slug)) {
-                $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->title);
+                $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->sku);
             }
             if (is_null($form->manufacturer_id)) {
                 $form->manufacturer_id = 0;
@@ -350,7 +350,7 @@ class ProductController extends AdminController
                 'meta_title_en-GB' => '',
                 'meta_description_en-GB' => '',
                 'meta_keyword_en-GB' => '',
-                'name_ru-RU' => $form->title,
+                'name_ru-RU' => $form->sku,
                 'alias_ru-RU' => $form->slug,
                 'short_description_ru-RU' => '',
                 'description_ru-RU' => $form->description ?? '',
