@@ -317,7 +317,7 @@ class UpdateProductsRatingJob extends AbstractJob
 
         $ratingConfig['last_update'] = date("Y-m-d-H:i");
 
-        file_put_contents(database_path('files/rating.log.txt'), $ratingConfig['last_update'] . ' - ' . count($rating) . ' товаров' . PHP_EOL, FILE_APPEND);
+        $this->debug(count($rating) . ' товаров');
         unset($rating);
 
         if (!isset($_POST['act'])) {

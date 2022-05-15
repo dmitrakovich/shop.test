@@ -349,7 +349,7 @@ class UpdateAvailabilityJob extends AbstractJob
             }
         }
         if ($deleteCount > 50) {
-            $this->writeLog("!!! Ошибка. Больше 50 снять с публикации", 'error');
+            $this->writeLog("Ошибка! Больше 50 снять с публикации", 'error');
         } elseif ($deleteCount > 0) {
             Product::whereIn('id', $deleteListId)->delete();
             $this->writeLog("Снято с публикации $deleteCount");
@@ -365,7 +365,7 @@ class UpdateAvailabilityJob extends AbstractJob
             return;
         }
 
-        // !!! не тестировал работу, хз работает ли...
+        // не тестировал работу, хз работает ли...
 
         $deleteCount = 0;
         $deleteListId = [];
@@ -377,7 +377,7 @@ class UpdateAvailabilityJob extends AbstractJob
             }
         }
         if ($deleteCount > 1000) {
-            $this->writeLog("!!! Ошибка. Больше 1000 удалить размеров");
+            $this->writeLog("Ошибка! Больше 1000 удалить размеров");
         } elseif ($deleteCount > 0) {
             foreach ($deleteListId as $productId => $product) {
                 foreach ($product as $sizeName) {

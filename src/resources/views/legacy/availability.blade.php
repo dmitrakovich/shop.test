@@ -314,7 +314,7 @@ if (isset($_POST['act'])) {
 						$aviN = $avI['name'];
 						$aviS = $avI['vid'];
 						$aviSN = $avI['size'];
-						if ($aviS=='new') $aviSN .= "!!! добавить размер в админку !!!";
+						if ($aviS=='new') $aviSN .= "!## добавить размер в админку ##!";
 						$aviC = '';
 						if ($avI['status'] == 1) {
 							$aviC = 'class="complete"';

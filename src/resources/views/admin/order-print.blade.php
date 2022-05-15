@@ -16,7 +16,7 @@
               <td align="center" valign="top">
 
 
-                {{-- Copy /resources/views/emails/order-created.blade.php !!!! --}}
+                {{-- Copy /resources/views/emails/order-created.blade.php ! --}}
 
 
 				<table width="600" border="0" cellpadding="0" cellspacing="0" style="border:none; border-collapse:collapse; border-spacing:0; margin: 0 auto;"><tbody>

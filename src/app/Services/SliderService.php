@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @todo Refactor DRY !!!!
+ * @todo Refactor DRY !
  */
 class SliderService
 {

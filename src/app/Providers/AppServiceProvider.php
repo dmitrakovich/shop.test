@@ -32,8 +32,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Schema::defaultStringLength(191); // !!!
-
         Paginator::useBootstrap();
 
         setlocale(LC_TIME, 'ru_RU.UTF-8');
