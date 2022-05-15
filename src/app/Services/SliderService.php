@@ -56,7 +56,7 @@ class SliderService
                         'products' => $products->map(function ($product) {
                             return [
                                 'id' => $product->id,
-                                'title' => $product->sku,
+                                'sku' => $product->sku,
                                 'full_name' => "{$product->category->name} {$product->brand->name}",
                                 'sale_percentage' => $product->getSalePercentage(),
                                 'is_new' => $product->isNew(),
@@ -124,7 +124,7 @@ class SliderService
                 'products' => $products->map(function ($product) {
                     return [
                         'id' => $product->id,
-                        'title' => $product->sku,
+                        'sku' => $product->sku,
                         'full_name' => "{$product->category->name} {$product->brand->name}",
                         'sale_percentage' => $product->getSalePercentage(),
                         'is_new' => $product->isNew(),
