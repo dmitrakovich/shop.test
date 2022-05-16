@@ -105,6 +105,8 @@ Route::get('/sitemap.catalog.brands.xml', [SitemapController::class, 'brands'])-
 Route::get('/sitemap.catalog.categories_and_{another}_and_{another2}.xml', [SitemapController::class, 'catalog3'])->name('sitemap.catalog.catalog3');
 Route::get('/sitemap.catalog.categories_and_{another}.xml', [SitemapController::class, 'catalog2'])->name('sitemap.catalog.catalog2');
 
+Route::get('/opcache-reset', fn () => opcache_reset() ? 'Opcache cleared' : 'Error')->name('opcache.reset');
+
 Route::fallback(function () {
     return 'Хм… Почему ты оказался здесь?';
 });
