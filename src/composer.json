@@ -12,6 +12,7 @@
     ],
     "require": {
         "php": "^8.0.2",
+        "appstract/laravel-opcache": "^4.0",
         "default-089/sxgeo": "0.16.*@dev",
         "deployer/deployer": "v7.0.0-rc.8",
         "diglactic/laravel-breadcrumbs": "^7.2",

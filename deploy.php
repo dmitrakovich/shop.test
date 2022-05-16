@@ -71,7 +71,7 @@ task('deploy', [
     'artisan:view:cache',
     'artisan:event:cache',
     'deploy:symlink',
-    'artisan:opcache:reset',
+    'artisan:opcache:clear',
     'deploy:unlock',
     'deploy:cleanup',
     'deploy:success',
