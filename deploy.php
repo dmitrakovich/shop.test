@@ -55,6 +55,12 @@ task('deploy:writable', function () {
     });
 });
 
+desc('Clear OPCache');
+task('artisan:opcache:clear', artisan('opcache:clear'));
+
+desc('Pre-compile application code');
+task('artisan:opcache:compile', artisan('opcache:compile --force'));
+
 task('deploy', [
     'deploy:info',
     'deploy:setup',
@@ -71,7 +77,7 @@ task('deploy', [
     'artisan:view:cache',
     'artisan:event:cache',
     'deploy:symlink',
-    // 'artisan:opcache:clear',
+    'artisan:opcache:clear',
     'deploy:unlock',
     'deploy:cleanup',
     'deploy:success',
@@ -79,4 +85,3 @@ task('deploy', [
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
-
