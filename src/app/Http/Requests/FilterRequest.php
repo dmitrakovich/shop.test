@@ -61,7 +61,10 @@ class FilterRequest extends FormRequest
             $filters[$value->model_type][$value->slug] = $value;
         }
 
-        uksort($filters[Category::class], fn($a, $b) => array_search($a, $slugs) > array_search($b, $slugs));
+        uksort(
+            $filters[Category::class],
+            fn($a, $b) => intval(array_search($a, $slugs) > array_search($b, $slugs))
+        );
 
         $this->addTopProducts($filters);
 
