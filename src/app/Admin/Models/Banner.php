@@ -33,41 +33,27 @@ class Banner extends BannerModel
         return BannerModel::class;
     }
 
-    /**
-     * Interact with the banner's resource.
-     */
-    public function resource(): Attribute
+    public function setResourceAttribute($resource)
     {
-        return Attribute::make(
-            get: fn () => $this->getFirstMediaUrl(),
-            set: fn ($resource) => $this->clearMediaCollection()
-                ->addMedia(public_path("uploads/$resource"))
-                ->toMediaCollection()
-        );
+        $this->clearMediaCollection()
+            ->addMedia(public_path("uploads/$resource"))
+            ->toMediaCollection();
+    }
+
+    public function getResourceAttribute()
+    {
+        return $this->getFirstMediaUrl();
     }
 
     /**
      * Interact with the banner's type.
      */
-    public function type(): Attribute
+    public function getTypeAttribute()
     {
-        return Attribute::make(
-            get: fn () => intval(optional($this->getMedia()->first())->hasCustomProperty('videos'))
-        );
+        return intval(optional($this->getMedia()->first())->hasCustomProperty('videos'));
     }
 
-    /**
-     * Interact with the banner's videos.
-     */
-    public function videos(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->getVideos(),
-            set: fn ($videos) => $this->setVideos($videos)
-        );
-    }
-
-    public function setVideos(array $videos)
+    public function setVideosAttribute(array $videos)
     {
         if ($this->getMedia()->isEmpty()) {
             admin_error(self::ERRORS['empty_preview']);
@@ -90,7 +76,7 @@ class Banner extends BannerModel
         }
     }
 
-    public function getVideos()
+    public function getVideosAttribute()
     {
         $videos = optional($this->getMedia()->first())->getCustomProperty('videos');
 
