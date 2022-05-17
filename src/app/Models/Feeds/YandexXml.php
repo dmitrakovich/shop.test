@@ -106,7 +106,7 @@ class YandexXml extends AbstractFeed
                     'pictures' => $this->getProductImages($item->getMedia()),
                     'type_prefix' => $item->category->name,
                     'vendor' => $this->xmlSpecialChars($item->brand->name),
-                    'model' => $this->xmlSpecialChars($item->title),
+                    'model' => $this->xmlSpecialChars($item->sku),
                     'description' => $this->getDescription($item),
                 ];
             })->toArray();
