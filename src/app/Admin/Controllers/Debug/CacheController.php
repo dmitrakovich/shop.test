@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers\Debug;
 
 use Encore\Admin\Layout\Content;
+use Appstract\Opcache\OpcacheFacade as OPcache;;
 use Illuminate\Support\Facades\Artisan;
 use Encore\Admin\Controllers\AdminController;
 
@@ -15,7 +16,7 @@ class CacheController extends AdminController
         Artisan::call('route:cache');
         Artisan::call('view:cache');
         Artisan::call('event:cache');
-        Artisan::call('opcache:clear');
+        OPcache::clear();
 
         admin_success('Кэш успешно сброшен!');
 
