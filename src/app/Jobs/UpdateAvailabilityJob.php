@@ -76,7 +76,7 @@ class UpdateAvailabilityJob extends AbstractJob
                 'brand_id',
                 'brands.name as brand',
                 'category_id',
-                'title as name',
+                'sku as name',
                 'deleted_at',
                 'label_id as label',
             ]);

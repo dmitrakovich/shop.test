@@ -307,7 +307,7 @@ if (isset($_POST['act'])) {
 			<form method="post" id="formavailabilityAdd" name="formavailabilityAdd">
                 @csrf
 				<input type="hidden" name="act" value="addS">
-				<?
+				<?php
 					$btn_ok = 0;
 					foreach ($availabilityConfig['add_size'] as $avI) {
 						$aviI = $avI['id'];
@@ -327,7 +327,7 @@ if (isset($_POST['act'])) {
 					if ($btn_ok > 0):
 				?>
 				<button>Применить</button>
-                <? endif; ?>
+                <?php endif; ?>
 			</form>
         </div>
 
@@ -340,7 +340,7 @@ if (isset($_POST['act'])) {
 			<form method="post" id="formavailabilityDelS" name="formavailabilityDelS">
                 @csrf
 				<input type="hidden" name="act" value="delS">
-				<?
+				<?php
 					$btn_ok = 0;
 					foreach ($availabilityConfig['del_size'] as $avI) {
 						$aviI = $avI['id'];
@@ -359,7 +359,7 @@ if (isset($_POST['act'])) {
 					if ($btn_ok > 0):
 				?>
 				<button>Применить</button>
-                <? endif; ?>
+                <?php endif; ?>
 			</form>
         </div>
 
