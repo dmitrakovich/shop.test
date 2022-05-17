@@ -34,11 +34,9 @@ class Product extends ProductModel
     /**
      * Accessor for admin panel
      */
-    public function path(): Attribute
+    public function getPathAttribute(): string
     {
-        return Attribute::make(
-            get: fn () => $this->getUrl()
-        );
+        return $this->getUrl();
     }
 
     /**

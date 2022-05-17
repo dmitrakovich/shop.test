@@ -10,9 +10,10 @@ class Banner extends BannerModel
 {
     protected $appends = [
         'resource',
-        'videos',
         'type',
+        'videos',
     ];
+
     protected static $availablesVideoTypes = [
         'video/mp4',
         'video/webm',
@@ -35,7 +36,7 @@ class Banner extends BannerModel
     /**
      * Interact with the banner's resource.
      */
-    public function path(): Attribute
+    public function resource(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->getFirstMediaUrl(),
