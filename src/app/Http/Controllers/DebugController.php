@@ -22,6 +22,14 @@ class DebugController extends Controller
     }
 
     /**
+     * Show php info
+     */
+    public function phpinfo(): never
+    {
+        exit(phpinfo());
+    }
+
+    /**
      * @param Order $order
      * @return void
      */

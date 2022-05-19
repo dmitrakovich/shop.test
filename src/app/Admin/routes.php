@@ -70,6 +70,7 @@ Route::group([
     });
     Route::view('/test', 'test');
     Route::get('debug', [DebugController::class, 'index']);
+    Route::get('phpinfo', [DebugController::class, 'phpinfo']);
     Route::get('debug-sentry', function (): never {
         throw new Exception('Debug Sentry error!');
     });
