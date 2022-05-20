@@ -83,7 +83,7 @@ class UpdateAvailabilityJob extends AbstractJob
         $sizesList = Size::pluck('id', 'name')->toArray();
 
         foreach ($currentProducts as $product) {
-            $brandName = trim($product->brand);
+            $brandName = trim($product->brand ?? '');
             if (!empty($brandName)) {
                 $this->allProducts[strtolower($brandName)][$this->smallArt($product->name)] = [
                     'id' => $product->id,
