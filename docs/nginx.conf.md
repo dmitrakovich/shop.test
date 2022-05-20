@@ -38,6 +38,8 @@ server {
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         fastcgi_param PHP_ADMIN_VALUE "sendmail_path = /usr/sbin/sendmail -t -i -f info@barocco.by";
         fastcgi_pass unix:/var/www/php-fpm/1.sock;
+        fastcgi_buffers 16 32k;
+        fastcgi_buffer_size 64k;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
         try_files $uri =404;
         include fastcgi_params;
@@ -45,7 +47,7 @@ server {
     listen 10.1.1.86:80;
 }
 server {
-    listen 443 ssl;
+    listen 443 ssl http2;
     server_name barocco.by www.barocco.by;
     ssl_certificate "/var/www/httpd-cert/www-root/barocco.by_custom_1.crtca";
     ssl_certificate_key "/var/www/httpd-cert/www-root/barocco.by_custom_1.key";
@@ -89,11 +91,13 @@ server {
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         fastcgi_param PHP_ADMIN_VALUE "sendmail_path = /usr/sbin/sendmail -t -i -f info@barocco.by";
         fastcgi_pass unix:/var/www/php-fpm/1.sock;
+        fastcgi_buffers 16 32k;
+        fastcgi_buffer_size 64k;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
         try_files $uri =404;
         include fastcgi_params;
     }
 
-    listen 10.1.1.86:443 ssl;
+    listen 10.1.1.86:443 ssl http2;
 }
 ```shell
