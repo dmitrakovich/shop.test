@@ -7,7 +7,7 @@ require 'recipe/laravel.php';
 // Config
 
 // Number of releases to preserve in releases folder.
-set('keep_releases', 4); // default 10
+set('keep_releases', 3); // default 10
 
 // Project name
 set('application', 'Barocco');
