@@ -238,7 +238,7 @@ class Product extends Model implements HasMedia
         $searchService = new SearchService($search);
 
         if ($searchService->useSimpleSearch()) {
-            return $query->where('id', $searchService->getIds()[0]);
+            return $searchService->generateSimpleSearchQuery($query, ['id', 'sku']);
         }
 
         $query->where(function ($query) use ($searchService) {
