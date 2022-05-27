@@ -40,7 +40,7 @@ $res_prod = Product::leftJoin('brands', 'products.brand_id', '=', 'brands.id')
         'brand_id',
         'brands.name as brand',
         'category_id as cat_id',
-        'title as name',
+        'sku as name',
         'deleted_at',
         'label_id as label',
         'price',
@@ -666,7 +666,7 @@ $objWriter->save(storage_path('app/temp/sklad.xlsx'));
 
 					<td>{{ $prod['price'] }}</td>
 					<td>{{ $prod['discount'] }}</td>
-					<td>{{ round($prod['price_im'],2) }}</td>
+					<td>{{ round((float)$prod['price_im'], 2) }}</td>
 				</tr>
 
 				@endforeach
