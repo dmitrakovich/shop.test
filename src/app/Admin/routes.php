@@ -52,6 +52,11 @@ Route::group([
         $router->get('instagram', Forms\Instagram::class);
     });
 
+    $router->group(['prefix' => 'docs'], function ($router) {
+        $router->resource('edit', DocController::class);
+        $router->get('{doc:slug}', DocController::class);
+    });
+
     $router->resource('sales', SaleController::class);
 
     $router->resource('feedbacks', FeedbackController::class);
