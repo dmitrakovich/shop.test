@@ -25,6 +25,7 @@ add('shared_dirs', [
 add('writable_dirs', [
     'bootstrap/cache',
     'storage',
+    'public/uploads',
 ]);
 
 // Hosts
