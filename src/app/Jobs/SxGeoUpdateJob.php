@@ -16,7 +16,7 @@ class SxGeoUpdateJob extends AbstractJob
     /**
      * Путь к скачиваемому файлу
      */
-    final const URL = 'https://sypexgeo.net/files/SxGeoCountry.zip';
+    final const URL = 'https://sypexgeo.net/ru/pc/download/%s/SxGeoCountry.zip';
 
     protected $jobName = 'Обновление базы Sypex Geo';
 
@@ -36,6 +36,18 @@ class SxGeoUpdateJob extends AbstractJob
      * @var int
      */
     public $timeout = 600;
+
+    /**
+     * Переменные, которые нужно отразить в context
+     *
+     * @var array
+     */
+    protected $contextVars = ['lastModified'];
+
+    /**
+     * Last db modified date
+     */
+    protected ?string $lastModified = null;
 
     /**
      * Create a new job instance.
@@ -59,17 +71,22 @@ class SxGeoUpdateJob extends AbstractJob
 
         $zipFile = $this->sxGeoPath . '/SxGeoTmp.zip';
 
+        if (file_exists($this->lastUpdFile)) {
+            $this->lastModified = file_get_contents($this->lastUpdFile);
+        }
+
         $response = Http::withHeaders(
-            file_exists($this->lastUpdFile) ? ['If-Modified-Since' => file_get_contents($this->lastUpdFile)] : []
+            $this->lastModified ? ['If-Modified-Since' => $this->lastModified] : []
         )->withOptions([
             'sink' => fopen($zipFile, 'wb'),
-        ])->get(self::URL);
+        ])->get($this->getDownloadUrl());
 
         if ($response->status() == 304) {
             @unlink($zipFile);
             return $this->debug('Архив не обновился, с момента предыдущего скачивания');
         }
 
+        $this->lastModified = $response->header('Last-Modified');
         $this->debug('Архив скачан с сервера. Распаковываем');
 
         $zip = new ZipArchive;
@@ -81,8 +98,16 @@ class SxGeoUpdateJob extends AbstractJob
             return $this->error('Ошибка при распаковке архива');
         }
 
-        file_put_contents($this->lastUpdFile, gmdate('D, d M Y H:i:s') . ' GMT');
+        file_put_contents($this->lastUpdFile, $this->lastModified);
 
         $this->debug('База успешно обновлена');
+    }
+
+    /**
+     * Generates a download link
+     */
+    protected function getDownloadUrl(): string
+    {
+        return sprintf(self::URL, env('SXGEO_TOKEN'));
     }
 }
