@@ -108,6 +108,6 @@ class SxGeoUpdateJob extends AbstractJob
      */
     protected function getDownloadUrl(): string
     {
-        return sprintf(self::URL, env('SXGEO_TOKEN'));
+        return sprintf(self::URL, config('api.sxgeo.token'));
     }
 }
