@@ -4,7 +4,6 @@ namespace App\Admin\Models;
 
 use Illuminate\Support\Facades\File;
 use App\Models\Banner as BannerModel;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Banner extends BannerModel
 {
@@ -23,6 +22,7 @@ class Banner extends BannerModel
     final const ERRORS = [
         'empty_preview' => 'Превью для видео не может быть пустым!',
     ];
+
     /**
      * Get the class name for polymorphic relations.
      *
@@ -33,6 +33,12 @@ class Banner extends BannerModel
         return BannerModel::class;
     }
 
+    /**
+     * Resource mutator
+     *
+     * @param string $resource
+     * @return \Spatie\MediaLibrary\MediaCollections\Models\Media
+     */
     public function setResourceAttribute($resource)
     {
         $this->clearMediaCollection()
@@ -40,6 +46,11 @@ class Banner extends BannerModel
             ->toMediaCollection();
     }
 
+    /**
+     * Resource accessor
+     *
+     * @return string
+     */
     public function getResourceAttribute()
     {
         return $this->getFirstMediaUrl();
@@ -53,6 +64,11 @@ class Banner extends BannerModel
         return intval(optional($this->getMedia()->first())->hasCustomProperty('videos'));
     }
 
+    /**
+     * Video mutator
+     *
+     * @return void
+     */
     public function setVideosAttribute(array $videos)
     {
         if ($this->getMedia()->isEmpty()) {
@@ -76,6 +92,11 @@ class Banner extends BannerModel
         }
     }
 
+    /**
+     * Video accessor
+     *
+     * @return array
+     */
     public function getVideosAttribute()
     {
         $videos = optional($this->getMedia()->first())->getCustomProperty('videos');

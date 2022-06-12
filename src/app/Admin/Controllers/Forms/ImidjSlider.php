@@ -6,7 +6,6 @@ use App\Models\Ads\ProductCarousel;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Encore\Admin\Widgets\Form;
-use App\Services\InstagramService;
 
 class ImidjSlider extends Form
 {
