@@ -31,11 +31,7 @@ class GenerateLink extends StepForm
      */
     public function handle(Request $request)
     {
-        // dd($request->all());
-
-        admin_success('данные:' . json_encode($request->all(), JSON_UNESCAPED_SLASHES));
-
-        return back();
+        return $this->next($request->all());
     }
 
     /**
@@ -46,7 +42,7 @@ class GenerateLink extends StepForm
         $this->url('init_link', 'Исходная ссылка')
             ->required()
             ->placeholder('https://barocco.by...')
-            ->rules(['url', 'required']);
+            ->rules(['url', 'required', 'starts_with:https://barocco.by']);
 
         $this->select('source', 'Способ заказа')
             ->options(OrderMethod::getOptionsForSelect());
@@ -54,8 +50,18 @@ class GenerateLink extends StepForm
         $this->text('out_link', 'Сгенерированная ссылка')
             ->required()
             ->placeholder('Сгенерированная ссылка')
-            ->rules(['url', 'required'])
+            ->rules(['url', 'required', 'starts_with:https://barocco.by'])
             ->setScript($this->getScript());
+    }
+
+    /**
+     * The data of the form.
+     *
+     * @return array $data
+     */
+    public function data()
+    {
+        //
     }
 
     /**
@@ -113,5 +119,15 @@ class GenerateLink extends StepForm
             generateLink(state);
         };
         JS;
+    }
+
+    /**
+     * Redefinition addFooter function
+     *
+     * @return void
+     */
+    protected function addFooter()
+    {
+        $this->html('<button class="btn btn-info pull-right">Сгенерировать</button>');
     }
 }

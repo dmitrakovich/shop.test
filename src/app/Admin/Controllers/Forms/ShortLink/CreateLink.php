@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers\Forms\ShortLink;
 
 use Illuminate\Http\Request;
-use App\Models\Enum\OrderMethod;
 use Encore\Admin\Widgets\StepForm;
 
 class CreateLink extends StepForm
@@ -13,14 +12,14 @@ class CreateLink extends StepForm
      *
      * @var string
      */
-    public $title = 'Генератор ссылок';
+    public $title = 'Короткая ссылка';
 
     /**
      * The description of form.
      *
      * @var string
      */
-    public $description = 'Генератор ссылок';
+    public $description = 'Короткая ссылка';
 
     /**
      * Handle the form request.
@@ -31,10 +30,6 @@ class CreateLink extends StepForm
      */
     public function handle(Request $request)
     {
-        // dd($request->all());
-
-        admin_success('данные:' . json_encode($request->all(), JSON_UNESCAPED_SLASHES));
-
         return back();
     }
 
@@ -43,75 +38,41 @@ class CreateLink extends StepForm
      */
     public function form()
     {
-        $this->url('init_link', 'Исходная ссылка')
-            ->required()
-            ->placeholder('https://barocco.by...')
-            ->rules(['url', 'required']);
-
-        $this->select('source', 'Способ заказа')
-            ->options(OrderMethod::getOptionsForSelect());
-
-        $this->text('out_link', 'Сгенерированная ссылка')
-            ->required()
-            ->placeholder('Сгенерированная ссылка')
-            ->rules(['url', 'required'])
-            ->setScript($this->getScript());
+        $this->url('short_link', 'Короткая ссылка')->readonly();
     }
 
     /**
-     * Js code
+     * The data of the form.
+     *
+     * @return array $data
      */
-    protected function getScript(): string
+    public function data()
     {
-        $utms = [];
-        foreach (OrderMethod::getValues() as $value) {
-            $utms[$value] = OrderMethod::getUtmSources($value);
-        }
-        $utms = json_encode($utms);
+        $fullLink = $this->all()['generate']['out_link'];
 
-        return <<<JS
-        let state = { initLinkInput: '', sourceSelect: null };
-        const utms = $utms;
 
-        const outLinkInput = document.querySelector('input[name="out_link"]');
-        const generateLink = function (state) {
-            try {
-                const url = new URL(state.initLinkInput);
-                const utm = utms[state.sourceSelect] ?? null;
+        // записать в базу и сгенерировать короткую ссылку
 
-                url.searchParams.delete('utm_source');
-                url.searchParams.delete('utm_medium');
-                url.searchParams.delete('utm_campaign');
 
-                if (utm) {
-                    url.searchParams.append('utm_source', utm[0]);
-                    url.searchParams.append('utm_medium', utm[1]);
-                    url.searchParams.append('utm_campaign', utm[2]);
-                }
+        return ['short_link' => $fullLink];
+    }
 
-                outLinkInput.value = url.href;
-            } catch (error) {
-                return;
+    protected function addFooter()
+    {
+        $newLinkUrl = route('admin.short-link');
+
+        $footer = <<<HTML
+        <a href="{$newLinkUrl}" class="btn btn-warning pull-left">Сгенерировать новую ссылку</a>
+        <button type="button" class="btn btn-info pull-right js-copy-btn" onclick="copyShortUrl()">Скопировать</button>
+        <script>
+            function copyShortUrl() {
+                const inputWithUrl = document.querySelector('input#short_link');
+                navigator.clipboard.writeText(inputWithUrl.value);
+                toastr.success('Ссылка скопирована!', null, {timeOut: 1500, progressBar: false});
             }
-        }
+        </script>
+        HTML;
 
-        const initLinkInput = document.querySelector('input[name="init_link"]');
-        initLinkInput.addEventListener('paste', (event) => {
-            state.initLinkInput = (event.clipboardData || window.clipboardData).getData('text');
-            generateLink(state);
-        });
-        initLinkInput.addEventListener('keyup', (event) => {
-            if (!event.key || (event.key.length === 1 && event.keyCode >= 48 && event.keyCode <= 90) || event.keyCode === 8 || event.keyCode === 46) {
-                state.initLinkInput = event.target.value;
-                generateLink(state);
-            }
-        });
-
-        const sourceSelect = document.querySelector('select[name="source"]');
-        sourceSelect.onchange = (event) => {
-            state.sourceSelect = event.target.value;
-            generateLink(state);
-        };
-        JS;
+        $this->html($footer);
     }
 }
