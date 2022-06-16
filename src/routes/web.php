@@ -27,7 +27,7 @@ use App\Services\GoogleTagManagerService;
 |
 */
 
-require __DIR__.'/redirect.php';
+require __DIR__ . '/redirect.php';
 
 Route::get('/', [IndexController::class, 'index'])->name('index-page');
 
@@ -37,7 +37,7 @@ Route::get('online-shopping/{slug?}', [InfoPageController::class, 'index'])->nam
 
 Route::view('shops', 'static.shops')->name('static-shops');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::get('feedbacks/{type?}', [FeedbackController::class, 'index'])->name('feedbacks');
 Route::middleware('captcha')->post('feedbacks', [FeedbackController::class, 'store'])->name('feedbacks.store');
@@ -86,13 +86,6 @@ Route::group(['namespace' => 'Shop'], function () {
     Route::resource('orders', OrderController::class)->only('index')->middleware('auth');
 });
 
-// sitemap
-Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
-Route::get('/sitemap.static.xml', [SitemapController::class, 'static'])->name('sitemap.static');
-Route::get('/sitemap.products.xml', [SitemapController::class, 'products'])->name('sitemap.products');
-Route::get('/sitemap.catalog.categories.xml', [SitemapController::class, 'categories'])->name('sitemap.catalog.categories');
-Route::get('/sitemap.catalog.brands.xml', [SitemapController::class, 'brands'])->name('sitemap.catalog.brands');
-Route::get('/sitemap.catalog.categories_and_{another}_and_{another2}.xml', [SitemapController::class, 'catalog3'])->name('sitemap.catalog.catalog3');
-Route::get('/sitemap.catalog.categories_and_{another}.xml', [SitemapController::class, 'catalog2'])->name('sitemap.catalog.catalog2');
+require __DIR__ . '/sitemap.php';
 
-Route::fallback(fn () => 'Хм… Почему ты оказался здесь?');
+// Route::fallback(fn () => 'Хм… Почему ты оказался здесь?');

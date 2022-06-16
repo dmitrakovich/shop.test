@@ -4,7 +4,7 @@
 
     @foreach ($routes as $route)
         <url>
-            <loc>{{ route($route) }}</loc>
+            <loc>{{ route($route, [], true) }}</loc>
             <changefreq>daily</changefreq>
             <priority>0.5</priority>
         </url>
@@ -13,7 +13,7 @@
     @foreach ($routesWithParams as $route => $params)
         @foreach ($params as $param)
             <url>
-                <loc>{{ route($route, $param) }}</loc>
+                <loc>{{ route($route, $param, true) }}</loc>
                 <changefreq>daily</changefreq>
                 <priority>0.5</priority>
             </url>
