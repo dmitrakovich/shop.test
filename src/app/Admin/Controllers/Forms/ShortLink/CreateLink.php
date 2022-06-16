@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers\Forms\ShortLink;
 
+use App\Models\ShortLink;
 use Illuminate\Http\Request;
 use Encore\Admin\Widgets\StepForm;
 
@@ -50,11 +51,9 @@ class CreateLink extends StepForm
     {
         $fullLink = $this->all()['generate']['out_link'];
 
-
-        // записать в базу и сгенерировать короткую ссылку
-
-
-        return ['short_link' => $fullLink];
+        return [
+            'short_link' => ShortLink::createShortLink($fullLink)
+        ];
     }
 
     protected function addFooter()

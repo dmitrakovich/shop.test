@@ -44,8 +44,14 @@ class GenerateLink extends StepForm
             ->placeholder('https://barocco.by...')
             ->rules(['url', 'required', 'starts_with:https://barocco.by']);
 
-        $this->select('source', 'Способ заказа')
-            ->options(OrderMethod::getOptionsForSelect());
+        $orderMethods = OrderMethod::getOptionsForSelect();
+        unset(
+            $orderMethods[OrderMethod::DEFAULT],
+            $orderMethods[OrderMethod::ONECLICK],
+            $orderMethods[OrderMethod::PHONE],
+        );
+        $this->select('source', 'Источник заказа')
+            ->options($orderMethods);
 
         $this->text('out_link', 'Сгенерированная ссылка')
             ->required()
@@ -69,6 +75,9 @@ class GenerateLink extends StepForm
      */
     protected function getScript(): string
     {
+        $authUserLogin = auth()->user()->username;
+        $currentDate = date('ymd');
+
         $utms = [];
         foreach (OrderMethod::getValues() as $value) {
             $utms[$value] = OrderMethod::getUtmSources($value);
@@ -78,6 +87,8 @@ class GenerateLink extends StepForm
         return <<<JS
         let state = { initLinkInput: '', sourceSelect: null };
         const utms = $utms;
+        const adminLogin = '$authUserLogin';
+        const currentDate = '$currentDate';
 
         const outLinkInput = document.querySelector('input[name="out_link"]');
         const generateLink = function (state) {
@@ -88,12 +99,16 @@ class GenerateLink extends StepForm
                 url.searchParams.delete('utm_source');
                 url.searchParams.delete('utm_medium');
                 url.searchParams.delete('utm_campaign');
+                url.searchParams.delete('utm_content');
+                url.searchParams.delete('utm_term');
 
                 if (utm) {
                     url.searchParams.append('utm_source', utm[0]);
                     url.searchParams.append('utm_medium', utm[1]);
                     url.searchParams.append('utm_campaign', utm[2]);
                 }
+                url.searchParams.append('utm_content', adminLogin);
+                url.searchParams.append('utm_term', currentDate);
 
                 outLinkInput.value = url.href;
             } catch (error) {
