@@ -10,11 +10,11 @@ class OrderMethod implements Enum
     final const ONECLICK = 'oneclick';
     final const CHAT = 'chat';
     final const PHONE = 'phone';
-    final const EMAIL = 'email';
+    final const INSTAGRAM = 'insta';
     final const VIBER = 'viber';
     final const TELEGRAM = 'telegram';
     final const WHATSAPP = 'whatsapp';
-    final const INSTAGRAM = 'insta';
+    final const EMAIL = 'email';
     final const OTHER = 'other';
 
     /**
@@ -23,16 +23,16 @@ class OrderMethod implements Enum
     public static function getOptionsForSelect(): array
     {
         return [
-            OrderMethod::DEFAULT => 'через корзину',
-            OrderMethod::ONECLICK => 'в один клик',
-            OrderMethod::CHAT => 'через чат сайта',
-            OrderMethod::PHONE => 'по телефону',
-            OrderMethod::EMAIL => 'по email',
-            OrderMethod::VIBER => 'через viber',
-            OrderMethod::TELEGRAM => 'через telegram',
-            OrderMethod::WHATSAPP => 'через whatsapp',
-            OrderMethod::INSTAGRAM => 'через instagram',
-            OrderMethod::OTHER => 'другое',
+            self::DEFAULT => 'через корзину',
+            self::ONECLICK => 'в один клик',
+            self::CHAT => 'через чат сайта',
+            self::PHONE => 'по телефону',
+            self::INSTAGRAM => 'через instagram',
+            self::VIBER => 'через viber',
+            self::TELEGRAM => 'через telegram',
+            self::WHATSAPP => 'через whatsapp',
+            self::EMAIL => 'по email',
+            self::OTHER => 'другое',
         ];
     }
 

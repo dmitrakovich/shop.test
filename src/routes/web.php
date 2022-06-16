@@ -3,7 +3,6 @@
 use App\Models\Url;
 use Illuminate\Support\Str;
 use App\Http\Requests\FilterRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\SitemapController;
@@ -28,16 +27,7 @@ use App\Services\GoogleTagManagerService;
 |
 */
 
-// Route::domain(env('APP_NAME') . '.{domain}')->group(function () {
-//     Route::get('/domain', function ($domain) {
-//         dd($domain);
-//     });
-// });
-
-// redirects
-// TODO: if > 5 create separate file redirects.php
-Route::permanentRedirect('/insta', '/catalog?utm_source=instagram&utm_medium=social&utm_campaign=accaunt_link');
-Route::permanentRedirect('/tiktok', '/catalog?utm_source=tiktok&utm_medium=social&utm_campaign=accaunt_link');
+require __DIR__.'/redirect.php';
 
 Route::get('/', [IndexController::class, 'index'])->name('index-page');
 
@@ -60,7 +50,7 @@ Route::prefix('dashboard')->group(function () {
     });
     Route::resource('favorites', FavoriteController::class)->only('index');
     Route::view('card', 'dashboard.card')->name('dashboard-card');
-    Route::get('{orders?}', function () { return redirect()->route('orders.index'); });
+    Route::get('{orders?}', fn () => redirect()->route('orders.index'));
 });
 Route::resource('favorites', FavoriteController::class)->only(['store', 'destroy']);
 
@@ -105,6 +95,4 @@ Route::get('/sitemap.catalog.brands.xml', [SitemapController::class, 'brands'])-
 Route::get('/sitemap.catalog.categories_and_{another}_and_{another2}.xml', [SitemapController::class, 'catalog3'])->name('sitemap.catalog.catalog3');
 Route::get('/sitemap.catalog.categories_and_{another}.xml', [SitemapController::class, 'catalog2'])->name('sitemap.catalog.catalog2');
 
-Route::fallback(function () {
-    return 'Хм… Почему ты оказался здесь?';
-});
+Route::fallback(fn () => 'Хм… Почему ты оказался здесь?');
