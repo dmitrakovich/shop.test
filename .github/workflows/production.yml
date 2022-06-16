@@ -42,17 +42,16 @@ jobs:
     - name: Remove node_modules folder
       run: rm -R node_modules
 
-    #  !!!
-    # - name: Execute tests (Unit and Feature tests) via PHPUnit
-    #   env:
-    #     DB_CONNECTION: sqlite
-    #     DB_DATABASE: database/database.sqlite
-    #   run: |
-    #     mkdir -p database
-    #     touch database/database.sqlite
-    #     php artisan migrate --force
-    #     php artisan job:dispatch SxGeoUpdateJob
-    #     php artisan test
+    - name: Execute tests (Unit and Feature tests) via PHPUnit
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
+      run: |
+        mkdir -p database
+        touch database/database.sqlite
+        php artisan migrate --force
+        php artisan job:dispatch SxGeoUpdateJob
+        php artisan test
 
     - name: Deploy
       env:
