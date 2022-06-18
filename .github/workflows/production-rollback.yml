@@ -24,11 +24,11 @@ jobs:
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
         DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-      run: |
-        mkdir -p ~/.ssh
-        touch ~/.ssh/key.pem
-        (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
-        chmod 700 ~/.ssh/key.pem
+      # run: |
+      #   mkdir -p ~/.ssh
+      #   touch ~/.ssh/key.pem
+      #   (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
+      #   chmod 700 ~/.ssh/key.pem
       with:
         private-key: ${{ secrets.PRIVATE_KEY }}
         dep: rollback
