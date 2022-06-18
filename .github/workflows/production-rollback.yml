@@ -17,20 +17,20 @@ jobs:
       with:
         php-version: '8.1'
 
-    - name: Rollback
-      uses: deployphp/action@v1
-      env:
-        DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-        DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-        DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
-        DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-      run: |
-        mkdir -p ~/.ssh
-        touch ~/.ssh/key.pem
-        (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
-        chmod 700 ~/.ssh/key.pem
-      with:
-        dep: rollback
+    # - name: Rollback
+    #   uses: deployphp/action@v1
+    #   env:
+    #     DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+    #     DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+    #     DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+    #     DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+    #   run: |
+    #     mkdir -p ~/.ssh
+    #     touch ~/.ssh/key.pem
+    #     (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
+    #     chmod 700 ~/.ssh/key.pem
+    #   with:
+    #     dep: rollback
 
     - name: Send success status
       uses: appleboy/telegram-action@master
