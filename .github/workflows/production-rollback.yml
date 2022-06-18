@@ -1,6 +1,8 @@
-name: Rollback production release
+name: "Rollback production release"
 
 on: workflow_dispatch
+
+concurrency: production_environment
 
 jobs:
   rollback:
