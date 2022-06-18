@@ -1,4 +1,4 @@
-name: "Rollback production release"
+name: Rollback
 
 on: workflow_dispatch
 
