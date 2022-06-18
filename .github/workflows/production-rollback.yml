@@ -4,23 +4,19 @@ on: workflow_dispatch
 
 jobs:
   rollback:
-
     runs-on: ubuntu-latest
     environment: production
-    defaults:
-      run:
-        working-directory: ./src
 
     steps:
+    - uses: actions/checkout@v2
+
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'
-    - name: Install composer dependencies
-      run: composer install --optimize-autoloader --no-dev --quiet
 
-
-    - name: Deploy
+    - name: Rollback
+      uses: deployphp/action@v1
       env:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
@@ -31,7 +27,8 @@ jobs:
         touch ~/.ssh/key.pem
         (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
         chmod 700 ~/.ssh/key.pem
-        php ./vendor/bin/deployer.phar deploy
+      with:
+        dep: rollback
 
     - name: Send success status
       uses: appleboy/telegram-action@master
