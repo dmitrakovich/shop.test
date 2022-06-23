@@ -2,7 +2,7 @@ name: Production
 
 on:
   push:
-    branches: [ master-stub ]
+    branches: [ master ]
   repository_dispatch:
     types: [ retry-* ]
 

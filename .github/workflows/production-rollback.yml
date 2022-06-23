@@ -22,7 +22,6 @@ jobs:
     - name: Install composer dependencies
       run: composer install --optimize-autoloader --no-dev --quiet
 
-
     - name: Rollback
       env:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}

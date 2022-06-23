@@ -50,9 +50,10 @@ class CreateLink extends StepForm
     public function data()
     {
         $fullLink = $this->all()['generate']['out_link'];
+        $shortLink = ShortLink::createShortLink($fullLink);
 
         return [
-            'short_link' => ShortLink::createShortLink($fullLink)
+            'short_link' => route('short-link', $shortLink, true)
         ];
     }
 
