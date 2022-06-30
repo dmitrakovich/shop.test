@@ -20,6 +20,7 @@ use App\Models\Orders\OrderItemStatus;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
 use App\Facades\Currency as CurrencyFacade;
+use App\Models\Payments\Installment;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 
@@ -71,7 +72,9 @@ class OrderController extends AdminController
 
         $grid->column('status_key', 'Статус')->editable('select', $orderStatuses);
 
-        if (Admin::user()->inRoles(['administrator', 'director'])) {
+        /** @var Administrator */
+        $adminUser = Admin::user();
+        if ($adminUser->inRoles(['administrator', 'director'])) {
             $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
         } else {
             $grid->column('admin.name', 'Менеджер');
@@ -183,7 +186,13 @@ class OrderController extends AdminController
         $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
         $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
         $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
-        $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));
+        $form->select('payment_id', 'Способ оплаты')
+            ->options(PaymentMethod::pluck('name', 'id'))
+            ->when(Installment::PAYMENT_METHOD_ID, function (Form $form) {
+                $form->number('installment.contract_number', 'Номер договора рассрочки');
+                $form->decimal('installment.monthly_fee', 'Ежемесячный платёж');
+                $form->switch('installment.send_notifications', 'Отправлять оповещение')->default(true);
+            });
         $form->select('order_method', 'Способ заказа')
             ->options(OrderMethod::getOptionsForSelect())
             ->default(OrderMethod::DEFAULT);
@@ -192,7 +201,9 @@ class OrderController extends AdminController
 
         $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'));
 
-        if (Admin::user()->inRoles(['administrator', 'director'])) {
+        /** @var Administrator */
+        $adminUser = Admin::user();
+        if ($adminUser->inRoles(['administrator', 'director'])) {
             $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
         } else {
             $form->display('admin.name', 'Менеджер');

@@ -8,6 +8,7 @@ use Payments\PaymentMethod;
 use Deliveries\DeliveryMethod;
 use Illuminate\Support\Carbon;
 use App\Models\Enum\OrderMethod;
+use App\Models\Payments\Installment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Encore\Admin\Auth\Database\Administrator;
@@ -172,12 +173,18 @@ class Order extends Model
 
     /**
      * Order payment method
-     *
-     * @return Relations\BelongsTo
      */
-    public function payment()
+    public function payment(): Relations\BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);
+    }
+
+    /**
+     * Get the installment associated with the order.
+     */
+    public function installment(): Relations\HasOne
+    {
+        return $this->hasOne(Installment::class);
     }
 
     /**
