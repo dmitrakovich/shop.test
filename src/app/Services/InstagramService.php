@@ -104,7 +104,7 @@ class InstagramService
             return [];
         }
 
-        return $data['data'];
+        return array_filter($data['data'], fn (array $post) => isset($post['caption']));
     }
 
     /**
