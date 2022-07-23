@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', "Купить {$category->getNameForCatalogTitle()} с примеркой по Беларуси")
+@section('ogImage', $products->first()->getFirstMedia()->getUrl('full'))
 
 @section('breadcrumbs', Breadcrumbs::render('category', $category))
 
