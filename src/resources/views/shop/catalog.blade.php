@@ -2,7 +2,7 @@
 
 @section('title', "Купить {$category->getNameForCatalogTitle()} с примеркой по Беларуси")
 @if ($products->isNotEmpty())
-    @section('ogImage', $products->first()->getFirstMedia()->getUrl('full'))
+    @section('ogImage', $products->first()->getFirstMedia()->getUrl('catalog'))
 @endif
 
 @section('breadcrumbs', Breadcrumbs::render('category', $category))

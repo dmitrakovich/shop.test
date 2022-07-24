@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta property="og:title" content="@yield('title', 'Barocco')" />
-    <meta property="og:image" content="@yield('ogImage', asset('/favicon-192x192.png'))" />
+    <meta property="og:image" content="@yield('ogImage', asset('/images/icons/square-logo.jpg'))" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ URL::current() }}" />
 
