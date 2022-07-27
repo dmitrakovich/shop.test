@@ -63,11 +63,9 @@ class Category extends Model
     /**
      * Generate path mutator
      */
-    public function path(): Attribute
+    public function setPathAttribute($path)
     {
-        return Attribute::make(
-            set: fn () => $this->generatePath()
-        );
+        $this->generatePath();
     }
 
     /**
