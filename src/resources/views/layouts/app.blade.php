@@ -10,6 +10,8 @@
     <meta property="og:image" content="@yield('ogImage', asset('/images/icons/square-logo.jpg'))" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ URL::current() }}" />
+    <meta property="og:description" content="@yield('description', 'Barocco - интернет-магазин женской обуви с примеркой по Беларуси')"/>
+    <meta property="description" content="@yield('description', 'Barocco - интернет-магазин женской обуви с примеркой по Беларуси')"/>
 
     <title>@yield('title', 'Barocco')</title>
 
