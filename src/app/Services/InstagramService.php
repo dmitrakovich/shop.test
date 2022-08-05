@@ -2,32 +2,40 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 class InstagramService
 {
     /**
-     * Base url for request
-     *
-     * @var string
+     * Fields to get
      */
-    protected $baseUrl = 'https://graph.instagram.com';
+    const POSTS_FIELDS = [
+        'id',
+        'media_type',
+        'media_url',
+        'caption',
+        'timestamp',
+        'thumbnail_url',
+        'permalink'
+    ];
+
+    /**
+     * Base url for request
+     */
+    protected string $baseUrl = 'https://graph.instagram.com';
 
     /**
      * API access token
-     *
-     * @var string
      */
-    protected $accessToken;
+    protected string $accessToken;
 
     /**
-     * Token lifetime
-     *
-     * @var integer
+     * Token lifetime (50 days)
      */
-    protected $tokenLifetime = 4320000; // 50 days
+    protected int $tokenLifetime = 4320000;
 
     /**
      * Cache keys
@@ -85,34 +93,23 @@ class InstagramService
     public function getPosts(): array
     {
         $response = Http::get($this->baseUrl . '/me/media', [
-            'fields' => implode(',', [
-                'id',
-                'media_type',
-                'media_url',
-                'caption',
-                'timestamp',
-                'thumbnail_url',
-                'permalink'
-            ]),
+            'fields' => implode(',', self::POSTS_FIELDS),
             'access_token' => $this->accessToken
         ]);
 
-        $data = $response->json();
-
-        if ($response->failed() || isset($data['error']) || empty($data['data'])) {
-            Log::error(new \Exception($data['error']['message'] ?? 'Unknown instagram api error'));
+        if ($this->captureException($response)) {
             return [];
         }
 
-        return array_filter($data['data'], fn (array $post) => isset($post['caption']));
+        return $this->filterWrongData($response->json()['data']);
     }
 
     /**
-     * Get last 25 instagram posts use cache
+     * Get last 25 instagram posts use cache (1h)
      */
     public function getCachedPosts(): array
     {
-        return Cache::remember(self::CACHE_POSTS_KEY, 3600, fn() => $this->getPosts()); // 1h
+        return Cache::remember(self::CACHE_POSTS_KEY, 3600, fn() => $this->getPosts());
     }
 
     /**
@@ -133,5 +130,29 @@ class InstagramService
         } else {
             Cache::forever(self::CACHE_TITLE_KEY, $title);
         }
+    }
+
+    /**
+     * Capture and log error if exist
+     */
+    public function captureException(Response $response): bool
+    {
+        $data = $response->json() ?? $response->body();
+
+        if ($response->failed() || isset($data['error']) || empty($data['data']) || is_string($data)) {
+            $errorMsg = $data['error']['message'] ?? (is_string($data) ? $data : null) ?? 'Unknown instagram api error';
+            Log::error(new \Exception($errorMsg));
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Filter data without required fields
+     */
+    public function filterWrongData(array $data): array
+    {
+        return array_filter($data, fn (array $post) => isset($post['caption']));
     }
 }
