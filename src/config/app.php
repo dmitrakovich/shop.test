@@ -217,6 +217,7 @@ return [
         'Cart' => App\Facades\Cart::class,
         'UrlHelper' => App\Helpers\UrlHelper::class,
         'Currency' =>  App\Facades\Currency::class,
+        'Seo' => App\Facades\Seo::class,
     ])->toArray(),
 
 ];

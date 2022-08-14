@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Size;
 use App\Facades\Sale;
 use App\Facades\Currency;
 use Illuminate\Support\Carbon;
@@ -9,9 +10,8 @@ use App\Services\SearchService;
 use App\Models\ProductAttributes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Illuminate\Database\Eloquent\{Model, Builder, Relations, SoftDeletes};
+use Illuminate\Database\Eloquent\{Model, Collection, Builder, Relations, SoftDeletes};
 
 /**
  * Class Product
@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\{Model, Builder, Relations, SoftDeletes};
  * @property int $id
  * @property \App\Models\Category $category
  * @property \App\Models\Brand $brand
+ * @property Collection<Size> $sizes
  * @property string $sku (new title)
  * @property string $slug
  * @property float $price
@@ -428,5 +429,13 @@ class Product extends Model implements HasMedia
     public function isNew(): bool
     {
         return $this->old_price == 0;
+    }
+
+    /**
+     * Checks that the product has only one size
+     */
+    public function hasOneSize(): bool
+    {
+        return $this->sizes->count() === 1 && $this->sizes->first()->slug === Size::ONE_SIZE_SLUG;
     }
 }
