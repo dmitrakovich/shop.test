@@ -74,7 +74,8 @@ class UrlHelper
                 }
             }
         }
-        return route('shop', implode('/', $sorted) . self::buildParams($params));
+
+        return route('shop', str_replace('catalog/', '', implode('/', $sorted)) . self::buildParams($params));
     }
 
     /**
