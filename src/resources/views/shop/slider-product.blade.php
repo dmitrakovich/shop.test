@@ -23,6 +23,7 @@
             src="{{ $product['image'] }}"
             alt="{{ $product['sku'] }}"
             class="img-fluid product-first-image"
+            onerror="imageOnError(this)"
         >
         <div>{{ $product['full_name'] }}<br>
             @if ($product['sale_percentage'])

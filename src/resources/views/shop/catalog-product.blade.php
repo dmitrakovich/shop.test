@@ -28,11 +28,13 @@
                 src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
                 alt="{{ $product->extendedName() }}"
                 class="img-fluid product-first-image"
+                onerror="imageOnError(this)"
             />
             <img
                 src="{{ ($product->getMedia()->get(1) ?? $product->getFirstMedia())->getUrl('catalog') }}"
                 alt="{{ $product->extendedName() }}"
                 class="img-fluid product-second-image"
+                onerror="imageOnError(this)"
             />
         </a>
         <button

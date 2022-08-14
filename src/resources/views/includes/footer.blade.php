@@ -43,3 +43,10 @@
         </div>
     </div>
 </footer>
+
+<script>
+function imageOnError(image) {
+    image.onerror = '';
+    image.src = '/storage/products/0/deleted.jpg';
+}
+</script>

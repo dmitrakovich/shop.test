@@ -35,7 +35,12 @@
                             </div>
                         @else
                             <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
-                                <img src="{{ $image->getUrl('normal') }}" alt="{{ $product->extendedName() }}" class="img-fluid">
+                                <img
+                                    src="{{ $image->getUrl('normal') }}"
+                                    alt="{{ $product->extendedName() }}"
+                                    class="img-fluid"
+                                    onerror="imageOnError(this)"
+                                >
                             </a>
                         @endif
                     @endforeach
@@ -44,7 +49,12 @@
                     @foreach ($product->getMedia() as $key => $image)
                         <div class="col-auto">
                             <div class="position-relative d-inline-block">
-                                <img src="{{ $image->getUrl('thumb') }}" alt="{{ $product->extendedName() }} миниатюра {{ ++$key }}" class="img-fluid">
+                                <img
+                                    src="{{ $image->getUrl('thumb') }}"
+                                    alt="{{ $product->extendedName() }} миниатюра {{ ++$key }}"
+                                    class="img-fluid"
+                                    onerror="imageOnError(this)"
+                                >
                                 @if ($image->hasCustomProperty('video'))
                                     <span class="youtube-play-icon"></span>
                                 @endif
