@@ -16,6 +16,14 @@ class Seo
     }
 
     /**
+     * Return generated description for product page
+     */
+    public static function getProductDescription(Product $product): string
+    {
+        return app(TitleGenerotorService::class)->getProductDescription($product);
+    }
+
+    /**
      * Return generated title for catalog page
      */
     public function getCatalogTitle(string $page, ...$params)

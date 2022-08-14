@@ -11,16 +11,25 @@ class TitleGenerotorService
      */
     public function getProductTitle(Product $product): string
     {
-        $title = $product->extendedName() . ' ';
-        $title .= ($discount = $product->getSalePercentage()) ? "со скидкой {$discount}%." : '- новинка!';
+        $discount = $product->getSalePercentage();
+
+        return $product->extendedName() . ' ' . ($discount ? "со скидкой {$discount}%." : '- новинка!');
+    }
+
+    /**
+     * Generate description for product
+     */
+    public function getProductDescription(Product $product): string
+    {
+        $description = $this->getProductTitle($product);
 
         if (!empty($product->color_txt)) {
-            $title .= " Цвет: {$product->color_txt}.";
+            $description .= " Цвет: {$product->color_txt}.";
         }
         if ($product->sizes->isNotEmpty() && !$product->hasOneSize()) {
-            $title .= ' Размеры: ' . $product->sizes->implode('name', ', ');
+            $description .= ' Размеры: ' . $product->sizes->implode('name', ', ');
         }
 
-        return $title;
+        return $description;
     }
 }
