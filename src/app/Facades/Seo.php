@@ -2,6 +2,7 @@
 
 namespace App\Facades;
 
+use App\Services\Seo\MetaService;
 use App\Services\Seo\TitleGenerotorService;
 use Illuminate\Support\Facades\Facade;
 
@@ -20,6 +21,7 @@ class Seo extends Facade
     {
         $instance = match ($method) {
             'getProductTitle', 'getProductDescription', 'getCatalogTitle', 'getCatalogDescription' => TitleGenerotorService::class,
+            'metaForRobotsForCatalog' => MetaService::class,
         };
 
         return static::resolveFacadeInstance($instance);

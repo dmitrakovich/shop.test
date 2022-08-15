@@ -5,6 +5,7 @@
     @section('ogImage', $products->first()->getFirstMedia()->getUrl('catalog'))
 @endif
 @section('description', Seo::getCatalogDescription($currentFilters))
+@section('metaForRobots', Seo::metaForRobotsForCatalog($currentFilters))
 
 @section('breadcrumbs', Breadcrumbs::render('category', $category))
 
