@@ -14,12 +14,14 @@ use App\Models\Category;
 use App\Models\Collection;
 use App\Models\ProductAttributes\Status;
 use App\Models\Tag;
+use Illuminate\Support\Str;
 
 class TitleGenerotorService
 {
     const ATTRIBUTE_PRIORITY = [
         Category::class,
         Size::class,
+        Tag::class,
         Color::class,
         Fabric::class,
         Heel::class,
@@ -34,20 +36,14 @@ class TitleGenerotorService
         Color::class,
         Fabric::class,
         Season::class,
+        Style::class,
         Category::class,
         Status::class,
         Size::class,
-
+        Tag::class,
         Collection::class,
         Heel::class,
         Brand::class,
-
-
-
-        Style::class, // !!!
-        // Tag::class, // !!!
-
-
     ];
 
     /**
@@ -89,7 +85,7 @@ class TitleGenerotorService
                 /** @var Category $category */
                 $category = end($currentFilters[$attrModel])->filters;
                 $titleValues[$attrModel] = $category->getNameForCatalogTitle();
-                $title .= !$category->isRoot() ? 'Купить ' : '';
+                $title .= !$category->isRoot() ? 'купить ' : '';
                 continue;
             }
 
@@ -100,13 +96,10 @@ class TitleGenerotorService
             $filter = reset($currentFilters[$attrModel]);
 
             switch ($attrModel) {
-                // case Category::class:
-                //     $value = $filter->filters->getNameForCatalogTitle();
-                //     break;
-
                 case Color::class:
                 case Fabric::class:
                 case Season::class:
+                case Style::class:
                     if (isset($titleValues[Category::class])) {
                         $value = explode(',', (string)$filter->filters->seo)[3] ?? null;
                     } else {
@@ -121,11 +114,21 @@ class TitleGenerotorService
                 case Size::class:
                     /** @var Size $size */
                     $size = $filter->filters;
-                    $value = $size->slug === Size::ONE_SIZE_SLUG ? $size->name : "в {$size->name} размере";
+                    $value = $size->slug === Size::ONE_SIZE_SLUG ? null : "в {$size->name} размере";
+                    break;
+
+                case Tag::class:
+                case Heel::class:
+                case Brand::class:
+                    $value = $filter->filters->seo ?? $filter->filters->name;
+                    break;
+
+                case Collection::class:
+                    $value = $filter->filters->name;
                     break;
 
                 default:
-                    $value = null; // !!!
+                    $value = null;
                     break;
             }
 
@@ -138,7 +141,14 @@ class TitleGenerotorService
             }
         }
 
-        return $title . implode(' ', $titleValues);
+        $titleValuesOrdered = [];
+        foreach (self::ATTRIBUTE_ORDER as $attrModel) {
+            if (isset($titleValues[$attrModel])) {
+                $titleValuesOrdered[] = $titleValues[$attrModel];
+            }
+        }
+
+        return Str::ucfirst($title . implode(' ', $titleValuesOrdered));
     }
 
     /**
