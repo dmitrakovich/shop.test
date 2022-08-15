@@ -6,6 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Product status class
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ *
+ * @mixin Builder
+ */
 class Status extends Model
 {
     use HasFactory;
@@ -30,5 +41,16 @@ class Status extends Model
         }
 
         return $builder;
+    }
+
+    /**
+     * Prepare for page title
+     */
+    public function getForTitle(): string
+    {
+        return match ($this->slug) {
+            'st-new' => '- новинки!',
+            'st-sale' => 'на распродаже!'
+        };
     }
 }

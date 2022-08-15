@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
-@section('title', "Купить {$category->getNameForCatalogTitle()} с примеркой по Беларуси")
+@section('title', Seo::getCatalogTitle($currentFilters))
 @if ($products->isNotEmpty())
     @section('ogImage', $products->first()->getFirstMedia()->getUrl('catalog'))
 @endif
+@section('description', Seo::getCatalogDescription($currentFilters))
 
 @section('breadcrumbs', Breadcrumbs::render('category', $category))
 

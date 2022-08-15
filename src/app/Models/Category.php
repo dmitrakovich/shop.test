@@ -205,7 +205,7 @@ class Category extends Model
     /**
      * Check category is root
      */
-    protected function isRoot(): bool
+    public function isRoot(): bool
     {
         return $this->id === self::ROOT_CATEGORY_ID;
     }
@@ -215,7 +215,7 @@ class Category extends Model
      */
     public function getNameForCatalogTitle(): string
     {
-        $name = $this->isRoot() ? 'женскую обувь' : $this->name;
+        $name = $this->isRoot() ? 'женская обувь' :  $this->name;
         return Str::lower($name);
     }
 
