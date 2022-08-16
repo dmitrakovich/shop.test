@@ -51,6 +51,7 @@ trait AttributeFilterTrait
     {
         return Str::snake(class_basename(self::class)) . 's';;
     }
+
     /**
      * Slug для фильтра
      *
@@ -60,6 +61,7 @@ trait AttributeFilterTrait
     {
         return $this->morphOne(Url::class, 'model');
     }
+
     /**
      * Удалить отношение при удалении фильтра
      *
@@ -70,6 +72,7 @@ trait AttributeFilterTrait
         $this->url()->delete();
         return parent::delete();
     }
+
     /**
      * Если перед применением фильтра необходимо произветсти
      * преобразолвание над данными или запросом
@@ -81,5 +84,13 @@ trait AttributeFilterTrait
     public static function beforeApplyFilter(Builder &$builder, array &$values)
     {
         $values = array_column($values, 'model_id');
+    }
+
+    /**
+     * Return model class name as property
+     */
+    public function getModelAttribute(): string
+    {
+        return self::class;
     }
 }

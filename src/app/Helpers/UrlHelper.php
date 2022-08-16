@@ -18,35 +18,53 @@ use Illuminate\Support\Facades\Request;
 
 class UrlHelper
 {
-    protected static $canonicalOrder = [
-        # model => св-ва [уникальный, ]
-        Category::class => [true,],                // 1. Категория
-        Status::class => [false,],                 // 2. Статус
-        Size::class => [false,],                   // 3. Размер
-        Color::class => [false,],                  // 4. Цвет
-        Fabric::class => [false,],                 // 5. Материал
-        Style::class => [false,],                  // 6. Стиль
-        Heel::class => [false,],                   // 7. Каблук
-        Tag::class => [false,],                    // 8. Теги
-        Season::class => [false,],                 // 9. Сезон
-        Collection::class => [false,],             // 10. Коллекция
+    /**
+     * Order of filters in an url string
+     */
+    const CANONICAL_ORDER = [
+        Category::class,      // 1. Категория
+        Status::class,        // 2. Статус
+        Size::class,          // 3. Размер
+        Color::class,         // 4. Цвет
+        Fabric::class,        // 5. Материал
+        Style::class,         // 6. Стиль
+        Heel::class,          // 7. Каблук
+        Tag::class,           // 8. Теги
+        Season::class,        // 9. Сезон
+        Collection::class,    // 10. Коллекция
         // 11. Город
-        Brand::class => [false,],                  // 12. Бренд
+        Brand::class,         // 12. Бренд
     ];
+
+    /**
+     * At most one value
+     */
+    const UNIQUE_FILTERS = [
+        Category::class,
+    ];
+
     protected static $params = null;
     protected static $availableParams = [
         'search'
     ];
-
     protected static $currentFilters = [];
 
+    /**
+     * Generate url for filter
+     */
     public static function generate(array $add = [], array $remove = [])
     {
         $filters = self::$currentFilters;
         $params = self::getParams();
 
         foreach ($add as $filter) {
-            $filters[$filter['model']][$filter['slug']] = $filter;
+            $model = $filter['model'];
+            $slug = $filter['slug'];
+            if (in_array($model, self::UNIQUE_FILTERS)) {
+                $filters[$model] = [$slug => $filter];
+            } else {
+                $filters[$model][$slug] = $filter;
+            }
         }
 
         foreach ($remove as $filter) {
@@ -58,14 +76,11 @@ class UrlHelper
         }
 
         $sorted = [];
-        foreach (self::$canonicalOrder as $model => [$single]) {
+        foreach (self::CANONICAL_ORDER as $model) {
             if (isset($filters[$model])) {
                 if ($model == Category::class) {
-                    array_unshift($sorted, end($filters[$model])['filters']['path']);
-                } elseif ($single) {
-                    if (!empty(end($filters[$model]))) {
-                        $sorted[] = end($filters[$model])['slug'];
-                    }
+                    $filter = end($filters[$model]);
+                    $sorted[] = $filter instanceof Category ? $filter->path : $filter['filters']['path'];
                 } else {
                     sort($filters[$model]);
                     foreach ($filters[$model] as $filter) {
