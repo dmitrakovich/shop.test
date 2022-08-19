@@ -78,14 +78,14 @@ class TitleGenerotorService
      */
     public function getCatalogTitle(array $currentFilters): string
     {
-        $title = '';
+        $emptyCategory = true;
         $titleValues = [];
         foreach (self::ATTRIBUTE_PRIORITY as $attrModel) {
             if ($attrModel === Category::class) {
                 /** @var Category $category */
                 $category = end($currentFilters[$attrModel])->filters;
                 $titleValues[$attrModel] = $category->getNameForCatalogTitle();
-                $title .= !$category->isRoot() ? 'купить ' : '';
+                $emptyCategory = $category->isRoot();
                 continue;
             }
 
@@ -100,11 +100,8 @@ class TitleGenerotorService
                 case Fabric::class:
                 case Season::class:
                 case Style::class:
-                    if (isset($titleValues[Category::class])) {
-                        $value = explode(',', (string)$filter->filters->seo)[3] ?? null;
-                    } else {
-                        $value = explode(',', (string)$filter->filters->seo)[1] ?? null;
-                    }
+                    $seoFormNumber = $emptyCategory ? 1 : 3;
+                    $value = explode(',', (string)$filter->filters->seo)[$seoFormNumber] ?? null;
                     break;
 
                 case Status::class:
@@ -148,7 +145,7 @@ class TitleGenerotorService
             }
         }
 
-        return Str::ucfirst($title . implode(' ', $titleValuesOrdered));
+        return Str::ucfirst((!$emptyCategory ? 'купить ' : '') . implode(' ', $titleValuesOrdered));
     }
 
     /**
