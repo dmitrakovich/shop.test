@@ -72,6 +72,7 @@ task('deploy', [
     'deploy:writable',
     'artisan:storage:link',
     'artisan:migrate',
+    'artisan:cache:clear',
     'artisan:config:cache',
     'artisan:route:cache',
     'artisan:view:cache',
