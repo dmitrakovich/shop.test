@@ -10,6 +10,7 @@ use App\Models\{
     Color,
     Fabric,
     Season,
+    Style,
     Category,
     Collection
 };
@@ -22,18 +23,17 @@ class UrlHelper
      * Order of filters in an url string
      */
     const CANONICAL_ORDER = [
-        Category::class,      // 1. Категория
-        Status::class,        // 2. Статус
-        Size::class,          // 3. Размер
-        Color::class,         // 4. Цвет
-        Fabric::class,        // 5. Материал
-        Style::class,         // 6. Стиль
-        Heel::class,          // 7. Каблук
-        Tag::class,           // 8. Теги
-        Season::class,        // 9. Сезон
-        Collection::class,    // 10. Коллекция
-        // 11. Город
-        Brand::class,         // 12. Бренд
+        Category::class,
+        Status::class,
+        Size::class,
+        Color::class,
+        Fabric::class,
+        Heel::class,
+        Tag::class,
+        Season::class,
+        Style::class,
+        Collection::class,
+        Brand::class,
     ];
 
     /**

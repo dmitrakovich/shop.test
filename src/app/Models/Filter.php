@@ -2,17 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\{
-    Tag,
-    Heel,
-    Size,
-    Brand,
-    Color,
-    Fabric,
-    Season,
-    Category,
-    Collection
-};
 use Illuminate\Support\Facades\Cache;
 use App\Models\ProductAttributes\Status;
 
@@ -32,6 +21,7 @@ class Filter
         'colors' => Color::class,
         'heels' => Heel::class,
         'seasons' => Season::class,
+        'styles' => Style::class,
         'tags' => Tag::class,
         'brands' => Brand::class,
     ];
@@ -42,8 +32,7 @@ class Filter
      * @var array
      */
     protected static $filtersPrefixes = [
-        'App\Size' => 'Размер ',
-        'App\Height' => 'Рост ',
+        Size::class => 'Размер ',
     ];
 
     /**

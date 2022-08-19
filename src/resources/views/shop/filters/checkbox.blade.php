@@ -1,8 +1,8 @@
-<div class="filter-block brand">
-    <div class="title"><span>БРЕНДЫ</span></div>
-    <div class="list" {{-- style="display: none" --}}>
+<div class="filter-block {{ $filterName }}">
+    <div class="title"><span>{{ $filterTitle }}</span></div>
+    <div class="list">
         <ul>
-            @foreach ($filters['brands'] as $slug => $filter)
+            @foreach ($filters[$filterName] as $slug => $filter)
                 <li class="check @checked(isset($currentFilters[$filter['model']][$slug]))">
                     <a href="{{ isset($currentFilters[$filter['model']][$slug]) ? UrlHelper::generate([], [$filter]) : UrlHelper::generate([$filter]) }}">
                         <span>{{ $filter['name'] }}</span>
