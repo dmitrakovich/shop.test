@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace App\Admin\Controllers\ProductAttributes;
 
-use App\Models\Collection;
+use App\Models\Fabric;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class CollectionController extends AdminController
+class FabricController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Collection';
+    protected $title = 'Fabric';
 
     /**
      * Make a grid builder.
@@ -24,14 +24,14 @@ class CollectionController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Collection());
+        $grid = new Grid(new Fabric());
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
         $grid->column('slug', __('Slug'));
-        // $grid->column('seo', __('Seo'));
-        // $grid->column('created_at', __('Created at'));
-        // $grid->column('updated_at', __('Updated at'));
+        $grid->column('seo', __('Seo'));
+        $grid->column('created_at', __('Created at'));
+        $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
@@ -44,7 +44,7 @@ class CollectionController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Collection::findOrFail($id));
+        $show = new Show(Fabric::findOrFail($id));
 
         $show->field('id', __('Id'));
         $show->field('name', __('Name'));
@@ -63,15 +63,11 @@ class CollectionController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Collection());
+        $form = new Form(new Fabric());
 
         $form->text('name', __('Name'));
         $form->text('slug', __('Slug'));
         $form->textarea('seo', __('Seo'));
-
-        $form->saved(function (Form $form) {
-            $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
-        });
 
         return $form;
     }

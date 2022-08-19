@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace App\Admin\Controllers\ProductAttributes;
 
-use App\Models\Heel;
+use App\Models\Season;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class HeelHeightController extends AdminController
+class SeasonController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Heel';
+    protected $title = 'Season';
 
     /**
      * Make a grid builder.
@@ -24,7 +24,7 @@ class HeelHeightController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Heel());
+        $grid = new Grid(new Season());
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
@@ -44,7 +44,7 @@ class HeelHeightController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Heel::findOrFail($id));
+        $show = new Show(Season::findOrFail($id));
 
         $show->field('id', __('Id'));
         $show->field('name', __('Name'));
@@ -63,11 +63,15 @@ class HeelHeightController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Heel());
+        $form = new Form(new Season());
 
         $form->text('name', __('Name'));
         $form->text('slug', __('Slug'));
         $form->textarea('seo', __('Seo'));
+
+        $form->saved(function (Form $form) {
+            $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
+        });
 
         return $form;
     }

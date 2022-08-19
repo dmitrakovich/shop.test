@@ -18,16 +18,6 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('users', UserController::class);
-    $router->resource('categories', CategoryController::class);
-    $router->resource('fabrics', FabricController::class);
-    $router->resource('sizes', SizeController::class);
-    $router->resource('colors', ColorController::class);
-    $router->resource('heel-heights', HeelHeightController::class);
-    $router->resource('seasons', SeasonController::class);
-    $router->resource('tags', TagController::class);
-    $router->resource('brands', BrandController::class);
-    $router->resource('manufacturers', ManufacturerController::class);
-    $router->resource('collections', CollectionController::class);
     $router->resource('info-pages', InfoPageController::class);
     $router->resource('orders', \OrderController::class);
     $router->get('orders/{order}/process', [\App\Admin\Controllers\OrderController::class, 'process'])->name('orders.process');
@@ -35,6 +25,20 @@ Route::group([
 
     $router->resource('products', ProductController::class);
     $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('products.restore');
+
+    $router->group(['prefix' => 'product-attributes', 'namespace' => 'ProductAttributes'], function ($router) {
+        $router->resource('categories', CategoryController::class);
+        $router->resource('fabrics', FabricController::class);
+        $router->resource('sizes', SizeController::class);
+        $router->resource('colors', ColorController::class);
+        $router->resource('heel-heights', HeelHeightController::class);
+        $router->resource('seasons', SeasonController::class);
+        $router->resource('styles', StyleController::class);
+        $router->resource('tags', TagController::class);
+        $router->resource('brands', BrandController::class);
+        $router->resource('manufacturers', ManufacturerController::class);
+        $router->resource('collections', CollectionController::class);
+    });
 
     $router->group(['prefix' => 'config', 'namespace' => 'Config'], function ($router) {
         $router->resource('payment-methods', PaymentController::class);

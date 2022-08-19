@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace App\Admin\Controllers\ProductAttributes;
 
 use App\Models\ProductAttributes\Manufacturer;
 use Encore\Admin\Controllers\AdminController;
