@@ -26,13 +26,13 @@
         <a href="{{ $product->getUrl() }}" data-gtm-click="productClick">
             <img
                 src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
-                alt="{{ $product->extendedName() }}"
+                alt="{{ $product->shortName() }}"
                 class="img-fluid product-first-image"
                 onerror="imageOnError(this)"
             />
             <img
                 src="{{ ($product->getMedia()->get(1) ?? $product->getFirstMedia())->getUrl('catalog') }}"
-                alt="{{ $product->extendedName() }}"
+                alt="{{ $product->shortName() }}"
                 class="img-fluid product-second-image"
                 onerror="imageOnError(this)"
             />
@@ -45,7 +45,7 @@
         >быстрый просмотр</button>
     </div>
 
-    <b>{{ $product->simpleName() }}</b> <br>
+    <b>{{ $product->shortName() }}</b> <br>
     @if ($product->getPrice() < $product->getOldPrice())
         <span class="old_price">{!! $product->getFormattedOldPrice() !!}</span>
         <span class="new_price">{!! $product->getFormattedPrice() !!}</span>

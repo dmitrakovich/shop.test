@@ -32,7 +32,8 @@ class BannerController extends AdminController
             'index_main' => 'На главной главный',
             'index_top' => 'На главной сверху',
             'index_bottom' => 'На главной снизу',
-            'main_menu_catalog' => 'В главном меню | каталог'
+            'main_menu_catalog' => 'В главном меню | каталог',
+            'catalog_mob' => 'В каталоге моб.',
         ]);
         $grid->column('resource', 'Media')->image();
         $grid->column('title', __('Title'))->display(function ($title) {
@@ -85,12 +86,31 @@ class BannerController extends AdminController
         $form = new Form(new Banner());
 
         $form->select('position', 'Позиция')->options([
-            'catalog_top' => 'В каталоге',
-            'index_main' => 'На главной главный',
-            'index_top' => 'На главной сверху',
-            'index_bottom' => 'На главной снизу',
-            'main_menu_catalog' => 'В главном меню | каталог'
-        ])->required();
+            'catalog_top'       => 'В каталоге',
+            'index_main'        => 'На главной главный',
+            'index_top'         => 'На главной сверху',
+            'index_bottom'      => 'На главной снизу',
+            'main_menu_catalog' => 'В главном меню | каталог',
+            'catalog_mob'       => 'В каталоге моб.',
+        ])->when('in', ['catalog_top', 'catalog_mob', 'index_main'], function (Form $form) {
+          $form->radio('show_timer', 'Таймер')
+               ->options([
+                true  =>'Да',
+                false =>'Нет',
+              ])->when(1, function (Form $form) {
+                $form->datetime('timer', 'Таймер');
+              });
+          $form->radio('spoiler.show', 'Спойлер')
+               ->options([
+                true  =>'Да',
+                false =>'Нет',
+              ])->when(1, function (Form $form) {
+                $form->embeds('spoiler',   'Описание спойлера', function ($form) {
+                  $form->text('btn_name',  'Название кнопки');
+                  $form->ckeditor('terms', 'Условия акции');
+                });
+              });
+        })->required();
 
         $form->radioButton('type','Тип баннера')
             ->options(['Картинка', 'Видео'])

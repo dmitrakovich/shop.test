@@ -22,7 +22,7 @@ Breadcrumbs::for('category', function ($trail, $category) {
 // Index > catalog > category > product
 Breadcrumbs::for('product', function ($trail, $product) {
     $trail->parent('category', $product->category);
-    $trail->push($product->extendedName());
+    $trail->push($product->shortName());
 });
 
 // Index > cart

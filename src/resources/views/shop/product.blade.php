@@ -37,7 +37,7 @@
                             <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
                                 <img
                                     src="{{ $image->getUrl('normal') }}"
-                                    alt="{{ $product->extendedName() }}"
+                                    alt="{{ $product->shortName() }}"
                                     class="img-fluid"
                                     onerror="imageOnError(this)"
                                 >
@@ -51,7 +51,7 @@
                             <div class="position-relative d-inline-block">
                                 <img
                                     src="{{ $image->getUrl('thumb') }}"
-                                    alt="{{ $product->extendedName() }} миниатюра {{ ++$key }}"
+                                    alt="{{ $product->shortName() }} миниатюра {{ ++$key }}"
                                     class="img-fluid"
                                     onerror="imageOnError(this)"
                                 >
@@ -68,7 +68,7 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-6 text-muted">
-                        {{ $product->extendedName() }}
+                        {{ $product->shortName() }}
                     </div>
                     <div class="col-6 text-right rating-result">
                         @for ($i = 1; $i <= 5; $i++)
@@ -196,6 +196,10 @@
             {!! $product->description !!}
         </div>
         <div class="col-12 col-lg-4 offset-lg-1">
+            @if (!empty($product->brand->name))
+                Бренд - {{ $product->brand->name }} <br>
+            @endif
+
             @if (!empty($product->color_txt))
                 Цвет - {{ $product->color_txt }} <br>
             @endif

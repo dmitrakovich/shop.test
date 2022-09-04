@@ -174,6 +174,13 @@ class Product extends Model implements HasMedia
     }
 
     /**
+    * Get product short name (category name + id)
+    */
+    public function shortName(): string {
+      return $this->category->title . ' ' . $this->id;
+    }
+
+    /**
      * Simple name + id
      */
     public function extendedName(): string

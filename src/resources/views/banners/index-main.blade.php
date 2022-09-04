@@ -23,6 +23,7 @@
                 <source src="/videos/201016_vitacci.ogv" type="video/ogg" />
             </video> --}}
         </a>
+        @include('banners.banner-timer', ['banner' => $indexMainBanner])
     </div>
 @endif
 
