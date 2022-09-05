@@ -7,5 +7,6 @@
                 class="img-fluid"
             />
         </a>
+        @include('banners.banner-timer', ['banner' => $catalogBanner])
     </div>
 @endif

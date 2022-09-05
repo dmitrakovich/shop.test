@@ -33,6 +33,7 @@
     <div class="col-12 col-lg-9 col-xl-10 catalog-page">
 
         {{ Banner::getCatalogTop() }}
+        {{ Banner::getCatalogMob() }}
 
         <div class="col-12 my-4 d-none d-lg-block">
             <div class="row justify-content-end align-items-center">

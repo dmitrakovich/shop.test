@@ -14,20 +14,26 @@ class Banner extends Model implements HasMedia
         InteractsWithMedia,
         SoftDeletes;
 
+    protected $casts = [
+      'spoiler'      => 'json',
+    ];
+
     public static function getIndexMain()
     {
         $indexMainBanner = self::active()
+            ->bannerFields()
             ->where('position', 'index_main')
             ->with('media')
             ->orderByPriority()
-            ->first(['id', 'title', 'url']);
+            ->first();
 
         $indexTopBanners = self::active()
+            ->bannerFields()
             ->where('position', 'index_top')
             ->with('media')
             ->orderByPriority()
             ->limit(3)
-            ->get(['id', 'title', 'url']);
+            ->get();
 
         return view('banners.index-main', compact('indexMainBanner', 'indexTopBanners'));
     }
@@ -35,10 +41,11 @@ class Banner extends Model implements HasMedia
     public static function getIndexBottom()
     {
         $indexBottomBanners = self::active()
+            ->bannerFields()
             ->where('position', 'index_bottom')
             ->with('media')
             ->orderByDesc('priority')
-            ->get(['id', 'title', 'url']);
+            ->get();
 
         return view('banners.index-bottom', compact('indexBottomBanners'));
     }
@@ -46,10 +53,11 @@ class Banner extends Model implements HasMedia
     public static function getCatalogTop()
     {
         $catalogBanner = self::active()
+            ->bannerFields()
             ->where('position', 'catalog_top')
             ->with('media')
             ->orderByPriority()
-            ->first(['id', 'title', 'url']);
+            ->first();
 
         return view('banners.catalog-top', compact('catalogBanner'));
     }
@@ -57,12 +65,25 @@ class Banner extends Model implements HasMedia
     public static function getMainMenuCatalog()
     {
         $mainMenuCatalog = self::active()
+            ->bannerFields()
             ->where('position', 'main_menu_catalog')
             ->with('media')
             ->orderByPriority()
-            ->first(['id', 'title', 'url']);
+            ->first();
 
         return view('banners.main-menu-catalog', compact('mainMenuCatalog'));
+    }
+
+    public static function getCatalogMob()
+    {
+        $mobCatalogBanner = self::active()
+            ->bannerFields()
+            ->where('position', 'catalog_mob')
+            ->with('media')
+            ->orderByPriority()
+            ->first();
+
+        return view('banners.catalog-mob', compact('mobCatalogBanner'));
     }
 
     /**
@@ -78,6 +99,16 @@ class Banner extends Model implements HasMedia
                 ->orWhereNull('start_datetime'))
             ->where(fn($query) => $query->where('end_datetime', '>=', now())
                 ->orWhereNull('end_datetime'));
+    }
+
+    /**
+    * Scope a query to only banner fields.
+    *
+    * @param  \Illuminate\Database\Eloquent\Builder  $query
+    * @return \Illuminate\Database\Eloquent\Builder
+    */
+    public function scopeBannerFields($query) {
+      return $query->select('id', 'title', 'url', 'timer', 'spoiler');
     }
 
     /**
