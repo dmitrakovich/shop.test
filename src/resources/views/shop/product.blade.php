@@ -123,7 +123,15 @@
                 <div class="row my-4">
                     @if (!empty($product->sale['label']))
                         <div class="col-12 py-3 py-xl-4 text-center" style="background: #EEF6FC;">
-                            {{ $product->sale['label'] }}
+                            <div class="row d-flex flex-nowrap align-items-center">
+                              <div class="flex-fill">{{ $product->sale['label'] }}</div>
+                              @if(!empty($product->sale['end_datetime']))
+                                <div class="col-5 col-sm-4 text-danger">
+                                  до конца акции<br>
+                                  @include('includes.timer', ['end_time' => $product->sale['end_datetime']])
+                                </div>
+                              @endif
+                            </div>
                         </div>
                     @endif
                 </div>

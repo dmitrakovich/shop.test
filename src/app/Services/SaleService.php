@@ -176,8 +176,9 @@ class SaleService
     private function getSaleData(float $price, float $oldPrice, int $index = 0, int $count = 1): array
     {
         return [
-            'price' => $this->applySale($price, $oldPrice, $index, $count),
-            'label' => $this->sale->label_text
+            'price'        => $this->applySale($price, $oldPrice, $index, $count),
+            'label'        => $this->sale->label_text,
+            'end_datetime' => $this->sale->end_datetime ?? null
         ];
     }
 

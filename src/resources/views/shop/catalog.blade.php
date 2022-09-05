@@ -31,7 +31,13 @@
         @include('shop.filters.all')
     </div>
     <div class="col-12 col-lg-9 col-xl-10 catalog-page">
-
+      <div class="row">
+        <div class="col-12 d-flex flex-wrap">
+          @foreach($badges as $badge)
+            <a href="{{ $badge->url ?? '/catalog' }}" class="border py-2 px-4 m-1">{{ $badge->name }}</a>
+          @endforeach
+        </div>
+      </div>
         {{ Banner::getCatalogTop() }}
         {{ Banner::getCatalogMob() }}
 
