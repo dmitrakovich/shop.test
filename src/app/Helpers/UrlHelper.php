@@ -80,7 +80,15 @@ class UrlHelper
             if (isset($filters[$model])) {
                 if ($model == Category::class) {
                     $filter = end($filters[$model]);
-                    $sorted[] = $filter instanceof Category ? $filter->path : $filter['filters']['path'];
+                  if($filter instanceof Category) {
+                    $sorted[] = $filter->path;
+                  } else {
+                    $filter_path = $filter['filters']['path'] ?? '';
+                    if($filter_path != 'catalog') {
+                      $filter_cat_path = substr($filter_path, strrpos($filter_path, "/")+ 1);
+                      $sorted[] = $filter_cat_path;
+                    }
+                  }
                 } else {
                     sort($filters[$model]);
                     foreach ($filters[$model] as $filter) {

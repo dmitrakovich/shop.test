@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Laravie\SerializesQuery\Eloquent;
 use Illuminate\Support\Facades\Session;
 use App\Services\GoogleTagManagerService;
+use App\Helpers\UrlHelper;
 
 class CatalogService
 {
@@ -49,6 +50,30 @@ class CatalogService
         Cache::put($this->getQueryCacheKey(), Eloquent::serialize($productsQuery), 3600);
 
         return $products;
+    }
+
+    public function getFilterBadges(?array $currentFiltersGroups):array {
+      $badges = [];
+      if(!empty($currentFiltersGroups)) {
+        foreach ($currentFiltersGroups as $currentFiltersGroup) {
+          foreach ($currentFiltersGroup as $currentFilter) {
+            if($currentFilter->filters->slug !== 'catalog') {
+              $badges[] = (object)[
+                'name'  => $currentFilter->filters->name,
+                'url'   => UrlHelper::generate([], [$currentFilter->filters])
+              ];
+            }
+          }
+        }
+      }
+      if(!empty($_GET['search'])) {
+        $badges[] = (object)[
+          'name'  => 'Поиск: ' . $_GET['search'],
+          'url'   => UrlHelper::generate([], [['param' => 'search']])
+        ];
+      }
+      $params = UrlHelper::getParams();
+      return $badges;
     }
 
     /**
