@@ -72,7 +72,6 @@ class CatalogService
           'url'   => UrlHelper::generate([], [['param' => 'search']])
         ];
       }
-      $params = UrlHelper::getParams();
       return $badges;
     }
 
