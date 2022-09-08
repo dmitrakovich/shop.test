@@ -93,13 +93,6 @@ class BannerController extends AdminController
             'main_menu_catalog' => 'В главном меню | каталог',
             'catalog_mob'       => 'В каталоге моб.',
         ])->when('in', ['catalog_top', 'catalog_mob', 'index_main'], function (Form $form) {
-          $form->radio('show_timer', 'Таймер')
-               ->options([
-                true  =>'Да',
-                false =>'Нет',
-              ])->when(1, function (Form $form) {
-                $form->datetime('timer', 'Таймер');
-              });
           $form->radio('spoiler.show', 'Спойлер')
                ->options([
                 true  =>'Да',
@@ -131,6 +124,11 @@ class BannerController extends AdminController
         $form->switch('active', 'Активный')->default(1);
         $form->datetime('start_datetime', 'Дата начала')->default(date('Y-m-d H:i:s'));
         $form->datetime('end_datetime', 'Дата оконания'); // ->default(date('Y-m-d H:i:s'));
+        $form->radio('show_timer', 'Таймер')
+        ->options([
+            true  =>'Да',
+            false =>'Нет',
+        ]);
 
         $form->submitted(function (Form $form) {
             $form->ignore('type');
