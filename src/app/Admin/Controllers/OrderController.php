@@ -72,13 +72,13 @@ class OrderController extends AdminController
 
         $grid->column('status_key', 'Статус')->editable('select', $orderStatuses);
 
-        /** @var Administrator */
-        $adminUser = Admin::user();
-        if ($adminUser->inRoles(['administrator', 'director'])) {
+        // /** @var Administrator */
+        // $adminUser = Admin::user();
+        // if ($adminUser->inRoles(['administrator', 'director'])) {
             $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
-        } else {
-            $grid->column('admin.name', 'Менеджер');
-        }
+        // } else {
+        //     $grid->column('admin.name', 'Менеджер');
+        // }
 
         $grid->column('created_at', 'Создан');
 
@@ -159,8 +159,8 @@ class OrderController extends AdminController
             $form->tools($this->getProcessTool((int)request('order')));
         }
 
-        $form->text('first_name', 'Имя')->required();;
         $form->text('last_name', 'Фамилия');
+        $form->text('first_name', 'Имя')->required();
         $form->text('patronymic_name', 'Отчество');
         $form->number('user_id', __('User id'));
         $form->number('promocode_id', __('Promocode id'));
@@ -201,13 +201,13 @@ class OrderController extends AdminController
 
         $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'));
 
-        /** @var Administrator */
-        $adminUser = Admin::user();
-        if ($adminUser->inRoles(['administrator', 'director'])) {
+        // /** @var Administrator */
+        // $adminUser = Admin::user();
+        // if ($adminUser->inRoles(['administrator', 'director'])) {
             $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
-        } else {
-            $form->display('admin.name', 'Менеджер');
-        }
+        // } else {
+        //     $form->display('admin.name', 'Менеджер');
+        // }
 
         $form->hasMany('adminComments', 'Комментарии менеджера', function (Form\NestedForm $form) {
             $form->text('comment', 'Комментарий')->rules(['required', 'max:500']);
@@ -332,7 +332,7 @@ class OrderController extends AdminController
         return <<<JS
 $(function () {
     // disable editing for current items in order
-    $('select.product_id, select.size_id').attr('disabled', true);
+    $('select.product_id').attr('disabled', true);
 
     // prepare current images
     $('#has-many-itemsExtended .file-input').each(function (index, element) {
@@ -356,6 +356,11 @@ $(function () {
             // console.log(itemBlock);
             // console.log(response);
         });
+    });
+
+    // prepare sizes
+    $('.itemsExtended.product_id').each(function (index, element) {
+        $(element).change();
     });
 });
 JS;
