@@ -57,7 +57,7 @@ class CatalogService
       if(!empty($currentFiltersGroups)) {
         foreach ($currentFiltersGroups as $currentFiltersGroup) {
           foreach ($currentFiltersGroup as $currentFilter) {
-            if($currentFilter->filters->slug !== 'catalog') {
+            if(isset($currentFilter->filters->slug) && $currentFilter->filters->slug !== 'catalog') {
               $badges[] = (object)[
                 'name'  => $currentFilter->filters->name,
                 'url'   => UrlHelper::generate([], [$currentFilter->filters])
