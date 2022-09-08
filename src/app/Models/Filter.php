@@ -27,12 +27,10 @@ class Filter
     ];
 
     /**
-     * префиксы для выбранных фильтров
-     *
-     * @var array
+     * Prefixes for selected filters
      */
-    protected static $filtersPrefixes = [
-        Size::class => 'Размер ',
+    protected static array $filtersPrefixes = [
+        Size::class => 'Размер: ',
     ];
 
     /**
@@ -68,12 +66,10 @@ class Filter
     }
 
     /**
-     * Префикс для отображаемого названия выбранного фильтра
-     *
-     * @return string
+     * Prefix for the display name of the selected filter
      */
-    public static function getNamePrefix(string $filterType)
+    public static function getNamePrefix(string $filterModel): string
     {
-        return self::$filtersPrefixes[$filterType] ?? '';
+        return self::$filtersPrefixes[$filterModel] ?? '';
     }
 }
