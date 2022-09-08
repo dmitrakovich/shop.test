@@ -72,15 +72,23 @@ class FilterRequest extends FormRequest
     }
 
     /**
-     * @return void
+     * Add Top filters models to filters if exist
      */
-    protected function addTopProducts(array &$filters)
+    protected function addTopProducts(array &$filters): void
     {
         $top = $this->input('top', '');
         $top = array_filter(explode(',', $top));
 
         if (!empty($top)) {
-            $filters[Top::class] = array_map(fn(int $value) => ['model_id' => $value], $top);
+            $filters[Top::class] = array_map(function(int $id) {
+                $urlModel = new Url([
+                    'slug' => 'top',
+                    'model_type' => Top::class,
+                    'model_id' => $id,
+                ]);
+
+                return $urlModel->setRelation('filters', new Top());
+            }, $top);
         }
     }
 }

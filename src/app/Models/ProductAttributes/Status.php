@@ -2,6 +2,7 @@
 
 namespace App\Models\ProductAttributes;
 
+use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class Status extends Model
 {
-    use HasFactory;
+    use HasFactory, AttributeFilterTrait;
 
     /**
      * @param Builder $builder
@@ -52,13 +53,5 @@ class Status extends Model
             'st-new' => '- новинки!',
             'st-sale' => 'на распродаже!'
         };
-    }
-
-    /**
-     * Return model class name as property
-     */
-    public function getModelAttribute(): string
-    {
-        return self::class;
     }
 }

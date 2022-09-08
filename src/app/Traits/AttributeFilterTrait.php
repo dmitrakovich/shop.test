@@ -93,4 +93,12 @@ trait AttributeFilterTrait
     {
         return self::class;
     }
+
+    /**
+     * Mark filter as invisible
+     */
+    public function isInvisible(): bool
+    {
+        return false;
+    }
 }

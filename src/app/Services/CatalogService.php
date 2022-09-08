@@ -10,6 +10,7 @@ use Laravie\SerializesQuery\Eloquent;
 use Illuminate\Support\Facades\Session;
 use App\Services\GoogleTagManagerService;
 use App\Helpers\UrlHelper;
+use App\Models\Filter;
 
 class CatalogService
 {
@@ -52,27 +53,30 @@ class CatalogService
         return $products;
     }
 
-    public function getFilterBadges(?array $currentFiltersGroups, ?string $searchQuery = null):array {
-      $badges = [];
-      if(!empty($currentFiltersGroups)) {
-        foreach ($currentFiltersGroups as $currentFiltersGroup) {
-          foreach ($currentFiltersGroup as $currentFilter) {
-            if(isset($currentFilter->filters->slug) && $currentFilter->filters->slug !== 'catalog') {
-              $badges[] = (object)[
-                'name'  => $currentFilter->filters->name,
-                'url'   => UrlHelper::generate([], [$currentFilter->filters])
-              ];
+    public function getFilterBadges(?array $currentFiltersGroups, ?string $searchQuery = null): array
+    {
+        $badges = [];
+        if (!empty($currentFiltersGroups)) {
+            foreach ($currentFiltersGroups as $currentFiltersGroup) {
+                foreach ($currentFiltersGroup as $currentFilter) {
+                    $filterModel = $currentFilter->filters;
+                    if ($filterModel->isInvisible() || $filterModel->slug === 'catalog') {
+                        continue;
+                    }
+                    $badges[] = (object)[
+                        'name'  => Filter::getNamePrefix($filterModel) . $filterModel->name,
+                        'url'   => UrlHelper::generate([], [$filterModel])
+                    ];
+                }
             }
-          }
         }
-      }
-      if($searchQuery) {
-        $badges[] = (object)[
-          'name'  => 'Поиск: ' . $searchQuery,
-          'url'   => UrlHelper::generate([], [['param' => 'search']])
-        ];
-      }
-      return $badges;
+        if ($searchQuery) {
+            $badges[] = (object)[
+                'name'  => 'Поиск: ' . $searchQuery,
+                'url'   => UrlHelper::generate([], [['param' => 'search']])
+            ];
+        }
+        return $badges;
     }
 
     /**
