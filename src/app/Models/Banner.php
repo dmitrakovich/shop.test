@@ -86,6 +86,11 @@ class Banner extends Model implements HasMedia
         return view('banners.catalog-mob', compact('mobCatalogBanner'));
     }
 
+    public function setShowTimerAttribute($value)
+    {
+        $this->attributes['show_timer'] = $this->end_datetime ? $value : false;
+    }
+
     /**
      * Scope a query to only active banners.
      *
@@ -108,7 +113,7 @@ class Banner extends Model implements HasMedia
     * @return \Illuminate\Database\Eloquent\Builder
     */
     public function scopeBannerFields($query) {
-      return $query->select('id', 'title', 'url', 'timer', 'spoiler');
+      return $query->select('id', 'title', 'url', 'end_datetime', 'show_timer', 'spoiler');
     }
 
     /**
