@@ -31,10 +31,15 @@
         @include('shop.filters.all')
     </div>
     <div class="col-12 col-lg-9 col-xl-10 catalog-page">
-
         {{ Banner::getCatalogTop() }}
         {{ Banner::getCatalogMob() }}
-
+        @if(!empty($badges))
+          <div class="col-12 d-flex flex-wrap my-3">
+            @foreach($badges as $badge)
+              <a href="{{ $badge->url ?? '/catalog' }}" class="border py-2 px-4 m-1 d-inline-flex alight-items-center">{{ $badge->name }} <span class="ml-1">@include('svg.close')</span></a>
+            @endforeach
+          </div>
+        @endif
         <div class="col-12 my-4 d-none d-lg-block">
             <div class="row justify-content-end align-items-center">
 

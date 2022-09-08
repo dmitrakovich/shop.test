@@ -1,3 +1,5 @@
+import timer from '../components/timer';
+
 const { default: axios } = require("axios");
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -64,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       },
       afterShow: function () {
+        timer($('.js-countdown'));
         slickRefresh();
         gtmProductDetailEvent(productDetail);
       }

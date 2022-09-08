@@ -53,4 +53,12 @@ class Status extends Model
             'st-sale' => 'на распродаже!'
         };
     }
+
+    /**
+     * Return model class name as property
+     */
+    public function getModelAttribute(): string
+    {
+        return self::class;
+    }
 }
