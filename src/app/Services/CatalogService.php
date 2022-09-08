@@ -52,7 +52,7 @@ class CatalogService
         return $products;
     }
 
-    public function getFilterBadges(?array $currentFiltersGroups):array {
+    public function getFilterBadges(?array $currentFiltersGroups, ?string $searchQuery = null):array {
       $badges = [];
       if(!empty($currentFiltersGroups)) {
         foreach ($currentFiltersGroups as $currentFiltersGroup) {
@@ -66,9 +66,9 @@ class CatalogService
           }
         }
       }
-      if(!empty($_GET['search'])) {
+      if($searchQuery) {
         $badges[] = (object)[
-          'name'  => 'Поиск: ' . $_GET['search'],
+          'name'  => 'Поиск: ' . $searchQuery,
           'url'   => UrlHelper::generate([], [['param' => 'search']])
         ];
       }

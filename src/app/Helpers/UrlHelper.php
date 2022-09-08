@@ -79,15 +79,15 @@ class UrlHelper
         foreach (self::CANONICAL_ORDER as $model) {
             if (isset($filters[$model])) {
                 if ($model == Category::class) {
-                    $filter = end($filters[$model]);
+                      $filter = end($filters[$model]);
                   if($filter instanceof Category) {
-                    $sorted[] = $filter->path;
+                      $sorted[] = $filter->path;
                   } else {
-                    $filter_path = $filter['filters']['path'] ?? '';
-                    if($filter_path != 'catalog') {
-                      $filter_cat_path = substr($filter_path, strrpos($filter_path, "/")+ 1);
-                      $sorted[] = $filter_cat_path;
-                    }
+                      $filterPath = $filter['filters']['path'] ?? '';
+                      if($filterPath != 'catalog') {
+                          $filterCatPath = substr($filterPath, strrpos($filterPath, "/")+ 1);
+                          $sorted[] = $filterCatPath;
+                      }
                   }
                 } else {
                     sort($filters[$model]);

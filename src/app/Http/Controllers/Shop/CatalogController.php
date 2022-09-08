@@ -60,7 +60,7 @@ class CatalogController extends BaseController
         ];
 
         $category = end($currentFilters[Category::class])->getFilterModel();
-        $badges = $catalogService->getFilterBadges($currentFilters);
+        $badges = $catalogService->getFilterBadges($currentFilters, $searchQuery);
 
         $gtmService->setForCatalog($products, $category, $searchQuery);
 
