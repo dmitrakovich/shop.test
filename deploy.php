@@ -87,3 +87,11 @@ task('deploy', [
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
+
+// Rollback settings
+task('rollback:after', [
+    'artisan:cache:clear',
+    'artisan:opcache:clear',
+]);
+
+after('rollback','rollback:after');
