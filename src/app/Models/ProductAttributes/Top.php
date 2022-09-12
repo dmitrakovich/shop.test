@@ -16,7 +16,7 @@ class Top
      */
     public static function applyFilter(Builder $builder, array $values)
     {
-        return $builder->whereNotIn('id', $values);
+        return $builder->whereNotIn('id', array_column($values, 'model_id'));
     }
 
     /**

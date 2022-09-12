@@ -11,7 +11,7 @@ class Url extends Model
     protected $primaryKey = 'slug';
     protected $keyType = 'string';
     protected $fillable = [
-        'slug'
+        'slug', 'model_type', 'model_id',
     ];
     /**
      * Найти url model по slug

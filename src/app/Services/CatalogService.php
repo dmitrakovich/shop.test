@@ -124,13 +124,14 @@ class CatalogService
             return;
         }
 
-        $topProducts = $this->productService->getById($filters[Top::class]);
+        $topProductsIds = array_column($filters[Top::class], 'model_id');
+        $topProducts = $this->productService->getById($topProductsIds);
         if (empty($topProducts)) {
             return;
         }
 
         $topProducts = $topProducts->keyBy('id');
-        $sorting = array_reverse(array_column($filters[Top::class], 'model_id'));
+        $sorting = array_reverse($topProductsIds);
         foreach ($sorting as $productId) {
             if (isset($topProducts[$productId])) {
                 $products->prepend($topProducts[$productId]);

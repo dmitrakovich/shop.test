@@ -90,11 +90,11 @@
                                     @if ($value == 'Оформить рассрочку')
                                         <br>
                                         <span class="text-muted font-size-12">
-                                            (Рассрочка на 2 платежа
+                                            (Рассрочка на 3 платежа
                                             Первый взнос
-                                            <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() - Cart::getTotalPrice() * 0.5 }} руб.</span>
-                                            Оставшийся платеж
-                                            <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() * 0.5 }} руб.</span>
+                                            <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() - Cart::getTotalPrice() * 0.6 }} руб.</span>
+                                            Оставшиеся 2 платежа по
+                                            <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() * 0.3 }} руб.</span>
                                             в месяц)
                                     </span>
                                     @endif
