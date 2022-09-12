@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Collection;
 use App\Models\ProductAttributes\Top;
@@ -57,10 +58,10 @@ class CatalogService
     {
         $badges = [];
         if (!empty($currentFiltersGroups)) {
-            foreach ($currentFiltersGroups as $currentFiltersGroup) {
-                foreach ($currentFiltersGroup as $currentFilter) {
+            foreach ($currentFiltersGroups as $currentFiltersGroupKey => $currentFiltersGroup) {
+                foreach ($currentFiltersGroup as $currentFilterKey => $currentFilter) {
                     $filterModel = $currentFilter->filters;
-                    if ($filterModel->isInvisible() || $filterModel->slug === 'catalog') {
+                    if ($filterModel->isInvisible() || $filterModel->slug === 'catalog' || ($currentFiltersGroupKey == Category::class) && (array_key_last($currentFiltersGroup) != $currentFilterKey)) {
                         continue;
                     }
                     $badges[] = (object)[
@@ -72,7 +73,7 @@ class CatalogService
         }
         if ($searchQuery) {
             $badges[] = (object)[
-                'name'  => 'Поиск: ' . $searchQuery,
+                'name'  => 'Поиск: ' . mb_strimwidth($searchQuery, 0, 12, '...'),
                 'url'   => UrlHelper::generate([], [['param' => 'search']])
             ];
         }

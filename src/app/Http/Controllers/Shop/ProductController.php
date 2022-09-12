@@ -15,7 +15,7 @@ class ProductController extends BaseController
      */
     public function show(Url $url, array $params, GoogleTagManagerService $gtmService): View
     {
-        $product = Product::findOrFail($url->model_id);
+        $product = Product::with(['tags', 'category'])->findOrFail($url->model_id);
 
         $gtmService->setViewForProduct($product);
         $dataLayer = $gtmService->prepareProduct($product);

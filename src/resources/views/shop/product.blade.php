@@ -202,6 +202,13 @@
         </div>
         <div class="col-12 col-lg-7">
             {!! $product->description !!}
+            @if(!empty($product->tags))
+                <div>
+                    @foreach($product->tags as $tag)
+                        <a href="{{ (isset($product->category->path) ? ('/' . $product->category->path) : route('shop')) . '/' . $tag->slug }}" class="border py-1 px-2 m-1 d-inline-flex alight-items-center">{{ $tag->name }}</a>
+                    @endforeach
+                </div>
+            @endif
         </div>
         <div class="col-12 col-lg-4 offset-lg-1">
             @if (!empty($product->brand->name))
