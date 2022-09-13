@@ -42,14 +42,20 @@ trait AttributeFilterTrait
         });
     }
 
-    protected static function getRelationColumn()
+    /**
+     * Relation column name in product table
+     */
+    protected static function getRelationColumn(): ?string
     {
         return null;
     }
 
-    protected static function getRelationNameByClass()
+    /**
+     * Autogenerate relation name by model class
+     */
+    protected static function getRelationNameByClass(): string
     {
-        return Str::snake(class_basename(self::class)) . 's';;
+        return Str::snake(class_basename(self::class)) . 's';
     }
 
     /**
