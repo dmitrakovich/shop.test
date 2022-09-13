@@ -16,7 +16,7 @@ class ProductCarouselController extends AdminController
      *
      * @var string
      */
-    protected $title = 'ProductCarousel';
+    protected $title = 'Слайдер товаров';
 
     /**
      * Make a grid builder.
@@ -40,8 +40,13 @@ class ProductCarouselController extends AdminController
         $grid->column('count', 'Количество товаров');
         $grid->column('speed', 'Скорость (мс)');
 
-        $grid->model()->where('is_imidj', false);
+        $grid->model()->where('is_imidj', false)->whereNull('enum_type_id');
 
+        $grid->disablePagination();
+        $grid->disableFilter();
+        $grid->disableExport();
+        $grid->disableColumnSelector();
+        $grid->disableRowSelector();
         return $grid;
     }
 
