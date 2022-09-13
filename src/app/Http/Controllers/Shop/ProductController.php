@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Shop;
 use App\Models\Url;
 use App\Models\Product;
 use App\Services\GoogleTagManagerService;
+use App\Services\SliderService;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 
@@ -19,8 +20,10 @@ class ProductController extends BaseController
 
         $gtmService->setViewForProduct($product);
         $dataLayer = $gtmService->prepareProduct($product);
+        $sliderService = new SliderService; 
+        $similarProducts = $sliderService->getSimilarProducts($product->id);
 
-        return view('shop.product-page', compact('product', 'dataLayer'));
+        return view('shop.product-page', compact('product', 'dataLayer', 'similarProducts'));
     }
 
     /**

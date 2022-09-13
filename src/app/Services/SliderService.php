@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
-use App\Models\Product;
-use App\Models\Category;
+use App\Enums\ProductCarouselEnum;
+use App\Models\{Category, Product};
 use App\Facades\Currency;
 use App\Models\Ads\ProductCarousel;
 use App\Models\Favorite;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\{Builder, Collection};
+
 
 /**
  * @todo Refactor DRY !
@@ -26,6 +27,7 @@ class SliderService
             $productCarousels = [];
             $carousels = ProductCarousel::ordered()
                 ->where('is_imidj', false)
+                ->whereNull('enum_type_id')
                 ->get(['title', 'categories', 'only_sale', 'only_new', 'count', 'speed']);
 
             foreach ($carousels as $key => $carousel) {
@@ -144,6 +146,66 @@ class SliderService
         $this->addFavorites($slider['products']);
 
         return $slider;
+    }
+
+    /**
+     * Get similar products slider
+     *
+     * @return array
+     */
+    public function getSimilarProducts(int $productId): array
+    {
+        $slider = Cache::remember('similar_products_slider', 1800, function () { // 0.5h
+            return ProductCarousel::where('enum_type_id', ProductCarouselEnum::SIMILAR_PRODUCTS)
+                ->first(['title', 'count', 'speed']);
+        });
+        if (empty($slider)) {
+            return [];
+        }
+        $products = Cache::remember('similar_products_by_product_id_' . $productId, 1800, function () use ($productId, $slider) { // 0.5h
+            $attrs   = ['sizes', 'colors', 'tags'];
+            $product = Product::where('id', $productId)->with($attrs)->first();
+            do {
+                $query = Product::where('id', '!=', $productId)
+                                ->where('category_id', $product->category_id)
+                                ->with(['media', 'category', 'brand']);
+                foreach($attrs as $attr) {
+                    $values = (!empty($product->{$attr}) && $product->{$attr} instanceof Collection) ? array_column($product->{$attr}->toArray(), 'id') : null;
+                    if($values) {
+                        $query->whereHas($attr, function (Builder $q) use ($values) {
+                            $q->where('id', $values);
+                        });
+                    }
+                }
+                $result     = $query->limit($slider->count)->orderBy('rating', 'desc')->get();
+                $recomended = isset($recomended) ? $recomended->merge($result) : $result;
+                $recomended = $recomended->take($slider->count);
+                array_pop($attrs);
+            } while (count($recomended) < $slider->count && count($attrs));
+
+            return $recomended->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'sku' => $product->sku,
+                    'full_name' => $product->shortName(),
+                    'sale_percentage' => $product->getSalePercentage(),
+                    'is_new' => $product->isNew(),
+                    'price_byn' => $product->getFinalPrice(),
+                    'old_price_byn' => $product->getFinalOldPrice(),
+                    'url' => $product->getUrl(),
+                    'image' => $product->getFirstMedia()->getUrl('catalog'),
+                    'dataLayer' => GoogleTagManagerService::prepareProduct($product),
+                ];
+            })->toArray();
+        });
+        $this->setDataLayerForPage($products);
+        $this->addConvertedAndFormattedPrice($products);
+        $this->addFavorites($products);
+        return [
+            'title'    => $slider->title,
+            'speed'    => $slider->speed,
+            'products' => $products
+        ];
     }
 
     /**

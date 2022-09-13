@@ -253,7 +253,11 @@
 
         </div>
     </div>
-
+    @if(!empty($similarProducts) && count($similarProducts))
+        <div class="col-md-12 my-3">
+            @include('partials.index.simple-slider', ['simpleSlider' => $similarProducts])
+        </div>
+    @endif
 </div>
 
 {{-- modals --}}
