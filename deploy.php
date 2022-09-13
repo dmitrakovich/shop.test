@@ -16,13 +16,13 @@ set('application', 'Barocco');
 // set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
 set('shared_files', ['.env']);
-add('shared_dirs', [
+set('shared_dirs', [
     'storage',
     'public/uploads',
     'database/files',
     'database/sxgeo',
 ]);
-add('writable_dirs', [
+set('writable_dirs', [
     'bootstrap/cache',
     'storage',
     'public/uploads',
@@ -49,10 +49,8 @@ task('deploy:upload', function () {
 
 task('deploy:writable', function () {
     within('{{release_path}}', function () {
-        $dirs = get('writable_dirs');
-        foreach ($dirs as $dir) {
-            run("chmod -R -f 775 {$dir}");
-        }
+        $dirs = join(' ', get('writable_dirs'));
+        run("chmod -R -f 0755 $dirs");
     });
 });
 
