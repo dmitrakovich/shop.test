@@ -293,7 +293,8 @@ class Product extends Model implements HasMedia
      */
     public function scopeOnlyNew(Builder $query, int $days = 10)
     {
-        return $query->where('created_at', '>', now()->subDays($days));
+        // return $query->where('created_at', '>', now()->subDays($days));
+        return $query->where('old_price', 0);
     }
 
     /**

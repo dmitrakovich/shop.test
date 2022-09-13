@@ -89,7 +89,9 @@ trait AttributeFilterTrait
      */
     public static function beforeApplyFilter(Builder &$builder, array &$values)
     {
-        $values = array_column($values, 'model_id');
+        if (!array_is_list($values)) {
+            $values = array_column($values, 'model_id');
+        }
     }
 
     /**
