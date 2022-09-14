@@ -76,7 +76,7 @@ class SaleService
      */
     protected function checkCategory(int $categoryId): bool
     {
-        return is_null($this->sale->categories) || !in_array($categoryId, $this->sale->categories);
+        return is_null($this->sale->categories) || in_array($categoryId, $this->sale->categories);
     }
 
     /**
@@ -84,7 +84,7 @@ class SaleService
      */
     protected function checkCollection(int $collectionId): bool
     {
-        return is_null($this->sale->collections) || !in_array($collectionId, $this->sale->collections);
+        return is_null($this->sale->collections) || in_array($collectionId, $this->sale->collections);
     }
 
     /**
@@ -100,7 +100,7 @@ class SaleService
      */
     protected function checkSeason(int $seasonId): bool
     {
-        return is_null($this->sale->seasons) || !in_array($seasonId, $this->sale->seasons);
+        return is_null($this->sale->seasons) || in_array($seasonId, $this->sale->seasons);
     }
 
     /**
