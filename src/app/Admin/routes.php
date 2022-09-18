@@ -54,6 +54,7 @@ Route::group([
         $router->resource('product-carousels', ProductCarouselController::class);
         $router->get('imidj', Forms\ImidjSlider::class);
         $router->get('similar-products', Forms\SimilarProductsSlider::class);
+        $router->get('recent-products', Forms\RecentProductsSlider::class);
         $router->get('instagram', Forms\Instagram::class);
         $router->get('short-link', Forms\ShortLink\ShortLinkController::class)->name('short-link');
     });

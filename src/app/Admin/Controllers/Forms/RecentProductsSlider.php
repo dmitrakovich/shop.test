@@ -7,14 +7,14 @@ use App\Models\Ads\ProductCarousel;
 use Illuminate\Http\Request;
 use Encore\Admin\Widgets\Form;
 
-class SimilarProductsSlider extends Form
+class RecentProductsSlider extends Form
 {
     /**
      * The form title.
      *
      * @var string
      */
-    public $title = 'Похожие товары';
+    public $title = 'Недавно просмотренные товары';
 
     /**
      * The description of form.
@@ -32,9 +32,9 @@ class SimilarProductsSlider extends Form
      */
     public function handle(Request $request)
     {
-        $slider = ProductCarousel::where('enum_type_id', ProductCarouselEnum::SIMILAR_PRODUCTS)->firstOrNew();
+        $slider = ProductCarousel::where('enum_type_id', ProductCarouselEnum::RECENT_PRODUCTS)->firstOrNew();
 
-        $slider->enum_type_id = ProductCarouselEnum::SIMILAR_PRODUCTS;
+        $slider->enum_type_id = ProductCarouselEnum::RECENT_PRODUCTS;
         $slider->title        = $request->input('title', null);
         $slider->speed        = $request->input('speed', 3000);
         $slider->count        = 12;
@@ -61,7 +61,7 @@ class SimilarProductsSlider extends Form
      */
     public function data()
     {
-        return optional(ProductCarousel::where('enum_type_id', ProductCarouselEnum::SIMILAR_PRODUCTS)
+        return optional(ProductCarousel::where('enum_type_id', ProductCarouselEnum::RECENT_PRODUCTS)
             ->first(['title', 'speed', 'count']))
             ->toArray();
     }

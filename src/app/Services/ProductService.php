@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Session;
 
 class ProductService
 {
@@ -53,10 +54,10 @@ class ProductService
             'styles:id,name',
             'favorite:product_id',
         ])
-        ->get()
-        ->each(function (Product $product) {
-            $product->dataLayer = GoogleTagManagerService::prepareProduct($product);
-        });
+            ->get()
+            ->each(function (Product $product) {
+                $product->dataLayer = GoogleTagManagerService::prepareProduct($product);
+            });
     }
 
     /**
@@ -73,7 +74,9 @@ class ProductService
             'brand:id,name',
             'colors:id,name',
         ])
-            ->when($withTrashed, function ($query) { $query->withTrashed(); })
+            ->when($withTrashed, function ($query) {
+                $query->withTrashed();
+            })
             ->has('brand')
             ->has('colors')
             ->where('price', '>', 0)
@@ -88,5 +91,30 @@ class ProductService
         return $this->getById(
             Product::inRandomOrder()->limit(5)->pluck('id')->toArray()
         );
+    }
+
+    /**
+     * Add product to recent
+     */
+    public function addToRecent(int $productId): void
+    {
+        $recentProducts = Session::get('recent_products', []);
+        foreach ($recentProducts as $key => $id) {
+            if ($id == $productId) {
+                unset($recentProducts[$key]);
+            }
+        }
+        array_push($recentProducts, $productId);
+        $recentProducts = array_values(array_slice($recentProducts, 0, 20));
+        Session::put('recent_products', $recentProducts);
+        Session::save();
+    }
+
+    /**
+     * Get product to recent
+     */
+    public function getRecent(): array
+    {
+        return Session::get('recent_products', []);
     }
 }

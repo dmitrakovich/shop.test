@@ -6,6 +6,7 @@ use App\Models\Url;
 use App\Models\Product;
 use App\Services\GoogleTagManagerService;
 use App\Services\SliderService;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 
@@ -20,10 +21,13 @@ class ProductController extends BaseController
 
         $gtmService->setViewForProduct($product);
         $dataLayer = $gtmService->prepareProduct($product);
-        $sliderService = new SliderService; 
+        $productService = new ProductService;
+        $productService->addToRecent($product->id);
+        $sliderService   = new SliderService; 
         $similarProducts = $sliderService->getSimilarProducts($product->id);
+        $recentProductsSlider = $sliderService->getRecentProducts($productService);
 
-        return view('shop.product-page', compact('product', 'dataLayer', 'similarProducts'));
+        return view('shop.product-page', compact('product', 'dataLayer', 'similarProducts', 'recentProductsSlider'));
     }
 
     /**

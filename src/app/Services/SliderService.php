@@ -7,6 +7,7 @@ use App\Models\{Category, Product};
 use App\Facades\Currency;
 use App\Models\Ads\ProductCarousel;
 use App\Models\Favorite;
+use App\Services\ProductService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\{Builder, Collection};
 
@@ -155,23 +156,25 @@ class SliderService
      */
     public function getSimilarProducts(int $productId): array
     {
-        $slider = Cache::remember('similar_products_slider', 1800, function () { // 0.5h
+        $cacheConfig = config('cache_config.product_carousel_similar_products');
+        $slider = Cache::rememberForever($cacheConfig['key'], function () {
             return ProductCarousel::where('enum_type_id', ProductCarouselEnum::SIMILAR_PRODUCTS)
                 ->first(['title', 'count', 'speed']);
         });
         if (empty($slider)) {
             return [];
         }
-        $products = Cache::remember('similar_products_by_product_id_' . $productId, 1800, function () use ($productId, $slider) { // 0.5h
+        $cacheConfig = config('cache_config.similar_products');
+        $products = Cache::remember($cacheConfig['key'] . $productId, $cacheConfig['ttl'], function () use ($productId, $slider) { // 0.5h
             $attrs   = ['sizes', 'colors', 'tags'];
             $product = Product::where('id', $productId)->with($attrs)->first();
             do {
                 $query = Product::where('id', '!=', $productId)
-                                ->where('category_id', $product->category_id)
-                                ->with(['media', 'category', 'brand']);
-                foreach($attrs as $attr) {
+                    ->where('category_id', $product->category_id)
+                    ->with(['media', 'category', 'brand']);
+                foreach ($attrs as $attr) {
                     $values = (!empty($product->{$attr}) && $product->{$attr} instanceof Collection) ? array_column($product->{$attr}->toArray(), 'id') : null;
-                    if($values) {
+                    if ($values) {
                         $query->whereHas($attr, function (Builder $q) use ($values) {
                             $q->where('id', $values);
                         });
@@ -209,6 +212,56 @@ class SliderService
     }
 
     /**
+     * Get recent products slider
+     *
+     * @return array
+     */
+    public function getRecentProducts(ProductService $productService): array
+    {
+        $cacheConfig = config('cache_config.product_carousel_recent_products');
+        $slider = Cache::rememberForever($cacheConfig['key'], function () {
+            return ProductCarousel::where('enum_type_id', ProductCarouselEnum::RECENT_PRODUCTS)
+                ->first(['title', 'count', 'speed']);
+        });
+        if (empty($slider)) {
+            return [];
+        }
+        $ids      = $productService->getRecent();
+        $products = Product::whereIn('id', $ids)->with(['media', 'category', 'brand'])->get();
+        $flipIds  = array_flip($ids);
+        $resultProducts = [];
+        if (empty($products)) {
+            return [];
+        }
+        foreach ($products as $product) {
+            $key = $flipIds[$product->id] ?? null;
+            if ($key) {
+                $resultProducts[$key] = [
+                    'id'              => $product->id,
+                    'sku'             => $product->sku,
+                    'full_name'       => $product->shortName(),
+                    'sale_percentage' => $product->getSalePercentage(),
+                    'is_new'          => $product->isNew(),
+                    'price_byn'       => $product->getFinalPrice(),
+                    'old_price_byn'   => $product->getFinalOldPrice(),
+                    'url'             => $product->getUrl(),
+                    'image'           => $product->getFirstMedia()->getUrl('catalog'),
+                    'dataLayer'       => GoogleTagManagerService::prepareProduct($product),
+                ];
+            }
+        }
+        krsort($resultProducts);
+        $this->setDataLayerForPage($resultProducts);
+        $this->addConvertedAndFormattedPrice($resultProducts);
+        $this->addFavorites($resultProducts);
+        return [
+            'title'    => $slider->title,
+            'speed'    => $slider->speed,
+            'products' => $resultProducts
+        ];
+    }
+
+    /**
      * Add in products array converted and formatted price
      *
      * @param array $products
@@ -231,7 +284,7 @@ class SliderService
     protected function addFavorites(array &$products): void
     {
         $favorites = Favorite::whereIn('product_id', array_column($products, 'id'))
-                        ->pluck('product_id')->toArray();
+            ->pluck('product_id')->toArray();
 
         foreach ($products as &$product) {
             $product['favorite'] = in_array($product['id'], $favorites);
