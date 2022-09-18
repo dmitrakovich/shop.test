@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 class ProductCarousel extends Model implements Sortable
 {
