@@ -254,8 +254,13 @@
         </div>
     </div>
     @if(!empty($similarProducts) && count($similarProducts))
-        <div class="col-md-12 my-3">
+        <div class="col-md-12 mt-3 mb-5">
             @include('partials.index.simple-slider', ['simpleSlider' => $similarProducts])
+        </div>
+    @endif
+    @if(!empty($recentProductsSlider['products']) && count($recentProductsSlider['products']))
+        <div class="col-md-12 my-3">
+            @include('partials.index.simple-slider', ['simpleSlider' => $recentProductsSlider])
         </div>
     @endif
 </div>

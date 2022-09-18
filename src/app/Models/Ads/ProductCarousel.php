@@ -8,12 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
+use Illuminate\Support\Facades\Cache;
 
 class ProductCarousel extends Model implements Sortable
 {
     use SortableTrait;
     use HasFactory;
     use HasJsonRelationships;
+
+    public static function boot()
+    {
+        parent::boot();
+        self::saved(function ($model) {
+            $cacheConfig = config('cache_config');
+            Cache::forget($cacheConfig['product_carousel_similar_products']['key'] ?? '');
+            Cache::forget($cacheConfig['product_carousel_recent_products']['key'] ?? ' ');
+        });
+    }
+
 
     protected $appends = [
         'categories_list'
