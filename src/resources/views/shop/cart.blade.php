@@ -24,24 +24,36 @@
                                             <a href="{{ $item->product->getUrl() }}" target="_blank">
                                                 {{ $item->product->brand->name }} {{ $item->product->id }}
                                             </a><br>
-                                            <small>{{ $item->product->category->title }}</small>
+                                            <small>{{ $item->product->category->title }}</small><br>
+                                            <small>Размер: {{ $item->size->name }}</small><br>
+                                            <small>Цвет: {{ $item->product->color_txt }}</small><br>
                                         </div>
                                         <div class="col-12 col-md-2 mt-md-2">{{ DeclensionNoun::make($item->count, 'пара') }}</div>
-                                        <div class="col-12 col-md-2 mt-md-2">размер {{ $item->size->name}}</div>
-                                        <div class="col-12 col-md-2 mt-md-2">{{ $item->product->color_txt }}</div>
-                                        <div class="col-12 col-md-3 mt-md-2 mb-4">
+                                        <div class="col-12 col-md-2 mt-md-2">
                                             @if ($item->product->getPrice() < $item->product->getOldPrice())
-                                                <span class="old_price text-muted">{!! $item->product->getFormattedOldPrice() !!}</span>&nbsp;
+                                                <span class="old_price text-muted">{!! $item->product->getFormattedOldPrice() !!}</span>
+                                            @endif
+                                        </div>
+                                        <div class="col-12 col-md-3 mt-md-2">
+                                            @if ($item->product->getPrice() < $item->product->getOldPrice())
                                                 <span class="product-label product-label-sale px-1">
                                                     -{{ $item->product->getSalePercentage() }}%
+                                                </span>&nbsp; акция &nbsp;&nbsp;
+                                                <span class="text-danger">
+                                                    @include('includes.timer', ['end_time' => $item->product->sale['end_datetime']])
                                                 </span><br>
+                                                <span>-{{ $item->product->getFormattedPriceDiff() }}</span><br>
+                                            @endif
+                                        </div>
+                                        <div class="col-12 col-md-2 mt-md-2 mb-4">
+                                            @if ($item->product->getPrice() < $item->product->getOldPrice())
                                                 <span class="new_price">{!! $item->product->getFormattedPrice() !!}</span>
                                             @else
                                                 <span class="price">{!! $item->product->getFormattedPrice() !!}</span>
                                             @endif
                                         </div>
 
-                                        <div class="col-12 col-auto mt-auto position-absolute fixed-bottom">
+                                        <div class="col-12 col-auto mt-auto">
                                             <div class="row">
                                                 <div class="col-auto">
                                                     <a href="{{ route('cart-delete', $item->id) }}" class="text-muted text-decoration-underline">

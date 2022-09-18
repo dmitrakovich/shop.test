@@ -19,7 +19,7 @@ class SaleController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Sale';
+    protected $title = 'Акции';
 
     /**
      * Algorithms list
@@ -59,6 +59,13 @@ class SaleController extends AdminController
         // $grid->column('updated_at', __('Updated at'));
         // $grid->column('deleted_at', __('Deleted at'));
 
+        $grid->actions(function ($actions) {
+          $actions->disableView();
+        });
+        $grid->disableFilter();
+        $grid->disableExport();
+        $grid->disableColumnSelector();
+        $grid->disableRowSelector();
         return $grid;
     }
 
@@ -89,8 +96,8 @@ class SaleController extends AdminController
 
         $form->text('title', 'Название')->required();
         $form->text('label_text', 'Текст на шильде');
-        $form->datetime('start_datetime', 'Дата начала')->default(date('Y-m-d H:i:s'));
-        $form->datetime('end_datetime', 'Дата завершения')->default(date('Y-m-d 23:59:59'));
+        $form->datetime('start_datetime', 'Дата начала')->default(date('d.m.Y H:i:s'))->format('DD.MM.YYYY HH:mm:ss');
+        $form->datetime('end_datetime', 'Дата завершения')->default(date('d.m.Y 23:59:59'))->format('DD.MM.YYYY HH:mm:ss');
         $form->select('algorithm', 'Алгоритм')->options(self::ALGORITHMS_LIST)->default('simple');
         $form->text('sale', 'Скидка')->required();
         $form->listbox('categories', 'Категории')->options($allCategoriesList)->default(array_keys($allCategoriesList));
@@ -118,6 +125,15 @@ class SaleController extends AdminController
             $form->model()->save();
         });
 
+        $form->tools(function (Form\Tools $tools) {
+          $tools->disableView();
+        });
+        $form->footer(function ($footer) {
+          $footer->disableReset();
+          $footer->disableViewCheck();
+          $footer->disableEditingCheck();
+          $footer->disableCreatingCheck();
+        });
         return $form;
     }
 

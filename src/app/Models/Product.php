@@ -390,6 +390,26 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Get product old price & price diff
+     *
+     * @return float
+     */
+    public function getPriceDiff(): float
+    {
+        return $this->getFinalOldPrice() - $this->getFinalPrice();
+    }
+
+    /**
+     * Get product formatted price diff
+     * 
+     * @return float
+     */
+    public function getFormattedPriceDiff(): string
+    {
+        return Currency::convertAndFormat($this->getPriceDiff());
+    }
+
+    /**
      * Calculate sale percentage
      *
      * @return integer
