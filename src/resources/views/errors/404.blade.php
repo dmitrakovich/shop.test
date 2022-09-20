@@ -1,54 +1,32 @@
-
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Not Found</title>
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .code {
-                border-right: 2px solid;
-                font-size: 26px;
-                padding: 0 15px 0 15px;
-                text-align: center;
-            }
-
-            .message {
-                font-size: 18px;
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            <div class="code">Custom 404 page</div>
-            <div class="message" style="padding: 10px;">Not Found</div>
-        </div>
-    </body>
-</html>
+@extends('layouts.app')
+@section('content')
+<div class="w-100 my-4">
+    {{ Banner::getCatalogTop() }}
+    {{ Banner::getCatalogMob() }}
+</div>
+<div>
+    <h2 class="text-center my-5">
+        404<br>
+        К сожалению такой страницы не существует.<br>
+        Посмотрите популярные товары
+    </h2>
+</div>
+<div class="col-md-12 my-5">
+    @php
+    $simpleSliders = method_exists('\App\Services\SliderService', 'getSimple') ? (new \App\Services\SliderService)->getSimple() : [];
+    $simpleSliders = $simpleSliders[0] ?? null;
+    @endphp
+    @includeWhen(isset($simpleSliders), 'partials.index.simple-slider', ['simpleSlider' => ($simpleSliders)])
+</div>
+<div class="my-5">
+    <a href="{{ config('contacts.viber.link') }}" data-gtm-user-event="callViber">
+        {{ config('contacts.viber.name') }}
+    </a> /
+    <a href="{{ config('contacts.telegram.link') }}" data-gtm-user-event="callTelegram">
+        {{ config('contacts.telegram.name') }}
+    </a> /
+    <a href="{{ config('contacts.whats-app.link') }}" data-gtm-user-event="callWhatsApp">
+        {{ config('contacts.whats-app.name') }}
+    </a>
+</div>
+@endsection

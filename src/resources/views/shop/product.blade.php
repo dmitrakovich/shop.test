@@ -205,7 +205,7 @@
             @if(!empty($product->tags))
                 <div>
                     @foreach($product->tags as $tag)
-                        <a href="{{ (isset($product->category->path) ? ('/' . $product->category->path) : route('shop')) . '/' . $tag->slug }}" class="border py-1 px-2 m-1 d-inline-flex alight-items-center">{{ $tag->name }}</a>
+                        <a href="{{ (isset($product->category->path) ? ('/' . $product->category->path) : route('shop')) . '/' . $tag->slug }}" class="bg-dark text-white py-0 px-2 m-1 d-inline-flex alight-items-center">{{ ($product->category->name ?? '') . ' ' . $tag->name }}</a>
                     @endforeach
                 </div>
             @endif
