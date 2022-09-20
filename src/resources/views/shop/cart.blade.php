@@ -39,9 +39,12 @@
                                                 <span class="product-label product-label-sale px-1">
                                                     -{{ $item->product->getSalePercentage() }}%
                                                 </span>&nbsp; акция &nbsp;&nbsp;
-                                                <span class="text-danger">
-                                                    @include('includes.timer', ['end_time' => $item->product->sale['end_datetime']])
-                                                </span><br>
+                                                @if(isset($item->product->sale['end_datetime']))
+                                                    <span class="text-danger">
+                                                        @include('includes.timer', ['end_time' => $item->product->sale['end_datetime']])
+                                                    </span>
+                                                @endif
+                                                <br>
                                                 <span>-{{ $item->product->getFormattedPriceDiff() }}</span><br>
                                             @endif
                                         </div>
