@@ -5,7 +5,42 @@
 ></script>
 
 <div class="content">
-    <div class="title">Something went wrong.</div>
+    <div class="message">
+        <h2>
+            На сайте ведутся технические работы.<br>
+            Подождите... и он станет ещё лучше!
+        </h2>
+        <div>
+            <a href="{{ config('contacts.phone.link') }}" data-gtm-user-event="callPhone">
+                {{ config('contacts.phone.name') }}
+            </a><br>
+            <a href="{{ config('contacts.viber.link') }}" data-gtm-user-event="callViber">
+                {{ config('contacts.viber.name') }}
+            </a> /
+            <a href="{{ config('contacts.telegram.link') }}" data-gtm-user-event="callTelegram">
+                {{ config('contacts.telegram.name') }}
+            </a> /
+            <a href="{{ config('contacts.whats-app.link') }}" data-gtm-user-event="callWhatsApp">
+                {{ config('contacts.whats-app.name') }}
+            </a>
+        </div>
+        
+    </div>
+    <style>
+      .message {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+      }
+      .message a {
+        color: inherit;
+        display: inline-block;
+        margin: 5px;
+      }
+    </style>
 
     @if(app()->bound('sentry') && app('sentry')->getLastEventId())
       <div class="subtitle">Error ID: {{ app('sentry')->getLastEventId() }}</div>
