@@ -15,7 +15,7 @@ class TagController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Tag';
+    protected $title = 'Теги';
 
     /**
      * Make a grid builder.
@@ -26,13 +26,23 @@ class TagController extends AdminController
     {
         $grid = new Grid(new Tag());
 
+        $grid->model()->withCount('products');
+
         $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
+        $grid->column('name', __('Название'));
         $grid->column('slug', __('Slug'));
         $grid->column('seo', __('Seo'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('products_count', __('Товаров содержит'));
+        $grid->column('created_at', __('Дата создания'));
+        $grid->column('updated_at', __('Дата обновления'));
 
+        $grid->actions(function ($actions) {
+            $actions->disableView();
+        });
+        $grid->disableFilter();
+        $grid->disableExport();
+        $grid->disableColumnSelector();
+        $grid->disableRowSelector();
         return $grid;
     }
 
@@ -71,6 +81,16 @@ class TagController extends AdminController
 
         $form->saved(function (Form $form) {
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
+        });
+
+        $form->tools(function (Form\Tools $tools) {
+            $tools->disableView();
+        });
+        $form->footer(function ($footer) {
+            $footer->disableReset();
+            $footer->disableViewCheck();
+            $footer->disableEditingCheck();
+            $footer->disableCreatingCheck();
         });
 
         return $form;
