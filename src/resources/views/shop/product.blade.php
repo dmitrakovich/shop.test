@@ -203,14 +203,24 @@
         <div class="col-12 col-lg-7">
             {!! $product->description !!}
             @if(!empty($product->tags))
+                <div class="font-size-15 mb-1">
+                   ТЕГИ
+                </div>
                 <div>
                     @foreach($product->tags as $tag)
-                        <a href="{{ (isset($product->category->path) ? ('/' . $product->category->path) : route('shop')) . '/' . $tag->slug }}" class="bg-dark text-white py-0 px-2 m-1 d-inline-flex alight-items-center">{{ ($product->category->name ?? '') . ' ' . $tag->name }}</a>
+                        <a
+                            href="{{ (isset($product->category->path) ? ('/' . $product->category->path) : route('shop')) . '/' . $tag->slug }}"
+                            class="bg-dark text-white py-0 px-2 m-1 d-inline-flex alight-items-center"
+                            title="{{ ($product->category->name ?? '') . ' ' . ($tag->seo ?? $tag->name) }}"
+                        >{{ $tag->name }}</a>
                     @endforeach
                 </div>
             @endif
         </div>
         <div class="col-12 col-lg-4 offset-lg-1">
+            <div class="font-size-15 mb-1">
+                ХАРАКТЕРИСТИКИ
+            </div>
             @if (!empty($product->brand->name))
                 Бренд - {{ $product->brand->name }} <br>
             @endif

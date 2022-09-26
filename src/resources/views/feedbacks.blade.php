@@ -18,7 +18,10 @@
             </button>
         </div>
     </div>
-
+    <div class="row my-4">
+        {{ Banner::getFeedback() }}
+        {{ Banner::getFeedbackMob() }}
+    </div>
     <div class="row justify-content-between px-5">
         @foreach ($feedbacks as $feedback)
             <div class="col-12 item my-4">
