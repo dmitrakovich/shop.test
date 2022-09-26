@@ -86,6 +86,30 @@ class Banner extends Model implements HasMedia
         return view('banners.catalog-mob', compact('mobCatalogBanner'));
     }
 
+    public static function getFeedback()
+    {
+        $feedbackBanner = self::active()
+            ->bannerFields()
+            ->where('position', 'feedback')
+            ->with('media')
+            ->orderByPriority()
+            ->first();
+
+        return view('banners.feedback', compact('feedbackBanner'));
+    }
+
+    public static function getFeedbackMob()
+    {
+        $feedbackBannerMob = self::active()
+            ->bannerFields()
+            ->where('position', 'feedback_mob')
+            ->with('media')
+            ->orderByPriority()
+            ->first();
+
+        return view('banners.feedback-mob', compact('feedbackBannerMob'));
+    }
+
     public function setShowTimerAttribute($value)
     {
         $this->attributes['show_timer'] = $this->end_datetime ? $value : false;
