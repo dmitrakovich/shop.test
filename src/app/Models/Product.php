@@ -420,6 +420,32 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Calculate full sale percentage - discount percentage
+     *
+     * @return integer
+     */
+    public function getOnlySalePercentage():? int
+    {
+        $result = ceil($this->getSalePercentage() - $this->getDiscountPercentage());
+        return ($result > 0) ?$result : null;
+    }
+
+    /**
+     * Calculate old price && price percentage
+     *
+     * @return integer
+     */
+    public function getDiscountPercentage():? int
+    {
+        $priceDiff = $this->old_price - $this->price;
+        if ($priceDiff > 0) {
+            $percent = ceil(((100 * $priceDiff) / $this->getFinalOldPrice()));
+        }
+        return $percent ?? null;
+    }
+
+
+    /**
      * getFirstMediaUrl & check empty media
      *
      * @param string $collectionName
