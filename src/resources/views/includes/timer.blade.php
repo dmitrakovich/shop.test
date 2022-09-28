@@ -12,9 +12,9 @@
                     <span class="text-white">&nbsp;</span>
                 @endif
                 <span class="bg-white rounded text-center d-inline-block py-2 px-1 hours" style="min-width: 40px;">{{ sprintf("%02d", ($diff->h ?? '00')) }}</span>
-                <span class="text-white">:</span>
+                <span class="text-white font-weight-bold">:</span>
                 <span class="bg-white rounded text-center d-inline-block py-2 px-1 minutes" style="min-width: 40px;">{{ sprintf("%02d", ($diff->i ?? '00')) }}</span>
-                <span class="text-white">:</span>
+                <span class="text-white font-weight-bold">:</span>
                 <span class="bg-white rounded text-center d-inline-block py-2 px-1 seconds" style="min-width: 40px;">{{ sprintf("%02d", ($diff->s ?? '00')) }}</span>
             </div>
         @else

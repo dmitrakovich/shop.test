@@ -126,17 +126,20 @@
                             <div class="row">
                                 <div class="col-6 text-left">
                                     @if($product->getDiscountPercentage())
-                                        <span class="text-danger fw-bold">
-                                            скидка <span style="font-size: 20px;">{{ $product->getDiscountPercentage() }}% </span>
+                                        <span class="text-danger">
+                                            скидка <span class="h4">{{ $product->getDiscountPercentage() }}% </span>
                                         </span>
                                     @endif
                                 </div>
                                 <div class="col-6 bg-danger py-1">
-                                <span style="font-size: 20px;">+  {{ $product->getOnlySalePercentage() }}% </span> по акции                                </div>
+                                    @if($product->getOnlySalePercentage())
+                                        <span class="h4">+{{ $product->getOnlySalePercentage() }}% </span> по акции
+                                    @endif
+                                </div>
                             </div>
                             <div class="row py-3 align-items-center bg-danger">
                                 <div class="col-12 mb-2">
-                                    <div class="flex-fill">{{ $product->sale['label'] }}</div>
+                                    <div class="flex-fill font-weight-bold text-uppercase">{{ $product->sale['label'] }}</div>
                                 </div>
                                 @if(!empty($product->sale['end_datetime']))
                                     <div class="col-12 text-danger">
@@ -214,7 +217,7 @@
         </div>
         <div class="col-12 col-lg-7">
             {!! $product->description !!}
-            @if(!empty($product->tags))
+            @if(isset($product->tags) && count($product->tags))
                 <div class="font-size-15 mb-1">
                    ТЕГИ
                 </div>

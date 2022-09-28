@@ -424,10 +424,10 @@ class Product extends Model implements HasMedia
      *
      * @return integer
      */
-    public function getOnlySalePercentage():? int
+    public function getOnlySalePercentage(): int
     {
         $result = ceil($this->getSalePercentage() - $this->getDiscountPercentage());
-        return ($result > 0) ?$result : null;
+        return ($result > 0) ? $result : null;
     }
 
     /**
@@ -435,13 +435,13 @@ class Product extends Model implements HasMedia
      *
      * @return integer
      */
-    public function getDiscountPercentage():? int
+    public function getDiscountPercentage(): int
     {
         $priceDiff = $this->old_price - $this->price;
         if ($priceDiff > 0) {
             $percent = ceil(((100 * $priceDiff) / $this->getFinalOldPrice()));
         }
-        return $percent ?? null;
+        return $percent ?? 0;
     }
 
 
