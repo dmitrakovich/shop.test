@@ -122,15 +122,30 @@
 
                 <div class="row my-4">
                     @if (!empty($product->sale['label']))
-                        <div class="col-12 py-3 py-xl-4 text-center" style="background: #EEF6FC;">
-                            <div class="row d-flex flex-nowrap align-items-center">
-                              <div class="flex-fill">{{ $product->sale['label'] }}</div>
-                              @if(!empty($product->sale['end_datetime']))
-                                <div class="col-5 col-sm-4 text-danger">
-                                  до конца акции<br>
-                                  @include('includes.timer', ['end_time' => $product->sale['end_datetime']])
+                        <div class="col-12 py-3 py-xl-4 text-center">
+                            <div class="row">
+                                <div class="col-6 text-left">
+                                    @if($product->getDiscountPercentage())
+                                        <span class="text-danger">
+                                            скидка <span class="h4">{{ $product->getDiscountPercentage() }}% </span>
+                                        </span>
+                                    @endif
                                 </div>
-                              @endif
+                                <div class="col-6 bg-danger py-1">
+                                    @if($product->getOnlySalePercentage())
+                                        <span class="h4">+{{ $product->getOnlySalePercentage() }}% </span> по акции
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row py-3 align-items-center bg-danger">
+                                <div class="col-12 mb-2">
+                                    <div class="flex-fill font-weight-bold text-uppercase">{{ $product->sale['label'] }}</div>
+                                </div>
+                                @if(!empty($product->sale['end_datetime']))
+                                    <div class="col-12 text-danger">
+                                        @include('includes.timer', ['end_time' => $product->sale['end_datetime'], 'badgeCountdown' => true ])
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     @endif
@@ -202,7 +217,7 @@
         </div>
         <div class="col-12 col-lg-7">
             {!! $product->description !!}
-            @if(!empty($product->tags))
+            @if(isset($product->tags) && count($product->tags))
                 <div class="font-size-15 mb-1">
                    ТЕГИ
                 </div>

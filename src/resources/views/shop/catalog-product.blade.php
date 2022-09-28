@@ -20,6 +20,9 @@
                 <div class="product-label product-label-sale">
                     -{{ $product->getSalePercentage() }}%
                 </div>
+                <div class="product-label product-label-sale">
+                    акция
+                </div>
             @endif
         </div>
 
