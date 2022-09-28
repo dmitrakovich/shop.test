@@ -1,6 +1,7 @@
 import timer from '../components/timer';
 
 const { default: axios } = require("axios");
+const SCROLL_POSITION_STORAGE_KEY = 'catalog-scroll-position';
 
 document.addEventListener("DOMContentLoaded", function () {
   let productsContainer = document.getElementById('catalog-endless-scroll');
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         isLoading = true;
 
-        axios.get('/ajax-next-page', {params: {cursor, ...gtmData}})
+        axios.get('/ajax-next-page', { params: { cursor, ...gtmData } })
           .then(function (response) {
             hasMoreProducts = response.data.has_more;
             cursor = response.data.cursor;
@@ -48,9 +49,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // save scroll position
+  document.addEventListener('click', saveScrollPosition);
+  window.scrollTo(0, getScrollPosition());
+
   // scroll top button
-  $(document).on('click', '.scroll-top-btn', function() {
-    $('html, body').stop().animate({scrollTop: 0}, 800);
+  document.querySelector('button.scroll-top-btn').addEventListener('click', function () {
+    window.scrollTo({top: 0, behavior: 'smooth'});
   });
 
   // quick view
@@ -73,3 +78,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+/**
+ * @param {PointerEvent} event
+ */
+const saveScrollPosition = function (event) {
+  const filters = document.getElementById("sidebarFilters");
+  if (event.target === filters || filters.contains(event.target)) {
+    sessionStorage.setItem(SCROLL_POSITION_STORAGE_KEY, window.scrollY);
+  } else {
+    sessionStorage.removeItem(SCROLL_POSITION_STORAGE_KEY);
+  }
+}
+
+/**
+ * @returns number
+ */
+const getScrollPosition = function () {
+  return +(sessionStorage.getItem(SCROLL_POSITION_STORAGE_KEY) || 0);
+}
