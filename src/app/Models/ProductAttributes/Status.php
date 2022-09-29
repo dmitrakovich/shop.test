@@ -6,6 +6,7 @@ use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ProductAttributes\Promotion;
 
 /**
  * Product status class
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Status extends Model
 {
     use HasFactory, AttributeFilterTrait;
+    protected $guarded = ['id'];
 
     /**
      * @param Builder $builder
@@ -37,6 +39,10 @@ class Status extends Model
 
                 case 'st-sale':
                     $builder->whereColumn('price', '<', 'old_price');
+                    break;
+
+                case 'promotion':
+                    Promotion::getProductsForAllActiveSales($builder);
                     break;
             }
         }

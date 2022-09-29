@@ -36,7 +36,7 @@ class Promotion extends Model
     /**
      * Get all sales & apply sales config to products
      */
-    protected static function getProductsForAllActiveSales(Builder $builder): Builder
+    public static function getProductsForAllActiveSales(Builder $builder): Builder
     {
         $builder->where(function ($query) {
             Sale::query()->actual()->get()->each(function (Sale $sale) use ($query) {

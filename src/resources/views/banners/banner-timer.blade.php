@@ -1,4 +1,4 @@
-@if(!empty($banner->show_timer) || !empty($banner->spoiler))
+@if((isset($banner->show_timer) && $banner->show_timer) || (isset($banner->spoiler['show']) && $banner->spoiler['show']))
   @php
     $timer_id      = uniqid();
   @endphp
