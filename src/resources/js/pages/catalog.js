@@ -1,4 +1,5 @@
 import timer from '../components/timer';
+import { TABLET_BREAKPOINT } from '../constants';
 
 const { default: axios } = require("axios");
 const SCROLL_POSITION_STORAGE_KEY = 'catalog-scroll-position';
@@ -50,8 +51,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // save scroll position
-  document.addEventListener('click', saveScrollPosition);
-  window.scrollTo(0, getScrollPosition());
+  if (document.documentElement.clientWidth >= TABLET_BREAKPOINT) {
+    document.addEventListener('click', saveScrollPosition);
+    window.scrollTo(0, getScrollPosition());
+  }
 
   // scroll top button
   document.querySelector('button.scroll-top-btn').addEventListener('click', function () {
