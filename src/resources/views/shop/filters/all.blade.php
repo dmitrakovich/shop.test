@@ -4,6 +4,9 @@
 @include('shop.filters.checkbox', ['filterName' => 'statuses', 'filterTitle' => 'СТАТУСЫ'])
 <hr>
 
+@include('shop.filters.prices')
+<hr>
+
 @include('shop.filters.checkbox', ['filterName' => 'fabrics', 'filterTitle' => 'МАТЕРИАЛ'])
 <hr>
 
