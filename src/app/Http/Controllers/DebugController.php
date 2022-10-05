@@ -8,6 +8,7 @@ use App\Models\Orders\Order;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Facades\SmsTraffic;
 
 class DebugController extends Controller
 {
@@ -15,6 +16,8 @@ class DebugController extends Controller
     {
         // $this->formatPhones();
         // dd(0000);
+
+        dd(SmsTraffic::send()->getBody()->getContents());
 
         // php artisan make:mail OrderShipped
 
