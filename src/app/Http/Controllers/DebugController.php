@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
+use App\Notifications\TestSms;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,28 @@ class DebugController extends Controller
         // $this->formatPhones();
         // dd(0000);
 
-        dd(SmsTraffic::send()->getBody()->getContents());
+        /** @var User $user */
+        $user = User::find('xxxxx');
+
+        dd(
+            $user,
+            $user->notify(new TestSms())
+        );
+
+        $phones = '375333467338';
+        $message = 'test xml response 111';
+
+        $response = SmsTraffic::send($phones, $message);
+        // $response = SmsTraffic::balance();
+
+        dd(
+            $response,
+            // $response->hasError(),
+            // $response->isServerError(),
+            // $response->getErrorMessage(),
+            // $response->getDescription(),
+            // $response->getSmsId(),
+        );
 
         // php artisan make:mail OrderShipped
 

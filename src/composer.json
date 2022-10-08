@@ -16,7 +16,7 @@
         "default-089/sxgeo": "0.16.*@dev",
         "deployer/deployer": "v7.0.0-rc.8",
         "diglactic/laravel-breadcrumbs": "^7.2",
-        "dmitrakovich/smstraffic-for-laravel": "dev-main",
+        "dmitrakovich/smstraffic-for-laravel": "^0.1.1",
         "drandin/declension-nouns": "dev-master",
         "encore/laravel-admin": "^1.8",
         "giggsey/libphonenumber-for-php": "8.12.47.1",

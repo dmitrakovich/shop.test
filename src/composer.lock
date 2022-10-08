@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5123aa6af3b814a9ae43edc101d09649",
+    "content-hash": "b0b1c23f893e2e7277aaad64560a5292",
     "packages": [
         {
             "name": "appstract/laravel-opcache",
@@ -443,16 +443,16 @@
         },
         {
             "name": "dmitrakovich/smstraffic-for-laravel",
-            "version": "dev-main",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmitrakovich/smstraffic-for-laravel.git",
-                "reference": "e5fc561a7ebece34d7ee3c1f8d81bc9806e26b45"
+                "reference": "98d3e7bccafdfee2461f50a4eb5220100fb48bad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/e5fc561a7ebece34d7ee3c1f8d81bc9806e26b45",
-                "reference": "e5fc561a7ebece34d7ee3c1f8d81bc9806e26b45",
+                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/98d3e7bccafdfee2461f50a4eb5220100fb48bad",
+                "reference": "98d3e7bccafdfee2461f50a4eb5220100fb48bad",
                 "shasum": ""
             },
             "require": {
@@ -461,7 +461,6 @@
                 "illuminate/support": "^8.0|^9.0",
                 "php": "^8.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -495,9 +494,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dmitrakovich/smstraffic-for-laravel/issues",
-                "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/main"
+                "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/v0.1.1"
             },
-            "time": "2022-10-08T09:31:07+00:00"
+            "time": "2022-10-08T18:20:04+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -11690,7 +11689,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "default-089/sxgeo": 20,
-        "dmitrakovich/smstraffic-for-laravel": 20,
         "drandin/declension-nouns": 20
     },
     "prefer-stable": true,
