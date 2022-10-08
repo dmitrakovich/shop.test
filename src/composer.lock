@@ -447,12 +447,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmitrakovich/smstraffic-for-laravel.git",
-                "reference": "df071edec278f6be494951dcc2f4a6a1badc81c8"
+                "reference": "e5fc561a7ebece34d7ee3c1f8d81bc9806e26b45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/df071edec278f6be494951dcc2f4a6a1badc81c8",
-                "reference": "df071edec278f6be494951dcc2f4a6a1badc81c8",
+                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/e5fc561a7ebece34d7ee3c1f8d81bc9806e26b45",
+                "reference": "e5fc561a7ebece34d7ee3c1f8d81bc9806e26b45",
                 "shasum": ""
             },
             "require": {
@@ -497,7 +497,7 @@
                 "issues": "https://github.com/dmitrakovich/smstraffic-for-laravel/issues",
                 "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/main"
             },
-            "time": "2022-10-07T22:45:55+00:00"
+            "time": "2022-10-08T09:31:07+00:00"
         },
         {
             "name": "doctrine/cache",
