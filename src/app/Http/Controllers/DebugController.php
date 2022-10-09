@@ -4,34 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Mail\OrderCreated;
-use App\Models\Logs\SmsLog;
 use App\Models\Orders\Order;
 use App\Notifications\TestSms;
-use App\Services\LogService;
-use Encore\Admin\Auth\Database\Administrator;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Database\Eloquent\Model;
 
 class DebugController extends Controller
 {
-    public function index(LogService $logService)
+    public function index()
     {
         /** @var User $user */
-        // $user = User::find('xxx');
-        // dd($user, $user->notifyNow(new TestSms()));
-
-        $logService->logSms(
-            '375333467338',
-            'sms text',
-            'viber(60)-sms',
-            Administrator::inRandomOrder()->value('id'),
-            Order::inRandomOrder()->value('id'),
-            'in queue'
-        );
-
-        $sms = SmsLog::latest()->first();
-        dd($sms->toArray());
+        $user = User::findOrFail('xxxx');
+        dd($user, $user->notifyNow(new TestSms()));
 
         // php artisan make:mail OrderShipped
 
