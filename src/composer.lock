@@ -443,16 +443,16 @@
         },
         {
             "name": "dmitrakovich/smstraffic-for-laravel",
-            "version": "v0.1.1",
+            "version": "v0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmitrakovich/smstraffic-for-laravel.git",
-                "reference": "98d3e7bccafdfee2461f50a4eb5220100fb48bad"
+                "reference": "d2e1c6f9ab7174634ea71cec1a8a5c3b9246e91e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/98d3e7bccafdfee2461f50a4eb5220100fb48bad",
-                "reference": "98d3e7bccafdfee2461f50a4eb5220100fb48bad",
+                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/d2e1c6f9ab7174634ea71cec1a8a5c3b9246e91e",
+                "reference": "d2e1c6f9ab7174634ea71cec1a8a5c3b9246e91e",
                 "shasum": ""
             },
             "require": {
@@ -494,9 +494,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dmitrakovich/smstraffic-for-laravel/issues",
-                "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/v0.1.1"
+                "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/v0.1.4"
             },
-            "time": "2022-10-08T18:20:04+00:00"
+            "time": "2022-10-09T18:37:04+00:00"
         },
         {
             "name": "doctrine/cache",

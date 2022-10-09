@@ -71,6 +71,8 @@ Route::group([
 
     $router->resource('media', MediaController::class);
 
+    $router->get('send-sms', Forms\Sms::class);
+
     // legacy
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);
