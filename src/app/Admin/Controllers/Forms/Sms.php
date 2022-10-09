@@ -11,6 +11,14 @@ use Illuminate\Notifications\Facades\SmsTraffic;
 class Sms extends Form
 {
     /**
+     * Sms form constructor.
+     */
+    public function __construct(private LogService $logService, $data = [])
+    {
+        parent::__construct($data);
+    }
+
+    /**
      *
      */
     const ROUTE_OPTIONS = [
@@ -33,15 +41,14 @@ class Sms extends Form
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, LogService $logService)
+    public function handle(Request $request)
     {
         $phone = $request->input('phone');
         $text = $request->input('text');
-        $routes = array_flip(self::ROUTE_OPTIONS);
-        $route = $routes[$request->input('route')];
+        $route = $request->input('route');
 
         $response = SmsTraffic::send($phone, $text, ['route' => $route]);
-        $logService->logSms($phone, $text, $route, Admin::user()->id, null, $response->getDescription());
+        $this->logService->logSms($phone, $text, $route, Admin::user()->id, null, $response->getDescription());
 
         admin_success('Сообщение отправлено. Id сообщения: ' . $response->getSmsId());
 
