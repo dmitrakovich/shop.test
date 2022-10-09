@@ -4,42 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Mail\OrderCreated;
+use App\Models\Logs\SmsLog;
 use App\Models\Orders\Order;
 use App\Notifications\TestSms;
+use App\Services\LogService;
+use Encore\Admin\Auth\Database\Administrator;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Facades\SmsTraffic;
 
 class DebugController extends Controller
 {
-    public function index()
+    public function index(LogService $logService)
     {
-        // $this->formatPhones();
-        // dd(0000);
-
         /** @var User $user */
-        $user = User::find('xxxxx');
+        // $user = User::find('xxx');
+        // dd($user, $user->notifyNow(new TestSms()));
 
-        dd(
-            $user,
-            $user->notify(new TestSms())
+        $logService->logSms(
+            '375333467338',
+            'sms text',
+            'viber(60)-sms',
+            Administrator::inRandomOrder()->value('id'),
+            Order::inRandomOrder()->value('id'),
+            'in queue'
         );
 
-        $phones = '375333467338';
-        $message = 'test xml response 111';
-
-        $response = SmsTraffic::send($phones, $message);
-        // $response = SmsTraffic::balance();
-
-        dd(
-            $response,
-            // $response->hasError(),
-            // $response->isServerError(),
-            // $response->getErrorMessage(),
-            // $response->getDescription(),
-            // $response->getSmsId(),
-        );
+        $sms = SmsLog::latest()->first();
+        dd($sms->toArray());
 
         // php artisan make:mail OrderShipped
 

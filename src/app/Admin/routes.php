@@ -76,6 +76,11 @@ Route::group([
     $router->any('rating', RatingController::class);
     $router->any('sklad', [SkladController::class, 'index']);
 
+    // logs
+    $router->group(['prefix' => 'logs'], function ($router) {
+        $router->resource('sms', Logs\SmsController::class);
+    });
+
     // debug
     $router->group(['prefix' => 'debug', 'namespace' => 'Debug'], function ($router) {
         $router->any('clear-cache', CacheController::class);
