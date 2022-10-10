@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Logs\SmsLog;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class LogService
@@ -32,7 +31,7 @@ class LogService
         $log->phone = $phone;
         $log->text = $text;
         $log->route = $route;
-        $log->admin_id = $adminId ?? Auth::id();
+        $log->admin_id = $adminId;
         $log->order_id = $orderId;
         $log->status = $status;
         $log->save();
