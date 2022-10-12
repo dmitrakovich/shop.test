@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 
 abstract class BaseController extends Controller
 {
-    public function __construct()
+    /**
+     * BaseController constructor.
+     */
+    public function __construct(protected Request $request)
     {
-        // инифциализация общих моментов
     }
 }

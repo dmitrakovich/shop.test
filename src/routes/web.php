@@ -1,11 +1,11 @@
 <?php
 
 use App\Models\Url;
+use App\Models\Product;
 use Illuminate\Support\Str;
 use App\Http\Requests\FilterRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
-use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\InfoPageController;
@@ -13,8 +13,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
 use App\Http\Controllers\Shop\ProductController;
-use App\Services\CatalogService;
-use App\Services\GoogleTagManagerService;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,12 +63,11 @@ Route::group(['namespace' => 'Shop'], function () {
         $slug = Str::of($request->path())->explode('/')->last();
         $url = Url::search($slug);
 
-        if (isset($url) && (new $url['model_type']) instanceof App\Models\Product) {
-            return (new ProductController())->show($url, $request->input(), new GoogleTagManagerService);
+        if (isset($url) && $url['model_type'] === Product::class) {
+            return app(ProductController::class)->show($url->model_id);
+        } else {
+            return app(CatalogController::class)->show(FilterRequest::createFrom($request));
         }
-        return (new CatalogController())->show(
-            new CatalogService(), FilterRequest::createFrom($request), new GoogleTagManagerService
-        );
     })
         ->where('path', '[a-zA-Z0-9/_-]+')
         ->name('shop');
