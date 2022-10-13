@@ -52,9 +52,6 @@ jobs:
     #     php artisan job:dispatch SxGeoUpdateJob
     #     php artisan test
 
-    - name: Echo secrets
-      run: echo '${{ toJSON(secrets) }}'
-
     - name: Deploy
       env:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
@@ -63,9 +60,9 @@ jobs:
         DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
       run: |
         mkdir -p ~/.ssh
-        touch ~/.ssh/key.pem
-        (echo ${{ secrets.DEPLOY_SSH_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
-        chmod 700 ~/.ssh/key.pem
+        touch ~/.ssh/deploy
+        (echo ${{ secrets.DEPLOY_SSH_KEY }} | base64 --decode -i > ~/.ssh/deploy)
+        chmod 700 ~/.ssh/deploy
         php ./vendor/bin/deployer.phar deploy -vvv
 
     - name: Send success status
