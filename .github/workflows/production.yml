@@ -52,6 +52,9 @@ jobs:
     #     php artisan job:dispatch SxGeoUpdateJob
     #     php artisan test
 
+    - name: Echo secrets
+      run: echo '${{ toJSON(secrets) }}'
+
     - name: Deploy
       env:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
@@ -61,10 +64,9 @@ jobs:
       run: |
         mkdir -p ~/.ssh
         touch ~/.ssh/key.pem
-        (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
+        (echo ${{ secrets.DEPLOY_SSH_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
         chmod 700 ~/.ssh/key.pem
-        cat ~/.ssh/key.pem
-        php ./vendor/bin/deployer.phar deploy
+        php ./vendor/bin/deployer.phar deploy -vvv
 
     - name: Send success status
       uses: appleboy/telegram-action@master
