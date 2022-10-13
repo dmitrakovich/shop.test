@@ -39,7 +39,7 @@ host('production')
         '-o StrictHostKeyChecking=no',
         '-o UserKnownHostsFile=/dev/null',
     ])
-    ->setIdentityFile('~/.ssh/key.pem');
+    ->setIdentityFile('~/.ssh/deploy');
 
 task('deploy:upload', function () {
     upload('', '{{release_path}}');
