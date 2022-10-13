@@ -63,11 +63,7 @@ jobs:
         touch ~/.ssh/deploy
         (echo ${{ secrets.DEPLOY_SSH_KEY }} | base64 --decode -i > ~/.ssh/deploy)
         chmod 700 ~/.ssh/deploy
-        cat ~/.ssh/deploy
-        echo 12312
-        cat ~/.ssh/deploy
-        cat ~/.ssh/deploy
-        php ./vendor/bin/deployer.phar deploy -vvv
+        php ./vendor/bin/deployer.phar deploy
 
     - name: Send success status
       uses: appleboy/telegram-action@master
