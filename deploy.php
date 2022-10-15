@@ -50,7 +50,7 @@ task('deploy:upload', function () {
 task('deploy:writable', function () {
     within('{{release_path}}', function () {
         $dirs = join(' ', get('writable_dirs'));
-        run("chmod -R -f 0755 $dirs");
+        run("chmod -R 0755 $dirs");
     });
 });
 
