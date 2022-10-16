@@ -4,6 +4,9 @@
 sudo useradd -m -s /bin/bash www-root
 # create password
 sudo passwd www-root
+# add to www-data group & vice versa
+usermod -a -G www-data www-root
+usermod -a -G www-root www-data
 ```
 
 
@@ -43,6 +46,10 @@ In nginx.conf change user to `www-root` and add site config ([example](https://g
 
 
 ## Php setup
+Install php:
+```shell
+apt-get install php-common php-mysql php-cli php-fpm
+```
 In /etc/php/8.1/fpm/pool.d/www.conf change user to `www-root`
 ```properties
 user = www-root
