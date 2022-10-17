@@ -48,7 +48,7 @@ In nginx.conf change user to `www-root` and add site config ([example](https://g
 ## Php setup
 Install php:
 ```shell
-apt-get install php-common php-mysql php-cli php-fpm
+apt-get install php-common php-mysql php-mbstring php-xml php-zip php-gd php-cli php-fpm
 ```
 In /etc/php/8.1/fpm/pool.d/www.conf change user to `www-root`
 ```properties

@@ -163,7 +163,7 @@ class ProductSeeder extends Seeder
                 // 52 => 000000, // на свадьбу
                 // 53 => 000000, // на выпускной
                 // 54 => 000000, // вечерняя мода
-                // 55 => 1, // лодочки
+                55 => 1, // лодочки
                 68 => 4, // Челси
                 69 => 5, // Казаки
                 88 => 10, // Рептилия
@@ -287,7 +287,7 @@ class ProductSeeder extends Seeder
                 "{$this->oldTableName}.product_id as id",
                 'product_publish as publish',
                 'alias_ru-RU as slug',
-                'name_ru-RU as title',
+                'name_ru-RU as sku',
                 'product_buy_price as buy_price',
                 'product_price as price',
                 'product_old_price as old_price',
@@ -357,6 +357,7 @@ class ProductSeeder extends Seeder
             }
 
             $insertData['deleted_at'] = $insertData['publish'] ? null : self::$currentDateTime;
+            unset($insertData['publish']);
 
             $product = new Product($insertData);
             $product->save();
