@@ -30,6 +30,7 @@ class EventServiceProvider extends ServiceProvider
         Login::class => [
             SaveDevice::class,
             MergeFavorites::class,
+            SyncOrderHistory::class,
             // MergeCart::class,
         ],
         OrderCreated::class => [
