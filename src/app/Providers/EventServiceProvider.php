@@ -4,15 +4,16 @@ namespace App\Providers;
 
 use App\Events\OrderCreated;
 use App\Listeners\MergeCart;
-use App\Listeners\MergeFavorites;
 use App\Listeners\SaveDevice;
-use App\Listeners\SendOrderInformationNotification;
+use App\Listeners\MergeFavorites;
 use Illuminate\Auth\Events\Login;
+use App\Listeners\SyncOrderHistory;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
+use App\Listeners\SendOrderInformationNotification;
+use Illuminate\Notifications\Events\NotificationSent;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Notifications\Events\NotificationSent;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -24,11 +25,12 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+            // SyncOrderHistory::class,
         ],
         Login::class => [
             SaveDevice::class,
             MergeFavorites::class,
-            MergeCart::class,
+            // MergeCart::class,
         ],
         OrderCreated::class => [
             SendOrderInformationNotification::class,
