@@ -57,7 +57,8 @@ class Status extends Model
     {
         return match ($this->slug) {
             'st-new' => '- новинки!',
-            'st-sale' => 'на распродаже!'
+            'st-sale' => 'на распродаже!',
+            'promotion' => 'на акции',
         };
     }
 }
