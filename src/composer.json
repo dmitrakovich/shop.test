@@ -33,6 +33,7 @@
         "laravel/tinker": "^2.7",
         "laravie/serialize-queries": "^2.0",
         "sentry/sentry-laravel": "^2.12",
+        "spatie/laravel-backup": "^8.1",
         "spatie/laravel-googletagmanager": "^2.6",
         "spatie/laravel-medialibrary": "^10.3",
         "staudenmeir/eloquent-json-relations": "^1.6"
