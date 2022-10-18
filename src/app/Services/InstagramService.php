@@ -43,9 +43,18 @@ class InstagramService
     final const CACHE_POSTS_KEY = 'instagram_posts';
     final const CACHE_TITLE_KEY = 'instagram_title';
 
+    /**
+     * Media types
+     */
+    final const MEDIA_TYPE_PHOTO = 'CAROUSEL_ALBUM';
+    final const MEDIA_TYPE_VIDEO = 'VIDEO';
+
+    /**
+     * InstagramService constructor.
+     */
     public function __construct()
     {
-        $this->accessToken = $this->getAccessToken();;
+        $this->accessToken = $this->getAccessToken();
     }
 
     /**
@@ -101,6 +110,8 @@ class InstagramService
             return [];
         }
 
+        // dd($response->json()['data']);
+
         return $this->filterWrongData($response->json()['data']);
     }
 
@@ -109,6 +120,7 @@ class InstagramService
      */
     public function getCachedPosts(): array
     {
+        // return $this->getPosts();
         return Cache::remember(self::CACHE_POSTS_KEY, 3600, fn() => $this->getPosts());
     }
 
