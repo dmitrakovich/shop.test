@@ -383,6 +383,15 @@ button.scroll-top-btn {
     }
 }
 
+label.form-check-label span {
+    display: none;
+    text-decoration: none;
+}
+
+input.form-check-input:checked ~ label.form-check-label span {
+    display: block;
+}
+
 span.youtube-play-icon {
     position:absolute;
     top:50%;
