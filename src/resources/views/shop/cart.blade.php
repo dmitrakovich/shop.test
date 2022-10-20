@@ -86,7 +86,17 @@
                                     id="delivery-{{ $key }}"
                                     value="{{ $key }}" {{ $loop->first ? 'checked' : null }}
                                 />
-                                <label class="form-check-label" for="delivery-{{ $key }}">{{ $value }}</label>
+                                <label class="form-check-label" for="delivery-{{ $key }}">
+                                {{ $value }}
+                                @if ($value == 'Курьером с примеркой')
+                                    <br>
+                                    <span class="text-muted font-size-12">
+                                        БЕСПЛАТНО*
+                                        * в случае отказа от всех единиц, предоставленных на примерку, клиент оплачивает курьерскую доставку в размере 19 BYN
+                                        ** подробнее о <a href="/online-shopping/delivery" title="условия примерки">условиях примерки</a>
+                                    </span>
+                                @endif
+                                </label>
                             </div>
                         @endforeach
                     </div>
@@ -105,12 +115,9 @@
                                     @if ($value == 'Оформить рассрочку')
                                         <br>
                                         <span class="text-muted font-size-12">
-                                            (Рассрочка на 3 платежа
-                                            Первый взнос
-                                            <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() - Cart::getTotalPrice() * 0.6 }} руб.</span>
-                                            Оставшиеся 2 платежа по
-                                            <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() * 0.3 }} руб.</span>
-                                            в месяц)
+                                            Рассрочка на 3 платежа
+                                            Первый взнос <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() - Cart::getTotalPrice() * 0.6 }} руб.</span>
+                                            Оставшиеся 2 платежа по <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() * 0.3 }} руб.</span> в месяц
                                     </span>
                                     @endif
                                 </label>
