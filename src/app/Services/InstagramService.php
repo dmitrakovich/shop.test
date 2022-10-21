@@ -43,9 +43,18 @@ class InstagramService
     final const CACHE_POSTS_KEY = 'instagram_posts';
     final const CACHE_TITLE_KEY = 'instagram_title';
 
+    /**
+     * Media types
+     */
+    final const MEDIA_TYPE_IMAGE = ['IMAGE', 'CAROUSEL_ALBUM'];
+    final const MEDIA_TYPE_VIDEO = ['VIDEO', 'REELS'];
+
+    /**
+     * InstagramService constructor.
+     */
     public function __construct()
     {
-        $this->accessToken = $this->getAccessToken();;
+        $this->accessToken = $this->getAccessToken();
     }
 
     /**
@@ -149,10 +158,12 @@ class InstagramService
     }
 
     /**
-     * Filter data without required fields
+     * Filter data without required fields & filter video posts
      */
     public function filterWrongData(array $data): array
     {
-        return array_filter($data, fn (array $post) => isset($post['caption']));
+        return array_filter($data, fn (array $post) =>
+            isset($post['caption']) && in_array($post['media_type'], self::MEDIA_TYPE_IMAGE)
+        );
     }
 }
