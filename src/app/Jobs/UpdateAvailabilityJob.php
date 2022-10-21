@@ -349,7 +349,7 @@ class UpdateAvailabilityJob extends AbstractJob
             }
         }
         if ($deleteCount > 50) {
-            $this->writeLog("Ошибка! Больше 50 снять с публикации", 'error');
+            $this->writeLog("Ошибка! Больше 50 снять с публикации ($deleteCount)", 'error');
         } elseif ($deleteCount > 0) {
             Product::whereIn('id', $deleteListId)->delete();
             $this->writeLog("Снято с публикации $deleteCount");

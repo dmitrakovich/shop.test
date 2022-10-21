@@ -77,3 +77,9 @@ GRANT ALL PRIVILEGES ON dbname.* TO 'username'@'localhost';
 
 
 ## Run deploy
+
+
+## Config crontab
+```
+* * * * * cd /path-to-your-deploy-folder/current && php artisan schedule:run >> /dev/null 2>&1
+```
