@@ -46,8 +46,8 @@ class InstagramService
     /**
      * Media types
      */
-    final const MEDIA_TYPE_PHOTO = 'CAROUSEL_ALBUM';
-    final const MEDIA_TYPE_VIDEO = 'VIDEO';
+    final const MEDIA_TYPE_IMAGE = ['IMAGE', 'CAROUSEL_ALBUM'];
+    final const MEDIA_TYPE_VIDEO = ['VIDEO', 'REELS'];
 
     /**
      * InstagramService constructor.
@@ -110,8 +110,6 @@ class InstagramService
             return [];
         }
 
-        // dd($response->json()['data']);
-
         return $this->filterWrongData($response->json()['data']);
     }
 
@@ -120,7 +118,6 @@ class InstagramService
      */
     public function getCachedPosts(): array
     {
-        // return $this->getPosts();
         return Cache::remember(self::CACHE_POSTS_KEY, 3600, fn() => $this->getPosts());
     }
 
@@ -161,10 +158,12 @@ class InstagramService
     }
 
     /**
-     * Filter data without required fields
+     * Filter data without required fields & filter video posts
      */
     public function filterWrongData(array $data): array
     {
-        return array_filter($data, fn (array $post) => isset($post['caption']));
+        return array_filter($data, fn (array $post) =>
+            isset($post['caption']) && in_array($post['media_type'], self::MEDIA_TYPE_IMAGE)
+        );
     }
 }
