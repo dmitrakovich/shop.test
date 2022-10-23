@@ -27,6 +27,10 @@ use App\Http\Controllers\Shop\ProductController;
 
 require __DIR__ . '/redirect.php';
 
+Route::get('/test_500', function() {
+    throw new Exception('Nooooooooooooooo!');
+});
+
 Route::get('/', [IndexController::class, 'index'])->name('index-page');
 
 Route::get('terms', [InfoPageController::class, 'terms'])->name('info.terms');
