@@ -30,4 +30,15 @@ enum OnlinePaymentMethodEnum: int
         }
         return $result;
     }
+
+    /**
+     * Получить enum по value
+     * @param ?int $value - значение
+     * @return OnlinePaymentMethodEnum
+     */
+    public static function enumByValue(?int $value): ?self
+    {
+        $enum = self::tryFrom($value);
+        return $enum ? $enum : null;
+    }
 }
