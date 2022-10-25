@@ -7,6 +7,7 @@ use App\Listeners\MergeCart;
 use App\Listeners\SaveDevice;
 use App\Listeners\MergeFavorites;
 use Illuminate\Auth\Events\Login;
+use App\Listeners\LogNotification;
 use App\Listeners\SyncOrderHistory;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
