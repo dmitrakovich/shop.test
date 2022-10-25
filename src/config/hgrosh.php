@@ -3,11 +3,11 @@
 return [
     'token_cache_key'   => 'hgrosh_api_token',
     'token_url'         => 'https://iii.by/connect/token',
-    'client_id'         => 291311363,
-    'client_secret'     => '2607c51f-d68b-4f92-b092-8cecb9e5ec33',
+    'client_id'         => env('HGROSH_CLIENT_ID'),
+    'client_secret'     => env('HGROSH_SECRET_KEY'),
     'serviceproviderid' => 18464,
     'serviceid'         => 1,
     'retailoutletcode'  => 1,
 
-    'api_url'           => 'https://api-epos.hgrosh.by/public/v1',
+    'api_url'           => env('HGROSH_API_URL', 'https://api-epos.hgrosh.by/public/v1'),
 ];
