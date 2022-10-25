@@ -383,6 +383,17 @@ button.scroll-top-btn {
     }
 }
 
+/* скрывающиеся подсказки в корзине*/
+
+label.form-check-label span {
+    display: none;
+}
+
+input.form-check-input:checked ~ label.form-check-label span {
+    display: block;
+}
+
+
 span.youtube-play-icon {
     position:absolute;
     top:50%;
