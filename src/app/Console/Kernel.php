@@ -42,6 +42,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('feed:generate')->everySixHours();
 
         $schedule->command('backup:run --only-db')->dailyAt('01:00');
+        $schedule->command('backup:run --only-files')->cron('0 2 */3 * *'); // At 02:00 on every 3rd day-of-month
+        $schedule->command('backup:media')->weeklyOn(Schedule::MONDAY, '03:00');
     }
 
     /**
