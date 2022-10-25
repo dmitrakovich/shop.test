@@ -40,6 +40,8 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SxGeoUpdateJob)->dailyAt('03:07');
 
         $schedule->command('feed:generate')->everySixHours();
+
+        $schedule->command('backup:run --only-db')->dailyAt('01:00');
     }
 
     /**
