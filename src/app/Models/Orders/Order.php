@@ -4,11 +4,12 @@ namespace App\Models\Orders;
 
 use App\Models\Device;
 use App\Models\Country;
+use App\Models\Enum\OrderMethod;
+use App\Models\Payments\Installment;
+use App\Models\Payments\OnlinePayment;
 use Payments\PaymentMethod;
 use Deliveries\DeliveryMethod;
 use Illuminate\Support\Carbon;
-use App\Models\Enum\OrderMethod;
-use App\Models\Payments\Installment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Encore\Admin\Auth\Database\Administrator;
@@ -177,6 +178,16 @@ class Order extends Model
     public function payment(): Relations\BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);
+    }
+
+    /**
+     * Order online payments
+     *
+     * @return Relations\HasMany
+     */
+    public function onlinePayments(): Relations\HasMany
+    {
+        return $this->hasMany(OnlinePayment::class);
     }
 
     /**

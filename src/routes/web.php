@@ -12,6 +12,7 @@ use App\Http\Controllers\InfoPageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
+use App\Http\Controllers\Shop\PaymentController;
 use App\Http\Controllers\Shop\ProductController;
 
 /*
@@ -27,7 +28,12 @@ use App\Http\Controllers\Shop\ProductController;
 
 require __DIR__ . '/redirect.php';
 
+Route::get('/test_500', function() {
+    throw new Exception('Nooooooooooooooo!');
+});
+
 Route::get('/', [IndexController::class, 'index'])->name('index-page');
+Route::get('pay/erip/{payment_id?}', [PaymentController::class, 'erip'])->name('pay.erip');
 
 Route::get('terms', [InfoPageController::class, 'terms'])->name('info.terms');
 Route::get('policy', [InfoPageController::class, 'policy'])->name('info.policy');
