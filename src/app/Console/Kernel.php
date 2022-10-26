@@ -29,13 +29,13 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        // $schedule->job(new UpdateProductsRatingJob)
-        //     ->withoutOverlapping()
-        //     ->cron('15 5,11,17,23 * * *');
+        $schedule->job(new UpdateProductsRatingJob)
+            ->withoutOverlapping()
+            ->cron('15 5,11,17,23 * * *');
 
-        // $schedule->job(new UpdateAvailabilityJob)
-        //     ->withoutOverlapping()
-        //     ->everyThirtyMinutes();
+        $schedule->job(new UpdateAvailabilityJob)
+            ->withoutOverlapping()
+            ->everyThirtyMinutes();
 
         $schedule->job(new SxGeoUpdateJob)->dailyAt('03:07');
 

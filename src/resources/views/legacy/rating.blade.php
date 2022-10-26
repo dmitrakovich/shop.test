@@ -1,10 +1,11 @@
 <?php
 
+use App\Models\Config;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\UpdateProductsRatingJob;
 
-$ratingConfigFile = database_path('files/rating.conf.php');
-$ratingConfig = require_once $ratingConfigFile;
+$ratingConfigModel = Config::findOrFail('rating');
+$ratingConfig = $ratingConfigModel->config;
 
 // Предустановки
 $cur_season = $ratingConfig['cur_season']; // текущие сезоны
@@ -17,7 +18,7 @@ $service_message = "";
 switch (request()->input(['act'])) {
 
 	case "start":
-        UpdateProductsRatingJob::dispatchNow();
+        UpdateProductsRatingJob::dispatchSync();
 		$service_message = "<p class='adminka_message_success'>Рейтинг обновлен успешно в $ratingConfig[last_update]</p>";
 		break;
 
@@ -44,7 +45,7 @@ switch (request()->input(['act'])) {
 
 // Запись в config
 if (request()->input(['act'])) {
-	file_put_contents($ratingConfigFile, "<?php\nreturn " . var_export($ratingConfig, true) . ';');
+    $ratingConfigModel->update(['config' => $ratingConfig]);
 }
 ?>
 
