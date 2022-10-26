@@ -19,7 +19,6 @@ set('shared_files', ['.env']);
 set('shared_dirs', [
     'storage',
     'public/uploads',
-    'database/files',
     'database/sxgeo',
 ]);
 set('writable_dirs', [
