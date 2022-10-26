@@ -45,8 +45,6 @@ fi
 if [ "$FIRST_INSTALL" -eq 1 ]; then
     ./artisan job:dispatch SxGeoUpdateJob
     ./artisan storage:link
-    cp src/database/stubs/availability.conf.php src/database/files/availability.conf.php
-    cp src/database/stubs/rating.conf.php src/database/files/rating.conf.php
 fi
 
 # ./artisan optimize
