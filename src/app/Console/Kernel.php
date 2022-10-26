@@ -29,21 +29,16 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        $schedule->job(new UpdateProductsRatingJob)
-            ->withoutOverlapping()
-            ->cron('15 5,11,17,23 * * *');
-
-        $schedule->job(new UpdateAvailabilityJob)
-            ->withoutOverlapping()
-            ->everyThirtyMinutes();
-
+        $schedule->job(new UpdateProductsRatingJob)->withoutOverlapping()->cron('15 5,11,17,23 * * *');
+        $schedule->job(new UpdateAvailabilityJob)->withoutOverlapping()->everyThirtyMinutes();
         $schedule->job(new SxGeoUpdateJob)->dailyAt('03:07');
 
         $schedule->command('feed:generate')->everySixHours();
 
-        $schedule->command('backup:run --only-db')->dailyAt('01:00');
-        $schedule->command('backup:run --only-files')->cron('0 2 */3 * *'); // At 02:00 on every 3rd day-of-month
+        $schedule->command('backup:run')->dailyAt('01:00');
         $schedule->command('backup:media')->weeklyOn(Schedule::MONDAY, '03:00');
+        $schedule->command('backup:clean')->dailyAt('06:00');
+        $schedule->command('backup:monitor')->dailyAt('06:30');
     }
 
     /**
