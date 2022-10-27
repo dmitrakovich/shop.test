@@ -169,7 +169,7 @@ return [
 
         'mail' => [
             // 'to' => env('MAIL_FROM_ADDRESS'),
-            'to' => env('dmitrakovich.andrey@yandex.by'), // !!!
+            'to' => 'dmitrakovich.andrey@yandex.by', // !!!
 
             'from' => [
                 'address' => env('MAIL_FROM_ADDRESS'),
