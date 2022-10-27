@@ -188,8 +188,7 @@
             dsn: 'https://e75029f28a974691925616a8d3c3a4a0@o923846.ingest.sentry.io/5871606'
         });
         Sentry.showReportDialog({
-            eventId: '{{ app('
-            sentry ')->getLastEventId() }}',
+            eventId: '{{ app("sentry")->getLastEventId() }}',
             title: "Похоже, у нас проблемы.",
             subtitle: "Наша команда получила уведомление.",
             subtitle2: "Если вы хотите помочь, расскажите нам, что произошло.",
