@@ -2,15 +2,16 @@
 
 namespace App\Jobs;
 
-use App\Models\Product;
 use App\Models\Size;
-use App\Services\Api\YandexApiService;
+use App\Models\Config;
+use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Services\Api\YandexApiService;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Log;
 
 class UpdateAvailabilityJob extends AbstractJob
 {
@@ -425,23 +426,11 @@ class UpdateAvailabilityJob extends AbstractJob
     }
 
     /**
-     * Get availability config file name
-     */
-    protected function getConfigFileName(): string
-    {
-        return database_path('files/availability.conf.php');
-    }
-
-    /**
      * Get availability config
      */
     protected function getConfig(): array
     {
-        $availabilityConfigFile = $this->getConfigFileName();
-        if (!file_exists($availabilityConfigFile)) {
-            $this->fail(new \Exception('Не найден файл конфигурации'));
-        }
-        return require $availabilityConfigFile;
+        return Config::findOrFail('availability')->config;
     }
 
     /**
@@ -449,7 +438,7 @@ class UpdateAvailabilityJob extends AbstractJob
      */
     protected function saveConfig(array $config): void
     {
-        file_put_contents($this->getConfigFileName(), "<?php\nreturn " . var_export($config, true) . ';');
+        Config::find('availability')->update(['config' => $config]);
     }
 
     /**

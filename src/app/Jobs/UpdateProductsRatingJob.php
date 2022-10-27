@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Config;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\DB;
@@ -34,8 +35,8 @@ class UpdateProductsRatingJob extends AbstractJob
     public function handle()
     {
         $this->debug('Старт');
-        $ratingConfigFile = database_path('files/rating.conf.php');
-        $ratingConfig = require $ratingConfigFile;
+        $ratingConfigModel = Config::findOrFail('rating');
+        $ratingConfig = $ratingConfigModel->config;
         $counterYandexId = '86365748'; // id счётчика Яндекс, поменял на новый. Старый был '31699806'
 
         // Предустановки
@@ -321,8 +322,7 @@ class UpdateProductsRatingJob extends AbstractJob
         unset($rating);
 
         if (!isset($_POST['act'])) {
-            $strToFile = "<?php\nreturn " . var_export($ratingConfig, true) . ';';
-            file_put_contents(database_path('files/rating.conf.php'), $strToFile);
+            $ratingConfigModel->update(['config' => $ratingConfig]);
         }
 
         $this->complete('Успешно выполнено');

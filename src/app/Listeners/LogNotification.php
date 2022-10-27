@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace App\Listeners;
 
 use App\Models\Orders\Order;
 use Illuminate\Queue\InteractsWithQueue;

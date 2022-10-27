@@ -103,8 +103,9 @@
                         </button>
 
                         <div class="dropdown-menu p-3">
-                            <p class="font-size-15">
-                                <b>РАССРОЧКА НА 2 ПЛАТЕЖА</b>
+                            @if ($product->getPrice() >= 150)
+							<p class="font-size-15">
+                                <b>РАССРОЧКА НА 3 ПЛАТЕЖА</b>
                             </p>
                             <p>
                                 Первый взнос<br>
@@ -114,6 +115,19 @@
                                     {{ $product->getPrice() * 0.3 }} руб. в месяц
                                 </b>
                             </p>
+							@else
+							<p class="font-size-15">
+                                <b>РАССРОЧКА НА 2 ПЛАТЕЖА</b>
+                            </p>
+                            <p>
+                                Первый взнос<br>
+                                <b>{{ $product->getPrice() - $product->getPrice() * 0.5 }} руб.</b><br>
+                                Оставшийся платеж<br>
+                                <b class="border-bottom border-danger font-size-14">
+                                    {{ $product->getPrice() * 0.5 }} руб.
+                                </b>
+                            </p>
+							@endif
                             &#9989; Без увеличения цены <br>
                             &#9989; Без справки о доходах
                         </div>

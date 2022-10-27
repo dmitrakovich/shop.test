@@ -1,15 +1,16 @@
 <?php
 
-use App\Models\Brand;
 use App\Models\Size;
+use App\Models\Brand;
+use App\Models\Config;
 use App\Models\Product;
 use App\Jobs\UpdateAvailabilityJob;
+use Illuminate\Support\Facades\Log;
 
-$availabilityConfigFile = database_path('files/availability.conf.php');
-$availabilityConfig = require $availabilityConfigFile;
+$availabilityConfigModel = Config::findOrFail('availability');
+$availabilityConfig = $availabilityConfigModel->config;
 
 // Предустановки
-$thtime = date("Y-m-d-H:i:s");
 $filedate = explode(",",$availabilityConfig['file']);
 $service_message = "";
 
@@ -17,7 +18,7 @@ $service_message = "";
 if (isset($_POST['act'])) {
 	switch ($_POST['act']) {
         case "start":
-            $service_message = UpdateAvailabilityJob::dispatchNow(true);
+            $service_message = UpdateAvailabilityJob::dispatchSync(true);
 			break;
 
 		case "publish":
@@ -115,10 +116,12 @@ if (isset($_POST['act'])) {
     if (($_POST['act']=="save") || ($_POST['act']!="start" && isset($act_count) && $act_count>0)) {
         $log_type = ((isset($_POST['act']))?"РУЧНОЕ":"АВТО");
         $log_mess = str_replace(array("<p class='adminka_message_success'>","</p>"),"",$service_message);
-        file_put_contents(database_path('files/availability.log.txt'), "$thtime [$log_type]: $log_mess".PHP_EOL,FILE_APPEND);
+        Log::channel('update_availability')->log('info', $log_mess, ['type' => $log_type]);
     }
     // Запись в config
-    file_put_contents($availabilityConfigFile, "<?php\nreturn " . var_export($availabilityConfig, true) . ';');
+    $availabilityConfigModel->update([
+        'config' => $availabilityConfig
+    ]);
 } else {
     $service_message = "<p class='adminka_message_info'>Файл $filedate[0]. Актуальное наличие на $availabilityConfig[last_update]</p>";
 }
@@ -226,10 +229,10 @@ if (isset($_POST['act'])) {
             </div>
         </form>
 
-		{{-- <div class="adminka_field" style="height: 20px;">
+		<div class="adminka_field" style="height: 20px;">
 			<p>История изменений<br>
-           <a href="https://modny.by/administrator/components/com_jshopping/views/panel/tmpl/availability.log.txt" target="_blank">Открыть лог</a></p>
-		</div> --}}
+           <a href="https://barocco.by/admin/logs/update_availability.log" target="_blank">Открыть лог</a></p>
+		</div>
 	</div>
 
 	<div class="adminka_block">

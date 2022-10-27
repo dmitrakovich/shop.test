@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\OrderServiceInterface;
+use App\Models\Media\LocalUrlGenerator;
 use Illuminate\Support\Carbon;
 use App\Services\OrderService;
 use Illuminate\Pagination\Paginator;
@@ -36,5 +37,9 @@ class AppServiceProvider extends ServiceProvider
 
         setlocale(LC_TIME, 'ru_RU.UTF-8');
         Carbon::setLocale(config('app.locale'));
+
+        if ($this->app->environment('local')) {
+            $this->app['config']['filesystems.disks.public.url'] = 'https://barocco.by/media';
+        }
     }
 }
