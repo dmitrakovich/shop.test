@@ -169,11 +169,9 @@ class SliderService
             $attrs   = ['sizes', 'colors', 'tags'];
             $product = Product::where('id', $productId)->with($attrs)->first();
             do {
-                $query = Product::where('id', '!=', $productId);
-                if(isset($product->category_id)) {
-                    $query->where('category_id', $product->category_id);
-                }
-                $query->with(['media', 'category', 'brand']);
+                $query = Product::where('id', '!=', $productId)
+                    ->when($product->category_id, fn ($query, $id) => $query->where('category_id', $id))
+                    ->with(['media', 'category', 'brand']);
                 foreach ($attrs as $attr) {
                     $values = (!empty($product->{$attr}) && $product->{$attr} instanceof Collection) ? array_column($product->{$attr}->toArray(), 'id') : null;
                     if ($values) {
