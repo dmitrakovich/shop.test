@@ -109,11 +109,17 @@ footer {
 }
 
 .catalog-page, .favorites-page {
+    padding-left: 5px;
+    padding-right: 5px;
+
     @include media-breakpoint-up(lg) {
         margin-bottom: 100px;
     }
 
     .product-item {
+        padding-left: 5px;
+        padding-right: 5px;
+
         @include media-breakpoint-down(sm) {
             margin-bottom: 100px;
         }
