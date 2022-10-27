@@ -151,6 +151,9 @@
                     @endif
                 </div>
 
+                @if($product->trashed())
+                    <h4 class="h4 mb-5">Нет в наличии</h4>
+                @else
                 <div class="row mb-4">
                     <div class="col-12 product-size">
                         <div class="row justify-content-between">
@@ -191,6 +194,7 @@
                         </button>
                     </div>
                 </div>
+                @endif
 
                 <div class="col-12 text-center text-muted mt-5">
                     <p>
@@ -210,6 +214,14 @@
 
         </div>
     </div>
+
+    @if($product->trashed() && !empty($similarProducts) && count($similarProducts))
+    <div class="row">
+        <div class="col-md-12 mt-3 mb-5">
+            @include('partials.index.simple-slider', ['simpleSlider' => $similarProducts])
+        </div>
+    </div>
+    @endif
 
     <div class="row my-5 product-description">
         <div class="col-12 font-size-15 mb-1">
@@ -278,7 +290,7 @@
 
         </div>
     </div>
-    @if(!empty($similarProducts) && count($similarProducts))
+    @if(!$product->trashed() && !empty($similarProducts) && count($similarProducts))
         <div class="col-md-12 mt-3 mb-5">
             @include('partials.index.simple-slider', ['simpleSlider' => $similarProducts])
         </div>

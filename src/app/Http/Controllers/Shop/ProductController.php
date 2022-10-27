@@ -28,8 +28,7 @@ class ProductController extends BaseController
      */
     public function show(int $id): View
     {
-        $product = Product::with(['tags', 'category'])->findOrFail($id);
-
+        $product = Product::with(['tags', 'category'])->withTrashed()->findOrFail($id);
         $this->gtmService->setViewForProduct($product);
         $this->productService->addToRecent($product->id);
 
