@@ -23,7 +23,7 @@ class Api
         $class_name       = $action_namespace . ucfirst($name);
         if (class_exists($class_name)) {
             if (!isset($this->action_container[$class_name])) {
-                $this->action_container[$class_name] = new $class_name($this->http_client);
+                $this->action_container[$class_name] = new $class_name($this->http_client, $arguments);
             }
             return $this->action_container[$class_name];
         } else {
