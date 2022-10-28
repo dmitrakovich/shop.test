@@ -33,7 +33,7 @@ class CreateOnlinePayment extends Action
     public function form()
     {
         $this->text('order_id',         'Номер заказа')->default($this->orderId ?? null)->readonly();
-        $this->select('method_enum_id', 'Номер заказа')->options(OnlinePaymentMethodEnum::list())->default(OnlinePaymentMethodEnum::ERIP->value);
+        $this->select('method_enum_id', 'Способ оплаты')->options(OnlinePaymentMethodEnum::list())->default(OnlinePaymentMethodEnum::ERIP->value);
         $this->text('amount',           'Сумма платежа')->rules('required');
         $this->textarea('comment',      'Комментарий');
     }

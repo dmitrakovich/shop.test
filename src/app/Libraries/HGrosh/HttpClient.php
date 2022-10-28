@@ -69,9 +69,9 @@ class HttpClient
      * @return ApiResponse
      * @throws RequestException
      */
-    public function post(string $url, array $params = []): ApiResponse
+    public function post(string $url, array $params = [], $getParams = []): ApiResponse
     {
-        return $this->request('POST', $url, $params);
+        return $this->request('POST', $url, $params, $getParams);
     }
 
     /**
@@ -113,7 +113,7 @@ class HttpClient
      * @return ApiResponse
      * @throws RequestException
      */
-    protected function request(string $method, string $url, array $params = []): ApiResponse
+    protected function request(string $method, string $url, array $params = [], $getParams = []): ApiResponse
     {
         $url = $this->config['api_url'] . ($url ? ('/' . trim($url, '/')) : '');
         try {
@@ -122,9 +122,11 @@ class HttpClient
                 'Authorization' => 'Bearer ' . $this->getToken()
             ];
             if ($method === 'GET') {
-                $url .= '?' . http_build_query($params);
-                $body = '';
+                $params = array_merge($params, $getParams);
+                $url   .= empty($params) ? '' : ('?' . http_build_query($params));
+                $body   = '';
             } else {
+                $url   .= empty($getParams) ? '' : ('?' . http_build_query($getParams));
                 $body     = (string)json_encode($params);
             }
             $uri      = new Uri($url);

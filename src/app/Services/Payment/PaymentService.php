@@ -21,7 +21,7 @@ class PaymentService
      */
     public function getOnlinePaymentByPaymentId(string $payment_id, OnlinePaymentMethodEnum $method_enum): ?OnlinePayment
     {
-        return OnlinePayment::where('payment_id', $payment_id)->where('method_enum_id', $method_enum)->with('order')->first();
+        return OnlinePayment::where('payment_url', $payment_id)->where('method_enum_id', $method_enum)->with('order')->first();
     }
 
     /**
@@ -65,7 +65,9 @@ class PaymentService
                 $postData['billingInfo']['address']['line1']        = $order->user_addr;
                 $postData['shippingInfo']['amount']['value']        = $data['amount'];
 
-                $payment = ApiHGroshFacade::invoicingCreateInvoice()->request($postData);
+                $payment = ApiHGroshFacade::invoicingCreateInvoice()->addGetParam([
+                    'canPayAtOnce' => 'true'
+                ])->request($postData);
                 if ($payment->isOk()) {
                     $response = $payment->getBodyFormat();
                     $onlinePayment = OnlinePayment::create([
@@ -76,7 +78,7 @@ class PaymentService
                         'admin_user_id'  => Admin::user()->id ?? null,
                         'amount'         => $response[0]['totalAmount'] ?? $data['amount'] ?? null,
                         'expires_at'     => date('Y-m-d H:i:s', strtotime('+3 day')),
-                        'payment_id'     => $payment_id,
+                        'payment_id'     => $response[0]['id'],
                         'payment_url'    => $payment_id,
                         'email'          => $response[0]['billingInfo']['email'] ?? null,
                         'phone'          => $response[0]['billingInfo']['phone']['fullNumber'] ?? null,
