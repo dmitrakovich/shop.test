@@ -170,7 +170,7 @@ class SliderService
             $product = Product::where('id', $productId)->with($attrs)->first();
             do {
                 $query = Product::where('id', '!=', $productId)
-                    ->when($product->category_id, fn ($query, $id) => $query->where('category_id', $id))
+                    // ->when($product->category_id, fn ($query, $id) => $query->where('category_id', $id))
                     ->with(['media', 'category', 'brand']);
                 foreach ($attrs as $attr) {
                     $values = (!empty($product->{$attr}) && $product->{$attr} instanceof Collection) ? array_column($product->{$attr}->toArray(), 'id') : null;
