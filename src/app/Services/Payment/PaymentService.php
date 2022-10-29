@@ -87,8 +87,9 @@ class PaymentService
                         'fio'            => $response[0]['billingInfo']['contact']['fullName'] ?? null,
                         'comment'        => $data['comment'] ?? null,
                     ]);
-                    if(isset($data['send_sms']) && $data['send_sms'] == 1) {
-                        $smsResponse = SmsTraffic::send($order->phone, 'Вас выставлен счет № ' . $payment_num . ' - подробнее по ссылке ' . route('pay.erip', $payment_num));
+                    if (isset($data['send_sms']) && $data['send_sms'] == 1) {
+                        $smsText     = ($order->first_name ? ($order->first_name . ', ') : '') . 'Вам выставлен счет № ' . $payment_num . ' - подробнее по ссылке ' . route('pay.erip', $payment_num, true);
+                        $smsResponse = SmsTraffic::send($order->phone, $smsText);
                     }
                 }
                 break;
