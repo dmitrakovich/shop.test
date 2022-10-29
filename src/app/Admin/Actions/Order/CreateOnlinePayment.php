@@ -36,6 +36,7 @@ class CreateOnlinePayment extends Action
         $this->select('method_enum_id', 'Способ оплаты')->options(OnlinePaymentMethodEnum::list())->default(OnlinePaymentMethodEnum::ERIP->value);
         $this->text('amount',           'Сумма платежа')->rules('required');
         $this->textarea('comment',      'Комментарий');
+        $this->radio('send_sms',        'Отправлять SMS оповещение')->options([1 => 'Да', 0 => 'Нет'])->default(1);
     }
 
     public function html()

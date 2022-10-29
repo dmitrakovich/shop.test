@@ -8,6 +8,7 @@ use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
 use Encore\Admin\Facades\Admin;
 
+use Illuminate\Notifications\Facades\SmsTraffic;
 use App\Libraries\HGrosh\Facades\ApiHGroshFacade;
 
 class PaymentService
@@ -19,9 +20,9 @@ class PaymentService
      * @param OnlinePaymentMethodEnum $method_enum
      * @return OnlinePayment
      */
-    public function getOnlinePaymentByPaymentId(string $payment_id, OnlinePaymentMethodEnum $method_enum): ?OnlinePayment
+    public function getOnlinePaymentByPaymentUrl(string $payment_url, OnlinePaymentMethodEnum $method_enum): ?OnlinePayment
     {
-        return OnlinePayment::where('payment_url', $payment_id)->where('method_enum_id', $method_enum)->with('order')->first();
+        return OnlinePayment::where('payment_url', $payment_url)->where('method_enum_id', $method_enum)->with('order')->first();
     }
 
     /**
@@ -36,11 +37,11 @@ class PaymentService
 
         switch (OnlinePaymentMethodEnum::tryFrom($data['method_enum_id'])) {
             case OnlinePaymentMethodEnum::ERIP:
-                $config     = config('hgrosh');
-                $postData   = [];
-                $payment_id = $order->id . '-' . (++$paymentCount);
+                $config      = config('hgrosh');
+                $postData    = [];
+                $payment_num = $order->id . '-' . (++$paymentCount);
 
-                $postData['number']                               = $payment_id;
+                $postData['number']                               = $payment_num;
                 $postData['currency']                             = 933;
                 $postData['merchantInfo']['serviceId']            = $config['serviceid'];
                 $postData['merchantInfo']['retailOutlet']['code'] = $config['retailoutletcode'];
@@ -79,12 +80,16 @@ class PaymentService
                         'amount'         => $response[0]['totalAmount'] ?? $data['amount'] ?? null,
                         'expires_at'     => date('Y-m-d H:i:s', strtotime('+3 day')),
                         'payment_id'     => $response[0]['id'],
-                        'payment_url'    => $payment_id,
+                        'payment_num'    => $payment_num,
+                        'payment_url'    => $payment_num,
                         'email'          => $response[0]['billingInfo']['email'] ?? null,
                         'phone'          => $response[0]['billingInfo']['phone']['fullNumber'] ?? null,
                         'fio'            => $response[0]['billingInfo']['contact']['fullName'] ?? null,
                         'comment'        => $data['comment'] ?? null,
                     ]);
+                    if(isset($data['send_sms']) && $data['send_sms'] == 1) {
+                        $smsResponse = SmsTraffic::send($order->phone, 'Вас выставлен счет № ' . $payment_num . ' - подробнее по ссылке ' . route('pay.erip', $payment_num));
+                    }
                 }
                 break;
         }

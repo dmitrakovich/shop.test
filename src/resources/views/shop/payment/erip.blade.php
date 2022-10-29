@@ -3,8 +3,8 @@
 
 @section('content')
 <div class="my-5 col-12 text-center">
-    <h1 class="text-danger h3">Счёт № {{ $online_payment->payment_id }}</h1>
-    <p class="text-muted">к заказу № 20042 от {{ $online_payment->order->created_at->format('d.m.Y') }}</p>
+    <h1 class="text-danger h3">Счёт № {{ $online_payment->payment_num }}</h1>
+    <p class="text-muted">к заказу № {{ $online_payment->order_id }} от {{ $online_payment->order->created_at->format('d.m.Y') }}</p>
     <p class="h4">Сумма {{ $online_payment->amount }} BYN</p>
 </div>
 <div class="my-3 col-12">
