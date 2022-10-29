@@ -9,6 +9,7 @@ use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePaymentStatus;
 
 use Encore\Admin\Facades\Admin;
+use Encore\Admin\Auth\Database\Administrator;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Model, Relations};
@@ -50,6 +51,13 @@ class OnlinePayment extends Model
         return $this->belongsTo(Order::class);
     }
 
+    /**
+     * Get the order that owns the payment.
+     */
+    public function admin(): Relations\BelongsTo
+    {
+        return $this->belongsTo(Administrator::class, 'admin_user_id');
+    }
 
     /**
      * Get online paymeny link.
@@ -61,7 +69,7 @@ class OnlinePayment extends Model
         $enum = OnlinePaymentMethodEnum::enumByValue($this->method_enum_id);
         if ($enum) {
             return match ($enum) {
-                OnlinePaymentMethodEnum::ERIP => route('pay.erip', $this->payment_id),
+                OnlinePaymentMethodEnum::ERIP => route('pay.erip', $this->payment_url),
             };
         }
         return null;

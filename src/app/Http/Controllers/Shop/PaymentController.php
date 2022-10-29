@@ -12,10 +12,10 @@ class PaymentController extends BaseController
      * Display the specified product.
      */
     public function erip(
-        string $paymentId,
+        string $paymentUrl,
         PaymentService $paymentService
     ): View {
-        $online_payment = $paymentService->getOnlinePaymentByPaymentId($paymentId, OnlinePaymentMethodEnum::ERIP);
+        $online_payment = $paymentService->getOnlinePaymentByPaymentUrl($paymentUrl, OnlinePaymentMethodEnum::ERIP);
         if(!$online_payment) {
             abort(404);
         }

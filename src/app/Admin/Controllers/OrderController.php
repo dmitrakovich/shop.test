@@ -285,12 +285,14 @@ class OrderController extends AdminController
     private function onlinePaymentGrid($orderId)
     {
         $grid = new Grid(new OnlinePayment());
-        $grid->model()->where('order_id', $orderId);
+        $grid->model()->where('order_id', $orderId)->orderBy('id', 'desc');
 
-        $grid->column('amount',     'Сумма платежа');
         $grid->column('created_at', 'Дата/время создания')->display(function($date) {
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
         });
+        $grid->column('admin.name',  'Менеджер');
+        $grid->column('amount',     'Сумма платежа');
+
         $grid->column('expires_at', 'Срок действия платежа')->display(function($date) {
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
         });
