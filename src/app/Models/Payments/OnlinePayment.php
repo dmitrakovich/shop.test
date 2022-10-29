@@ -69,7 +69,7 @@ class OnlinePayment extends Model
         $enum = OnlinePaymentMethodEnum::enumByValue($this->method_enum_id);
         if ($enum) {
             return match ($enum) {
-                OnlinePaymentMethodEnum::ERIP => route('pay.erip', $this->payment_url),
+                OnlinePaymentMethodEnum::ERIP => route('pay.erip', $this->payment_url, true),
             };
         }
         return null;
