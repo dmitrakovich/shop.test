@@ -10,10 +10,13 @@
 <div class="my-3 col-12">
     <h2 class="h3 mb-3 text-center font-weight-normal">Как оплатить?</h3>
         <div class="row">
+            @if($online_payment->qr_code)
             <div class="col-12 col-md-6 mb-4">
                 <h3 class="h4">1-й способ</h3>
                 <p>По QR-коду в Вашем мобильном банкинге.</p>
+                <img src="{{ Storage::disk('public')->url($online_payment->qr_code) }}" alt="{{ $online_payment->order_id }}" width="175" height="175">
             </div>
+            @endif
             <div class="col-12 col-md-6">
                 <h3 class="h4">2-й способ</h3>
                 <p>Оплата в ЕРИП по коду услуги.</p>
