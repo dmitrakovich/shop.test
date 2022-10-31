@@ -210,7 +210,7 @@
                 </div>
                 @endif
 
-                <div class="col-12 text-center text-muted mt-5">
+                <div class="col-12 text-left text-muted mt-5">
                     <p>
                         <img src="/images/icons/installments.svg" alt="" role="presentation" class="pr-2">
                         Без переплат в рассрочку
@@ -258,7 +258,7 @@
                 </div>
             @endif
         </div>
-        <div class="col-12 col-lg-4 offset-lg-1">
+        <div class="col-12 col-lg-4 offset-lg-1 product-characteristics">
             <div class="font-size-15 mb-1">
                 ХАРАКТЕРИСТИКИ
             </div>
