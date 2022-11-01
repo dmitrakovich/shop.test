@@ -317,12 +317,17 @@ button.scroll-top-btn {
         }
     }
 }
+.product-characteristics {
+	@media (max-width: 1024px) {
+		order:-1;
+	}
+}
 
 
 .rating-result {
     span.star {
         padding: 0;
-        font-size: 32px;
+        font-size: 26px;
         margin: 0 2px;
         color: lightgrey;
         &:before {
