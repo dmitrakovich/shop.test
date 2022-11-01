@@ -8,7 +8,10 @@ use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
 use Encore\Admin\Facades\Admin;
 
+use App\Jobs\Payment\CreateQrcodeJob;
+
 use Illuminate\Notifications\Facades\SmsTraffic;
+use Illuminate\Support\Facades\Storage;
 use App\Libraries\HGrosh\Facades\ApiHGroshFacade;
 
 class PaymentService
@@ -87,6 +90,7 @@ class PaymentService
                         'fio'            => $response[0]['billingInfo']['contact']['fullName'] ?? null,
                         'comment'        => $data['comment'] ?? null,
                     ]);
+                    CreateQrcodeJob::dispatch($onlinePayment)->delay(now()->addSeconds(10));
                     if (isset($data['send_sms']) && $data['send_sms'] == 1) {
                         $smsText     = ($order->first_name ? ($order->first_name . ', ') : '') . 'Вам выставлен счет № ' . $payment_num . ' - подробнее по ссылке ' . route('pay.erip', $payment_num, true);
                         $smsResponse = SmsTraffic::send($order->phone, $smsText);
@@ -94,6 +98,24 @@ class PaymentService
                 }
                 break;
         }
+        return $onlinePayment;
+    }
+
+    /**
+     * Создать QRcode платежа.
+     * @param OnlinePayment $onlinePayment
+     * @return OnlinePayment
+     */
+    public function createOnlinePaymentQrCode(OnlinePayment $onlinePayment): OnlinePayment
+    {
+        $qrCode = ApiHGroshFacade::invoicingInvoiceQRcode()->request([
+            'id'       => $onlinePayment->payment_id,
+            'getImage' => 'true'
+        ]);
+        $responseQrCode = $qrCode->getBodyFormat();
+        $qrCodePath     = 'hgrosh/' . date('m-Y') . '/' . $onlinePayment->payment_id . '.jpg';
+        Storage::disk('public')->put($qrCodePath, base64_decode($responseQrCode['result']['image']));
+        $onlinePayment->update(['qr_code' => $qrCodePath]);
         return $onlinePayment;
     }
 }
