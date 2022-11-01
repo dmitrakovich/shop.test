@@ -5,7 +5,6 @@ namespace App\Models\Orders;
 use App\Models\Device;
 use App\Models\Country;
 use App\Models\Enum\OrderMethod;
-use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use Payments\PaymentMethod;
 use Deliveries\DeliveryMethod;
@@ -188,14 +187,6 @@ class Order extends Model
     public function onlinePayments(): Relations\HasMany
     {
         return $this->hasMany(OnlinePayment::class);
-    }
-
-    /**
-     * Get the installment associated with the order.
-     */
-    public function installment(): Relations\HasOne
-    {
-        return $this->hasOne(Installment::class);
     }
 
     /**

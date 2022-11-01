@@ -28,7 +28,7 @@ return new class extends Migration
     {
         Schema::table('online_payments', function (Blueprint $table) {
             $table->dropColumn('payment_num');
-            $table->dropIndex('payment_url');
+            $table->dropIndex(['payment_url']);
         });
     }
 };

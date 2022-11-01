@@ -13,6 +13,9 @@ class OrderItemExtended extends OrderItem
         'product_name',
         'product_link',
         'product_photo',
+        'installment_contract_number',
+        'installment_monthly_fee',
+        'installment_send_notifications',
     ];
 
     /**
@@ -30,6 +33,16 @@ class OrderItemExtended extends OrderItem
     public function getMorphClass()
     {
         return OrderItem::class;
+    }
+
+    /**
+     * Get the default foreign key name for the model.
+     *
+     * @return string
+     */
+    public function getForeignKey()
+    {
+        return 'order_item_id';
     }
 
     /**
@@ -61,5 +74,29 @@ class OrderItemExtended extends OrderItem
     public function getProductPhotoAttribute(): string
     {
         return $this->product->getFirstMediaUrl();
+    }
+
+    /**
+     * Installment contract number for this order item
+     */
+    public function getInstallmentContractNumberAttribute(): ?int
+    {
+        return $this->installment?->contract_number;
+    }
+
+    /**
+     * Installment contract number for this order item
+     */
+    public function getInstallmentMonthlyFeeAttribute(): ?float
+    {
+        return $this->installment?->monthly_fee;
+    }
+
+    /**
+     * Installment contract number for this order item
+     */
+    public function getInstallmentSendNotificationsAttribute(): ?bool
+    {
+        return $this->installment?->send_notifications;
     }
 }

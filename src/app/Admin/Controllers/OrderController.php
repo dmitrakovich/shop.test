@@ -5,7 +5,7 @@ namespace App\Admin\Controllers;
 use Encore\Admin\{Form, Grid, Show};
 use App\Models\{Country, Currency, Product, Size};
 use App\Models\Payments\{Installment, OnlinePayment};
-use App\Models\Orders\{Order, OrderStatus, OrderItemStatus};
+use App\Models\Orders\{Order, OrderItemExtended, OrderStatus, OrderItemStatus};
 
 use Payments\PaymentMethod;
 use Deliveries\DeliveryMethod;
@@ -199,13 +199,7 @@ class OrderController extends AdminController
             $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
             $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
             $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
-            $form->select('payment_id', 'Способ оплаты')
-                ->options(PaymentMethod::pluck('name', 'id'))
-                ->when(Installment::PAYMENT_METHOD_ID, function (Form $form) {
-                    $form->number('installment.contract_number', 'Номер договора рассрочки');
-                    $form->decimal('installment.monthly_fee', 'Ежемесячный платёж');
-                    $form->switch('installment.send_notifications', 'Отправлять оповещение')->default(true);
-                });
+            $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));
             $form->select('order_method', 'Способ заказа')
                 ->options(OrderMethod::getOptionsForSelect())
                 ->default(OrderMethod::DEFAULT);
@@ -226,7 +220,9 @@ class OrderController extends AdminController
                 $form->text('comment', 'Комментарий')->rules(['required', 'max:500']);
                 $form->display('created_at', 'Дата');
             });
+        });
 
+        $form->tab('Товары', function ($form) {
             $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $nestedForm) {
                 $currencyCode = $nestedForm->getForm()->model()->currency;
                 $nestedForm->select('product_id', 'Код товара')
@@ -253,6 +249,16 @@ class OrderController extends AdminController
                 $nestedForm->currency('old_price', 'Старая цена')->symbol($currencyCode);
                 $nestedForm->currency('current_price', 'Стоимость')->symbol($currencyCode);
                 $nestedForm->currency('discount', 'Скидка')->symbol('%');
+
+                // installment
+                $nestedForm->number('installment_contract_number', 'Номер договора рассрочки')
+                    ->addElementClass(['installment-field']);
+                $nestedForm->currency('installment_monthly_fee', 'Ежемесячный платёж')
+                    ->symbol($currencyCode)
+                    ->addElementClass(['installment-field']);
+                $nestedForm->switch('installment_send_notifications', 'Отправлять оповещение')
+                    ->default(true)
+                    ->addElementClass(['installment-field']);
             })->setScript($this->getScriptForExtendedItems());
         });
 
@@ -274,12 +280,38 @@ class OrderController extends AdminController
                     $form->input("itemsExtended.$key.current_price", $product->getPrice());
                 }
             }
-            /**
-             * @todo recalc order total price
-             */
+        });
+
+        $form->saved(function (Form $form) {
+            if ((int)$form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
+                $this->saveInstallments($form);
+            }
+             // TODO: recalc order total price
         });
 
         return $form;
+    }
+
+    /**
+     * Save installments for order items
+     */
+    protected function saveInstallments(Form $form): void
+    {
+        /** @var OrderItemExtended $itemExtended */
+        foreach ($form->model()->itemsExtended as $itemExtended) {
+            $contractNumber = (int)$form->input("itemsExtended.{$itemExtended->id}.installment_contract_number");
+            if (!$contractNumber) {
+                continue;
+            }
+            $monthlyFee = (float)$form->input("itemsExtended.{$itemExtended->id}.installment_monthly_fee");
+            $sendNotifications = $form->input("itemsExtended.{$itemExtended->id}.installment_send_notifications") === 'on';
+            /** @var Installment $itemExtended */
+            $installment = $itemExtended->installment()->firstOrNew();
+            $installment->contract_number = $contractNumber;
+            $installment->monthly_fee = $monthlyFee;
+            $installment->send_notifications = $sendNotifications;
+            $installment->save();
+        }
     }
 
     private function onlinePaymentGrid($orderId)
@@ -384,6 +416,7 @@ class OrderController extends AdminController
      */
     protected function getScriptForExtendedItems(): string
     {
+        $installmentPaymentId = Installment::PAYMENT_METHOD_ID;
         return <<<JS
 $(function () {
     // disable editing for current items in order
@@ -413,10 +446,21 @@ $(function () {
         });
     });
 
-    // prepare sizes
-    $('.itemsExtended.product_id').each(function (index, element) {
-        $(element).change();
+    $(document).on('change', '.payment_id', function () {
+        $('.installment-field').parents('.form-group').removeClass('hide');
+        if ($(this).val() != $installmentPaymentId) {
+            $('.installment-field').parents('.form-group').addClass('hide');
+        }
     });
+
+    setTimeout(() => {
+        // prepare sizes
+        $('.itemsExtended.product_id').each(function (index, element) {
+            $(element).change();
+        });
+        // prepare installment fields
+        $('.payment_id').change();
+    }, 300);
 });
 JS;
     }
