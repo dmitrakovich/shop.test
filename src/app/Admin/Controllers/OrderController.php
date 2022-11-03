@@ -305,7 +305,7 @@ class OrderController extends AdminController
             }
             $monthlyFee = (float)$form->input("itemsExtended.{$itemExtended->id}.installment_monthly_fee");
             $sendNotifications = $form->input("itemsExtended.{$itemExtended->id}.installment_send_notifications") === 'on';
-            /** @var Installment $itemExtended */
+            /** @var Installment $installment */
             $installment = $itemExtended->installment()->firstOrNew();
             $installment->contract_number = $contractNumber;
             $installment->monthly_fee = $monthlyFee;

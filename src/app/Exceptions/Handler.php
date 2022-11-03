@@ -58,12 +58,8 @@ class Handler extends ExceptionHandler
             return;
         }
 
-        if (App::environment('local')) {
-            // The environment is local
-        } elseif (app()->bound('sentry')) {
+        if (App::environment('production') && app()->bound('sentry')) {
             app('sentry')->captureException($e);
-        } else {
-            $this->sendInTelegram($e);
         }
 
         parent::report($e);

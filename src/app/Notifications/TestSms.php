@@ -2,18 +2,8 @@
 
 namespace App\Notifications;
 
-use Illuminate\Notifications\Messages\SmsTrafficMessage;
-
 class TestSms extends AbstractSmsTraffic
 {
-    /**
-     *
-     */
-    public function toSmsTraffic($notifiable)
-    {
-        return (new SmsTrafficMessage)->content($this->getContent());
-    }
-
     /**
      *
      */

@@ -28,7 +28,10 @@ abstract class AbstractSmsTraffic extends Notification
      * @param mixed $notifiable
      * @return SmsTrafficMessage|string
      */
-    abstract public function toSmsTraffic($notifiable);
+    public function toSmsTraffic($notifiable)
+    {
+        return (new SmsTrafficMessage)->content($this->getContent());
+    }
 
     /**
      * Content for sms message

@@ -9,11 +9,15 @@ use App\Notifications\TestSms;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Database\Eloquent\Model;
+use App\Jobs\Payment\SendInstallmentNoticeJob;
 
 class DebugController extends Controller
 {
     public function index()
     {
+        SendInstallmentNoticeJob::dispatchSync();
+        return 'ok';
+
         /** @var User $user */
         $user = User::findOrFail('xxxx');
         dd($user, $user->notifyNow(new TestSms()));
