@@ -48,16 +48,17 @@ class PaymentService
                 $postData['currency']                             = 933;
                 $postData['merchantInfo']['serviceId']            = $config['serviceid'];
                 $postData['merchantInfo']['retailOutlet']['code'] = $config['retailoutletcode'];
+                $postData['dateInAirUTC']                         = now();
                 $postData['paymentDueTerms']['termsDay']          = 3;
                 $postData['paymentRules']['isTariff']             = false;
 
                 $postDataItems = [];
                 foreach ($order->items as $item) {
                     $postDataItems[] = [
-                        'code'       => $item->product->id,
-                        'name'       => $item->product->extendedName(),
+                        'name'       => 'Заказ №' . $payment_num,
                         'quantity'   => $item->count,
                         'measure'    => '',
+                        'unitPrice'  => ['value' => $data['amount']]
                     ];
                 }
                 $postData['items']                                  = $postDataItems;
@@ -67,7 +68,6 @@ class PaymentService
                 $postData['billingInfo']['phone']['nationalNumber'] = preg_replace('/[^0-9]/', '', $order->phone);
                 $postData['billingInfo']['email']                   = $order->email;
                 $postData['billingInfo']['address']['line1']        = $order->user_addr;
-                $postData['shippingInfo']['amount']['value']        = $data['amount'];
 
                 $payment = ApiHGroshFacade::invoicingCreateInvoice()->addGetParam([
                     'canPayAtOnce' => 'true'
