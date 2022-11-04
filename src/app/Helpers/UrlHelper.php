@@ -65,6 +65,9 @@ class UrlHelper
             } else {
                 $filters[$model][$slug] = $filter;
             }
+            if ($model === Category::class) {
+                $params = [];
+            }
         }
 
         foreach ($remove as $filter) {
