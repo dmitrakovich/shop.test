@@ -272,7 +272,7 @@ class OrderController extends AdminController
 
         $form->saving(function (Form $form) {
             CurrencyFacade::setCurrentCurrency($form->input('currency'), false);
-            foreach ($form->itemsExtended as $key => $item) {
+            foreach ($form->itemsExtended ?? [] as $key => $item) {
                 if (str_starts_with($key, 'new')) {
                     $product = Product::findOrFail($item['product_id']);
                     $form->input("itemsExtended.$key.price", $product->getPrice());
