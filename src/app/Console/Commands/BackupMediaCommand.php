@@ -13,7 +13,10 @@ class BackupMediaCommand extends BackupCommand
     public function handle()
     {
         config([
-            'backup.backup.source.files.include' => [storage_path('app/media')],
+            'backup.backup.source.files.include' => [
+                public_path('uploads'),
+                storage_path('app/media'),
+            ],
             'backup.backup.source.files.exclude' => [],
         ]);
 
