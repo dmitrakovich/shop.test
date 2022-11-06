@@ -135,4 +135,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $date->format('d.m.Y H:i:s');
     }
+
+    /**
+     * Route notifications for the SmsTraffic channel.
+     *
+     * @param  \Illuminate\Notifications\Notification $notification
+     * @return string
+     */
+    public function routeNotificationForSmsTraffic($notification)
+    {
+        return $this->phone;
+    }
 }

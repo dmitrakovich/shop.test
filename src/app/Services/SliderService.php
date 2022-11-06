@@ -167,10 +167,10 @@ class SliderService
         $cacheConfig = config('cache_config.similar_products');
         $products = Cache::remember($cacheConfig['key'] . $productId, $cacheConfig['ttl'], function () use ($productId, $slider) { // 0.5h
             $attrs   = ['sizes', 'colors', 'tags'];
-            $product = Product::where('id', $productId)->with($attrs)->first();
+            $product = Product::where('id', $productId)->withTrashed()->with($attrs)->first();
             do {
                 $query = Product::where('id', '!=', $productId)
-                    ->where('category_id', $product->category_id)
+                    // ->when($product->category_id, fn ($query, $id) => $query->where('category_id', $id))
                     ->with(['media', 'category', 'brand']);
                 foreach ($attrs as $attr) {
                     $values = (!empty($product->{$attr}) && $product->{$attr} instanceof Collection) ? array_column($product->{$attr}->toArray(), 'id') : null;

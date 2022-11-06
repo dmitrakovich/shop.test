@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Models\Url;
 use App\Models\Product;
 use App\Services\GoogleTagManagerService;
 use App\Services\SliderService;
@@ -13,29 +12,40 @@ use Illuminate\Contracts\View\View;
 class ProductController extends BaseController
 {
     /**
+     * ProductController constructor.
+     */
+    public function __construct(
+        Request $request,
+        private ProductService $productService,
+        private SliderService $sliderService,
+        private GoogleTagManagerService $gtmService,
+    ) {
+        parent::__construct($request);
+    }
+
+    /**
      * Display the specified product.
      */
-    public function show(Url $url, array $params, GoogleTagManagerService $gtmService): View
+    public function show(int $id): View
     {
-        $product = Product::with(['tags', 'category'])->findOrFail($url->model_id);
+        $product = Product::with(['tags', 'category'])->withTrashed()->findOrFail($id);
+        $this->gtmService->setViewForProduct($product);
+        $this->productService->addToRecent($product->id);
 
-        $gtmService->setViewForProduct($product);
-        $dataLayer = $gtmService->prepareProduct($product);
-        $productService = new ProductService;
-        $productService->addToRecent($product->id);
-        $sliderService   = new SliderService; 
-        $similarProducts = $sliderService->getSimilarProducts($product->id);
-        $recentProductsSlider = $sliderService->getRecentProducts($productService);
-
-        return view('shop.product-page', compact('product', 'dataLayer', 'similarProducts', 'recentProductsSlider'));
+        return view('shop.product-page', [
+            'product' => $product,
+            'dataLayer' => $this->gtmService->prepareProduct($product),
+            'similarProducts' => $this->sliderService->getSimilarProducts($product->id),
+            'recentProductsSlider' =>$this->sliderService->getRecentProducts($this->productService),
+        ]);
     }
 
     /**
      * Quick view
      */
-    public function quickView(Product $product, GoogleTagManagerService $gtmService): View
+    public function quickView(Product $product): View
     {
-        $dataLayer = $gtmService->prepareProduct($product);
+        $dataLayer = $this->gtmService->prepareProduct($product);
 
         return view('shop.product', compact('product', 'dataLayer'));
     }

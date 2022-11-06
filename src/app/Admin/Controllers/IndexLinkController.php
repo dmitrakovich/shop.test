@@ -55,7 +55,6 @@ class IndexLinkController extends AdminController
         $form = new Form(new IndexLink());
 
         $form->text('title', 'Заголовок')->required();
-        // $form->list('links', 'Ссылки');
         $form->table('links', 'Ссылки', function ($table) {
             $table->text('text', 'Текст');
             $table->text('href', 'Ссылка');

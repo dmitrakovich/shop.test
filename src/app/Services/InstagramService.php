@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Api\Token;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -25,17 +26,12 @@ class InstagramService
     /**
      * Base url for request
      */
-    protected string $baseUrl = 'https://graph.instagram.com';
+    protected const BASE_URL = 'https://graph.instagram.com';
 
     /**
-     * API access token
+     * Token lifetime
      */
-    protected string $accessToken;
-
-    /**
-     * Token lifetime (50 days)
-     */
-    protected int $tokenLifetime = 4320000;
+    protected const TTL_DAYS = 50;
 
     /**
      * Cache keys
@@ -43,43 +39,44 @@ class InstagramService
     final const CACHE_POSTS_KEY = 'instagram_posts';
     final const CACHE_TITLE_KEY = 'instagram_title';
 
-    public function __construct()
-    {
-        $this->accessToken = $this->getAccessToken();;
-    }
+    /**
+     * Media types
+     */
+    final const MEDIA_TYPE_IMAGE = ['IMAGE', 'CAROUSEL_ALBUM'];
+    final const MEDIA_TYPE_VIDEO = ['VIDEO', 'REELS'];
 
     /**
      * Get access token
      */
     protected function getAccessToken(): string
     {
-        $file = database_path('files/instagram_api_token.php');
+        /** @var Token $token */
+        $token = Token::instagram()->first();
 
-        if (!file_exists($file)) {
+        if (empty($token)) {
             throw new \Exception('Instagram token not exists');
         }
-        $this->updateIfNeeded($file);
+        $this->updateIfNeeded($token);
 
-        return require $file;
+        return $token;
     }
 
     /**
      * Update access token if needed
      */
-    protected function updateIfNeeded(string $file): void
+    protected function updateIfNeeded(Token $token): void
     {
-        if (time() > (filectime($file) + $this->tokenLifetime)) {
-            $token = $this->updateToken(require $file);
-            file_put_contents($file, "<?php return '$token';");
+        if ($token->isExpired()) {
+            $token->updateToken($this->getNewToken($token), now()->addDays(self::TTL_DAYS));
         }
     }
 
     /**
      * Update access token
      */
-    protected function updateToken(string $oldToken): string
+    protected function getNewToken(string $oldToken): string
     {
-        $response = Http::get($this->baseUrl . '/refresh_access_token', [
+        $response = Http::get(self::BASE_URL . '/refresh_access_token', [
             'grant_type' => 'ig_refresh_token',
             'access_token' => $oldToken
         ]);
@@ -92,9 +89,9 @@ class InstagramService
      */
     public function getPosts(): array
     {
-        $response = Http::get($this->baseUrl . '/me/media', [
+        $response = Http::get(self::BASE_URL . '/me/media', [
             'fields' => implode(',', self::POSTS_FIELDS),
-            'access_token' => $this->accessToken
+            'access_token' => $this->getAccessToken()
         ]);
 
         if ($this->captureException($response)) {
@@ -149,10 +146,12 @@ class InstagramService
     }
 
     /**
-     * Filter data without required fields
+     * Filter data without required fields & filter video posts
      */
     public function filterWrongData(array $data): array
     {
-        return array_filter($data, fn (array $post) => isset($post['caption']));
+        return array_filter($data, fn (array $post) =>
+            isset($post['caption']) && in_array($post['media_type'], self::MEDIA_TYPE_IMAGE)
+        );
     }
 }

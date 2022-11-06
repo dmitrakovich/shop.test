@@ -71,10 +71,17 @@ Route::group([
 
     $router->resource('media', MediaController::class);
 
+    $router->get('send-sms', Forms\Sms::class);
+
     // legacy
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);
     $router->any('sklad', [SkladController::class, 'index']);
+
+    // logs
+    $router->group(['prefix' => 'logs'], function ($router) {
+        $router->resource('sms', Logs\SmsController::class);
+    });
 
     // debug
     $router->group(['prefix' => 'debug', 'namespace' => 'Debug'], function ($router) {

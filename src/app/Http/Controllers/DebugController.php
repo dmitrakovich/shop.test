@@ -5,16 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
+use App\Notifications\TestSms;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Database\Eloquent\Model;
+use App\Jobs\Payment\SendInstallmentNoticeJob;
 
 class DebugController extends Controller
 {
     public function index()
     {
-        // $this->formatPhones();
-        // dd(0000);
+        SendInstallmentNoticeJob::dispatchSync();
+        return 'ok';
+
+        /** @var User $user */
+        $user = User::findOrFail('xxxx');
+        dd($user, $user->notifyNow(new TestSms()));
 
         // php artisan make:mail OrderShipped
 

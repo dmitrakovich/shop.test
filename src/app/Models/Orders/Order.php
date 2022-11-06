@@ -8,8 +8,9 @@ use Payments\PaymentMethod;
 use Deliveries\DeliveryMethod;
 use Illuminate\Support\Carbon;
 use App\Models\Enum\OrderMethod;
-use App\Models\Payments\Installment;
+use App\Models\Payments\OnlinePayment;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -58,7 +59,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'user_id',
@@ -180,11 +181,13 @@ class Order extends Model
     }
 
     /**
-     * Get the installment associated with the order.
+     * Order online payments
+     *
+     * @return Relations\HasMany
      */
-    public function installment(): Relations\HasOne
+    public function onlinePayments(): Relations\HasMany
     {
-        return $this->hasOne(Installment::class);
+        return $this->hasMany(OnlinePayment::class);
     }
 
     /**
@@ -280,5 +283,16 @@ class Order extends Model
     public function isOneClick(): bool
     {
         return $this->order_method == OrderMethod::ONECLICK;
+    }
+
+    /**
+     * Route notifications for the SmsTraffic channel.
+     *
+     * @param  \Illuminate\Notifications\Notification $notification
+     * @return string
+     */
+    public function routeNotificationForSmsTraffic($notification)
+    {
+        return $this->phone;
     }
 }

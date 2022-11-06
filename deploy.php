@@ -19,7 +19,6 @@ set('shared_files', ['.env']);
 set('shared_dirs', [
     'storage',
     'public/uploads',
-    'database/files',
     'database/sxgeo',
 ]);
 set('writable_dirs', [
@@ -39,7 +38,7 @@ host('production')
         '-o StrictHostKeyChecking=no',
         '-o UserKnownHostsFile=/dev/null',
     ])
-    ->setIdentityFile('~/.ssh/key.pem');
+    ->setIdentityFile('~/.ssh/deploy');
 
 task('deploy:upload', function () {
     upload('', '{{release_path}}');
@@ -50,7 +49,7 @@ task('deploy:upload', function () {
 task('deploy:writable', function () {
     within('{{release_path}}', function () {
         $dirs = join(' ', get('writable_dirs'));
-        run("chmod -R -f 0755 $dirs");
+        run("chmod -R 0755 $dirs");
     });
 });
 

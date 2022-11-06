@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Jenssegers\Agent\Facades\Agent;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -57,10 +58,8 @@ class Handler extends ExceptionHandler
             return;
         }
 
-        if (app()->bound('sentry')) {
+        if (App::environment('production') && app()->bound('sentry')) {
             app('sentry')->captureException($e);
-        } else {
-            $this->sendInTelegram($e);
         }
 
         parent::report($e);

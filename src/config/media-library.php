@@ -38,7 +38,7 @@ return [
     /*
      * The class that contains the strategy for determining a media file's path.
      */
-     'path_generator' => App\Models\Media\PathGenerator::class,
+    'path_generator' => App\Models\Media\PathGenerator::class,
 
     /*
      * Here you can specify which path generator should be used for the given class.

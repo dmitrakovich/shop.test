@@ -3,9 +3,19 @@
 namespace App\Models\Ads;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Index page's links class
+ *
+ * @property int $id
+ * @property string $title
+ * @property array $links
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ *
+ * @mixin Builder
+ */
 class IndexLink extends Model
 {
     use HasFactory;
@@ -15,16 +25,11 @@ class IndexLink extends Model
     ];
 
     /**
-     * Interact with the index page's links.
-     *
-     * @return Attribute
+     * Set the index page's links.
      */
-    public function links(): Attribute
+    public function setLinksAttribute(array $value): void
     {
-        return Attribute::make(
-            get: fn ($value) => array_values(json_decode($value, true) ?: []),
-            set: fn ($value) => $this->attributes['links'] = json_encode(array_values($value))
-        );
+        $this->attributes['links'] = json_encode(array_values($value));
     }
 
     protected function serializeDate(\DateTimeInterface $date)

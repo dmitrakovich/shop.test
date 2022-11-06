@@ -13,16 +13,24 @@ use App\Services\GoogleTagManagerService;
 class CatalogController extends BaseController
 {
     /**
+     * CatalogController constructor.
+     */
+    public function __construct(
+        Request $request,
+        private GoogleTagManagerService $gtmService,
+        private CatalogService $catalogService,
+    ) {
+        parent::__construct($request);
+    }
+
+    /**
      * Render products for next page
      */
-    public function ajaxNextPage(
-        CatalogService $catalogService,
-        Request $request,
-        GoogleTagManagerService $gtmService
-    ): array {
-        $request->validate(['cursor' => 'required']);
+    public function ajaxNextPage(): array
+    {
+        $this->request->validate(['cursor' => 'required']);
 
-        $products = $catalogService->getNextProducts();
+        $products = $this->catalogService->getNextProducts();
 
         $renderedProducts = [];
         foreach ($products as $product) {
@@ -33,24 +41,24 @@ class CatalogController extends BaseController
             'rendered_products' => $renderedProducts,
             'cursor' => optional($products->nextCursor())->encode(),
             'has_more' => $products->hasMorePages(),
-            'data_layers' => $gtmService->getForCatalogArrays(
-                $products, $request->input('category'), $request->input('search')
+            'data_layers' => $this->gtmService->getForCatalogArrays(
+                $products, $this->request->input('category'), $this->request->input('search')
             ),
         ];
     }
 
-    public function show(
-        CatalogService $catalogService,
-        FilterRequest $filterRequest,
-        GoogleTagManagerService $gtmService
-    ) {
+    /**
+     * Show catalog page
+     */
+    public function show(FilterRequest $filterRequest)
+    {
         $sort = $filterRequest->getSorting();
         $currentFilters = $filterRequest->getFilters();
         $searchQuery = $filterRequest->input('search');
         UrlHelper::setCurrentFilters($currentFilters);
         // dump($currentFilters);
 
-        $products = $catalogService->getProducts($currentFilters, $sort, $searchQuery);
+        $products = $this->catalogService->getProducts($currentFilters, $sort, $searchQuery);
 
         $sortingList = [
             'rating' => 'по популярности',
@@ -60,9 +68,9 @@ class CatalogController extends BaseController
         ];
 
         $category = end($currentFilters[Category::class])->getFilterModel();
-        $badges = $catalogService->getFilterBadges($currentFilters, $searchQuery);
+        $badges = $this->catalogService->getFilterBadges($currentFilters, $searchQuery);
 
-        $gtmService->setForCatalog($products, $category, $searchQuery);
+        $this->gtmService->setForCatalog($products, $category, $searchQuery);
 
         return view('shop.catalog', [
             'products' => $products,

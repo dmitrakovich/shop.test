@@ -2,27 +2,23 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Size;
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
-use Encore\Admin\Show;
-use App\Models\Country;
-use App\Models\Product;
-use App\Models\Currency;
+use Encore\Admin\{Form, Grid, Show};
+use App\Models\{Country, Currency, Product, Size};
+use App\Models\Payments\{Installment, OnlinePayment};
+use App\Models\Orders\{Order, OrderItemExtended, OrderStatus, OrderItemStatus};
+
 use Payments\PaymentMethod;
-use App\Models\Orders\Order;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Widgets\Table;
 use App\Models\Enum\OrderMethod;
-use App\Models\Orders\OrderStatus;
-use App\Models\Orders\OrderItemStatus;
-use App\Admin\Actions\Order\PrintOrder;
-use App\Admin\Actions\Order\ProcessOrder;
+
+use App\Admin\Actions\Order\{CreateOnlinePayment, PrintOrder, ProcessOrder};
 use App\Facades\Currency as CurrencyFacade;
-use App\Models\Payments\Installment;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Grid\Displayers\ContextMenuActions;
 
 class OrderController extends AdminController
 {
@@ -31,7 +27,7 @@ class OrderController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Order';
+    protected $title = 'Заказы';
 
     /**
      * Make a grid builder.
@@ -75,14 +71,14 @@ class OrderController extends AdminController
         // /** @var Administrator */
         // $adminUser = Admin::user();
         // if ($adminUser->inRoles(['administrator', 'director'])) {
-            $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
+        $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
         // } else {
         //     $grid->column('admin.name', 'Менеджер');
         // }
 
         $grid->column('created_at', 'Создан');
 
-        $grid->actions (function ($actions) {
+        $grid->actions(function ($actions) {
             $actions->add(new ProcessOrder());
             $actions->add(new PrintOrder());
         });
@@ -90,7 +86,7 @@ class OrderController extends AdminController
         $grid->model()->orderBy('id', 'desc');
         $grid->paginate(15);
 
-        $grid->filter(function($filter) use ($orderStatuses, $admins) {
+        $grid->filter(function ($filter) use ($orderStatuses, $admins) {
             $filter->disableIdFilter();
             $filter->equal('id', 'Номер заказа');
             $filter->like('last_name', 'Фамилия');
@@ -146,11 +142,27 @@ class OrderController extends AdminController
     }
 
     /**
+     * Edit interface.
+     *
+     * @param mixed   $id
+     * @param Content $content
+     *
+     * @return Content
+     */
+    public function edit($id, Content $content)
+    {
+        return $content
+            ->title($this->title())
+            ->description($this->description['edit'] ?? trans('admin.edit'))
+            ->body($this->form($id)->edit($id));
+    }
+
+    /**
      * Make a form builder.
      *
      * @return Form
      */
-    protected function form()
+    protected function form(?int $id = null)
     {
         $form = new Form(new Order());
 
@@ -159,90 +171,108 @@ class OrderController extends AdminController
             $form->tools($this->getProcessTool((int)request('order')));
         }
 
-        $form->text('last_name', 'Фамилия');
-        $form->text('first_name', 'Имя')->required();
-        $form->text('patronymic_name', 'Отчество');
-        $form->number('user_id', __('User id'));
-        $form->number('promocode_id', __('Promocode id'));
-        $form->email('email', __('Email'));
-        $form->phone('phone', 'Телефон');
-        $form->textarea('comment', 'Коммментарий');
-        $form->select('currency', 'Валюта')->options(Currency::pluck('code', 'code'))
-            ->when('BYN', function (Form $form) {
-                $form->decimal('rate', 'Курс')->default(Currency::where('code', 'BYN')->value('rate'));
-            })->when('KZT', function (Form $form) {
-                $form->decimal('rate', 'Курс')->default(Currency::where('code', 'KZT')->value('rate'));
-            })->when('RUB', function (Form $form) {
-                $form->decimal('rate', 'Курс')->default(Currency::where('code', 'RUB')->value('rate'));
-            })->when('USD', function (Form $form) {
-                $form->decimal('rate', 'Курс')->default(Currency::where('code', 'USD')->value('rate'));
-            })->default('BYN')->required();
+        $form->tab('Основное', function ($form) {
+            $form->text('last_name', 'Фамилия');
+            $form->text('first_name', 'Имя')->required();
+            $form->text('patronymic_name', 'Отчество');
+            $form->number('user_id', __('User id'));
+            $form->number('promocode_id', __('Promocode id'));
+            $form->email('email', __('Email'));
+            $form->phone('phone', 'Телефон');
+            $form->textarea('comment', 'Коммментарий');
+            $form->select('currency', 'Валюта')->options(Currency::pluck('code', 'code'))
+                ->when('BYN', function (Form $form) {
+                    $form->decimal('rate', 'Курс')->default(Currency::where('code', 'BYN')->value('rate'));
+                })->when('KZT', function (Form $form) {
+                    $form->decimal('rate', 'Курс')->default(Currency::where('code', 'KZT')->value('rate'));
+                })->when('RUB', function (Form $form) {
+                    $form->decimal('rate', 'Курс')->default(Currency::where('code', 'RUB')->value('rate'));
+                })->when('USD', function (Form $form) {
+                    $form->decimal('rate', 'Курс')->default(Currency::where('code', 'USD')->value('rate'));
+                })->default('BYN')->required();
 
-        $form->select('country_id', 'Страна')->options(Country::pluck('name', 'id'));
-        $form->text('region', __('Region'));
-        $form->text('city', 'Город');
-        $form->text('zip', __('Zip'));
-        $form->text('user_addr', __('User addr'));
-        $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
-        $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
-        $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
-        $form->select('payment_id', 'Способ оплаты')
-            ->options(PaymentMethod::pluck('name', 'id'))
-            ->when(Installment::PAYMENT_METHOD_ID, function (Form $form) {
-                $form->number('installment.contract_number', 'Номер договора рассрочки');
-                $form->decimal('installment.monthly_fee', 'Ежемесячный платёж');
-                $form->switch('installment.send_notifications', 'Отправлять оповещение')->default(true);
-            });
-        $form->select('order_method', 'Способ заказа')
-            ->options(OrderMethod::getOptionsForSelect())
-            ->default(OrderMethod::DEFAULT);
+            $form->select('country_id', 'Страна')->options(Country::pluck('name', 'id'));
+            $form->text('region', __('Region'));
+            $form->text('city', 'Город');
+            $form->text('zip', __('Zip'));
+            $form->text('user_addr', __('User addr'));
+            $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
+            $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
+            $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
+            $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));
+            $form->select('order_method', 'Способ заказа')
+                ->options(OrderMethod::getOptionsForSelect())
+                ->default(OrderMethod::DEFAULT);
 
-        $this->setUtmSources($form);
+            $this->setUtmSources($form);
 
-        $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'));
+            $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'));
 
-        // /** @var Administrator */
-        // $adminUser = Admin::user();
-        // if ($adminUser->inRoles(['administrator', 'director'])) {
+            // /** @var Administrator */
+            // $adminUser = Admin::user();
+            // if ($adminUser->inRoles(['administrator', 'director'])) {
             $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
-        // } else {
-        //     $form->display('admin.name', 'Менеджер');
-        // }
+            // } else {
+            //     $form->display('admin.name', 'Менеджер');
+            // }
 
-        $form->hasMany('adminComments', 'Комментарии менеджера', function (Form\NestedForm $form) {
-            $form->text('comment', 'Комментарий')->rules(['required', 'max:500']);
-            $form->display('created_at', 'Дата');
+            $form->hasMany('adminComments', 'Комментарии менеджера', function (Form\NestedForm $form) {
+                $form->text('comment', 'Комментарий')->rules(['required', 'max:500']);
+                $form->display('created_at', 'Дата');
+            });
         });
 
-        $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $nestedForm) {
-            $currencyCode = $nestedForm->getForm()->model()->currency;
-            $nestedForm->select('product_id', 'Код товара')
-                ->options(function ($id) { return [$id => $id]; })
-                ->ajax('/api/product/product')
-                ->attribute(['data-js-trigger' => 'product_id'])
-                ->load('size_id', '/api/product/sizes');
-            $nestedForm->hidden('count')->default(1);
-            $nestedForm->hidden('buy_price')->default(0);
-            $nestedForm->hidden('price');
-            $nestedForm->display('product_link', 'Название модели');
-            $nestedForm->image('product_photo', 'Фото товара')->readonly();
-            $nestedForm->select('size_id', 'Размер')->options(function ($id) {
-                if ($size = Size::find($id)) {
-                    return [$size->id => $size->name];
-                }
-            })->required();
-            $nestedForm->select('status_key', 'Статус модели')
-                ->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'))
-                ->default(OrderItemStatus::DEFAULT_VALUE)
-                ->required();
-            $nestedForm->currency('old_price', 'Старая цена')->symbol($currencyCode);
-            $nestedForm->currency('current_price', 'Стоимость')->symbol($currencyCode);
-            $nestedForm->currency('discount', 'Скидка')->symbol('%');
-        })->setScript($this->getScriptForExtendedItems());
+        $form->tab('Товары', function ($form) {
+            $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $nestedForm) {
+                $currencyCode = $nestedForm->getForm()->model()->currency;
+                $nestedForm->select('product_id', 'Код товара')
+                    ->options(function ($id) {
+                        return [$id => $id];
+                    })
+                    ->ajax('/api/product/product')
+                    ->attribute(['data-js-trigger' => 'product_id'])
+                    ->load('size_id', '/api/product/sizes');
+                $nestedForm->hidden('count')->default(1);
+                $nestedForm->hidden('buy_price')->default(0);
+                $nestedForm->hidden('price');
+                $nestedForm->display('product_link', 'Название модели');
+                $nestedForm->image('product_photo', 'Фото товара')->readonly();
+                $nestedForm->select('size_id', 'Размер')->options(function ($id) {
+                    if ($size = Size::find($id)) {
+                        return [$size->id => $size->name];
+                    }
+                })->required();
+                $nestedForm->select('status_key', 'Статус модели')
+                    ->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'))
+                    ->default(OrderItemStatus::DEFAULT_VALUE)
+                    ->required();
+                $nestedForm->currency('old_price', 'Старая цена')->symbol($currencyCode);
+                $nestedForm->currency('current_price', 'Стоимость')->symbol($currencyCode);
+                $nestedForm->currency('discount', 'Скидка')->symbol('%');
+
+                // installment
+                $nestedForm->number('installment_contract_number', 'Номер договора рассрочки')
+                    ->addElementClass(['installment-field']);
+                $nestedForm->currency('installment_monthly_fee', 'Ежемесячный платёж')
+                    ->symbol($currencyCode)
+                    ->addElementClass(['installment-field']);
+                $nestedForm->switch('installment_send_notifications', 'Отправлять оповещение')
+                    ->default(true)
+                    ->addElementClass(['installment-field']);
+            })->setScript($this->getScriptForExtendedItems());
+        });
+
+        if ($id) {
+            $form->tab('Платежи', function ($form) use ($id) {
+                $form->row(function ($form) use ($id) {
+                    $form->html($this->onlinePaymentGrid($id));
+                });
+            });
+        }
 
         $form->saving(function (Form $form) {
             CurrencyFacade::setCurrentCurrency($form->input('currency'), false);
-            foreach ($form->itemsExtended as $key => $item) {
+            foreach ($form->itemsExtended ?? [] as $key => $item) {
                 if (str_starts_with($key, 'new')) {
                     $product = Product::findOrFail($item['product_id']);
                     $form->input("itemsExtended.$key.price", $product->getPrice());
@@ -250,12 +280,69 @@ class OrderController extends AdminController
                     $form->input("itemsExtended.$key.current_price", $product->getPrice());
                 }
             }
-            /**
-             * @todo recalc order total price
-             */
+        });
+
+        $form->saved(function (Form $form) {
+            if ((int)$form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
+                $this->saveInstallments($form);
+            }
+             // TODO: recalc order total price
         });
 
         return $form;
+    }
+
+    /**
+     * Save installments for order items
+     */
+    protected function saveInstallments(Form $form): void
+    {
+        /** @var OrderItemExtended $itemExtended */
+        foreach ($form->model()->itemsExtended as $itemExtended) {
+            $contractNumber = (int)$form->input("itemsExtended.{$itemExtended->id}.installment_contract_number");
+            if (!$contractNumber) {
+                continue;
+            }
+            $monthlyFee = (float)$form->input("itemsExtended.{$itemExtended->id}.installment_monthly_fee");
+            $sendNotifications = $form->input("itemsExtended.{$itemExtended->id}.installment_send_notifications") === 'on';
+            /** @var Installment $installment */
+            $installment = $itemExtended->installment()->firstOrNew();
+            $installment->contract_number = $contractNumber;
+            $installment->monthly_fee = $monthlyFee;
+            $installment->send_notifications = $sendNotifications;
+            $installment->save();
+        }
+    }
+
+    private function onlinePaymentGrid($orderId)
+    {
+        $grid = new Grid(new OnlinePayment());
+        $grid->model()->where('order_id', $orderId)->orderBy('id', 'desc');
+
+        $grid->column('created_at', 'Дата/время создания')->display(function($date) {
+            return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
+        });
+        $grid->column('admin.name',  'Менеджер');
+        $grid->column('amount',     'Сумма платежа');
+
+        $grid->column('expires_at', 'Срок действия платежа')->display(function($date) {
+            return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
+        });
+        $grid->column('link', 'Срок действия платежа')->display(function($link) {
+            return '<a href="' . $link . '" target="_blank">Ссылка на станицу оплаты</a>';
+        });
+
+        $grid->tools(function (Grid\Tools $tools) use ($orderId) {
+            $tools->append(new CreateOnlinePayment($orderId));
+        });
+        $grid->setActionClass(ContextMenuActions::class);
+        $grid->disableCreateButton();
+        $grid->disablePagination();
+        $grid->disableFilter();
+        $grid->disableExport();
+        $grid->disableColumnSelector();
+        $grid->disableRowSelector();
+        return $grid->render();
     }
 
     /**
@@ -329,6 +416,7 @@ class OrderController extends AdminController
      */
     protected function getScriptForExtendedItems(): string
     {
+        $installmentPaymentId = Installment::PAYMENT_METHOD_ID;
         return <<<JS
 $(function () {
     // disable editing for current items in order
@@ -358,10 +446,21 @@ $(function () {
         });
     });
 
-    // prepare sizes
-    $('.itemsExtended.product_id').each(function (index, element) {
-        $(element).change();
+    $(document).on('change', '.payment_id', function () {
+        $('.installment-field').parents('.form-group').removeClass('hide');
+        if ($(this).val() != $installmentPaymentId) {
+            $('.installment-field').parents('.form-group').addClass('hide');
+        }
     });
+
+    setTimeout(() => {
+        // prepare sizes
+        $('.itemsExtended.product_id').each(function (index, element) {
+            $(element).change();
+        });
+        // prepare installment fields
+        $('.payment_id').change();
+    }, 300);
 });
 JS;
     }

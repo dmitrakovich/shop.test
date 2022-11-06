@@ -103,8 +103,9 @@
                         </button>
 
                         <div class="dropdown-menu p-3">
-                            <p class="font-size-15">
-                                <b>РАССРОЧКА НА 2 ПЛАТЕЖА</b>
+                            @if ($product->getPrice() >= 150)
+							<p class="font-size-15">
+                                <b>РАССРОЧКА НА 3 ПЛАТЕЖА</b>
                             </p>
                             <p>
                                 Первый взнос<br>
@@ -114,6 +115,19 @@
                                     {{ $product->getPrice() * 0.3 }} руб. в месяц
                                 </b>
                             </p>
+							@else
+							<p class="font-size-15">
+                                <b>РАССРОЧКА НА 2 ПЛАТЕЖА</b>
+                            </p>
+                            <p>
+                                Первый взнос<br>
+                                <b>{{ $product->getPrice() - $product->getPrice() * 0.5 }} руб.</b><br>
+                                Оставшийся платеж<br>
+                                <b class="border-bottom border-danger font-size-14">
+                                    {{ $product->getPrice() * 0.5 }} руб.
+                                </b>
+                            </p>
+							@endif
                             &#9989; Без увеличения цены <br>
                             &#9989; Без справки о доходах
                         </div>
@@ -151,6 +165,9 @@
                     @endif
                 </div>
 
+                @if($product->trashed())
+                    <h4 class="h4 mb-5">Нет в наличии</h4>
+                @else
                 <div class="row mb-4">
                     <div class="col-12 product-size">
                         <div class="row justify-content-between">
@@ -191,8 +208,9 @@
                         </button>
                     </div>
                 </div>
+                @endif
 
-                <div class="col-12 text-center text-muted mt-5">
+                <div class="col-12 text-left text-muted mt-5">
                     <p>
                         <img src="/images/icons/installments.svg" alt="" role="presentation" class="pr-2">
                         Без переплат в рассрочку
@@ -210,6 +228,14 @@
 
         </div>
     </div>
+
+    @if($product->trashed() && !empty($similarProducts) && count($similarProducts))
+    <div class="row">
+        <div class="col-md-12 mt-3 mb-5">
+            @include('partials.index.simple-slider', ['simpleSlider' => $similarProducts])
+        </div>
+    </div>
+    @endif
 
     <div class="row my-5 product-description">
         <div class="col-12 font-size-15 mb-1">
@@ -232,7 +258,7 @@
                 </div>
             @endif
         </div>
-        <div class="col-12 col-lg-4 offset-lg-1">
+        <div class="col-12 col-lg-4 offset-lg-1 product-characteristics">
             <div class="font-size-15 mb-1">
                 ХАРАКТЕРИСТИКИ
             </div>
@@ -278,7 +304,7 @@
 
         </div>
     </div>
-    @if(!empty($similarProducts) && count($similarProducts))
+    @if(!$product->trashed() && !empty($similarProducts) && count($similarProducts))
         <div class="col-md-12 mt-3 mb-5">
             @include('partials.index.simple-slider', ['simpleSlider' => $similarProducts])
         </div>
