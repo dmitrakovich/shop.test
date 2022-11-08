@@ -15,6 +15,7 @@
                 <h3 class="h4">По QR-коду в мобильном банкинге</h3>
                 <p>1. Выберите в Вашем мобильном банкинге способ оплаты<br><i>E-POS - оплата товаров по QR-коду</i></p>
                 <p>2. Отсканируйте код ниже:</p>
+                <img src="{{ Storage::disk('public')->url($online_payment->qr_code) }}" alt="{{ $online_payment->order_id }}" width="175" height="175">
             </div>
             @endif
             <div class="col-12 col-md-6">
