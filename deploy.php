@@ -77,6 +77,7 @@ task('deploy', [
     'deploy:symlink',
     'artisan:cache:clear',
     'artisan:opcache:clear',
+    'artisan:queue:restart',
     'deploy:unlock',
     'deploy:cleanup',
     'deploy:success',
