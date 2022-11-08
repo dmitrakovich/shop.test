@@ -10,22 +10,26 @@
 @section('breadcrumbs', Breadcrumbs::render('category', $category))
 
 @section('content')
-    <div class="row d-flex d-lg-none mb-2">
-        <div class="col-6 align-self-center">
-            <button class="btn btn-outline-dark rounded" type="button" data-toggle="collapse" data-target="#sidebarFilters">
-                Фильтр
-            </button>
-            <span class="text-muted font-size-12">
-                {{ DeclensionNoun::make($products->totalCount, 'модель') }}
-            </span>
+    <div class="col-12">
+        <div class="row d-flex d-lg-none mb-2">
+            <div class="col-6 align-self-center">
+                <button class="btn btn-outline-dark rounded" type="button" data-toggle="collapse" data-target="#sidebarFilters">
+                    Фильтр
+                </button>
+                <span class="text-muted font-size-12">
+                    {{ DeclensionNoun::make($products->totalCount, 'модель') }}
+                </span>
+            </div>
+            <div class="col-6">
+                <select onchange="window.location.href = this.value" class="form-control">
+                    @foreach ($sortingList as $key => $value)
+                        <option value="{{ URL::current() . "?sort=$key" }}" @selected($sort == $key)>
+                            {{ $value }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
         </div>
-        <select onchange="window.location.href = this.value" class="form-control col-6">
-            @foreach ($sortingList as $key => $value)
-                <option value="{{ URL::current() . "?sort=$key" }}" @selected($sort == $key)>
-                    {{ $value }}
-                </option>
-            @endforeach
-        </select>
     </div>
     <div class="collapse col-12 col-lg-3 col-xl-2 d-lg-block filters-sidebar" id="sidebarFilters">
         @include('shop.filters.all')
@@ -34,7 +38,7 @@
         {{ Banner::getCatalogTop() }}
         {{ Banner::getCatalogMob() }}
         @if(!empty($badges))
-          <div class="col-12 d-flex flex-wrap my-3">
+          <div class="d-flex flex-wrap my-3">
             @foreach($badges as $badge)
               <a href="{{ $badge->url ?? '/catalog' }}" class="border py-2 px-4 m-1 d-inline-flex alight-items-center">{{ $badge->name }} <span class="ml-1">@include('svg.close')</span></a>
             @endforeach
@@ -65,14 +69,35 @@
             <input type="hidden" name="has_more" value="@json($products->hasMorePages())">
             <input type="hidden" name="gtm_category_name" value="{{ $category->getNameWithParents() }}">
             <input type="hidden" name="gtm_search_query" value="{{ $searchQuery }}">
-            <div class="row justify-content-start" id="catalog-endless-scroll">
-                @forelse($products as $product)
-                    @include('shop.catalog-product', compact('product'))
-                @empty
-                    <p>Нет товаров</p>
-                @endforelse
+                @if($products->isNotEmpty())
+                    <div class="col-12">
+                        <div class="row justify-content-start" id="catalog-endless-scroll">
+                            @foreach($products as $product)
+                                @include('shop.catalog-product', compact('product'))
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    <div class="px-2 px-md-5 my-4 my-md-5">
+                        <h1 class="text-center mb-4">ТОВАРЫ НЕ НАЙДЕНЫ</h1>
+                        <p class="text-center">
+                            К сожалению нет товаров соответствующих запросу, но...<br>
+                            вы можете вернутся назад, воспользоваться меню или выбрать из популярных товаров
+                        </p>
+                        <div class="text-center my-5">
+                            <a href="{{ url()->previous() }}" class="btn btn-outline-dark mx-2 mb-2 py-1 px-3" style="min-width: 134px;">
+                                Назад
+                            </a>
+                            <a href="{{ route('shop') }}" class="btn btn-dark mx-2 mb-2 py-1 px-3" style="min-width: 134px;">
+                                В каталог
+                            </a>
+                        </div>
+                        <div class="col-md-12 my-4">
+                            @includeWhen(isset($simpleSliders[0]), 'partials.index.simple-slider', ['simpleSlider' => ($simpleSliders[0] ?? null)])
+                        </div>
+                    </div>
+                @endif
                 {{-- {{ $products->links() }} --}}
-            </div>
         </div>
 
     </div>
