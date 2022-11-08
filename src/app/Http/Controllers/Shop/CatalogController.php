@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Helpers\UrlHelper;
 use Illuminate\Http\Request;
 use App\Services\CatalogService;
+use App\Services\SliderService;
 use App\Http\Requests\FilterRequest;
 use App\Services\GoogleTagManagerService;
 
@@ -42,7 +43,9 @@ class CatalogController extends BaseController
             'cursor' => optional($products->nextCursor())->encode(),
             'has_more' => $products->hasMorePages(),
             'data_layers' => $this->gtmService->getForCatalogArrays(
-                $products, $this->request->input('category'), $this->request->input('search')
+                $products,
+                $this->request->input('category'),
+                $this->request->input('search')
             ),
         ];
     }
@@ -72,7 +75,7 @@ class CatalogController extends BaseController
 
         $this->gtmService->setForCatalog($products, $category, $searchQuery);
 
-        return view('shop.catalog', [
+        $data = [
             'products' => $products,
             'category' => $category,
             'currentFilters' => $currentFilters,
@@ -81,6 +84,11 @@ class CatalogController extends BaseController
             'sort' => $sort,
             'sortingList' => $sortingList,
             'searchQuery' => $searchQuery,
-        ]);
+        ];
+        if (!$products->isNotEmpty()) {
+            $sliderService         = new SliderService;
+            $data['simpleSliders'] = $sliderService->getSimple();
+        }
+        return view('shop.catalog', $data);
     }
 }
