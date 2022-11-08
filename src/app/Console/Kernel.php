@@ -8,6 +8,7 @@ use App\Jobs\UpdateAvailabilityJob;
 use App\Jobs\UpdateProductsRatingJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\App;
 
 class Kernel extends ConsoleKernel
 {
@@ -28,6 +29,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        if (!App::environment('production')) {
+            return;
+        }
         // $schedule->command('inspire')->hourly();
 
         $schedule->job(new UpdateProductsRatingJob)->withoutOverlapping()->cron('15 5,11,17,23 * * *');

@@ -21,9 +21,6 @@ class SendInstallmentNoticeJob extends AbstractJob
      */
     public function handle(InstallmentService $installmentService)
     {
-        if (!App::environment('production')) {
-            return;
-        }
         $this->debug('Отправка уведомлений о рассрочке');
 
         $count = $installmentService->sendNotifications();
