@@ -14,6 +14,7 @@ use App\Models\{
     Category,
     Collection
 };
+use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
 use Illuminate\Support\Facades\Request;
 
@@ -34,6 +35,7 @@ class UrlHelper
         Style::class,
         Collection::class,
         Brand::class,
+        Price::class,
     ];
 
     /**

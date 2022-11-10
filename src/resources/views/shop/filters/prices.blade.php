@@ -20,9 +20,15 @@
         <div class="col-12 btn-group mt-3 px-0">
             <div class="col">
                 <button class="btn btn-block btn-secondary">Сбросить</button>
+
             </div>
             <div class="col">
                 <button class="btn btn-block btn-dark">Применить</button>
+
+                {{-- <a href="{{ UrlHelper::generate(['price-from-120']) }}">
+                    <span>test</span>
+                    <i class="checkmark"></i>
+                </a> --}}
             </div>
         </div>
     </div>

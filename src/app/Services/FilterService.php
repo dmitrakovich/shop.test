@@ -74,6 +74,17 @@ class FilterService
      */
     public function getStaticFilter(string $slug): ?Url
     {
+        if (str_starts_with($slug, 'price-from-')) {
+            // Price
+        }
+
+        // return match ($slug) {
+        //     'size-40' =>
+        //     default => null,
+        // };
+        // if ($slug === ) {
+        //     return Url::where('slug', 'size-40')->with('filters')->first();
+        // }
 
         return null;
     }
