@@ -5,6 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Url class
+ *
+ * @property string $slug
+ * @property string $model_type
+ * @property int $model_id
+ * @property string $redirect
+ */
 class Url extends Model
 {
     public $timestamps = false;
@@ -13,6 +21,7 @@ class Url extends Model
     protected $fillable = [
         'slug', 'model_type', 'model_id',
     ];
+
     /**
      * Найти url model по slug
      *
@@ -28,6 +37,7 @@ class Url extends Model
         // );
         // if (!empty($url->redirect)) return redirect($url->redirect);
     }
+
     /**
      * Get the parent filters model
      */

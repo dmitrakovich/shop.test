@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Models\Filter;
 use App\Models\Category;
 use App\Helpers\UrlHelper;
 use Illuminate\Http\Request;
 use App\Services\CatalogService;
 use App\Http\Requests\FilterRequest;
+use App\Services\FilterService;
 use App\Services\GoogleTagManagerService;
 
 class CatalogController extends BaseController
@@ -77,7 +77,7 @@ class CatalogController extends BaseController
             'category' => $category,
             'currentFilters' => $currentFilters,
             'badges' => $badges,
-            'filters' => Filter::all(),
+            'filters' => app(FilterService::class)->getAll(),
             'sort' => $sort,
             'sortingList' => $sortingList,
             'searchQuery' => $searchQuery,

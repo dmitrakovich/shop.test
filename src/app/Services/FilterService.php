@@ -1,18 +1,29 @@
 <?php
 
-namespace App\Models;
+namespace App\Services;
 
+use App\Models\{
+    Tag,
+    Url,
+    Heel,
+    Size,
+    Brand,
+    Color,
+    Style,
+    Fabric,
+    Season,
+    Category,
+    Collection,
+};
 use Illuminate\Support\Facades\Cache;
 use App\Models\ProductAttributes\Status;
 
-class Filter
+class FilterService
 {
     /**
-     * связанные с фильтрами классы
-     *
-     * @var array
+     * Filter-related classes
      */
-    protected static $filtersModels = [
+    protected static array $filtersModels = [
         'categories' => Category::class,
         'statuses' => Status::class,
         'fabrics' => Fabric::class,
@@ -27,19 +38,12 @@ class Filter
     ];
 
     /**
-     * Prefixes for selected filters
-     */
-    protected static array $filtersPrefixes = [
-        Size::class => 'Размер: ',
-    ];
-
-    /**
      * Получить все фильтра
      *
      * @param array $filtersList список нужных фильтров
      * @return array
      */
-    public static function all(array $filtersList = null)
+    public static function getAll(array $filtersList = null)
     {
         if (Cache::has('filters')) {
             $filters = Cache::get('filters');
@@ -66,10 +70,11 @@ class Filter
     }
 
     /**
-     * Prefix for the display name of the selected filter
+     * Generate static filter
      */
-    public static function getNamePrefix(string $filterModel): string
+    public function getStaticFilter(string $slug): ?Url
     {
-        return self::$filtersPrefixes[$filterModel] ?? '';
+
+        return null;
     }
 }

@@ -109,4 +109,12 @@ trait AttributeFilterTrait
     {
         return false;
     }
+
+    /**
+     * Generate filter badge name
+     */
+    public function getBadgeName(): string
+    {
+        return $this->name ?? '';
+    }
 }

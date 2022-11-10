@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Url;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
+use App\Services\FilterService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FilterRequest extends FormRequest
@@ -50,24 +51,41 @@ class FilterRequest extends FormRequest
      */
     public function getFilters(): array
     {
-        $filters = [];
         $slugs = $this->path() ? explode('/', $this->path()) : [];
+        $filters = $this->getStaticFilters($slugs);
 
-        $filtersTemp = Url::whereIn('slug', $slugs)
+        Url::whereIn('slug', $slugs)
             ->with('filters')
-            ->get(['slug', 'model_type', 'model_id']);
-
-        foreach ($filtersTemp as $value) {
-            $filters[$value->model_type][$value->slug] = $value;
-        }
+            ->get(['slug', 'model_type', 'model_id'])
+            ->each(function (Url $url) use (&$filters) {
+                $filters[$url->model_type][$url->slug] = $url;
+            });
 
         uksort(
             $filters[Category::class],
-            fn($a, $b) => intval(array_search($a, $slugs) > array_search($b, $slugs))
+            fn ($a, $b) => intval(array_search($a, $slugs) > array_search($b, $slugs))
         );
 
         $this->addTopProducts($filters);
 
+        return $filters;
+    }
+
+    /**
+     * Get static filters (not from db)
+     */
+    public function getStaticFilters(array &$slugs): array
+    {
+        $filters = [];
+        /** @var FilterService $filterService */
+        $filterService = app(FilterService::class);
+        foreach ($slugs as $key => $slug) {
+            /** @var Url $url */
+            if ($url = $filterService->getStaticFilter($slug)) {
+                $filters[$url->model_type][$url->slug] = $url;
+                unset($slugs[$key]);
+            }
+        }
         return $filters;
     }
 
@@ -80,7 +98,7 @@ class FilterRequest extends FormRequest
         $top = array_filter(explode(',', $top));
 
         if (!empty($top)) {
-            $filters[Top::class] = array_map(function(int $id) {
+            $filters[Top::class] = array_map(function (int $id) {
                 $urlModel = new Url([
                     'slug' => 'top',
                     'model_type' => Top::class,

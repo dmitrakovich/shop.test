@@ -11,7 +11,6 @@ use Laravie\SerializesQuery\Eloquent;
 use Illuminate\Support\Facades\Session;
 use App\Services\GoogleTagManagerService;
 use App\Helpers\UrlHelper;
-use App\Models\Filter;
 
 class CatalogService
 {
@@ -65,7 +64,7 @@ class CatalogService
                         continue;
                     }
                     $badges[] = (object)[
-                        'name'  => Filter::getNamePrefix($filterModel) . $filterModel->name,
+                        'name'  => $filterModel->getBadgeName(),
                         'url'   => UrlHelper::generate([], [$filterModel])
                     ];
                 }
