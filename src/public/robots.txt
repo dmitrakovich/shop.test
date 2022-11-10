@@ -1,2 +1,15 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /pay/
+Disallow: /lnk/
+Disallow: /index.php
+Disallow: /catalog/catalog/
+Disallow: /*?*search=
+Disallow: /*?*top=
+Disallow: /*?*sort=
+Disallow: /*?*external_browser_redirect=
+Disallow: /*?*page=
+Disallow: /*?*yadclid=
+Disallow: /*?*utm_source=
+
+Sitemap: https://barocco.by/sitemap.xml
