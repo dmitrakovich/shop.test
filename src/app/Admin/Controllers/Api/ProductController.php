@@ -5,9 +5,10 @@ namespace App\Admin\Controllers\Api;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Orders\OrderItem;
+use App\Models\Size;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class ProductController extends Controller
 {
@@ -27,42 +28,29 @@ class ProductController extends Controller
     /**
      * Return product data
      *
-     * @param Request $request
-     * @return array
+     * @throws ModelNotFoundException
      */
     public function getProductDataById(Request $request): array
     {
-        $product = $this->getProduct($request);
+        $product = Product::findOrFail($request->input('productId'));
+        $sizes = $product->sizes()->get(['id', 'name as text'])->keyBy('id')->toArray();
+
+        if ($orderItemId = $request->input('orderItemId')) {
+            /** @var OrderItem $orderItem */
+            $orderItem = OrderItem::findOrFail($orderItemId);
+            if (!isset($sizes[$orderItem->size_id])) {
+                /** @var Size $size */
+                $size = Size::findOrFail($orderItem->size_id);
+                $sizes[$size->id] = ['id' => $size->id, 'text' => $size->name];
+                ksort($sizes);
+            }
+        }
 
         return [
             'name' => $product->extendedName(),
             'link' => $product->getUrl(),
-            'image' => $product->getFirstMediaUrl()
+            'image' => $product->getFirstMediaUrl(),
+            'sizes' => array_values($sizes),
         ];
-    }
-
-    /**
-     * Return product sizes [id => text]
-     *
-     * @param Request $request
-     * @return EloquentCollection
-     */
-    public function sizesByProductId(Request $request): EloquentCollection
-    {
-        return $this->getProduct($request)->sizes()->get(['id', 'name as text']);
-    }
-
-    /**
-     * Get Product model from request
-     *
-     * @param Request $request
-     * @throws ModelNotFoundException
-     * @return Product
-     */
-    protected function getProduct(Request $request): Product
-    {
-        $productId = $request->get('q');
-
-        return Product::findOrFail($productId);
     }
 }

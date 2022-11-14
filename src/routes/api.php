@@ -26,7 +26,6 @@ Route::middleware('auth:sanctum')->group( function () {
 Route::prefix('product')->group(function () {
     Route::get('product', [ProductController::class, 'getById']);
     Route::get('data', [ProductController::class, 'getProductDataById']);
-    Route::get('sizes', [ProductController::class, 'sizesByProductId']);
 });
 
 // Route::post('croppic/save', [CropperController::class, 'save']);

@@ -11,7 +11,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * class OrderItem
  *
- * @property integer $count
+ * @property int $id
+ * @property int $order_id
+ * @property int $product_id
+ * @property int $size_id
+ * @property int $count
+ * @property float $buy_price
+ * @property float $price
+ * @property float $old_price
+ * @property float $current_price
+ * @property float $discount
+ * @property bool $promocode_applied
+ * @property string $status_key
+ * @property \Carbon\Carbon $release_date
+ * @property int $pred_period
  * @property-read Product $product
  * @property-read OrderItemStatus $status
  * @property-read Installment $installment
@@ -33,6 +46,8 @@ class OrderItem extends Model
         'discount',
         'status_key',
     ];
+
+
 
     /**
      * Product from order item

@@ -224,14 +224,13 @@ class OrderController extends AdminController
 
         $form->tab('Товары', function ($form) {
             $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $nestedForm) {
+                $nestedForm->hidden('id')->addElementClass('order-item-id');
                 $currencyCode = $nestedForm->getForm()->model()->currency;
                 $nestedForm->select('product_id', 'Код товара')
                     ->options(function ($id) {
                         return [$id => $id];
                     })
-                    ->ajax('/api/product/product')
-                    ->attribute(['data-js-trigger' => 'product_id'])
-                    ->load('size_id', '/api/product/sizes');
+                    ->ajax('/api/product/product');
                 $nestedForm->hidden('count')->default(1);
                 $nestedForm->hidden('buy_price')->default(0);
                 $nestedForm->hidden('price');
@@ -430,19 +429,33 @@ $(function () {
 
     // get product data for new item in order
     $(document).on('change', '.itemsExtended.product_id', function () {
-        let itemBlock = $(this).parents('.has-many-itemsExtended-form');
-
-        $.get('/api/product/data', {q: $(this).val()}, function (response) {
-            let img = $('<img>').attr('src', response.image).height(105);
-            let link = $('<a>', {
+        const itemBlock = $(this).parents('.has-many-itemsExtended-form');
+        const sizesSelectElement = itemBlock.find('select.size_id');
+        const payload = {
+            productId: $(this).val(),
+            orderItemId: itemBlock.find('.order-item-id').val()
+        };
+        $.get('/api/product/data', payload, function (response) {
+            // console.log(response);
+            const img = $('<img>').attr('src', response.image).height(105);
+            const link = $('<a>', {
                 text: response.name,
                 href: response.link,
                 target: '_blank',
             });
             $(itemBlock).find('.file-input').empty().append(img);
             $(itemBlock).find('.box.box-solid.box-default .box-body').html(link);
-            // console.log(itemBlock);
-            // console.log(response);
+            // sizes
+            sizesSelectElement.find('option').remove();
+            $(sizesSelectElement).select2({
+                placeholder: 'Выбрать',
+                allowClear: true,
+                data: response.sizes
+            });
+            if (sizesSelectElement.data('value')) {
+                $(sizesSelectElement).val(sizesSelectElement.data('value'));
+            }
+            $(sizesSelectElement).trigger('change');
         });
     });
 
