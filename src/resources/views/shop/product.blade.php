@@ -169,7 +169,7 @@
                     <h4 class="h4 mb-5">Нет в наличии</h4>
                 @else
                 <div class="row mb-4">
-                    <div class="col-12 product-size">
+                    <div class="col-12 px-0 px-md-2 product-size">
                         <div class="row justify-content-between">
                             <div class="col-auto">
                                 <span class="text-muted">Выберите размер:</span>
@@ -182,7 +182,7 @@
                         </div>
                         <ul class="p-0 mt-3 js-sizes">
                             @foreach ($product->sizes as $size)
-                                <li class="d-inline-block pr-3">
+                                <li class="d-inline-block pr-2">
                                     <label for="input-size-{{ $size->id }}" class="check">
                                         <span class="checkmark">{{ $size->name }}</span>
                                     </label>
