@@ -52,15 +52,14 @@ class PaymentService
                 $postData['paymentDueTerms']['termsDay']          = 3;
                 $postData['paymentRules']['isTariff']             = false;
 
-                $postDataItems = [];
-                foreach ($order->items as $item) {
-                    $postDataItems[] = [
-                        'name'       => 'Заказ №' . $payment_num,
-                        'quantity'   => $item->count,
-                        'measure'    => '',
-                        'unitPrice'  => ['value' => $data['amount']]
-                    ];
-                }
+                $postDataItems   = [];
+                $postDataItems[] = [
+                    'name'       => 'Заказ №' . $payment_num,
+                    'quantity'   => 1,
+                    'measure'    => '',
+                    'unitPrice'  => ['value' => $data['amount']]
+                ];
+
                 $postData['items']                                  = $postDataItems;
                 $postData['billingInfo']['contact']['firstName']    = $order->first_name;
                 $postData['billingInfo']['contact']['lastName']     = $order->last_name;
