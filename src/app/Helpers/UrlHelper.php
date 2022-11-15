@@ -2,19 +2,17 @@
 
 namespace App\Helpers;
 
-use App\Models\{
-    Tag,
-    Heel,
-    Size,
-    Brand,
-    Color,
-    Fabric,
-    Season,
-    Style,
-    Category,
-    Collection
-};
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Collection;
+use App\Models\Color;
+use App\Models\Fabric;
+use App\Models\Heel;
 use App\Models\ProductAttributes\Status;
+use App\Models\Season;
+use App\Models\Size;
+use App\Models\Style;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Request;
 
 class UrlHelper
@@ -44,9 +42,11 @@ class UrlHelper
     ];
 
     protected static $params = null;
+
     protected static $availableParams = [
-        'search'
+        'search',
     ];
+
     protected static $currentFilters = [];
 
     /**
@@ -86,7 +86,7 @@ class UrlHelper
         foreach (self::CANONICAL_ORDER as $model) {
             if (isset($filters[$model])) {
                 if ($model == Category::class) {
-                    $filter   = end($filters[$model]);
+                    $filter = end($filters[$model]);
                     $sorted[] = ($filter instanceof Category) ? ($filter->path ?? '') : ($filter['filters']['path'] ?? '');
                 } else {
                     sort($filters[$model]);
@@ -97,7 +97,7 @@ class UrlHelper
             }
         }
 
-        return route('shop', str_replace('catalog/', '', implode('/', $sorted)) . self::buildParams($params));
+        return route('shop', str_replace('catalog/', '', implode('/', $sorted)).self::buildParams($params));
     }
 
     /**
@@ -113,6 +113,7 @@ class UrlHelper
                 }
             }
         }
+
         return self::$params;
     }
 
@@ -121,7 +122,7 @@ class UrlHelper
      */
     protected static function buildParams(array $params): ?string
     {
-        return empty($params) ? null : '?' . http_build_query($params);
+        return empty($params) ? null : '?'.http_build_query($params);
     }
 
     public static function setCurrentFilters(array $currentFilters)
@@ -139,6 +140,6 @@ class UrlHelper
     {
         parse_str(parse_url($originalVideoUrl, PHP_URL_QUERY), $params);
 
-        return 'https://www.youtube.com/embed/' . ($params['v'] ?? 'hrwJvG8kALA'); //  . http_build_query($extPrams); // ?autoplay=1&rel=0
+        return 'https://www.youtube.com/embed/'.($params['v'] ?? 'hrwJvG8kALA'); //  . http_build_query($extPrams); // ?autoplay=1&rel=0
     }
 }

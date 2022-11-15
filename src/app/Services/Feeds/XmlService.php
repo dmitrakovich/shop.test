@@ -13,9 +13,9 @@ class XmlService extends AbstractFeedService
      */
     public function generate(): void
     {
-        $data = view('xml.' . $this->feedInstance->getKey(), [
+        $data = view('xml.'.$this->feedInstance->getKey(), [
             'currency' => $this->currency,
-            'data' => $this->feedInstance->getPreparedData()
+            'data' => $this->feedInstance->getPreparedData(),
         ]);
 
         $this->saveToFile($data);
@@ -24,7 +24,7 @@ class XmlService extends AbstractFeedService
     /**
      * Save xml data to file
      *
-     * @param View $data
+     * @param  View  $data
      * @return void
      */
     protected function saveToFile(View $data): void

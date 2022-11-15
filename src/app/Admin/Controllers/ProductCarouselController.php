@@ -2,12 +2,12 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Ads\ProductCarousel;
+use App\Models\Category;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Models\Category;
-use App\Models\Ads\ProductCarousel;
-use Encore\Admin\Controllers\AdminController;
 
 class ProductCarouselController extends AdminController
 {
@@ -31,7 +31,7 @@ class ProductCarouselController extends AdminController
 
         $grid->column('title', 'Заголовок');
         $grid->column('categories', 'Категории')->display(function ($categories) {
-            return join(' ', array_map(function ($role) {
+            return implode(' ', array_map(function ($role) {
                 return "<span class='label label-success'>$role[title]</span>";
             }, $categories));
         });
@@ -47,13 +47,14 @@ class ProductCarouselController extends AdminController
         $grid->disableExport();
         $grid->disableColumnSelector();
         $grid->disableRowSelector();
+
         return $grid;
     }
 
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)

@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Order;
 
-use Illuminate\Validation\Rule;
-use App\Models\Orders\OrderStatus;
-use App\Models\Orders\OrderItemStatus;
 use App\Http\Requests\SyncRequestTrait;
+use App\Models\Orders\OrderItemStatus;
+use App\Models\Orders\OrderStatus;
+use Illuminate\Validation\Rule;
 
 class SyncRequest extends StoreRequest
 {
@@ -28,8 +28,6 @@ class SyncRequest extends StoreRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules()
     {

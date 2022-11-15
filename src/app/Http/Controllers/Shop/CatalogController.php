@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Models\Filter;
-use App\Models\Category;
 use App\Helpers\UrlHelper;
-use Illuminate\Http\Request;
-use App\Services\CatalogService;
-use App\Services\SliderService;
 use App\Http\Requests\FilterRequest;
+use App\Models\Category;
+use App\Models\Filter;
+use App\Services\CatalogService;
 use App\Services\GoogleTagManagerService;
+use App\Services\SliderService;
+use Illuminate\Http\Request;
 
 class CatalogController extends BaseController
 {
@@ -85,10 +85,11 @@ class CatalogController extends BaseController
             'sortingList' => $sortingList,
             'searchQuery' => $searchQuery,
         ];
-        if (!$products->isNotEmpty()) {
-            $sliderService         = new SliderService;
+        if (! $products->isNotEmpty()) {
+            $sliderService = new SliderService;
             $data['simpleSliders'] = $sliderService->getSimple();
         }
+
         return view('shop.catalog', $data);
     }
 }

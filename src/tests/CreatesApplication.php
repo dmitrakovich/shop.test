@@ -28,7 +28,7 @@ trait CreatesApplication
     /**
      * Prepare app
      *
-     * @param mixed $app
+     * @param  mixed  $app
      * @return void
      */
     private function prepareApp($app)

@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * class OrderAdminComment
  *
- * @property integer $id
- * @property integer $order_id
+ * @property int $id
+ * @property int $order_id
  * @property string $comment
  * @property Carbon $created_at
  * @property Carbon $updated_at

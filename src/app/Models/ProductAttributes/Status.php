@@ -3,10 +3,9 @@
 namespace App\Models\ProductAttributes;
 
 use App\Traits\AttributeFilterTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\ProductAttributes\Promotion;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Product status class
@@ -22,11 +21,12 @@ use App\Models\ProductAttributes\Promotion;
 class Status extends Model
 {
     use HasFactory, AttributeFilterTrait;
+
     protected $guarded = ['id'];
 
     /**
-     * @param Builder $builder
-     * @param array $values
+     * @param  Builder  $builder
+     * @param  array  $values
      * @return Builder
      */
     public static function applyFilter(Builder $builder, array $values)

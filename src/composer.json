@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.1",
         "appstract/laravel-opcache": "^4.0",
         "default-089/sxgeo": "0.16.*@dev",
         "deployer/deployer": "v7.0.0-rc.8",
@@ -43,6 +43,7 @@
         "barryvdh/laravel-debugbar": "^3.6",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^1.9",
+        "laravel/pint": "^1.2",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.5.10",

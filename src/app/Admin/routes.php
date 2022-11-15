@@ -1,21 +1,20 @@
 <?php
 
-use Illuminate\Routing\Router;
-use Encore\Admin\Facades\Admin;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DebugController;
 use App\Admin\Controllers\SkladController;
+use App\Http\Controllers\DebugController;
 use App\Http\Controllers\Shop\OrderController;
+use Encore\Admin\Facades\Admin;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 
 Admin::routes();
 
 Route::group([
-    'prefix'        => config('admin.route.prefix'),
-    'as'            => config('admin.route.prefix') . '.',
-    'namespace'     => config('admin.route.namespace'),
-    'middleware'    => config('admin.route.middleware'),
+    'prefix' => config('admin.route.prefix'),
+    'as' => config('admin.route.prefix').'.',
+    'namespace' => config('admin.route.namespace'),
+    'middleware' => config('admin.route.middleware'),
 ], function (Router $router) {
-
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('users', UserController::class);
     $router->resource('info-pages', InfoPageController::class);

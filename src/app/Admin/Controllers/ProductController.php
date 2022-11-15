@@ -2,32 +2,32 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Tag;
-use App\Models\Heel;
-use App\Models\Size;
+use App\Admin\Actions\Post\BatchRestore;
+use App\Admin\Actions\Post\Restore;
+use App\Admin\Models\Media;
+use App\Admin\Models\Product;
+use App\Admin\Services\UploadImagesService;
 use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Collection;
 use App\Models\Color;
-use App\Models\Style;
 use App\Models\Fabric;
+use App\Models\Heel;
+use App\Models\ProductAttributes\Manufacturer;
 use App\Models\Season;
+use App\Models\Size;
+use App\Models\Style;
+use App\Models\Tag;
+use Database\Seeders\ProductSeeder;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Models\Category;
-use App\Models\Collection;
-use App\Admin\Models\Media;
-use Illuminate\Support\Str;
-use App\Admin\Models\Product;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\MessageBag;
-use App\Admin\Actions\Post\Restore;
-use Database\Seeders\ProductSeeder;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use App\Admin\Actions\Post\BatchRestore;
-use App\Admin\Services\UploadImagesService;
-use Encore\Admin\Controllers\AdminController;
-use App\Models\ProductAttributes\Manufacturer;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\Str;
 
 class ProductController extends AdminController
 {
@@ -37,6 +37,7 @@ class ProductController extends AdminController
      * @var string
      */
     protected $title = 'Product';
+
     /**
      * костыльный объект, чтобы с сидера достать соответсвие id
      *
@@ -44,7 +45,7 @@ class ProductController extends AdminController
      */
     protected static $productSeederObject = null;
 
-    public function __construct(private readonly UploadImagesService $uploadImagesService)
+    public function __construct(private UploadImagesService $uploadImagesService)
     {
     }
 
@@ -60,7 +61,7 @@ class ProductController extends AdminController
         $grid->column('id', 'Id')->sortable();
         $grid->column('media', 'Фото')->display(fn ($pictures) => optional($this->getFirstMedia())->getUrl('thumb'))->image();
         $grid->column('deleted_at', 'Опубликован')->display(
-            fn ($deleted) => !$deleted ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>'
+            fn ($deleted) => ! $deleted ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>'
         )->sortable();
         $grid->column('slug', 'Slug');
         $grid->column('sku', 'Артикул');
@@ -96,13 +97,14 @@ class ProductController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)
     {
         return back();
     }
+
     /**
      * Restore product by id
      *
@@ -112,8 +114,10 @@ class ProductController extends AdminController
     {
         $product = Product::withTrashed()->findOrFail($productId, ['id']);
         $product->restore();
+
         return back();
     }
+
     /**
      * Make a form builder.
      *
@@ -129,7 +133,7 @@ class ProductController extends AdminController
             $form->tools(function (Form\Tools $tools) use ($product) {
                 if ($product->trashed()) {
                     $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
-                        <a href="' . route('admin.products.restore', $product->id) . '" class="btn btn-sm btn-success">
+                        <a href="'.route('admin.products.restore', $product->id).'" class="btn btn-sm btn-success">
                         <i class="fa fa-history"></i>&nbsp;&nbsp;Восстановить</a></div>');
                     $tools->disableDelete();
                 }
@@ -179,7 +183,7 @@ class ProductController extends AdminController
                 0 => 'нет',
                 1 => 'хит',
                 2 => 'ликвидация',
-                3 => 'не выгружать'
+                3 => 'не выгружать',
             ]);
             $form->text('rating', 'Рейтинг')->disable();
             $form->multipleSelect('tags', 'Теги')->options(Tag::pluck('name', 'id'));
@@ -190,10 +194,9 @@ class ProductController extends AdminController
             $form->ckeditor('description', '');
         });
 
-
         $form->saving(function (Form $form) {
             if (empty($form->slug)) {
-                $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->sku);
+                $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name').'-'.$form->sku);
             }
             if (is_null($form->manufacturer_id)) {
                 $form->manufacturer_id = 0;
@@ -209,9 +212,10 @@ class ProductController extends AdminController
             if ($existsProduct) {
                 $editLink = route('admin.products.edit', $existsProduct->id);
                 $error = new MessageBag([
-                    'title'   => 'Товар с таким названием есть',
-                    'message' => '<a href="' . $editLink . '">Cсылка на редактирование этого товара<a>',
+                    'title' => 'Товар с таким названием есть',
+                    'message' => '<a href="'.$editLink.'">Cсылка на редактирование этого товара<a>',
                 ]);
+
                 return back()->with(compact('error'));
             }
         });
@@ -233,7 +237,7 @@ class ProductController extends AdminController
                 $key = array_search("new-{$media->name}", $sorting);
                 $sorting[$key] = $media->id;
             }
-            if (!empty($sorting)) {
+            if (! empty($sorting)) {
                 Media::setNewOrder($sorting);
             }
 
@@ -247,6 +251,7 @@ class ProductController extends AdminController
 
         return $form;
     }
+
     /**
      * Получить id категории из запроса
      *
@@ -274,6 +279,7 @@ class ProductController extends AdminController
                 return $category->id;
             }
         }
+
         return null;
     }
 
@@ -286,19 +292,21 @@ class ProductController extends AdminController
             return null;
         }
         $sizes = explode(';', (string) $sizes);
+
         return Size::whereIn('name', $sizes)->pluck('id')->toArray();
     }
 
     /**
      * Get olt attribute id from product seeder
      *
-     * @param string $type
-     * @param integer $newId
+     * @param  string  $type
+     * @param  int  $newId
      */
     protected function getOldId($type, $newId): int
     {
         $seeder = self::$productSeederObject ?? (self::$productSeederObject = new ProductSeeder);
         $oldIds = array_flip($seeder->attributesList[$type]['new_id'] ?? []);
+
         return $oldIds[$newId] ?? 0;
     }
 
@@ -319,7 +327,7 @@ class ProductController extends AdminController
                 'product_availability' => '',
                 'product_date_added' => date('Y-m-d H:i:s'),
                 'date_modify' => date('Y-m-d H:i:s'),
-                'product_publish' => !$form->model()->trashed(),
+                'product_publish' => ! $form->model()->trashed(),
                 'product_tax_id' => 0,
                 'currency_id' => 1,
                 'product_template' => 'default',
@@ -331,7 +339,7 @@ class ProductController extends AdminController
                 'different_prices' => 0,
                 'product_weight' => 0,
                 'image' => '',
-                'product_manufacturer_id' => $this->getOldId('brand',  $form->brand_id),
+                'product_manufacturer_id' => $this->getOldId('brand', $form->brand_id),
                 'product_is_add_price' => 0,
                 'add_price_unit_id' => 3,
                 'average_rating' => 0,
@@ -361,7 +369,7 @@ class ProductController extends AdminController
                 'extra_field_2' => $form->fabric_top_txt ?? '',
                 'extra_field_3' => $form->collection_id,
                 'extra_field_6' => 14,
-                'extra_field_7' => $this->getOldId('season',  $form->season_id),
+                'extra_field_7' => $this->getOldId('season', $form->season_id),
                 'extra_field_8' => $form->fabric_inner_txt ?? '',
                 'extra_field_9' => $form->fabric_insole_txt ?? '',
                 'extra_field_10' => $form->fabric_outsole_txt ?? '',
@@ -378,27 +386,27 @@ class ProductController extends AdminController
             'category' => [
                 'product_id' => $form->model()->id,
                 'category_id' => $this->getOldId('category', $form->category_id),
-                'product_ordering' => 1
+                'product_ordering' => 1,
             ],
             'sizes' => array_map(fn ($oldSizeId) => [
                 'product_id' => $form->model()->id,
                 'attr_id' => 2,
                 'attr_value_id' => $oldSizeId,
                 'price_mod' => '+',
-                'addprice ' => 0
+                'addprice ' => 0,
             ], array_filter(array_map(fn ($size) => $this->getOldId('sizes', $size), $form->sizes))),
 
             'images' => $form->model()->getMedia()->map(fn ($image) => $image->getUrl('full'))->toArray(),
 
             'videos' => $form->model()->getMedia()->map(fn ($image) => $image->getCustomProperty('video'))->filter()->toArray(),
 
-            'imidj' => $form->model()->getMedia()->map(fn ($image) => $image->getCustomProperty('is_imidj'))->filter()->toArray()
+            'imidj' => $form->model()->getMedia()->map(fn ($image) => $image->getCustomProperty('is_imidj'))->filter()->toArray(),
         ];
         // dd($data);
 
         $data = [
             'token' => 'vTnD57Pdq45lkU',
-            'data' => $data
+            'data' => $data,
         ];
 
         // Log::info($data);

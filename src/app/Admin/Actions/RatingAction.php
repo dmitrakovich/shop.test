@@ -15,28 +15,31 @@ class RatingAction extends RowAction
 
         return $this->response()->html($this->renderHtml($model->rating));
     }
+
     /**
      * This method displays different icons in this column based on the value of the `star` field.
      *
-     * @param int $stars
+     * @param  int  $stars
      * @return string
      */
     public function display($stars)
     {
         return $this->renderHtml($stars);
     }
+
     /**
      * render stars html
      *
-     * @param integer $star
+     * @param  int  $star
      * @return string
      */
     protected function renderHtml(int $stars)
     {
         $html = '';
-        for ($i=1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $html .= $i <= $stars ? '<i class="fa fa-star"></i>' : '<i class="fa fa-star-o"></i>';
         }
-        return '<span style="white-space: nowrap;">' . $html . '</span>';
+
+        return '<span style="white-space: nowrap;">'.$html.'</span>';
     }
 }

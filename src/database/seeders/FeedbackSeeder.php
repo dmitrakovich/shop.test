@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\DB;
 class FeedbackSeeder extends Seeder
 {
     protected string $tableName = 'feedbacks';
+
     protected string $oldTableName = 'cyizj_jshopping_products_reviews';
+
     /**
      * Run the database seeds.
      *
@@ -46,7 +48,7 @@ class FeedbackSeeder extends Seeder
             }
             $review->user_email = trim($review->user_email);
 
-            $feedback = Feedback::create((array)$review);
+            $feedback = Feedback::create((array) $review);
 
             if (($imgStartPos = mb_strpos($review->text, '{img}')) !== false) {
                 $images = mb_substr($review->text, $imgStartPos + 5); // - {img} (5)
@@ -56,9 +58,11 @@ class FeedbackSeeder extends Seeder
                 $feedback->save();
 
                 foreach ($images as $image) {
-                    if ($image == 'undefined') continue;
+                    if ($image == 'undefined') {
+                        continue;
+                    }
 
-                    $urlToFile = 'https://modny.by/images/comments/' . $image;
+                    $urlToFile = 'https://modny.by/images/comments/'.$image;
                     try {
                         $feedback->addMediaFromUrl($urlToFile)
                             ->preservingOriginal()

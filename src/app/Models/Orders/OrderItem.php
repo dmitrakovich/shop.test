@@ -2,12 +2,13 @@
 
 namespace App\Models\Orders;
 
-use App\Models\Size;
-use App\Models\Product;
 use App\Models\Payments\Installment;
+use App\Models\Product;
+use App\Models\Size;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 /**
  * class OrderItem
  *
@@ -46,8 +47,6 @@ class OrderItem extends Model
         'discount',
         'status_key',
     ];
-
-
 
     /**
      * Product from order item

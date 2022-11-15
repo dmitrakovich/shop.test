@@ -2,16 +2,15 @@
 
 namespace App\Jobs;
 
+use App\Contracts\FeedServiceInterface;
 use App\Models\Currency;
-use Illuminate\Bus\Queueable;
 use App\Models\Feeds\AbstractFeed;
 use App\Services\Feeds\CsvService;
 use App\Services\Feeds\XmlService;
-use Illuminate\Queue\SerializesModels;
-use App\Contracts\FeedServiceInterface;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class FeedGeneratorJob extends AbstractJob
 {
@@ -28,8 +27,8 @@ class FeedGeneratorJob extends AbstractJob
      * @return void
      */
     public function __construct(
-        private readonly AbstractFeed $feedInstance,
-        private readonly Currency $currency
+        private AbstractFeed $feedInstance,
+        private Currency $currency
     ) {
     }
 

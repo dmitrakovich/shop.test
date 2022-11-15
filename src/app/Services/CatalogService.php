@@ -2,16 +2,15 @@
 
 namespace App\Services;
 
-use App\Models\Category;
-use App\Models\Product;
-use Illuminate\Support\Collection;
-use App\Models\ProductAttributes\Top;
-use Illuminate\Support\Facades\Cache;
-use Laravie\SerializesQuery\Eloquent;
-use Illuminate\Support\Facades\Session;
-use App\Services\GoogleTagManagerService;
 use App\Helpers\UrlHelper;
+use App\Models\Category;
 use App\Models\Filter;
+use App\Models\Product;
+use App\Models\ProductAttributes\Top;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
+use Laravie\SerializesQuery\Eloquent;
 
 class CatalogService
 {
@@ -31,9 +30,9 @@ class CatalogService
     }
 
     /**
-     * @param array $filters
-     * @param string $sort
-     * @param string|null $search
+     * @param  array  $filters
+     * @param  string  $sort
+     * @param  string|null  $search
      * @return \Illuminate\Contracts\Pagination\CursorPaginator
      */
     public function getProducts(array $filters, string $sort, ?string $search = null)
@@ -57,26 +56,27 @@ class CatalogService
     public function getFilterBadges(?array $currentFiltersGroups, ?string $searchQuery = null): array
     {
         $badges = [];
-        if (!empty($currentFiltersGroups)) {
+        if (! empty($currentFiltersGroups)) {
             foreach ($currentFiltersGroups as $currentFiltersGroupKey => $currentFiltersGroup) {
                 foreach ($currentFiltersGroup as $currentFilterKey => $currentFilter) {
                     $filterModel = $currentFilter->filters;
                     if ($filterModel->isInvisible() || $filterModel->slug === 'catalog' || ($currentFiltersGroupKey == Category::class) && (array_key_last($currentFiltersGroup) != $currentFilterKey)) {
                         continue;
                     }
-                    $badges[] = (object)[
-                        'name'  => Filter::getNamePrefix($filterModel) . $filterModel->name,
-                        'url'   => UrlHelper::generate([], [$filterModel])
+                    $badges[] = (object) [
+                        'name' => Filter::getNamePrefix($filterModel).$filterModel->name,
+                        'url' => UrlHelper::generate([], [$filterModel]),
                     ];
                 }
             }
         }
         if ($searchQuery) {
-            $badges[] = (object)[
-                'name'  => 'Поиск: ' . mb_strimwidth($searchQuery, 0, 12, '...'),
-                'url'   => UrlHelper::generate([], [['param' => 'search']])
+            $badges[] = (object) [
+                'name' => 'Поиск: '.mb_strimwidth($searchQuery, 0, 12, '...'),
+                'url' => UrlHelper::generate([], [['param' => 'search']]),
             ];
         }
+
         return $badges;
     }
 
@@ -95,7 +95,7 @@ class CatalogService
             $productsQuery = Eloquent::unserialize($productsQuery);
             $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
         } catch (\Throwable $th) {
-            abort(419, 'Page maby expired. Error: ' . $th->getMessage());
+            abort(419, 'Page maby expired. Error: '.$th->getMessage());
         }
 
         $this->addGtmData($products);
@@ -110,12 +110,12 @@ class CatalogService
      */
     protected function getQueryCacheKey(): string
     {
-        return 'catalog-query-' . Session::getId();
+        return 'catalog-query-'.Session::getId();
     }
 
     /**
-     * @param mixed $products
-     * @param array $filters
+     * @param  mixed  $products
+     * @param  array  $filters
      * @return void
      */
     protected function addTopProducts($products, array $filters)
@@ -140,8 +140,8 @@ class CatalogService
     }
 
     /**
-     * @param mixed $products
-     * @return integer
+     * @param  mixed  $products
+     * @return int
      */
     protected function topProductsCount($products): int
     {
@@ -151,7 +151,7 @@ class CatalogService
     /**
      * Add GTM data to products
      *
-     * @param Collection $products
+     * @param  Collection  $products
      * @return void
      */
     protected function addGtmData($products): void

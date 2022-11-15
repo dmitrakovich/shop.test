@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
-use Illuminate\Http\Response;
-use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
@@ -50,7 +49,7 @@ class SitemapController extends Controller
                 ['colors', 'sizes'],
                 ['fabrics', 'sizes'],
             ],
-            'date' => $this->date
+            'date' => $this->date,
         ]);
     }
 
@@ -63,7 +62,7 @@ class SitemapController extends Controller
     {
         return $this->render('sitemap.products', [
             'products' => Product::with('category')->get(['id', 'slug', 'category_id']),
-            'date' => $this->date
+            'date' => $this->date,
         ]);
     }
 
@@ -76,7 +75,7 @@ class SitemapController extends Controller
     {
         return $this->render('sitemap.categories', [
             'categories' => Category::get(['id', 'slug', 'path']),
-            'date' => $this->date
+            'date' => $this->date,
         ]);
     }
 
@@ -89,7 +88,7 @@ class SitemapController extends Controller
     {
         return $this->render('sitemap.brands', [
             'brands' => Brand::get(['id', 'slug']),
-            'date' => $this->date
+            'date' => $this->date,
         ]);
     }
 
@@ -105,7 +104,7 @@ class SitemapController extends Controller
         return $this->render('sitemap.catalog2', [
             'categories' => Category::get(['id', 'slug', 'path']),
             'anothers' => $model::get(['id', 'slug']),
-            'date' => $this->date
+            'date' => $this->date,
         ]);
     }
 
@@ -123,7 +122,7 @@ class SitemapController extends Controller
             'categories' => Category::get(['id', 'slug', 'path']),
             'anothers' => $model::get(['id', 'slug']),
             'anothers2' => $model2::get(['id', 'slug']),
-            'date' => $this->date
+            'date' => $this->date,
         ]);
     }
 
@@ -138,19 +137,19 @@ class SitemapController extends Controller
             'routes' => [
                 'index-page',
                 'static-shops',
-                'cart'
+                'cart',
             ],
             'routesWithParams' => [
                 'feedbacks' => ['reviews', 'models', 'questions'],
                 'info' => ['instruction', 'payment', 'delivery', 'return', 'installments'],
-            ]
+            ],
         ]);
     }
 
     /**
      * Сформировать XML
      */
-    public function render(string $viewName, array $data = []) : Response
+    public function render(string $viewName, array $data = []): Response
     {
         return response()
             ->view($viewName, $data)

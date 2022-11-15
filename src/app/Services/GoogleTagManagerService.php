@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Cart;
+use App\Models\Category;
 use App\Models\Orders\OrderItem;
+use App\Models\Product;
 use Illuminate\Support\Collection;
 use Spatie\GoogleTagManager\DataLayer;
-use App\Models\{Cart, Category, Product};
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class GoogleTagManagerService
@@ -13,7 +15,7 @@ class GoogleTagManagerService
     /**
      * Set GTM view event for product page
      *
-     * @param Product $product
+     * @param  Product  $product
      */
     public function setViewForProduct(Product $product): void
     {
@@ -23,7 +25,7 @@ class GoogleTagManagerService
     /**
      * Set GTM view event for cart page
      *
-     * @param Cart $cart
+     * @param  Cart  $cart
      */
     public function setViewForCart(Cart $cart): void
     {
@@ -60,7 +62,7 @@ class GoogleTagManagerService
     /**
      * Set GTM view event for catalog page
      *
-     * @param Collection $products
+     * @param  Collection  $products
      */
     public function setViewForCatalog($products, string|Category $category, ?string $searchQuery = null): void
     {
@@ -68,15 +70,15 @@ class GoogleTagManagerService
             $category = $category->getNameWithParents();
         }
 
-        if (!empty($searchQuery)) {
+        if (! empty($searchQuery)) {
             GoogleTagManagerFacade::view('search_result', [
                 'query' => $searchQuery,
-                'ids' => $products->implode('id', ',')
+                'ids' => $products->implode('id', ','),
             ]);
         } else {
             GoogleTagManagerFacade::view('catalog', [
                 'category' => $category,
-                'ids' => $products->implode('id', ',')
+                'ids' => $products->implode('id', ','),
             ]);
         }
     }
@@ -84,12 +86,12 @@ class GoogleTagManagerService
     /**
      * Prepare products array
      *
-     * @param Product $product
+     * @param  Product  $product
      */
     public static function prepareProduct(Product $product, ?int $quantity = null): DataLayer
     {
         return new DataLayer(array_filter([
-            'name' => $product->brand->name . ' '. $product->id,
+            'name' => $product->brand->name.' '.$product->id,
             'id' => $product->id,
             'price' => $product->getPrice('USD'),
             'brand' => $product->brand->name,
@@ -101,19 +103,19 @@ class GoogleTagManagerService
     /**
      * Prepare products array
      *
-     * @param Collection $products
+     * @param  Collection  $products
      */
     public function prepareProductsArray($products): array
     {
         return $products->map(
-            fn(Product $product) => self::prepareProduct($product)->toArray()
+            fn (Product $product) => self::prepareProduct($product)->toArray()
         )->toArray();
     }
 
     /**
      * Set GTM ecommerce event for catalog page
      *
-     * @param Collection $products
+     * @param  Collection  $products
      */
     public function setEcommerceForCatalog($products): void
     {
@@ -123,7 +125,7 @@ class GoogleTagManagerService
     /**
      * Set events for catalog page
      *
-     * @param Collection $products
+     * @param  Collection  $products
      */
     public function setForCatalog($products, string|Category $category, ?string $searchQuery = null): void
     {
@@ -134,13 +136,13 @@ class GoogleTagManagerService
     /**
      * Generate & return dataLayer script for catalog page
      *
-     * @param Collection $products
+     * @param  Collection  $products
      */
     public function getForCatalogArrays($products, string|Category $category, ?string $searchQuery = null): array
     {
         $this->setForCatalog($products, $category, $searchQuery);
 
-        return GoogleTagManagerFacade::getPushData()->map(fn(DataLayer $dataLayer) => $dataLayer->toArray())->toArray();
+        return GoogleTagManagerFacade::getPushData()->map(fn (DataLayer $dataLayer) => $dataLayer->toArray())->toArray();
     }
 
     /**
@@ -156,15 +158,15 @@ class GoogleTagManagerService
     /**
      * Set GTM ecommerce add to cart flash event
      *
-     * @param Product $product
+     * @param  Product  $product
      */
     public function setProductAddFlashEvent(Product $product, int $quantity): void
     {
         GoogleTagManagerFacade::ecommerceFlash('productAdd', [
             'add' => [
                 'products' => [
-                    self::prepareProduct($product, $quantity)->toArray()
-                ]
+                    self::prepareProduct($product, $quantity)->toArray(),
+                ],
             ],
         ]);
     }
@@ -172,15 +174,15 @@ class GoogleTagManagerService
     /**
      * Set GTM ecommerce remove from cart flash event
      *
-     * @param Product $product
+     * @param  Product  $product
      */
     public function setProductRemoveFlashEvent(Product $product, int $quantity): void
     {
         GoogleTagManagerFacade::ecommerceFlash('productRemove', [
             'remove' => [
                 'products' => [
-                    self::prepareProduct($product, $quantity)->toArray()
-                ]
+                    self::prepareProduct($product, $quantity)->toArray(),
+                ],
             ],
         ]);
     }
@@ -188,12 +190,12 @@ class GoogleTagManagerService
     /**
      * Set GTM ecommerce purchase event
      *
-     * @param Collection $orderItems
+     * @param  Collection  $orderItems
      */
     public function setPurchaseEvent($orderItems, int $orderId, bool $isOneClick): void
     {
         $gtmProducts = $orderItems->map(
-            fn(OrderItem $item) => self::prepareProduct($item->product, $item->count)->toArray()
+            fn (OrderItem $item) => self::prepareProduct($item->product, $item->count)->toArray()
         )->toArray();
 
         if ($isOneClick) {
@@ -205,9 +207,9 @@ class GoogleTagManagerService
             'purchase' => [
                 'actionField' => [
                     'id' => $orderId,
-                    'goal_id'=> 230549930,
+                    'goal_id' => 230549930,
                 ],
-                'products' => $gtmProducts
+                'products' => $gtmProducts,
             ],
         ]);
 

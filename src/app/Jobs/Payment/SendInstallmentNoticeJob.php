@@ -3,7 +3,6 @@
 namespace App\Jobs\Payment;
 
 use App\Jobs\AbstractJob;
-use Illuminate\Support\Facades\App;
 use App\Services\Payment\InstallmentService;
 use Drandin\DeclensionNouns\Facades\DeclensionNoun;
 
@@ -25,6 +24,6 @@ class SendInstallmentNoticeJob extends AbstractJob
 
         $count = $installmentService->sendNotifications();
 
-        $this->debug('Отправлено ' . DeclensionNoun::make($count, 'уведомление'));
+        $this->debug('Отправлено '.DeclensionNoun::make($count, 'уведомление'));
     }
 }

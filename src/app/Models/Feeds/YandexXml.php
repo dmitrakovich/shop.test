@@ -2,15 +2,15 @@
 
 namespace App\Models\Feeds;
 
-use App\Models\Color;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\Currency;
-use Illuminate\Support\Str;
-use App\Services\ProductService;
-use Illuminate\Support\Collection;
 use App\Facades\Currency as CurrencyFacade;
+use App\Models\Category;
+use App\Models\Color;
+use App\Models\Currency;
+use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class YandexXml extends AbstractFeed
 {
@@ -36,7 +36,7 @@ class YandexXml extends AbstractFeed
      */
     public function getPreparedData(): object
     {
-        return (object)[
+        return (object) [
             'name' => 'barocco.by',
             'company' => 'ООО «БароккоСтайл»',
             'url' => $this->getHost(),
@@ -82,7 +82,8 @@ class YandexXml extends AbstractFeed
                 if ($item->parent_id != Category::ROOT_CATEGORY_ID) {
                     $category['parent_id'] = $item->parent_id;
                 }
-                return (object)$category;
+
+                return (object) $category;
             });
     }
 
@@ -95,9 +96,9 @@ class YandexXml extends AbstractFeed
     {
         return (new ProductService)->getForFeed()
             ->map(function (Product $item) {
-                return (object)[
+                return (object) [
                     'id' => $item->id,
-                    'url' => $this->getHost() . $item->getUrl(),
+                    'url' => $this->getHost().$item->getUrl(),
                     'price' => $item->getPrice(),
                     'old_price' => $item->getOldPrice(),
                     'colors' => $this->getColors($item->colors),
@@ -115,7 +116,7 @@ class YandexXml extends AbstractFeed
     /**
      * Prepare color from colors for filters
      *
-     * @param EloquentCollection $colors
+     * @param  EloquentCollection  $colors
      * @return array
      */
     public function getColors(EloquentCollection $colors): array
@@ -128,13 +129,13 @@ class YandexXml extends AbstractFeed
     /**
      * Prepare offer params
      *
-     * @param Product $product
+     * @param  Product  $product
      * @return array
      */
     public function getOfferParams(Product $product): array
     {
         $params = [];
-        if (!empty($product->fabric_top_txt)) {
+        if (! empty($product->fabric_top_txt)) {
             $name = 'Материал';
             if ($product->category->parent_id != Category::ACCESSORIES_PARENT_ID) {
                 $name .= ' верха';
@@ -142,15 +143,15 @@ class YandexXml extends AbstractFeed
             $params[$name] = $product->fabric_top_txt;
         }
 
-        if (!empty($product->fabric_insole_txt)) {
+        if (! empty($product->fabric_insole_txt)) {
             $params['Материал подкладки'] = $product->fabric_insole_txt;
         }
 
-        if (!empty($product->fabric_outsole_txt)) {
+        if (! empty($product->fabric_outsole_txt)) {
             $params['Материал подошвы'] = $product->fabric_outsole_txt;
         }
 
-        if (!empty($product->heel_txt)) {
+        if (! empty($product->heel_txt)) {
             $params['Высота каблука'] = $product->heel_txt;
         }
 
@@ -160,7 +161,7 @@ class YandexXml extends AbstractFeed
     /**
      * Generate product description
      *
-     * @param Product $product
+     * @param  Product  $product
      * @return string
      */
     public function getDescription(Product $product): string

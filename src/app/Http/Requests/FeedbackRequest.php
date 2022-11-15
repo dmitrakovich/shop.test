@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\Feedback;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class FeedbackRequest extends FormRequest
 {
@@ -31,7 +31,7 @@ class FeedbackRequest extends FormRequest
             'type_id' => $captchaScore > 4 ? Feedback::TYPE_REVIEW : Feedback::TYPE_SPAM,
             'captcha_score' => intval($captchaScore),
             'rating' => intval($this->rating ?? 5),
-            'product_id' => intval($this->product_id ?? 0)
+            'product_id' => intval($this->product_id ?? 0),
         ]);
     }
 
@@ -45,7 +45,7 @@ class FeedbackRequest extends FormRequest
         return array_merge($this->validator->validated(), [
             'user_id' => Auth::id(),
             'yandex_id' => $this->cookie('_ym_uid'),
-            'ip' => $this->ip()
+            'ip' => $this->ip(),
         ]);
     }
 

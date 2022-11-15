@@ -2,12 +2,12 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\InfoPage;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Models\InfoPage;
 use Illuminate\Support\Str;
-use Encore\Admin\Controllers\AdminController;
 
 class InfoPageController extends AdminController
 {
@@ -31,7 +31,7 @@ class InfoPageController extends AdminController
         $grid->column('slug', __('Slug'));
         $grid->column('name', __('Name'))->label();
         $grid->column('icon', __('Icon'))->image(url('/'));
-        $grid->column('html', __('Html'))->display(function($text) {
+        $grid->column('html', __('Html'))->display(function ($text) {
             return Str::limit(strip_tags($text), 300, '...');
         });
         $grid->created_at()->date('d.m.Y H:i:s');
@@ -43,7 +43,7 @@ class InfoPageController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)

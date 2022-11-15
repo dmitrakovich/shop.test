@@ -32,7 +32,7 @@ set('writable_dirs', [
 host('production')
     ->setHostname(getenv('DEPLOY_HOST'))
     ->setRemoteUser(getenv('DEPLOY_USER'))
-    ->setPort((int)getenv('DEPLOY_PORT'))
+    ->setPort((int) getenv('DEPLOY_PORT'))
     ->setDeployPath(getenv('DEPLOY_PATH'))
     ->setSshArguments([
         '-o StrictHostKeyChecking=no',
@@ -48,7 +48,7 @@ task('deploy:upload', function () {
 
 task('deploy:writable', function () {
     within('{{release_path}}', function () {
-        $dirs = join(' ', get('writable_dirs'));
+        $dirs = implode(' ', get('writable_dirs'));
         run("chmod -R 0755 $dirs");
     });
 });
@@ -92,4 +92,4 @@ task('rollback:after', [
     'artisan:opcache:clear',
 ]);
 
-after('rollback','rollback:after');
+after('rollback', 'rollback:after');

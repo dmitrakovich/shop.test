@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Services\OldSiteSyncService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Auth;
 
 trait SyncRequestTrait
 {
@@ -20,6 +20,7 @@ trait SyncRequestTrait
      * Handle a failed validation attempt.
      *
      * @return void
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     protected function failedValidation(Validator $validator): never

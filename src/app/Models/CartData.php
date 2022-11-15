@@ -20,6 +20,7 @@ class CartData extends Model
         'price',
         'status_key',
     ];
+
     /**
      * Связть с товарами
      *
@@ -30,6 +31,7 @@ class CartData extends Model
         return $this->hasOne(Product::class, 'id', 'product_id')
             ->with(['category', 'brand', 'media', 'styles']);
     }
+
     /**
      * Связть с размерами
      *

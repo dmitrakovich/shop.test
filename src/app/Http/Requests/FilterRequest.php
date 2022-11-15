@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\Category;
-use App\Models\Url;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
+use App\Models\Url;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FilterRequest extends FormRequest
@@ -39,9 +39,10 @@ class FilterRequest extends FormRequest
     {
         $session = $this->session();
         $sorting = $this->input('sort') ?? $session->get('sorting', Product::DEFAULT_SORT);
-        if ($session->get('sorting') <> $sorting) {
+        if ($session->get('sorting') != $sorting) {
             $session->put('sorting', $sorting);
         }
+
         return $sorting;
     }
 
@@ -63,7 +64,7 @@ class FilterRequest extends FormRequest
 
         uksort(
             $filters[Category::class],
-            fn($a, $b) => intval(array_search($a, $slugs) > array_search($b, $slugs))
+            fn ($a, $b) => intval(array_search($a, $slugs) > array_search($b, $slugs))
         );
 
         $this->addTopProducts($filters);
@@ -79,8 +80,8 @@ class FilterRequest extends FormRequest
         $top = $this->input('top', '');
         $top = array_filter(explode(',', $top));
 
-        if (!empty($top)) {
-            $filters[Top::class] = array_map(function(int $id) {
+        if (! empty($top)) {
+            $filters[Top::class] = array_map(function (int $id) {
                 $urlModel = new Url([
                     'slug' => 'top',
                     'model_type' => Top::class,

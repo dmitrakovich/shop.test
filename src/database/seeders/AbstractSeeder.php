@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\DB;
 abstract class AbstractSeeder extends Seeder
 {
     protected $useTimestamps = true;
+
     protected $sortColumn = null;
+
     protected $tableName;
+
     protected $values;
 
     /**
@@ -22,13 +25,13 @@ abstract class AbstractSeeder extends Seeder
         if (empty($this->tableName)) {
             throw new \Exception('Empty table name!');
         }
-        if (!is_string($this->tableName)) {
+        if (! is_string($this->tableName)) {
             throw new \Exception('Table name not string!');
         }
         if (empty($this->values)) {
             throw new \Exception('Empty values!');
         }
-        if (!is_array($this->values)) {
+        if (! is_array($this->values)) {
             throw new \Exception('Values not array!');
         }
     }
@@ -40,8 +43,8 @@ abstract class AbstractSeeder extends Seeder
      */
     protected function setTimestamps()
     {
-        if (!$this->useTimestamps) {
-           return;
+        if (! $this->useTimestamps) {
+            return;
         }
         $now = now();
         foreach ($this->values as &$value) {
@@ -56,7 +59,7 @@ abstract class AbstractSeeder extends Seeder
      */
     protected function setSort()
     {
-        if (!$this->sortColumn) {
+        if (! $this->sortColumn) {
             return;
         }
         foreach ($this->values as $key => &$value) {

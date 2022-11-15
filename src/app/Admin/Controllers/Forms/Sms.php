@@ -3,9 +3,9 @@
 namespace App\Admin\Controllers\Forms;
 
 use App\Services\LogService;
-use Illuminate\Http\Request;
-use Encore\Admin\Widgets\Form;
 use Encore\Admin\Facades\Admin;
+use Encore\Admin\Widgets\Form;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Facades\SmsTraffic;
 
 class Sms extends Form
@@ -18,9 +18,6 @@ class Sms extends Form
         parent::__construct($data);
     }
 
-    /**
-     *
-     */
     const ROUTE_OPTIONS = [
         'sms' => 'SMS',
         'viber' => 'Viber',
@@ -37,8 +34,7 @@ class Sms extends Form
     /**
      * Handle the form request.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request)
@@ -50,7 +46,7 @@ class Sms extends Form
         $response = SmsTraffic::send($phone, $text, ['route' => $route]);
         $this->logService->logSms($phone, $text, $route, Admin::user()->id, null, $response->getDescription());
 
-        admin_success('Сообщение отправлено. Id сообщения: ' . $response->getSmsId());
+        admin_success('Сообщение отправлено. Id сообщения: '.$response->getSmsId());
 
         return back();
     }

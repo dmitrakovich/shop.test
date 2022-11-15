@@ -2,14 +2,14 @@
 
 return [
     'yandex' => [
-        'token' => env('YANDEX_TOKEN')
+        'token' => env('YANDEX_TOKEN'),
     ],
 
     'instagram' => [
-        'id' => '17841406935269379'
+        'id' => '17841406935269379',
     ],
 
     'sxgeo' => [
-        'token' => env('SXGEO_TOKEN')
+        'token' => env('SXGEO_TOKEN'),
     ],
 ];

@@ -19,6 +19,7 @@ class Cart extends Model
     public function setCart()
     {
         $cartId = Auth::user() ? Auth::user()->cart_token : Cookie::get('cart_token');
+
         return self::findOrNew($cartId);
     }
 
@@ -41,6 +42,7 @@ class Cart extends Model
         foreach ($this->items as $item) {
             $counter += $item->count;
         }
+
         return $counter;
     }
 
@@ -53,6 +55,7 @@ class Cart extends Model
         foreach ($this->items as $item) {
             $price += ($item->product->getOldPrice() * $item->count);
         }
+
         return $price;
     }
 
@@ -65,6 +68,7 @@ class Cart extends Model
         foreach ($this->items as $item) {
             $price += ($item->product->getPrice($currencyCode) * $item->count);
         }
+
         return $price;
     }
 
@@ -86,7 +90,7 @@ class Cart extends Model
             $this->items()->create([
                 'product_id' => $productId,
                 'count' => 1,
-                'size_id' => $sizeId
+                'size_id' => $sizeId,
             ]);
         }
 
@@ -106,7 +110,7 @@ class Cart extends Model
      */
     public function createIfNotExists(): self
     {
-        if (!$this->exists) {
+        if (! $this->exists) {
             $this->save();
             if (Auth::check()) {
                 /** @var \App\Models\User $user */
@@ -147,6 +151,7 @@ class Cart extends Model
         }
 
         $this->items->load('size:id,name');
+
         return $this;
     }
 }

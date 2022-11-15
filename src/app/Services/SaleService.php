@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Cart;
-use App\Models\Sale;
 use App\Models\Product;
+use App\Models\Sale;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class SaleService
@@ -46,7 +46,7 @@ class SaleService
      */
     protected function hasSale(): bool
     {
-        return !empty($this->sale);
+        return ! empty($this->sale);
     }
 
     /**
@@ -92,7 +92,7 @@ class SaleService
      */
     protected function checkStyles(EloquentCollection $styles): bool
     {
-        return is_null($this->sale->styles) || !empty(array_intersect($styles->modelKeys(), $this->sale->styles));
+        return is_null($this->sale->styles) || ! empty(array_intersect($styles->modelKeys(), $this->sale->styles));
     }
 
     /**
@@ -108,7 +108,7 @@ class SaleService
      */
     protected function checkNew(float $price, float $oldPrice): bool
     {
-        return !$this->sale->only_new || $price > $oldPrice;
+        return ! $this->sale->only_new || $price > $oldPrice;
     }
 
     /**
@@ -138,7 +138,7 @@ class SaleService
     protected function getOverflowDiscount(): float
     {
         if ($this->sale->algorithm == $this->sale::ALGORITHM_COUNT) {
-            return (float)end($this->discounts);
+            return (float) end($this->discounts);
         } else {
             return 0;
         }
@@ -176,9 +176,9 @@ class SaleService
     private function getSaleData(float $price, float $oldPrice, int $index = 0, int $count = 1): array
     {
         return [
-            'price'        => $this->applySale($price, $oldPrice, $index, $count),
-            'label'        => $this->sale->label_text,
-            'end_datetime' => $this->sale->end_datetime ?? null
+            'price' => $this->applySale($price, $oldPrice, $index, $count),
+            'label' => $this->sale->label_text,
+            'end_datetime' => $this->sale->end_datetime ?? null,
         ];
     }
 
@@ -202,7 +202,8 @@ class SaleService
         if (is_null($this->hasSaleProductsInCart)) {
             throw new \Exception('First need apply sale for cart');
         }
-        return !$this->hasSaleProductsInCart || $this->sale->has_fitting;
+
+        return ! $this->hasSaleProductsInCart || $this->sale->has_fitting;
     }
 
     /**
@@ -213,16 +214,19 @@ class SaleService
         if (is_null($this->hasSaleProductsInCart)) {
             throw new \Exception('First need apply sale for cart');
         }
-        return !$this->hasSaleProductsInCart || $this->sale->has_installment;
+
+        return ! $this->hasSaleProductsInCart || $this->sale->has_installment;
     }
 
     public function applyForCart(Cart $cart)
     {
         $this->hasSaleProductsInCart = false;
 
-        if (!$this->hasSale()) return;
+        if (! $this->hasSale()) {
+            return;
+        }
 
-        $products = $cart->items->map(fn($item, $key) => $item->product);
+        $products = $cart->items->map(fn ($item, $key) => $item->product);
         $products = $products->sortBy('price');
 
         $productSaleList = [];
@@ -230,7 +234,7 @@ class SaleService
             if ($this->checkSaleConditions($product)) {
                 $productSaleList[$product->id] = [
                     'price' => $product->price,
-                    'oldPrice' => $product->getFixedOldPrice()
+                    'oldPrice' => $product->getFixedOldPrice(),
                 ];
                 $this->hasSaleProductsInCart = true;
             }

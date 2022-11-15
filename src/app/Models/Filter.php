@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Cache;
 use App\Models\ProductAttributes\Status;
+use Illuminate\Support\Facades\Cache;
 
 class Filter
 {
@@ -36,7 +36,7 @@ class Filter
     /**
      * Получить все фильтра
      *
-     * @param array $filtersList список нужных фильтров
+     * @param  array  $filtersList список нужных фильтров
      * @return array
      */
     public static function all(array $filtersList = null)
@@ -45,7 +45,7 @@ class Filter
             $filters = Cache::get('filters');
         }
 
-        if (!isset($filters)) {
+        if (! isset($filters)) {
             $filtersList ??= array_keys(self::$filtersModels);
             foreach ($filtersList as $filterName) {
                 $model = self::$filtersModels[$filterName];
@@ -62,6 +62,7 @@ class Filter
             }
             Cache::put('filters', $filters, 86400); // day
         }
+
         return $filters;
     }
 

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('banners', function (Blueprint $table) {
-          $table->dropColumn('timer');
+            $table->dropColumn('timer');
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('banners', function (Blueprint $table) {
-          $table->dateTime('timer')->nullable();
+            $table->dateTime('timer')->nullable();
         });
     }
 };

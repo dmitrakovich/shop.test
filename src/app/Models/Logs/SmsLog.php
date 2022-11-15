@@ -3,8 +3,8 @@
 namespace App\Models\Logs;
 
 use App\Models\Orders\Order;
-use Illuminate\Database\Eloquent\Model;
 use Encore\Admin\Auth\Database\Administrator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**

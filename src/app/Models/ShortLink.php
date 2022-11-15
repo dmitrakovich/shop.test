@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * ShortLink provide full link by short link
  *
- * @property integer $id
+ * @property int $id
  * @property string $short_link
  * @property string $full_link
  * @property Carbon $created_at
@@ -19,6 +19,7 @@ class ShortLink extends Model
     use HasFactory;
 
     final const SHORT_LINK_LENGTH = 7;
+
     final const CHAR_LIST = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234567890';
 
     /**
@@ -44,7 +45,7 @@ class ShortLink extends Model
     {
         $fuse = 15;
         do {
-            if (!$fuse--) {
+            if (! $fuse--) {
                 throw new \Exception('Too many attempts to generate');
             }
             $random = substr(str_shuffle(self::CHAR_LIST), 0, self::SHORT_LINK_LENGTH);

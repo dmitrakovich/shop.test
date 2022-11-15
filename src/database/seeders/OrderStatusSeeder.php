@@ -5,7 +5,9 @@ namespace Database\Seeders;
 class OrderStatusSeeder extends AbstractSeeder
 {
     protected $sortColumn = 'sorting';
+
     protected $tableName = 'order_statuses';
+
     protected $values = [
         ['key' => 'new', 'name_for_admin' => 'Принят', 'name_for_user' => 'Принят'],
         ['key' => 'canceled', 'name_for_admin' => 'Отменен', 'name_for_user' => 'Отменен'],

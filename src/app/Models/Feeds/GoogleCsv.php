@@ -45,7 +45,7 @@ class GoogleCsv extends AbstractFeed
      */
     public function getPreparedData(): object
     {
-        return (object)[
+        return (object) [
             'headers' => $this->getHeaders(),
             'rows' => $this->getRows(),
         ];
@@ -84,7 +84,7 @@ class GoogleCsv extends AbstractFeed
                 return [
                     $item->id,
                     $this->getItemTitle($item),
-                    $this->getHost() . $item->getUrl(),
+                    $this->getHost().$item->getUrl(),
                     $this->getProductImages($item->getMedia())[0],
                     $this->getDescription($item),
                     $item->category->name,
@@ -97,8 +97,8 @@ class GoogleCsv extends AbstractFeed
     /**
      * Get sale price if exist
      *
-     * @param float $price
-     * @param float $oldPrice
+     * @param  float  $price
+     * @param  float  $oldPrice
      * @return string|null
      */
     protected function getSalePrice(float $price, float $oldPrice): ?string
@@ -109,29 +109,29 @@ class GoogleCsv extends AbstractFeed
     /**
      * Format price for google csv
      *
-     * @param float $price
+     * @param  float  $price
      * @return string
      */
     protected function formatPrice(float $price): string
     {
-        return number_format($price, 2) . ' ' . $this->currency->code;
+        return number_format($price, 2).' '.$this->currency->code;
     }
 
     /**
      * Prepared item title
      *
-     * @param Product $item
+     * @param  Product  $item
      * @return string
      */
     protected function getItemTitle(Product $item): string
     {
-        return $item->category->name . ' ' . $item->sku;
+        return $item->category->name.' '.$item->sku;
     }
 
     /**
      * Generate product description
      *
-     * @param Product $product
+     * @param  Product  $product
      * @return string
      */
     public function getDescription(Product $product): string

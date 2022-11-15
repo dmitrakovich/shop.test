@@ -19,7 +19,7 @@ class GoogleTagManagerProvider extends ServiceProvider
     {
         GoogleTagManagerFacade::macro('view', function (string $page, ?array $content = null) {
             $currency = Currency::getCurrentCurrency();
-            $userData = Auth::check() ?  Auth::user() : Guest::getData();
+            $userData = Auth::check() ? Auth::user() : Guest::getData();
             GoogleTagManagerFacade::push(array_filter([
                 'pageType' => $page,
                 'user_type' => Auth::check() ? Auth::user()->usergroup_id : 'guest',

@@ -17,7 +17,7 @@ class CsvService extends AbstractFeedService
     /**
      * Save csv data to file
      *
-     * @param object $data
+     * @param  object  $data
      * @return void
      */
     protected function saveToFile(object $data): void

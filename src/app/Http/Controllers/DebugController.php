@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Jobs\Payment\SendInstallmentNoticeJob;
 use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
+use App\Models\User;
 use App\Notifications\TestSms;
-use libphonenumber\PhoneNumberUtil;
-use libphonenumber\PhoneNumberFormat;
 use Illuminate\Database\Eloquent\Model;
-use App\Jobs\Payment\SendInstallmentNoticeJob;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 
 class DebugController extends Controller
 {
     public function index()
     {
         SendInstallmentNoticeJob::dispatchSync();
+
         return 'ok';
 
         /** @var User $user */
@@ -36,7 +37,7 @@ class DebugController extends Controller
     }
 
     /**
-     * @param Order $order
+     * @param  Order  $order
      * @return void
      */
     public function printOrder(Order $order)
@@ -58,7 +59,6 @@ class DebugController extends Controller
             $this->formatPhone($order);
         });
 
-
         User::all()->each(function (Model $user) {
             $this->formatPhone($user);
         });
@@ -79,7 +79,7 @@ class DebugController extends Controller
 
             $parsedPhone = $phoneUtil->parse($phone, $countryCode);
 
-            if (!$phoneUtil->isValidNumber($parsedPhone)) {
+            if (! $phoneUtil->isValidNumber($parsedPhone)) {
                 return;
             }
 
@@ -93,6 +93,7 @@ class DebugController extends Controller
             }
         } catch (\Throwable $th) {
             dump($th->getMessage());
+
             return;
         }
     }

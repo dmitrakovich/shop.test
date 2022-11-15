@@ -2,8 +2,10 @@
 
 use App\Admin\Field;
 use Encore\Admin\Facades\Admin;
+
 /**
  * Laravel-admin - admin builder based on Laravel.
+ *
  * @author z-song <https://github.com/z-song>
  *
  * Bootstraper for Admin.
@@ -17,9 +19,7 @@ use Encore\Admin\Facades\Admin;
  * Or require js and css assets:
  * Admin::css('/packages/prettydocs/css/styles.css');
  * Admin::js('/packages/prettydocs/js/main.js');
- *
  */
-
 Encore\Admin\Form::forget(['map', 'editor']);
 
 Encore\Admin\Form::extend('phone', Field\Phone::class);

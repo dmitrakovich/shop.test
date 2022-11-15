@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string code currency code 3 symbol (ISO 4217)
  * @property string country country code 2 symbol (ISO 3166-1)
  * @property float rate
- * @property integer decimals
+ * @property int decimals
  * @property string symbol
  * @property string icon
  * @property \Illuminate\Support\Carbon created_at

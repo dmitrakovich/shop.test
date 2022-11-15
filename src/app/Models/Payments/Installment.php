@@ -5,22 +5,21 @@ namespace App\Models\Payments;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Installment class
  *
- * @property integer $id
- * @property integer $order_item_id
+ * @property int $id
+ * @property int $order_item_id
  * @property string $contract_number
  * @property float $monthly_fee
- * @property boolean $send_notifications
+ * @property bool $send_notifications
  * @property Carbon|null $notice_sent_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
- *
  * @property-read Order $order
  */
 class Installment extends Model

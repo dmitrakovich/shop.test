@@ -7,6 +7,7 @@ use App\Models\Category;
 class MetaService
 {
     const MAX_FILTERS_COUNT = 3;
+
     const MAX_FILTER_VALUES_COUNT = 1;
 
     /**

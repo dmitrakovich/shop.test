@@ -2,11 +2,11 @@
 
 namespace App\Services\Feeds;
 
+use App\Contracts\FeedServiceInterface;
+use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
 use App\Models\Feeds\AbstractFeed;
 use Illuminate\Support\Facades\Log;
-use App\Contracts\FeedServiceInterface;
-use App\Facades\Currency as CurrencyFacade;
 
 abstract class AbstractFeedService implements FeedServiceInterface
 {
@@ -46,17 +46,17 @@ abstract class AbstractFeedService implements FeedServiceInterface
     /**
      * Return feed file path by instance & currency
      *
-     * @param string $prefix
-     * @param string $postfix
+     * @param  string  $prefix
+     * @param  string  $postfix
      * @return string
      */
     protected function getFilePath(string $prefix = '', string $postfix = ''): string
     {
-        return storage_path('app') . DIRECTORY_SEPARATOR
-            . self::FEEDS_DIR . DIRECTORY_SEPARATOR
-            . $prefix . $this->feedInstance->getKey() . '_'
-            . strtolower($this->currency->code) . $postfix
-            . '.' . $this->feedInstance::FILE_TYPE;
+        return storage_path('app').DIRECTORY_SEPARATOR
+            .self::FEEDS_DIR.DIRECTORY_SEPARATOR
+            .$prefix.$this->feedInstance->getKey().'_'
+            .strtolower($this->currency->code).$postfix
+            .'.'.$this->feedInstance::FILE_TYPE;
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractFeedService implements FeedServiceInterface
      */
     public function backup(): void
     {
-        if (!file_exists($this->filePath)) {
+        if (! file_exists($this->filePath)) {
             return;
         }
 

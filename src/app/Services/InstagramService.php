@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\Models\Api\Token;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class InstagramService
 {
@@ -20,7 +20,7 @@ class InstagramService
         'caption',
         'timestamp',
         'thumbnail_url',
-        'permalink'
+        'permalink',
     ];
 
     /**
@@ -37,12 +37,14 @@ class InstagramService
      * Cache keys
      */
     final const CACHE_POSTS_KEY = 'instagram_posts';
+
     final const CACHE_TITLE_KEY = 'instagram_title';
 
     /**
      * Media types
      */
     final const MEDIA_TYPE_IMAGE = ['IMAGE', 'CAROUSEL_ALBUM'];
+
     final const MEDIA_TYPE_VIDEO = ['VIDEO', 'REELS'];
 
     /**
@@ -76,9 +78,9 @@ class InstagramService
      */
     protected function getNewToken(string $oldToken): string
     {
-        $response = Http::get(self::BASE_URL . '/refresh_access_token', [
+        $response = Http::get(self::BASE_URL.'/refresh_access_token', [
             'grant_type' => 'ig_refresh_token',
-            'access_token' => $oldToken
+            'access_token' => $oldToken,
         ]);
 
         return $response->json('access_token');
@@ -89,9 +91,9 @@ class InstagramService
      */
     public function getPosts(): array
     {
-        $response = Http::get(self::BASE_URL . '/me/media', [
+        $response = Http::get(self::BASE_URL.'/me/media', [
             'fields' => implode(',', self::POSTS_FIELDS),
-            'access_token' => $this->getAccessToken()
+            'access_token' => $this->getAccessToken(),
         ]);
 
         if ($this->captureException($response)) {
@@ -106,7 +108,7 @@ class InstagramService
      */
     public function getCachedPosts(): array
     {
-        return Cache::remember(self::CACHE_POSTS_KEY, 3600, fn() => $this->getPosts());
+        return Cache::remember(self::CACHE_POSTS_KEY, 3600, fn () => $this->getPosts());
     }
 
     /**
@@ -139,6 +141,7 @@ class InstagramService
         if ($response->failed() || isset($data['error']) || empty($data['data']) || is_string($data)) {
             $errorMsg = $data['error']['message'] ?? (is_string($data) ? $data : null) ?? 'Unknown instagram api error';
             Log::error(new \Exception($errorMsg));
+
             return true;
         }
 
@@ -150,8 +153,8 @@ class InstagramService
      */
     public function filterWrongData(array $data): array
     {
-        return array_filter($data, fn (array $post) =>
-            isset($post['caption']) && in_array($post['media_type'], self::MEDIA_TYPE_IMAGE)
-        );
+        return array_filter($data, function (array $post) {
+            return isset($post['caption']) && in_array($post['media_type'], self::MEDIA_TYPE_IMAGE);
+        });
     }
 }

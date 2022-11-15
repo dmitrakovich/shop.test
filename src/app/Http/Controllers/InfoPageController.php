@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\InfoPage;
-use Illuminate\Contracts\View\View;
 use App\Services\GoogleTagManagerService;
+use Illuminate\Contracts\View\View;
 
 class InfoPageController extends Controller
 {
@@ -13,7 +13,7 @@ class InfoPageController extends Controller
      */
     public function index(GoogleTagManagerService $gtmService, ?string $slug = null): View
     {
-        $currentInfoPage = InfoPage::when($slug, fn($query) => $query->where('slug', $slug))
+        $currentInfoPage = InfoPage::when($slug, fn ($query) => $query->where('slug', $slug))
             ->firstOrFail(['slug', 'name', 'html'])
             ->toArray();
 

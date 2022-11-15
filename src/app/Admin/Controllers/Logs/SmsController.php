@@ -2,12 +2,12 @@
 
 namespace App\Admin\Controllers\Logs;
 
+use App\Models\Logs\SmsLog;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Models\Logs\SmsLog;
 use Encore\Admin\Widgets\Table;
-use Encore\Admin\Controllers\AdminController;
 
 class SmsController extends AdminController
 {
@@ -27,12 +27,13 @@ class SmsController extends AdminController
     {
         $grid = new Grid(new SmsLog());
 
-        $grid->column('id', 'id')->hide();;
-        $grid->column('admin.name','Менеджер');
+        $grid->column('id', 'id')->hide();
+        $grid->column('admin.name', 'Менеджер');
         $grid->column('order_id', 'Заказ')->modal(function ($model) {
             if (empty($model->order_id) || empty($order = $model->order()->first())) {
                 return 'Смс сообщение не связанно с заказом';
             }
+
             return new Table([], [
                 'id' => $order->id,
                 'ФИО' => $order->user_full_name,
@@ -43,8 +44,8 @@ class SmsController extends AdminController
                 'Дата заказа' => $order->created_at,
             ]);
         });
-        $grid->column('route','Тип (маршрут)');
-        $grid->column('phone','Номер телефона');
+        $grid->column('route', 'Тип (маршрут)');
+        $grid->column('phone', 'Номер телефона');
         $grid->column('text', 'Текс сообщения');
         $grid->column('status', 'Статус');
         $grid->column('created_at', 'Дата и время отправки');
@@ -63,7 +64,7 @@ class SmsController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)

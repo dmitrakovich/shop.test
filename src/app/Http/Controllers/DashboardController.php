@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Requests\Auth\UpdateRequest;
 use App\Models\Country;
-use Illuminate\Support\Str;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\Auth\UpdateRequest;
+use Illuminate\Support\Str;
 
 class DashboardController extends Controller
 {
@@ -29,8 +29,8 @@ class DashboardController extends Controller
     /**
      * Получить данные профиля
      *
-     * @param User $user
-     * @param Request $request
+     * @param  User  $user
+     * @param  Request  $request
      * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
     public function update(User $user, UpdateRequest $request)

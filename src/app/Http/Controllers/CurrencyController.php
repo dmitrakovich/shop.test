@@ -14,7 +14,8 @@ class CurrencyController extends Controller
      */
     public function switch(Request $request)
     {
-        Currency::setCurrentCurrency((string)$request->input('currency'));
+        Currency::setCurrentCurrency((string) $request->input('currency'));
+
         return back();
     }
 }

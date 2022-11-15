@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * Class User
  *
- * @package App
  *
  * @property string $first_name
  * @property string $last_name
@@ -101,7 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hasAddresses(): bool
     {
-        return !empty($this->getFirstAddress()->id);
+        return ! empty($this->getFirstAddress()->id);
     }
 
     /**
@@ -117,7 +116,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Interact with the user's first name.
      *
-     * @param string $firstName
+     * @param  string  $firstName
      */
     public function firstName(): Attribute
     {
@@ -139,7 +138,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Route notifications for the SmsTraffic channel.
      *
-     * @param  \Illuminate\Notifications\Notification $notification
+     * @param  \Illuminate\Notifications\Notification  $notification
      * @return string
      */
     public function routeNotificationForSmsTraffic($notification)

@@ -2,15 +2,15 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Category;
+use App\Models\Collection;
 use App\Models\Sale;
-use App\Models\Style;
 use App\Models\Season;
+use App\Models\Style;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Models\Category;
-use App\Models\Collection;
-use Encore\Admin\Controllers\AdminController;
 
 class SaleController extends AdminController
 {
@@ -28,7 +28,7 @@ class SaleController extends AdminController
         Sale::ALGORITHM_FAKE => 'Ложная',
         Sale::ALGORITHM_SIMPLE => 'Простая',
         Sale::ALGORITHM_COUNT => 'От кол-ва',
-        Sale::ALGORITHM_ASCENDING => 'По возрастанию'
+        Sale::ALGORITHM_ASCENDING => 'По возрастанию',
     ];
 
     /**
@@ -60,19 +60,20 @@ class SaleController extends AdminController
         // $grid->column('deleted_at', __('Deleted at'));
 
         $grid->actions(function ($actions) {
-          $actions->disableView();
+            $actions->disableView();
         });
         $grid->disableFilter();
         $grid->disableExport();
         $grid->disableColumnSelector();
         $grid->disableRowSelector();
+
         return $grid;
     }
 
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)
@@ -90,9 +91,9 @@ class SaleController extends AdminController
         $form = new Form(new Sale());
 
         $allCategoriesList = Category::getFormatedTree();
-        $allCollectionsList = Collection::pluck('name','id')->toArray();
+        $allCollectionsList = Collection::pluck('name', 'id')->toArray();
         $allStylesList = Style::orderBy('name')->pluck('name', 'id')->toArray();
-        $allSeasonsList = Season::pluck('name','id')->toArray();
+        $allSeasonsList = Season::pluck('name', 'id')->toArray();
 
         $form->text('title', 'Название')->required();
         $form->text('label_text', 'Текст на шильде');
@@ -126,14 +127,15 @@ class SaleController extends AdminController
         });
 
         $form->tools(function (Form\Tools $tools) {
-          $tools->disableView();
+            $tools->disableView();
         });
         $form->footer(function ($footer) {
-          $footer->disableReset();
-          $footer->disableViewCheck();
-          $footer->disableEditingCheck();
-          $footer->disableCreatingCheck();
+            $footer->disableReset();
+            $footer->disableViewCheck();
+            $footer->disableEditingCheck();
+            $footer->disableCreatingCheck();
         });
+
         return $form;
     }
 
@@ -148,6 +150,7 @@ class SaleController extends AdminController
         if (count($ids) == count($allEntities)) {
             return null;
         }
+
         return array_map('intval', $ids);
     }
 }

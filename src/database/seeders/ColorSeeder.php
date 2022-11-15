@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class ColorSeeder extends Seeder
 {
     protected $tableName = 'colors';
+
     protected $values = [
         ['name' => 'черный', 'slug' => 'black', 'seo' => 'черный,черная,черное,черные', 'value' => '#000000'],
         ['name' => 'коричневый', 'slug' => 'brown', 'seo' => 'коричневый,коричневая,коричневое,коричневые', 'value' => '#964B00'],
@@ -27,6 +28,7 @@ class ColorSeeder extends Seeder
         ['name' => 'розовый', 'slug' => 'pink', 'seo' => 'розовый,розовая,розовое,розовые', 'value' => '#FF69B4'],
         ['name' => 'мультиколор', 'slug' => 'multi', 'seo' => 'разноцветный,разноцветная,разноцветное,разноцветные', 'value' => '#FF69B4'],
     ];
+
     /**
      * Run the database seeds.
      *

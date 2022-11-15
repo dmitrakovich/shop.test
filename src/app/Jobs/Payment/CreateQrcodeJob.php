@@ -4,12 +4,11 @@ namespace App\Jobs\Payment;
 
 use App\Models\Payments\OnlinePayment;
 use App\Services\Payment\PaymentService;
-
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class CreateQrcodeJob implements ShouldQueue
 {
@@ -20,9 +19,8 @@ class CreateQrcodeJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(
-        private readonly OnlinePayment $onlinePayment
-    ) {
+    public function __construct(private OnlinePayment $onlinePayment)
+    {
     }
 
     /**

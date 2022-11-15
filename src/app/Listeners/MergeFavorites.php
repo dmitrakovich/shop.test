@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Models\Device;
 use App\Models\Favorite;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class MergeFavorites
 {

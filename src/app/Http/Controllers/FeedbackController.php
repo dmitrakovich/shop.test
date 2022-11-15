@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Feedback;
-use Illuminate\Http\Request;
 use App\Http\Requests\FeedbackRequest;
+use App\Models\Feedback;
 use App\Services\GoogleTagManagerService;
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
@@ -33,7 +32,7 @@ class FeedbackController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\FeedbackRequest $request
+     * @param  \App\Http\Requests\FeedbackRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(FeedbackRequest $feedbackRequest)
@@ -60,7 +59,7 @@ class FeedbackController extends Controller
 
         return [
             'result' => 'После модерации Ваш отзыв будет опубликован на сайте.',
-            'dataLayer' => GoogleTagManagerFacade::getFlashData()
+            'dataLayer' => GoogleTagManagerFacade::getFlashData(),
         ];
     }
 }

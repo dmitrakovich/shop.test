@@ -2,8 +2,8 @@
 
 namespace App\Models\Feeds;
 
-use App\Models\Product;
 use App\Models\Category;
+use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Str;
@@ -32,7 +32,7 @@ class GoogleXml extends AbstractFeed
      */
     public function getPreparedData(): object
     {
-        return (object)[
+        return (object) [
             'channel' => $this->getChannel(),
             'items' => $this->getItems(),
         ];
@@ -45,7 +45,7 @@ class GoogleXml extends AbstractFeed
      */
     protected function getChannel(): object
     {
-        return (object)[
+        return (object) [
             'title' => 'Барокко',
             'link' => $this->getHost(),
             'description' => 'Интернет магазин брендовой обуви',
@@ -61,9 +61,9 @@ class GoogleXml extends AbstractFeed
     {
         return (new ProductService)->getForFeed(true)
             ->map(function (Product $item) {
-                return (object)[
+                return (object) [
                     'id' => $item->id,
-                    'link' => $this->getHost() . $item->getUrl(),
+                    'link' => $this->getHost().$item->getUrl(),
                     'size' => $item->sizes->implode('name', '/'),
                     'availability' => $item->trashed() ? 'out of stock' : 'in stock',
                     'price' => $item->getPrice(),
@@ -84,8 +84,9 @@ class GoogleXml extends AbstractFeed
      * Return google product category
      *
      * @see https://support.google.com/merchants/answer/6324436?hl=ru
-     * @param Category $category
-     * @return integer
+     *
+     * @param  Category  $category
+     * @return int
      */
     protected function getGoogleCategory(Category $category): int
     {
@@ -101,7 +102,7 @@ class GoogleXml extends AbstractFeed
     /**
      * Generate & return product type
      *
-     * @param Category $category
+     * @param  Category  $category
      * @return string
      */
     protected function getProductType(Category $category): string
@@ -111,18 +112,19 @@ class GoogleXml extends AbstractFeed
             $type[] = 'Женские аксессуары';
         } else {
             $type[] = 'Женская обувь';
-            if (!in_array($category->parent_id, [null, Category::ROOT_CATEGORY_ID])) {
+            if (! in_array($category->parent_id, [null, Category::ROOT_CATEGORY_ID])) {
                 $type[] = $this->getCategoriesList()[$category->parent_id]->title;
             }
         }
         $type[] = $category->title;
+
         return implode(' > ', $type);
     }
 
     /**
      * Prepare color from colors for filters
      *
-     * @param EloquentCollection $colors
+     * @param  EloquentCollection  $colors
      * @return string
      */
     public function getColor(EloquentCollection $colors): string
@@ -133,16 +135,16 @@ class GoogleXml extends AbstractFeed
     /**
      * Generate product description
      *
-     * @param Product $product
+     * @param  Product  $product
      * @return string
      */
     public function getDescription(Product $product): string
     {
-        $description = $product->extendedName() . '. ';
-        $description .= $this->sizesToString($product->sizes) . '. ';
+        $description = $product->extendedName().'. ';
+        $description .= $this->sizesToString($product->sizes).'. ';
         $description .= "Цвет: {$product->color_txt}. ";
 
-        if (!empty($product->fabric_top_txt)) {
+        if (! empty($product->fabric_top_txt)) {
             $description .= 'Материал';
             if ($product->category->parent_id != Category::ACCESSORIES_PARENT_ID) {
                 $description .= ' верха';
@@ -150,16 +152,16 @@ class GoogleXml extends AbstractFeed
             $description .= ": {$product->fabric_top_txt}. ";
         }
 
-        if (!empty($product->fabric_insole_txt)) {
+        if (! empty($product->fabric_insole_txt)) {
             $description .= "Материал подкладки: {$product->fabric_insole_txt}. ";
         }
 
-        if (!empty($product->fabric_outsole_txt)) {
+        if (! empty($product->fabric_outsole_txt)) {
             $description .= "Материал подошвы: {$product->fabric_outsole_txt}. ";
         }
 
-        if (!empty($product->heel_txt)) {
-            $description .=  "Высота каблука: {$product->heel_txt}. ";
+        if (! empty($product->heel_txt)) {
+            $description .= "Высота каблука: {$product->heel_txt}. ";
         }
 
         $description .= $product->description;

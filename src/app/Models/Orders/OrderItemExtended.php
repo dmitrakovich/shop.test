@@ -49,6 +49,7 @@ class OrderItemExtended extends OrderItem
      * Product name
      *
      * @deprecated
+     *
      * @return string
      */
     public function getProductNameAttribute(): string

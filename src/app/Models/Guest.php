@@ -16,7 +16,7 @@ class Guest
     final const COOKIE_NAME = 'guest_data';
 
     /**
-     * @var integer 1 year
+     * @var int 1 year
      */
     final const COOKIE_LIFE_TIME = 525600;
 
@@ -47,10 +47,11 @@ class Guest
      */
     protected static function checkData(array $data): bool
     {
-        if (!empty($data['phone']) || !empty($data['email'])) {
+        if (! empty($data['phone']) || ! empty($data['email'])) {
             return true;
         } else {
-            Log::warning('Wrong guest data! data: ' . json_encode($data));
+            Log::warning('Wrong guest data! data: '.json_encode($data));
+
             return false;
         }
     }

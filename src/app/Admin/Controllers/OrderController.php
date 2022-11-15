@@ -2,23 +2,32 @@
 
 namespace App\Admin\Controllers;
 
-use Encore\Admin\{Form, Grid, Show};
-use App\Models\{Country, Currency, Product, Size};
-use App\Models\Payments\{Installment, OnlinePayment};
-use App\Models\Orders\{Order, OrderItemExtended, OrderStatus, OrderItemStatus};
-
-use Payments\PaymentMethod;
-use Deliveries\DeliveryMethod;
-use Encore\Admin\Facades\Admin;
-use Encore\Admin\Layout\Content;
-use Encore\Admin\Widgets\Table;
-use App\Models\Enum\OrderMethod;
-
-use App\Admin\Actions\Order\{CreateOnlinePayment, PrintOrder, ProcessOrder};
+use App\Admin\Actions\Order\CreateOnlinePayment;
+use App\Admin\Actions\Order\PrintOrder;
+use App\Admin\Actions\Order\ProcessOrder;
 use App\Facades\Currency as CurrencyFacade;
+use App\Models\Country;
+use App\Models\Currency;
+use App\Models\Enum\OrderMethod;
+use App\Models\Orders\Order;
+use App\Models\Orders\OrderItemExtended;
+use App\Models\Orders\OrderItemStatus;
+use App\Models\Orders\OrderStatus;
+use App\Models\Payments\Installment;
+use App\Models\Payments\OnlinePayment;
+use App\Models\Product;
+use App\Models\Size;
+use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Form;
+use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\ContextMenuActions;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Show;
+use Encore\Admin\Widgets\Table;
+use Payments\PaymentMethod;
 
 class OrderController extends AdminController
 {
@@ -102,7 +111,7 @@ class OrderController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)
@@ -144,9 +153,8 @@ class OrderController extends AdminController
     /**
      * Edit interface.
      *
-     * @param mixed   $id
-     * @param Content $content
-     *
+     * @param  mixed  $id
+     * @param  Content  $content
      * @return Content
      */
     public function edit($id, Content $content)
@@ -168,7 +176,7 @@ class OrderController extends AdminController
 
         if ($form->isEditing()) {
             $form->tools($this->getPrintTool());
-            $form->tools($this->getProcessTool((int)request('order')));
+            $form->tools($this->getProcessTool((int) request('order')));
         }
 
         $form->tab('Основное', function ($form) {
@@ -282,10 +290,10 @@ class OrderController extends AdminController
         });
 
         $form->saved(function (Form $form) {
-            if ((int)$form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
+            if ((int) $form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
                 $this->saveInstallments($form);
             }
-             // TODO: recalc order total price
+            // TODO: recalc order total price
         });
 
         return $form;
@@ -298,11 +306,11 @@ class OrderController extends AdminController
     {
         /** @var OrderItemExtended $itemExtended */
         foreach ($form->model()->itemsExtended as $itemExtended) {
-            $contractNumber = (int)$form->input("itemsExtended.{$itemExtended->id}.installment_contract_number");
-            if (!$contractNumber) {
+            $contractNumber = (int) $form->input("itemsExtended.{$itemExtended->id}.installment_contract_number");
+            if (! $contractNumber) {
                 continue;
             }
-            $monthlyFee = (float)$form->input("itemsExtended.{$itemExtended->id}.installment_monthly_fee");
+            $monthlyFee = (float) $form->input("itemsExtended.{$itemExtended->id}.installment_monthly_fee");
             $sendNotifications = $form->input("itemsExtended.{$itemExtended->id}.installment_send_notifications") === 'on';
             /** @var Installment $installment */
             $installment = $itemExtended->installment()->firstOrNew();
@@ -318,17 +326,17 @@ class OrderController extends AdminController
         $grid = new Grid(new OnlinePayment());
         $grid->model()->where('order_id', $orderId)->orderBy('id', 'desc');
 
-        $grid->column('created_at', 'Дата/время создания')->display(function($date) {
+        $grid->column('created_at', 'Дата/время создания')->display(function ($date) {
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
         });
-        $grid->column('admin.name',  'Менеджер');
-        $grid->column('amount',     'Сумма платежа');
+        $grid->column('admin.name', 'Менеджер');
+        $grid->column('amount', 'Сумма платежа');
 
-        $grid->column('expires_at', 'Срок действия платежа')->display(function($date) {
+        $grid->column('expires_at', 'Срок действия платежа')->display(function ($date) {
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
         });
-        $grid->column('link', 'Срок действия платежа')->display(function($link) {
-            return '<a href="' . $link . '" target="_blank">Ссылка на станицу оплаты</a>';
+        $grid->column('link', 'Срок действия платежа')->display(function ($link) {
+            return '<a href="'.$link.'" target="_blank">Ссылка на станицу оплаты</a>';
         });
 
         $grid->tools(function (Grid\Tools $tools) use ($orderId) {
@@ -341,13 +349,14 @@ class OrderController extends AdminController
         $grid->disableExport();
         $grid->disableColumnSelector();
         $grid->disableRowSelector();
+
         return $grid->render();
     }
 
     /**
      * Set utm sources in form
      *
-     * @param Form $form
+     * @param  Form  $form
      * @return void
      */
     protected function setUtmSources(Form $form): void
@@ -357,8 +366,8 @@ class OrderController extends AdminController
         $form->hidden('utm_campaign');
 
         $form->saving(function (Form $form) {
-            if (!empty($form->order_method)) {
-                list($utmSource, $utmMedium, $utmCampaign) = OrderMethod::getUtmSources($form->order_method);
+            if (! empty($form->order_method)) {
+                [$utmSource, $utmMedium, $utmCampaign] = OrderMethod::getUtmSources($form->order_method);
                 $form->utm_source = $utmSource;
                 $form->utm_medium = $utmMedium;
                 $form->utm_campaign = $utmCampaign;
@@ -369,7 +378,7 @@ class OrderController extends AdminController
     /**
      * Handle process order action
      *
-     * @param Order $order
+     * @param  Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function process(Order $order)
@@ -382,15 +391,15 @@ class OrderController extends AdminController
     /**
      * Render process tool
      *
-     * @param integer $orderId
+     * @param  int  $orderId
      * @return \Closure
      */
     protected function getProcessTool(int $orderId)
     {
         return function ($tools) use ($orderId) {
             $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
-                <a  href="' . route('admin.orders.process', $orderId) . '" class="btn btn-sm" style="color: #fff; background-color: #800080; border-color: #730d73;">
-                <i class="fa fa-archive"></i>&nbsp;&nbsp;' . (new ProcessOrder)->name . '</a></div>');
+                <a  href="'.route('admin.orders.process', $orderId).'" class="btn btn-sm" style="color: #fff; background-color: #800080; border-color: #730d73;">
+                <i class="fa fa-archive"></i>&nbsp;&nbsp;'.(new ProcessOrder)->name.'</a></div>');
         };
     }
 
@@ -403,7 +412,7 @@ class OrderController extends AdminController
     {
         return function ($tools) {
             $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
-                <a onclick="' . PrintOrder::printScript(request('order')) . '" class="btn btn-sm btn-success">
+                <a onclick="'.PrintOrder::printScript(request('order')).'" class="btn btn-sm btn-success">
                 <i class="fa fa-print"></i>&nbsp;&nbsp;Печать</a></div>');
         };
     }
@@ -416,6 +425,7 @@ class OrderController extends AdminController
     protected function getScriptForExtendedItems(): string
     {
         $installmentPaymentId = Installment::PAYMENT_METHOD_ID;
+
         return <<<JS
 $(function () {
     // disable editing for current items in order

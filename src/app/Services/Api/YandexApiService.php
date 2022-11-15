@@ -30,7 +30,7 @@ class YandexApiService
     {
         return $this->get(
             'https://cloud-api.yandex.net:443/v1/disk/resources',
-            ['path' => '/Ostatki/ostatki.txt', 'field' => 'modified,md5',]
+            ['path' => '/Ostatki/ostatki.txt', 'field' => 'modified,md5']
         );
     }
 
@@ -50,8 +50,8 @@ class YandexApiService
     /**
      * Send GET query to yandex api
      *
-     * @param string $url
-     * @param array $params
+     * @param  string  $url
+     * @param  array  $params
      * @return mixed
      */
     protected function get(string $url, array $params = [])

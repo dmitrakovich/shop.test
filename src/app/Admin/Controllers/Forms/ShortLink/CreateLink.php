@@ -3,8 +3,8 @@
 namespace App\Admin\Controllers\Forms\ShortLink;
 
 use App\Models\ShortLink;
-use Illuminate\Http\Request;
 use Encore\Admin\Widgets\StepForm;
+use Illuminate\Http\Request;
 
 class CreateLink extends StepForm
 {
@@ -25,8 +25,7 @@ class CreateLink extends StepForm
     /**
      * Handle the form request.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request)
@@ -53,7 +52,7 @@ class CreateLink extends StepForm
         $shortLink = ShortLink::createShortLink($fullLink);
 
         return [
-            'short_link' => route('short-link', $shortLink, true)
+            'short_link' => route('short-link', $shortLink, true),
         ];
     }
 

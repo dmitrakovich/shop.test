@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-use App\Models\Cart;
-use App\Models\Orders\Order;
 use App\Contracts\OrderServiceInterface;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Requests\Order\SyncRequest;
+use App\Models\Cart;
+use App\Models\Orders\Order;
 
 class OrderService implements OrderServiceInterface
 {
@@ -31,7 +31,7 @@ class OrderService implements OrderServiceInterface
                 ]);
             }
             $order->adminComments()->create([
-                'comment' => 'Заказ импортирован из modny.by. Старый номер ' . intval($request->input('id')),
+                'comment' => 'Заказ импортирован из modny.by. Старый номер '.intval($request->input('id')),
             ]);
         } else {
             foreach ($cart->items as $item) {

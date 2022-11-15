@@ -4,8 +4,8 @@ namespace App\Admin\Controllers\Forms;
 
 use App\Models\Ads\ProductCarousel;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Encore\Admin\Widgets\Form;
+use Illuminate\Http\Request;
 
 class ImidjSlider extends Form
 {
@@ -26,8 +26,7 @@ class ImidjSlider extends Form
     /**
      * Handle the form request.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request)

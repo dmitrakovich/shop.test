@@ -2,8 +2,8 @@
 
 namespace App\Contracts;
 
-use App\Models\Cart;
 use App\Http\Requests\Order\StoreRequest;
+use App\Models\Cart;
 
 interface OrderServiceInterface
 {

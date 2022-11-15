@@ -4,6 +4,7 @@ namespace App\Facades;
 
 use App\Services\CurrencyService;
 use Illuminate\Support\Facades\Facade;
+
 /**
  * @method static \Illuminate\Contracts\View\View|null getSwitcher() Get swither view
  * @method static void setCurrentCurrency(?string $currencyCode, $save = true) Set current currency

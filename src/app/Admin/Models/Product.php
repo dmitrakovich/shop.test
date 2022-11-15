@@ -12,6 +12,7 @@ class Product extends ProductModel
         'path',
         'photos',
     ];
+
     /**
      * The "booted" method of the model.
      *
@@ -21,6 +22,7 @@ class Product extends ProductModel
     {
         //
     }
+
     /**
      * Get the class name for polymorphic relations.
      *
@@ -74,6 +76,7 @@ class Product extends ProductModel
             foreach ($photos as $value) {
                 $ordering[] = $mediaItems[$mediaPointer[$value]]->id;
             }
+
             return Media::setNewOrder($ordering);
         }
 
@@ -98,6 +101,7 @@ class Product extends ProductModel
             // $photos[] = $image->getUrl('catalog');
             // $photos[] = $image->getPath();
         }
+
         return $photos;
     }
 }

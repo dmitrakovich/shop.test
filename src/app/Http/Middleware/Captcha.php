@@ -21,12 +21,12 @@ class Captcha
         if (isset($token)) {
             $data = [
                 'secret' => config('captcha.secret'),
-                'response' => $token
+                'response' => $token,
             ];
             $response = Http::get(config('captcha.url'), $data);
 
             if ($response->ok() && $response->json('success')) {
-                $captchaScore = (float)$response->json('score') * 10;
+                $captchaScore = (float) $response->json('score') * 10;
             }
         }
 

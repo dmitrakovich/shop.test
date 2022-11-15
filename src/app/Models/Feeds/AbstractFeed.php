@@ -47,13 +47,13 @@ abstract class AbstractFeed
      */
     public function getHost(): string
     {
-        return $this->cache['host'] ?? ($this->cache['host'] = 'https://' . request()->getHost());
+        return $this->cache['host'] ?? ($this->cache['host'] = 'https://'.request()->getHost());
     }
 
     /**
      * Prepare string to xml format
      *
-     * @param string $string
+     * @param  string  $string
      * @return string
      */
     public function xmlSpecialChars(string $string): string
@@ -64,7 +64,7 @@ abstract class AbstractFeed
     /**
      * Return product image urls
      *
-     * @param MediaCollection $media
+     * @param  MediaCollection  $media
      * @return array
      */
     public function getProductImages(MediaCollection $media): array
@@ -84,32 +84,33 @@ abstract class AbstractFeed
         if (empty($this->cache['product_categories'])) {
             $this->cache['product_categories'] = Category::all()->keyBy('id');
         }
+
         return $this->cache['product_categories'];
     }
 
     /**
      * Prepare sizes string from sizes list
      *
-     * @param EloquentCollection $sizes
+     * @param  EloquentCollection  $sizes
      * @return string
      */
     protected function sizesToString(EloquentCollection $sizes): string
     {
         $sizesList = $sizes->pluck('name');
-        $sizesStr = 'Размеры: ' . ($sizesList[0] ?? 'без размера');
+        $sizesStr = 'Размеры: '.($sizesList[0] ?? 'без размера');
 
         $useDash = false;
         $sizesListCount = count($sizesList);
         for ($i = 1; $i < $sizesListCount; $i++) {
             if (
                 ($i + 1) < $sizesListCount
-                && $sizesList[$i - 1] == ((int)$sizesList[$i] - 1)
-                && $sizesList[$i + 1] == ((int)$sizesList[$i] + 1)
+                && $sizesList[$i - 1] == ((int) $sizesList[$i] - 1)
+                && $sizesList[$i + 1] == ((int) $sizesList[$i] + 1)
             ) {
                 $sizesStr .= $useDash ? '' : '-';
                 $useDash = true;
             } else {
-                $sizesStr .= ($useDash ? '' : ',') . $sizesList[$i];
+                $sizesStr .= ($useDash ? '' : ',').$sizesList[$i];
                 $useDash = false;
             }
         }

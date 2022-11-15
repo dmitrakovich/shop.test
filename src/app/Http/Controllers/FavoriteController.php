@@ -32,7 +32,7 @@ class FavoriteController extends Controller
         $favorite = Favorite::create([
             'user_id' => Auth::id(),
             'device_id' => Device::getId(),
-            'product_id' => (int)$request->input('productId'),
+            'product_id' => (int) $request->input('productId'),
         ]);
 
         return $favorite->id;
@@ -45,7 +45,7 @@ class FavoriteController extends Controller
      */
     public function destroy(Request $request)
     {
-        $productId = (int)$request->route('favorite');
+        $productId = (int) $request->route('favorite');
 
         return Favorite::where('product_id', $productId)->delete();
     }

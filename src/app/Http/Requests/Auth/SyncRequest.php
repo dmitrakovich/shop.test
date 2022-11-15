@@ -3,8 +3,8 @@
 namespace App\Http\Requests\Auth;
 
 use App\Http\Requests\SyncRequestTrait;
-use Illuminate\Support\Str;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class SyncRequest extends FormRequest
 {

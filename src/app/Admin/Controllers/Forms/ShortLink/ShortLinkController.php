@@ -2,13 +2,12 @@
 
 namespace App\Admin\Controllers\Forms\ShortLink;
 
-use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Widgets\MultipleSteps;
 
 class ShortLinkController extends Controller
 {
-
     public function __invoke(Content $content)
     {
         $steps = [

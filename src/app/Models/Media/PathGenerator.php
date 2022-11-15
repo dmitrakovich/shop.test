@@ -35,7 +35,7 @@ class PathGenerator extends DefaultPathGenerator
         }
 
         for ($i = 0; $i < $nestingLevel; $i++) {
-            $path .= '/' . substr($key, 0, $i + 1);
+            $path .= '/'.substr($key, 0, $i + 1);
         }
 
         return "$path/$key";

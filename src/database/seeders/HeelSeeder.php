@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class HeelSeeder extends Seeder
 {
     protected $tableName = 'heels';
+
     protected $values = [
         ['name' => 'без каблука', 'slug' => 'heel-without', 'seo' => 'без каблука'],
         ['name' => 'низкий каблук', 'slug' => 'heel-low', 'seo' => 'на низком каблуке'],
@@ -18,6 +19,7 @@ class HeelSeeder extends Seeder
         ['name' => 'протектор', 'slug' => 'heel-prot', 'seo' => 'на протекторе'],
         ['name' => 'тракторная подошва', 'slug' => 'heel-trak', 'seo' => 'на тракторной подошве'],
     ];
+
     /**
      * Run the database seeds.
      *

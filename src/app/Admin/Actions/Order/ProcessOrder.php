@@ -9,24 +9,26 @@ use Illuminate\Database\Eloquent\Model;
 class ProcessOrder extends RowAction
 {
     public $name = 'Взять в работу';
+
     protected $isRow = false;
 
     public function handle(Model $model)
     {
         $this->isRow = true;
+
         return $this->process($model);
     }
 
     /**
      * Handle action
      *
-     * @param Model $model
+     * @param  Model  $model
      * @return mixed
      */
     public function process(Model $model)
     {
-        if (!empty($model->admin_id)) {
-            return $this->warningResponse('Заказ уже обрабатывает менеджер ' . $model->admin->name);
+        if (! empty($model->admin_id)) {
+            return $this->warningResponse('Заказ уже обрабатывает менеджер '.$model->admin->name);
         }
         if ($model->status->key != 'new') {
             return $this->warningResponse("Заказ находится в статусе \"{$model->status->name_for_admin}\", его нельзя взять в работу");
@@ -41,7 +43,7 @@ class ProcessOrder extends RowAction
     /**
      * Generate success response
      *
-     * @param string $message
+     * @param  string  $message
      * @return mixed
      */
     public function successResponse(string $message)
@@ -56,7 +58,7 @@ class ProcessOrder extends RowAction
     /**
      * Generate warning response
      *
-     * @param string $message
+     * @param  string  $message
      * @return mixed
      */
     public function warningResponse(string $message)

@@ -2,17 +2,17 @@
 
 namespace App\Services\Seo;
 
-use App\Models\Heel;
-use App\Models\Size;
 use App\Models\Brand;
-use App\Models\Color;
-use App\Models\Style;
-use App\Models\Fabric;
-use App\Models\Season;
-use App\Models\Product;
 use App\Models\Category;
 use App\Models\Collection;
+use App\Models\Color;
+use App\Models\Fabric;
+use App\Models\Heel;
+use App\Models\Product;
 use App\Models\ProductAttributes\Status;
+use App\Models\Season;
+use App\Models\Size;
+use App\Models\Style;
 use App\Models\Tag;
 use Illuminate\Support\Str;
 
@@ -53,7 +53,7 @@ class TitleGenerotorService
     {
         $discount = $product->getSalePercentage();
 
-        return $product->extendedName() . ' ' . ($discount ? "со скидкой {$discount}%." : '- новинка!');
+        return $product->extendedName().' '.($discount ? "со скидкой {$discount}%." : '- новинка!');
     }
 
     /**
@@ -63,11 +63,11 @@ class TitleGenerotorService
     {
         $description = $this->getProductTitle($product);
 
-        if (!empty($product->color_txt)) {
+        if (! empty($product->color_txt)) {
             $description .= " Цвет: {$product->color_txt}.";
         }
-        if ($product->sizes->isNotEmpty() && !$product->hasOneSize()) {
-            $description .= ' Размеры: ' . $product->sizes->implode('name', ', ');
+        if ($product->sizes->isNotEmpty() && ! $product->hasOneSize()) {
+            $description .= ' Размеры: '.$product->sizes->implode('name', ', ');
         }
 
         return $description;
@@ -86,6 +86,7 @@ class TitleGenerotorService
                 $category = end($currentFilters[$attrModel])->filters;
                 $titleValues[$attrModel] = $category->getNameForCatalogTitle();
                 $emptyCategory = $category->isRoot();
+
                 continue;
             }
 
@@ -101,7 +102,7 @@ class TitleGenerotorService
                 case Season::class:
                 case Style::class:
                     $seoFormNumber = $emptyCategory ? 1 : 3;
-                    $value = explode(',', (string)$filter->filters->seo)[$seoFormNumber] ?? null;
+                    $value = explode(',', (string) $filter->filters->seo)[$seoFormNumber] ?? null;
                     break;
 
                 case Status::class:
@@ -129,7 +130,7 @@ class TitleGenerotorService
                     break;
             }
 
-            if (!empty($value)) {
+            if (! empty($value)) {
                 $titleValues[$attrModel] = $value;
             }
 
@@ -145,7 +146,7 @@ class TitleGenerotorService
             }
         }
 
-        return Str::ucfirst((!$emptyCategory ? 'купить ' : '') . implode(' ', $titleValuesOrdered));
+        return Str::ucfirst((! $emptyCategory ? 'купить ' : '').implode(' ', $titleValuesOrdered));
     }
 
     /**
@@ -153,6 +154,6 @@ class TitleGenerotorService
      */
     public function getCatalogDescription(array $currentFilters): string
     {
-        return $this->getCatalogTitle($currentFilters) . ' с примеркой по Беларуси';
+        return $this->getCatalogTitle($currentFilters).' с примеркой по Беларуси';
     }
 }

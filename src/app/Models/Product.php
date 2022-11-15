@@ -2,21 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\Size;
-use App\Facades\Sale;
 use App\Facades\Currency;
-use Illuminate\Support\Carbon;
+use App\Facades\Sale;
 use App\Services\SearchService;
-use App\Models\ProductAttributes;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Illuminate\Database\Eloquent\{Model, Collection, Builder, Relations, SoftDeletes};
 
 /**
  * Class Product
  *
- * @package App
  *
  * @property int $id
  * @property \App\Models\Category $category
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\{Model, Collection, Builder, Relations, SoftDel
  * @property string $slug
  * @property float $price
  * @property float $old_price
- * @property integer $category_id
+ * @property int $category_id
  * @property string $color_txt
  * @property string $fabric_top_txt
  * @property string $fabric_inner_txt
@@ -170,7 +171,7 @@ class Product extends Model implements HasMedia
      */
     public function simpleName(): string
     {
-        return $this->category->title . ' ' . $this->brand->name;
+        return $this->category->title.' '.$this->brand->name;
     }
 
     /**
@@ -178,7 +179,7 @@ class Product extends Model implements HasMedia
      */
     public function shortName(): string
     {
-        return $this->category->title . ' ' . $this->id;
+        return $this->category->title.' '.$this->id;
     }
 
     /**
@@ -186,7 +187,7 @@ class Product extends Model implements HasMedia
      */
     public function extendedName(): string
     {
-        return $this->simpleName() . ' ' . $this->id;
+        return $this->simpleName().' '.$this->id;
     }
 
     /**
@@ -194,7 +195,7 @@ class Product extends Model implements HasMedia
      */
     public function getFullName(): string
     {
-        return $this->brand->name . ' ' . $this->sku;
+        return $this->brand->name.' '.$this->sku;
     }
 
     /**
@@ -202,7 +203,7 @@ class Product extends Model implements HasMedia
      */
     public function getUrl(): string
     {
-        return $this->url ?? ($this->url = $this->category->getUrl() . '/' . $this->slug);
+        return $this->url ?? ($this->url = $this->category->getUrl().'/'.$this->slug);
     }
 
     /**
@@ -215,11 +216,12 @@ class Product extends Model implements HasMedia
         $this->addMediaConversion('normal')->width(700);
         $this->addMediaConversion('full')->width(1200);
     }
+
     /**
      * Сортировка товаров
      *
-     * @param Builder $query
-     * @param string $type
+     * @param  Builder  $query
+     * @param  string  $type
      * @return Builder
      */
     public function scopeSorting(Builder $query, string $type)
@@ -232,11 +234,12 @@ class Product extends Model implements HasMedia
             // 'discount' => $query->orderByDesc('discount')->orderByDesc('id'),
         };
     }
+
     /**
      * Поиск товаров
      *
-     * @param Builder $query
-     * @param string $search
+     * @param  Builder  $query
+     * @param  string  $search
      * @return Builder
      */
     public function scopeSearch(Builder $query, ?string $search = null)
@@ -248,6 +251,7 @@ class Product extends Model implements HasMedia
 
         if ($searchService->useSimpleSearch()) {
             $searchValue = $searchService->getIds()[0];
+
             return $searchService->generateSearchQuery($query, 'sku')
                 ->orWhere('id', $searchValue);
         }
@@ -275,8 +279,8 @@ class Product extends Model implements HasMedia
     /**
      * Get only products with sale
      *
-     * @param Builder $query
-     * @param float $amount
+     * @param  Builder  $query
+     * @param  float  $amount
      * @return Builder
      */
     public function scopeOnlyWithSale(Builder $query, float $amount = 0.01)
@@ -287,8 +291,8 @@ class Product extends Model implements HasMedia
     /**
      * Get only new products
      *
-     * @param Builder $query
-     * @param int $days
+     * @param  Builder  $query
+     * @param  int  $days
      * @return Builder
      */
     public function scopeOnlyNew(Builder $query, int $days = 10)
@@ -304,7 +308,7 @@ class Product extends Model implements HasMedia
      */
     public function applySale()
     {
-        if (!isset($this->sale)) {
+        if (! isset($this->sale)) {
             Sale::applyForProduct($this);
         }
     }
@@ -316,17 +320,18 @@ class Product extends Model implements HasMedia
      */
     public function getFinalPrice()
     {
-        if (!isset($this->final_price)) {
+        if (! isset($this->final_price)) {
             $this->applySale();
             $this->final_price = $this->sale['price'] ?? $this->price;
         }
-        return $this->final_price;;
+
+        return $this->final_price;
     }
 
     /**
      * Get product price
      *
-     * @param string|null $currencyCode
+     * @param  string|null  $currencyCode
      * @return float
      */
     public function getPrice(?string $currencyCode = null): float
@@ -361,17 +366,18 @@ class Product extends Model implements HasMedia
      */
     public function getFinalOldPrice()
     {
-        if (!isset($this->final_old_price)) {
+        if (! isset($this->final_old_price)) {
             $this->applySale();
             $this->final_old_price = $this->getFixedOldPrice();
         }
+
         return $this->final_old_price;
     }
 
     /**
      * Get product old price
      *
-     * @param string|null $currencyCode
+     * @param  string|null  $currencyCode
      * @return float
      */
     public function getOldPrice(?string $currencyCode = null): float
@@ -401,7 +407,7 @@ class Product extends Model implements HasMedia
 
     /**
      * Get product formatted price diff
-     * 
+     *
      * @return float
      */
     public function getFormattedPriceDiff(): string
@@ -412,7 +418,7 @@ class Product extends Model implements HasMedia
     /**
      * Calculate sale percentage
      *
-     * @return integer
+     * @return int
      */
     public function getSalePercentage(): int
     {
@@ -422,18 +428,19 @@ class Product extends Model implements HasMedia
     /**
      * Calculate full sale percentage - discount percentage
      *
-     * @return integer
+     * @return int
      */
     public function getOnlySalePercentage(): int
     {
         $result = ceil($this->getSalePercentage() - $this->getDiscountPercentage());
+
         return ($result > 0) ? $result : null;
     }
 
     /**
      * Calculate old price && price percentage
      *
-     * @return integer
+     * @return int
      */
     public function getDiscountPercentage(): int
     {
@@ -441,29 +448,30 @@ class Product extends Model implements HasMedia
         if ($priceDiff > 0) {
             $percent = ceil(((100 * $priceDiff) / $this->getFinalOldPrice()));
         }
+
         return $percent ?? 0;
     }
-
 
     /**
      * getFirstMediaUrl & check empty media
      *
-     * @param string $collectionName
-     * @param string $conversionName
+     * @param  string  $collectionName
+     * @param  string  $conversionName
      * @return string
      */
     public function getFirstMediaUrl(string $collectionName = 'default', string $conversionName = ''): string
     {
-        if (!($url = $this->traitGetFirstMediaUrl($collectionName, $conversionName))) {
+        if (! ($url = $this->traitGetFirstMediaUrl($collectionName, $conversionName))) {
             $url = '/storage/products/0/deleted.jpg';
         }
+
         return $url;
     }
 
     /**
      * Set default values for product
      *
-     * @param integer $id
+     * @param  int  $id
      * @return void
      */
     public function setDefaultValues(int $id = 0)
@@ -479,7 +487,7 @@ class Product extends Model implements HasMedia
     /**
      * Is the model new
      *
-     * @return boolean
+     * @return bool
      */
     public function isNew(): bool
     {

@@ -2,8 +2,8 @@
 
 namespace App\Admin\Controllers;
 
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Layout\Content;
 
 class SkladController extends AdminController
 {
@@ -16,6 +16,5 @@ class SkladController extends AdminController
 
     public function export()
     {
-
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Models\Api;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Token class.
@@ -43,7 +43,7 @@ class Token extends Model
      */
     public function isExpired(): bool
     {
-        return !empty($this->expire_date) && $this->expire_date->isPast();
+        return ! empty($this->expire_date) && $this->expire_date->isPast();
     }
 
     /**

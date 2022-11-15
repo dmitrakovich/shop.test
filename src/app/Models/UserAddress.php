@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * Class UserAddress
  *
- * @property integer $id
- * @property integer $user_id
- * @property integer $country_id
+ * @property int $id
+ * @property int $user_id
+ * @property int $country_id
  * @property string $region
  * @property string $city
  * @property string $zip

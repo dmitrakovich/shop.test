@@ -14,7 +14,7 @@ class CartServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('cart', fn() => (new Cart())->setCart());
+        $this->app->singleton('cart', fn () => (new Cart())->setCart());
     }
 
     /**

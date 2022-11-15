@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 class UrlsSeeder extends Seeder
 {
     protected $slugs = null;
+
     /**
      * Run the database seeds.
      *
@@ -49,7 +50,7 @@ class UrlsSeeder extends Seeder
             $this->slugs[] = [
                 'slug' => $slug['slug'],
                 'model_id' => $slug['id'],
-                'model_type' => $class
+                'model_type' => $class,
             ];
         }
     }

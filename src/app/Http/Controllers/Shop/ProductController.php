@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Shop;
 
 use App\Models\Product;
 use App\Services\GoogleTagManagerService;
-use App\Services\SliderService;
 use App\Services\ProductService;
-use Illuminate\Http\Request;
+use App\Services\SliderService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class ProductController extends BaseController
 {
@@ -36,7 +36,7 @@ class ProductController extends BaseController
             'product' => $product,
             'dataLayer' => $this->gtmService->prepareProduct($product),
             'similarProducts' => $this->sliderService->getSimilarProducts($product->id),
-            'recentProductsSlider' =>$this->sliderService->getRecentProducts($this->productService),
+            'recentProductsSlider' => $this->sliderService->getRecentProducts($this->productService),
         ]);
     }
 

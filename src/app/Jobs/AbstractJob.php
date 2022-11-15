@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
-use Throwable;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 abstract class AbstractJob implements ShouldQueue
 {
@@ -55,12 +55,7 @@ abstract class AbstractJob implements ShouldQueue
     }
 
     /**
-     * Запись отадочных сообщений в лог
-     *
-     * @param string $msg сообщение
-     * @param string $channel канал для логов
-     * @param string $type тип сообщения
-     * @return void
+     * Запись отадочных сообщений в логd
      */
     protected function debug(string $msg, string $channel = 'jobs', string $type = 'info'): void
     {
@@ -82,9 +77,6 @@ abstract class AbstractJob implements ShouldQueue
 
     /**
      * Запись сообщения об ошибке в лог
-     *
-     * @param string $msg сообщение
-     * @return void
      */
     protected function error(string $msg): void
     {
@@ -93,9 +85,6 @@ abstract class AbstractJob implements ShouldQueue
 
     /**
      * Запись сообщения об окончании работы
-     *
-     * @param string $msg сообщение
-     * @return void
      */
     protected function complete(string $msg, string $channel = 'jobs', string $type = 'info'): void
     {
@@ -105,13 +94,12 @@ abstract class AbstractJob implements ShouldQueue
 
     /**
      * Получить форматированное кол-во использованной памяти
-     *
-     * @return string
      */
     protected function getFormatedUsedMemory(): string
     {
         $base = log(memory_get_usage(), 1024);
         $suffixes = ['', 'K', 'M', 'G', 'T'];
-        return round(pow(1024, $base - floor($base)), 2) . ' ' . $suffixes[floor($base)];
+
+        return round(pow(1024, $base - floor($base)), 2).' '.$suffixes[floor($base)];
     }
 }

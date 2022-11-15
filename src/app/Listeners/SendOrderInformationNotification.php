@@ -3,11 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\OrderCreated;
+use App\Mail\OrderCreated as OrderCreatedMail;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Mail\OrderCreated as OrderCreatedMail;
 
 class SendOrderInformationNotification
 {
@@ -28,7 +26,7 @@ class SendOrderInformationNotification
     {
         $order = $event->order;
 
-        if (!empty($order['email'])) {
+        if (! empty($order['email'])) {
             Mail::to($order['email'])->send(new OrderCreatedMail($order));
         }
 

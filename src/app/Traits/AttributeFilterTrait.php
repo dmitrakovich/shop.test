@@ -11,8 +11,8 @@ trait AttributeFilterTrait
     /**
      * Применить фильтр
      *
-     * @param Builder $builder
-     * @param array $values
+     * @param  Builder  $builder
+     * @param  array  $values
      * @return Builder
      */
     public static function applyFilter(Builder $builder, array $values)
@@ -55,7 +55,7 @@ trait AttributeFilterTrait
      */
     protected static function getRelationNameByClass(): string
     {
-        return Str::snake(class_basename(self::class)) . 's';
+        return Str::snake(class_basename(self::class)).'s';
     }
 
     /**
@@ -76,6 +76,7 @@ trait AttributeFilterTrait
     public function delete()
     {
         $this->url()->delete();
+
         return parent::delete();
     }
 
@@ -83,13 +84,13 @@ trait AttributeFilterTrait
      * Если перед применением фильтра необходимо произветсти
      * преобразолвание над данными или запросом
      *
-     * @param Builder $builder
-     * @param array $values
+     * @param  Builder  $builder
+     * @param  array  $values
      * @return void
      */
     public static function beforeApplyFilter(Builder &$builder, array &$values)
     {
-        if (!array_is_list($values)) {
+        if (! array_is_list($values)) {
             $values = array_column($values, 'model_id');
         }
     }

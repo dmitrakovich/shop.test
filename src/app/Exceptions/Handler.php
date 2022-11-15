@@ -2,12 +2,12 @@
 
 namespace App\Exceptions;
 
-use Throwable;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Jenssegers\Agent\Facades\Agent;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -65,7 +65,7 @@ class Handler extends ExceptionHandler
         parent::report($e);
     }
 
-    private function sendInTelegram (Throwable $e)
+    private function sendInTelegram(Throwable $e)
     {
         /*$time = Carbon::now()->format('Y-m-d H:i:s.u');
         $exception = get_class($e);

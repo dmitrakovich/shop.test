@@ -5,8 +5,6 @@ namespace App\Listeners;
 use App\Models\Cart;
 use App\Models\CartData;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class MergeCart
 {

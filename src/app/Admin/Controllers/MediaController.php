@@ -2,11 +2,11 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Models\Media;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Admin\Models\Media;
-use Encore\Admin\Controllers\AdminController;
 
 class MediaController extends AdminController
 {
@@ -30,7 +30,7 @@ class MediaController extends AdminController
             return $this->getUrl();
         })->image('', 120, 120);
         $grid->column('link', 'Ссылка на товар')->display(function () {
-            return '<a href="' . $this->model->getUrl() . '" target="_blank">' . $this->model->getFullName() . '</a>';
+            return '<a href="'.$this->model->getUrl().'" target="_blank">'.$this->model->getFullName().'</a>';
         });
         $grid->column('video_url', 'Ссылка на видео')->display(function () {
             return $this->custom_properties['video'] ?? '';
@@ -45,7 +45,7 @@ class MediaController extends AdminController
         $grid->model()->where('model_type', 'App\Models\Product');
         $grid->model()->with(['model']);
 
-        $grid->filter(function($filter) {
+        $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // Remove the default id filter
             $filter->where(function ($query) {
                 $query->whereRaw("EXISTS (
@@ -69,7 +69,7 @@ class MediaController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)
@@ -95,7 +95,7 @@ class MediaController extends AdminController
             }
 
             $isImidj = request()->input('is_imidj');
-            if (!empty($isImidj)) {
+            if (! empty($isImidj)) {
                 $form->model()->setCustomProperty('is_imidj', true);
             } else {
                 $form->model()->forgetCustomProperty('is_imidj');

@@ -1,19 +1,19 @@
 <?php
 
-use App\Models\Url;
-use App\Models\Product;
-use Illuminate\Support\Str;
-use App\Http\Requests\FilterRequest;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\IndexController;
 use App\Http\Controllers\CurrencyController;
-use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\InfoPageController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\InfoPageController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
 use App\Http\Controllers\Shop\PaymentController;
 use App\Http\Controllers\Shop\ProductController;
+use App\Http\Requests\FilterRequest;
+use App\Models\Product;
+use App\Models\Url;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ use App\Http\Controllers\Shop\ProductController;
 |
 */
 
-require __DIR__ . '/redirect.php';
+require __DIR__.'/redirect.php';
 
 Route::get('/', [IndexController::class, 'index'])->name('index-page');
 Route::get('pay/erip/{payment_id?}', [PaymentController::class, 'erip'])->name('pay.erip');
@@ -37,7 +37,7 @@ Route::get('online-shopping/{slug?}', [InfoPageController::class, 'index'])->nam
 
 Route::view('shops', 'static.shops')->name('static-shops');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 Route::get('feedbacks/{type?}', [FeedbackController::class, 'index'])->name('feedbacks');
 Route::middleware('captcha')->post('feedbacks', [FeedbackController::class, 'store'])->name('feedbacks.store');
@@ -74,7 +74,7 @@ Route::group(['namespace' => 'Shop'], function () {
         ->where('path', '[a-zA-Z0-9/_-]+')
         ->name('shop');
 
-    Route::prefix('cart')->group(function () { // routes for cart pages
+    Route::prefix('cart')->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('cart');
         Route::post('add', [CartController::class, 'addToCart'])->name('cart-add');
         Route::get('delete/{item}', [CartController::class, 'delete'])->name('cart-delete');
@@ -85,6 +85,6 @@ Route::group(['namespace' => 'Shop'], function () {
     Route::resource('orders', OrderController::class)->only('index')->middleware('auth');
 });
 
-require __DIR__ . '/sitemap.php';
+require __DIR__.'/sitemap.php';
 
 // Route::fallback(fn () => 'Хм… Почему ты оказался здесь?');

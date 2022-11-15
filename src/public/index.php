@@ -20,12 +20,14 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
     require $maintenance;
 }
 
-/**
+/*
  |--------------------------------------------------------------------------
  | Переопределение ларавельных хелперов и добавление своих
  |--------------------------------------------------------------------------
- */
-require_once __DIR__ . '/../app/Helpers/functions.php';
+*/
+
+require_once __DIR__.'/../app/Helpers/functions.php';
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
