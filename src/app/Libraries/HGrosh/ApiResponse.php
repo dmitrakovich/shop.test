@@ -34,9 +34,9 @@ class ApiResponse
                 $response->hasHeader('Content-type') &&
                 strpos(implode(',', $response->getHeader('Content-type')), 'json') !== false
             ) {
-                $this->body = (string) $response->getBody()->getContents();
+                $this->body = (string)$response->getBody()->getContents();
             } else {
-                $this->body = (string) $response->getBody();
+                $this->body = (string)$response->getBody();
             }
             $this->location = $response->getHeader('location');
             if ($this->status > 299) {

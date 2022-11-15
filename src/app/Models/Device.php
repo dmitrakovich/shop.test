@@ -156,7 +156,7 @@ class Device extends Model
      */
     public function setYandexId(?int $yandexId = null): void
     {
-        $yandexId ??= (int) Cookie::get(self::YANDEX_ID_COOKIE_NAME);
+        $yandexId ??= (int)Cookie::get(self::YANDEX_ID_COOKIE_NAME);
 
         $this->attributes['yandex_id'] = $yandexId;
     }

@@ -26,7 +26,7 @@ class Captcha
             $response = Http::get(config('captcha.url'), $data);
 
             if ($response->ok() && $response->json('success')) {
-                $captchaScore = (float) $response->json('score') * 10;
+                $captchaScore = (float)$response->json('score') * 10;
             }
         }
 

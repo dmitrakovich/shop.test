@@ -48,7 +48,7 @@ class FeedbackSeeder extends Seeder
             }
             $review->user_email = trim($review->user_email);
 
-            $feedback = Feedback::create((array) $review);
+            $feedback = Feedback::create((array)$review);
 
             if (($imgStartPos = mb_strpos($review->text, '{img}')) !== false) {
                 $images = mb_substr($review->text, $imgStartPos + 5); // - {img} (5)

@@ -91,7 +91,7 @@ class UpdateAvailabilityJob extends AbstractJob
                 $this->allProducts[strtolower($brandName)][$this->smallArt($product->name)] = [
                     'id' => $product->id,
                     'cat_id' => $product->category_id,
-                    'status' => (int) !$product->trashed(),
+                    'status' => (int)!$product->trashed(),
                     'articul' => $product->name,
                     'brand' => $brandName,
                     'size' => $product->sizes->pluck('id', 'name')->toArray(),
@@ -107,7 +107,7 @@ class UpdateAvailabilityJob extends AbstractJob
         } elseif (isset($fileInfo['error'])) {
             return $this->errorWithReturn('Ошибка получения данных. ' . ($fileInfo['message'] ?? $fileInfo['error']));
         }
-        $filedate = explode(',', (string) $availabilityConfig['file']);
+        $filedate = explode(',', (string)$availabilityConfig['file']);
         $actionsCount = is_countable($availabilityConfig['publish']) ? count($availabilityConfig['publish']) : 0;
         +(is_countable($availabilityConfig['add_size']) ? count($availabilityConfig['add_size']) : 0)
             + (is_countable($availabilityConfig['del']) ? count($availabilityConfig['del']) : 0)
@@ -280,7 +280,7 @@ class UpdateAvailabilityJob extends AbstractJob
             }
         }
         $availabilityConfig['last_update'] = $this->thtime;
-        $filedate = explode(',', (string) $availabilityConfig['file']);
+        $filedate = explode(',', (string)$availabilityConfig['file']);
         $this->writeLog("Файл $filedate[0]. Наличие сверено в $availabilityConfig[last_update]");
 
         if ($availabilityConfig['auto_del'] === 'on') {

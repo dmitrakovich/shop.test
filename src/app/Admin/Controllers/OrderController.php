@@ -176,7 +176,7 @@ class OrderController extends AdminController
 
         if ($form->isEditing()) {
             $form->tools($this->getPrintTool());
-            $form->tools($this->getProcessTool((int) request('order')));
+            $form->tools($this->getProcessTool((int)request('order')));
         }
 
         $form->tab('Основное', function ($form) {
@@ -290,7 +290,7 @@ class OrderController extends AdminController
         });
 
         $form->saved(function (Form $form) {
-            if ((int) $form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
+            if ((int)$form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
                 $this->saveInstallments($form);
             }
             // TODO: recalc order total price
@@ -306,11 +306,11 @@ class OrderController extends AdminController
     {
         /** @var OrderItemExtended $itemExtended */
         foreach ($form->model()->itemsExtended as $itemExtended) {
-            $contractNumber = (int) $form->input("itemsExtended.{$itemExtended->id}.installment_contract_number");
+            $contractNumber = (int)$form->input("itemsExtended.{$itemExtended->id}.installment_contract_number");
             if (!$contractNumber) {
                 continue;
             }
-            $monthlyFee = (float) $form->input("itemsExtended.{$itemExtended->id}.installment_monthly_fee");
+            $monthlyFee = (float)$form->input("itemsExtended.{$itemExtended->id}.installment_monthly_fee");
             $sendNotifications = $form->input("itemsExtended.{$itemExtended->id}.installment_send_notifications") === 'on';
             /** @var Installment $installment */
             $installment = $itemExtended->installment()->firstOrNew();

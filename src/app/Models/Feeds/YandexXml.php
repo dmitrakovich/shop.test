@@ -36,7 +36,7 @@ class YandexXml extends AbstractFeed
      */
     public function getPreparedData(): object
     {
-        return (object) [
+        return (object)[
             'name' => 'barocco.by',
             'company' => 'ООО «БароккоСтайл»',
             'url' => $this->getHost(),
@@ -83,7 +83,7 @@ class YandexXml extends AbstractFeed
                     $category['parent_id'] = $item->parent_id;
                 }
 
-                return (object) $category;
+                return (object)$category;
             });
     }
 
@@ -96,7 +96,7 @@ class YandexXml extends AbstractFeed
     {
         return (new ProductService)->getForFeed()
             ->map(function (Product $item) {
-                return (object) [
+                return (object)[
                     'id' => $item->id,
                     'url' => $this->getHost() . $item->getUrl(),
                     'price' => $item->getPrice(),

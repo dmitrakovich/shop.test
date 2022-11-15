@@ -4,6 +4,9 @@
         "concat_space": {
             "spacing": "one"
         },
+        "cast_spaces": {
+            "space": "none"
+        },
         "not_operator_with_successor_space": false
     }
 }

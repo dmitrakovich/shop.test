@@ -134,7 +134,7 @@ class HttpClient
                 $body = '';
             } else {
                 $url .= empty($getParams) ? '' : ('?' . http_build_query($getParams));
-                $body = (string) json_encode($params);
+                $body = (string)json_encode($params);
             }
             $uri = new Uri($url);
             $request = new Request($method, $uri, $headers, $body);
@@ -142,7 +142,7 @@ class HttpClient
 
             return new ApiResponse($response);
         } catch (\Throwable $e) {
-            throw new RequestException($e->getMessage(), (int) $e->getCode());
+            throw new RequestException($e->getMessage(), (int)$e->getCode());
         }
     }
 }

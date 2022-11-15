@@ -138,7 +138,7 @@ class SaleService
     protected function getOverflowDiscount(): float
     {
         if ($this->sale->algorithm == $this->sale::ALGORITHM_COUNT) {
-            return (float) end($this->discounts);
+            return (float)end($this->discounts);
         } else {
             return 0;
         }

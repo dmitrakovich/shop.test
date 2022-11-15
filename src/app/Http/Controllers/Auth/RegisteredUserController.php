@@ -57,7 +57,7 @@ class RegisteredUserController extends Controller
      */
     public function sync(SyncRequest $syncRequest)
     {
-        $oldId = (int) $syncRequest->input('id');
+        $oldId = (int)$syncRequest->input('id');
         $userData = $syncRequest->validated();
 
         $existUser = User::when(!empty($userData['phone']), function ($query) use ($userData) {

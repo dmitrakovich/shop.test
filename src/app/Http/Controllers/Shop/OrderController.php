@@ -53,7 +53,7 @@ class OrderController extends BaseController
             $items = [];
             foreach ($request->input('sizes') as $sizeId => $state) {
                 $items[] = CartData::make([
-                    'product_id' => (int) $request->input('product_id'),
+                    'product_id' => (int)$request->input('product_id'),
                     'size_id' => $sizeId,
                     'count' => 1,
                 ]);
@@ -135,7 +135,7 @@ class OrderController extends BaseController
      */
     public function sync(SyncRequest $request)
     {
-        $oldId = (int) $request->input('id');
+        $oldId = (int)$request->input('id');
         $oldSizes = (new ProductSeeder)->attributesList['sizes']['new_id'];
         $cart = Cart::make();
         $items = [];

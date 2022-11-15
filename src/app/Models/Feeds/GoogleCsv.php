@@ -45,7 +45,7 @@ class GoogleCsv extends AbstractFeed
      */
     public function getPreparedData(): object
     {
-        return (object) [
+        return (object)[
             'headers' => $this->getHeaders(),
             'rows' => $this->getRows(),
         ];

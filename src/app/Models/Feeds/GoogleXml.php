@@ -32,7 +32,7 @@ class GoogleXml extends AbstractFeed
      */
     public function getPreparedData(): object
     {
-        return (object) [
+        return (object)[
             'channel' => $this->getChannel(),
             'items' => $this->getItems(),
         ];
@@ -45,7 +45,7 @@ class GoogleXml extends AbstractFeed
      */
     protected function getChannel(): object
     {
-        return (object) [
+        return (object)[
             'title' => 'Барокко',
             'link' => $this->getHost(),
             'description' => 'Интернет магазин брендовой обуви',
@@ -61,7 +61,7 @@ class GoogleXml extends AbstractFeed
     {
         return (new ProductService)->getForFeed(true)
             ->map(function (Product $item) {
-                return (object) [
+                return (object)[
                     'id' => $item->id,
                     'link' => $this->getHost() . $item->getUrl(),
                     'size' => $item->sizes->implode('name', '/'),

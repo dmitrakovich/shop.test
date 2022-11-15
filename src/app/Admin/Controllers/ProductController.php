@@ -227,7 +227,7 @@ class ProductController extends AdminController
             // Storage::delete('file.jpg'); // !!!
 
             // add
-            $sorting = array_filter(explode('|', (string) $form->input('sorting')));
+            $sorting = array_filter(explode('|', (string)$form->input('sorting')));
             $addImages = $form->input('add_images') ?? [];
             foreach ($addImages as $image) {
                 $media = $form->model()
@@ -291,7 +291,7 @@ class ProductController extends AdminController
         if (empty($sizes = request('new_sizes'))) {
             return null;
         }
-        $sizes = explode(';', (string) $sizes);
+        $sizes = explode(';', (string)$sizes);
 
         return Size::whereIn('name', $sizes)->pluck('id')->toArray();
     }

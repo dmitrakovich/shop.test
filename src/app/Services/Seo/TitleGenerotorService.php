@@ -102,7 +102,7 @@ class TitleGenerotorService
                 case Season::class:
                 case Style::class:
                     $seoFormNumber = $emptyCategory ? 1 : 3;
-                    $value = explode(',', (string) $filter->filters->seo)[$seoFormNumber] ?? null;
+                    $value = explode(',', (string)$filter->filters->seo)[$seoFormNumber] ?? null;
                     break;
 
                 case Status::class:

@@ -342,7 +342,7 @@ class ProductSeeder extends Seeder
             $oldProduct->action = intval($oldProduct->action);
             $oldProduct->rating = $oldProduct->rating > 0 ? $oldProduct->rating : 0;
 
-            $insertData = $oldProduct = (array) $oldProduct;
+            $insertData = $oldProduct = (array)$oldProduct;
             unset($insertData['extra_field_3'],
                 $insertData['extra_field_13'],
                 $insertData['extra_field_14'],

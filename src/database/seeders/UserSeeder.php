@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
                 $oldUser->updated_at = null;
             }
 
-            DB::table($this->tableName)->insert((array) $oldUser);
+            DB::table($this->tableName)->insert((array)$oldUser);
         }
     }
 }

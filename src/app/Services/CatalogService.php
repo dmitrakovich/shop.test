@@ -63,7 +63,7 @@ class CatalogService
                     if ($filterModel->isInvisible() || $filterModel->slug === 'catalog' || ($currentFiltersGroupKey == Category::class) && (array_key_last($currentFiltersGroup) != $currentFilterKey)) {
                         continue;
                     }
-                    $badges[] = (object) [
+                    $badges[] = (object)[
                         'name' => Filter::getNamePrefix($filterModel) . $filterModel->name,
                         'url' => UrlHelper::generate([], [$filterModel]),
                     ];
@@ -71,7 +71,7 @@ class CatalogService
             }
         }
         if ($searchQuery) {
-            $badges[] = (object) [
+            $badges[] = (object)[
                 'name' => 'Поиск: ' . mb_strimwidth($searchQuery, 0, 12, '...'),
                 'url' => UrlHelper::generate([], [['param' => 'search']]),
             ];
