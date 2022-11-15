@@ -16,6 +16,6 @@ class InvoicingInvoiceQRcode extends Action
     {
         $params = array_merge($params, $this->params);
 
-        return $this->http_client->{$this->method}('/invoicing/invoice/'.$params['id'].'/qrcode', $params, $this->getParams);
+        return $this->http_client->{$this->method}('/invoicing/invoice/' . $params['id'] . '/qrcode', $params, $this->getParams);
     }
 }

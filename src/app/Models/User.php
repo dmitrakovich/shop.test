@@ -100,7 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hasAddresses(): bool
     {
-        return ! empty($this->getFirstAddress()->id);
+        return !empty($this->getFirstAddress()->id);
     }
 
     /**

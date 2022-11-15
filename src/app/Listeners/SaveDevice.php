@@ -28,12 +28,12 @@ class SaveDevice
         $device = Device::getOrNew();
         $user = $event->user ?? Auth::user();
 
-        if (! empty($user)) {
+        if (!empty($user)) {
             $device->user()->associate($user);
             $device->cart()->associate($user->cart);
         }
 
-        if (! empty($event->order)) {
+        if (!empty($event->order)) {
             $event->order->device()->associate($device);
             $event->order->save();
         }

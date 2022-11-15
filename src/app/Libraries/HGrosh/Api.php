@@ -19,10 +19,10 @@ class Api
     public function __call($name, $arguments)
     {
         $reflection = new ReflectionClass($this->http_client);
-        $action_namespace = $reflection->getNamespaceName().'\Actions\\';
-        $class_name = $action_namespace.ucfirst($name);
+        $action_namespace = $reflection->getNamespaceName() . '\Actions\\';
+        $class_name = $action_namespace . ucfirst($name);
         if (class_exists($class_name)) {
-            if (! isset($this->action_container[$class_name])) {
+            if (!isset($this->action_container[$class_name])) {
                 $this->action_container[$class_name] = new $class_name($this->http_client, $arguments);
             }
 

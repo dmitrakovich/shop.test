@@ -25,13 +25,13 @@ abstract class AbstractSeeder extends Seeder
         if (empty($this->tableName)) {
             throw new \Exception('Empty table name!');
         }
-        if (! is_string($this->tableName)) {
+        if (!is_string($this->tableName)) {
             throw new \Exception('Table name not string!');
         }
         if (empty($this->values)) {
             throw new \Exception('Empty values!');
         }
-        if (! is_array($this->values)) {
+        if (!is_array($this->values)) {
             throw new \Exception('Values not array!');
         }
     }
@@ -43,7 +43,7 @@ abstract class AbstractSeeder extends Seeder
      */
     protected function setTimestamps()
     {
-        if (! $this->useTimestamps) {
+        if (!$this->useTimestamps) {
             return;
         }
         $now = now();
@@ -59,7 +59,7 @@ abstract class AbstractSeeder extends Seeder
      */
     protected function setSort()
     {
-        if (! $this->sortColumn) {
+        if (!$this->sortColumn) {
             return;
         }
         foreach ($this->values as $key => &$value) {

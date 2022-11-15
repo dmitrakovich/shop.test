@@ -307,7 +307,7 @@ class OrderController extends AdminController
         /** @var OrderItemExtended $itemExtended */
         foreach ($form->model()->itemsExtended as $itemExtended) {
             $contractNumber = (int) $form->input("itemsExtended.{$itemExtended->id}.installment_contract_number");
-            if (! $contractNumber) {
+            if (!$contractNumber) {
                 continue;
             }
             $monthlyFee = (float) $form->input("itemsExtended.{$itemExtended->id}.installment_monthly_fee");
@@ -336,7 +336,7 @@ class OrderController extends AdminController
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
         });
         $grid->column('link', 'Срок действия платежа')->display(function ($link) {
-            return '<a href="'.$link.'" target="_blank">Ссылка на станицу оплаты</a>';
+            return '<a href="' . $link . '" target="_blank">Ссылка на станицу оплаты</a>';
         });
 
         $grid->tools(function (Grid\Tools $tools) use ($orderId) {
@@ -366,7 +366,7 @@ class OrderController extends AdminController
         $form->hidden('utm_campaign');
 
         $form->saving(function (Form $form) {
-            if (! empty($form->order_method)) {
+            if (!empty($form->order_method)) {
                 [$utmSource, $utmMedium, $utmCampaign] = OrderMethod::getUtmSources($form->order_method);
                 $form->utm_source = $utmSource;
                 $form->utm_medium = $utmMedium;
@@ -398,8 +398,8 @@ class OrderController extends AdminController
     {
         return function ($tools) use ($orderId) {
             $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
-                <a  href="'.route('admin.orders.process', $orderId).'" class="btn btn-sm" style="color: #fff; background-color: #800080; border-color: #730d73;">
-                <i class="fa fa-archive"></i>&nbsp;&nbsp;'.(new ProcessOrder)->name.'</a></div>');
+                <a  href="' . route('admin.orders.process', $orderId) . '" class="btn btn-sm" style="color: #fff; background-color: #800080; border-color: #730d73;">
+                <i class="fa fa-archive"></i>&nbsp;&nbsp;' . (new ProcessOrder)->name . '</a></div>');
         };
     }
 
@@ -412,7 +412,7 @@ class OrderController extends AdminController
     {
         return function ($tools) {
             $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
-                <a onclick="'.PrintOrder::printScript(request('order')).'" class="btn btn-sm btn-success">
+                <a onclick="' . PrintOrder::printScript(request('order')) . '" class="btn btn-sm btn-success">
                 <i class="fa fa-print"></i>&nbsp;&nbsp;Печать</a></div>');
         };
     }

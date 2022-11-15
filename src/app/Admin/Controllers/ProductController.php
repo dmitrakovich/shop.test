@@ -61,7 +61,7 @@ class ProductController extends AdminController
         $grid->column('id', 'Id')->sortable();
         $grid->column('media', 'Фото')->display(fn ($pictures) => optional($this->getFirstMedia())->getUrl('thumb'))->image();
         $grid->column('deleted_at', 'Опубликован')->display(
-            fn ($deleted) => ! $deleted ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>'
+            fn ($deleted) => !$deleted ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>'
         )->sortable();
         $grid->column('slug', 'Slug');
         $grid->column('sku', 'Артикул');
@@ -133,7 +133,7 @@ class ProductController extends AdminController
             $form->tools(function (Form\Tools $tools) use ($product) {
                 if ($product->trashed()) {
                     $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
-                        <a href="'.route('admin.products.restore', $product->id).'" class="btn btn-sm btn-success">
+                        <a href="' . route('admin.products.restore', $product->id) . '" class="btn btn-sm btn-success">
                         <i class="fa fa-history"></i>&nbsp;&nbsp;Восстановить</a></div>');
                     $tools->disableDelete();
                 }
@@ -196,7 +196,7 @@ class ProductController extends AdminController
 
         $form->saving(function (Form $form) {
             if (empty($form->slug)) {
-                $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name').'-'.$form->sku);
+                $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->sku);
             }
             if (is_null($form->manufacturer_id)) {
                 $form->manufacturer_id = 0;
@@ -213,7 +213,7 @@ class ProductController extends AdminController
                 $editLink = route('admin.products.edit', $existsProduct->id);
                 $error = new MessageBag([
                     'title' => 'Товар с таким названием есть',
-                    'message' => '<a href="'.$editLink.'">Cсылка на редактирование этого товара<a>',
+                    'message' => '<a href="' . $editLink . '">Cсылка на редактирование этого товара<a>',
                 ]);
 
                 return back()->with(compact('error'));
@@ -237,7 +237,7 @@ class ProductController extends AdminController
                 $key = array_search("new-{$media->name}", $sorting);
                 $sorting[$key] = $media->id;
             }
-            if (! empty($sorting)) {
+            if (!empty($sorting)) {
                 Media::setNewOrder($sorting);
             }
 
@@ -327,7 +327,7 @@ class ProductController extends AdminController
                 'product_availability' => '',
                 'product_date_added' => date('Y-m-d H:i:s'),
                 'date_modify' => date('Y-m-d H:i:s'),
-                'product_publish' => ! $form->model()->trashed(),
+                'product_publish' => !$form->model()->trashed(),
                 'product_tax_id' => 0,
                 'currency_id' => 1,
                 'product_template' => 'default',

@@ -100,6 +100,6 @@ abstract class AbstractJob implements ShouldQueue
         $base = log(memory_get_usage(), 1024);
         $suffixes = ['', 'K', 'M', 'G', 'T'];
 
-        return round(pow(1024, $base - floor($base)), 2).' '.$suffixes[floor($base)];
+        return round(pow(1024, $base - floor($base)), 2) . ' ' . $suffixes[floor($base)];
     }
 }

@@ -26,7 +26,7 @@ use Illuminate\Support\Str;
 |
 */
 
-require __DIR__.'/redirect.php';
+require __DIR__ . '/redirect.php';
 
 Route::get('/', [IndexController::class, 'index'])->name('index-page');
 Route::get('pay/erip/{payment_id?}', [PaymentController::class, 'erip'])->name('pay.erip');
@@ -37,7 +37,7 @@ Route::get('online-shopping/{slug?}', [InfoPageController::class, 'index'])->nam
 
 Route::view('shops', 'static.shops')->name('static-shops');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::get('feedbacks/{type?}', [FeedbackController::class, 'index'])->name('feedbacks');
 Route::middleware('captcha')->post('feedbacks', [FeedbackController::class, 'store'])->name('feedbacks.store');
@@ -85,6 +85,6 @@ Route::group(['namespace' => 'Shop'], function () {
     Route::resource('orders', OrderController::class)->only('index')->middleware('auth');
 });
 
-require __DIR__.'/sitemap.php';
+require __DIR__ . '/sitemap.php';
 
 // Route::fallback(fn () => 'Хм… Почему ты оказался здесь?');

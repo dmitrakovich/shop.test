@@ -16,7 +16,7 @@ class PaymentController extends BaseController
         PaymentService $paymentService
     ): View {
         $online_payment = $paymentService->getOnlinePaymentByPaymentUrl($paymentUrl, OnlinePaymentMethodEnum::ERIP);
-        if (! $online_payment) {
+        if (!$online_payment) {
             abort(404);
         }
 

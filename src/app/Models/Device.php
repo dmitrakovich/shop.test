@@ -88,7 +88,7 @@ class Device extends Model
     public static function generateId(Request $request): string
     {
         return md5(
-            uniqid($request->getHost()).$request->ip()
+            uniqid($request->getHost()) . $request->ip()
         );
     }
 
@@ -107,7 +107,7 @@ class Device extends Model
      */
     protected static function getDefaultId(): string
     {
-        return 'undefined_'.time();
+        return 'undefined_' . time();
     }
 
     /**

@@ -56,7 +56,7 @@ class CatalogService
     public function getFilterBadges(?array $currentFiltersGroups, ?string $searchQuery = null): array
     {
         $badges = [];
-        if (! empty($currentFiltersGroups)) {
+        if (!empty($currentFiltersGroups)) {
             foreach ($currentFiltersGroups as $currentFiltersGroupKey => $currentFiltersGroup) {
                 foreach ($currentFiltersGroup as $currentFilterKey => $currentFilter) {
                     $filterModel = $currentFilter->filters;
@@ -64,7 +64,7 @@ class CatalogService
                         continue;
                     }
                     $badges[] = (object) [
-                        'name' => Filter::getNamePrefix($filterModel).$filterModel->name,
+                        'name' => Filter::getNamePrefix($filterModel) . $filterModel->name,
                         'url' => UrlHelper::generate([], [$filterModel]),
                     ];
                 }
@@ -72,7 +72,7 @@ class CatalogService
         }
         if ($searchQuery) {
             $badges[] = (object) [
-                'name' => 'Поиск: '.mb_strimwidth($searchQuery, 0, 12, '...'),
+                'name' => 'Поиск: ' . mb_strimwidth($searchQuery, 0, 12, '...'),
                 'url' => UrlHelper::generate([], [['param' => 'search']]),
             ];
         }
@@ -95,7 +95,7 @@ class CatalogService
             $productsQuery = Eloquent::unserialize($productsQuery);
             $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
         } catch (\Throwable $th) {
-            abort(419, 'Page maby expired. Error: '.$th->getMessage());
+            abort(419, 'Page maby expired. Error: ' . $th->getMessage());
         }
 
         $this->addGtmData($products);
@@ -110,7 +110,7 @@ class CatalogService
      */
     protected function getQueryCacheKey(): string
     {
-        return 'catalog-query-'.Session::getId();
+        return 'catalog-query-' . Session::getId();
     }
 
     /**

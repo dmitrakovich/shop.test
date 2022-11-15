@@ -47,7 +47,7 @@ abstract class AbstractFeed
      */
     public function getHost(): string
     {
-        return $this->cache['host'] ?? ($this->cache['host'] = 'https://'.request()->getHost());
+        return $this->cache['host'] ?? ($this->cache['host'] = 'https://' . request()->getHost());
     }
 
     /**
@@ -97,7 +97,7 @@ abstract class AbstractFeed
     protected function sizesToString(EloquentCollection $sizes): string
     {
         $sizesList = $sizes->pluck('name');
-        $sizesStr = 'Размеры: '.($sizesList[0] ?? 'без размера');
+        $sizesStr = 'Размеры: ' . ($sizesList[0] ?? 'без размера');
 
         $useDash = false;
         $sizesListCount = count($sizesList);
@@ -110,7 +110,7 @@ abstract class AbstractFeed
                 $sizesStr .= $useDash ? '' : '-';
                 $useDash = true;
             } else {
-                $sizesStr .= ($useDash ? '' : ',').$sizesList[$i];
+                $sizesStr .= ($useDash ? '' : ',') . $sizesList[$i];
                 $useDash = false;
             }
         }

@@ -101,7 +101,7 @@ class Banner extends BannerModel
     {
         $videos = optional($this->getMedia()->first())->getCustomProperty('videos');
 
-        if (empty($videos) || ! is_array($videos)) {
+        if (empty($videos) || !is_array($videos)) {
             return null;
         }
 

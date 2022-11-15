@@ -41,7 +41,7 @@ class Promotion extends Model
         $builder->where(function ($query) {
             Sale::query()->actual()->get()->each(function (Sale $sale) use ($query) {
                 $query->orWhere(function ($query) use ($sale) {
-                    if (! empty($sale->categories)) {
+                    if (!empty($sale->categories)) {
                         $categories = [];
                         foreach ($sale->categories as $categoryId) {
                             $categories = array_merge(
@@ -52,15 +52,15 @@ class Promotion extends Model
                         $query->whereIn('category_id', $categories);
                     }
 
-                    if (! empty($sale->collections)) {
+                    if (!empty($sale->collections)) {
                         Collection::applyFilter($query, $sale->collections);
                     }
 
-                    if (! empty($sale->styles)) {
+                    if (!empty($sale->styles)) {
                         Style::applyFilter($query, $sale->styles);
                     }
 
-                    if (! empty($sale->seasons)) {
+                    if (!empty($sale->seasons)) {
                         Season::applyFilter($query, $sale->seasons);
                     }
 

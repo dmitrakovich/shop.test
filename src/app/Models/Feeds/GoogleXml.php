@@ -63,7 +63,7 @@ class GoogleXml extends AbstractFeed
             ->map(function (Product $item) {
                 return (object) [
                     'id' => $item->id,
-                    'link' => $this->getHost().$item->getUrl(),
+                    'link' => $this->getHost() . $item->getUrl(),
                     'size' => $item->sizes->implode('name', '/'),
                     'availability' => $item->trashed() ? 'out of stock' : 'in stock',
                     'price' => $item->getPrice(),
@@ -112,7 +112,7 @@ class GoogleXml extends AbstractFeed
             $type[] = 'Женские аксессуары';
         } else {
             $type[] = 'Женская обувь';
-            if (! in_array($category->parent_id, [null, Category::ROOT_CATEGORY_ID])) {
+            if (!in_array($category->parent_id, [null, Category::ROOT_CATEGORY_ID])) {
                 $type[] = $this->getCategoriesList()[$category->parent_id]->title;
             }
         }
@@ -140,11 +140,11 @@ class GoogleXml extends AbstractFeed
      */
     public function getDescription(Product $product): string
     {
-        $description = $product->extendedName().'. ';
-        $description .= $this->sizesToString($product->sizes).'. ';
+        $description = $product->extendedName() . '. ';
+        $description .= $this->sizesToString($product->sizes) . '. ';
         $description .= "Цвет: {$product->color_txt}. ";
 
-        if (! empty($product->fabric_top_txt)) {
+        if (!empty($product->fabric_top_txt)) {
             $description .= 'Материал';
             if ($product->category->parent_id != Category::ACCESSORIES_PARENT_ID) {
                 $description .= ' верха';
@@ -152,15 +152,15 @@ class GoogleXml extends AbstractFeed
             $description .= ": {$product->fabric_top_txt}. ";
         }
 
-        if (! empty($product->fabric_insole_txt)) {
+        if (!empty($product->fabric_insole_txt)) {
             $description .= "Материал подкладки: {$product->fabric_insole_txt}. ";
         }
 
-        if (! empty($product->fabric_outsole_txt)) {
+        if (!empty($product->fabric_outsole_txt)) {
             $description .= "Материал подошвы: {$product->fabric_outsole_txt}. ";
         }
 
-        if (! empty($product->heel_txt)) {
+        if (!empty($product->heel_txt)) {
             $description .= "Высота каблука: {$product->heel_txt}. ";
         }
 

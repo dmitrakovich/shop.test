@@ -15,7 +15,7 @@ return new class extends Migration
      */
     public function up()
     {
-        if (! Schema::hasColumn('media', 'generated_conversions')) {
+        if (!Schema::hasColumn('media', 'generated_conversions')) {
             Schema::table('media', function (Blueprint $table) {
                 $table->json('generated_conversions')->nullable();
             });

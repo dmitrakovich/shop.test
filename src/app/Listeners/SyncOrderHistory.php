@@ -25,7 +25,7 @@ class SyncOrderHistory
      */
     public function handle(Registered|Login $event)
     {
-        if (! empty($event->user->phone)) {
+        if (!empty($event->user->phone)) {
             $this->order
                 ->where('phone', $event->user->phone)
                 ->update(['user_id' => $event->user->id]);

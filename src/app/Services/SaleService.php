@@ -46,7 +46,7 @@ class SaleService
      */
     protected function hasSale(): bool
     {
-        return ! empty($this->sale);
+        return !empty($this->sale);
     }
 
     /**
@@ -92,7 +92,7 @@ class SaleService
      */
     protected function checkStyles(EloquentCollection $styles): bool
     {
-        return is_null($this->sale->styles) || ! empty(array_intersect($styles->modelKeys(), $this->sale->styles));
+        return is_null($this->sale->styles) || !empty(array_intersect($styles->modelKeys(), $this->sale->styles));
     }
 
     /**
@@ -108,7 +108,7 @@ class SaleService
      */
     protected function checkNew(float $price, float $oldPrice): bool
     {
-        return ! $this->sale->only_new || $price > $oldPrice;
+        return !$this->sale->only_new || $price > $oldPrice;
     }
 
     /**
@@ -203,7 +203,7 @@ class SaleService
             throw new \Exception('First need apply sale for cart');
         }
 
-        return ! $this->hasSaleProductsInCart || $this->sale->has_fitting;
+        return !$this->hasSaleProductsInCart || $this->sale->has_fitting;
     }
 
     /**
@@ -215,14 +215,14 @@ class SaleService
             throw new \Exception('First need apply sale for cart');
         }
 
-        return ! $this->hasSaleProductsInCart || $this->sale->has_installment;
+        return !$this->hasSaleProductsInCart || $this->sale->has_installment;
     }
 
     public function applyForCart(Cart $cart)
     {
         $this->hasSaleProductsInCart = false;
 
-        if (! $this->hasSale()) {
+        if (!$this->hasSale()) {
             return;
         }
 

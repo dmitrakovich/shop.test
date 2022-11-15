@@ -110,7 +110,7 @@ class Cart extends Model
      */
     public function createIfNotExists(): self
     {
-        if (! $this->exists) {
+        if (!$this->exists) {
             $this->save();
             if (Auth::check()) {
                 /** @var \App\Models\User $user */

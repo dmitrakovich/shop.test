@@ -46,7 +46,7 @@ class Sms extends Form
         $response = SmsTraffic::send($phone, $text, ['route' => $route]);
         $this->logService->logSms($phone, $text, $route, Admin::user()->id, null, $response->getDescription());
 
-        admin_success('Сообщение отправлено. Id сообщения: '.$response->getSmsId());
+        admin_success('Сообщение отправлено. Id сообщения: ' . $response->getSmsId());
 
         return back();
     }

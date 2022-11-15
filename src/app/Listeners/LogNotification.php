@@ -28,7 +28,7 @@ class LogNotification
     public function handle(NotificationSent $event)
     {
         $notification = $event->notification;
-        if (! ($notification instanceof AbstractSmsTraffic)) {
+        if (!($notification instanceof AbstractSmsTraffic)) {
             return;
         }
         /** @var SmsTrafficResponse $response */

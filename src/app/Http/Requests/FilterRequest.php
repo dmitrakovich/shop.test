@@ -80,7 +80,7 @@ class FilterRequest extends FormRequest
         $top = $this->input('top', '');
         $top = array_filter(explode(',', $top));
 
-        if (! empty($top)) {
+        if (!empty($top)) {
             $filters[Top::class] = array_map(function (int $id) {
                 $urlModel = new Url([
                     'slug' => 'top',

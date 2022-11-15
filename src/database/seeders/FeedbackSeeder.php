@@ -62,7 +62,7 @@ class FeedbackSeeder extends Seeder
                         continue;
                     }
 
-                    $urlToFile = 'https://modny.by/images/comments/'.$image;
+                    $urlToFile = 'https://modny.by/images/comments/' . $image;
                     try {
                         $feedback->addMediaFromUrl($urlToFile)
                             ->preservingOriginal()

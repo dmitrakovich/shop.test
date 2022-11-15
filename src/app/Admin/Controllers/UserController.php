@@ -87,7 +87,7 @@ class UserController extends AdminController
         });
 
         $form->saving(function (Form $form) {
-            if (! empty($form->password)) {
+            if (!empty($form->password)) {
                 $form->password = Hash::make($form->password);
             }
         });

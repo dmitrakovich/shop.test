@@ -29,7 +29,7 @@ class OldSiteSyncService
      */
     public static function errorResponse($errorMessages, int $code = 422)
     {
-        if (! is_array($errorMessages)) {
+        if (!is_array($errorMessages)) {
             $errorMessages = [$errorMessages];
         }
 

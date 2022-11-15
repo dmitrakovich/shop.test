@@ -106,7 +106,7 @@ class CurrencyService
      */
     protected function setCurrencyByCode(string $currencyCode)
     {
-        if (! isset($this->allCurrencies[$currencyCode])) {
+        if (!isset($this->allCurrencies[$currencyCode])) {
             $currencyCode = $this->getCurrencyCodeByCountry();
         }
         $this->currency = $this->allCurrencies[$currencyCode] ?? $this->getDefaultCurrency();
@@ -192,7 +192,7 @@ class CurrencyService
     {
         $currency = $this->allCurrencies[$currency] ?? $this->currency;
 
-        return number_format($price, $currency->decimals, '.', '&nbsp;').'&nbsp;'.$currency->symbol;
+        return number_format($price, $currency->decimals, '.', '&nbsp;') . '&nbsp;' . $currency->symbol;
     }
 
     /**

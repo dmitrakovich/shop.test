@@ -26,7 +26,7 @@ class SendOrderInformationNotification
     {
         $order = $event->order;
 
-        if (! empty($order['email'])) {
+        if (!empty($order['email'])) {
             Mail::to($order['email'])->send(new OrderCreatedMail($order));
         }
 

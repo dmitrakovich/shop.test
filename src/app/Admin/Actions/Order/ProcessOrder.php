@@ -27,8 +27,8 @@ class ProcessOrder extends RowAction
      */
     public function process(Model $model)
     {
-        if (! empty($model->admin_id)) {
-            return $this->warningResponse('Заказ уже обрабатывает менеджер '.$model->admin->name);
+        if (!empty($model->admin_id)) {
+            return $this->warningResponse('Заказ уже обрабатывает менеджер ' . $model->admin->name);
         }
         if ($model->status->key != 'new') {
             return $this->warningResponse("Заказ находится в статусе \"{$model->status->name_for_admin}\", его нельзя взять в работу");

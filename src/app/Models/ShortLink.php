@@ -45,7 +45,7 @@ class ShortLink extends Model
     {
         $fuse = 15;
         do {
-            if (! $fuse--) {
+            if (!$fuse--) {
                 throw new \Exception('Too many attempts to generate');
             }
             $random = substr(str_shuffle(self::CHAR_LIST), 0, self::SHORT_LINK_LENGTH);

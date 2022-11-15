@@ -51,12 +51,12 @@ class CropperController extends Controller
 
         foreach ($files as $file) {
             $timestamp = time();
-            $name = $timestamp.'.'.$file->clientExtension();
+            $name = $timestamp . '.' . $file->clientExtension();
             $moveResult = $file->move(storage_path('app/temp'), $name);
 
             return [
-                'id' => 'new-'.$timestamp,
-                'src' => '/temp/'.basename($moveResult),
+                'id' => 'new-' . $timestamp,
+                'src' => '/temp/' . basename($moveResult),
                 'name' => $name,
             ];
         }

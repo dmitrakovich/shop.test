@@ -30,7 +30,7 @@ class MediaController extends AdminController
             return $this->getUrl();
         })->image('', 120, 120);
         $grid->column('link', 'Ссылка на товар')->display(function () {
-            return '<a href="'.$this->model->getUrl().'" target="_blank">'.$this->model->getFullName().'</a>';
+            return '<a href="' . $this->model->getUrl() . '" target="_blank">' . $this->model->getFullName() . '</a>';
         });
         $grid->column('video_url', 'Ссылка на видео')->display(function () {
             return $this->custom_properties['video'] ?? '';
@@ -95,7 +95,7 @@ class MediaController extends AdminController
             }
 
             $isImidj = request()->input('is_imidj');
-            if (! empty($isImidj)) {
+            if (!empty($isImidj)) {
                 $form->model()->setCustomProperty('is_imidj', true);
             } else {
                 $form->model()->forgetCustomProperty('is_imidj');

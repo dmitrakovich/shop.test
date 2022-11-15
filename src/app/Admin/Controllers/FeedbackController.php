@@ -41,7 +41,7 @@ class FeedbackController extends AdminController
         $grid = new Grid(new Feedback());
 
         $grid->column('id', 'Ответить')->display(function ($feedbackId) {
-            return '<a href="'.route('admin.feedbacks.feedback-answers.create', $feedbackId).'" target="_blank">Ответить</a>';
+            return '<a href="' . route('admin.feedbacks.feedback-answers.create', $feedbackId) . '" target="_blank">Ответить</a>';
         });
         $grid->column('user_name', __('Имя'));
         $grid->column('user_email', __('Email'))->email();

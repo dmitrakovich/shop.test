@@ -55,7 +55,7 @@ trait AttributeFilterTrait
      */
     protected static function getRelationNameByClass(): string
     {
-        return Str::snake(class_basename(self::class)).'s';
+        return Str::snake(class_basename(self::class)) . 's';
     }
 
     /**
@@ -90,7 +90,7 @@ trait AttributeFilterTrait
      */
     public static function beforeApplyFilter(Builder &$builder, array &$values)
     {
-        if (! array_is_list($values)) {
+        if (!array_is_list($values)) {
             $values = array_column($values, 'model_id');
         }
     }

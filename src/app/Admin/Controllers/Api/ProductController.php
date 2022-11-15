@@ -38,7 +38,7 @@ class ProductController extends Controller
         if ($orderItemId = $request->input('orderItemId')) {
             /** @var OrderItem $orderItem */
             $orderItem = OrderItem::findOrFail($orderItemId);
-            if (! isset($sizes[$orderItem->size_id])) {
+            if (!isset($sizes[$orderItem->size_id])) {
                 /** @var Size $size */
                 $size = Size::findOrFail($orderItem->size_id);
                 $sizes[$size->id] = ['id' => $size->id, 'text' => $size->name];

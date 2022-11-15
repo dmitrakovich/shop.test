@@ -85,7 +85,7 @@ class CatalogController extends BaseController
             'sortingList' => $sortingList,
             'searchQuery' => $searchQuery,
         ];
-        if (! $products->isNotEmpty()) {
+        if (!$products->isNotEmpty()) {
             $sliderService = new SliderService;
             $data['simpleSliders'] = $sliderService->getSimple();
         }

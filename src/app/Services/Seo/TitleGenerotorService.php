@@ -53,7 +53,7 @@ class TitleGenerotorService
     {
         $discount = $product->getSalePercentage();
 
-        return $product->extendedName().' '.($discount ? "со скидкой {$discount}%." : '- новинка!');
+        return $product->extendedName() . ' ' . ($discount ? "со скидкой {$discount}%." : '- новинка!');
     }
 
     /**
@@ -63,11 +63,11 @@ class TitleGenerotorService
     {
         $description = $this->getProductTitle($product);
 
-        if (! empty($product->color_txt)) {
+        if (!empty($product->color_txt)) {
             $description .= " Цвет: {$product->color_txt}.";
         }
-        if ($product->sizes->isNotEmpty() && ! $product->hasOneSize()) {
-            $description .= ' Размеры: '.$product->sizes->implode('name', ', ');
+        if ($product->sizes->isNotEmpty() && !$product->hasOneSize()) {
+            $description .= ' Размеры: ' . $product->sizes->implode('name', ', ');
         }
 
         return $description;
@@ -130,7 +130,7 @@ class TitleGenerotorService
                     break;
             }
 
-            if (! empty($value)) {
+            if (!empty($value)) {
                 $titleValues[$attrModel] = $value;
             }
 
@@ -146,7 +146,7 @@ class TitleGenerotorService
             }
         }
 
-        return Str::ucfirst((! $emptyCategory ? 'купить ' : '').implode(' ', $titleValuesOrdered));
+        return Str::ucfirst((!$emptyCategory ? 'купить ' : '') . implode(' ', $titleValuesOrdered));
     }
 
     /**
@@ -154,6 +154,6 @@ class TitleGenerotorService
      */
     public function getCatalogDescription(array $currentFilters): string
     {
-        return $this->getCatalogTitle($currentFilters).' с примеркой по Беларуси';
+        return $this->getCatalogTitle($currentFilters) . ' с примеркой по Беларуси';
     }
 }

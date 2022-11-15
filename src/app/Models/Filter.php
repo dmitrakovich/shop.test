@@ -45,7 +45,7 @@ class Filter
             $filters = Cache::get('filters');
         }
 
-        if (! isset($filters)) {
+        if (!isset($filters)) {
             $filtersList ??= array_keys(self::$filtersModels);
             foreach ($filtersList as $filterName) {
                 $model = self::$filtersModels[$filterName];

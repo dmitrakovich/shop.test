@@ -40,7 +40,7 @@ class PaymentService
             case OnlinePaymentMethodEnum::ERIP:
                 $config = config('hgrosh');
                 $postData = [];
-                $payment_num = $order->id.'-'.(++$paymentCount);
+                $payment_num = $order->id . '-' . (++$paymentCount);
 
                 $postData['number'] = $payment_num;
                 $postData['currency'] = 933;
@@ -52,7 +52,7 @@ class PaymentService
 
                 $postDataItems = [];
                 $postDataItems[] = [
-                    'name' => 'Заказ №'.$payment_num,
+                    'name' => 'Заказ №' . $payment_num,
                     'quantity' => 1,
                     'measure' => '',
                     'unitPrice' => ['value' => $data['amount']],
@@ -89,7 +89,7 @@ class PaymentService
                     ]);
                     CreateQrcodeJob::dispatch($onlinePayment)->delay(now()->addSeconds(10));
                     if (isset($data['send_sms']) && $data['send_sms'] == 1) {
-                        $smsText = ($order->first_name ? ($order->first_name.', ') : '').'Вам выставлен счет № '.$payment_num.' - подробнее по ссылке '.route('pay.erip', $payment_num, true);
+                        $smsText = ($order->first_name ? ($order->first_name . ', ') : '') . 'Вам выставлен счет № ' . $payment_num . ' - подробнее по ссылке ' . route('pay.erip', $payment_num, true);
                         $smsResponse = SmsTraffic::send($order->phone, $smsText);
                     }
                 }
@@ -112,7 +112,7 @@ class PaymentService
             'getImage' => 'true',
         ]);
         $responseQrCode = $qrCode->getBodyFormat();
-        $qrCodePath = 'hgrosh/'.date('m-Y').'/'.$onlinePayment->payment_id.'.jpg';
+        $qrCodePath = 'hgrosh/' . date('m-Y') . '/' . $onlinePayment->payment_id . '.jpg';
         Storage::disk('public')->put($qrCodePath, base64_decode($responseQrCode['result']['image']));
         $onlinePayment->update(['qr_code' => $qrCodePath]);
 

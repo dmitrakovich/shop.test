@@ -132,13 +132,13 @@ class Category extends Model
      */
     public function getUrl(): string
     {
-        return '/'.$this->path;
+        return '/' . $this->path;
     }
 
     public function generatePath()
     {
         $slug = $this->slug;
-        $this->attributes['path'] = $this->isRoot() ? $slug : $this->parent->path.'/'.$slug;
+        $this->attributes['path'] = $this->isRoot() ? $slug : $this->parent->path . '/' . $slug;
 
         return $this;
     }
@@ -167,9 +167,9 @@ class Category extends Model
 
         $traverse = function ($categories, $prefix = '', &$result = []) use (&$traverse) {
             foreach ($categories as $category) {
-                $result[$category->id] = $prefix.$category->title;
+                $result[$category->id] = $prefix . $category->title;
 
-                $traverse($category->children, $prefix.'---- ', $result);
+                $traverse($category->children, $prefix . '---- ', $result);
             }
 
             return $result;
@@ -230,7 +230,7 @@ class Category extends Model
         $name = $category->name;
         while ($category->parentCategory) {
             $category = $category->parentCategory;
-            $name = $category->name.'/'.$name;
+            $name = $category->name . '/' . $name;
         }
 
         return $name;

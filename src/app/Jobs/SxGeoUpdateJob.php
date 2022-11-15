@@ -57,7 +57,7 @@ class SxGeoUpdateJob extends AbstractJob
     public function __construct()
     {
         $this->sxGeoPath = database_path('sxgeo');
-        $this->lastUpdFile = $this->sxGeoPath.'/SxGeo.upd';
+        $this->lastUpdFile = $this->sxGeoPath . '/SxGeo.upd';
     }
 
     /**
@@ -69,7 +69,7 @@ class SxGeoUpdateJob extends AbstractJob
     {
         $this->debug('Старт. Скачиваем архив с сервера');
 
-        $zipFile = $this->sxGeoPath.'/SxGeoTmp.zip';
+        $zipFile = $this->sxGeoPath . '/SxGeoTmp.zip';
 
         if (file_exists($this->lastUpdFile)) {
             $this->lastModified = file_get_contents($this->lastUpdFile);

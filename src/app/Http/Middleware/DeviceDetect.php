@@ -16,7 +16,7 @@ class DeviceDetect
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! $request->hasCookie(Device::DEVICE_ID_COOKIE_NAME)) {
+        if (!$request->hasCookie(Device::DEVICE_ID_COOKIE_NAME)) {
             Cookie::queue(cookie(
                 Device::DEVICE_ID_COOKIE_NAME,
                 Device::generateId($request),

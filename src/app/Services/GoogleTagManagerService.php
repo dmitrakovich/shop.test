@@ -70,7 +70,7 @@ class GoogleTagManagerService
             $category = $category->getNameWithParents();
         }
 
-        if (! empty($searchQuery)) {
+        if (!empty($searchQuery)) {
             GoogleTagManagerFacade::view('search_result', [
                 'query' => $searchQuery,
                 'ids' => $products->implode('id', ','),
@@ -91,7 +91,7 @@ class GoogleTagManagerService
     public static function prepareProduct(Product $product, ?int $quantity = null): DataLayer
     {
         return new DataLayer(array_filter([
-            'name' => $product->brand->name.' '.$product->id,
+            'name' => $product->brand->name . ' ' . $product->id,
             'id' => $product->id,
             'price' => $product->getPrice('USD'),
             'brand' => $product->brand->name,

@@ -97,7 +97,7 @@ class UrlHelper
             }
         }
 
-        return route('shop', str_replace('catalog/', '', implode('/', $sorted)).self::buildParams($params));
+        return route('shop', str_replace('catalog/', '', implode('/', $sorted)) . self::buildParams($params));
     }
 
     /**
@@ -122,7 +122,7 @@ class UrlHelper
      */
     protected static function buildParams(array $params): ?string
     {
-        return empty($params) ? null : '?'.http_build_query($params);
+        return empty($params) ? null : '?' . http_build_query($params);
     }
 
     public static function setCurrentFilters(array $currentFilters)
@@ -140,6 +140,6 @@ class UrlHelper
     {
         parse_str(parse_url($originalVideoUrl, PHP_URL_QUERY), $params);
 
-        return 'https://www.youtube.com/embed/'.($params['v'] ?? 'hrwJvG8kALA'); //  . http_build_query($extPrams); // ?autoplay=1&rel=0
+        return 'https://www.youtube.com/embed/' . ($params['v'] ?? 'hrwJvG8kALA'); //  . http_build_query($extPrams); // ?autoplay=1&rel=0
     }
 }

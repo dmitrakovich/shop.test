@@ -18,7 +18,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Class Product
  *
- *
  * @property int $id
  * @property \App\Models\Category $category
  * @property \App\Models\Brand $brand
@@ -171,7 +170,7 @@ class Product extends Model implements HasMedia
      */
     public function simpleName(): string
     {
-        return $this->category->title.' '.$this->brand->name;
+        return $this->category->title . ' ' . $this->brand->name;
     }
 
     /**
@@ -179,7 +178,7 @@ class Product extends Model implements HasMedia
      */
     public function shortName(): string
     {
-        return $this->category->title.' '.$this->id;
+        return $this->category->title . ' ' . $this->id;
     }
 
     /**
@@ -187,7 +186,7 @@ class Product extends Model implements HasMedia
      */
     public function extendedName(): string
     {
-        return $this->simpleName().' '.$this->id;
+        return $this->simpleName() . ' ' . $this->id;
     }
 
     /**
@@ -195,7 +194,7 @@ class Product extends Model implements HasMedia
      */
     public function getFullName(): string
     {
-        return $this->brand->name.' '.$this->sku;
+        return $this->brand->name . ' ' . $this->sku;
     }
 
     /**
@@ -203,7 +202,7 @@ class Product extends Model implements HasMedia
      */
     public function getUrl(): string
     {
-        return $this->url ?? ($this->url = $this->category->getUrl().'/'.$this->slug);
+        return $this->url ?? ($this->url = $this->category->getUrl() . '/' . $this->slug);
     }
 
     /**
@@ -308,7 +307,7 @@ class Product extends Model implements HasMedia
      */
     public function applySale()
     {
-        if (! isset($this->sale)) {
+        if (!isset($this->sale)) {
             Sale::applyForProduct($this);
         }
     }
@@ -320,7 +319,7 @@ class Product extends Model implements HasMedia
      */
     public function getFinalPrice()
     {
-        if (! isset($this->final_price)) {
+        if (!isset($this->final_price)) {
             $this->applySale();
             $this->final_price = $this->sale['price'] ?? $this->price;
         }
@@ -366,7 +365,7 @@ class Product extends Model implements HasMedia
      */
     public function getFinalOldPrice()
     {
-        if (! isset($this->final_old_price)) {
+        if (!isset($this->final_old_price)) {
             $this->applySale();
             $this->final_old_price = $this->getFixedOldPrice();
         }
@@ -461,7 +460,7 @@ class Product extends Model implements HasMedia
      */
     public function getFirstMediaUrl(string $collectionName = 'default', string $conversionName = ''): string
     {
-        if (! ($url = $this->traitGetFirstMediaUrl($collectionName, $conversionName))) {
+        if (!($url = $this->traitGetFirstMediaUrl($collectionName, $conversionName))) {
             $url = '/storage/products/0/deleted.jpg';
         }
 

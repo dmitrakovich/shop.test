@@ -55,7 +55,7 @@ class GenerateFeed extends Command
     {
         $instances = self::INSTANCES;
 
-        if (! empty($this->argument('instance'))) {
+        if (!empty($this->argument('instance'))) {
             $instance = strtolower($this->argument('instance'));
             $instances = Arr::only($instances, $instance);
 
@@ -76,7 +76,7 @@ class GenerateFeed extends Command
     {
         $allCurrencies = Currency::all(['code', 'country', 'rate', 'decimals', 'symbol'])->keyBy('code');
 
-        if (! empty($this->argument('currency'))) {
+        if (!empty($this->argument('currency'))) {
             $currency = strtoupper($this->argument('currency'));
             $allCurrencies = $allCurrencies->only($currency);
 

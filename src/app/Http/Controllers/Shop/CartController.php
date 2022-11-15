@@ -34,10 +34,10 @@ class CartController extends BaseController
         $deliveriesList = DeliveryMethod::where('active', true)->pluck('name', 'id');
         $paymentsList = PaymentMethod::where('active', true)->pluck('name', 'id');
 
-        if (! Sale::hasFitting()) {
+        if (!Sale::hasFitting()) {
             unset($deliveriesList['BelpostCourierFitting']);
         }
-        if (! Sale::hasInstallment()) {
+        if (!Sale::hasInstallment()) {
             unset($paymentsList['Installment']);
         }
 
@@ -88,7 +88,7 @@ class CartController extends BaseController
      */
     public function final(ProductService $productService, GoogleTagManagerService $gtmService)
     {
-        if (! Session::has('order_id')) {
+        if (!Session::has('order_id')) {
             return redirect()->route('orders.index');
         }
         $order = Order::with('items')->findOrFail(Session::get('order_id'));

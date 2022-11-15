@@ -60,9 +60,9 @@ class RegisteredUserController extends Controller
         $oldId = (int) $syncRequest->input('id');
         $userData = $syncRequest->validated();
 
-        $existUser = User::when(! empty($userData['phone']), function ($query) use ($userData) {
+        $existUser = User::when(!empty($userData['phone']), function ($query) use ($userData) {
             $query->where('phone', $userData['phone']);
-        })->when(! empty($userData['email']), function ($query) use ($userData) {
+        })->when(!empty($userData['email']), function ($query) use ($userData) {
             $query->orWhere('email', $userData['email']);
         })->first();
 

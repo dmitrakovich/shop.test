@@ -43,7 +43,7 @@ class Token extends Model
      */
     public function isExpired(): bool
     {
-        return ! empty($this->expire_date) && $this->expire_date->isPast();
+        return !empty($this->expire_date) && $this->expire_date->isPast();
     }
 
     /**

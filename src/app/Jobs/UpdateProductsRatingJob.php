@@ -319,10 +319,10 @@ class UpdateProductsRatingJob extends AbstractJob
 
         $ratingConfig['last_update'] = date('Y-m-d-H:i');
 
-        $this->debug(count($rating).' товаров');
+        $this->debug(count($rating) . ' товаров');
         unset($rating);
 
-        if (! isset($_POST['act'])) {
+        if (!isset($_POST['act'])) {
             $ratingConfigModel->update(['config' => $ratingConfig]);
         }
 

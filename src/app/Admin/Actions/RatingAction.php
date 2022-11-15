@@ -40,6 +40,6 @@ class RatingAction extends RowAction
             $html .= $i <= $stars ? '<i class="fa fa-star"></i>' : '<i class="fa fa-star-o"></i>';
         }
 
-        return '<span style="white-space: nowrap;">'.$html.'</span>';
+        return '<span style="white-space: nowrap;">' . $html . '</span>';
     }
 }

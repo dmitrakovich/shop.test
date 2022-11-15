@@ -150,7 +150,7 @@ class Banner extends Model implements HasMedia
     public function scopeOrderByPriority($query)
     {
         return $query->orderByRaw(
-            $query->getGrammar()->compileRandom('').' * ( priority + 2 ) DESC'
+            $query->getGrammar()->compileRandom('') . ' * ( priority + 2 ) DESC'
         );
     }
 }

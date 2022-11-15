@@ -7,14 +7,23 @@ class OrderMethod implements Enum
     use EnumTrait;
 
     final const DEFAULT = 'default';
+
     final const ONECLICK = 'oneclick';
+
     final const CHAT = 'chat';
+
     final const PHONE = 'phone';
+
     final const INSTAGRAM = 'insta';
+
     final const VIBER = 'viber';
+
     final const TELEGRAM = 'telegram';
+
     final const WHATSAPP = 'whatsapp';
+
     final const EMAIL = 'email';
+
     final const OTHER = 'other';
 
     /**

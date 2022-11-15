@@ -84,7 +84,7 @@ class GoogleCsv extends AbstractFeed
                 return [
                     $item->id,
                     $this->getItemTitle($item),
-                    $this->getHost().$item->getUrl(),
+                    $this->getHost() . $item->getUrl(),
                     $this->getProductImages($item->getMedia())[0],
                     $this->getDescription($item),
                     $item->category->name,
@@ -114,7 +114,7 @@ class GoogleCsv extends AbstractFeed
      */
     protected function formatPrice(float $price): string
     {
-        return number_format($price, 2).' '.$this->currency->code;
+        return number_format($price, 2) . ' ' . $this->currency->code;
     }
 
     /**
@@ -125,7 +125,7 @@ class GoogleCsv extends AbstractFeed
      */
     protected function getItemTitle(Product $item): string
     {
-        return $item->category->name.' '.$item->sku;
+        return $item->category->name . ' ' . $item->sku;
     }
 
     /**

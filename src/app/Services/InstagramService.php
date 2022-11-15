@@ -78,7 +78,7 @@ class InstagramService
      */
     protected function getNewToken(string $oldToken): string
     {
-        $response = Http::get(self::BASE_URL.'/refresh_access_token', [
+        $response = Http::get(self::BASE_URL . '/refresh_access_token', [
             'grant_type' => 'ig_refresh_token',
             'access_token' => $oldToken,
         ]);
@@ -91,7 +91,7 @@ class InstagramService
      */
     public function getPosts(): array
     {
-        $response = Http::get(self::BASE_URL.'/me/media', [
+        $response = Http::get(self::BASE_URL . '/me/media', [
             'fields' => implode(',', self::POSTS_FIELDS),
             'access_token' => $this->getAccessToken(),
         ]);

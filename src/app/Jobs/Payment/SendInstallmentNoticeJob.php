@@ -24,6 +24,6 @@ class SendInstallmentNoticeJob extends AbstractJob
 
         $count = $installmentService->sendNotifications();
 
-        $this->debug('Отправлено '.DeclensionNoun::make($count, 'уведомление'));
+        $this->debug('Отправлено ' . DeclensionNoun::make($count, 'уведомление'));
     }
 }

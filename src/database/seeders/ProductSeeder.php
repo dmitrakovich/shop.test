@@ -400,7 +400,7 @@ class ProductSeeder extends Seeder
             $imagesList = $oldProductImages[$productId] ?? [];
             foreach ($imagesList as $image) {
                 // $pathToFile = 'C:/OSPanel/domains/shop.test/public/images/products/' . $image;
-                $urlToFile = 'https://modny.by/components/com_jshopping/files/img_products/'.$image->image_name;
+                $urlToFile = 'https://modny.by/components/com_jshopping/files/img_products/' . $image->image_name;
                 $customProperties = [];
 
                 if ($image->name === 'imidj') {
@@ -417,7 +417,7 @@ class ProductSeeder extends Seeder
                         ->addMediaFromUrl($urlToFile)
                         ->preservingOriginal();
 
-                    if (! empty($customProperties)) {
+                    if (!empty($customProperties)) {
                         $media->withCustomProperties($customProperties);
                     }
 

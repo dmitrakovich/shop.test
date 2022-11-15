@@ -122,18 +122,18 @@ class HttpClient
      */
     protected function request(string $method, string $url, array $params = [], $getParams = []): ApiResponse
     {
-        $url = $this->config['api_url'].($url ? ('/'.trim($url, '/')) : '');
+        $url = $this->config['api_url'] . ($url ? ('/' . trim($url, '/')) : '');
         try {
             $headers = [
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer '.$this->getToken(),
+                'Authorization' => 'Bearer ' . $this->getToken(),
             ];
             if ($method === 'GET') {
                 $params = array_merge($params, $getParams);
-                $url .= empty($params) ? '' : ('?'.http_build_query($params));
+                $url .= empty($params) ? '' : ('?' . http_build_query($params));
                 $body = '';
             } else {
-                $url .= empty($getParams) ? '' : ('?'.http_build_query($getParams));
+                $url .= empty($getParams) ? '' : ('?' . http_build_query($getParams));
                 $body = (string) json_encode($params);
             }
             $uri = new Uri($url);

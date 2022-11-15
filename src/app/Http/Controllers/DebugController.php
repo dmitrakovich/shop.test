@@ -79,7 +79,7 @@ class DebugController extends Controller
 
             $parsedPhone = $phoneUtil->parse($phone, $countryCode);
 
-            if (! $phoneUtil->isValidNumber($parsedPhone)) {
+            if (!$phoneUtil->isValidNumber($parsedPhone)) {
                 return;
             }
 
