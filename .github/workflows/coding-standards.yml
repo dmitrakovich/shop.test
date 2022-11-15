@@ -36,7 +36,7 @@ jobs:
         run: pint --config ./formaters/pint.json
 
       - name: Install NPM dependencies
-        run: npm ci
+        run: npm ci -C ./src
 
       - name: Copy blade-formatter config to root dir
         run: |
