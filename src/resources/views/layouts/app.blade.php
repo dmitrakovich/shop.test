@@ -5,14 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="robots" content="@yield('metaForRobots', 'all')"/>
+    <meta name="robots" content="@yield('metaForRobots', 'all')" />
 
     <meta property="og:title" content="@yield('title', 'Barocco')" />
     <meta property="og:image" content="@yield('ogImage', asset('/images/icons/square-logo.jpg'))" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ URL::current() }}" />
-    <meta property="og:description" content="@yield('description', 'Barocco - интернет-магазин женской обуви с примеркой по Беларуси')"/>
-    <meta property="description" content="@yield('description', 'Barocco - интернет-магазин женской обуви с примеркой по Беларуси')"/>
+    <meta property="og:description" content="@yield('description', 'Barocco - интернет-магазин женской обуви с примеркой по Беларуси')" />
+    <meta property="description" content="@yield('description', 'Barocco - интернет-магазин женской обуви с примеркой по Беларуси')" />
 
     <title>@yield('title', 'Barocco')</title>
 

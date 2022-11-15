@@ -15,8 +15,12 @@
                 с 10.00 до 22.00<br>
                 ежедневно
                 <div class="h5 mt-5 mb-4">Информация</div>
-                <a href="{{ route('info.terms') }}" title="Публичная оферта">Публичная оферта</a><br>
-                <a href="{{ route('info.policy') }}" title="Политика конфиденциальности">Политика конфиденциальности</a><br>
+                <a href="{{ route('info.terms') }}" title="Публичная оферта">
+                    Публичная оферта
+                </a><br>
+                <a href="{{ route('info.policy') }}" title="Политика конфиденциальности">
+                    Политика конфиденциальности
+                </a><br>
             </div>
             <div class="col-12 col-sm text-center text-sm-left">
                 <h5 class="mt-5 mb-4">Контакты</h5>
@@ -45,8 +49,8 @@
 </footer>
 
 <script>
-function imageOnError(image) {
-    image.onerror = '';
-    image.src = '/storage/products/0/deleted.jpg';
-}
+    function imageOnError(image) {
+        image.onerror = '';
+        image.src = '/storage/products/0/deleted.jpg';
+    }
 </script>

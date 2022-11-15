@@ -1,3 +1,4 @@
+{{-- blade-formatter-disable --}}
 <?= '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL ?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
     <channel>

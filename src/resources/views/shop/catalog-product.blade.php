@@ -1,13 +1,11 @@
 <?php /** @var \App\Models\Product $product */ ?>
 
-<div
-    class="col-3 js-product-item product-item mb-3 text-center text-lg-left"
-    data-gtm-product='{!! $product->dataLayer->toJson() !!}'
->
+<div class="col-3 js-product-item product-item mb-3 text-center text-lg-left"
+    data-gtm-product='{!! $product->dataLayer->toJson() !!}'>
     <div class="mb-3 image position-relative">
-		
+
         <a  class="d-inline-block position-relative" href="{{ $product->getUrl() }}" data-gtm-click="productClick">
-			
+
 			@include('partials.buttons.favorite', [
 				'favoriteProductId' => $product->id,
 				'favoriteState' => isset($product->favorite)
@@ -29,25 +27,18 @@
 				@endif
 			</div>
 
-            <img
-                src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
-                alt="{{ $product->shortName() }}"
-                class="img-fluid product-first-image"
-                onerror="imageOnError(this)"
-            />
-            <img
-                src="{{ ($product->getMedia()->get(1) ?? $product->getFirstMedia())->getUrl('catalog') }}"
-                alt="{{ $product->shortName() }}"
-                class="img-fluid product-second-image"
-                onerror="imageOnError(this)"
-            />
+            <img src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
+                alt="{{ $product->shortName() }}" class="img-fluid product-first-image"
+                onerror="imageOnError(this)" />
+            <img src="{{ ($product->getMedia()->get(1) ?? $product->getFirstMedia())->getUrl('catalog') }}"
+                alt="{{ $product->shortName() }}" class="img-fluid product-second-image"
+                onerror="imageOnError(this)" />
         </a>
-        <button
-            type="button"
-            aria-label="быстрый просмотр"
+        <button type="button" aria-label="быстрый просмотр"
             data-src="{{ route('product.quick', $product->id) }}"
-            class="quick-link btn btn-block btn-outline-dark d-none d-lg-block"
-        >быстрый просмотр</button>
+            class="quick-link btn btn-block btn-outline-dark d-none d-lg-block">
+            быстрый просмотр
+        </button>
     </div>
 
     <b>{{ $product->shortName() }}</b> <br>
@@ -57,6 +48,6 @@
     @else
         <span class="price">{!! $product->getFormattedPrice() !!}</span>
     @endif
-    <br/>
+    <br />
     <span class="text-mutted">{{ $product->sizes->implode('name', ' | ') }}</span>
 </div>

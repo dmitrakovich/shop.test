@@ -1,4 +1,4 @@
-name: fix code styling
+name: Fix code styling
 
 on:
   pull_request:
@@ -17,9 +17,6 @@ on:
 jobs:
   laravel-pint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./src
 
     steps:
       - name: Checkout code
@@ -36,7 +33,21 @@ jobs:
         run: composer global require laravel/pint
 
       - name: Run Pint
-        run: pint
+        run: pint --config ./formaters/pint.json
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Copy blade-formatter config to root dir
+        run: |
+          cp formaters/.bladeformatterrc.json ./
+          cp formaters/.bladeignore ./
+
+      - name: Run Blade Formatter
+        run: |
+          src/node_modules/.bin/blade-formatter --write \
+            src/resources/views/*.blade.php \
+            src/resources/views/**/*.blade.php
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4

@@ -15,12 +15,12 @@
     Карта клиента
 </a>
 @auth
-<a class="col static-pages-menu-item" href="{{ route('logout') }}"
-    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-    <img src="/images/icons/logout.svg" class="img-fluid mr-3" alt="Выйти">
-    {{ __('auth.Logout') }}
-</a>
-<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-    @csrf
-</form>
+    <a class="col static-pages-menu-item" href="{{ route('logout') }}"
+        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <img src="/images/icons/logout.svg" class="img-fluid mr-3" alt="Выйти">
+        {{ __('auth.Logout') }}
+    </a>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
 @endauth

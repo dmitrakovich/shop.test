@@ -2,8 +2,7 @@
     @foreach ($media as $image)
         <div class="file-preview-frame krajee-default" data-id="{{ $image->id }}">
             <div class="shop-file-content">
-                <img src="{{ $image->getUrl('catalog') }}"
-                    class="file-preview-image kv-preview-data"
+                <img src="{{ $image->getUrl('catalog') }}" class="file-preview-image kv-preview-data"
                     style="max-width:100%;max-height:100%;">
             </div>
             <div class="file-thumbnail-footer">

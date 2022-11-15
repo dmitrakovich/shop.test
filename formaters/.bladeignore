@@ -1,0 +1,4 @@
+src/resources/views/sitemap/*
+src/resources/views/legacy/*
+src/resources/views/admin/order-print.blade.php
+src/resources/views/emails/order-created.blade.php

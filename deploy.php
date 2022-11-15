@@ -32,7 +32,7 @@ set('writable_dirs', [
 host('production')
     ->setHostname(getenv('DEPLOY_HOST'))
     ->setRemoteUser(getenv('DEPLOY_USER'))
-    ->setPort((int) getenv('DEPLOY_PORT'))
+    ->setPort((int)getenv('DEPLOY_PORT'))
     ->setDeployPath(getenv('DEPLOY_PATH'))
     ->setSshArguments([
         '-o StrictHostKeyChecking=no',
