@@ -69,8 +69,8 @@ class OrderController extends AdminController
 
             return new Table(['Фото', 'Товар', 'Наличие', 'Статус', 'Размер', 'Цена'], $items);
         });
-        $grid->column('country.name', 'Страна');
-        $grid->column('city', 'Город');
+        $grid->column('country.name',  'Страна');
+        $grid->column('city','Город');
         $grid->column('user_addr', 'Адрес');
         $grid->column('payment.name', 'Способ оплаты');
         $grid->column('delivery.name', 'Способ доставки');
@@ -111,7 +111,7 @@ class OrderController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param  mixed  $id
+     * @param mixed  $id
      * @return Show
      */
     protected function detail($id)
@@ -164,7 +164,6 @@ class OrderController extends AdminController
             ->description($this->description['edit'] ?? trans('admin.edit'))
             ->body($this->form($id)->edit($id));
     }
-
     /**
      * Make a form builder.
      *
@@ -298,6 +297,7 @@ class OrderController extends AdminController
 
         return $form;
     }
+
 
     /**
      * Save installments for order items
