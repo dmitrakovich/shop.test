@@ -4,28 +4,29 @@
     data-gtm-product='{!! $product->dataLayer->toJson() !!}'>
     <div class="mb-3 image position-relative">
 
-        <a  class="d-inline-block position-relative" href="{{ $product->getUrl() }}" data-gtm-click="productClick">
+        <a class="d-inline-block position-relative" href="{{ $product->getUrl() }}"
+            data-gtm-click="productClick">
 
-			@include('partials.buttons.favorite', [
-				'favoriteProductId' => $product->id,
-				'favoriteState' => isset($product->favorite)
-			])
+            @include('partials.buttons.favorite', [
+                'favoriteProductId' => $product->id,
+                'favoriteState' => isset($product->favorite),
+            ])
 
-			<div class="product-labels">
-				@if ($product->isNew())
-					<div class="product-label product-label-new">
-						new
-					</div>
-				@endif
-				@if ($product->getSalePercentage())
-					<div class="product-label product-label-sale">
-						-{{ $product->getSalePercentage() }}%
-					</div>
-					<div class="product-label product-label-sale">
-						акция
-					</div>
-				@endif
-			</div>
+            <div class="product-labels">
+                @if ($product->isNew())
+                    <div class="product-label product-label-new">
+                        new
+                    </div>
+                @endif
+                @if ($product->getSalePercentage())
+                    <div class="product-label product-label-sale">
+                        -{{ $product->getSalePercentage() }}%
+                    </div>
+                    <div class="product-label product-label-sale">
+                        акция
+                    </div>
+                @endif
+            </div>
 
             <img src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
                 alt="{{ $product->shortName() }}" class="img-fluid product-first-image"
