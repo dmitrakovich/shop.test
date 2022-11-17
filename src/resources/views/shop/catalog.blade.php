@@ -1,16 +1,5 @@
 @extends('layouts.app')
-
-{{-- blade-formatter-disable --}}
-@section('title', Seo::getCatalogTitle($currentFilters))
-@if ($products->isNotEmpty())
-    @section('ogImage', $products->first()->getFirstMedia()->getUrl('catalog'))
-@endif
-@section('description', Seo::getCatalogDescription($currentFilters))
-@section('metaForRobots', Seo::metaForRobotsForCatalog($currentFilters))
-{{-- blade-formatter-enable --}}
-
 @section('breadcrumbs', Breadcrumbs::render('category', $category))
-
 @section('content')
     <div class="col-12">
         <div class="row d-flex d-lg-none mb-2">

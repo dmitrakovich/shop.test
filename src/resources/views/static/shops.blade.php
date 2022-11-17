@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Магазины')
+@php SeoFacade::setTitle('Магазины') @endphp
 
 @section('breadcrumbs', Breadcrumbs::render('static-shops'))
 

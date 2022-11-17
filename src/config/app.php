@@ -197,6 +197,7 @@ return [
         Drandin\DeclensionNouns\DeclensionNounsServiceProvider::class,
         App\Providers\CartServiceProvider::class,
         App\Providers\GoogleTagManagerProvider::class,
+        App\Libraries\Seo\Providers\SeoServiceProvider::class,
 
     ],
 
@@ -218,6 +219,7 @@ return [
         'UrlHelper' => App\Helpers\UrlHelper::class,
         'Currency' => App\Facades\Currency::class,
         'Seo' => App\Facades\Seo::class,
+        'SeoFacade' => App\Libraries\Seo\Facades\SeoFacade::class,
     ])->toArray(),
 
 ];

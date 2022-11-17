@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', $currentInfoPage['name'])
-
 @section('breadcrumbs', Breadcrumbs::render('info-page', $currentInfoPage))
 
 @section('content')

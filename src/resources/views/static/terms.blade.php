@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Публичная оферта')
-
 @section('breadcrumbs', Breadcrumbs::render('terms'))
 
 @section('content')
