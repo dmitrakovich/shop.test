@@ -426,10 +426,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Calculate full sale percentage - discount percentage
-     *
-     * @return int
      */
-    public function getOnlySalePercentage(): int
+    public function getOnlySalePercentage(): ?int
     {
         $result = ceil($this->getSalePercentage() - $this->getDiscountPercentage());
 
