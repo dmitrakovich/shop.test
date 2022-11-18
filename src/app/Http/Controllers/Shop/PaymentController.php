@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Shop;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Services\Payment\PaymentService;
 use Illuminate\Contracts\View\View;
-
 use SeoFacade;
 
 class PaymentController extends BaseController

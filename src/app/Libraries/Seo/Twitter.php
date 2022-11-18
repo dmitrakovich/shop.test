@@ -15,6 +15,7 @@ class Twitter implements SeoContract
 
     /**
      * Generate meta tags
+     *
      * @return string
      */
     public function generate(): string
@@ -28,16 +29,17 @@ class Twitter implements SeoContract
                 if ($key == 'image') {
                     $value = secure_url($value);
                 }
-                $key    = 'twitter:' . strip_tags($key);
+                $key = 'twitter:' . strip_tags($key);
                 $html[] = '<meta name="' . $key . '" content="' . strip_tags((string)$value) . '"/>';
             }
         }
+
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * @param string $key
-     * @param string|null|bool $value
+     * @param  string  $key
+     * @param  string|null|bool  $value
      * @return self
      */
     private function addToConfig(string $key, string|null|bool $value): self
@@ -45,12 +47,14 @@ class Twitter implements SeoContract
         if (!is_null($value)) {
             $this->config[$key] = $value;
         }
+
         return $this;
     }
 
     /**
      * Set title.
-     * @param string|null $title
+     *
+     * @param  string|null  $title
      * @return self
      */
     public function setTitle(?string $title): self
@@ -60,7 +64,8 @@ class Twitter implements SeoContract
 
     /**
      * Set description
-     * @param string|null $description
+     *
+     * @param  string|null  $description
      * @return self
      */
     public function setDescription(?string $description): self
@@ -68,12 +73,14 @@ class Twitter implements SeoContract
         if ($description && trim($description)) {
             return $this->addToConfig('description', htmlspecialchars($description, ENT_QUOTES, 'UTF-8', false));
         }
+
         return $this;
     }
 
     /**
      * Set image
-     * @param null|string|array $image
+     *
+     * @param  null|string|array  $image
      * @return self
      */
     public function setImage(null|string|array $image): self
@@ -84,12 +91,14 @@ class Twitter implements SeoContract
         if (is_array($image)) {
             return $this->addToConfig('image', $image[0]);
         }
+
         return $this;
     }
 
     /**
      * Set url
-     * @param string|null $url
+     *
+     * @param  string|null  $url
      * @return self
      */
     public function setUrl(?string $url): self

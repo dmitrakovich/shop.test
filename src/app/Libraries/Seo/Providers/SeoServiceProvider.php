@@ -6,13 +6,11 @@ use App\Libraries\Seo\OpenGraph;
 use App\Libraries\Seo\Seo;
 use App\Libraries\Seo\SeoMeta;
 use App\Libraries\Seo\Twitter;
-
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
 class SeoServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-
     /**
      * @return void
      */
@@ -22,6 +20,7 @@ class SeoServiceProvider extends ServiceProvider implements DeferrableProvider
 
     /**
      * Register the service provider.
+     *
      * @return void
      */
     public function register()

@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FeedbackRequest;
 use App\Models\Feedback;
 use App\Services\GoogleTagManagerService;
-use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 use SeoFacade;
+use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class FeedbackController extends Controller
 {

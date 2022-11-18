@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Shop;
 
 use App\Models\Product;
 use App\Services\GoogleTagManagerService;
-use App\Services\Seo\TitleGenerotorService;
 use App\Services\ProductService;
+use App\Services\Seo\TitleGenerotorService;
 use App\Services\SliderService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-
 use SeoFacade;
 
 class ProductController extends BaseController

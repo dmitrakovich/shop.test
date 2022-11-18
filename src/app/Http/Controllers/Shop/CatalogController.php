@@ -8,10 +8,9 @@ use App\Models\Category;
 use App\Models\Filter;
 use App\Services\CatalogService;
 use App\Services\GoogleTagManagerService;
-use App\Services\SliderService;
 use App\Services\Seo\TitleGenerotorService;
+use App\Services\SliderService;
 use Illuminate\Http\Request;
-
 use Seo;
 use SeoFacade;
 

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\InfoPage;
 use App\Services\GoogleTagManagerService;
 use Illuminate\Contracts\View\View;
-
 use SeoFacade;
 
 class InfoPageController extends Controller

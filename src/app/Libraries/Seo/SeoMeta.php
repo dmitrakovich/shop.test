@@ -15,29 +15,30 @@ class SeoMeta implements SeoContract
 
     /**
      * Generate meta tags
+     *
      * @return string
      */
     public function generate(): string
     {
-        $html = array();
+        $html = [];
         foreach ($this->config as $key => $value) {
             if ($value !== false) {
                 switch ($key) {
                     case 'title':
-                        $html[] = "<title>" . (string)$value . "</title>";
+                        $html[] = '<title>' . (string)$value . '</title>';
                         break;
                     case 'description':
-                        $html[] = "<meta name=\"description\" content=\"" . (string)$value . "\">";
+                        $html[] = '<meta name="description" content="' . (string)$value . '">';
                         break;
                     case 'url':
-                        $value  = is_null($value) ? htmlspecialchars(url()->current()) : $value;
-                        $html[] = "<link rel=\"canonical\" href=\"" . (string)$value . "\"/>";
+                        $value = is_null($value) ? htmlspecialchars(url()->current()) : $value;
+                        $html[] = '<link rel="canonical" href="' . (string)$value . '"/>';
                         break;
                     case 'robots':
                         if ($value) {
                             $html[] = "<meta name=\"robots\" content=\"{$value}\">";
                         } else {
-                            $html[] = "<meta name=\"robots\" content=\"all\">";
+                            $html[] = '<meta name="robots" content="all">';
                         }
                         break;
                     case 'keywords':
@@ -45,19 +46,20 @@ class SeoMeta implements SeoContract
                             $value = $value->toArray();
                         }
                         $value = is_array($value) ? implode(', ', $value) : $value;
-                        if($value) {
-                            $html[]   = "<meta name=\"keywords\" content=\"" . (string)$value . "\">";
+                        if ($value) {
+                            $html[] = '<meta name="keywords" content="' . (string)$value . '">';
                         }
                         break;
                 }
             }
         }
+
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * @param string $key
-     * @param string|null|bool $value
+     * @param  string  $key
+     * @param  string|null|bool  $value
      * @return self
      */
     private function addToConfig(string $key, string|null|bool $value): self
@@ -65,12 +67,14 @@ class SeoMeta implements SeoContract
         if (!is_null($value)) {
             $this->config[$key] = $value;
         }
+
         return $this;
     }
 
     /**
      * Set keywords
-     * @param string|array|null $keywords
+     *
+     * @param  string|array|null  $keywords
      * @return self
      */
     public function setKeywords(string|array|null $keywords): self
@@ -81,12 +85,14 @@ class SeoMeta implements SeoContract
             }
             $keywords = array_map('strip_tags', $keywords);
         }
+
         return $this->addToConfig('keywords', $keywords);
     }
 
     /**
      * Set title.
-     * @param string|null $title
+     *
+     * @param  string|null  $title
      * @return self
      */
     public function setTitle(?string $title): self
@@ -94,12 +100,14 @@ class SeoMeta implements SeoContract
         if ($title && trim($title)) {
             return $this->addToConfig('title', $title);
         }
+
         return $this;
     }
 
     /**
      * Set description
-     * @param string|null $description
+     *
+     * @param  string|null  $description
      * @return self
      */
     public function setDescription(?string $description): self
@@ -107,6 +115,7 @@ class SeoMeta implements SeoContract
         if ($description && trim($description)) {
             return $this->addToConfig('description', htmlspecialchars($description, ENT_QUOTES, 'UTF-8', false));
         }
+
         return $this;
     }
 
@@ -117,7 +126,8 @@ class SeoMeta implements SeoContract
 
     /**
      * Set url
-     * @param string|null $url
+     *
+     * @param  string|null  $url
      * @return self
      */
     public function setUrl(?string $url): self
@@ -127,7 +137,8 @@ class SeoMeta implements SeoContract
 
     /**
      * Set robots
-     * @param string|null $robots
+     *
+     * @param  string|null  $robots
      * @return self
      */
     public function setRobots(?string $robots): self
@@ -135,6 +146,7 @@ class SeoMeta implements SeoContract
         if (trim($robots)) {
             return $this->addToConfig('robots', $robots);
         }
+
         return $this;
     }
 }
