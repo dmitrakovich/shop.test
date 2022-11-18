@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InfoPage;
 use App\Services\GoogleTagManagerService;
 use Illuminate\Contracts\View\View;
+use SeoFacade;
 
 class InfoPageController extends Controller
 {
@@ -19,6 +20,8 @@ class InfoPageController extends Controller
 
         $gtmService->setViewForOther();
 
+        SeoFacade::setTitle($currentInfoPage['name']);
+
         return view('static.template', compact('currentInfoPage'));
     }
 
@@ -28,6 +31,7 @@ class InfoPageController extends Controller
     public function terms(GoogleTagManagerService $gtmService): View
     {
         $gtmService->setViewForOther();
+        SeoFacade::setTitle('Публичная оферта');
 
         return view('static.terms');
     }
@@ -38,6 +42,7 @@ class InfoPageController extends Controller
     public function policy(GoogleTagManagerService $gtmService): View
     {
         $gtmService->setViewForOther();
+        SeoFacade::setTitle('Политика конфиденциальности');
 
         return view('static.policy');
     }

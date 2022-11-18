@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Оплата')
-
 @section('breadcrumbs', Breadcrumbs::render('static-payment'))
 
 @section('content')

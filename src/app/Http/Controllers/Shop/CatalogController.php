@@ -8,8 +8,11 @@ use App\Models\Category;
 use App\Models\Filter;
 use App\Services\CatalogService;
 use App\Services\GoogleTagManagerService;
+use App\Services\Seo\TitleGenerotorService;
 use App\Services\SliderService;
 use Illuminate\Http\Request;
+use Seo;
+use SeoFacade;
 
 class CatalogController extends BaseController
 {
@@ -20,6 +23,7 @@ class CatalogController extends BaseController
         Request $request,
         private GoogleTagManagerService $gtmService,
         private CatalogService $catalogService,
+        private TitleGenerotorService $seoService,
     ) {
         parent::__construct($request);
     }
@@ -59,7 +63,6 @@ class CatalogController extends BaseController
         $currentFilters = $filterRequest->getFilters();
         $searchQuery = $filterRequest->input('search');
         UrlHelper::setCurrentFilters($currentFilters);
-        // dump($currentFilters);
 
         $products = $this->catalogService->getProducts($currentFilters, $sort, $searchQuery);
 
@@ -85,9 +88,17 @@ class CatalogController extends BaseController
             'sortingList' => $sortingList,
             'searchQuery' => $searchQuery,
         ];
+
+        SeoFacade::setTitle($this->seoService->getCatalogTitle($currentFilters))
+            ->setDescription($this->seoService->getCatalogDescription($currentFilters));
+
         if (!$products->isNotEmpty()) {
             $sliderService = new SliderService;
             $data['simpleSliders'] = $sliderService->getSimple();
+            SeoFacade::setRobots('noindex, nofollow');
+        } else {
+            SeoFacade::setImage($products->first()->getFirstMedia()->getUrl('catalog'));
+            SeoFacade::setRobots(Seo::metaForRobotsForCatalog($currentFilters));
         }
 
         return view('shop.catalog', $data);

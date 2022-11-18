@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FeedbackRequest;
 use App\Models\Feedback;
 use App\Services\GoogleTagManagerService;
+use SeoFacade;
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class FeedbackController extends Controller
@@ -25,6 +26,7 @@ class FeedbackController extends Controller
             ->paginate(50);
 
         $gtmService->setViewForOther();
+        SeoFacade::setTitle('Отзывы');
 
         return view('feedbacks', compact('type', 'feedbacks'));
     }

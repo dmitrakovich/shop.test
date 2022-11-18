@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Доставка')
-
 @section('breadcrumbs', Breadcrumbs::render('static-delivery'))
 
 @section('content')

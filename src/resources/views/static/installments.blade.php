@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Рассрочка')
-
 @section('breadcrumbs', Breadcrumbs::render('static-installments'))
 
 @section('content')

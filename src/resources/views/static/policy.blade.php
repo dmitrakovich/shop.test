@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Политика конфиденциальности')
-
 @section('breadcrumbs', Breadcrumbs::render('policy'))
 
 @section('content')
