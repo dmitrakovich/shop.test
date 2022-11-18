@@ -25,7 +25,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ inputs.php }}
+          php-version: ${{ inputs.php || 8.1 }}
           extensions: json, dom, curl, libxml, mbstring
           coverage: none
 
@@ -52,4 +52,4 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: ${{ inputs.message }}
+          commit_message: ${{ inputs.message }} || Format ${{ github.actor }} code
