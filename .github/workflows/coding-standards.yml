@@ -1,8 +1,7 @@
 name: Fix code styling
 
 on:
-  pull_request:
-    branches: [master]
+  pull_request_target:
   workflow_dispatch:
     inputs:
       php:
@@ -21,9 +20,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        # with:
-          # ref: ${{ github.head_ref }}
-          # token: ${{ secrets.PAT }}
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -56,5 +55,5 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: ${{ inputs.message }} Format ${{ github.actor }} code
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.PAT }}
