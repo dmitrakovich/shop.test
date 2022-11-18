@@ -22,8 +22,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.head_ref }}
-          # token: ${{ secrets.PAT }}
+          # ref: ${{ github.head_ref }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
