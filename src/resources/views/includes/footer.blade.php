@@ -12,7 +12,7 @@
             </div>
             <div class="col-12 col-sm text-center text-sm-left">
                 <div class="h5 mt-5 mb-4">Время работы</div>
-                с 10.00 до 22.00<br>
+				с 08.00 до 21.00<br>
                 ежедневно
                 <div class="h5 mt-5 mb-4">Информация</div>
                 <a href="{{ route('info.terms') }}" title="Публичная оферта">
