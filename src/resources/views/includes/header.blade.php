@@ -14,7 +14,7 @@
             </div>
             <div class="col-auto d-none d-lg-block">
                 <p style="line-height: 1.15rem;"><small>
-                        Ежедневно&nbsp;с 10:00&nbsp;до&nbsp;22:00<br>
+                        Ежедневно&nbsp;с 08:00&nbsp;до&nbsp;21:00<br>
                         <a href="{{ config('contacts.phone.link') }}" data-gtm-user-event="callPhone">
                             {{ config('contacts.phone.name') }}
                         </a>&nbsp;
