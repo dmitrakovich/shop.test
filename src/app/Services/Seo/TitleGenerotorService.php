@@ -9,6 +9,7 @@ use App\Models\Color;
 use App\Models\Fabric;
 use App\Models\Heel;
 use App\Models\Product;
+use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
 use App\Models\Season;
 use App\Models\Size;
@@ -30,6 +31,7 @@ class TitleGenerotorService
         Style::class,
         Brand::class,
         Collection::class,
+        Price::class,
     ];
 
     const ATTRIBUTE_ORDER = [
@@ -44,6 +46,7 @@ class TitleGenerotorService
         Collection::class,
         Heel::class,
         Brand::class,
+        Price::class,
     ];
 
     /**
@@ -89,6 +92,13 @@ class TitleGenerotorService
 
                 continue;
             }
+            if ($attrModel === Price::class) {
+                foreach ($currentFilters[$attrModel] ?? [] as $price) {
+                    if (str_starts_with('price-from-', $price->slug)) {
+                        unset($currentFilters[$attrModel][$price->slug]);
+                    }
+                }
+            }
 
             if (empty($currentFilters[$attrModel]) || count($currentFilters[$attrModel]) > 1) {
                 continue;
@@ -123,6 +133,10 @@ class TitleGenerotorService
 
                 case Collection::class:
                     $value = $filter->filters->name;
+                    break;
+
+                case Price::class:
+                    $value = Str::lower($filter->filters->getBadgeName());
                     break;
 
                 default:
