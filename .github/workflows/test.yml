@@ -6,6 +6,10 @@ on:
   repository_dispatch:
     types: [ retry-* ]
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   laravel-tests-and-deploy:
 
