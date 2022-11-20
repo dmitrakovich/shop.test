@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
 use App\Models\Url;
+use App\Services\FilterService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FilterRequest extends FormRequest
@@ -51,16 +52,15 @@ class FilterRequest extends FormRequest
      */
     public function getFilters(): array
     {
-        $filters = [];
-        $slugs = $this->path() ? explode('/', $this->path()) : [];
+        $slugs = array_filter(explode('/', 'catalog/' . $this->path));
+        $filters = $this->getStaticFilters($slugs);
 
-        $filtersTemp = Url::whereIn('slug', $slugs)
+        Url::whereIn('slug', $slugs)
             ->with('filters')
-            ->get(['slug', 'model_type', 'model_id']);
-
-        foreach ($filtersTemp as $value) {
-            $filters[$value->model_type][$value->slug] = $value;
-        }
+            ->get(['slug', 'model_type', 'model_id'])
+            ->each(function (Url $url) use (&$filters) {
+                $filters[$url->model_type][$url->slug] = $url;
+            });
 
         uksort(
             $filters[Category::class],
@@ -68,6 +68,25 @@ class FilterRequest extends FormRequest
         );
 
         $this->addTopProducts($filters);
+
+        return $filters;
+    }
+
+    /**
+     * Get static filters (not from db)
+     */
+    public function getStaticFilters(array &$slugs): array
+    {
+        $filters = [];
+        /** @var FilterService $filterService */
+        $filterService = app(FilterService::class);
+        foreach ($slugs as $key => $slug) {
+            /** @var Url $url */
+            if ($url = $filterService->getStaticFilter($slug)) {
+                $filters[$url->model_type][$url->slug] = $url;
+                unset($slugs[$key]);
+            }
+        }
 
         return $filters;
     }

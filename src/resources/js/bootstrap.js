@@ -13,6 +13,7 @@ try {
     require('bootstrap');
     require('@fancyapps/fancybox');
     require('slick-carousel');
+    require('ion-rangeslider');
 } catch (e) {}
 
 /**

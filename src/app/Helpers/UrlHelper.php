@@ -8,6 +8,7 @@ use App\Models\Collection;
 use App\Models\Color;
 use App\Models\Fabric;
 use App\Models\Heel;
+use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
 use App\Models\Season;
 use App\Models\Size;
@@ -32,6 +33,7 @@ class UrlHelper
         Style::class,
         Collection::class,
         Brand::class,
+        Price::class,
     ];
 
     /**
@@ -57,6 +59,18 @@ class UrlHelper
         $filters = self::$currentFilters;
         $params = self::getParams();
 
+        foreach ($remove as $filter) {
+            if (isset($filter['param'])) {
+                unset($params[$filter['param']]);
+            } else {
+                if (in_array($filter['model'], [Category::class, Price::class])) {
+                    unset($filters[$filter['model']]);
+                } else {
+                    unset($filters[$filter['model']][$filter['slug']]);
+                }
+            }
+        }
+
         foreach ($add as $filter) {
             $model = $filter['model'];
             $slug = $filter['slug'];
@@ -67,18 +81,6 @@ class UrlHelper
             }
             if ($model === Category::class) {
                 $params = [];
-            }
-        }
-
-        foreach ($remove as $filter) {
-            if (isset($filter['param'])) {
-                unset($params[$filter['param']]);
-            } else {
-                if ($filter['model'] == Category::class) {
-                    unset($filters[$filter['model']]);
-                } else {
-                    unset($filters[$filter['model']][$filter['slug']]);
-                }
             }
         }
 

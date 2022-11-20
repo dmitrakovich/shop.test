@@ -182,6 +182,17 @@ class CurrencyService
     }
 
     /**
+     * Convert price from needed or current currency to byn
+     */
+    public function reverseConvert(float $priceInCurrency, ?string $currencyCode = null): float
+    {
+        $currency = $this->allCurrencies[$currencyCode] ?? $this->currency;
+        $priceInByn = $priceInCurrency / $currency->rate;
+
+        return ceil($priceInByn);
+    }
+
+    /**
      * Format price in current currency
      *
      * @param  float  $price

@@ -144,12 +144,6 @@ return [
             'level' => 'debug',
         ],
 
-        'smstraffic' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/smstraffic.log'),
-            'tap' => [SimpleFormatter::class],
-            'level' => 'debug',
-        ],
     ],
 
 ];

@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Facades\Seo;
 use App\Helpers\UrlHelper;
 use App\Http\Requests\FilterRequest;
+use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\Category;
-use App\Models\Filter;
+use App\Models\ProductAttributes\Price;
 use App\Services\CatalogService;
+use App\Services\FilterService;
 use App\Services\GoogleTagManagerService;
 use App\Services\Seo\TitleGenerotorService;
 use App\Services\SliderService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Seo;
-use SeoFacade;
 
 class CatalogController extends BaseController
 {
@@ -83,7 +85,7 @@ class CatalogController extends BaseController
             'category' => $category,
             'currentFilters' => $currentFilters,
             'badges' => $badges,
-            'filters' => Filter::all(),
+            'filters' => app(FilterService::class)->getAll(),
             'sort' => $sort,
             'sortingList' => $sortingList,
             'searchQuery' => $searchQuery,
@@ -102,5 +104,16 @@ class CatalogController extends BaseController
         }
 
         return view('shop.catalog', $data);
+    }
+
+    /**
+     * Generate url with price filter slugs & redirect to it
+     */
+    public function priceFilter(FilterRequest $filterRequest, FilterService $filterService): RedirectResponse
+    {
+        UrlHelper::setCurrentFilters($filterRequest->getFilters());
+        $add = $filterService->makePriceFilters($filterRequest->input());
+
+        return redirect(UrlHelper::generate($add, [['model' => Price::class]]));
     }
 }

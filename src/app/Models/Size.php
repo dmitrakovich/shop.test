@@ -24,4 +24,12 @@ class Size extends Model
     final const ONE_SIZE_SLUG = 'size-none';
 
     public $timestamps = false;
+
+    /**
+     * Generate filter badge name
+     */
+    public function getBadgeName(): string
+    {
+        return 'Размер: ' . $this->name;
+    }
 }

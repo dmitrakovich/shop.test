@@ -5,6 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Url class
+ *
+ * @property string $slug
+ * @property string $model_type
+ * @property int $model_id
+ * @property string $redirect
+ */
 class Url extends Model
 {
     public $timestamps = false;
