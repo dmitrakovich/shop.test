@@ -3,21 +3,19 @@
 namespace App\Services;
 
 use App\Facades\Currency;
-use App\Models\{
-    Tag,
-    Url,
-    Heel,
-    Size,
-    Brand,
-    Color,
-    Style,
-    Fabric,
-    Season,
-    Category,
-    Collection,
-};
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Collection;
+use App\Models\Color;
+use App\Models\Fabric;
+use App\Models\Heel;
 use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
+use App\Models\Season;
+use App\Models\Size;
+use App\Models\Style;
+use App\Models\Tag;
+use App\Models\Url;
 use Illuminate\Support\Facades\Cache;
 
 class FilterService

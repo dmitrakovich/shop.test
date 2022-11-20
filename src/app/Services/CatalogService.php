@@ -67,8 +67,8 @@ class CatalogService
                         continue;
                     }
                     $badges[] = (object)[
-                        'name'  => $filterModel->getBadgeName(),
-                        'url'   => UrlHelper::generate([], [$filterModel])
+                        'name' => $filterModel->getBadgeName(),
+                        'url' => UrlHelper::generate([], [$filterModel]),
                     ];
                 }
             }

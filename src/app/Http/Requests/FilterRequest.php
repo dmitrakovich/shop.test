@@ -87,6 +87,7 @@ class FilterRequest extends FormRequest
                 unset($slugs[$key]);
             }
         }
+
         return $filters;
     }
 
