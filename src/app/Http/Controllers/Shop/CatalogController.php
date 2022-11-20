@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Models\Category;
 use App\Helpers\UrlHelper;
-use Illuminate\Http\Request;
-use App\Services\CatalogService;
 use App\Http\Requests\FilterRequest;
+use App\Models\Category;
+use App\Models\ProductAttributes\Price;
+use App\Services\CatalogService;
 use App\Services\FilterService;
 use App\Services\GoogleTagManagerService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class CatalogController extends BaseController
 {
@@ -82,5 +84,16 @@ class CatalogController extends BaseController
             'sortingList' => $sortingList,
             'searchQuery' => $searchQuery,
         ]);
+    }
+
+    /**
+     * Generate url with price filter slugs & redirect to it
+     */
+    public function priceFilter(FilterRequest $filterRequest, FilterService $filterService): RedirectResponse
+    {
+        UrlHelper::setCurrentFilters($filterRequest->getFilters());
+        $add = $filterService->makePriceFilters($filterRequest->input());
+
+        return redirect(UrlHelper::generate($add, [['model' => Price::class]]));
     }
 }

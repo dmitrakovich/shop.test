@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Facades\Currency;
 use App\Models\{
     Tag,
     Url,
@@ -15,6 +16,7 @@ use App\Models\{
     Category,
     Collection,
 };
+use App\Models\ProductAttributes\Price;
 use Illuminate\Support\Facades\Cache;
 use App\Models\ProductAttributes\Status;
 
@@ -74,18 +76,42 @@ class FilterService
      */
     public function getStaticFilter(string $slug): ?Url
     {
-        if (str_starts_with($slug, 'price-from-')) {
-            // Price
+        if (str_starts_with($slug, 'price-')) {
+            return $this->makeUrlFilter(new Price(['slug' => $slug]));
         }
 
-        // return match ($slug) {
-        //     'size-40' =>
-        //     default => null,
-        // };
-        // if ($slug === ) {
-        //     return Url::where('slug', 'size-40')->with('filters')->first();
-        // }
-
         return null;
+    }
+
+    /**
+     * Add filter to Url model
+     */
+    public function makeUrlFilter($filter): Url
+    {
+        $urlModel = new Url([
+            'slug' => $filter->slug,
+            'model_type' => get_class($filter),
+            'model_id' => $filter->id,
+        ]);
+
+        return $urlModel->setRelation('filters', $filter);
+    }
+
+    /**
+     * Make price filter models for filters slugs
+     */
+    public function makePriceFilters(array $data): array
+    {
+        $filters = [];
+        if ($data['price_from'] > $data['price_min']) {
+            $slug = 'price-from-' . Currency::reverseConvert($data['price_from']);
+            $filters[] = new Price(['slug' => $slug]);
+        }
+        if ($data['price_to'] < $data['price_max']) {
+            $slug = 'price-to-' . Currency::reverseConvert($data['price_to']);
+            $filters[] = new Price(['slug' => $slug]);
+        }
+
+        return $filters;
     }
 }

@@ -2,15 +2,18 @@
 
 namespace App\Services;
 
+use App\Facades\Currency;
+use App\Helpers\UrlHelper;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Support\Collection;
 use App\Models\ProductAttributes\Top;
-use Illuminate\Support\Facades\Cache;
-use Laravie\SerializesQuery\Eloquent;
-use Illuminate\Support\Facades\Session;
 use App\Services\GoogleTagManagerService;
-use App\Helpers\UrlHelper;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
+use Laravie\SerializesQuery\Eloquent;
 
 class CatalogService
 {
@@ -45,6 +48,7 @@ class CatalogService
         $this->addTopProducts($products, $filters);
         $products->totalCount = $productsQuery->count() + $this->topProductsCount($products);
 
+        $this->addMinMaxPrices($products, $productsQuery);
         $this->addGtmData($products);
 
         // save query in cache (1 hour)
@@ -145,6 +149,37 @@ class CatalogService
     protected function topProductsCount($products): int
     {
         return $products->count() - self::PAGE_SIZE;
+    }
+
+    protected function addMinMaxPrices(CursorPaginator $products, Builder $productsQuery): void
+    {
+        $priceQuery = clone $productsQuery;
+        $query = $priceQuery->getQuery();
+        $bindings = $priceQuery->getBindings();
+        $bindkey = 0;
+
+        foreach ($query->wheres as $key => $where) {
+            if ($where['type'] === 'Basic') {
+                $bindkey++;
+            } else {
+                continue;
+            }
+            // match ($where['type']) {
+            //     'Basic' => $bindkey++,
+            //     'Column' => $bindkey,
+            //     'In' => $bindkey += count($where['values']),
+            //     'Exists', 'Nested' => $bindkey += count($where['query']->getBindings()),
+            // };
+            if (isset($where['column']) && $where['column'] === 'price') {
+                unset($bindings[$bindkey - 1]);
+                unset($query->wheres[$key]);
+            }
+        }
+        $query->wheres = array_values($query->wheres);
+        $priceQuery->setBindings(array_values($bindings));
+
+        $products->minPrice = Currency::convert($priceQuery->min('price') ?? 0);
+        $products->maxPrice = Currency::convert($priceQuery->max('price') ?? 999);
     }
 
     /**

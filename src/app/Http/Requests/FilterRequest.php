@@ -51,7 +51,7 @@ class FilterRequest extends FormRequest
      */
     public function getFilters(): array
     {
-        $slugs = $this->path() ? explode('/', $this->path()) : [];
+        $slugs = array_filter(explode('/', 'catalog/' . $this->path));
         $filters = $this->getStaticFilters($slugs);
 
         Url::whereIn('slug', $slugs)

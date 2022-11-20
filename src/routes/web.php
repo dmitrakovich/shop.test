@@ -59,16 +59,17 @@ Route::post('currency/switch', [CurrencyController::class, 'switch'])->name('cur
 Route::group(['namespace' => 'Shop'], function () {
     Route::post('/quick/{product}', [ProductController::class, 'quickView'])->name('product.quick');
     Route::get('ajax-next-page', [CatalogController::class, 'ajaxNextPage']);
+    Route::post('price-filter/{path?}', [CatalogController::class, 'priceFilter'])
+        ->where('path', '[a-zA-Z0-9/_-]+');
 
-    Route::get('catalog/{path?}', function () {
-        $request = Route::getCurrentRequest();
-        $slug = Str::of($request->path())->explode('/')->last();
+    Route::get('catalog/{path?}', function (FilterRequest $request) {
+        $slug = (string)Str::of($request->path())->explode('/')->last();
         $url = Url::search($slug);
 
         if (isset($url) && $url['model_type'] === Product::class) {
             return app(ProductController::class)->show($url->model_id);
         } else {
-            return app(CatalogController::class)->show(FilterRequest::createFrom($request));
+            return app(CatalogController::class)->show($request);
         }
     })
         ->where('path', '[a-zA-Z0-9/_-]+')
