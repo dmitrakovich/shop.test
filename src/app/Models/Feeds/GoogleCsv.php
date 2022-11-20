@@ -97,8 +97,8 @@ class GoogleCsv extends AbstractFeed
     /**
      * Get sale price if exist
      *
-     * @param float $price
-     * @param float $oldPrice
+     * @param  float  $price
+     * @param  float  $oldPrice
      * @return string|null
      */
     protected function getSalePrice(float $price, float $oldPrice): ?string
@@ -109,7 +109,7 @@ class GoogleCsv extends AbstractFeed
     /**
      * Format price for google csv
      *
-     * @param float $price
+     * @param  float  $price
      * @return string
      */
     protected function formatPrice(float $price): string
@@ -120,7 +120,7 @@ class GoogleCsv extends AbstractFeed
     /**
      * Prepared item title
      *
-     * @param Product $item
+     * @param  Product  $item
      * @return string
      */
     protected function getItemTitle(Product $item): string
@@ -131,7 +131,7 @@ class GoogleCsv extends AbstractFeed
     /**
      * Generate product description
      *
-     * @param Product $product
+     * @param  Product  $product
      * @return string
      */
     public function getDescription(Product $product): string

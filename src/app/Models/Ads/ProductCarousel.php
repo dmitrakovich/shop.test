@@ -3,12 +3,12 @@
 namespace App\Models\Ads;
 
 use App\Models\Category;
-use Spatie\EloquentSortable\Sortable;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
+use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 
 class ProductCarousel extends Model implements Sortable
 {
@@ -26,9 +26,8 @@ class ProductCarousel extends Model implements Sortable
         });
     }
 
-
     protected $appends = [
-        'categories_list'
+        'categories_list',
     ];
 
     /**

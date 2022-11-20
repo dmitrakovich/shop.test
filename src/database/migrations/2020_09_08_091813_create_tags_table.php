@@ -17,7 +17,7 @@ class CreateTagsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->uuid('slug')->unique();
-            $table->text('seo')->nullable();;
+            $table->text('seo')->nullable();
             $table->timestamps();
         });
     }

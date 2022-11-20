@@ -2,16 +2,16 @@
 
 namespace App\Jobs;
 
-use App\Models\Size;
 use App\Models\Config;
 use App\Models\Product;
+use App\Models\Size;
+use App\Services\Api\YandexApiService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\Api\YandexApiService;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 
 class UpdateAvailabilityJob extends AbstractJob
 {
@@ -20,9 +20,10 @@ class UpdateAvailabilityJob extends AbstractJob
     /**
      * Ручной способ обновления
      *
-     * @var boolean
+     * @var bool
      */
     protected $isManual = false;
+
     protected $thtime = null;
 
     /**
@@ -41,6 +42,7 @@ class UpdateAvailabilityJob extends AbstractJob
 
     // варианты букв в артикулах
     protected static $engSymbols = ['a', 'b', 'c', 'e', 'h', 'k', 'm', 'o', 'p', 't', 'x'];
+
     protected static $rusSymbols = ['а', 'в', 'с', 'е', 'н', 'к', 'м', 'о', 'р', 'т', 'х'];
 
     /**
@@ -51,7 +53,7 @@ class UpdateAvailabilityJob extends AbstractJob
     public function __construct(bool $manual = false)
     {
         $this->isManual = $manual;
-        $this->thtime = date("Y-m-d-H:i:s");
+        $this->thtime = date('Y-m-d-H:i:s');
     }
 
     /**
@@ -93,7 +95,7 @@ class UpdateAvailabilityJob extends AbstractJob
                     'articul' => $product->name,
                     'brand' => $brandName,
                     'size' => $product->sizes->pluck('id', 'name')->toArray(),
-                    'label' => $product->label
+                    'label' => $product->label,
                 ];
             }
         }
@@ -105,9 +107,9 @@ class UpdateAvailabilityJob extends AbstractJob
         } elseif (isset($fileInfo['error'])) {
             return $this->errorWithReturn('Ошибка получения данных. ' . ($fileInfo['message'] ?? $fileInfo['error']));
         }
-        $filedate = explode(',', (string) $availabilityConfig['file']);
+        $filedate = explode(',', (string)$availabilityConfig['file']);
         $actionsCount = is_countable($availabilityConfig['publish']) ? count($availabilityConfig['publish']) : 0;
-        + (is_countable($availabilityConfig['add_size']) ? count($availabilityConfig['add_size']) : 0)
+        +(is_countable($availabilityConfig['add_size']) ? count($availabilityConfig['add_size']) : 0)
             + (is_countable($availabilityConfig['del']) ? count($availabilityConfig['del']) : 0)
             + (is_countable($availabilityConfig['del_size']) ? count($availabilityConfig['del_size']) : 0)
             + (is_countable($availabilityConfig['new']) ? count($availabilityConfig['new']) : 0);
@@ -122,7 +124,7 @@ class UpdateAvailabilityJob extends AbstractJob
         }
 
         $resI = file_get_contents($downloadLink);
-        $resI = mb_convert_encoding($resI, "UTF-8", "windows-1251");
+        $resI = mb_convert_encoding($resI, 'UTF-8', 'windows-1251');
         $resI = explode("\n", $resI);
         $resD = [];
         for ($i = 5; $i < count($resI); $i++) {
@@ -132,10 +134,9 @@ class UpdateAvailabilityJob extends AbstractJob
                 $brandName = trim($itemA[3]);
                 $brandKey = strtolower($brandName);
                 $smallArt = $this->smallArt($itemC[0]);
-                $sizeNotNull = $itemA[5] =! 0;
+                $sizeNotNull = $itemA[5] = !0;
 
                 if (!empty($brandName) && !empty($smallArt) && $sizeNotNull) {
-
                     $smallArt = $this->searchVendorCode($smallArt, $brandKey);
 
                     if (!isset($resD[$brandKey][$smallArt])) {
@@ -144,7 +145,7 @@ class UpdateAvailabilityJob extends AbstractJob
                             'brand' => $brandName,
                             'size' => $itemA[4] == 'б/р' ? ['без размера' => 'без размера'] : [$itemA[4] => $itemA[4]],
                             'cat' => $itemC[1],
-                            'price' => str_replace("'00", "", $itemA[6])
+                            'price' => str_replace("'00", '', $itemA[6]),
                         ];
                     } elseif (is_array($resD[$brandKey][$smallArt]['size'])) {
                         $resD[$brandKey][$smallArt]['size'][$itemA[4]] = $itemA[4];
@@ -158,8 +159,8 @@ class UpdateAvailabilityJob extends AbstractJob
         }
         unset($resI);
         // Сброс
-        $deadline = date("Y-m-d-H:i:s", mktime(date("H"), date("i"), date("s"), date("n"), date("j") - $availabilityConfig['period'], date("Y")));
-        $sbros = array('publish', 'new', 'add_size', 'del', 'del_size');
+        $deadline = date('Y-m-d-H:i:s', mktime(date('H'), date('i'), date('s'), date('n'), date('j') - $availabilityConfig['period'], date('Y')));
+        $sbros = ['publish', 'new', 'add_size', 'del', 'del_size'];
         foreach ($sbros as $sbrosv) {
             if ($availabilityConfig['auto_del'] == 'on' && $sbrosv == 'publish') {
                 foreach ($availabilityConfig[$sbrosv] as $sbrK => $sbrV) {
@@ -168,7 +169,7 @@ class UpdateAvailabilityJob extends AbstractJob
                     }
                 }
             } elseif ($availabilityConfig['auto_del'] == 'off' || $sbrosv == 'new') {
-                $availabilityConfig[$sbrosv] = array();
+                $availabilityConfig[$sbrosv] = [];
             } else {
                 foreach ($availabilityConfig[$sbrosv] as $sbrK => $sbrV) {
                     if (!isset($sbrV['time']) || $sbrV['time'] < $deadline) {
@@ -184,7 +185,7 @@ class UpdateAvailabilityJob extends AbstractJob
                     continue;
                 }
                 $checkIgn = $this->allProducts[$brandKey][$smallArt]['label'] != 3;
-                $checkNoM = (!isset($resD[$brandKey][$smallArt]) || (stripos($resD[$brandKey][$smallArt]['cat'], "мужск")) === false);
+                $checkNoM = (!isset($resD[$brandKey][$smallArt]) || (stripos($resD[$brandKey][$smallArt]['cat'], 'мужск')) === false);
                 if ($checkIgn && $checkNoM) {
                     if (
                         isset($this->allProducts[$brandKey][$smallArt])
@@ -196,7 +197,7 @@ class UpdateAvailabilityJob extends AbstractJob
                             'id' => $it['id'],
                             'name' => "$it[brand] $it[articul]",
                             'status' => 0,
-                            'time' => $this->thtime
+                            'time' => $this->thtime,
                         ];
                     }
                     if (
@@ -209,7 +210,7 @@ class UpdateAvailabilityJob extends AbstractJob
                             'id' => $it['id'],
                             'name' => "$it[brand] $it[articul]",
                             'status' => 0,
-                            'time' => $this->thtime
+                            'time' => $this->thtime,
                         ];
                     }
                     if (
@@ -218,21 +219,27 @@ class UpdateAvailabilityJob extends AbstractJob
                     ) {
                         $it = $resD[$brandKey][$smallArt];
                         $it_err = '';
-                        if (!isset($this->allProducts[$brandKey])) $it_err = 'нет бренда';
+                        if (!isset($this->allProducts[$brandKey])) {
+                            $it_err = 'нет бренда';
+                        }
                         if (is_array($it['size'])) {
                             $it_err_s = '';
-                            foreach ($it['size'] as $err_s) if (!isset($sizesList[$err_s])) $it_err_s = 'нет размера';
+                            foreach ($it['size'] as $err_s) {
+                                if (!isset($sizesList[$err_s])) {
+                                    $it_err_s = 'нет размера';
+                                }
+                            }
                             $it_err .= ((!empty($it_err) && !empty($it_err_s)) ? ', ' : '') . ((!empty($it_err_s)) ? $it_err_s : '');
                         }
-                        $availabilityConfig['new'][$brandKey . '-' . $smallArt] = array(
+                        $availabilityConfig['new'][$brandKey . '-' . $smallArt] = [
                             'id' => $brandKey . '-' . $smallArt,
                             'brand' => $it['brand'],
                             'articul' => $it['articul'],
                             'cat' => $it['cat'],
                             'size' => $it['size'],
                             'err' => $it_err,
-                            'time' => $this->thtime
-                        );
+                            'time' => $this->thtime,
+                        ];
                     }
                     // размеры
                     if (
@@ -246,14 +253,16 @@ class UpdateAvailabilityJob extends AbstractJob
                         $fs = $ss + $ds;
                         foreach ($fs as $fsk => $fsv) {
                             if (!isset($ss[$fsk]) && isset($ds[$fsk])) {
-                                if (!isset($sizesList[$fsk])) $sizesList[$fsk] = 'new';
+                                if (!isset($sizesList[$fsk])) {
+                                    $sizesList[$fsk] = 'new';
+                                }
                                 $availabilityConfig['add_size'][] = [
                                     'id' => $it['id'],
                                     'vid' => $sizesList[$fsk],
                                     'name' => "$it[brand] $it[articul]",
                                     'size' => $fsk,
                                     'status' => 0,
-                                    'time' => $this->thtime
+                                    'time' => $this->thtime,
                                 ];
                             } elseif (isset($ss[$fsk]) && !isset($ds[$fsk])) {
                                 $availabilityConfig['del_size'][] = [
@@ -262,16 +271,16 @@ class UpdateAvailabilityJob extends AbstractJob
                                     'name' => "$it[brand]  $it[articul]",
                                     'size' => $fsk,
                                     'status' => 0,
-                                    'time' => $this->thtime
+                                    'time' => $this->thtime,
                                 ];
                             }
                         }
                     }
                 }
-            };
-        };
+            }
+        }
         $availabilityConfig['last_update'] = $this->thtime;
-        $filedate = explode(",", (string) $availabilityConfig['file']);
+        $filedate = explode(',', (string)$availabilityConfig['file']);
         $this->writeLog("Файл $filedate[0]. Наличие сверено в $availabilityConfig[last_update]");
 
         if ($availabilityConfig['auto_del'] === 'on') {
@@ -286,6 +295,7 @@ class UpdateAvailabilityJob extends AbstractJob
         }
 
         $this->complete('Успешно выполнено');
+
         return '<p class="adminka_message_success">' . $this->getLogsInHtml() . '</p>';
     }
 
@@ -313,7 +323,9 @@ class UpdateAvailabilityJob extends AbstractJob
                 ->get('id as pid');
 
             foreach ($imgFL as $imgV) {
-                if (!in_array($imgV->pid, $imgL)) $imgL[] = $imgV->pid;
+                if (!in_array($imgV->pid, $imgL)) {
+                    $imgL[] = $imgV->pid;
+                }
             }
             foreach ($config['publish'] as $errK => $errV) {
                 if (!in_array($errV['id'], $imgL)) {
@@ -378,7 +390,7 @@ class UpdateAvailabilityJob extends AbstractJob
             }
         }
         if ($deleteCount > 1000) {
-            $this->writeLog("Ошибка! Больше 1000 удалить размеров");
+            $this->writeLog('Ошибка! Больше 1000 удалить размеров');
         } elseif ($deleteCount > 0) {
             foreach ($deleteListId as $productId => $product) {
                 foreach ($product as $sizeName) {
@@ -470,20 +482,22 @@ class UpdateAvailabilityJob extends AbstractJob
             // todo учитывать $log['level']
             $html .= $log['message'] . ';<br>';
         }
+
         return $html;
     }
 
     protected function smallArt($txt)
     {
-        $r = array(' ', '-', '.', '_', '*');
+        $r = [' ', '-', '.', '_', '*'];
+
         return mb_strtolower(str_replace($r, '', $txt));
     }
 
     /**
      * Поиск кривых артикулов
      *
-     * @param string $vendorCode полученный артикул
-     * @param string $brandKey код бренда
+     * @param  string  $vendorCode полученный артикул
+     * @param  string  $brandKey код бренда
      * @return string|null найденный артикул
      */
     protected function searchVendorCode(string $vendorCode, string $brandKey): ?string
@@ -499,12 +513,14 @@ class UpdateAvailabilityJob extends AbstractJob
         if (isset($this->allProducts[$brandKey][$vendorCodeEng])) {
             return $vendorCodeEng;
         }
+
         return $vendorCode;
     }
 
     protected function errorWithReturn(string $msg)
     {
         $this->complete($msg, 'jobs', 'error');
+
         return $msg;
     }
 }

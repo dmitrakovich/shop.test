@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class CollectionSeeder extends Seeder
 {
     protected $tableName = 'collections';
+
     protected $values = [
         ['id' => '66', 'name' => 'Весна-Лето 2020', 'slug' => 'col-vesna-leto-2020', 'seo' => ''],
         ['id' => '67', 'name' => 'Осень-Зима 20/21', 'slug' => 'col-vesna-leto-20-21', 'seo' => ''],
@@ -19,6 +20,7 @@ class CollectionSeeder extends Seeder
         ['id' => '75', 'name' => 'Осень-Зима 17/18', 'slug' => 'col-vesna-leto-17-18', 'seo' => ''],
         ['id' => '76', 'name' => 'Весна-Лето 2017', 'slug' => 'col-vesna-leto-2017', 'seo' => ''],
     ];
+
     /**
      * Run the database seeds.
      *

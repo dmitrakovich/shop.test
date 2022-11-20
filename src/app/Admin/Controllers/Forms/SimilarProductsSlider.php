@@ -4,8 +4,8 @@ namespace App\Admin\Controllers\Forms;
 
 use App\Enums\ProductCarouselEnum;
 use App\Models\Ads\ProductCarousel;
-use Illuminate\Http\Request;
 use Encore\Admin\Widgets\Form;
+use Illuminate\Http\Request;
 
 class SimilarProductsSlider extends Form
 {
@@ -26,8 +26,7 @@ class SimilarProductsSlider extends Form
     /**
      * Handle the form request.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request)
@@ -35,12 +34,13 @@ class SimilarProductsSlider extends Form
         $slider = ProductCarousel::where('enum_type_id', ProductCarouselEnum::SIMILAR_PRODUCTS)->firstOrNew();
 
         $slider->enum_type_id = ProductCarouselEnum::SIMILAR_PRODUCTS;
-        $slider->title        = $request->input('title', null);
-        $slider->speed        = $request->input('speed', 3000);
-        $slider->count        = 12;
+        $slider->title = $request->input('title', null);
+        $slider->speed = $request->input('speed', 3000);
+        $slider->count = 12;
         $slider->save();
 
         admin_success('Слайдер похожие товары успешно сохранен!');
+
         return back();
     }
 

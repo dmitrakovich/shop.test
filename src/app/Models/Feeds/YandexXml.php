@@ -2,15 +2,15 @@
 
 namespace App\Models\Feeds;
 
-use App\Models\Color;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\Currency;
-use Illuminate\Support\Str;
-use App\Services\ProductService;
-use Illuminate\Support\Collection;
 use App\Facades\Currency as CurrencyFacade;
+use App\Models\Category;
+use App\Models\Color;
+use App\Models\Currency;
+use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class YandexXml extends AbstractFeed
 {
@@ -82,6 +82,7 @@ class YandexXml extends AbstractFeed
                 if ($item->parent_id != Category::ROOT_CATEGORY_ID) {
                     $category['parent_id'] = $item->parent_id;
                 }
+
                 return (object)$category;
             });
     }
@@ -115,7 +116,7 @@ class YandexXml extends AbstractFeed
     /**
      * Prepare color from colors for filters
      *
-     * @param EloquentCollection $colors
+     * @param  EloquentCollection  $colors
      * @return array
      */
     public function getColors(EloquentCollection $colors): array
@@ -128,7 +129,7 @@ class YandexXml extends AbstractFeed
     /**
      * Prepare offer params
      *
-     * @param Product $product
+     * @param  Product  $product
      * @return array
      */
     public function getOfferParams(Product $product): array
@@ -160,7 +161,7 @@ class YandexXml extends AbstractFeed
     /**
      * Generate product description
      *
-     * @param Product $product
+     * @param  Product  $product
      * @return string
      */
     public function getDescription(Product $product): string

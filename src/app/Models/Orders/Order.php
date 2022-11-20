@@ -2,28 +2,28 @@
 
 namespace App\Models\Orders;
 
-use App\Models\Device;
 use App\Models\Country;
-use Payments\PaymentMethod;
-use Deliveries\DeliveryMethod;
-use Illuminate\Support\Carbon;
+use App\Models\Device;
 use App\Models\Enum\OrderMethod;
 use App\Models\Payments\OnlinePayment;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations;
+use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
+use Payments\PaymentMethod;
 
 /**
  * class Order
  *
- * @property integer $id
- * @property integer $user_id
+ * @property int $id
+ * @property int $user_id
  * @property string $first_name
  * @property string $last_name
  * @property string $patronymic_name
- * @property integer $promocode_id
+ * @property int $promocode_id
  * @property string $email
  * @property string $phone
  * @property string $comment
@@ -35,12 +35,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $city
  * @property string $zip
  * @property string $user_addr
- * @property integer $payment_id
+ * @property int $payment_id
  * @property float $payment_cost
- * @property integer $delivery_id
+ * @property int $delivery_id
  * @property float $delivery_cost
  * @property float $delivery_price
- * @property integer $delivery_point_id
+ * @property int $delivery_point_id
  * @property string $order_method
  * @property string $utm_medium
  * @property string $utm_source
@@ -48,10 +48,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $utm_content
  * @property string $utm_term
  * @property string $status_key
- * @property integer $admin_id
+ * @property int $admin_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
- *
  * @property-read Device $device
  * @property-read string $user_full_name
  * @property-read OrderStatus $status
@@ -103,14 +102,15 @@ class Order extends Model
      * Товары заказа
      *
      * @deprecated
+     *
      * @return Relations\HasMany
      */
     public function data()
     {
         return $this->hasMany(OrderItem::class)
             ->with([
-                'product' => function ($query) { $query->withTrashed(); },
-                'size:id,name'
+                'product' => fn ($query) => $query->withTrashed(),
+                'size:id,name',
             ]);
     }
 
@@ -123,9 +123,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class)
             ->with([
-                'product' => function ($query) { $query->withTrashed(); },
+                'product' => fn ($query) => $query->withTrashed(),
                 'status:key,name_for_admin,name_for_user',
-                'size:id,name'
+                'size:id,name',
             ]);
     }
 
@@ -138,9 +138,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderItemExtended::class)
             ->with([
-                'product' => function ($query) { $query->withTrashed(); },
+                'product' => fn ($query) => $query->withTrashed(),
                 'status:key,name_for_admin,name_for_user',
-                'size:id,name'
+                'size:id,name',
             ]);
     }
 
@@ -236,6 +236,7 @@ class Order extends Model
         foreach ($this->data as $item) {
             $price += ($item->current_price * $item->count);
         }
+
         return $price;
     }
 
@@ -245,9 +246,9 @@ class Order extends Model
         foreach ($this->data as $item) {
             $price += ($item->old_price * $item->count);
         }
+
         return $price;
     }
-
 
     public function getTotalPrice()
     {
@@ -265,8 +266,10 @@ class Order extends Model
         foreach ($this->data as $item) {
             $count += $item->count;
         }
+
         return $count;
     }
+
     /**
      * Farmat date in admin panel
      *
@@ -288,7 +291,7 @@ class Order extends Model
     /**
      * Route notifications for the SmsTraffic channel.
      *
-     * @param  \Illuminate\Notifications\Notification $notification
+     * @param  \Illuminate\Notifications\Notification  $notification
      * @return string
      */
     public function routeNotificationForSmsTraffic($notification)

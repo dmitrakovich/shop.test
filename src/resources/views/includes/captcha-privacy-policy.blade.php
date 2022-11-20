@@ -5,7 +5,15 @@
 </div>
 
 <style>
-    .captcha-privacy-policy { color: #B0B0B0; }
-    .captcha-privacy-policy a { color: #78BBF3; }
-    .captcha-privacy-policy a:hover { text-decoration: underline; }
+    .captcha-privacy-policy {
+        color: #B0B0B0;
+    }
+
+    .captcha-privacy-policy a {
+        color: #78BBF3;
+    }
+
+    .captcha-privacy-policy a:hover {
+        text-decoration: underline;
+    }
 </style>

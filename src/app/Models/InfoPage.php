@@ -13,7 +13,7 @@ class InfoPage extends Model
     public static function getMenu()
     {
         return Cache::rememberForever('info-pages-menu',
-            fn() => InfoPage::get(['slug', 'name', 'icon'])->toArray()
+            fn () => InfoPage::get(['slug', 'name', 'icon'])->toArray()
         );
     }
 }

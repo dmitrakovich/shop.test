@@ -2,11 +2,11 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Models\Banner;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Admin\Models\Banner;
-use Encore\Admin\Controllers\AdminController;
 
 class BannerController extends AdminController
 {
@@ -16,15 +16,16 @@ class BannerController extends AdminController
      * @var string
      */
     protected $title = 'Баннеры';
+
     private $position = [
-        'catalog_top'       => 'В каталоге',
-        'index_main'        => 'На главной главный',
-        'index_top'         => 'На главной сверху',
-        'index_bottom'      => 'На главной снизу',
+        'catalog_top' => 'В каталоге',
+        'index_main' => 'На главной главный',
+        'index_top' => 'На главной сверху',
+        'index_bottom' => 'На главной снизу',
         'main_menu_catalog' => 'В главном меню | каталог',
-        'catalog_mob'       => 'В каталоге моб.',
-        'feedback'          => 'В отзывах.',
-        'feedback_mob'      => 'В отзывах моб.',
+        'catalog_mob' => 'В каталоге моб.',
+        'feedback' => 'В отзывах.',
+        'feedback_mob' => 'В отзывах моб.',
     ];
 
     /**
@@ -54,13 +55,14 @@ class BannerController extends AdminController
         $grid->disableExport();
         $grid->disableColumnSelector();
         $grid->disableRowSelector();
+
         return $grid;
     }
 
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)
@@ -94,11 +96,11 @@ class BannerController extends AdminController
         $form->select('position', 'Позиция')->options($this->position)->when('in', ['catalog_top', 'catalog_mob', 'index_main'], function (Form $form) {
             $form->radio('spoiler.show', 'Спойлер')
                 ->options([
-                    true  => 'Да',
+                    true => 'Да',
                     false => 'Нет',
                 ])->when(1, function (Form $form) {
-                    $form->embeds('spoiler',   'Описание спойлера', function ($form) {
-                        $form->text('btn_name',  'Название кнопки');
+                    $form->embeds('spoiler', 'Описание спойлера', function ($form) {
+                        $form->text('btn_name', 'Название кнопки');
                         $form->ckeditor('terms', 'Условия акции');
                     });
                 });
@@ -125,7 +127,7 @@ class BannerController extends AdminController
         $form->datetime('end_datetime', 'Дата оконания'); // ->default(date('Y-m-d H:i:s'));
         $form->radio('show_timer', 'Таймер')
             ->options([
-                true  => 'Да',
+                true => 'Да',
                 false => 'Нет',
             ]);
 
@@ -142,6 +144,7 @@ class BannerController extends AdminController
             $footer->disableEditingCheck();
             $footer->disableCreatingCheck();
         });
+
         return $form;
     }
 }

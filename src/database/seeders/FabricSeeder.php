@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class FabricSeeder extends Seeder
 {
     protected $tableName = 'fabrics';
+
     protected $values = [
         ['name' => 'натуральная кожа', 'slug' => 'leather', 'seo' => 'кожаная,кожаное,кожаные,натуральной кожи'],
         ['name' => 'лакированная кожа', 'slug' => 'lak', 'seo' => 'кожаная,кожаное,кожаные,лакированной кожи'],
@@ -16,6 +17,7 @@ class FabricSeeder extends Seeder
         ['name' => 'искусственная кожа', 'slug' => 'imitation', 'seo' => 'кожаная,кожаное,кожаные,искусственной кожи'],
         ['name' => 'текстиль', 'slug' => 'textile', 'seo' => 'текстильная,текстильное,текстильные,текстиля'],
     ];
+
     /**
      * Run the database seeds.
      *

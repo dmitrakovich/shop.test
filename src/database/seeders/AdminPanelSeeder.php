@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class AdminPanelSeeder extends Seeder
 {
     protected $tableName = 'admin_menu';
+
     protected $values = [
         ['id' => 8, 'parent_id' => 9, 'order' => 4, 'title' => 'Размеры', 'icon' => 'fa-signal', 'uri' => 'sizes'],
         ['id' => 9, 'parent_id' => 0, 'order' => 1, 'title' => 'Аттрибуты товаров', 'icon' => 'fa-bars'],
@@ -19,6 +20,7 @@ class AdminPanelSeeder extends Seeder
         ['id' => 15, 'parent_id' => 9, 'order' => 8, 'title' => 'Теги', 'icon' => 'fa-tags', 'uri' => 'tags'],
         ['id' => 16, 'parent_id' => 9, 'order' => 9, 'title' => 'Бренды', 'icon' => 'fa-adn', 'uri' => 'brands'],
     ];
+
     /**
      * Run the database seeds.
      *

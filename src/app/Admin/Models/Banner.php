@@ -2,8 +2,8 @@
 
 namespace App\Admin\Models;
 
-use Illuminate\Support\Facades\File;
 use App\Models\Banner as BannerModel;
+use Illuminate\Support\Facades\File;
 
 class Banner extends BannerModel
 {
@@ -36,7 +36,7 @@ class Banner extends BannerModel
     /**
      * Resource mutator
      *
-     * @param string $resource
+     * @param  string  $resource
      * @return \Spatie\MediaLibrary\MediaCollections\Models\Media
      */
     public function setResourceAttribute($resource)

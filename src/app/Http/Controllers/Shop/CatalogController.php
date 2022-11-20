@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Facades\Seo;
 use App\Helpers\UrlHelper;
 use App\Http\Requests\FilterRequest;
+use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\Category;
 use App\Models\ProductAttributes\Price;
 use App\Services\CatalogService;
 use App\Services\FilterService;
 use App\Services\GoogleTagManagerService;
+use App\Services\Seo\TitleGenerotorService;
+use App\Services\SliderService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -21,6 +25,7 @@ class CatalogController extends BaseController
         Request $request,
         private GoogleTagManagerService $gtmService,
         private CatalogService $catalogService,
+        private TitleGenerotorService $seoService,
     ) {
         parent::__construct($request);
     }
@@ -44,7 +49,9 @@ class CatalogController extends BaseController
             'cursor' => optional($products->nextCursor())->encode(),
             'has_more' => $products->hasMorePages(),
             'data_layers' => $this->gtmService->getForCatalogArrays(
-                $products, $this->request->input('category'), $this->request->input('search')
+                $products,
+                $this->request->input('category'),
+                $this->request->input('search')
             ),
         ];
     }
@@ -58,7 +65,6 @@ class CatalogController extends BaseController
         $currentFilters = $filterRequest->getFilters();
         $searchQuery = $filterRequest->input('search');
         UrlHelper::setCurrentFilters($currentFilters);
-        // dump($currentFilters);
 
         $products = $this->catalogService->getProducts($currentFilters, $sort, $searchQuery);
 
@@ -74,7 +80,7 @@ class CatalogController extends BaseController
 
         $this->gtmService->setForCatalog($products, $category, $searchQuery);
 
-        return view('shop.catalog', [
+        $data = [
             'products' => $products,
             'category' => $category,
             'currentFilters' => $currentFilters,
@@ -83,7 +89,21 @@ class CatalogController extends BaseController
             'sort' => $sort,
             'sortingList' => $sortingList,
             'searchQuery' => $searchQuery,
-        ]);
+        ];
+
+        SeoFacade::setTitle($this->seoService->getCatalogTitle($currentFilters))
+            ->setDescription($this->seoService->getCatalogDescription($currentFilters));
+
+        if (!$products->isNotEmpty()) {
+            $sliderService = new SliderService;
+            $data['simpleSliders'] = $sliderService->getSimple();
+            SeoFacade::setRobots('noindex, nofollow');
+        } else {
+            SeoFacade::setImage($products->first()->getFirstMedia()->getUrl('catalog'));
+            SeoFacade::setRobots(Seo::metaForRobotsForCatalog($currentFilters));
+        }
+
+        return view('shop.catalog', $data);
     }
 
     /**

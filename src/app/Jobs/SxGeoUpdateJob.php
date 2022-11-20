@@ -2,12 +2,12 @@
 
 namespace App\Jobs;
 
-use ZipArchive;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use ZipArchive;
 
 class SxGeoUpdateJob extends AbstractJob
 {
@@ -83,6 +83,7 @@ class SxGeoUpdateJob extends AbstractJob
 
         if ($response->status() == 304) {
             @unlink($zipFile);
+
             return $this->debug('Архив не обновился, с момента предыдущего скачивания');
         }
 
@@ -90,7 +91,7 @@ class SxGeoUpdateJob extends AbstractJob
         $this->debug('Архив скачан с сервера. Распаковываем');
 
         $zip = new ZipArchive;
-        if ($zip->open($zipFile) === TRUE) {
+        if ($zip->open($zipFile) === true) {
             $zip->extractTo($this->sxGeoPath);
             $zip->close();
             unlink($zipFile);

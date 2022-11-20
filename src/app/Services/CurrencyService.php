@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 class CurrencyService
@@ -42,7 +42,7 @@ class CurrencyService
     /**
      * Set current country
      *
-     * @param string $countryCode
+     * @param  string  $countryCode
      * @return void
      */
     protected function setCurrenctCountry($countryCode = null)
@@ -78,8 +78,8 @@ class CurrencyService
     /**
      * Set & save current currency
      *
-     * @param string|null $currencyCode
-     * @param boolean $save
+     * @param  string|null  $currencyCode
+     * @param  bool  $save
      * @return void
      */
     public function setCurrentCurrency(?string $currencyCode = null, $save = true): void
@@ -101,7 +101,7 @@ class CurrencyService
     /**
      * Set currency by code
      *
-     * @param string $currencyCode
+     * @param  string  $currencyCode
      * @return void
      */
     protected function setCurrencyByCode(string $currencyCode)
@@ -132,6 +132,7 @@ class CurrencyService
         if ($this->countryCode == 'BY') {
             return null;
         }
+
         return view('includes.currency-switcher', [
             'currenciesList' => $this->allCurrencies,
             'currentCurrency' => $this->currency->code,
@@ -150,6 +151,7 @@ class CurrencyService
                 return $currency->code;
             }
         }
+
         return self::DEFAULT_CURRENCY;
     }
 
@@ -163,18 +165,19 @@ class CurrencyService
         return $this->currency;
     }
 
-   /**
-    * Convert price in needed or current currency
-    *
-    * @param float $priceInByn
-    * @param string|null $currencyCode
-    * @return float
-    */
+    /**
+     * Convert price in needed or current currency
+     *
+     * @param  float  $priceInByn
+     * @param  string|null  $currencyCode
+     * @return float
+     */
     public function convert(float $priceInByn, ?string $currencyCode = null): float
     {
         $currency = $this->allCurrencies[$currencyCode] ?? $this->currency;
         $precision = 10 ** $currency->decimals;
         $priceInCurrency = $priceInByn * $currency->rate;
+
         return ceil(round($priceInCurrency * $precision, $currency->decimals)) / $precision;
     }
 
@@ -192,20 +195,21 @@ class CurrencyService
     /**
      * Format price in current currency
      *
-     * @param float $price
-     * @param string|null $currency
+     * @param  float  $price
+     * @param  string|null  $currency
      * @return string
      */
     public function format(float $price, ?string $currency = null): string
     {
         $currency = $this->allCurrencies[$currency] ?? $this->currency;
+
         return number_format($price, $currency->decimals, '.', '&nbsp;') . '&nbsp;' . $currency->symbol;
     }
 
     /**
      * Conver & format price in current currency
      *
-     * @param float $value
+     * @param  float  $value
      * @return string
      */
     public function convertAndFormat(float $priceInByn): string

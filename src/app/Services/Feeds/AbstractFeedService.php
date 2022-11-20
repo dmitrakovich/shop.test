@@ -2,11 +2,11 @@
 
 namespace App\Services\Feeds;
 
+use App\Contracts\FeedServiceInterface;
+use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
 use App\Models\Feeds\AbstractFeed;
 use Illuminate\Support\Facades\Log;
-use App\Contracts\FeedServiceInterface;
-use App\Facades\Currency as CurrencyFacade;
 
 abstract class AbstractFeedService implements FeedServiceInterface
 {
@@ -46,8 +46,8 @@ abstract class AbstractFeedService implements FeedServiceInterface
     /**
      * Return feed file path by instance & currency
      *
-     * @param string $prefix
-     * @param string $postfix
+     * @param  string  $prefix
+     * @param  string  $postfix
      * @return string
      */
     protected function getFilePath(string $prefix = '', string $postfix = ''): string

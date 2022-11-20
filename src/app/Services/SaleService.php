@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Cart;
-use App\Models\Sale;
 use App\Models\Product;
+use App\Models\Sale;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class SaleService
@@ -176,9 +176,9 @@ class SaleService
     private function getSaleData(float $price, float $oldPrice, int $index = 0, int $count = 1): array
     {
         return [
-            'price'        => $this->applySale($price, $oldPrice, $index, $count),
-            'label'        => $this->sale->label_text,
-            'end_datetime' => $this->sale->end_datetime ?? null
+            'price' => $this->applySale($price, $oldPrice, $index, $count),
+            'label' => $this->sale->label_text,
+            'end_datetime' => $this->sale->end_datetime ?? null,
         ];
     }
 
@@ -202,6 +202,7 @@ class SaleService
         if (is_null($this->hasSaleProductsInCart)) {
             throw new \Exception('First need apply sale for cart');
         }
+
         return !$this->hasSaleProductsInCart || $this->sale->has_fitting;
     }
 
@@ -213,6 +214,7 @@ class SaleService
         if (is_null($this->hasSaleProductsInCart)) {
             throw new \Exception('First need apply sale for cart');
         }
+
         return !$this->hasSaleProductsInCart || $this->sale->has_installment;
     }
 
@@ -220,9 +222,11 @@ class SaleService
     {
         $this->hasSaleProductsInCart = false;
 
-        if (!$this->hasSale()) return;
+        if (!$this->hasSale()) {
+            return;
+        }
 
-        $products = $cart->items->map(fn($item, $key) => $item->product);
+        $products = $cart->items->map(fn ($item, $key) => $item->product);
         $products = $products->sortBy('price');
 
         $productSaleList = [];
@@ -230,7 +234,7 @@ class SaleService
             if ($this->checkSaleConditions($product)) {
                 $productSaleList[$product->id] = [
                     'price' => $product->price,
-                    'oldPrice' => $product->getFixedOldPrice()
+                    'oldPrice' => $product->getFixedOldPrice(),
                 ];
                 $this->hasSaleProductsInCart = true;
             }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Auth;
 
-use Illuminate\Database\Schema\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest

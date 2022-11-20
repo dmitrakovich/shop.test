@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\DB;
 class TagSeeder extends Seeder
 {
     protected $tableName = 'tags';
+
     protected $values = [
         ['name' => 'лодочки', 'slug' => 'pumps', 'seo' => 'лодочки'],
         ['name' => 'стразы', 'slug' => 'straz', 'seo' => 'со стразами'],
         ['name' => 'еврозима', 'slug' => 'eurowinter', 'seo' => 'еврозима'],
     ];
+
     /**
      * Run the database seeds.
      *

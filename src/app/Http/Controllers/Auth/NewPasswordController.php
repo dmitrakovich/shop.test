@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules;
 
 class NewPasswordController extends Controller
 {
@@ -26,6 +25,7 @@ class NewPasswordController extends Controller
      * Handle an incoming new password request.
      *
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)

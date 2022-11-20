@@ -21,7 +21,7 @@ class Captcha
         if (isset($token)) {
             $data = [
                 'secret' => config('captcha.secret'),
-                'response' => $token
+                'response' => $token,
             ];
             $response = Http::get(config('captcha.url'), $data);
 

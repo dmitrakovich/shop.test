@@ -53,7 +53,7 @@ abstract class AbstractFeed
     /**
      * Prepare string to xml format
      *
-     * @param string $string
+     * @param  string  $string
      * @return string
      */
     public function xmlSpecialChars(string $string): string
@@ -64,7 +64,7 @@ abstract class AbstractFeed
     /**
      * Return product image urls
      *
-     * @param MediaCollection $media
+     * @param  MediaCollection  $media
      * @return array
      */
     public function getProductImages(MediaCollection $media): array
@@ -84,13 +84,14 @@ abstract class AbstractFeed
         if (empty($this->cache['product_categories'])) {
             $this->cache['product_categories'] = Category::all()->keyBy('id');
         }
+
         return $this->cache['product_categories'];
     }
 
     /**
      * Prepare sizes string from sizes list
      *
-     * @param EloquentCollection $sizes
+     * @param  EloquentCollection  $sizes
      * @return string
      */
     protected function sizesToString(EloquentCollection $sizes): string

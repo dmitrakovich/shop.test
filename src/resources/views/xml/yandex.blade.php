@@ -1,3 +1,4 @@
+{{-- blade-formatter-disable --}}
 <?= '<?xml version="1.0" encoding="UTF-8"?>', PHP_EOL ?>
 <!DOCTYPE yml_catalog SYSTEM "shops.dtd">
 <yml_catalog date="{{ now()->format('Y-m-d H:i') }}">

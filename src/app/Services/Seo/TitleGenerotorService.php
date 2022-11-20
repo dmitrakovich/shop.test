@@ -2,17 +2,17 @@
 
 namespace App\Services\Seo;
 
-use App\Models\Heel;
-use App\Models\Size;
 use App\Models\Brand;
-use App\Models\Color;
-use App\Models\Style;
-use App\Models\Fabric;
-use App\Models\Season;
-use App\Models\Product;
 use App\Models\Category;
 use App\Models\Collection;
+use App\Models\Color;
+use App\Models\Fabric;
+use App\Models\Heel;
+use App\Models\Product;
 use App\Models\ProductAttributes\Status;
+use App\Models\Season;
+use App\Models\Size;
+use App\Models\Style;
 use App\Models\Tag;
 use Illuminate\Support\Str;
 
@@ -86,6 +86,7 @@ class TitleGenerotorService
                 $category = end($currentFilters[$attrModel])->filters;
                 $titleValues[$attrModel] = $category->getNameForCatalogTitle();
                 $emptyCategory = $category->isRoot();
+
                 continue;
             }
 

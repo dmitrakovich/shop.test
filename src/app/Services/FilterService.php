@@ -17,8 +17,8 @@ use App\Models\{
     Collection,
 };
 use App\Models\ProductAttributes\Price;
-use Illuminate\Support\Facades\Cache;
 use App\Models\ProductAttributes\Status;
+use Illuminate\Support\Facades\Cache;
 
 class FilterService
 {
@@ -42,7 +42,7 @@ class FilterService
     /**
      * Получить все фильтра
      *
-     * @param array $filtersList список нужных фильтров
+     * @param  array  $filtersList список нужных фильтров
      * @return array
      */
     public static function getAll(array $filtersList = null)
@@ -68,6 +68,7 @@ class FilterService
             }
             Cache::put('filters', $filters, 86400); // day
         }
+
         return $filters;
     }
 

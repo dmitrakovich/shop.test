@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\DB;
 abstract class AbstractSeeder extends Seeder
 {
     protected $useTimestamps = true;
+
     protected $sortColumn = null;
+
     protected $tableName;
+
     protected $values;
 
     /**
@@ -41,7 +44,7 @@ abstract class AbstractSeeder extends Seeder
     protected function setTimestamps()
     {
         if (!$this->useTimestamps) {
-           return;
+            return;
         }
         $now = now();
         foreach ($this->values as &$value) {

@@ -24,29 +24,29 @@ class CurrencySeeder extends Seeder
                 'country' => 'BY',
                 'rate' => 1.00,
                 'decimals' => 2,
-                'symbol' => 'byn'
+                'symbol' => 'byn',
             ],
             [
                 'code' => 'KZT',
                 'country' => 'KZ',
                 'rate' => 168.71,
                 'decimals' => 0,
-                'symbol' => '₸'
+                'symbol' => '₸',
             ],
             [
                 'code' => 'RUB',
                 'country' => 'RU',
                 'rate' => 28.54,
                 'decimals' => 0,
-                'symbol' => '₽'
+                'symbol' => '₽',
             ],
             [
                 'code' => 'USD',
                 'country' => 'US',
                 'rate' => 0.40,
                 'decimals' => 0,
-                'symbol' => '$'
-            ]
+                'symbol' => '$',
+            ],
         ]);
     }
 }

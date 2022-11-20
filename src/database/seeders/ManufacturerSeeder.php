@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class ManufacturerSeeder extends Seeder
 {
     protected $tableName = 'manufacturers';
+
     protected $values = [
         ['id' => 87, 'name' => 'Фабрика №10', 'created_at' => '2021-09-09 14:21:21'],
         ['id' => 86, 'name' => 'Фабрика №9', 'created_at' => '2021-09-09 14:21:21'],
@@ -20,6 +21,7 @@ class ManufacturerSeeder extends Seeder
         ['id' => 79, 'name' => 'Фабрика №2', 'created_at' => '2021-09-09 14:21:21'],
         ['id' => 78, 'name' => 'Фабрика №1', 'created_at' => '2021-09-09 14:21:21'],
     ];
+
     /**
      * Run the database seeds.
      *

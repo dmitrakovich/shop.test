@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SitemapController;
+use Illuminate\Support\Facades\Route;
 
 Route::group(['controller' => SitemapController::class, 'as' => 'sitemap.'], function () {
     Route::get('/sitemap.xml', 'index')->name('index');

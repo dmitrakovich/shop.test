@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\DB;
 class FeedbackSeeder extends Seeder
 {
     protected string $tableName = 'feedbacks';
+
     protected string $oldTableName = 'cyizj_jshopping_products_reviews';
+
     /**
      * Run the database seeds.
      *
@@ -56,7 +58,9 @@ class FeedbackSeeder extends Seeder
                 $feedback->save();
 
                 foreach ($images as $image) {
-                    if ($image == 'undefined') continue;
+                    if ($image == 'undefined') {
+                        continue;
+                    }
 
                     $urlToFile = 'https://modny.by/images/comments/' . $image;
                     try {

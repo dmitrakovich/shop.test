@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class SizeSeeder extends Seeder
 {
     protected $tableName = 'sizes';
+
     protected $values = [
         ['name' => 'без размера', 'slug' => 'size-none', 'value' => 0],
         ['name' => 33, 'slug' => 'size-33', 'value' => 21],
@@ -20,6 +21,7 @@ class SizeSeeder extends Seeder
         ['name' => 40, 'slug' => 'size-40', 'value' => 25.5],
         ['name' => 41, 'slug' => 'size-41', 'value' => 26.5],
     ];
+
     /**
      * Run the database seeds.
      *

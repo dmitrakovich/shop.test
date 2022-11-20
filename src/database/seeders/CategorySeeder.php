@@ -45,7 +45,7 @@ class CategorySeeder extends Seeder
             [21, 'Ботфорты'],                     // 24
         ];
 
-        foreach ($catData as list($parentId, $cName)) {
+        foreach ($catData as [$parentId, $cName]) {
             $category = new Category();
             $category->title = $cName;
             $category->slug = $cName == 'Каталог' ? 'catalog' : Str::slug($cName);

@@ -3,11 +3,9 @@
 namespace App\Providers;
 
 use App\Contracts\OrderServiceInterface;
-use App\Models\Media\LocalUrlGenerator;
-use Illuminate\Support\Carbon;
 use App\Services\OrderService;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

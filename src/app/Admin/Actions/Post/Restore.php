@@ -9,7 +9,7 @@ class Restore extends RowAction
 {
     public $name = 'Восстановить';
 
-    public function handle (Model $model)
+    public function handle(Model $model)
     {
         $model->restore();
 

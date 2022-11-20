@@ -3,11 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Sentry\State\Scope;
 use Illuminate\Http\Request;
-
-use function Sentry\configureScope;
 use Illuminate\Support\Facades\Auth;
+use function Sentry\configureScope;
+use Sentry\State\Scope;
 
 class SentryContext
 {

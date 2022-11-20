@@ -10,11 +10,8 @@
                     @endforeach
                 </video>
             @else
-                <img src="{{ $indexMainBanner->getFirstMediaUrl() }}"
-                    alt="{{ $indexMainBanner->title }}"
-                    title="{{ $indexMainBanner->title }}"
-                    class="img-fluid"
-                />
+                <img src="{{ $indexMainBanner->getFirstMediaUrl() }}" alt="{{ $indexMainBanner->title }}"
+                    title="{{ $indexMainBanner->title }}" class="img-fluid" />
             @endif
             {{-- <video id="videoblock" class="img-fluid" autoplay loop preload="metadata" muted playsinline
                 poster="/videos/201016_vitacci{{ Agent::isMobile() ? '_m' : null }}.jpg">
@@ -36,11 +33,8 @@
 @foreach ($indexTopBanners as $banner)
     <div class="col-12 col-lg-4 p-main">
         <a href="{{ $banner->url }}">
-            <img src="{{ $banner->getFirstMediaUrl() }}"
-                alt="{{ $banner->title }}"
-                title="{{ $banner->title }}"
-                class="img-fluid"
-            />
+            <img src="{{ $banner->getFirstMediaUrl() }}" alt="{{ $banner->title }}"
+                title="{{ $banner->title }}" class="img-fluid" />
         </a>
     </div>
 @endforeach

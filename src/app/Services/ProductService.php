@@ -23,6 +23,7 @@ class ProductService
                 continue;
             }
         }
+
         return $query;
     }
 
@@ -63,7 +64,7 @@ class ProductService
     /**
      * Get products collection for feed
      *
-     * @param boolean $withTrashed
+     * @param  bool  $withTrashed
      */
     public function getForFeed($withTrashed = false): EloquentCollection
     {

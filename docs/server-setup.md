@@ -83,3 +83,7 @@ GRANT ALL PRIVILEGES ON dbname.* TO 'username'@'localhost';
 ```
 * * * * * cd /path-to-your-deploy-folder/current && php artisan schedule:run >> /dev/null 2>&1
 ```
+
+
+## Config supervisor (Queues)
+[instruction](https://github.com/dmitrakovich/shop.test/blob/master/docs/supervisor.md).

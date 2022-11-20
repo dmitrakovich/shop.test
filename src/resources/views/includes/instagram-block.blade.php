@@ -12,7 +12,8 @@
     @foreach ($instagramPosts as $key => $post)
         <div class="col-6 col-lg-4 py-main" id="{{ $post['id'] }}">
             <a href="{{ $post['permalink'] }}" rel="noopener" target="_blank">
-                <img src="{{ $post['thumbnail_url'] ?? $post['media_url'] }}" title="{{ $post['caption'] }}" class="img-fluid" />
+                <img src="{{ $post['thumbnail_url'] ?? $post['media_url'] }}"
+                    title="{{ $post['caption'] }}" class="img-fluid" />
                 {{-- @include('svg.play-button', ['class' => 'position-absolute', 'style' => 'top: 0, left: 0;']) --}}
             </a>
         </div>

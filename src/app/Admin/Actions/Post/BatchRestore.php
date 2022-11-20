@@ -9,14 +9,14 @@ class BatchRestore extends BatchAction
 {
     public $name = 'Восстановить';
 
-    public function handle (Collection $collection)
+    public function handle(Collection $collection)
     {
         $collection->each->restore();
 
         return $this->response()->success('Восстановлены')->refresh();
     }
 
-    public function dialog ()
+    public function dialog()
     {
         $this->confirm('Вы уверены, что хотите восстановить?');
     }

@@ -2,15 +2,15 @@
 
 namespace App\Models\ProductAttributes;
 
-use App\Models\Sale;
 use App\Models\Category;
 use App\Models\Collection;
+use App\Models\Sale;
 use App\Models\Season;
 use App\Models\Style;
 use App\Traits\AttributeFilterTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Model for all promotions actions
@@ -20,8 +20,8 @@ class Promotion extends Model
     use HasFactory, AttributeFilterTrait;
 
     /**
-     * @param Builder $builder
-     * @param array $values
+     * @param  Builder  $builder
+     * @param  array  $values
      * @return Builder
      */
     public static function applyFilter(Builder $builder, array $values)

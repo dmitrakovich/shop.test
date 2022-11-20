@@ -21,7 +21,7 @@ class SearchService
     /**
      * Generate search query
      *
-     * @param array $search
+     * @param  array  $search
      * @return Builder
      */
     public function generateSearchQuery(Builder $query, string $column)
@@ -32,6 +32,7 @@ class SearchService
         while ($value = next($this->searchKeys)) {
             $query->orWhere($column, 'like', "%$value%");
         }
+
         return $query;
     }
 
@@ -41,6 +42,7 @@ class SearchService
     public function getIds(): array
     {
         $idList = array_filter($this->searchKeys, fn ($value) => is_numeric($value));
+
         return array_values(array_map('intval', $idList));
     }
 
@@ -62,6 +64,7 @@ class SearchService
             foreach ($fields as $field) {
                 $query->orWhere($field, $searchValue);
             }
+
             return $query;
         });
     }

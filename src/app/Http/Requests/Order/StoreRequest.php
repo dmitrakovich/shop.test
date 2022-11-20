@@ -3,10 +3,10 @@
 namespace App\Http\Requests\Order;
 
 use App\Facades\Currency;
-use Illuminate\Validation\Rule;
 use App\Models\Enum\OrderMethod;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -37,6 +37,7 @@ class StoreRequest extends FormRequest
             'utm_term' => $utm['utm_term'] ?? null,
         ]);
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -72,8 +73,6 @@ class StoreRequest extends FormRequest
 
     /**
      * Get order method
-     *
-     * @return string
      */
     protected function getOrderMethod(): string
     {
@@ -84,8 +83,6 @@ class StoreRequest extends FormRequest
 
     /**
      * Check is this order made in one click
-     *
-     * @return boolean
      */
     public function isOneClick(): bool
     {

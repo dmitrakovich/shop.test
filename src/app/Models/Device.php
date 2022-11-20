@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Http\Request;
-use Jenssegers\Agent\Facades\Agent;
-use Illuminate\Support\Facades\Cookie;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use Jenssegers\Agent\Facades\Agent;
 
 /**
  * Class Product
  *
  * @property string $id
- * @property integer $user_id
- * @property integer $cart_id
- * @property integer $yandex_id
+ * @property int $user_id
+ * @property int $cart_id
+ * @property int $yandex_id
  * @property string $google_id
  * @property string $type
  * @property string $agent
@@ -44,7 +44,7 @@ class Device extends Model
     final const GOOGLE_ID_COOKIE_NAME = '_ga';
 
     /**
-     * @var integer 1 year
+     * @var int 1 year
      */
     final const COOKIE_LIFE_TIME = 525600;
 
@@ -170,7 +170,7 @@ class Device extends Model
             $this->attributes['google_id'] = $googleId;
         } else {
             $googleId = Cookie::get(self::GOOGLE_ID_COOKIE_NAME);
-            $googleId = preg_replace("/^.+\.(.+?\..+?)$/", "\\1", $googleId);
+            $googleId = preg_replace("/^.+\.(.+?\..+?)$/", '\\1', $googleId);
 
             $this->attributes['google_id'] = $googleId;
         }

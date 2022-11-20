@@ -3,14 +3,14 @@
 namespace App\Services;
 
 use App\Enums\ProductCarouselEnum;
-use App\Models\{Category, Product};
 use App\Facades\Currency;
 use App\Models\Ads\ProductCarousel;
+use App\Models\Category;
 use App\Models\Favorite;
-use App\Services\ProductService;
+use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\{Builder, Collection};
-
 
 /**
  * @todo Refactor DRY !
@@ -18,13 +18,18 @@ use Illuminate\Database\Eloquent\{Builder, Collection};
 class SliderService
 {
     /**
+     * 1,5h
+     */
+    const CACHE_TTL = 1800;
+
+    /**
      * Get simple product slider
      *
      * @return array
      */
     public function getSimple(): array
     {
-        $sliders = Cache::remember('simple_slider', 1800, function () { // 0.5h
+        $sliders = Cache::remember('simple_slider', self::CACHE_TTL, function () {
             $productCarousels = [];
             $carousels = ProductCarousel::ordered()
                 ->where('is_imidj', false)
@@ -69,10 +74,11 @@ class SliderService
                                 'image' => $product->getFirstMedia()->getUrl('catalog'),
                                 'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                             ];
-                        })->toArray()
+                        })->toArray(),
                     ];
                 }
             }
+
             return $productCarousels;
         });
 
@@ -92,7 +98,7 @@ class SliderService
      */
     public function getImidj(): array
     {
-        $slider = Cache::remember('imidj_slider', 1800, function () { // 0.5h
+        $slider = Cache::remember('imidj_slider', self::CACHE_TTL, function () {
             $slider = ProductCarousel::where('is_imidj', true)
                 ->first(['title', 'categories', 'count', 'speed']);
 
@@ -138,7 +144,7 @@ class SliderService
                             ->first()->getUrl('normal'),
                         'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                     ];
-                })->toArray()
+                })->toArray(),
             ];
         });
 
@@ -165,8 +171,8 @@ class SliderService
             return [];
         }
         $cacheConfig = config('cache_config.similar_products');
-        $products = Cache::remember($cacheConfig['key'] . $productId, $cacheConfig['ttl'], function () use ($productId, $slider) { // 0.5h
-            $attrs   = ['sizes', 'colors', 'tags'];
+        $products = Cache::remember($cacheConfig['key'] . $productId, $cacheConfig['ttl'], function () use ($productId, $slider) {
+            $attrs = ['sizes', 'colors', 'tags'];
             $product = Product::where('id', $productId)->withTrashed()->with($attrs)->first();
             do {
                 $query = Product::where('id', '!=', $productId)
@@ -180,7 +186,7 @@ class SliderService
                         });
                     }
                 }
-                $result     = $query->limit($slider->count)->orderBy('rating', 'desc')->get();
+                $result = $query->limit($slider->count)->orderBy('rating', 'desc')->get();
                 $recomended = isset($recomended) ? $recomended->merge($result) : $result;
                 $recomended = $recomended->take($slider->count);
                 array_pop($attrs);
@@ -204,10 +210,11 @@ class SliderService
         $this->setDataLayerForPage($products);
         $this->addConvertedAndFormattedPrice($products);
         $this->addFavorites($products);
+
         return [
-            'title'    => $slider->title,
-            'speed'    => $slider->speed,
-            'products' => $products
+            'title' => $slider->title,
+            'speed' => $slider->speed,
+            'products' => $products,
         ];
     }
 
@@ -226,9 +233,9 @@ class SliderService
         if (empty($slider)) {
             return [];
         }
-        $ids      = $productService->getRecent();
+        $ids = $productService->getRecent();
         $products = Product::whereIn('id', $ids)->with(['media', 'category', 'brand'])->get();
-        $flipIds  = array_flip($ids);
+        $flipIds = array_flip($ids);
         $resultProducts = [];
         if (empty($products)) {
             return [];
@@ -237,16 +244,16 @@ class SliderService
             $key = $flipIds[$product->id] ?? null;
             if ($key) {
                 $resultProducts[$key] = [
-                    'id'              => $product->id,
-                    'sku'             => $product->sku,
-                    'full_name'       => $product->shortName(),
+                    'id' => $product->id,
+                    'sku' => $product->sku,
+                    'full_name' => $product->shortName(),
                     'sale_percentage' => $product->getSalePercentage(),
-                    'is_new'          => $product->isNew(),
-                    'price_byn'       => $product->getFinalPrice(),
-                    'old_price_byn'   => $product->getFinalOldPrice(),
-                    'url'             => $product->getUrl(),
-                    'image'           => $product->getFirstMedia()->getUrl('catalog'),
-                    'dataLayer'       => GoogleTagManagerService::prepareProduct($product),
+                    'is_new' => $product->isNew(),
+                    'price_byn' => $product->getFinalPrice(),
+                    'old_price_byn' => $product->getFinalOldPrice(),
+                    'url' => $product->getUrl(),
+                    'image' => $product->getFirstMedia()->getUrl('catalog'),
+                    'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                 ];
             }
         }
@@ -254,17 +261,18 @@ class SliderService
         $this->setDataLayerForPage($resultProducts);
         $this->addConvertedAndFormattedPrice($resultProducts);
         $this->addFavorites($resultProducts);
+
         return [
-            'title'    => $slider->title,
-            'speed'    => $slider->speed,
-            'products' => $resultProducts
+            'title' => $slider->title,
+            'speed' => $slider->speed,
+            'products' => $resultProducts,
         ];
     }
 
     /**
      * Add in products array converted and formatted price
      *
-     * @param array $products
+     * @param  array  $products
      * @return void
      */
     protected function addConvertedAndFormattedPrice(array &$products): void
@@ -278,7 +286,7 @@ class SliderService
     /**
      * Add favorites to products
      *
-     * @param array $products
+     * @param  array  $products
      * @return void
      */
     protected function addFavorites(array &$products): void
@@ -294,7 +302,7 @@ class SliderService
     /**
      * Prepare impressions data & call GTR Service
      *
-     * @param array $products
+     * @param  array  $products
      * @return void
      */
     protected function setDataLayerForPage(array $products): void

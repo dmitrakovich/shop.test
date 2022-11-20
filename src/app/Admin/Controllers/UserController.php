@@ -2,13 +2,13 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Country;
 use App\Models\User;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Models\Country;
 use Illuminate\Support\Facades\Hash;
-use Encore\Admin\Controllers\AdminController;
 
 class UserController extends AdminController
 {
@@ -34,7 +34,7 @@ class UserController extends AdminController
         $grid->column('email', 'Email');
         $grid->column('phone', 'Телефон');
         // $grid->column('birth_date', 'Дата рождения');
-        $grid->column('addresses', 'Адрес')->display(fn($addresses) => $addresses[0]['address'] ?? null);
+        $grid->column('addresses', 'Адрес')->display(fn ($addresses) => $addresses[0]['address'] ?? null);
         $grid->column('created_at', 'Дата регистрации');
 
         $grid->model()->orderBy('id', 'desc');
@@ -56,7 +56,7 @@ class UserController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)

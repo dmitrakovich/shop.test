@@ -4,7 +4,6 @@ namespace App\Models\Enum;
 
 /**
  * Class Enum
- * @package App\Models\Enum
  */
 interface Enum
 {

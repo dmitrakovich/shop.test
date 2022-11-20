@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Sale model
@@ -21,10 +21,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property array|null $collections
  * @property array|null $styles
  * @property array|null $seasons
- * @property boolean $only_new
- * @property boolean $add_client_sale
- * @property boolean $has_installment
- * @property boolean $has_fitting
+ * @property bool $only_new
+ * @property bool $add_client_sale
+ * @property bool $has_installment
+ * @property bool $has_fitting
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  * @property \Illuminate\Support\Carbon $deleted_at
@@ -35,8 +35,11 @@ class Sale extends Model
     use SoftDeletes;
 
     const ALGORITHM_FAKE = 'fake';
+
     const ALGORITHM_SIMPLE = 'simple';
+
     const ALGORITHM_COUNT = 'count';
+
     const ALGORITHM_ASCENDING = 'ascending';
 
     /**
@@ -59,8 +62,8 @@ class Sale extends Model
     /**
      * Выбор актуальных
      *
-     * @param Builder $query
-     * @param string $search
+     * @param  Builder  $query
+     * @param  string  $search
      * @return Builder
      */
     public function scopeActual(Builder $query)
@@ -78,7 +81,7 @@ class Sale extends Model
     /**
      * Farmat date
      *
-     * @param \DateTimeInterface $date
+     * @param  \DateTimeInterface  $date
      * @return string
      */
     protected function serializeDate(\DateTimeInterface $date)

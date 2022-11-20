@@ -1,4 +1,5 @@
 <?php
+
 return [
 
     // custom breadcrumbs template

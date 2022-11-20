@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\Category;
-use App\Models\Url;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
+use App\Models\Url;
 use App\Services\FilterService;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -40,9 +40,10 @@ class FilterRequest extends FormRequest
     {
         $session = $this->session();
         $sorting = $this->input('sort') ?? $session->get('sorting', Product::DEFAULT_SORT);
-        if ($session->get('sorting') <> $sorting) {
+        if ($session->get('sorting') != $sorting) {
             $session->put('sorting', $sorting);
         }
+
         return $sorting;
     }
 

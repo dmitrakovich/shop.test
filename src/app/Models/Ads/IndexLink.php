@@ -2,8 +2,8 @@
 
 namespace App\Models\Ads;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Index page's links class
@@ -21,7 +21,7 @@ class IndexLink extends Model
     use HasFactory;
 
     protected $casts = [
-        'links' =>'json',
+        'links' => 'json',
     ];
 
     /**

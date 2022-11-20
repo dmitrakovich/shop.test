@@ -2,20 +2,18 @@
 
 namespace App\Helpers;
 
-use App\Models\{
-    Tag,
-    Heel,
-    Size,
-    Brand,
-    Color,
-    Fabric,
-    Season,
-    Style,
-    Category,
-    Collection
-};
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Collection;
+use App\Models\Color;
+use App\Models\Fabric;
+use App\Models\Heel;
 use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
+use App\Models\Season;
+use App\Models\Size;
+use App\Models\Style;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Request;
 
 class UrlHelper
@@ -46,9 +44,11 @@ class UrlHelper
     ];
 
     protected static $params = null;
+
     protected static $availableParams = [
-        'search'
+        'search',
     ];
+
     protected static $currentFilters = [];
 
     /**
@@ -88,7 +88,7 @@ class UrlHelper
         foreach (self::CANONICAL_ORDER as $model) {
             if (isset($filters[$model])) {
                 if ($model == Category::class) {
-                    $filter   = end($filters[$model]);
+                    $filter = end($filters[$model]);
                     $sorted[] = ($filter instanceof Category) ? ($filter->path ?? '') : ($filter['filters']['path'] ?? '');
                 } else {
                     sort($filters[$model]);
@@ -115,6 +115,7 @@ class UrlHelper
                 }
             }
         }
+
         return self::$params;
     }
 

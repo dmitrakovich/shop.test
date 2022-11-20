@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Currency;
-use Illuminate\Support\Arr;
 use App\Jobs\FeedGeneratorJob;
+use App\Models\Currency;
 use App\Models\Feeds\GoogleCsv;
 use App\Models\Feeds\GoogleXml;
 use App\Models\Feeds\YandexXml;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Arr;
 
 class GenerateFeed extends Command
 {
@@ -102,6 +102,7 @@ class GenerateFeed extends Command
         }
 
         $this->info('Tasks created');
+
         return 0;
     }
 }

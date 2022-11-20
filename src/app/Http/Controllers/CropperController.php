@@ -57,7 +57,7 @@ class CropperController extends Controller
             return [
                 'id' => 'new-' . $timestamp,
                 'src' => '/temp/' . basename($moveResult),
-                'name' => $name
+                'name' => $name,
             ];
         }
     }

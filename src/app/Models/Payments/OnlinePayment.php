@@ -2,22 +2,21 @@
 
 namespace App\Models\Payments;
 
-use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
-
+use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
-use App\Models\Payments\OnlinePaymentStatus;
-
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Auth\Database\Administrator;
-
+use Encore\Admin\Facades\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\{Model, Relations};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations;
 
 class OnlinePayment extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
+
     protected $appends = [
         'link',
     ];
@@ -27,7 +26,7 @@ class OnlinePayment extends Model
         parent::boot();
         self::created(function ($model) {
             $model->statuses()->create([
-                'admin_user_id'          => Admin::user()->id ?? null,
+                'admin_user_id' => Admin::user()->id ?? null,
                 'payment_status_enum_id' => OnlinePaymentStatusEnum::PENDING,
             ]);
         });
@@ -72,6 +71,7 @@ class OnlinePayment extends Model
                 OnlinePaymentMethodEnum::ERIP => route('pay.erip', $this->payment_url, true),
             };
         }
+
         return null;
     }
 }

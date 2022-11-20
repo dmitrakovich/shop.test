@@ -3,18 +3,18 @@
 namespace App\Providers;
 
 use App\Events\OrderCreated;
-use App\Listeners\MergeCart;
-use App\Listeners\SaveDevice;
-use App\Listeners\MergeFavorites;
-use Illuminate\Auth\Events\Login;
 use App\Listeners\LogNotification;
-use App\Listeners\SyncOrderHistory;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Auth\Events\Registered;
+use App\Listeners\MergeCart;
+use App\Listeners\MergeFavorites;
+use App\Listeners\SaveDevice;
 use App\Listeners\SendOrderInformationNotification;
-use Illuminate\Notifications\Events\NotificationSent;
+use App\Listeners\SyncOrderHistory;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Notifications\Events\NotificationSent;
+use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {

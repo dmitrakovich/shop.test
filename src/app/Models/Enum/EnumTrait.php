@@ -4,7 +4,6 @@ namespace App\Models\Enum;
 
 /**
  * Class Enum
- * @package App\Models\Enum
  */
 trait EnumTrait
 {
@@ -14,6 +13,7 @@ trait EnumTrait
     public static function getKeys(): array
     {
         $class = new \ReflectionClass(get_called_class());
+
         return array_keys($class->getConstants());
     }
 
@@ -23,6 +23,7 @@ trait EnumTrait
     public static function getValues(): array
     {
         $class = new \ReflectionClass(get_called_class());
+
         return array_values($class->getConstants());
     }
 
@@ -33,6 +34,7 @@ trait EnumTrait
     {
         $class = new \ReflectionClass(get_called_class());
         $values = $class->getConstants();
+
         return reset($values);
     }
 }

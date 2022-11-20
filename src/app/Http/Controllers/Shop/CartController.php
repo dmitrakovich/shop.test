@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Facades\{Cart, Sale};
-use App\Models\{User, Guest, Country, Product};
-use Payments\PaymentMethod;
+use App\Facades\Cart;
+use App\Facades\Sale;
+use App\Models\Country;
+use App\Models\Guest;
 use App\Models\Orders\Order;
-use Illuminate\Http\Request;
-use Deliveries\DeliveryMethod;
-use App\Services\ProductService;
-use Illuminate\Support\Facades\Session;
+use App\Models\Product;
+use App\Models\User;
 use App\Services\GoogleTagManagerService;
+use App\Services\ProductService;
+use Deliveries\DeliveryMethod;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Payments\PaymentMethod;
 
 class CartController extends BaseController
 {
@@ -73,7 +77,7 @@ class CartController extends BaseController
 
         return [
             'result' => 'ok',
-            'total_count' => Cart::itemsCount()
+            'total_count' => Cart::itemsCount(),
         ];
     }
 

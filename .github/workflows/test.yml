@@ -3,8 +3,6 @@ name: Test
 on:
   push:
     branches: [ test ]
-  pull_request:
-    branches: [ test ]
   repository_dispatch:
     types: [ retry-* ]
 

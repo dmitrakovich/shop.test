@@ -3,12 +3,10 @@
 namespace App\Listeners;
 
 use App\Models\Orders\Order;
-use Illuminate\Queue\InteractsWithQueue;
 use App\Notifications\AbstractSmsTraffic;
 use App\Services\LogService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Events\NotificationSent;
 use Illuminate\Notifications\Client\Response\SmsTrafficResponse;
+use Illuminate\Notifications\Events\NotificationSent;
 
 class LogNotification
 {

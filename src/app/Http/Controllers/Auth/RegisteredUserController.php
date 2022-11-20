@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\SyncRequest;
+use App\Models\User;
 use App\Services\OldSiteSyncService;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
-use App\Http\Requests\Auth\SyncRequest;
-use App\Http\Requests\Auth\RegisterRequest;
-use Illuminate\Support\Arr;
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class RegisteredUserController extends Controller
@@ -29,6 +29,7 @@ class RegisteredUserController extends Controller
      * Handle an incoming registration request.
      *
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(RegisterRequest $request)
@@ -51,7 +52,7 @@ class RegisteredUserController extends Controller
     /**
      * Sync users with another DB
      *
-     * @param SyncRequest $request
+     * @param  SyncRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function sync(SyncRequest $syncRequest)

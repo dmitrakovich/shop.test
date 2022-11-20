@@ -5,13 +5,11 @@ namespace App\Jobs;
 use App\Models\Config;
 use App\Models\Product;
 use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class UpdateProductsRatingJob extends AbstractJob
 {
@@ -44,8 +42,8 @@ class UpdateProductsRatingJob extends AbstractJob
         $false_category = $ratingConfig['false_category']; // исключенные категории
         $Koef = $ratingConfig['algoritm'][$ratingConfig['curr_algoritm']];
 
-        $info = array();
-        $rating = array();
+        $info = [];
+        $rating = [];
 
         $res_prod = DB::table('products')
             ->whereNull('deleted_at')
@@ -56,20 +54,19 @@ class UpdateProductsRatingJob extends AbstractJob
                 MAX(DATEDIFF(NOW(), created_at)) AS newless_max')
             ->get();
 
-        $info['newless'] = array(
+        $info['newless'] = [
             'min' => $res_prod[0]->newless_min,
             'max' => $res_prod[0]->newless_max,
             'base' => $res_prod[0]->newless_max - $res_prod[0]->newless_min,
-            'summ' => 0
-        );
+            'summ' => 0,
+        ];
 
-        $info['price'] = array(
+        $info['price'] = [
             'min' => $res_prod[0]->price_min,
             'max' => $res_prod[0]->price_max,
             'base' => $res_prod[0]->price_max - $res_prod[0]->price_min,
-            'summ' => 0
-        );
-
+            'summ' => 0,
+        ];
 
         $res_prod = DB::table('products')
             ->whereNull('deleted_at')
@@ -78,12 +75,12 @@ class UpdateProductsRatingJob extends AbstractJob
             ->selectRaw('MAX(100*(old_price - price)/old_price) AS discount_max')
             ->get();
 
-        $info['discount'] = array(
+        $info['discount'] = [
             'min' => 0,
             'max' => $res_prod[0]->discount_max,
             'base' => $res_prod[0]->discount_max,
-            'summ' => 0
-        );
+            'summ' => 0,
+        ];
 
         $info['season'] = ['summ' => 0];
         $info['action'] = ['summ' => 0];
@@ -119,7 +116,7 @@ class UpdateProductsRatingJob extends AbstractJob
             $info['sale']['summ'] += abs($prod->sale);
             $info['category']['summ'] += abs($prod->cat);
 
-            $rating[$prod->id] = array(
+            $rating[$prod->id] = [
                 'popular' => 0,
                 'purshase' => 0,
                 'trand' => 0,
@@ -133,19 +130,19 @@ class UpdateProductsRatingJob extends AbstractJob
                 'action' => $prod->action,
                 'hit' => $prod->hit,
                 'sale' => $prod->sale,
-            );
+            ];
         }
 
         $productsIds = $products->pluck('id')->toArray();
         unset($products);
 
         // photo
-        $info['photo'] = array(
+        $info['photo'] = [
             'min' => 10,
             'max' => 0,
             'base' => 5,
-            'summ' => 0
-        );
+            'summ' => 0,
+        ];
 
         $productsCounters = Product::select(['id'])
             ->whereIn('id', $productsIds)
@@ -170,20 +167,23 @@ class UpdateProductsRatingJob extends AbstractJob
                 }
 
                 $info['photo']['summ'] += abs($photo);
-                if ($info['photo']['min'] > $ph->media_count) $info['photo']['min'] = $ph->media_count;
-                if ($info['photo']['max'] < $ph->media_count) $info['photo']['max'] = $ph->media_count;
+                if ($info['photo']['min'] > $ph->media_count) {
+                    $info['photo']['min'] = $ph->media_count;
+                }
+                if ($info['photo']['max'] < $ph->media_count) {
+                    $info['photo']['max'] = $ph->media_count;
+                }
                 $rating[$ph->id]['photo'] = $photo;
             }
         }
 
         // aviable
-        $info['aviable'] = array(
+        $info['aviable'] = [
             'min' => 10,
             'max' => 0,
             'base' => 5,
-            'summ' => 0
-        );
-
+            'summ' => 0,
+        ];
 
         foreach ($productsCounters as $av) {
             if (isset($rating[$av->id])) {
@@ -202,24 +202,27 @@ class UpdateProductsRatingJob extends AbstractJob
                 }
 
                 $info['aviable']['summ'] += abs($aviable);
-                if ($info['aviable']['min'] > $av->sizes_count) $info['aviable']['min'] = $av->sizes_count;
-                if ($info['aviable']['max'] < $av->sizes_count) $info['aviable']['max'] = $av->sizes_count;
+                if ($info['aviable']['min'] > $av->sizes_count) {
+                    $info['aviable']['min'] = $av->sizes_count;
+                }
+                if ($info['aviable']['max'] < $av->sizes_count) {
+                    $info['aviable']['max'] = $av->sizes_count;
+                }
                 $rating[$av->id]['aviable'] = $aviable;
             }
         }
         unset($productsCounters);
 
-
         // popular & purshase
-        $params = array(
-            'ids'         => $counterYandexId,
-            'metrics'     => 'ym:s:productImpressionsUniq,ym:s:productPurchasedUniq',
-            'dimensions'  => 'ym:s:productID',
-            'date1'       => '30daysAgo',
-            'date2'       => 'yesterday',
-            'sort'        => 'ym:s:productID',
-            'limit'        => 3000
-        );
+        $params = [
+            'ids' => $counterYandexId,
+            'metrics' => 'ym:s:productImpressionsUniq,ym:s:productPurchasedUniq',
+            'dimensions' => 'ym:s:productID',
+            'date1' => '30daysAgo',
+            'date2' => 'yesterday',
+            'sort' => 'ym:s:productID',
+            'limit' => 3000,
+        ];
 
         $result_popular = Http::withToken(config('api.yandex.token'), 'OAuth')
             ->get('https://api-metrika.yandex.ru/stat/v1/data', $params)
@@ -229,19 +232,19 @@ class UpdateProductsRatingJob extends AbstractJob
             throw new \Exception('Яндекс метрика не вернула данные');
         }
 
-        $info['popular'] = array(
+        $info['popular'] = [
             'min' => 0,
             'max' => $result_popular['max'][0],
             'base' => $result_popular['max'][0],
-            'summ' => 0
-        );
+            'summ' => 0,
+        ];
 
-        $info['purshase'] = array(
+        $info['purshase'] = [
             'min' => 0,
             'max' => $result_popular['max'][1],
             'base' => $result_popular['max'][1],
-            'summ' => 0
-        );
+            'summ' => 0,
+        ];
 
         foreach ($result_popular['data'] as $v) {
             $x = $v['dimensions'][0]['name'];
@@ -256,17 +259,16 @@ class UpdateProductsRatingJob extends AbstractJob
         }
         unset($result_popular);
 
-
         // trand
-        $params = array(
-            'ids'         => $counterYandexId,
-            'metrics'     => 'ym:s:productBasketsUniq',
-            'dimensions'  => 'ym:s:productID',
-            'date1'       => '7daysAgo',
-            'date2'       => 'yesterday',
-            'sort'        => 'ym:s:productID',
-            'limit'        => 3000
-        );
+        $params = [
+            'ids' => $counterYandexId,
+            'metrics' => 'ym:s:productBasketsUniq',
+            'dimensions' => 'ym:s:productID',
+            'date1' => '7daysAgo',
+            'date2' => 'yesterday',
+            'sort' => 'ym:s:productID',
+            'limit' => 3000,
+        ];
 
         $result_tranding = Http::withToken(config('api.yandex.token'), 'OAuth')
             ->get('https://api-metrika.yandex.ru/stat/v1/data', $params)
@@ -276,12 +278,12 @@ class UpdateProductsRatingJob extends AbstractJob
             throw new \Exception('Яндекс метрика не вернула данные (2)');
         }
 
-        $info['trand'] = array(
+        $info['trand'] = [
             'min' => 0,
             'max' => $result_tranding['max'][0],
             'base' => $result_tranding['max'][0],
-            'summ' => 0
-        );
+            'summ' => 0,
+        ];
 
         foreach ($result_tranding['data'] as $v) {
             $x = $v['dimensions'][0]['name'];
@@ -292,7 +294,6 @@ class UpdateProductsRatingJob extends AbstractJob
             }
         }
         unset($result_tranding);
-
 
         foreach ($rating as $id => $val) {
             if ($id > 0) {
@@ -309,14 +310,14 @@ class UpdateProductsRatingJob extends AbstractJob
         $i_summ = 0;
         foreach ($info as $k => $v) {
             $i_summ += abs($v['summ']);
-            $ratingConfig['basic_summ'][$k] = array('summ' => $v['summ']);
+            $ratingConfig['basic_summ'][$k] = ['summ' => $v['summ']];
         }
 
         foreach ($info as $k => $v) {
             $ratingConfig['basic_summ'][$k]['segment'] = $info[$k]['summ'] / $i_summ;
         }
 
-        $ratingConfig['last_update'] = date("Y-m-d-H:i");
+        $ratingConfig['last_update'] = date('Y-m-d-H:i');
 
         $this->debug(count($rating) . ' товаров');
         unset($rating);

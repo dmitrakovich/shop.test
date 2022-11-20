@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Banner extends Model implements HasMedia
 {
@@ -15,7 +15,7 @@ class Banner extends Model implements HasMedia
         SoftDeletes;
 
     protected $casts = [
-      'spoiler'      => 'json',
+        'spoiler' => 'json',
     ];
 
     public static function getIndexMain()
@@ -124,20 +124,21 @@ class Banner extends Model implements HasMedia
     public function scopeActive($query)
     {
         return $query->where('active', true)
-            ->where(fn($query) => $query->where('start_datetime', '<', now())
+            ->where(fn ($query) => $query->where('start_datetime', '<', now())
                 ->orWhereNull('start_datetime'))
-            ->where(fn($query) => $query->where('end_datetime', '>=', now())
+            ->where(fn ($query) => $query->where('end_datetime', '>=', now())
                 ->orWhereNull('end_datetime'));
     }
 
     /**
-    * Scope a query to only banner fields.
-    *
-    * @param  \Illuminate\Database\Eloquent\Builder  $query
-    * @return \Illuminate\Database\Eloquent\Builder
-    */
-    public function scopeBannerFields($query) {
-      return $query->select('id', 'title', 'url', 'end_datetime', 'show_timer', 'spoiler');
+     * Scope a query to only banner fields.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBannerFields($query)
+    {
+        return $query->select('id', 'title', 'url', 'end_datetime', 'show_timer', 'spoiler');
     }
 
     /**

@@ -41,7 +41,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -197,6 +197,7 @@ return [
         Drandin\DeclensionNouns\DeclensionNounsServiceProvider::class,
         App\Providers\CartServiceProvider::class,
         App\Providers\GoogleTagManagerProvider::class,
+        App\Libraries\Seo\Providers\SeoServiceProvider::class,
 
     ],
 
@@ -216,8 +217,9 @@ return [
         'Banner' => App\Models\Banner::class,
         'Cart' => App\Facades\Cart::class,
         'UrlHelper' => App\Helpers\UrlHelper::class,
-        'Currency' =>  App\Facades\Currency::class,
+        'Currency' => App\Facades\Currency::class,
         'Seo' => App\Facades\Seo::class,
+        'SeoFacade' => App\Libraries\Seo\Facades\SeoFacade::class,
     ])->toArray(),
 
 ];

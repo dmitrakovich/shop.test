@@ -1,0 +1,59 @@
+name: Fix code styling
+
+on:
+  pull_request_target:
+  workflow_dispatch:
+    inputs:
+      php:
+        description: 'Php version'
+        default: "8.1"
+        type: string
+      message:
+        description: 'Commit message'
+        default: Fix code styling.
+        type: string
+
+jobs:
+  laravel-pint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php || 8.1 }}
+          extensions: json, dom, curl, libxml, mbstring
+          coverage: none
+
+      - name: Install Pint
+        run: composer global require laravel/pint
+
+      - name: Run Pint
+        run: pint --config ./formaters/pint.json
+
+      - name: Install NPM dependencies
+        run: npm ci -C ./src
+
+      - name: Copy blade-formatter config to root dir
+        run: |
+          cp formaters/.bladeformatterrc.json ./
+          cp formaters/.bladeignore ./
+
+      - name: Run Blade Formatter
+        run: |
+          src/node_modules/.bin/blade-formatter --write \
+            src/resources/views/*.blade.php \
+            src/resources/views/**/*.blade.php
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: ${{ inputs.message }} Format ${{ github.actor }} code
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.PAT }}

@@ -1,10 +1,7 @@
-<div
-    class="position-relative js-product-item"
-    data-gtm-product='{!! $product['dataLayer']->toJson() !!}'
-    >
+<div class="position-relative js-product-item" data-gtm-product='{!! $product['dataLayer']->toJson() !!}'>
     @include('partials.buttons.favorite', [
         'favoriteProductId' => $product['id'],
-        'favoriteState' => $product['favorite']
+        'favoriteState' => $product['favorite'],
     ])
     <div class="product-labels">
         @if ($product['is_new'])
@@ -19,12 +16,8 @@
         @endif
     </div>
     <a href="{{ $product['url'] }}" data-gtm-click="productClick">
-        <img
-            src="{{ $product['image'] }}"
-            alt="{{ $product['sku'] }}"
-            class="img-fluid product-first-image"
-            onerror="imageOnError(this)"
-        >
+        <img src="{{ $product['image'] }}" alt="{{ $product['sku'] }}" class="img-fluid product-first-image"
+            onerror="imageOnError(this)">
         <div>{{ $product['full_name'] }}<br>
             @if ($product['sale_percentage'])
                 <span class="old_price">{!! $product['formatted_old_price'] !!}</span>

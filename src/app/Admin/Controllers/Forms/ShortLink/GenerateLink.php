@@ -2,9 +2,9 @@
 
 namespace App\Admin\Controllers\Forms\ShortLink;
 
-use Illuminate\Http\Request;
 use App\Models\Enum\OrderMethod;
 use Encore\Admin\Widgets\StepForm;
+use Illuminate\Http\Request;
 
 class GenerateLink extends StepForm
 {
@@ -25,8 +25,7 @@ class GenerateLink extends StepForm
     /**
      * Handle the form request.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request)

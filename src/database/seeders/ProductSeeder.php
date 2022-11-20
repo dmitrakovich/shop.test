@@ -9,12 +9,17 @@ use Illuminate\Support\Facades\DB;
 class ProductSeeder extends Seeder
 {
     protected $tableName = 'products';
+
     protected $startId = 0; // for add new products
+
     protected $limit = 50000;
 
     protected $oldTableName = 'cyizj_jshopping_products';
+
     protected $oldCategoriesTable = 'cyizj_jshopping_products_to_categories';
+
     protected $oldImagesTable = 'cyizj_jshopping_products_images';
+
     protected $oldSizesTable = 'cyizj_jshopping_products_attr2';
 
     protected static $currentDateTime;
@@ -71,7 +76,7 @@ class ProductSeeder extends Seeder
                 47 => 5, // Туфли на низкой подошве
                 48 => 'del', // Отзывы
                 49 => 14, // Мюли
-            ]
+            ],
         ],
         'sizes' => [
             'new_id' => [
@@ -88,7 +93,7 @@ class ProductSeeder extends Seeder
                 // 22 => 'del', // 45
                 23 => 2, // 33
                 24 => 3, // 34
-            ]
+            ],
         ],
         'collection' => [
             'column' => 'collection_id',
@@ -102,9 +107,9 @@ class ProductSeeder extends Seeder
                 74 => 74, // Весна-Лето 2018
                 75 => 75, // Осень-Зима 17/18
                 76 => 76, // Весна-Лето 2017
-            ]
+            ],
         ],
-        'colors' =>  [
+        'colors' => [
             'old_column' => 'extra_field_13',
             'new_id' => [
                 22 => 1, // черный
@@ -123,7 +128,7 @@ class ProductSeeder extends Seeder
                 48 => 15, // фиолетовый
                 57 => 9, // оранжевый
                 58 => 16, // розовый
-            ]
+            ],
         ],
         'fabrics' => [
             'old_column' => 'extra_field_14',
@@ -134,7 +139,7 @@ class ProductSeeder extends Seeder
                 59 => 4, // экокожа
                 60 => 6, // текстиль
                 64 => 5, // искусственная кожа
-            ]
+            ],
         ],
         // 'heels' => [],
         // 'styles' => [],
@@ -144,7 +149,7 @@ class ProductSeeder extends Seeder
                 17 => 2, // Лето
                 18 => 3, // Демисезон
                 19 => 1, // Зима
-            ]
+            ],
         ],
         'tags' => [
             'old_column' => 'extra_field_15',
@@ -169,7 +174,7 @@ class ProductSeeder extends Seeder
                 88 => 10, // Рептилия
                 89 => 9, // Пряжка
                 90 => 7, // Цепь
-            ]
+            ],
         ],
         'brand' => [
             'column' => 'brand_id',
@@ -241,7 +246,7 @@ class ProductSeeder extends Seeder
                 68 => 61, // ROMANTIC PERCENTAGE
                 69 => 68, // GELUSSI
                 70 => 69, // PAVI
-            ]
+            ],
         ],
         'manufacturer' => [
             'column' => 'manufacturer_id',
@@ -256,9 +261,10 @@ class ProductSeeder extends Seeder
                 80 => 80, // Фабрика №3
                 79 => 79, // Фабрика №2
                 78 => 78, // Фабрика №1
-            ]
+            ],
         ],
     ];
+
     /**
      * Run the database seeds.
      *
@@ -332,7 +338,6 @@ class ProductSeeder extends Seeder
             ->toArray();
 
         foreach ($oldProducts as $productId => $oldProduct) {
-
             // fixes
             $oldProduct->action = intval($oldProduct->action);
             $oldProduct->rating = $oldProduct->rating > 0 ? $oldProduct->rating : 0;
@@ -345,7 +350,6 @@ class ProductSeeder extends Seeder
 
             foreach ($this->attributesList as $method => $value) {
                 if (isset($value['column'])) { // одно значение
-
                     $insertValue = $value['new_id'][$oldProduct[$value['column']]] ?? 0;
 
                     if ($insertValue === 'del') {
@@ -361,7 +365,6 @@ class ProductSeeder extends Seeder
 
             $product = new Product($insertData);
             $product->save();
-
 
             foreach ($this->attributesList as $method => $value) {
                 if (isset($value['old_column'])) { // несколько
@@ -415,11 +418,10 @@ class ProductSeeder extends Seeder
                         ->preservingOriginal();
 
                     if (!empty($customProperties)) {
-                       $media->withCustomProperties($customProperties);
+                        $media->withCustomProperties($customProperties);
                     }
 
                     $media->toMediaCollection();
-
                 } catch (\Throwable $th) {
                     // echo $th->getMessage();
                 }

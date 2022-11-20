@@ -2,10 +2,10 @@
 
 namespace App\Admin\Controllers\Debug;
 
-use Encore\Admin\Layout\Content;
-use Appstract\Opcache\OpcacheFacade as OPcache;;
-use Illuminate\Support\Facades\Artisan;
+use Appstract\Opcache\OpcacheFacade as OPcache;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Layout\Content;
+use Illuminate\Support\Facades\Artisan;
 
 class CacheController extends AdminController
 {

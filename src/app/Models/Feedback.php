@@ -16,6 +16,7 @@ class Feedback extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $table = 'feedbacks';
+
     protected $fillable = [
         'user_id',
         'user_name',
@@ -33,7 +34,9 @@ class Feedback extends Model implements HasMedia
      * Feedbacks types by ids
      */
     final const TYPE_SPAM = 0;
+
     final const TYPE_REVIEW = 1;
+
     final const TYPE_QUESTION = 2;
 
     /**
@@ -47,6 +50,7 @@ class Feedback extends Model implements HasMedia
      * Max media sizes
      */
     final const MAX_PHOTO_SIZE = 5_242_880; // 5 MB
+
     final const MAX_VIDEO_SIZE = 52_428_800; // 50 MB
 
     /**
@@ -59,6 +63,7 @@ class Feedback extends Model implements HasMedia
         'models',
         'questions',
     ];
+
     /**
      * Ответы
      *
@@ -68,6 +73,7 @@ class Feedback extends Model implements HasMedia
     {
         return $this->hasMany(FeedbackAnswer::class)->with('media');
     }
+
     /**
      * Товары
      *
@@ -77,10 +83,12 @@ class Feedback extends Model implements HasMedia
     {
         return $this->belongsTo(Product::class)->withTrashed();
     }
+
     protected static function getType($type)
     {
         return in_array($type, self::$availableTypes) ? $type : self::DEFAULT_TYPE;
     }
+
     public function scopeType($query, $type)
     {
         return match (self::getType($type)) {
@@ -89,17 +97,19 @@ class Feedback extends Model implements HasMedia
             'questions' => $query->where('type_id', 2),
         };
     }
+
     /**
      * Отзывы для товаров
      *
      * @param [type] $query
-     * @param integer $productId идентификатор товара
+     * @param  int  $productId идентификатор товара
      * @return void
      */
     public function scopeForProduct($query, int $productId)
     {
         return $query->where('product_id', $productId);
     }
+
     /**
      * Размеры изображений
      */
@@ -108,6 +118,7 @@ class Feedback extends Model implements HasMedia
         $this->addMediaConversion('thumb')->width(150)->height(150);
         $this->addMediaConversion('full')->width(2000);
     }
+
     /**
      * Farmat date in admin panel
      *

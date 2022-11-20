@@ -2,23 +2,32 @@
 
 namespace App\Admin\Controllers;
 
-use Encore\Admin\{Form, Grid, Show};
-use App\Models\{Country, Currency, Product, Size};
-use App\Models\Payments\{Installment, OnlinePayment};
-use App\Models\Orders\{Order, OrderItemExtended, OrderStatus, OrderItemStatus};
-
-use Payments\PaymentMethod;
-use Deliveries\DeliveryMethod;
-use Encore\Admin\Facades\Admin;
-use Encore\Admin\Layout\Content;
-use Encore\Admin\Widgets\Table;
-use App\Models\Enum\OrderMethod;
-
-use App\Admin\Actions\Order\{CreateOnlinePayment, PrintOrder, ProcessOrder};
+use App\Admin\Actions\Order\CreateOnlinePayment;
+use App\Admin\Actions\Order\PrintOrder;
+use App\Admin\Actions\Order\ProcessOrder;
 use App\Facades\Currency as CurrencyFacade;
+use App\Models\Country;
+use App\Models\Currency;
+use App\Models\Enum\OrderMethod;
+use App\Models\Orders\Order;
+use App\Models\Orders\OrderItemExtended;
+use App\Models\Orders\OrderItemStatus;
+use App\Models\Orders\OrderStatus;
+use App\Models\Payments\Installment;
+use App\Models\Payments\OnlinePayment;
+use App\Models\Product;
+use App\Models\Size;
+use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Form;
+use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\ContextMenuActions;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Show;
+use Encore\Admin\Widgets\Table;
+use Payments\PaymentMethod;
 
 class OrderController extends AdminController
 {
@@ -102,7 +111,7 @@ class OrderController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)
@@ -144,9 +153,8 @@ class OrderController extends AdminController
     /**
      * Edit interface.
      *
-     * @param mixed   $id
-     * @param Content $content
-     *
+     * @param  mixed  $id
+     * @param  Content  $content
      * @return Content
      */
     public function edit($id, Content $content)
@@ -224,14 +232,13 @@ class OrderController extends AdminController
 
         $form->tab('Товары', function ($form) {
             $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $nestedForm) {
+                $nestedForm->hidden('id')->addElementClass('order-item-id');
                 $currencyCode = $nestedForm->getForm()->model()->currency;
                 $nestedForm->select('product_id', 'Код товара')
                     ->options(function ($id) {
                         return [$id => $id];
                     })
-                    ->ajax('/api/product/product')
-                    ->attribute(['data-js-trigger' => 'product_id'])
-                    ->load('size_id', '/api/product/sizes');
+                    ->ajax('/api/product/product');
                 $nestedForm->hidden('count')->default(1);
                 $nestedForm->hidden('buy_price')->default(0);
                 $nestedForm->hidden('price');
@@ -286,7 +293,7 @@ class OrderController extends AdminController
             if ((int)$form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
                 $this->saveInstallments($form);
             }
-             // TODO: recalc order total price
+            // TODO: recalc order total price
         });
 
         return $form;
@@ -319,16 +326,16 @@ class OrderController extends AdminController
         $grid = new Grid(new OnlinePayment());
         $grid->model()->where('order_id', $orderId)->orderBy('id', 'desc');
 
-        $grid->column('created_at', 'Дата/время создания')->display(function($date) {
+        $grid->column('created_at', 'Дата/время создания')->display(function ($date) {
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
         });
-        $grid->column('admin.name',  'Менеджер');
-        $grid->column('amount',     'Сумма платежа');
+        $grid->column('admin.name', 'Менеджер');
+        $grid->column('amount', 'Сумма платежа');
 
-        $grid->column('expires_at', 'Срок действия платежа')->display(function($date) {
+        $grid->column('expires_at', 'Срок действия платежа')->display(function ($date) {
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
         });
-        $grid->column('link', 'Срок действия платежа')->display(function($link) {
+        $grid->column('link', 'Срок действия платежа')->display(function ($link) {
             return '<a href="' . $link . '" target="_blank">Ссылка на станицу оплаты</a>';
         });
 
@@ -342,13 +349,14 @@ class OrderController extends AdminController
         $grid->disableExport();
         $grid->disableColumnSelector();
         $grid->disableRowSelector();
+
         return $grid->render();
     }
 
     /**
      * Set utm sources in form
      *
-     * @param Form $form
+     * @param  Form  $form
      * @return void
      */
     protected function setUtmSources(Form $form): void
@@ -359,7 +367,7 @@ class OrderController extends AdminController
 
         $form->saving(function (Form $form) {
             if (!empty($form->order_method)) {
-                list($utmSource, $utmMedium, $utmCampaign) = OrderMethod::getUtmSources($form->order_method);
+                [$utmSource, $utmMedium, $utmCampaign] = OrderMethod::getUtmSources($form->order_method);
                 $form->utm_source = $utmSource;
                 $form->utm_medium = $utmMedium;
                 $form->utm_campaign = $utmCampaign;
@@ -370,7 +378,7 @@ class OrderController extends AdminController
     /**
      * Handle process order action
      *
-     * @param Order $order
+     * @param  Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function process(Order $order)
@@ -383,7 +391,7 @@ class OrderController extends AdminController
     /**
      * Render process tool
      *
-     * @param integer $orderId
+     * @param  int  $orderId
      * @return \Closure
      */
     protected function getProcessTool(int $orderId)
@@ -417,6 +425,7 @@ class OrderController extends AdminController
     protected function getScriptForExtendedItems(): string
     {
         $installmentPaymentId = Installment::PAYMENT_METHOD_ID;
+
         return <<<JS
 $(function () {
     // disable editing for current items in order
@@ -430,19 +439,33 @@ $(function () {
 
     // get product data for new item in order
     $(document).on('change', '.itemsExtended.product_id', function () {
-        let itemBlock = $(this).parents('.has-many-itemsExtended-form');
-
-        $.get('/api/product/data', {q: $(this).val()}, function (response) {
-            let img = $('<img>').attr('src', response.image).height(105);
-            let link = $('<a>', {
+        const itemBlock = $(this).parents('.has-many-itemsExtended-form');
+        const sizesSelectElement = itemBlock.find('select.size_id');
+        const payload = {
+            productId: $(this).val(),
+            orderItemId: itemBlock.find('.order-item-id').val()
+        };
+        $.get('/api/product/data', payload, function (response) {
+            // console.log(response);
+            const img = $('<img>').attr('src', response.image).height(105);
+            const link = $('<a>', {
                 text: response.name,
                 href: response.link,
                 target: '_blank',
             });
             $(itemBlock).find('.file-input').empty().append(img);
             $(itemBlock).find('.box.box-solid.box-default .box-body').html(link);
-            // console.log(itemBlock);
-            // console.log(response);
+            // sizes
+            sizesSelectElement.find('option').remove();
+            $(sizesSelectElement).select2({
+                placeholder: 'Выбрать',
+                allowClear: true,
+                data: response.sizes
+            });
+            if (sizesSelectElement.data('value')) {
+                $(sizesSelectElement).val(sizesSelectElement.data('value'));
+            }
+            $(sizesSelectElement).trigger('change');
         });
     });
 

@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\AttributeFilterTrait;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Kalnoy\Nestedset\NodeTrait;
-use App\Traits\AttributeFilterTrait;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Product category class
@@ -107,7 +107,7 @@ class Category extends Model
      */
     public static function getChildrenCategoriesIdsList(int $categoryId): array
     {
-        return Cache::rememberForever("categoryChilds.$categoryId", fn() => self::traverseTree(
+        return Cache::rememberForever("categoryChilds.$categoryId", fn () => self::traverseTree(
             self::with('childrenCategories')->find($categoryId)->toArray()
         ));
     }
@@ -123,6 +123,7 @@ class Category extends Model
         foreach ($subtree['children_categories'] as $child) {
             $descendants = array_merge($descendants, self::traverseTree($child));
         }
+
         return $descendants;
     }
 
@@ -138,6 +139,7 @@ class Category extends Model
     {
         $slug = $this->slug;
         $this->attributes['path'] = $this->isRoot() ? $slug : $this->parent->path . '/' . $slug;
+
         return $this;
     }
 
@@ -167,8 +169,9 @@ class Category extends Model
             foreach ($categories as $category) {
                 $result[$category->id] = $prefix . $category->title;
 
-                $traverse($category->children, $prefix.'---- ', $result);
+                $traverse($category->children, $prefix . '---- ', $result);
             }
+
             return $result;
         };
 
@@ -192,8 +195,6 @@ class Category extends Model
 
     /**
      * Get category name (accessor)
-     *
-     * @param string $value
      */
     public function name(): Attribute
     {
@@ -215,7 +216,8 @@ class Category extends Model
      */
     public function getNameForCatalogTitle(): string
     {
-        $name = $this->isRoot() ? 'женская обувь' :  $this->name;
+        $name = $this->isRoot() ? 'женская обувь' : $this->name;
+
         return Str::lower($name);
     }
 
@@ -230,6 +232,7 @@ class Category extends Model
             $category = $category->parentCategory;
             $name = $category->name . '/' . $name;
         }
+
         return $name;
     }
 }

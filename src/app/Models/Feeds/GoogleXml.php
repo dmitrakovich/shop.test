@@ -2,8 +2,8 @@
 
 namespace App\Models\Feeds;
 
-use App\Models\Product;
 use App\Models\Category;
+use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Str;
@@ -84,8 +84,9 @@ class GoogleXml extends AbstractFeed
      * Return google product category
      *
      * @see https://support.google.com/merchants/answer/6324436?hl=ru
-     * @param Category $category
-     * @return integer
+     *
+     * @param  Category  $category
+     * @return int
      */
     protected function getGoogleCategory(Category $category): int
     {
@@ -101,7 +102,7 @@ class GoogleXml extends AbstractFeed
     /**
      * Generate & return product type
      *
-     * @param Category $category
+     * @param  Category  $category
      * @return string
      */
     protected function getProductType(Category $category): string
@@ -116,13 +117,14 @@ class GoogleXml extends AbstractFeed
             }
         }
         $type[] = $category->title;
+
         return implode(' > ', $type);
     }
 
     /**
      * Prepare color from colors for filters
      *
-     * @param EloquentCollection $colors
+     * @param  EloquentCollection  $colors
      * @return string
      */
     public function getColor(EloquentCollection $colors): string
@@ -133,7 +135,7 @@ class GoogleXml extends AbstractFeed
     /**
      * Generate product description
      *
-     * @param Product $product
+     * @param  Product  $product
      * @return string
      */
     public function getDescription(Product $product): string
@@ -159,7 +161,7 @@ class GoogleXml extends AbstractFeed
         }
 
         if (!empty($product->heel_txt)) {
-            $description .=  "Высота каблука: {$product->heel_txt}. ";
+            $description .= "Высота каблука: {$product->heel_txt}. ";
         }
 
         $description .= $product->description;

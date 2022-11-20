@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Contracts\OrderServiceInterface;
+use App\Events\OrderCreated;
 use App\Facades\Cart;
 use App\Facades\Sale;
-use App\Models\Orders\Order;
-use App\Models\CartData;
-use App\Events\OrderCreated;
-use Illuminate\Http\Request;
-use Database\Seeders\ProductSeeder;
-use App\Services\OldSiteSyncService;
-use Illuminate\Support\Facades\Auth;
-use App\Contracts\OrderServiceInterface;
-use App\Http\Requests\Order\SyncRequest;
 use App\Http\Requests\Order\StoreRequest;
+use App\Http\Requests\Order\SyncRequest;
+use App\Models\CartData;
+use App\Models\Orders\Order;
+use App\Services\OldSiteSyncService;
+use Database\Seeders\ProductSeeder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends BaseController
 {
@@ -27,7 +27,7 @@ class OrderController extends BaseController
     {
         return view('dashboard.orders', [
             'orders' => Order::with(['country', 'status:key,name_for_user'])
-                ->where('user_id', Auth::id())->get()
+                ->where('user_id', Auth::id())->get(),
         ]);
     }
 

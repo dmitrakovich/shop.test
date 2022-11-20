@@ -43,13 +43,14 @@ class TagController extends AdminController
         $grid->disableExport();
         $grid->disableColumnSelector();
         $grid->disableRowSelector();
+
         return $grid;
     }
 
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)

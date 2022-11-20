@@ -3,9 +3,8 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SmsTrafficMessage;
+use Illuminate\Notifications\Notification;
 
 abstract class AbstractSmsTraffic extends Notification
 {
@@ -25,7 +24,7 @@ abstract class AbstractSmsTraffic extends Notification
     /**
      * Get the SmsTraffic / SMS representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return SmsTrafficMessage|string
      */
     public function toSmsTraffic($notifiable)

@@ -2,14 +2,13 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Models\Doc;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Show;
-use App\Admin\Models\Doc;
-use Illuminate\Support\Str;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Controllers\AdminController;
-
+use Encore\Admin\Show;
+use Illuminate\Support\Str;
 
 class DocController extends AdminController
 {
@@ -41,7 +40,7 @@ class DocController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('slug', __('Slug'));
-        $grid->column('html', __('Html'))->display(function($text) {
+        $grid->column('html', __('Html'))->display(function ($text) {
             return Str::limit(strip_tags($text), 300, '...');
         })->style('max-width: 35vw;');
         $grid->column('created_at', 'Дата создния');
@@ -53,7 +52,7 @@ class DocController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)

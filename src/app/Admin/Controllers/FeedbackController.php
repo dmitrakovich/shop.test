@@ -2,15 +2,14 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Feedbacks\ShowAnswersAction;
+use App\Admin\Actions\RatingAction;
+use App\Models\Feedback;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Models\Feedback;
 use Illuminate\Support\Str;
-use App\Admin\Models\Product;
-use App\Admin\Actions\RatingAction;
-use Encore\Admin\Controllers\AdminController;
-use App\Admin\Actions\Feedbacks\ShowAnswersAction;
 
 class FeedbackController extends AdminController
 {
@@ -52,7 +51,7 @@ class FeedbackController extends AdminController
             return empty($answers) ? null : Str::limit(end($answers)['text'], 240);
         });
         $grid->column('rating', 'Оценка')->action(RatingAction::class);
-        $grid->column('product.title', 'Товар');/*->display(function ($product) {
+        $grid->column('product.title', 'Товар'); /*->display(function ($product) {
             return empty($product) ? 'не найден' : "<a href='$product[path]' target='_blank'>$product[title]</a>";
         });*/
         $grid->column('type_id', 'Тип')->using($this->feedbackTypes);
@@ -68,9 +67,9 @@ class FeedbackController extends AdminController
 
         $grid->rows(function ($row) {
             if ($row->column('type_id') == 'спам') {
-                $row->style("background-color:#cca4a4;");
+                $row->style('background-color:#cca4a4;');
             }
-         });
+        });
 
         return $grid;
     }
@@ -78,7 +77,7 @@ class FeedbackController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)

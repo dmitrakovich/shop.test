@@ -7,7 +7,6 @@ use App\Helpers\UrlHelper;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
-use App\Services\GoogleTagManagerService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\Collection;
@@ -33,9 +32,9 @@ class CatalogService
     }
 
     /**
-     * @param array $filters
-     * @param string $sort
-     * @param string|null $search
+     * @param  array  $filters
+     * @param  string  $sort
+     * @param  string|null  $search
      * @return \Illuminate\Contracts\Pagination\CursorPaginator
      */
     public function getProducts(array $filters, string $sort, ?string $search = null)
@@ -76,10 +75,11 @@ class CatalogService
         }
         if ($searchQuery) {
             $badges[] = (object)[
-                'name'  => 'Поиск: ' . mb_strimwidth($searchQuery, 0, 12, '...'),
-                'url'   => UrlHelper::generate([], [['param' => 'search']])
+                'name' => 'Поиск: ' . mb_strimwidth($searchQuery, 0, 12, '...'),
+                'url' => UrlHelper::generate([], [['param' => 'search']]),
             ];
         }
+
         return $badges;
     }
 
@@ -117,8 +117,8 @@ class CatalogService
     }
 
     /**
-     * @param mixed $products
-     * @param array $filters
+     * @param  mixed  $products
+     * @param  array  $filters
      * @return void
      */
     protected function addTopProducts($products, array $filters)
@@ -143,8 +143,8 @@ class CatalogService
     }
 
     /**
-     * @param mixed $products
-     * @return integer
+     * @param  mixed  $products
+     * @return int
      */
     protected function topProductsCount($products): int
     {
@@ -185,7 +185,7 @@ class CatalogService
     /**
      * Add GTM data to products
      *
-     * @param Collection $products
+     * @param  Collection  $products
      * @return void
      */
     protected function addGtmData($products): void

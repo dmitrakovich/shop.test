@@ -9,18 +9,20 @@ use Illuminate\Database\Eloquent\Model;
 class ProcessOrder extends RowAction
 {
     public $name = 'Взять в работу';
+
     protected $isRow = false;
 
     public function handle(Model $model)
     {
         $this->isRow = true;
+
         return $this->process($model);
     }
 
     /**
      * Handle action
      *
-     * @param Model $model
+     * @param  Model  $model
      * @return mixed
      */
     public function process(Model $model)
@@ -41,7 +43,7 @@ class ProcessOrder extends RowAction
     /**
      * Generate success response
      *
-     * @param string $message
+     * @param  string  $message
      * @return mixed
      */
     public function successResponse(string $message)
@@ -56,7 +58,7 @@ class ProcessOrder extends RowAction
     /**
      * Generate warning response
      *
-     * @param string $message
+     * @param  string  $message
      * @return mixed
      */
     public function warningResponse(string $message)

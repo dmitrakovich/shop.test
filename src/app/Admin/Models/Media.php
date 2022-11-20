@@ -11,6 +11,7 @@ class Media extends MediaModel
     {
         return $this->morphTo()->withTrashed();
     }
+
     /**
      * Get the class name for polymorphic relations.
      *

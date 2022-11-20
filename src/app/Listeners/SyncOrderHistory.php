@@ -5,8 +5,6 @@ namespace App\Listeners;
 use App\Models\Orders\Order;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SyncOrderHistory
 {
@@ -22,7 +20,7 @@ class SyncOrderHistory
     /**
      * Handle the event.
      *
-     * @param Registered|Login $event
+     * @param  Registered|Login  $event
      * @return void
      */
     public function handle(Registered|Login $event)

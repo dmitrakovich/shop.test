@@ -48,7 +48,7 @@ task('deploy:upload', function () {
 
 task('deploy:writable', function () {
     within('{{release_path}}', function () {
-        $dirs = join(' ', get('writable_dirs'));
+        $dirs = implode(' ', get('writable_dirs'));
         run("chmod -R 0755 $dirs");
     });
 });
@@ -77,6 +77,7 @@ task('deploy', [
     'deploy:symlink',
     'artisan:cache:clear',
     'artisan:opcache:clear',
+    'artisan:queue:restart',
     'deploy:unlock',
     'deploy:cleanup',
     'deploy:success',
@@ -91,4 +92,4 @@ task('rollback:after', [
     'artisan:opcache:clear',
 ]);
 
-after('rollback','rollback:after');
+after('rollback', 'rollback:after');

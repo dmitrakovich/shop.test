@@ -2,11 +2,11 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Models\Media;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Admin\Models\Media;
-use Encore\Admin\Controllers\AdminController;
 
 class MediaController extends AdminController
 {
@@ -45,7 +45,7 @@ class MediaController extends AdminController
         $grid->model()->where('model_type', 'App\Models\Product');
         $grid->model()->with(['model']);
 
-        $grid->filter(function($filter) {
+        $grid->filter(function ($filter) {
             $filter->disableIdFilter(); // Remove the default id filter
             $filter->where(function ($query) {
                 $query->whereRaw("EXISTS (
@@ -69,7 +69,7 @@ class MediaController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)

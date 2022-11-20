@@ -17,7 +17,7 @@ class CreateSeasonsTable extends Migration
             $table->id();
             $table->string('name');
             $table->uuid('slug');
-            $table->text('seo')->nullable();;
+            $table->text('seo')->nullable();
             $table->timestamps();
         });
     }
