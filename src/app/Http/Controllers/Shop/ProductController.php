@@ -34,9 +34,7 @@ class ProductController extends BaseController
         $this->gtmService->setViewForProduct($product);
         $this->productService->addToRecent($product->id);
 
-
         $this->seoService->setProduct($product)->generate();
-
 
         return view('shop.product-page', [
             'product' => $product,

@@ -96,7 +96,7 @@ class UrlHelper
                         if ($model === Price::class) {
                             $filter_exp = explode('-', $filter['slug']);
                             $filter_exp[array_key_last($filter_exp)] = 50 * ceil((int)end($filter_exp) / 50);
-                            $sorted[]   = implode('-', $filter_exp);
+                            $sorted[] = implode('-', $filter_exp);
                         } else {
                             $sorted[] = $filter['slug'];
                         }

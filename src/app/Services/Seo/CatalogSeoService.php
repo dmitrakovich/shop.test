@@ -2,34 +2,32 @@
 
 namespace App\Services\Seo;
 
-use App\Models\{
-    Brand,
-    Category,
-    Collection,
-    Color,
-    Fabric,
-    Heel,
-    Season,
-    Size,
-    Style,
-    Tag
-};
-use App\Models\ProductAttributes\Status;
-use App\Models\ProductAttributes\Price;
 use App\Helpers\UrlHelper;
-
+use App\Libraries\Seo\Facades\SeoFacade;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Collection;
+use App\Models\Color;
+use App\Models\Fabric;
+use App\Models\Heel;
+use App\Models\ProductAttributes\Price;
+use App\Models\ProductAttributes\Status;
+use App\Models\Season;
+use App\Models\Size;
+use App\Models\Style;
+use App\Models\Tag;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\Str;
-use App\Libraries\Seo\Facades\SeoFacade;
 
 class CatalogSeoService
 {
     private array $currentFilters = [];
+
     private CursorPaginator $catalogProducts;
+
     const MAX_FILTERS_COUNT = 3;
 
     const MAX_FILTER_VALUES_COUNT = 1;
-
 
     const ATTRIBUTE_PRIORITY = [
         Category::class,
@@ -67,6 +65,7 @@ class CatalogSeoService
     public function setCurrentFilters(array $currentFilters): self
     {
         $this->currentFilters = $currentFilters;
+
         return $this;
     }
 
@@ -76,6 +75,7 @@ class CatalogSeoService
     public function setProducts(CursorPaginator $products): self
     {
         $this->catalogProducts = $products;
+
         return $this;
     }
 
@@ -173,6 +173,7 @@ class CatalogSeoService
     public function getCatalogDescription(): string
     {
         $currentFilters = $this->currentFilters;
+
         return $this->getCatalogTitle($currentFilters) . ' с примеркой по Беларуси';
     }
 
@@ -182,6 +183,7 @@ class CatalogSeoService
     public function getCatalogCanonicalUrl(): string
     {
         $canonicalUrl = UrlHelper::generate();
+
         return $canonicalUrl;
     }
 
@@ -193,9 +195,9 @@ class CatalogSeoService
         $currentFilters = $this->currentFilters;
         $filtersCount = 0;
         foreach ($currentFilters as $filterType => $filters) {
-            if($filterType === Price::class) {
-                foreach($filters as $filterKey => $filter) {
-                    if(str_contains($filterKey, 'price-from')) {
+            if ($filterType === Price::class) {
+                foreach ($filters as $filterKey => $filter) {
+                    if (str_contains($filterKey, 'price-from')) {
                         return 'noindex, follow';
                     }
                 }
@@ -222,7 +224,7 @@ class CatalogSeoService
             SeoFacade::setImage($this->catalogProducts->first()->getFirstMedia()->getUrl('catalog'));
 
             $canonicalUrl = trim($this->getCatalogCanonicalUrl(), '/');
-            $currentPath  = request()->path();
+            $currentPath = request()->path();
             if ($canonicalUrl !== $currentPath) {
                 SeoFacade::setRobots('noindex, follow');
             } else {

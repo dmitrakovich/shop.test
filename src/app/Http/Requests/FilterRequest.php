@@ -59,9 +59,9 @@ class FilterRequest extends FormRequest
             ->with('filters')
             ->get(['slug', 'model_type', 'model_id']);
 
-        foreach($slugs as $slug) {
+        foreach ($slugs as $slug) {
             $value = $filtersTemp->firstWhere('slug', $slug);
-            if($value) {
+            if ($value) {
                 $filters[$value->model_type][$value->slug] = $value;
             }
         }

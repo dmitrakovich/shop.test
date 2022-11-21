@@ -9,9 +9,9 @@ use App\Models\ProductAttributes\Price;
 use App\Services\CatalogService;
 use App\Services\FilterService;
 use App\Services\GoogleTagManagerService;
+use App\Services\Seo\CatalogSeoService;
 use App\Services\SliderService;
 use Illuminate\Http\RedirectResponse;
-use App\Services\Seo\CatalogSeoService;
 use Illuminate\Http\Request;
 
 class CatalogController extends BaseController

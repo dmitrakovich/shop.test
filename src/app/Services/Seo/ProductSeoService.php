@@ -15,6 +15,7 @@ class ProductSeoService
     public function setProduct(Product $product): self
     {
         $this->product = $product;
+
         return $this;
     }
 
@@ -25,6 +26,7 @@ class ProductSeoService
     {
         $product = $this->product;
         $discount = $product->getSalePercentage();
+
         return $product->extendedName() . ' ' . ($discount ? "со скидкой {$discount}%." : '- новинка!');
     }
 
