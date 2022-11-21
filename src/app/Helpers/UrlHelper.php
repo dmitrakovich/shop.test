@@ -23,16 +23,16 @@ class UrlHelper
      */
     const CANONICAL_ORDER = [
         Category::class,
+        Brand::class,
         Status::class,
-        Size::class,
         Color::class,
         Fabric::class,
+        Size::class,
         Heel::class,
         Tag::class,
         Season::class,
         Style::class,
         Collection::class,
-        Brand::class,
         Price::class,
     ];
 
@@ -93,7 +93,13 @@ class UrlHelper
                 } else {
                     sort($filters[$model]);
                     foreach ($filters[$model] as $filter) {
-                        $sorted[] = $filter['slug'];
+                        if ($model === Price::class) {
+                            $filter_exp = explode('-', $filter['slug']);
+                            $filter_exp[array_key_last($filter_exp)] = 50 * ceil((int)end($filter_exp) / 50);
+                            $sorted[]   = implode('-', $filter_exp);
+                        } else {
+                            $sorted[] = $filter['slug'];
+                        }
                     }
                 }
             }

@@ -2,22 +2,35 @@
 
 namespace App\Services\Seo;
 
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\Collection;
-use App\Models\Color;
-use App\Models\Fabric;
-use App\Models\Heel;
-use App\Models\Product;
+use App\Models\{
+    Brand,
+    Category,
+    Collection,
+    Color,
+    Fabric,
+    Heel,
+    Season,
+    Size,
+    Style,
+    Tag
+};
 use App\Models\ProductAttributes\Status;
-use App\Models\Season;
-use App\Models\Size;
-use App\Models\Style;
-use App\Models\Tag;
-use Illuminate\Support\Str;
+use App\Models\ProductAttributes\Price;
+use App\Helpers\UrlHelper;
 
-class TitleGenerotorService
+use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Str;
+use App\Libraries\Seo\Facades\SeoFacade;
+
+class CatalogSeoService
 {
+    private array $currentFilters = [];
+    private CursorPaginator $catalogProducts;
+    const MAX_FILTERS_COUNT = 3;
+
+    const MAX_FILTER_VALUES_COUNT = 1;
+
+
     const ATTRIBUTE_PRIORITY = [
         Category::class,
         Size::class,
@@ -47,37 +60,29 @@ class TitleGenerotorService
     ];
 
     /**
-     * Generate title for product
+     * Set current filters
      */
-    public function getProductTitle(Product $product): string
+    public function setCurrentFilters(array $currentFilters): self
     {
-        $discount = $product->getSalePercentage();
-
-        return $product->extendedName() . ' ' . ($discount ? "со скидкой {$discount}%." : '- новинка!');
+        $this->currentFilters = $currentFilters;
+        return $this;
     }
 
     /**
-     * Generate description for product
+     * Set catalog products
      */
-    public function getProductDescription(Product $product): string
+    public function setProducts(CursorPaginator $products): self
     {
-        $description = $this->getProductTitle($product);
-
-        if (!empty($product->color_txt)) {
-            $description .= " Цвет: {$product->color_txt}.";
-        }
-        if ($product->sizes->isNotEmpty() && !$product->hasOneSize()) {
-            $description .= ' Размеры: ' . $product->sizes->implode('name', ', ');
-        }
-
-        return $description;
+        $this->catalogProducts = $products;
+        return $this;
     }
 
     /**
      * Generate title for catalog
      */
-    public function getCatalogTitle(array $currentFilters): string
+    public function getCatalogTitle(): string
     {
+        $currentFilters = $this->currentFilters;
         $emptyCategory = true;
         $titleValues = [];
         foreach (self::ATTRIBUTE_PRIORITY as $attrModel) {
@@ -152,8 +157,67 @@ class TitleGenerotorService
     /**
      * Generate description for catalog
      */
-    public function getCatalogDescription(array $currentFilters): string
+    public function getCatalogDescription(): string
     {
+        $currentFilters = $this->currentFilters;
         return $this->getCatalogTitle($currentFilters) . ' с примеркой по Беларуси';
+    }
+
+    /**
+     * Get catalog canonical url
+     */
+    public function getCatalogCanonicalUrl(): string
+    {
+        $canonicalUrl = UrlHelper::generate();
+        return $canonicalUrl;
+    }
+
+    /**
+     * Prepare meta info for robots
+     */
+    public function metaForRobotsForCatalog(): string
+    {
+        $currentFilters = $this->currentFilters;
+        $filtersCount = 0;
+        foreach ($currentFilters as $filterType => $filters) {
+            if($filterType === Price::class) {
+                foreach($filters as $filterKey => $filter) {
+                    if(str_contains($filterKey, 'price-from')) {
+                        return 'noindex, follow';
+                    }
+                }
+            }
+            $filterValuesCount = intval($filterType === Category::class) ?: count($filters);
+            $filtersCount += $filterValuesCount;
+
+            if ($filtersCount > self::MAX_FILTERS_COUNT || $filterValuesCount > self::MAX_FILTER_VALUES_COUNT) {
+                return 'noindex, nofollow';
+            }
+        }
+
+        return 'all';
+    }
+
+    /**
+     * Generate catalog seo
+     */
+    public function generate(): void
+    {
+        if (!$this->catalogProducts->isNotEmpty()) {
+            SeoFacade::setRobots('noindex, nofollow');
+        } else {
+            SeoFacade::setImage($this->catalogProducts->first()->getFirstMedia()->getUrl('catalog'));
+
+            $canonicalUrl = trim($this->getCatalogCanonicalUrl(), '/');
+            $currentPath  = request()->path();
+            if ($canonicalUrl !== $currentPath) {
+                SeoFacade::setRobots('noindex, follow');
+            } else {
+                SeoFacade::setRobots($this->metaForRobotsForCatalog());
+            }
+            SeoFacade::setTitle($this->getCatalogTitle())
+                ->setDescription($this->getCatalogDescription())
+                ->setUrl($canonicalUrl);
+        }
     }
 }

@@ -26,7 +26,7 @@ class Twitter implements SeoContract
         }
         foreach ($this->config as $key => $value) {
             if ($value !== false) {
-                if ($key == 'image') {
+                if ($key == 'image' || $key == 'url') {
                     $value = secure_url($value);
                 }
                 $key = 'twitter:' . strip_tags($key);

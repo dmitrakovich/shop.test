@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Shop;
 use App\Models\Product;
 use App\Services\GoogleTagManagerService;
 use App\Services\ProductService;
-use App\Services\Seo\TitleGenerotorService;
+use App\Services\Seo\ProductSeoService;
 use App\Services\SliderService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use SeoFacade;
 
 class ProductController extends BaseController
 {
@@ -21,7 +20,7 @@ class ProductController extends BaseController
         private ProductService $productService,
         private SliderService $sliderService,
         private GoogleTagManagerService $gtmService,
-        private TitleGenerotorService $seoService,
+        private ProductSeoService $seoService
     ) {
         parent::__construct($request);
     }
@@ -35,9 +34,9 @@ class ProductController extends BaseController
         $this->gtmService->setViewForProduct($product);
         $this->productService->addToRecent($product->id);
 
-        SeoFacade::setTitle($this->seoService->getProductTitle($product))
-            ->setDescription($this->seoService->getProductDescription($product))
-            ->setImage($product->getFirstMedia()->getUrl('catalog'));
+
+        $this->seoService->setProduct($product)->generate();
+
 
         return view('shop.product-page', [
             'product' => $product,
