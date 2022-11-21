@@ -43,6 +43,7 @@ class CatalogSeoService
         Style::class,
         Brand::class,
         Collection::class,
+        Price::class,
     ];
 
     const ATTRIBUTE_ORDER = [
@@ -57,6 +58,7 @@ class CatalogSeoService
         Collection::class,
         Heel::class,
         Brand::class,
+        Price::class,
     ];
 
     /**
@@ -94,6 +96,13 @@ class CatalogSeoService
 
                 continue;
             }
+            if ($attrModel === Price::class) {
+                foreach ($currentFilters[$attrModel] ?? [] as $price) {
+                    if (str_starts_with('price-from-', $price->slug)) {
+                        unset($currentFilters[$attrModel][$price->slug]);
+                    }
+                }
+            }
 
             if (empty($currentFilters[$attrModel]) || count($currentFilters[$attrModel]) > 1) {
                 continue;
@@ -128,6 +137,10 @@ class CatalogSeoService
 
                 case Collection::class:
                     $value = $filter->filters->name;
+                    break;
+
+                case Price::class:
+                    $value = Str::lower($filter->filters->getBadgeName());
                     break;
 
                 default:
