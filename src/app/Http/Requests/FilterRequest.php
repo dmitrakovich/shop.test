@@ -55,16 +55,13 @@ class FilterRequest extends FormRequest
         $slugs = array_filter(explode('/', 'catalog/' . $this->path));
         $filters = $this->getStaticFilters($slugs);
 
-        $filtersTemp = Url::whereIn('slug', $slugs)
+        Url::whereIn('slug', $slugs)
             ->with('filters')
-            ->get(['slug', 'model_type', 'model_id']);
-
-        foreach ($slugs as $slug) {
-            $value = $filtersTemp->firstWhere('slug', $slug);
-            if ($value) {
-                $filters[$value->model_type][$value->slug] = $value;
-            }
-        }
+            ->get(['slug', 'model_type', 'model_id'])->sortBy(function($model) use ($slugs){
+                return array_search($model->slug, $slugs);
+            })->each(function (Url $url) use (&$filters) {
+                $filters[$url->model_type][$url->slug] = $url;
+            });
 
         uksort(
             $filters[Category::class],
