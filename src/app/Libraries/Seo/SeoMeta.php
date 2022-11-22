@@ -32,7 +32,7 @@ class SeoMeta implements SeoContract
                         break;
                     case 'url':
                         $value = is_null($value) ? htmlspecialchars(url()->current()) : $value;
-                        $html[] = '<link rel="canonical" href="' . (string)$value . '"/>';
+                        $html[] = '<link rel="canonical" href="' . url((string)$value) . '"/>';
                         break;
                     case 'robots':
                         if ($value) {

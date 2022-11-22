@@ -28,7 +28,7 @@ class OpenGraph implements SeoContract
         }
         foreach ($this->config as $key => $value) {
             if ($value !== false) {
-                if ($key == 'image') {
+                if ($key == 'image' || $key == 'url') {
                     $value = secure_url($value);
                 }
                 $key = 'og:' . strip_tags($key);

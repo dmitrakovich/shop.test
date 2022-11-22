@@ -57,8 +57,9 @@ class FilterRequest extends FormRequest
 
         Url::whereIn('slug', $slugs)
             ->with('filters')
-            ->get(['slug', 'model_type', 'model_id'])
-            ->each(function (Url $url) use (&$filters) {
+            ->get(['slug', 'model_type', 'model_id'])->sortBy(function ($model) use ($slugs) {
+                return array_search($model->slug, $slugs);
+            })->each(function (Url $url) use (&$filters) {
                 $filters[$url->model_type][$url->slug] = $url;
             });
 
