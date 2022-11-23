@@ -12,9 +12,9 @@
             ])
         @endif
         @if (!empty($banner->spoiler['btn_name']))
-            <a class="text-decoration-underline"
-                style="color: {{ $banner->getSpoilerTextColor() }};" data-toggle="collapse"
-                href="#mobCatalogBannerCollapse_{{ $timer_id }}" role="button" aria-expanded="false"
+            <a class="text-decoration-underline" style="color: {{ $banner->getSpoilerTextColor() }};"
+                data-toggle="collapse" href="#mobCatalogBannerCollapse_{{ $timer_id }}" role="button"
+                aria-expanded="false"
                 aria-controls="mobCatalogBannerCollapse_{{ $timer_id }}">{{ $banner->spoiler['btn_name'] ?? '' }}</a>
         @endif
     </div>
