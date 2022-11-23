@@ -10,8 +10,9 @@
                     @endforeach
                 </video>
             @else
-                <img src="{{ $feedbackBannerMob->getFirstMediaUrl() }}" alt="{{ $feedbackBannerMob->title }}"
-                    title="{{ $feedbackBannerMob->title }}" class="img-fluid" />
+                <img src="{{ $feedbackBannerMob->getFirstMediaUrl() }}"
+                    alt="{{ $feedbackBannerMob->title }}" title="{{ $feedbackBannerMob->title }}"
+                    class="img-fluid" />
             @endif
         </a>
     </div>

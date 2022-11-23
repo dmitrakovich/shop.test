@@ -3,7 +3,8 @@
     @php
         $timer_id = uniqid();
     @endphp
-    <div class="px-3 py-2 d-flex justify-content-between align-items-center" style="background: {{ $banner->spoiler['bg_color'] ?? '#D22020' }}; color: {{ $banner->spoiler['text_color'] ?? '#fff' }};">
+    <div class="px-3 py-2 d-flex justify-content-between align-items-center"
+        style="background: {{ $banner->spoiler['bg_color'] ?? '#D22020' }}; color: {{ $banner->spoiler['text_color'] ?? '#fff' }};">
         @if (!empty($banner->show_timer) && $banner->show_timer)
             @include('includes.timer', [
                 'end_time' => $banner->end_datetime,
@@ -11,14 +12,16 @@
             ])
         @endif
         @if (!empty($banner->spoiler['btn_name']))
-            <a class="text-decoration-underline" style="color: {{ $banner->spoiler['text_color'] ?? '#fff' }};" data-toggle="collapse"
+            <a class="text-decoration-underline"
+                style="color: {{ $banner->spoiler['text_color'] ?? '#fff' }};" data-toggle="collapse"
                 href="#mobCatalogBannerCollapse_{{ $timer_id }}" role="button" aria-expanded="false"
                 aria-controls="mobCatalogBannerCollapse_{{ $timer_id }}">{{ $banner->spoiler['btn_name'] ?? '' }}</a>
         @endif
     </div>
     @if (!empty($banner->spoiler['terms']))
         <div class="collapse multi-collapse" id="mobCatalogBannerCollapse_{{ $timer_id }}">
-            <div class="card-body" style="background: {{ $banner->spoiler['bg_color'] ?? '#D22020' }}; color: {{ $banner->spoiler['text_color'] ?? '#fff' }};">
+            <div class="card-body"
+                style="background: {{ $banner->spoiler['bg_color'] ?? '#D22020' }}; color: {{ $banner->spoiler['text_color'] ?? '#fff' }};">
                 {!! $banner->spoiler['terms'] ?? '' !!}
             </div>
         </div>
