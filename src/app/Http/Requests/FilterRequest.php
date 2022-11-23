@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
 use App\Models\Url;

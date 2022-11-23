@@ -110,6 +110,26 @@ class Banner extends Model implements HasMedia
         return view('banners.feedback-mob', compact('feedbackBannerMob'));
     }
 
+    /**
+     * Get spoiler text color (Hex).
+     *
+     * @return string
+     */
+    public function getSpoilerTextColor(): string
+    {
+        return $this->spoiler['text_color'] ?? '#fff';
+    }
+
+    /**
+     * Get spoiler background color (Hex).
+     *
+     * @return string
+     */
+    public function getSpoilerBgColor(): string
+    {
+        return $this->spoiler['bg_color'] ?? '#d22020';
+    }
+
     public function setShowTimerAttribute($value)
     {
         $this->attributes['show_timer'] = $this->end_datetime ? $value : false;

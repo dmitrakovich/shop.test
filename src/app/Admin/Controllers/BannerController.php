@@ -102,6 +102,8 @@ class BannerController extends AdminController
                     $form->embeds('spoiler', 'Описание спойлера', function ($form) {
                         $form->text('btn_name', 'Название кнопки');
                         $form->ckeditor('terms', 'Условия акции');
+                        $form->color('text_color', 'Цвет текста')->default('#fff');
+                        $form->color('bg_color', 'Цвет фона')->default('#D22020');
                     });
                 });
         })->required();
