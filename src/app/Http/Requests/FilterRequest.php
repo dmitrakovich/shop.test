@@ -57,16 +57,11 @@ class FilterRequest extends FormRequest
 
         Url::whereIn('slug', $slugs)
             ->with('filters')
-            ->get(['slug', 'model_type', 'model_id'])->sortBy(function ($model) use ($slugs) {
-                return array_search($model->slug, $slugs);
-            })->each(function (Url $url) use (&$filters) {
+            ->get(['slug', 'model_type', 'model_id'])
+            ->sortBy(fn (Url $url) => array_search($url->slug, $slugs))
+            ->each(function (Url $url) use (&$filters) {
                 $filters[$url->model_type][$url->slug] = $url;
             });
-
-        uksort(
-            $filters[Category::class],
-            fn ($a, $b) => intval(array_search($a, $slugs) > array_search($b, $slugs))
-        );
 
         $this->addTopProducts($filters);
 
