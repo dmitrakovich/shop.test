@@ -20,7 +20,6 @@ use App\Models\Size;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\ContextMenuActions;
@@ -186,7 +185,7 @@ class OrderController extends AdminController
             $form->number('user_id', __('User id'));
             $form->number('promocode_id', __('Promocode id'));
             $form->email('email', __('Email'));
-            $form->phone('phone', 'Телефон');
+            $form->phone('phone', 'Телефон')->required();
             $form->textarea('comment', 'Коммментарий');
             $form->select('currency', 'Валюта')->options(Currency::pluck('code', 'code'))
                 ->when('BYN', function (Form $form) {
@@ -214,16 +213,9 @@ class OrderController extends AdminController
 
             $this->setUtmSources($form);
 
-            $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'));
-
-            // /** @var Administrator */
-            // $adminUser = Admin::user();
-            // if ($adminUser->inRoles(['administrator', 'director'])) {
+            $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'))
+                ->default(OrderStatus::DEFAULT_VALUE)->required();
             $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
-            // } else {
-            //     $form->display('admin.name', 'Менеджер');
-            // }
-
             $form->hasMany('adminComments', 'Комментарии менеджера', function (Form\NestedForm $form) {
                 $form->text('comment', 'Комментарий')->rules(['required', 'max:500']);
                 $form->display('created_at', 'Дата');
