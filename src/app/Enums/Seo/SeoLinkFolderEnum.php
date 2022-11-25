@@ -8,6 +8,7 @@ enum SeoLinkFolderEnum: int
 
     /**
      * Получить название
+     *
      * @return string
      */
     public function name(): ?string
@@ -19,15 +20,17 @@ enum SeoLinkFolderEnum: int
 
     /**
      * Получить список
+     *
      * @return array
      */
     public static function list(): array
     {
         $result = [];
-        $cases  = self::cases();
+        $cases = self::cases();
         foreach ($cases as $case) {
             $result[$case->value] = $case->name();
         }
+
         return $result;
     }
 }

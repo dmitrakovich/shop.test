@@ -8,16 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class SeoLink extends Model
 {
     use HasFactory;
-    protected $guarded  = ['id'];
-    protected $dates    = ['frequency_updated_at'];
+
+    protected $guarded = ['id'];
+
+    protected $dates = ['frequency_updated_at'];
 
     public function setFrequencyAttribute($value)
     {
-        if ($this->frequency != $value || ($this->frequency == NULL && $value)) {
+        if ($this->frequency != $value || ($this->frequency == null && $value)) {
             $this->attributes['frequency_updated_at'] = Carbon::now();
         }
         $this->attributes['frequency'] = $value;
     }
+
     public function setDestinationAttribute($value)
     {
         $result = '';

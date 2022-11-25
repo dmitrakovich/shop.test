@@ -4,9 +4,9 @@ namespace App\Services\Seo;
 
 use App\Helpers\UrlHelper;
 use App\Libraries\Seo\Facades\SeoFacade;
-use App\Models\City;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Collection;
 use App\Models\Color;
 use App\Models\Fabric;
@@ -23,6 +23,7 @@ use Illuminate\Support\Str;
 class CatalogSeoService
 {
     private array $currentFilters = [];
+
     private ?City $currentCity = null;
 
     private CursorPaginator $catalogProducts;
@@ -67,6 +68,7 @@ class CatalogSeoService
     public function setCurrentFilters(array $currentFilters): self
     {
         $this->currentFilters = $currentFilters;
+
         return $this;
     }
 
@@ -76,6 +78,7 @@ class CatalogSeoService
     public function setCurrentCity(?City $currentCity): self
     {
         $this->currentCity = $currentCity;
+
         return $this;
     }
 
@@ -174,7 +177,7 @@ class CatalogSeoService
             }
         }
 
-        if($this->currentCity) {
+        if ($this->currentCity) {
             $titleValuesOrdered[] = $this->currentCity->catalog_title;
         }
 

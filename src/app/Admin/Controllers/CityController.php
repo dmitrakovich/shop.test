@@ -4,14 +4,13 @@ namespace App\Admin\Controllers;
 
 use App\Models\City;
 use App\Models\Country;
-
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 
 class CityController extends AdminController
 {
-    protected $title    = 'Города';
+    protected $title = 'Города';
 
     protected function grid()
     {
@@ -20,15 +19,15 @@ class CityController extends AdminController
         $countries = Country::pluck('name', 'id');
 
         $grid->filter(function ($filter) use ($countries) {
-            $filter->like('name',     'Название города');
+            $filter->like('name', 'Название города');
             $filter->in('country_id', 'Страна')->multipleSelect($countries);
             $filter->disableIdFilter();
         });
 
-        $grid->column('id',                   'ID')->sortable();
-        $grid->column('name',                 'Название');
-        $grid->column('slug',                 'Slug');
-        $grid->column('catalog_title',        'Seo текст (в каталоге)');
+        $grid->column('id', 'ID')->sortable();
+        $grid->column('name', 'Название');
+        $grid->column('slug', 'Slug');
+        $grid->column('catalog_title', 'Seo текст (в каталоге)');
 
         $grid->actions(function ($actions) {
             $actions->disableDelete();
@@ -39,17 +38,18 @@ class CityController extends AdminController
         $grid->disableColumnSelector();
         $grid->disableExport();
         $grid->disableRowSelector();
+
         return $grid;
     }
 
     protected function form()
     {
-        $form      = new Form(new City);
+        $form = new Form(new City);
         $countries = Country::pluck('name', 'id');
 
-        $form->select('country_id',              'Страна')->options($countries);
-        $form->text('name',                      'Название города')->placeholder('Введите название города')->rules(['required'], ['required' => 'Поле обязательно для заполнения.']);
-        $form->text('catalog_title',             'Seo текст (в каталоге)')->placeholder('Введите seo текст');
+        $form->select('country_id', 'Страна')->options($countries);
+        $form->text('name', 'Название города')->placeholder('Введите название города')->rules(['required'], ['required' => 'Поле обязательно для заполнения.']);
+        $form->text('catalog_title', 'Seo текст (в каталоге)')->placeholder('Введите seo текст');
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
             $tools->disableView();
@@ -60,6 +60,7 @@ class CityController extends AdminController
             $footer->disableEditingCheck();
             $footer->disableCreatingCheck();
         });
+
         return $form;
     }
 }

@@ -70,11 +70,13 @@ class FilterRequest extends FormRequest
 
     /**
      * Get city
+     *
      * @return City
      */
     public function getCity(): ?City
     {
         $citySlug = $this->route('city');
+
         return City::where('slug', $citySlug)->first();
     }
 

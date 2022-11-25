@@ -65,7 +65,7 @@ Route::group(['namespace' => 'Shop'], function () {
     $check_catalog = function (FilterRequest $request) {
         $path = $request->route('path');
         $slug = (string)Str::of($path)->explode('/')->last();
-        $url  = Url::search($slug);
+        $url = Url::search($slug);
 
         if (isset($url) && $url['model_type'] === Product::class) {
             return app(ProductController::class)->show($url->model_id);

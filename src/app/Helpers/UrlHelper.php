@@ -3,8 +3,8 @@
 namespace App\Helpers;
 
 use App\Models\Brand;
-use App\Models\City;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Collection;
 use App\Models\Color;
 use App\Models\Fabric;
@@ -109,7 +109,7 @@ class UrlHelper
             }
         }
 
-        if($city) {
+        if ($city) {
             array_unshift($sorted, 'city-' . $city->slug);
         }
 
@@ -145,7 +145,6 @@ class UrlHelper
     {
         self::$currentFilters = $currentFilters;
     }
-
 
     /**
      * Установить текущий город
