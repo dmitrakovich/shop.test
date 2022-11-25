@@ -63,6 +63,11 @@ Route::group([
         $router->get('{doc:slug}', DocController::class);
     });
 
+    $router->group(['prefix' => 'seo'], function ($router) {
+        $router->resource('seo-links', Seo\SeoLinkController::class);
+    });
+    $router->resource('cities', CityController::class);
+
     $router->resource('sales', SaleController::class);
 
     $router->resource('feedbacks', FeedbackController::class);

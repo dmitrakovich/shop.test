@@ -62,18 +62,19 @@ Route::group(['namespace' => 'Shop'], function () {
     Route::post('price-filter/{path?}', [CatalogController::class, 'priceFilter'])
         ->where('path', '[a-zA-Z0-9/_-]+');
 
-    Route::get('catalog/{path?}', function (FilterRequest $request) {
-        $slug = (string)Str::of($request->path())->explode('/')->last();
-        $url = Url::search($slug);
+    $check_catalog = function (FilterRequest $request) {
+        $path = $request->route('path');
+        $slug = (string)Str::of($path)->explode('/')->last();
+        $url  = Url::search($slug);
 
         if (isset($url) && $url['model_type'] === Product::class) {
             return app(ProductController::class)->show($url->model_id);
         } else {
             return app(CatalogController::class)->show($request);
         }
-    })
-        ->where('path', '[a-zA-Z0-9/_-]+')
-        ->name('shop');
+    };
+    Route::get('catalog/city-{city}/{path?}', $check_catalog)->where('path', '[a-zA-Z0-9/_-]+')->name('shop');
+    Route::get('catalog/{path?}', $check_catalog)->where('path', '[a-zA-Z0-9/_-]+')->name('shop');
 
     Route::prefix('cart')->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('cart');

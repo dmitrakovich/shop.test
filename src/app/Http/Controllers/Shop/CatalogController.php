@@ -61,8 +61,10 @@ class CatalogController extends BaseController
     {
         $sort = $filterRequest->getSorting();
         $currentFilters = $filterRequest->getFilters();
+        $currentCity = $filterRequest->getCity();
         $searchQuery = $filterRequest->input('search');
         UrlHelper::setCurrentFilters($currentFilters);
+        UrlHelper::setCurrentCity($currentCity);
 
         $products = $this->catalogService->getProducts($currentFilters, $sort, $searchQuery);
 
@@ -93,7 +95,7 @@ class CatalogController extends BaseController
             $sliderService = new SliderService;
             $data['simpleSliders'] = $sliderService->getSimple();
         }
-        $this->seoService->setCurrentFilters($currentFilters)->setProducts($products)->generate();
+        $this->seoService->setCurrentFilters($currentFilters)->setCurrentCity($currentCity)->setProducts($products)->generate();
 
         return view('shop.catalog', $data);
     }
