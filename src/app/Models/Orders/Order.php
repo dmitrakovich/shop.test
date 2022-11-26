@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\Device;
 use App\Models\Enum\OrderMethod;
 use App\Models\Payments\OnlinePayment;
+use App\Models\User;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,6 +52,7 @@ use Payments\PaymentMethod;
  * @property int $admin_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read User $user
  * @property-read Device $device
  * @property-read string $user_full_name
  * @property-read OrderStatus $status
@@ -142,6 +144,14 @@ class Order extends Model
                 'status:key,name_for_admin,name_for_user',
                 'size:id,name',
             ]);
+    }
+
+    /**
+     * The authorized user who made the order
+     */
+    public function user(): Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**
