@@ -87,6 +87,9 @@ document.addEventListener("DOMContentLoaded", function () {
  */
 const saveScrollPosition = function (event) {
   const filters = document.getElementById("sidebarFilters");
+  if (!filters) {
+    return
+  }
   if (event.target === filters || filters.contains(event.target)) {
     sessionStorage.setItem(SCROLL_POSITION_STORAGE_KEY, window.scrollY);
   } else {

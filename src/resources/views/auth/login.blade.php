@@ -55,10 +55,10 @@
                                                 </span>
                                             </span>
                                             <script>
-                                                window.onload = function () {
+                                                window.onload = function() {
                                                     var timer = document.querySelector('#sms-throttle-timer');
                                                     var duration = parseInt(timer.textContent, 10);
-                                                    var interval = setInterval(function () {
+                                                    var interval = setInterval(function() {
                                                         if (--duration < 1) {
                                                             clearInterval(interval);
                                                             document.querySelector('#resend-otp-button').classList.remove('d-none');
@@ -70,10 +70,11 @@
                                                 }
                                             </script>
                                         @endif
-                                        <input type="submit" id="resend-otp-button"
+                                        <button type="button" id="resend-otp-button"
                                             class="btn btn-link p-0 text-muted @if (session('smsThrottle') > 0) d-none @endif"
-                                            style="border-bottom: 1px dashed #999999" value="Запросить код еше раз"
-                                            onclick="document.getElementById('otp')?.remove()">
+                                            style="border-bottom: 1px dashed #999999">
+                                            Запросить код еше раз
+                                        </button>
                                     </div>
                                 </div>
                             @endif
