@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Collection;
 use App\Models\Color;
 use App\Models\Fabric;
@@ -51,12 +52,15 @@ class UrlHelper
 
     protected static $currentFilters = [];
 
+    protected static ?City $currentCity = null;
+
     /**
      * Generate url for filter
      */
     public static function generate(array $add = [], array $remove = [])
     {
         $filters = self::$currentFilters;
+        $city = self::$currentCity;
         $params = self::getParams();
 
         foreach ($remove as $filter) {
@@ -105,6 +109,10 @@ class UrlHelper
             }
         }
 
+        if ($city) {
+            array_unshift($sorted, 'city-' . $city->slug);
+        }
+
         return route('shop', str_replace('catalog/', '', implode('/', $sorted)) . self::buildParams($params));
     }
 
@@ -136,12 +144,14 @@ class UrlHelper
     public static function setCurrentFilters(array $currentFilters)
     {
         self::$currentFilters = $currentFilters;
-        // dd($currentFilters);
-        /*foreach ($currentFilters as $model => $items) {
-            foreach ($items as $item) {
-                self::$currentFilters[$model][$item['slug']['slug']] = $item['slug']['slug'];
-            }
-        }*/
+    }
+
+    /**
+     * Установить текущий город
+     */
+    public static function setCurrentCity(?City $city): void
+    {
+        self::$currentCity = $city;
     }
 
     public static function getEmbedVideoUrl(string $originalVideoUrl, $extPrams = [])

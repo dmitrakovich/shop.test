@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\City;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
 use App\Models\Url;
@@ -65,6 +66,18 @@ class FilterRequest extends FormRequest
         $this->addTopProducts($filters);
 
         return $filters;
+    }
+
+    /**
+     * Get city
+     *
+     * @return City
+     */
+    public function getCity(): ?City
+    {
+        $citySlug = $this->route('city');
+
+        return City::where('slug', $citySlug)->first();
     }
 
     /**
