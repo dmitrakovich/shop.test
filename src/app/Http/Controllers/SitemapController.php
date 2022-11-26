@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
-use App\Models\City;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Product;
 use App\Models\Tag;
 use Illuminate\Http\Response;
@@ -130,6 +130,7 @@ class SitemapController extends Controller
 
     /**
      * Город + Категория
+     *
      * @return Response
      */
     public function citiesCategories()
@@ -143,6 +144,7 @@ class SitemapController extends Controller
 
     /**
      * Город + Категория + Теги
+     *
      * @return Response
      */
     public function citiesCategoriesTags()
