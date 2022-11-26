@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\City;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Tag;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
@@ -122,6 +124,33 @@ class SitemapController extends Controller
             'categories' => Category::get(['id', 'slug', 'path']),
             'anothers' => $model::get(['id', 'slug']),
             'anothers2' => $model2::get(['id', 'slug']),
+            'date' => $this->date,
+        ]);
+    }
+
+    /**
+     * Город + Категория
+     * @return Response
+     */
+    public function citiesCategories()
+    {
+        return $this->render('sitemap.cities_categories', [
+            'categories' => Category::get(['id', 'slug', 'path']),
+            'cities' => City::get(['id', 'slug']),
+            'date' => $this->date,
+        ]);
+    }
+
+    /**
+     * Город + Категория + Теги
+     * @return Response
+     */
+    public function citiesCategoriesTags()
+    {
+        return $this->render('sitemap.cities_categories_tags', [
+            'categories' => Category::get(['id', 'slug', 'path']),
+            'cities' => City::get(['id', 'slug']),
+            'tags' => Tag::get(['id', 'slug']),
             'date' => $this->date,
         ]);
     }

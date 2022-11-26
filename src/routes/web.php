@@ -73,7 +73,7 @@ Route::group(['namespace' => 'Shop'], function () {
             return app(CatalogController::class)->show($request);
         }
     };
-    Route::get('catalog/city-{city}/{path?}', $check_catalog)->where('path', '[a-zA-Z0-9/_-]+')->name('shop');
+    Route::get('catalog/city-{city}/{path?}', $check_catalog)->where('path', '[a-zA-Z0-9/_-]+')->name('shop-city');
     Route::get('catalog/{path?}', $check_catalog)->where('path', '[a-zA-Z0-9/_-]+')->name('shop');
 
     Route::prefix('cart')->group(function () {
