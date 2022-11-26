@@ -73,7 +73,7 @@
             </div>
 
 
-            <div class="form-group row">
+            {{-- <div class="form-group row">
                 <label for="password"
                     class="d-none d-md-block col-md-4 col-xl-3 col-form-label">Пароль</label>
                 <div class="col-12 col-md-8 col-lg-4 col-xl-3">
@@ -86,7 +86,7 @@
                         </span>
                     @enderror
                 </div>
-            </div>
+            </div> --}}
 
             <div class="form-group row">
                 <div class="col-12">
@@ -94,14 +94,14 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            {{-- <div class="form-group row">
                 <label for="phone"
                     class="d-none d-md-block col-md-4 col-xl-3 col-form-label">Телефон</label>
                 <div class="col-12 col-md-8 col-lg-4 col-xl-3">
                     @include('partials.inputs.phone',
                         compact('countries', 'currentCountry'))
                 </div>
-            </div>
+            </div> --}}
 
             <div class="form-group row">
                 <label for="birth_date" class="d-none d-md-block col-md-4 col-xl-3 col-form-label">Дата
@@ -131,6 +131,22 @@
                         @endforeach
                     </select>
                     @error('country_id')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="city" class="d-none d-md-block col-md-4 col-xl-3 col-form-label">
+                    Город
+                </label>
+                <div class="col-12 col-md-8 col-xl-6">
+                    <input id="city" type="text" class="form-control @error('city') is-invalid @enderror"
+                        name="city" value="{{ old('city', $user->getFirstAddress()->city) }}" required
+                        autocomplete="address-level2" placeholder="Город" />
+                    @error('city')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

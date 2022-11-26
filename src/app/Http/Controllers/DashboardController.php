@@ -44,14 +44,14 @@ class DashboardController extends Controller
             $user->addresses()->create($validatedData);
         }
 
-        if ($request->filled('password')) {
-            $request->validate(['password' => ['required', 'string', 'min:8']]);
+        // if ($request->filled('password')) {
+        //     $request->validate(['password' => ['required', 'string', 'min:8']]);
 
-            $user->forceFill([
-                'password' => Hash::make($request->input('password')),
-                'remember_token' => Str::random(60),
-            ])->save();
-        }
+        //     $user->forceFill([
+        //         'password' => Hash::make($request->input('password')),
+        //         'remember_token' => Str::random(60),
+        //     ])->save();
+        // }
 
         if ($result) {
             return redirect()

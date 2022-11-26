@@ -2,10 +2,10 @@ import captcha from './../components/captcha';
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  const registerForm = document.forms.register_form;
-  const submitButton = registerForm?.querySelector('button[type=submit]')
+  const loginForm = document.forms.login_form;
+  const submitButton = loginForm?.querySelector('button[type=submit]')
 
-  registerForm?.addEventListener('submit', event => {
+  loginForm?.addEventListener('submit', event => {
     event.preventDefault();
     submitButton.disabled = true;
     submitButton.classList.add('btn-disabled-load');
@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
       input.type = "hidden";
       input.name = "captcha_token";
       input.value = token;
-      registerForm.appendChild(input);
-      registerForm.submit();
+      loginForm.appendChild(input);
+      loginForm.submit();
     });
   });
 

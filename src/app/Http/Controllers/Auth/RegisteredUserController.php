@@ -22,7 +22,7 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        return view('auth.register', ['user' => Auth::user()]);
     }
 
     /**
@@ -32,22 +32,22 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(RegisterRequest $request)
-    {
-        $user = User::forceCreate([
-            'first_name' => $request->first_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    // public function store(RegisterRequest $request)
+    // {
+    //     $user = User::forceCreate([
+    //         'first_name' => $request->first_name,
+    //         'email' => $request->email,
+    //         'password' => Hash::make($request->password),
+    //     ]);
 
-        event(new Registered($user));
+    //     event(new Registered($user));
 
-        GoogleTagManagerFacade::user('userRegistration');
+    //     GoogleTagManagerFacade::user('userRegistration');
 
-        Auth::login($user);
+    //     Auth::login($user);
 
-        return redirect()->route('verification.notice');
-    }
+    //     return redirect()->route('verification.notice');
+    // }
 
     /**
      * Sync users with another DB

@@ -335,14 +335,15 @@
         <h3 class="mx-5 mb-4">Купить в один клик</h3>
         <div class="form-group">
             <input type="text" class="form-control" name="first_name" placeholder="Имя"
-                autocomplete="given-name" required>
+                value="{{ optional(auth()->user())->first_name }}" autocomplete="given-name" required>
         </div>
         <div class="form-group">
             @include('partials.inputs.phone')
         </div>
         <div class="form-group">
             <input type="text" class="form-control" name="user_addr"
-                placeholder="Населенный пункт" autocomplete="address" required>
+                placeholder="Населенный пункт" autocomplete="address" required
+                value="{{ optional(auth()->user())->getFirstFullAddress() }}">
         </div>
         <button type="button" class="btn btn-dark my-3 px-5" id="buy-one-click-submit">
             Купить

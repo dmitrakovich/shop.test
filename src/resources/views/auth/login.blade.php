@@ -11,81 +11,85 @@
                     </div>
                 @endif
 
-                <div class="card mt-5">
+                <div class="card my-5">
                     <div class="card-header">
-                        <h4>ВХОД</h4>
+                        <h4>Войти/Зарегистрироваться</h4>
                     </div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('login') }}" name="login_form">
                             @csrf
 
                             <div class="form-group row">
                                 <div class="col-auto">
-                                    <b>С помощью аккаунта</b>
-                                </div>
-                                <div class="col-auto ml-auto">
-                                    <a class="text-muted text-decoration-underline"
-                                        href="{{ route('register') }}">
-                                        Создать аккаунт
-                                    </a>
+                                    <b>С помощью номера телефона</b>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <div class="col-md-12">
-                                    <input id="email" type="email"
-                                        class="form-control @error('email') is-invalid @enderror"
-                                        name="email" placeholder="E-mail" value="{{ old('email') }}"
-                                        required autocomplete="email" autofocus>
-
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                    @include('partials.inputs.phone', ['readonly' => !!old('phone')])
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <input id="password" type="password"
-                                        class="form-control @error('password') is-invalid @enderror"
-                                        name="password" placeholder="Пароль" required
-                                        autocomplete="current-password" />
-
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="remember"
-                                            id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                        <label class="form-check-label" for="remember">
-                                            Запомнить меня
-                                        </label>
+                            @if (old('phone'))
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <input id="otp" type="text"
+                                            class="form-control @error('otp') is-invalid @enderror" name="otp"
+                                            placeholder="Введите код" required autocomplete="off" />
+                                        @error('otp')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
                                 </div>
-                            </div>
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        @if (session('smsThrottle') > 0)
+                                            <span id="sms-throttle-timer-wrapper">
+                                                <span class="text-muted">Запросить код повторно через </span>
+                                                <span class="text-danger">
+                                                    00:<span id="sms-throttle-timer">{{ session('smsThrottle') }}</span>
+                                                </span>
+                                            </span>
+                                            <script>
+                                                window.onload = function () {
+                                                    var timer = document.querySelector('#sms-throttle-timer');
+                                                    var duration = parseInt(timer.textContent, 10);
+                                                    var interval = setInterval(function () {
+                                                        if (--duration < 1) {
+                                                            clearInterval(interval);
+                                                            document.querySelector('#resend-otp-button').classList.remove('d-none');
+                                                            document.querySelector('#sms-throttle-timer-wrapper').remove();
+                                                        } else {
+                                                            timer.textContent = duration < 10 ? '0' + duration : duration;
+                                                        }
+                                                    }, 1000);
+                                                }
+                                            </script>
+                                        @endif
+                                        <input type="submit" id="resend-otp-button"
+                                            class="btn btn-link p-0 text-muted @if (session('smsThrottle') > 0) d-none @endif"
+                                            style="border-bottom: 1px dashed #999999" value="Запросить код еше раз"
+                                            onclick="document.getElementById('otp')?.remove()">
+                                    </div>
+                                </div>
+                            @endif
+
+                            @include('includes.captcha-privacy-policy')
+                            <br />
 
                             <div class="form-group row">
                                 <div class="col-md-12 text-center">
                                     <button type="submit" class="btn btn-dark px-4">
-                                        Войти
+                                        @if (old('phone'))
+                                            Войти
+                                        @else
+                                            Получить код
+                                        @endif
                                     </button>
-
-                                    @if (Route::has('password.request'))
-                                        <a class="btn btn-link" href="{{ route('password.request') }}">
-                                            <b>Забыли пароль?</b>
-                                        </a>
-                                    @endif
                                 </div>
                             </div>
                         </form>

@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use libphonenumber\PhoneNumberUtil;
 
 /**
  * Class User
@@ -18,6 +19,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $first_name
  * @property string $last_name
  * @property string $patronymic_name
+ * @property string $phone
+ * @property \Carbon\Carbon $phone_verified_at
  * @property-read Cart $cart
  */
 class User extends Authenticatable implements MustVerifyEmail
@@ -46,7 +49,6 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
@@ -56,8 +58,29 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
+        'phone_verified_at' => 'datetime',
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Bootstrap the model and its traits.
+     */
+    public static function boot(): void
+    {
+        parent::boot();
+
+        self::created(static function (self $user) {
+            $user->setCountryByPhone();
+        });
+    }
+
+    /**
+     * Find user by phone number
+     */
+    public static function getByPhone(string $phone): ?self
+    {
+        return self::query()->where('phone', $phone)->first();
+    }
 
     /**
      * User's cart
@@ -93,6 +116,24 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getFirstAddressCountryId(): ?int
     {
         return $this->getFirstAddress()->country_id;
+    }
+
+    /**
+     * Get fisrt full user address if exist
+     */
+    public function getFirstFullAddress(): ?string
+    {
+        if (!$address = $this->getFirstAddress()) {
+            return null;
+        }
+
+        $addressParts = array_filter([
+            optional($address->country)->name,
+            $address->city,
+            $address->address
+        ]);
+
+        return implode(', ', $addressParts);
     }
 
     /**
@@ -136,6 +177,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Update datetime in phone_verified_at field
+     */
+    public function updatePhoneVerifiedAt(): bool
+    {
+        return $this->forceFill([
+            'phone_verified_at' => $this->freshTimestamp(),
+        ])->save();
+    }
+
+    /**
      * Route notifications for the SmsTraffic channel.
      *
      * @param  \Illuminate\Notifications\Notification  $notification
@@ -144,5 +195,34 @@ class User extends Authenticatable implements MustVerifyEmail
     public function routeNotificationForSmsTraffic($notification)
     {
         return $this->phone;
+    }
+
+    /**
+     * Check if required fields filled
+     */
+    public function hasRequiredFields(): bool
+    {
+        return !empty($this->first_name) && !empty($this->last_name)
+            && !empty($this->getFirstAddress()->city);
+    }
+
+    /**
+     * Save user country by his phone
+     */
+    public function setCountryByPhone(): void
+    {
+        /** @var UserAddress $address */
+        $address = $this->addresses()->firstOrNew();
+
+        $phoneUtil = PhoneNumberUtil::getInstance();
+        $parsedPhone = $phoneUtil->parse($this->phone);
+        $countryCode = $phoneUtil->getRegionCodeForNumber($parsedPhone);
+
+        $countryId = Country::query()->where('code', $countryCode)->value('id');
+
+        if ($countryId) {
+            $address->country_id = $countryId;
+            $address->save();
+        }
     }
 }
