@@ -61,19 +61,16 @@ class SeoLinkController extends AdminController
         $form = new Form(new SeoLink);
 
         $form->tab('Основное', function ($form) {
-            $form->select('type_id', 'Папка')->options(SeoLinkFolderEnum::list());
-            $form->text('seo_url', 'Seo ссылка')->placeholder('Введите seo ссылку')->creationRules(['required', 'unique:seo_links,seo_url'], [
-                'required' => 'Поле обязательно для заполнения.',
-                'unique' => 'Такая ссылка уже существует.',
-            ])->rules(['required'], ['required' => 'Поле обязательно для заполнения.']);
+            $form->select('folder_enum_id', 'Папка')->options(SeoLinkFolderEnum::list());
+            $form->text('seo_url', 'Seo ссылка')->placeholder('Введите seo ссылку');
             $form->text('destination', 'Ссылка на сайте')->placeholder('Введите ссылку на сайте')->creationRules(['required'], [
                 'required' => 'Поле обязательно для заполнения.',
             ])->rules(['required'], ['required' => 'Поле обязательно для заполнения.']);
             $form->text('tag', 'Тег')->placeholder('Введите тег')->rules(['required'], ['required' => 'Поле обязательно для заполнения.']);
             $form->text('frequency', 'Частота')->placeholder('Введите частоту')->default(0)->rules(['integer'], ['integer' => 'Поле частота должно быть числом.']);
             $form->text('h1', 'H1 заголовок')->placeholder('Введите h1 заголовок');
-            $form->ckeditor('description', 'Описание')->placeholder('Введите описание');
-            $form->text('title', 'Meta заголовок')->placeholder('Введите meta заголовок');
+            $form->ckeditor('main_text', 'Описание')->placeholder('Введите описание');
+            $form->text('meta_title', 'Meta заголовок')->placeholder('Введите meta заголовок');
             $form->textarea('meta_description', 'Meta описание')->rows(2)->placeholder('Введите meta описание');
             $form->tags('meta_keywords', 'Мета-тег Keywords')->placeholder('Введите ключевые слова');
         });

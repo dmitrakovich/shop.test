@@ -2,6 +2,7 @@
 
 namespace App\Models\Seo;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,17 +24,14 @@ class SeoLink extends Model
 
     public function setDestinationAttribute($value)
     {
-        $result = '';
-        $parse_url = parse_url($value);
-        if (isset($parse_url['path']) && $parse_url['path']) {
-            $result .= $parse_url['path'];
-            if (isset($parse_url['query']) && $parse_url['query']) {
-                $result .= '?' . $parse_url['query'];
-            }
+        if ($value) {
+            $result = '';
+            $parse_url = parse_url($value);
+            $result .= ($parse_url['path'] ?? '') . (!empty($parse_url['query']) ? ('?' . $parse_url['query']) : '');
+            $result = ltrim(ltrim(ltrim($result, '/'), 'catalog'), '/');
+            $this->attributes['destination'] = 'catalog/' . $result;
+        } else {
+            $this->attributes['destination'] = null;
         }
-        $result = ltrim($result, '/');
-        $result = ltrim($result, 'catalog');
-        $result = ltrim($result, '/');
-        $this->attributes['destination'] = 'catalog/' . $result;
     }
 }

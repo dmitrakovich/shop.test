@@ -57,7 +57,7 @@ class UrlHelper
     /**
      * Generate url for filter
      */
-    public static function generate(array $add = [], array $remove = [])
+    public static function generate(array $add = [], array $remove = [], $canonical = false)
     {
         $filters = self::$currentFilters;
         $city = self::$currentCity;
@@ -97,10 +97,11 @@ class UrlHelper
                 } else {
                     sort($filters[$model]);
                     foreach ($filters[$model] as $filter) {
-                        if ($model === Price::class) {
-                            $filter_exp = explode('-', $filter['slug']);
-                            $filter_exp[array_key_last($filter_exp)] = 50 * ceil((int)end($filter_exp) / 50);
-                            $sorted[] = implode('-', $filter_exp);
+                        if ($model === Price::class && $canonical) {
+                            $priceVal = $filter->filters->getPriceAttribute();
+                            if (!str_contains($filter['slug'], 'price-from') && !($priceVal % 50)) {
+                                $sorted[] = $filter['slug'];
+                            }
                         } else {
                             $sorted[] = $filter['slug'];
                         }

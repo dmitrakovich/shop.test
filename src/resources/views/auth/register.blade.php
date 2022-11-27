@@ -10,7 +10,8 @@
                     </div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('dashboard-profile-update', $user) }}" name="register_form">
+                        <form method="POST" action="{{ route('dashboard-profile-update', $user) }}"
+                            name="register_form">
                             @method('PATCH')
                             @csrf
                             <div class="form-group row">
@@ -25,9 +26,9 @@
                                 </label>
                                 <div class="col-md-6">
                                     <input id="last_name" type="text"
-                                        class="form-control @error('last_name') is-invalid @enderror" name="last_name"
-                                        value="{{ old('last_name', $user->last_name) }}" required autocomplete="family-name"
-                                        autofocus />
+                                        class="form-control @error('last_name') is-invalid @enderror"
+                                        name="last_name" value="{{ old('last_name', $user->last_name) }}"
+                                        required autocomplete="family-name" autofocus />
                                     @error('last_name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -42,9 +43,9 @@
                                 </label>
                                 <div class="col-md-6">
                                     <input id="first_name" type="text"
-                                        class="form-control @error('first_name') is-invalid @enderror" name="first_name"
-                                        value="{{ old('first_name', $user->first_name) }}" required
-                                        autocomplete="given-name" />
+                                        class="form-control @error('first_name') is-invalid @enderror"
+                                        name="first_name" value="{{ old('first_name', $user->first_name) }}"
+                                        required autocomplete="given-name" />
                                     @error('first_name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -60,7 +61,8 @@
                                 <div class="col-md-6">
                                     <input id="patronymic_name" type="text"
                                         class="form-control @error('patronymic_name') is-invalid @enderror"
-                                        name="patronymic_name" value="{{ old('patronymic_name', $user->patronymic_name) }}"
+                                        name="patronymic_name"
+                                        value="{{ old('patronymic_name', $user->patronymic_name) }}"
                                         autocomplete="additional-name" />
                                     @error('patronymic_name')
                                         <span class="invalid-feedback" role="alert">
@@ -76,7 +78,8 @@
                                 </label>
                                 <div class="col-md-6">
                                     <input id="city" type="text"
-                                        class="form-control @error('city') is-invalid @enderror" name="city"
+                                        class="form-control @error('city') is-invalid @enderror"
+                                        name="city"
                                         value="{{ old('city', $user->getFirstAddress()->city) }}" required
                                         autocomplete="address-level2" />
                                     @error('city')
@@ -93,7 +96,8 @@
                                 </label>
                                 <div class="col-md-6">
                                     <input id="address" type="text"
-                                        class="form-control @error('address') is-invalid @enderror" name="address"
+                                        class="form-control @error('address') is-invalid @enderror"
+                                        name="address"
                                         value="{{ old('address', $user->getFirstAddress()->address) }}"
                                         autocomplete="address-level3" />
                                     @error('address')
@@ -111,8 +115,9 @@
                                 </label>
                                 <div class="col-md-6">
                                     <input id="email" type="email"
-                                        class="form-control @error('email') is-invalid @enderror" name="email"
-                                        value="{{ old('email', $user->email) }}" autocomplete="email">
+                                        class="form-control @error('email') is-invalid @enderror"
+                                        name="email" value="{{ old('email', $user->email) }}"
+                                        autocomplete="email">
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>

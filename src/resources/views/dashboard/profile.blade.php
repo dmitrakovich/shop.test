@@ -143,8 +143,9 @@
                     Город
                 </label>
                 <div class="col-12 col-md-8 col-xl-6">
-                    <input id="city" type="text" class="form-control @error('city') is-invalid @enderror"
-                        name="city" value="{{ old('city', $user->getFirstAddress()->city) }}" required
+                    <input id="city" type="text"
+                        class="form-control @error('city') is-invalid @enderror" name="city"
+                        value="{{ old('city', $user->getFirstAddress()->city) }}" required
                         autocomplete="address-level2" placeholder="Город" />
                     @error('city')
                         <span class="invalid-feedback" role="alert">

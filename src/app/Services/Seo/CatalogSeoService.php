@@ -14,10 +14,13 @@ use App\Models\Heel;
 use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
 use App\Models\Season;
+use App\Models\Seo\SeoLink;
 use App\Models\Size;
 use App\Models\Style;
 use App\Models\Tag;
 use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 
 class CatalogSeoService
@@ -25,6 +28,8 @@ class CatalogSeoService
     private array $currentFilters = [];
 
     private ?City $currentCity = null;
+
+    private ?SeoLink $seoLink = null;
 
     private CursorPaginator $catalogProducts;
 
@@ -62,6 +67,14 @@ class CatalogSeoService
         Price::class,
     ];
 
+    public function __construct()
+    {
+        $requestUri = ltrim(Request::getRequestUri(), '/');
+        $this->seoLink = Cache::remember('seo_link_uri_' . $requestUri, 1800, function () use ($requestUri) {
+            return SeoLink::firstWhere('destination', $requestUri);
+        });
+    }
+
     /**
      * Set current filters
      */
@@ -97,91 +110,95 @@ class CatalogSeoService
      */
     public function getCatalogTitle(): string
     {
-        $currentFilters = $this->currentFilters;
-        $emptyCategory = true;
-        $titleValues = [];
-        foreach (self::ATTRIBUTE_PRIORITY as $attrModel) {
-            if ($attrModel === Category::class) {
-                /** @var Category $category */
-                $category = end($currentFilters[$attrModel])->filters;
-                $titleValues[$attrModel] = $category->getNameForCatalogTitle();
-                $emptyCategory = $category->isRoot();
+        if (!empty($this->seoLink->meta_title)) {
+            return $this->seoLink->meta_title;
+        } else {
+            $currentFilters = $this->currentFilters;
+            $emptyCategory = true;
+            $titleValues = [];
+            foreach (self::ATTRIBUTE_PRIORITY as $attrModel) {
+                if ($attrModel === Category::class) {
+                    /** @var Category $category */
+                    $category = end($currentFilters[$attrModel])->filters;
+                    $titleValues[$attrModel] = $category->getNameForCatalogTitle();
+                    $emptyCategory = $category->isRoot();
 
-                continue;
-            }
-            if ($attrModel === Price::class) {
-                foreach ($currentFilters[$attrModel] ?? [] as $price) {
-                    if (str_starts_with('price-from-', $price->slug)) {
-                        unset($currentFilters[$attrModel][$price->slug]);
+                    continue;
+                }
+                if ($attrModel === Price::class) {
+                    foreach ($currentFilters[$attrModel] ?? [] as $price) {
+                        if (str_starts_with('price-from-', $price->slug)) {
+                            unset($currentFilters[$attrModel][$price->slug]);
+                        }
                     }
+                }
+
+                if (empty($currentFilters[$attrModel]) || count($currentFilters[$attrModel]) > 1) {
+                    continue;
+                }
+
+                $filter = reset($currentFilters[$attrModel]);
+
+                switch ($attrModel) {
+                    case Color::class:
+                    case Fabric::class:
+                    case Season::class:
+                    case Style::class:
+                        $seoFormNumber = $emptyCategory ? 1 : 3;
+                        $value = explode(',', (string)$filter->filters->seo)[$seoFormNumber] ?? null;
+                        break;
+
+                    case Status::class:
+                        $value = $filter->filters->getForTitle();
+                        break;
+
+                    case Size::class:
+                        /** @var Size $size */
+                        $size = $filter->filters;
+                        $value = $size->slug === Size::ONE_SIZE_SLUG ? null : "в {$size->name} размере";
+                        break;
+
+                    case Tag::class:
+                    case Heel::class:
+                    case Brand::class:
+                        $value = $filter->filters->seo ?? $filter->filters->name;
+                        break;
+
+                    case Collection::class:
+                        $value = $filter->filters->name;
+                        break;
+
+                    case Price::class:
+                        $value = Str::lower($filter->filters->getBadgeName());
+                        break;
+
+                    default:
+                        $value = null;
+                        break;
+                }
+
+                if (!empty($value)) {
+                    $titleValues[$attrModel] = $value;
+                }
+
+                if (count($titleValues) >= 4) {
+                    break;
                 }
             }
 
-            if (empty($currentFilters[$attrModel]) || count($currentFilters[$attrModel]) > 1) {
-                continue;
+            $titleValuesOrdered = [];
+            foreach (self::ATTRIBUTE_ORDER as $attrModel) {
+                if (isset($titleValues[$attrModel])) {
+                    $titleValuesOrdered[] = $titleValues[$attrModel];
+                }
             }
 
-            $filter = reset($currentFilters[$attrModel]);
-
-            switch ($attrModel) {
-                case Color::class:
-                case Fabric::class:
-                case Season::class:
-                case Style::class:
-                    $seoFormNumber = $emptyCategory ? 1 : 3;
-                    $value = explode(',', (string)$filter->filters->seo)[$seoFormNumber] ?? null;
-                    break;
-
-                case Status::class:
-                    $value = $filter->filters->getForTitle();
-                    break;
-
-                case Size::class:
-                    /** @var Size $size */
-                    $size = $filter->filters;
-                    $value = $size->slug === Size::ONE_SIZE_SLUG ? null : "в {$size->name} размере";
-                    break;
-
-                case Tag::class:
-                case Heel::class:
-                case Brand::class:
-                    $value = $filter->filters->seo ?? $filter->filters->name;
-                    break;
-
-                case Collection::class:
-                    $value = $filter->filters->name;
-                    break;
-
-                case Price::class:
-                    $value = Str::lower($filter->filters->getBadgeName());
-                    break;
-
-                default:
-                    $value = null;
-                    break;
+            if ($this->currentCity) {
+                $titleValuesOrdered[] = $this->currentCity->catalog_title;
             }
 
-            if (!empty($value)) {
-                $titleValues[$attrModel] = $value;
-            }
-
-            if (count($titleValues) >= 4) {
-                break;
-            }
+            return Str::ucfirst((!$emptyCategory ? 'купить ' : '') . implode(' ', $titleValuesOrdered));
         }
-
-        $titleValuesOrdered = [];
-        foreach (self::ATTRIBUTE_ORDER as $attrModel) {
-            if (isset($titleValues[$attrModel])) {
-                $titleValuesOrdered[] = $titleValues[$attrModel];
-            }
-        }
-
-        if ($this->currentCity) {
-            $titleValuesOrdered[] = $this->currentCity->catalog_title;
-        }
-
-        return Str::ucfirst((!$emptyCategory ? 'купить ' : '') . implode(' ', $titleValuesOrdered));
     }
 
     /**
@@ -189,9 +206,13 @@ class CatalogSeoService
      */
     public function getCatalogDescription(): string
     {
-        $currentFilters = $this->currentFilters;
+        if (!empty($this->seoLink->meta_description)) {
+            return $this->seoLink->meta_description;
+        } else {
+            $currentFilters = $this->currentFilters;
 
-        return $this->getCatalogTitle($currentFilters) . ' с примеркой по Беларуси';
+            return $this->getCatalogTitle($currentFilters) . ' с примеркой по Беларуси';
+        }
     }
 
     /**
@@ -199,7 +220,7 @@ class CatalogSeoService
      */
     public function getCatalogCanonicalUrl(): string
     {
-        $canonicalUrl = UrlHelper::generate();
+        $canonicalUrl = UrlHelper::generate([], [], true);
 
         return $canonicalUrl;
     }
