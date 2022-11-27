@@ -28,7 +28,9 @@
 
                             <div class="form-group row">
                                 <div class="col-md-12">
-                                    @include('partials.inputs.phone', ['readonly' => !!old('phone')])
+                                    @include('partials.inputs.phone', [
+                                        'readonly' => !!old('phone'),
+                                    ])
                                 </div>
                             </div>
 
@@ -36,8 +38,9 @@
                                 <div class="form-group row">
                                     <div class="col-md-12">
                                         <input id="otp" type="text"
-                                            class="form-control @error('otp') is-invalid @enderror" name="otp"
-                                            placeholder="Введите код" required autocomplete="off" />
+                                            class="form-control @error('otp') is-invalid @enderror"
+                                            name="otp" placeholder="Введите код" required
+                                            autocomplete="off" />
                                         @error('otp')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -51,7 +54,8 @@
                                             <span id="sms-throttle-timer-wrapper">
                                                 <span class="text-muted">Запросить код повторно через </span>
                                                 <span class="text-danger">
-                                                    00:<span id="sms-throttle-timer">{{ session('smsThrottle') }}</span>
+                                                    00:<span
+                                                        id="sms-throttle-timer">{{ session('smsThrottle') }}</span>
                                                 </span>
                                             </span>
                                             <script>

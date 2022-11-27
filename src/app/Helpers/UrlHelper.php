@@ -99,7 +99,7 @@ class UrlHelper
                     foreach ($filters[$model] as $filter) {
                         if ($model === Price::class && $canonical) {
                             $priceVal = $filter->filters->getPriceAttribute();
-                            if(!str_contains($filter['slug'], 'price-from') && !($priceVal % 50)) {
+                            if (!str_contains($filter['slug'], 'price-from') && !($priceVal % 50)) {
                                 $sorted[] = $filter['slug'];
                             }
                         } else {

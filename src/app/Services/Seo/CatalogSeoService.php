@@ -4,24 +4,23 @@ namespace App\Services\Seo;
 
 use App\Helpers\UrlHelper;
 use App\Libraries\Seo\Facades\SeoFacade;
-use App\Models\{
-    Brand,
-    Category,
-    City,
-    Collection,
-    Color,
-    Fabric,
-    Heel,
-    Season,
-    Size,
-    Style,
-    Tag
-};
-use App\Models\ProductAttributes\{Price, Status};
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\City;
+use App\Models\Collection;
+use App\Models\Color;
+use App\Models\Fabric;
+use App\Models\Heel;
+use App\Models\ProductAttributes\Price;
+use App\Models\ProductAttributes\Status;
+use App\Models\Season;
 use App\Models\Seo\SeoLink;
+use App\Models\Size;
+use App\Models\Style;
+use App\Models\Tag;
 use Illuminate\Pagination\CursorPaginator;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 
 class CatalogSeoService
@@ -71,7 +70,7 @@ class CatalogSeoService
     public function __construct()
     {
         $requestUri = ltrim(Request::getRequestUri(), '/');
-        $this->seoLink = Cache::remember("seo_link_uri_" . $requestUri, 1800, function() use ($requestUri) {
+        $this->seoLink = Cache::remember('seo_link_uri_' . $requestUri, 1800, function () use ($requestUri) {
             return SeoLink::firstWhere('destination', $requestUri);
         });
     }
@@ -111,7 +110,7 @@ class CatalogSeoService
      */
     public function getCatalogTitle(): string
     {
-        if(!empty($this->seoLink->meta_title)) {
+        if (!empty($this->seoLink->meta_title)) {
             return $this->seoLink->meta_title;
         } else {
             $currentFilters = $this->currentFilters;
@@ -207,10 +206,11 @@ class CatalogSeoService
      */
     public function getCatalogDescription(): string
     {
-        if(!empty($this->seoLink->meta_description)) {
+        if (!empty($this->seoLink->meta_description)) {
             return $this->seoLink->meta_description;
         } else {
             $currentFilters = $this->currentFilters;
+
             return $this->getCatalogTitle($currentFilters) . ' с примеркой по Беларуси';
         }
     }

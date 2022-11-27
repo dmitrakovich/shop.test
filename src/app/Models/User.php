@@ -130,7 +130,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $addressParts = array_filter([
             optional($address->country)->name,
             $address->city,
-            $address->address
+            $address->address,
         ]);
 
         return implode(', ', $addressParts);

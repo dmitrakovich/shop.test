@@ -91,7 +91,7 @@ class LoginRequest extends FormRequest
         if (RateLimiter::tooManyAttempts($this->throttleKeyForOTP(), self::OTP_THROTTLE)) {
             event(new Lockout($this));
             $this->returnBack(['otp' => __('auth.throttle', [
-                'seconds' => RateLimiter::availableIn($this->throttleKeyForOTP())
+                'seconds' => RateLimiter::availableIn($this->throttleKeyForOTP()),
             ])]);
         }
     }
@@ -115,7 +115,7 @@ class LoginRequest extends FormRequest
     public function returnBack(array $errors = []): never
     {
         $response = back()->with([
-            'smsThrottle' => RateLimiter::availableIn($this->throttleKeyForSms())
+            'smsThrottle' => RateLimiter::availableIn($this->throttleKeyForSms()),
         ]);
         $response->withInput($this->only('phone'));
         if (!empty($errors)) {
