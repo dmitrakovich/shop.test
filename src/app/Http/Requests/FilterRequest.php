@@ -77,7 +77,7 @@ class FilterRequest extends FormRequest
     {
         $citySlug = $this->route('city');
 
-        return City::where('slug', $citySlug)->first();
+        return $citySlug ? City::where('slug', $citySlug)->first() : null;
     }
 
     /**
