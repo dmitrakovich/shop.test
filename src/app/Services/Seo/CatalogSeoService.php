@@ -127,7 +127,7 @@ class CatalogSeoService
                 }
                 if ($attrModel === Price::class) {
                     foreach ($currentFilters[$attrModel] ?? [] as $price) {
-                        if (str_starts_with('price-from-', $price->slug)) {
+                        if (str_starts_with($price->slug, 'price-from-')) {
                             unset($currentFilters[$attrModel][$price->slug]);
                         }
                     }
