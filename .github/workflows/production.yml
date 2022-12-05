@@ -5,6 +5,12 @@ on:
     branches: [ master ]
   repository_dispatch:
     types: [ retry-* ]
+  workflow_dispatch:
+    inputs:
+      verbosity:
+        description: 'Verbosity level'
+        default: "-vvv"
+        type: string
 
 concurrency:
   group: ${{ github.ref }}
@@ -67,7 +73,7 @@ jobs:
         touch ~/.ssh/deploy
         (echo ${{ secrets.DEPLOY_SSH_KEY }} | base64 --decode -i > ~/.ssh/deploy)
         chmod 700 ~/.ssh/deploy
-        php ./vendor/bin/deployer.phar deploy
+        php ./vendor/bin/deployer.phar deploy ${{ inputs.verbosity }}
 
     - name: Send success status
       uses: appleboy/telegram-action@master
