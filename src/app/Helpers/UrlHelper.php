@@ -114,7 +114,7 @@ class UrlHelper
             array_unshift($sorted, 'city-' . $city->slug);
         }
 
-        return route('shop', str_replace('catalog/', '', implode('/', $sorted)) . self::buildParams($params));
+        return route('shop', ltrim(str_replace(['/catalog', 'catalog'], '', implode('/', $sorted)), '/') . self::buildParams($params));
     }
 
     /**

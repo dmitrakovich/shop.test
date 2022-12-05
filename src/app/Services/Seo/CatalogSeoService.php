@@ -220,7 +220,7 @@ class CatalogSeoService
      */
     public function getCatalogCanonicalUrl(): string
     {
-        $canonicalUrl = UrlHelper::generate([], [], true);
+        $canonicalUrl = $this->seoLink->destination ?? UrlHelper::generate([], [], true);
 
         return $canonicalUrl;
     }
