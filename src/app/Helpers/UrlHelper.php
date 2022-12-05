@@ -113,6 +113,7 @@ class UrlHelper
         if ($city) {
             array_unshift($sorted, 'city-' . $city->slug);
         }
+
         return route('shop', ltrim(str_replace(['/catalog', 'catalog'], '', implode('/', $sorted)), '/') . self::buildParams($params));
     }
 
