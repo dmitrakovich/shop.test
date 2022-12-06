@@ -41,7 +41,7 @@ host('production')
     ->setIdentityFile('~/.ssh/deploy');
 
 task('deploy:upload', function () {
-    upload('', '{{release_path}}', ['options' => ['--bwlimit=4096']]);
+    upload('', '{{release_path}}', ['options' => ['--ignore-missing-args', '-zz']]);
 });
 
 // Tasks
