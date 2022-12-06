@@ -41,7 +41,7 @@ host('production')
     ->setIdentityFile('~/.ssh/deploy');
 
 task('deploy:upload', function () {
-    upload('', '{{release_path}}', ['options' => ['--ignore-missing-args', '-zz']]);
+    upload('', '{{release_path}}');
 });
 
 // Tasks
