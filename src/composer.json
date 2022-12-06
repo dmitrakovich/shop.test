@@ -14,7 +14,7 @@
         "php": "^8.1",
         "appstract/laravel-opcache": "^4.0",
         "default-089/sxgeo": "0.16.*@dev",
-        "deployer/deployer": "v7.0.0-rc.8",
+        "deployer/deployer": "^7.0",
         "diglactic/laravel-breadcrumbs": "^7.2",
         "dmitrakovich/smstraffic-for-laravel": "^0.1.1",
         "drandin/declension-nouns": "dev-master",
