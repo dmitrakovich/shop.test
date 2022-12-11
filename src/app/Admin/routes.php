@@ -16,11 +16,15 @@ Route::group([
     'middleware' => config('admin.route.middleware'),
 ], function (Router $router) {
     $router->get('/', 'HomeController@index')->name('home');
-    $router->resource('users', UserController::class);
     $router->resource('info-pages', InfoPageController::class);
     $router->resource('orders', \OrderController::class);
     $router->get('orders/{order}/process', [\App\Admin\Controllers\OrderController::class, 'process'])->name('orders.process');
     $router->get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
+
+    $router->group(['prefix' => 'users'], function ($router) {
+        $router->resource('users', Users\UserController::class);
+        $router->resource('groups', Users\GroupController::class);
+    });
 
     $router->resource('products', ProductController::class);
     $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('products.restore');

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\Payment\SendInstallmentNoticeJob;
 use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
-use App\Models\User;
+use App\Models\User\User;
 use App\Notifications\TestSms;
 use Illuminate\Database\Eloquent\Model;
 use libphonenumber\PhoneNumberFormat;

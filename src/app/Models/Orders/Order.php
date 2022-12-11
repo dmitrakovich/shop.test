@@ -6,7 +6,7 @@ use App\Models\Country;
 use App\Models\Device;
 use App\Models\Enum\OrderMethod;
 use App\Models\Payments\OnlinePayment;
-use App\Models\User;
+use App\Models\User\User;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

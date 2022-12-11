@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\User;
 
+use App\Models\Cart;
+use App\Models\Country;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +16,6 @@ use libphonenumber\PhoneNumberUtil;
 
 /**
  * Class User
- *
  *
  * @property string $first_name
  * @property string $last_name
@@ -83,6 +84,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * User's discount group
+     */
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(Group::class)->withDefault(Group::defaultData());
+    }
+
+    /**
      * User's cart
      */
     public function cart(): BelongsTo
@@ -97,13 +106,13 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function addresses()
     {
-        return $this->hasMany(UserAddress::class);
+        return $this->hasMany(Address::class);
     }
 
     /**
      * Get fisrt user address if exist
      *
-     * @return \App\Models\UserAddress
+     * @return \App\Models\Address
      */
     public function getFirstAddress()
     {
@@ -211,7 +220,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function setCountryByPhone(): void
     {
-        /** @var UserAddress $address */
+        /** @var Address $address */
         $address = $this->addresses()->firstOrNew();
 
         $phoneUtil = PhoneNumberUtil::getInstance();

@@ -8,7 +8,7 @@ use App\Models\Country;
 use App\Models\Guest;
 use App\Models\Orders\Order;
 use App\Models\Product;
-use App\Models\User;
+use App\Models\User\User;
 use App\Services\GoogleTagManagerService;
 use App\Services\ProductService;
 use Deliveries\DeliveryMethod;

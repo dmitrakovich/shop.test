@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Admin\Controllers;
+namespace App\Admin\Controllers\Users;
 
 use App\Models\Country;
-use App\Models\User;
+use App\Models\User\Group;
+use App\Models\User\User;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends AdminController
 {
@@ -33,7 +33,7 @@ class UserController extends AdminController
         $grid->column('patronymic_name', 'Отчество');
         $grid->column('email', 'Email');
         $grid->column('phone', 'Телефон');
-        // $grid->column('birth_date', 'Дата рождения');
+        $grid->column('group.name', 'Группа');
         $grid->column('addresses', 'Адрес')->display(fn ($addresses) => $addresses[0]['address'] ?? null);
         $grid->column('created_at', 'Дата регистрации');
 
@@ -73,23 +73,18 @@ class UserController extends AdminController
     {
         $form = new Form(new User());
 
-        $form->text('first_name', 'Имя');
-        $form->text('last_name', 'Фамилия');
+        $form->text('first_name', 'Имя')->required();
+        $form->text('last_name', 'Фамилия')->required();
         $form->text('patronymic_name', 'Отчество');
         $form->email('email', 'Email');
-        $form->password('password', 'Новый пароль')->rules(['nullable', 'min:8']);
-        $form->phone('phone', 'Телефон');
+        $form->phone('phone', 'Телефон')->required();
         $form->date('birth_date', 'Дата рождения')->default(date('Y-m-d'));
+        $form->select('group_id', 'Группа')->options(Group::query()->pluck('name', 'id'))->required();
 
         $form->hasMany('addresses', 'Адреса', function (Form\NestedForm $form) {
-            $form->select('country_id', 'Страна')->options(Country::pluck('name', 'id'));
+            $form->select('country_id', 'Страна')->options(Country::query()->pluck('name', 'id'));
+            $form->text('city', 'Город');
             $form->textarea('address', 'Адрес');
-        });
-
-        $form->saving(function (Form $form) {
-            if (!empty($form->password)) {
-                $form->password = Hash::make($form->password);
-            }
         });
 
         return $form;

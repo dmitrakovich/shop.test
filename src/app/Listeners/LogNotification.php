@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Models\Orders\Order;
-use App\Models\User;
+use App\Models\User\User;
 use App\Notifications\AbstractSmsTraffic;
 use App\Services\LogService;
 use Illuminate\Notifications\Client\Response\SmsTrafficResponse;
