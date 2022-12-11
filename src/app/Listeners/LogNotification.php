@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Models\Orders\Order;
+use App\Models\User;
 use App\Notifications\AbstractSmsTraffic;
 use App\Services\LogService;
 use Illuminate\Notifications\Client\Response\SmsTrafficResponse;
@@ -36,12 +37,13 @@ class LogNotification
         $notifiable = $event->notifiable;
 
         $this->logService->logSms(
-            $notifiable->routeNotificationFor('smstraffic', $notification),
-            $notification->getContent(),
-            $notification->getRoute(),
-            null,
-            $notifiable instanceof Order ? $notifiable->id : null,
-            $response->getDescription()
+            phone: $notifiable->routeNotificationFor('smstraffic', $notification),
+            text: $notification->getContent(),
+            route: $notification->getRoute(),
+            userId: $notifiable instanceof User ? $notifiable->id : null,
+            orderId: $notifiable instanceof Order ? $notifiable->id : null,
+            mailingId: $notification->getMailingId(),
+            status: $response->getDescription()
         );
     }
 }

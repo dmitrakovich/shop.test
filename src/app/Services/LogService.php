@@ -24,7 +24,9 @@ class LogService
         string $text,
         string $route,
         ?int $adminId = null,
+        ?int $userId = null,
         ?int $orderId = null,
+        ?int $mailingId = null,
         ?string $status = null,
     ): SmsLog {
         $log = $this->smsLog->newInstance();
@@ -32,7 +34,9 @@ class LogService
         $log->text = $text;
         $log->route = $route;
         $log->admin_id = $adminId;
+        $log->user_id = $userId;
         $log->order_id = $orderId;
+        $log->mailing_id = $mailingId;
         $log->status = $status;
         $log->save();
 

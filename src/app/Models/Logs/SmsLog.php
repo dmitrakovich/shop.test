@@ -2,7 +2,9 @@
 
 namespace App\Models\Logs;
 
+use App\Models\Ads\Mailing;
 use App\Models\Orders\Order;
+use App\Models\User;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +14,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $id
  * @property int|null $admin_id
+ * @property int|null $user_id
  * @property int|null $order_id
+ * @property int|null $mailing_id
  * @property string $route
  * @property string $phone
  * @property string $text
@@ -37,7 +41,9 @@ class SmsLog extends Model
     protected $fillable = [
         'id',
         'admin_id',
+        'user_id',
         'order_id',
+        'mailing_id',
         'route',
         'phone',
         'text',
@@ -70,10 +76,26 @@ class SmsLog extends Model
     }
 
     /**
+     * The user to which the message refers
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * The order to which the message refers
      */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    /**
+     * The mailing to which the message refers
+     */
+    public function mailing(): BelongsTo
+    {
+        return $this->belongsTo(Mailing::class);
     }
 }

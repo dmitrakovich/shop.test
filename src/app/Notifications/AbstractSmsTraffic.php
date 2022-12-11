@@ -11,6 +11,11 @@ abstract class AbstractSmsTraffic extends Notification
     use Queueable;
 
     /**
+     * @var integer|null
+     */
+    const MAILING_ID = null;
+
+    /**
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
@@ -43,5 +48,13 @@ abstract class AbstractSmsTraffic extends Notification
     public function getRoute(): ?string
     {
         return config('smstraffic.route');
+    }
+
+    /**
+     * Get the id of the mailing list to which the notification belongs
+     */
+    public function getMailingId(): ?int
+    {
+        return self::MAILING_ID;
     }
 }
