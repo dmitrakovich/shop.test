@@ -256,7 +256,7 @@ class OrderController extends AdminController
                     ->symbol($currencyCode)
                     ->addElementClass(['installment-field']);
                 $nestedForm->switch('installment_send_notifications', 'Отправлять оповещение')
-                    ->default(true)
+                    ->default(false)
                     ->addElementClass(['installment-field']);
             })->setScript($this->getScriptForExtendedItems());
         });
