@@ -111,11 +111,12 @@ class PaymentService
             'id' => $onlinePayment->payment_id,
             'getImage' => 'true',
         ]);
-        $responseQrCode = $qrCode->getBodyFormat();
-        $qrCodePath = 'hgrosh/' . date('m-Y') . '/' . $onlinePayment->payment_id . '.jpg';
-        Storage::disk('public')->put($qrCodePath, base64_decode($responseQrCode['result']['image']));
-        $onlinePayment->update(['qr_code' => $qrCodePath]);
-
+        if($qrCode->isOk()) {
+            $responseQrCode = $qrCode->getBodyFormat();
+            $qrCodePath = 'hgrosh/' . date('m-Y') . '/' . $onlinePayment->payment_id . '.jpg';
+            Storage::disk('public')->put($qrCodePath, base64_decode($responseQrCode['result']['image']));
+            $onlinePayment->update(['qr_code' => $qrCodePath]);
+        }
         return $onlinePayment;
     }
 }
