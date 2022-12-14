@@ -1,5 +1,6 @@
 import timer from '../components/timer';
 import { TABLET_BREAKPOINT } from '../constants';
+import productSliders from '../components/swiper';
 
 const { default: axios } = require("axios");
 const SCROLL_POSITION_STORAGE_KEY = 'catalog-scroll-position';
@@ -64,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // quick view
   $(document).on('click', '.quick-link', function (e) {
     e.preventDefault();
+    $.fancybox.close();
     let url = $(this).data('src');
     $.fancybox.open({
       type: 'ajax',
@@ -74,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       },
       afterShow: function () {
+        productSliders();
         timer($('.js-countdown'));
         slickRefresh();
         gtmProductDetailEvent(productDetail);

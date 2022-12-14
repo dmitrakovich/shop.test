@@ -1,6 +1,7 @@
 <?php /** @var \App\Models\Product $product */ ?>
 
 <div class="col-12 product-page">
+<div class="col-12 product-page p-product">
     <div class="row">
         <div class="col-12 col-md-6 col-xl-7">
             <div class="position-relative">
@@ -229,6 +230,29 @@
                         Возврат 14 дней
                     </p>
                 </div>
+                @if(!empty($productGroup))
+                    <div class="p-product__prGroup">
+                      <h3 class="p-product__prGroup-title">{{ $productGroup['title'] }}</h3>
+                      <div class="swiper js-productGroup">
+                          <div class="swiper-wrapper">
+                              @foreach ($productGroup['products'] as $key => $productGroupItem)
+                                  @if(isset($quickView) && $quickView == true)
+                                  <a href="{{ $productGroupItem['url'] }}" aria-label="быстрый просмотр" data-src="/quick/{{ $productGroupItem['id'] }}" class="quick-link p-product__prGroup-item swiper-slide @if($productGroupItem['id'] == $product->id) active @endif">
+                                  @else
+                                  <a href="{{ $productGroupItem['url'] }}" class="p-product__prGroup-item swiper-slide @if($productGroupItem['id'] == $product->id) active @endif">
+                                  @endif
+                                      <img src="{{ $productGroupItem['image'] }}"
+                                          alt="{{ $productGroupItem['full_name'] }}"
+                                          onerror="imageOnError(this)">
+                                      {{ $productGroupItem['full_name'] }}
+                                  </a>
+                              @endforeach
+                          </div>
+                          <div class="js-productGroup-next swiper-button-next"></div>
+                          <div class="js-productGroup-prev swiper-button-prev"></div>
+                      </div>
+                    </div>
+                @endif
             </form>
 
         </div>

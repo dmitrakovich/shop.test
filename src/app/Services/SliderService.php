@@ -219,6 +219,55 @@ class SliderService
     }
 
     /**
+     * Get product group
+     *
+     * @return array
+     */
+    public function getProductGroup(?int $productGroupId): array
+    {
+        if(!$productGroupId) {
+          return [];
+        }
+        $cacheConfig = config('cache_config.product_carousel_product_group');
+        $slider = Cache::rememberForever($cacheConfig['key'], function () {
+            return ProductCarousel::where('enum_type_id', ProductCarouselEnum::PRODUCT_GROUP)
+                ->first(['title', 'count', 'speed']);
+        });
+        if (empty($slider)) {
+            return [];
+        }
+        $cacheConfig = config('cache_config.product_group');
+        $products = Cache::remember($cacheConfig['key'] . $productGroupId, $cacheConfig['ttl'], function () use ($productGroupId) {
+            $products = Product::where('product_group_id', $productGroupId)
+                    ->with(['media', 'category', 'brand'])->get();
+            return $products->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'sku' => $product->sku,
+                    'full_name' => $product->shortName(),
+                    'sale_percentage' => $product->getSalePercentage(),
+                    'is_new' => $product->isNew(),
+                    'price_byn' => $product->getFinalPrice(),
+                    'old_price_byn' => $product->getFinalOldPrice(),
+                    'url' => $product->getUrl(),
+                    'image' => $product->getFirstMediaUrl('catalog'),
+                    'dataLayer' => GoogleTagManagerService::prepareProduct($product),
+                ];
+            })->toArray();
+        });
+        $this->setDataLayerForPage($products);
+        $this->addConvertedAndFormattedPrice($products);
+        $this->addFavorites($products);
+
+        return [
+            'title' => $slider->title,
+            'speed' => $slider->speed,
+            'products' => $products,
+        ];
+    }
+
+
+    /**
      * Get recent products slider
      *
      * @return array

@@ -55,4 +55,9 @@
 @import './slick';
 
 // Ion.RangeSlider
-@import '~ion-rangeslider/css/ion.rangeSlider'
+@import '~ion-rangeslider/css/ion.rangeSlider';
+
+// Swiper
+@import '~swiper/swiper-bundle.css';
+@import '_swiper';
+@import 'shop/product';

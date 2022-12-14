@@ -166,6 +166,14 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Product group relation.
+     */
+    public function productGroup()
+    {
+      return $this->belongsTo(ProductGroup::class);
+    }
+
+    /**
      * Get product simple name (category name + brand name)
      */
     public function simpleName(): string
