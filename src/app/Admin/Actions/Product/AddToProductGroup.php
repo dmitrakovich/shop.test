@@ -39,6 +39,6 @@ class AddToProductGroup extends Action
 
     public function html()
     {
-        return "<div class='text-center'><a class='add-product-group btn btn-success'>" . $this->name . "</a></div>";
+        return '<div class="text-center"><a class="add-product-group btn btn-success">' . $this->name . '</a></div>';
     }
 }

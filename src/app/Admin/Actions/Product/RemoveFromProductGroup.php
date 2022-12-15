@@ -39,6 +39,6 @@ class RemoveFromProductGroup extends Action
 
     public function html()
     {
-        return "<div class='text-center'><a class='remove-from-product-group btn btn-danger'>" . $this->name . "</a></div>";
+        return '<div class="text-center"><a class="remove-from-product-group btn btn-danger">' . $this->name . '</a></div>';
     }
 }
