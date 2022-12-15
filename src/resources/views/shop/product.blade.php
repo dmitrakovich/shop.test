@@ -440,7 +440,7 @@
             </table>
         </div>
     </div>
-
-    <script>
-        var productDetail = {!! $dataLayer->toJson() !!};
-    </script>
+</div>
+<script>
+    var productDetail = {!! $dataLayer->toJson() !!};
+</script>

@@ -120,7 +120,7 @@ class SliderService
                 })
                 ->sorting('rating')
                 ->limit($slider->count)
-                ->with(['media', 'category', 'brand'])
+                ->with(['media', 'category', 'brand', 'styles'])
                 ->get();
 
             if (empty($products)) {
@@ -177,7 +177,7 @@ class SliderService
             do {
                 $query = Product::where('id', '!=', $productId)
                     // ->when($product->category_id, fn ($query, $id) => $query->where('category_id', $id))
-                    ->with(['media', 'category', 'brand']);
+                    ->with(['media', 'category', 'brand', 'styles']);
                 foreach ($attrs as $attr) {
                     $values = (!empty($product->{$attr}) && $product->{$attr} instanceof Collection) ? array_column($product->{$attr}->toArray(), 'id') : null;
                     if ($values) {
@@ -239,7 +239,7 @@ class SliderService
         $cacheConfig = config('cache_config.product_group');
         $products = Cache::remember($cacheConfig['key'] . $productGroupId, $cacheConfig['ttl'], function () use ($productGroupId, $slider) {
             $products = Product::where('product_group_id', $productGroupId)
-                    ->with(['media', 'category', 'brand'])->limit($slider->count ?? 12)->get();
+                    ->with(['media', 'category', 'brand', 'styles'])->limit($slider->count ?? 12)->get();
 
             return $products->map(function ($product) {
                 return [

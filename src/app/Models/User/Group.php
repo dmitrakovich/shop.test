@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property string $name
- * @property string $discount
+ * @property float $discount
  */
 class Group extends Model
 {

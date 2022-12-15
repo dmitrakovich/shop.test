@@ -4,10 +4,13 @@ namespace App\Models\User;
 
 use App\Models\Cart;
 use App\Models\Country;
+use App\Models\Orders\Order;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -23,6 +26,8 @@ use libphonenumber\PhoneNumberUtil;
  * @property string $phone
  * @property \Carbon\Carbon $phone_verified_at
  * @property-read Cart $cart
+ * @property-read Group $group
+ * @property-read Collection<Order> $orders
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -173,6 +178,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return Attribute::make(
             get: fn ($firstName) => Str::ucfirst($firstName)
         );
+    }
+
+    /**
+     * User's orders
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 
     /**
