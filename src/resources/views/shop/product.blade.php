@@ -240,10 +240,8 @@
                                 <div class="swiper-wrapper">
                                     @foreach ($productGroup['products'] as $key => $productGroupItem)
                                         <a href="{{ $productGroupItem['url'] }}"
-                                            @if (isset($quickView) && $quickView == true)
-                                            aria-label="быстрый просмотр"
-                                            data-src="/quick/{{ $productGroupItem['id'] }}"
-                                            @endif
+                                            @if (isset($quickView) && $quickView == true) aria-label="быстрый просмотр"
+                                            data-src="/quick/{{ $productGroupItem['id'] }}" @endif
                                             class="@if (isset($quickView) && $quickView == true) quick-link @endif p-product__prGroup-item swiper-slide @if ($productGroupItem['id'] == $product->id) active @endif">
                                             <img src="{{ $productGroupItem['image'] }}"
                                                 alt="{{ $productGroupItem['full_name'] }}"
