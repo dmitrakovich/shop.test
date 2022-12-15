@@ -239,19 +239,16 @@
                             <div class="swiper js-productGroup">
                                 <div class="swiper-wrapper">
                                     @foreach ($productGroup['products'] as $key => $productGroupItem)
-                                        @if (isset($quickView) && $quickView == true)
-                                            <a href="{{ $productGroupItem['url'] }}"
-                                                aria-label="быстрый просмотр"
-                                                data-src="/quick/{{ $productGroupItem['id'] }}"
-                                                class="quick-link p-product__prGroup-item swiper-slide @if ($productGroupItem['id'] == $product->id) active @endif">
-                                            @else
-                                                <a href="{{ $productGroupItem['url'] }}"
-                                                    class="p-product__prGroup-item swiper-slide @if ($productGroupItem['id'] == $product->id) active @endif">
-                                        @endif
-                                        <img src="{{ $productGroupItem['image'] }}"
-                                            alt="{{ $productGroupItem['full_name'] }}"
-                                            onerror="imageOnError(this)">
-                                        {{ $productGroupItem['full_name'] }}
+                                        <a href="{{ $productGroupItem['url'] }}"
+                                            @if (isset($quickView) && $quickView == true)
+                                            aria-label="быстрый просмотр"
+                                            data-src="/quick/{{ $productGroupItem['id'] }}"
+                                            @endif
+                                            class="@if (isset($quickView) && $quickView == true) quick-link @endif p-product__prGroup-item swiper-slide @if ($productGroupItem['id'] == $product->id) active @endif">
+                                            <img src="{{ $productGroupItem['image'] }}"
+                                                alt="{{ $productGroupItem['full_name'] }}"
+                                                onerror="imageOnError(this)">
+                                            {{ $productGroupItem['full_name'] }}
                                         </a>
                                     @endforeach
                                 </div>
