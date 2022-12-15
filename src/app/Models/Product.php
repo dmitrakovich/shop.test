@@ -170,7 +170,7 @@ class Product extends Model implements HasMedia
      */
     public function productGroup()
     {
-      return $this->belongsTo(ProductGroup::class);
+        return $this->belongsTo(ProductGroup::class);
     }
 
     /**

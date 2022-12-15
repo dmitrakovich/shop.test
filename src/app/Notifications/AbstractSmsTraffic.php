@@ -11,7 +11,7 @@ abstract class AbstractSmsTraffic extends Notification
     use Queueable;
 
     /**
-     * @var integer|null
+     * @var int|null
      */
     const MAILING_ID = null;
 

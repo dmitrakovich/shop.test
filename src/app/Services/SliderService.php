@@ -225,8 +225,8 @@ class SliderService
      */
     public function getProductGroup(?int $productGroupId): array
     {
-        if(!$productGroupId) {
-          return [];
+        if (!$productGroupId) {
+            return [];
         }
         $cacheConfig = config('cache_config.product_carousel_product_group');
         $slider = Cache::rememberForever($cacheConfig['key'], function () {
@@ -240,6 +240,7 @@ class SliderService
         $products = Cache::remember($cacheConfig['key'] . $productGroupId, $cacheConfig['ttl'], function () use ($productGroupId) {
             $products = Product::where('product_group_id', $productGroupId)
                     ->with(['media', 'category', 'brand'])->get();
+
             return $products->map(function ($product) {
                 return [
                     'id' => $product->id,
@@ -265,7 +266,6 @@ class SliderService
             'products' => $products,
         ];
     }
-
 
     /**
      * Get recent products slider
