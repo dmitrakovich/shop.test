@@ -240,26 +240,18 @@ class SliderService
         $products = Cache::remember($cacheConfig['key'] . $productGroupId, $cacheConfig['ttl'], function () use ($productGroupId, $slider) {
             $products = Product::where('product_group_id', $productGroupId)
                     ->with(['media', 'category', 'brand', 'styles'])->limit($slider->count ?? 12)->get();
-
             return $products->map(function ($product) {
                 return [
                     'id' => $product->id,
                     'sku' => $product->sku,
                     'full_name' => $product->shortName(),
-                    'sale_percentage' => $product->getSalePercentage(),
-                    'is_new' => $product->isNew(),
-                    'price_byn' => $product->getFinalPrice(),
-                    'old_price_byn' => $product->getFinalOldPrice(),
                     'url' => $product->getUrl(),
-                    'image' => $product->getFirstMediaUrl('catalog'),
+                    'image' => $product->getFirstMediaUrl('default', 'catalog'),
                     'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                 ];
             })->toArray();
         });
         $this->setDataLayerForPage($products);
-        $this->addConvertedAndFormattedPrice($products);
-        $this->addFavorites($products);
-
         return [
             'title' => $slider->title,
             'speed' => $slider->speed,
