@@ -25,10 +25,11 @@ class AddToProductGroup extends Action
     public function handle(
         Request $request
     ) {
-      $service = new ProductGroupService;
-      $data = $request->all();
-      $service->addToProductGroup($data['cur_product_id'], $data['product_id']);
-      return $this->response()->success('Товар добавлен в группу товаров!')->refresh();
+        $service = new ProductGroupService;
+        $data = $request->all();
+        $service->addToProductGroup($data['cur_product_id'], $data['product_id']);
+
+        return $this->response()->success('Товар добавлен в группу товаров!')->refresh();
     }
 
     public function form()
@@ -39,6 +40,6 @@ class AddToProductGroup extends Action
 
     public function html()
     {
-        return "<div class='text-center'><a class='add-product-group btn btn-success'>" . $this->name . "</a></div>";
+        return "<div class='text-center'><a class='add-product-group btn btn-success'>" . $this->name . '</a></div>';
     }
 }

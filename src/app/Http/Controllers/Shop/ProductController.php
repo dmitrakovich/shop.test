@@ -53,6 +53,7 @@ class ProductController extends BaseController
         $dataLayer = $this->gtmService->prepareProduct($product);
         $productGroup = $this->sliderService->getProductGroup($product->product_group_id);
         $quickView = true;
+
         return view('shop.product', compact('product', 'productGroup', 'quickView', 'dataLayer'));
     }
 }

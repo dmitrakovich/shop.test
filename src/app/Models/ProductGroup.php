@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProductGroup extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
 
     /**
@@ -15,7 +16,6 @@ class ProductGroup extends Model
      */
     public function products()
     {
-      return $this->hasMany(Product::class, 'id', 'product_group_id');
+        return $this->hasMany(Product::class, 'id', 'product_group_id');
     }
-
 }

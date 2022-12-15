@@ -13,12 +13,13 @@ class RemoveFromProductGroup extends Action
     public $name = 'Удалить товар из группы товаров';
 
     private $productId;
+
     private $productGroupId;
 
     public function __construct(?int $productId = null, ?int $productGroupId = null)
     {
         parent::__construct();
-        $this->productId      = $productId;
+        $this->productId = $productId;
         $this->productGroupId = $productGroupId;
     }
 
@@ -28,6 +29,7 @@ class RemoveFromProductGroup extends Action
         $service = new ProductGroupService;
         $data = $request->all();
         $service->removeFromProductGroup($data['product_id'], $data['product_group_id']);
+
         return $this->response()->success('Товар удален из группы товаров!')->refresh();
     }
 
@@ -39,6 +41,6 @@ class RemoveFromProductGroup extends Action
 
     public function html()
     {
-        return "<div class='text-center'><a class='remove-from-product-group btn btn-danger'>" . $this->name . "</a></div>";
+        return "<div class='text-center'><a class='remove-from-product-group btn btn-danger'>" . $this->name . '</a></div>';
     }
 }
