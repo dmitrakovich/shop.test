@@ -2,6 +2,9 @@ import Mustache from 'mustache';
 import TEMPLATE_ADDED_TO_CART from '../templates/modals/added-to-cart.html';
 import { validatePhone } from './components/inputs/phone';
 import timer from './components/timer';
+import intiSliders from './components/swiper';
+
+intiSliders();
 
 timer($('.js-countdown'));
 

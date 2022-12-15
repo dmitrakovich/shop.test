@@ -1,0 +1,28 @@
+.p-product {
+  width: 100%;
+
+  &__prGroup {
+    margin: 40px 0;
+
+    &-title {
+      font-size: 16px;
+      line-height: 100%;
+      margin-bottom: 22px;
+      font-weight: 400;
+      color: #767676;
+    }
+    &-item {
+      width: 150px;
+      max-width: 150px;
+      padding: 5px;
+      height: auto;
+
+      img {
+        width: 100%;
+      }
+      &.active {
+        border: 1px solid #000;
+      }
+    }
+  }
+}

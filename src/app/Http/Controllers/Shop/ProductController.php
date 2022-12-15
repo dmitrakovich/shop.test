@@ -40,6 +40,7 @@ class ProductController extends BaseController
             'product' => $product,
             'dataLayer' => $this->gtmService->prepareProduct($product),
             'similarProducts' => $this->sliderService->getSimilarProducts($product->id),
+            'productGroup' => $this->sliderService->getProductGroup($product->product_group_id),
             'recentProductsSlider' => $this->sliderService->getRecentProducts($this->productService),
         ]);
     }
@@ -50,7 +51,9 @@ class ProductController extends BaseController
     public function quickView(Product $product): View
     {
         $dataLayer = $this->gtmService->prepareProduct($product);
+        $productGroup = $this->sliderService->getProductGroup($product->product_group_id);
+        $quickView = true;
 
-        return view('shop.product', compact('product', 'dataLayer'));
+        return view('shop.product', compact('product', 'productGroup', 'quickView', 'dataLayer'));
     }
 }

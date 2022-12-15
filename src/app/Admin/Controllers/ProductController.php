@@ -4,6 +4,8 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Post\BatchRestore;
 use App\Admin\Actions\Post\Restore;
+use App\Admin\Actions\Product\AddToProductGroup;
+use App\Admin\Actions\Product\RemoveFromProductGroup;
 use App\Admin\Models\Media;
 use App\Admin\Models\Product;
 use App\Admin\Services\UploadImagesService;
@@ -36,7 +38,7 @@ class ProductController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Product';
+    protected $title = 'Товары';
 
     /**
      * костыльный объект, чтобы с сидера достать соответсвие id
@@ -194,6 +196,13 @@ class ProductController extends AdminController
             $form->ckeditor('description', '');
         });
 
+        if (isset($product)) {
+            $form->column(12, function ($form) use ($product) {
+                $form->divider('Группа товаров');
+                $form->html($this->productGroupGrid($product));
+            });
+        }
+
         $form->saving(function (Form $form) {
             if (empty($form->slug)) {
                 $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->sku);
@@ -250,6 +259,50 @@ class ProductController extends AdminController
         });
 
         return $form;
+    }
+
+    private function productGroupGrid(Product $product)
+    {
+        $grid = new Grid(new Product());
+        $grid->model()->whereNotNull('product_group_id')->where('product_group_id', $product->product_group_id)->with(['category', 'brand'])->orderBy('id', 'desc');
+
+        $grid->column('id', 'ID товара');
+        $grid->column('media', 'Изображение')->display(function () {
+            return '<img src="' . $this->getFirstMediaUrl() . '" loading="lazy" width="100px">';
+        });
+        $grid->column('sku', 'Артикул товара')->display(function () {
+            return $this->sku ?? $this->title;
+        });
+        $grid->column('category.title', 'Категория')->display(function ($categoryTitle) use ($product) {
+            $result = $categoryTitle;
+            $result .= ($this->category_id != $product->category_id) ? '<br><span class="text-danger">Категории товаров в группе отличаются</span>' : '';
+
+            return $result;
+        });
+        $grid->column('brand.name', 'Бренд')->display(function ($brandName) use ($product) {
+            $result = $brandName;
+            $result .= ($this->brand_id != $product->brand_id) ? '<br><span class="text-danger">Бренды товаров в группе отличаются</span>' : '';
+
+            return $result;
+        });
+
+        $grid->tools(function (Grid\Tools $tools) use ($product) {
+            if ($product->product_group_id) {
+                $tools->append(new RemoveFromProductGroup($product->id, $product->product_group_id));
+            } else {
+                $tools->append(new AddToProductGroup($product->id));
+            }
+        });
+        $grid->setActionClass(ContextMenuActions::class);
+        $grid->disableCreateButton();
+        $grid->disablePagination();
+        $grid->disableFilter();
+        $grid->disableActions();
+        $grid->disableExport();
+        $grid->disableColumnSelector();
+        $grid->disableRowSelector();
+
+        return $grid->render();
     }
 
     /**
