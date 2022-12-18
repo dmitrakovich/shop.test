@@ -246,19 +246,13 @@ class SliderService
                     'id' => $product->id,
                     'sku' => $product->sku,
                     'full_name' => $product->shortName(),
-                    'sale_percentage' => $product->getSalePercentage(),
-                    'is_new' => $product->isNew(),
-                    'price_byn' => $product->getFinalPrice(),
-                    'old_price_byn' => $product->getFinalOldPrice(),
                     'url' => $product->getUrl(),
-                    'image' => $product->getFirstMediaUrl('catalog'),
+                    'image' => $product->getFirstMediaUrl('default', 'catalog'),
                     'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                 ];
             })->toArray();
         });
         $this->setDataLayerForPage($products);
-        $this->addConvertedAndFormattedPrice($products);
-        $this->addFavorites($products);
 
         return [
             'title' => $slider->title,
