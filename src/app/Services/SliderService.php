@@ -240,6 +240,7 @@ class SliderService
         $products = Cache::remember($cacheConfig['key'] . $productGroupId, $cacheConfig['ttl'], function () use ($productGroupId, $slider) {
             $products = Product::where('product_group_id', $productGroupId)
                     ->with(['media', 'category', 'brand', 'styles'])->limit($slider->count ?? 12)->get();
+
             return $products->map(function ($product) {
                 return [
                     'id' => $product->id,
@@ -252,6 +253,7 @@ class SliderService
             })->toArray();
         });
         $this->setDataLayerForPage($products);
+
         return [
             'title' => $slider->title,
             'speed' => $slider->speed,
