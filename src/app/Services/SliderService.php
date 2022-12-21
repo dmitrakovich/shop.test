@@ -246,6 +246,7 @@ class SliderService
                     'id' => $product->id,
                     'sku' => $product->sku,
                     'full_name' => $product->shortName(),
+                    'color_txt' => $product->color_txt,
                     'url' => $product->getUrl(),
                     'image' => $product->getFirstMediaUrl('default', 'catalog'),
                     'dataLayer' => GoogleTagManagerService::prepareProduct($product),

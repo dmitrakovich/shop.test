@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $text
  * @property string $status
  * @property \Carbon\Carbon $created_at
+ *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class SmsLog extends Model
