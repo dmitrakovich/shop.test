@@ -35,6 +35,7 @@ Route::get('terms', [InfoPageController::class, 'terms'])->name('info.terms');
 Route::get('policy', [InfoPageController::class, 'policy'])->name('info.policy');
 Route::get('online-shopping/{slug?}', [InfoPageController::class, 'index'])->name('info');
 
+Route::view('channel', 'channel')->name('channel');
 Route::view('shops', 'static.shops')->name('static-shops');
 
 require __DIR__ . '/auth.php';

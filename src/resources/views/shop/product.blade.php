@@ -249,7 +249,7 @@
                                             <img src="{{ $productGroupItem['image'] }}"
                                                 alt="{{ $productGroupItem['full_name'] }}"
                                                 onerror="imageOnError(this)">
-                                            {{ $productGroupItem['full_name'] }}
+                                            {{ $productGroupItem['color_txt'] ?? $productGroupItem['full_name'] }}
                                         </a>
                                     @endforeach
                                 </div>
