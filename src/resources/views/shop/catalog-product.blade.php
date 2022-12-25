@@ -23,7 +23,7 @@
                         -{{ $product->getSalePercentage() }}%
                     </div>
                 @endif
-                @if ($product->getOnlySalePercentage())
+                @if (!empty($product->getSale('general_sale')))
                     <div class="product-label product-label-sale">
                         акция
                     </div>

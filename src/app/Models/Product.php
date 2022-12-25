@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Facades\Currency;
-use App\Facades\Sale;
 use App\Services\SearchService;
+use App\Traits\ProductSales;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +42,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Product extends Model implements HasMedia
 {
     use SoftDeletes;
+    use ProductSales;
     use InteractsWithMedia {
         getFirstMediaUrl as traitGetFirstMediaUrl;
     }
@@ -284,13 +285,13 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Get only products with sale
+     * Get only products with discount
      *
      * @param  Builder  $query
      * @param  float  $amount
      * @return Builder
      */
-    public function scopeOnlyWithSale(Builder $query, float $amount = 0.01)
+    public function scopeOnlyWithDiscount(Builder $query, float $amount = 0.01)
     {
         return $query->whereRaw('((`old_price` - `price`) / `old_price`) > ?', $amount);
     }
@@ -309,30 +310,11 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Применить акцияю к продукту
-     *
-     * @return void
+     * Check product's discount
      */
-    public function applySale()
+    public function hasDiscount(): bool
     {
-        if (!isset($this->sale)) {
-            Sale::applyForProduct($this);
-        }
-    }
-
-    /**
-     * Get fianl price after apply other sales
-     *
-     * @return float
-     */
-    public function getFinalPrice()
-    {
-        if (!isset($this->final_price)) {
-            $this->applySale();
-            $this->final_price = $this->sale['price'] ?? $this->price;
-        }
-
-        return $this->final_price;
+        return $this->getPrice() < $this->getOldPrice();
     }
 
     /**
@@ -358,27 +340,20 @@ class Product extends Model implements HasMedia
 
     /**
      * Get fixed wrong old price
-     *
-     * @return float
      */
-    public function getFixedOldPrice()
+    public function getFixedOldPrice(): float
     {
         return $this->old_price > $this->price ? $this->old_price : $this->price;
     }
 
     /**
      * Get fianl old price after apply other sales
-     *
-     * @return float
      */
-    public function getFinalOldPrice()
+    public function getFinalOldPrice(): float
     {
-        if (!isset($this->final_old_price)) {
-            $this->applySale();
-            $this->final_old_price = $this->getFixedOldPrice();
-        }
+        $this->applySales();
 
-        return $this->final_old_price;
+        return $this->getFixedOldPrice();
     }
 
     /**
@@ -400,61 +375,6 @@ class Product extends Model implements HasMedia
     public function getFormattedOldPrice()
     {
         return Currency::convertAndFormat($this->getFinalOldPrice());
-    }
-
-    /**
-     * Get product old price & price diff
-     *
-     * @return float
-     */
-    public function getPriceDiff(): float
-    {
-        return $this->getFinalOldPrice() - $this->getFinalPrice();
-    }
-
-    /**
-     * Get product formatted price diff
-     *
-     * @return float
-     */
-    public function getFormattedPriceDiff(): string
-    {
-        return Currency::convertAndFormat($this->getPriceDiff());
-    }
-
-    /**
-     * Calculate sale percentage
-     *
-     * @return int
-     */
-    public function getSalePercentage(): int
-    {
-        return ceil((1 - ($this->getFinalPrice() / $this->getFinalOldPrice())) * 100);
-    }
-
-    /**
-     * Calculate full sale percentage - discount percentage
-     */
-    public function getOnlySalePercentage(): ?int
-    {
-        $result = ceil($this->getSalePercentage() - $this->getDiscountPercentage());
-
-        return ($result > 0) ? $result : null;
-    }
-
-    /**
-     * Calculate old price && price percentage
-     *
-     * @return int
-     */
-    public function getDiscountPercentage(): int
-    {
-        $priceDiff = $this->old_price - $this->price;
-        if ($priceDiff > 0) {
-            $percent = ceil(((100 * $priceDiff) / $this->getFinalOldPrice()));
-        }
-
-        return $percent ?? 0;
     }
 
     /**

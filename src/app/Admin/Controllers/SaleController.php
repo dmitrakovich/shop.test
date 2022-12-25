@@ -107,6 +107,7 @@ class SaleController extends AdminController
         $form->listbox('seasons', 'Сезон')->options($allSeasonsList)->default(array_keys($allSeasonsList));
         $form->switch('only_new', 'Участвуют только новинки');
         $form->switch('add_client_sale', 'Клиентская скидка суммируется');
+        $form->switch('add_review_sale', 'Суммируется со скидкой за отзывы')->default(true);
         $form->switch('has_installment', 'Действует рассрочка')->default(1);
         $form->switch('has_fitting', 'Действует примерка')->default(1);
 

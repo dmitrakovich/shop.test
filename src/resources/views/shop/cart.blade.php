@@ -5,7 +5,7 @@
 @section('breadcrumbs', Breadcrumbs::render('cart'))
 
 @section('content')
-    <div class="col-10 my-5">
+    <div class="col-11 mt-lg-4 mb-5 cart-page">
         @if ($cart->items->isNotEmpty())
             <form action="{{ route('orders.store', '#user-data-validate') }}" id="cartData" method="post">
                 <div class="row">
@@ -33,33 +33,36 @@
                                             {{ DeclensionNoun::make($item->count, 'пара') }}
                                         </div>
                                         <div class="col-12 col-md-2 mt-md-2">
-                                            @if ($item->product->getPrice() < $item->product->getOldPrice())
+                                            @if ($item->product->hasDiscount())
                                                 <span class="old_price text-muted">
                                                     {!! $item->product->getFormattedOldPrice() !!}
                                                 </span>
                                             @endif
                                         </div>
-                                        <div class="col-12 col-md-3 mt-md-2">
-                                            @if ($item->product->getPrice() < $item->product->getOldPrice())
-                                                <span class="product-label product-label-sale px-1">
-                                                    -{{ $item->product->getSalePercentage() }}%
-                                                </span>&nbsp; акция &nbsp;&nbsp;
-                                                @if (isset($item->product->sale['end_datetime']))
-                                                    <span class="text-danger">
-                                                        {{-- blade-formatter-disable-next-line --}}
-                                                        @include('includes.timer', ['end_time' => $item->product->sale['end_datetime']])
-                                                    </span>
-                                                @endif
-                                                <br>
-                                                <span>-{{ $item->product->getFormattedPriceDiff() }}</span><br>
+                                        <div class="col-12 col-md-3 mt-md-2 item-sales">
+                                            @if ($item->product->hasDiscount())
+                                                @foreach ($item->product->getSales() as $sale)
+                                                    <p class="sale-block">
+                                                        <span class="product-label product-label-sale px-1">
+                                                            {{ $sale->discount_percentage }}%
+                                                        </span>&nbsp;
+                                                        <span>{{ $sale->label }}</span>
+                                                        @if (!empty($sale->end_datetime))
+                                                            <span class="text-danger">
+                                                                {{-- blade-formatter-disable-next-line --}}
+                                                                @include('includes.timer', ['end_time' => $sale->end_datetime])
+                                                            </span>
+                                                        @endif
+                                                        <br />
+                                                        <span>-{{ Currency::convertAndFormat($sale->discount) }}</span>
+                                                    </p>
+                                                @endforeach
                                             @endif
                                         </div>
                                         <div class="col-12 col-md-2 mt-md-2 mb-4">
-                                            @if ($item->product->getPrice() < $item->product->getOldPrice())
-                                                <span class="new_price">{!! $item->product->getFormattedPrice() !!}</span>
-                                            @else
-                                                <span class="price">{!! $item->product->getFormattedPrice() !!}</span>
-                                            @endif
+                                            <span class="{{$item->product->hasDiscount() ? 'new_price' : 'price'}}">
+                                                {!! $item->product->getFormattedPrice() !!}
+                                            </span>
                                         </div>
 
                                         <div class="col-12 col-auto mt-auto">

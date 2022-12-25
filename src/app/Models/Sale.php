@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property array|null $seasons
  * @property bool $only_new
  * @property bool $add_client_sale
+ * @property bool $add_review_sale
  * @property bool $has_installment
  * @property bool $has_fitting
  * @property \Illuminate\Support\Carbon $created_at

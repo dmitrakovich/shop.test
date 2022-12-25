@@ -69,7 +69,7 @@ class Promotion extends Model
                     }
 
                     if ($sale->algorithm === Sale::ALGORITHM_FAKE) {
-                        $query->onlyWithSale();
+                        $query->onlyWithDiscount();
                     }
                 });
             });

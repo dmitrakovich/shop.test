@@ -3,22 +3,53 @@
 namespace App\Services;
 
 use App\Models\Cart;
+use App\Models\Data\SaleData;
 use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class SaleService
 {
+    private const REVIEW_DISCOUNT = 10;
+
     private ?Sale $sale;
 
     private array $discounts = [];
 
     private ?bool $hasSaleProductsInCart = null;
 
+    /**
+     * Personal user's discount
+     */
+    private ?float $userDiscount = null;
+
+    /**
+     * Product review discount
+     */
+    private ?float $reviewDiscount = null;
+
+    /**
+     * SaleService construct
+     */
     public function __construct()
     {
-        $this->sale = Sale::actual()->orderByDesc('id')->first();
+        $this->setSales();
         $this->prepareDiscounts();
+    }
+
+    /**
+     * Set current sales
+     */
+    private function setSales(): void
+    {
+        $this->sale = Sale::actual()->orderByDesc('id')->first();
+        /** @var \App\Models\User\User $user */
+        if ($user = auth()->user()) {
+            $this->userDiscount = $user->group->discount;
+            if ($user->hasReviewAfterOrder()) {
+                $this->reviewDiscount = self::REVIEW_DISCOUNT;
+            }
+        }
     }
 
     /**
@@ -32,21 +63,39 @@ class SaleService
     }
 
     /**
-     * Return current sale
-     *
-     * @return Sale|null
-     */
-    public function getCurrentSale()
-    {
-        return $this->sale;
-    }
-
-    /**
      * Check has sale
      */
     protected function hasSale(): bool
     {
         return !empty($this->sale);
+    }
+
+    /**
+     * Check user's discount
+     */
+    protected function hasUserSale(): bool
+    {
+        $addUserSale = $this->hasSale() ? $this->sale->add_client_sale : true;
+
+        return $addUserSale && !is_null($this->userDiscount);
+    }
+
+    /**
+     * Check user's discount
+     */
+    protected function hasReviewSale(): bool
+    {
+        $addReviewSale = $this->hasSale() ? $this->sale->add_review_sale : true;
+
+        return $addReviewSale && !is_null($this->reviewDiscount);
+    }
+
+    /**
+     * Check any sale
+     */
+    protected function hasAnySale(): bool
+    {
+        return $this->hasSale() || $this->hasUserSale() || $this->hasReviewSale();
     }
 
     /**
@@ -173,13 +222,60 @@ class SaleService
     /**
      * Get sale data
      */
-    private function getSaleData(float $price, float $oldPrice, int $index = 0, int $count = 1): array
+    private function getSaleData(float $price, float $oldPrice, int $index = 0, int $count = 1): SaleData
     {
-        return [
-            'price' => $this->applySale($price, $oldPrice, $index, $count),
-            'label' => $this->sale->label_text,
-            'end_datetime' => $this->sale->end_datetime ?? null,
-        ];
+        $discountPrice = $this->applySale($price, $oldPrice, $index, $count);
+        [$discount, $discountPercentage] = $this->getDiscountData($price, $discountPrice, $oldPrice, $index);
+
+        return new SaleData(
+            price: $discountPrice,
+            discount: $discount,
+            discount_percentage: $discountPercentage,
+            label: $this->sale->label_text,
+            end_datetime: $this->sale->end_datetime,
+        );
+    }
+
+    /**
+     * Calculate final general sale's discount data
+     */
+    private function getDiscountData(float $price, float $discountPrice, float $oldPrice, int $index): array
+    {
+        $isFakeAlgorithm = $this->sale->algorithm === $this->sale::ALGORITHM_FAKE;
+
+        return $isFakeAlgorithm
+            ? [$oldPrice - $price, floor((1 - ($price / $oldPrice)) * 100)]
+            : [$price - $discountPrice, $this->getDiscount($index) * 100];
+    }
+
+    /**
+     * Get user's sale data from auth user
+     */
+    private function getUserSaleData(float $price): SaleData
+    {
+        $discountPrice = $this->round($price - $price * $this->userDiscount / 100);
+
+        return new SaleData(
+            price: $discountPrice,
+            discount: $price - $discountPrice,
+            discount_percentage: $this->userDiscount,
+            label: 'Скидка клиента'
+        );
+    }
+
+    /**
+     * Get user's review's sale data from auth user
+     */
+    private function getReviewSaleData(float $price): SaleData
+    {
+        $discountPrice = $this->round($price - $price * $this->reviewDiscount / 100);
+
+        return new SaleData(
+            price: $discountPrice,
+            discount: $price - $discountPrice,
+            discount_percentage: $this->reviewDiscount,
+            label: 'Скидка за отзыв'
+        );
     }
 
     /**
@@ -187,10 +283,35 @@ class SaleService
      */
     public function applyForProduct(Product $product): void
     {
+        $sales = [];
+        $finalPrice = $product->price;
+
         if ($this->hasSale() && $this->applyForOneProduct() && $this->checkSaleConditions($product)) {
-            $product->sale = $this->getSaleData($product->price, $product->getFixedOldPrice());
-        } else {
-            $product->sale = [];
+            $sale = $this->getSaleData($finalPrice, $product->getFixedOldPrice());
+            $sales['general_sale'] = $sale;
+            $finalPrice = $sale->price;
+        }
+
+        $this->applyUserSales($sales, $finalPrice);
+
+        $product->setSales(['list' => $sales, 'final_price' => $finalPrice]);
+    }
+
+    /**
+     * Apply user's sales to sales list by price
+     */
+    private function applyUserSales(array &$sales, float &$finalPrice): void
+    {
+        if ($this->hasUserSale()) {
+            $sale = $this->getUserSaleData($finalPrice);
+            $sales['user_sale'] = $sale;
+            $finalPrice = $sale->price;
+        }
+
+        if ($this->hasReviewSale()) {
+            $sale = $this->getReviewSaleData($finalPrice);
+            $sales['review_sale'] = $sale;
+            $finalPrice = $sale->price;
         }
     }
 
@@ -218,15 +339,18 @@ class SaleService
         return !$this->hasSaleProductsInCart || $this->sale->has_installment;
     }
 
-    public function applyForCart(Cart $cart)
+    /**
+     * Apply to items in cart
+     */
+    public function applyForCart(Cart $cart): void
     {
         $this->hasSaleProductsInCart = false;
 
-        if (!$this->hasSale()) {
+        if (!$this->hasAnySale()) {
             return;
         }
 
-        $products = $cart->items->map(fn ($item, $key) => $item->product);
+        $products = $cart->items->map(fn ($item) => $item->product);
         $products = $products->sortBy('price');
 
         $productSaleList = [];
@@ -245,7 +369,12 @@ class SaleService
         }
 
         foreach ($cart->items as $item) {
-            $item->product->sale = $productSaleList[$item->product->id] ?? [];
+            $generalSale = $productSaleList[$item->product->id] ?? null;
+            $sales = $generalSale ? ['general_sale' => $generalSale] : [];
+            $finalPrice = $generalSale ? $generalSale->price : $item->product->price;
+
+            $this->applyUserSales($sales, $finalPrice);
+            $item->product->setSales(['list' => $sales, 'final_price' => $finalPrice]);
         }
     }
 }

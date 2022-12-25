@@ -47,7 +47,7 @@ class SliderService
 
                 $products = Product::whereIn('category_id', $categories)
                     ->when($carousel->only_sale, function ($query) {
-                        $query->onlyWithSale();
+                        $query->onlyWithDiscount();
                     })
                     ->when($carousel->only_new, function ($query) {
                         $query->onlyNew();

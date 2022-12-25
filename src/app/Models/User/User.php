@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Models\Cart;
 use App\Models\Country;
+use App\Models\Feedback;
 use App\Models\Orders\Order;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -189,6 +190,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * User's reviews
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
+    /**
      * Farmat date in admin panel
      *
      * @return string
@@ -246,5 +255,19 @@ class User extends Authenticatable implements MustVerifyEmail
             $address->country_id = $countryId;
             $address->save();
         }
+    }
+
+    /**
+     * Check if user has review after order
+     * TODO: cache it
+     */
+    public function hasReviewAfterOrder(): bool
+    {
+        /** @var Order $lastOrder */
+        if ($lastOrderDate = $this->orders()->latest()->value('created_at')) {
+            return $this->reviews()->where('created_at', '>', $lastOrderDate)->exists();
+        }
+
+        return false;
     }
 }

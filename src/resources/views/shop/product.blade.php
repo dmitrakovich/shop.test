@@ -1,5 +1,3 @@
-<?php /** @var \App\Models\Product $product */ ?>
-
 <div class="col-12 product-page">
     <div class="col-12 product-page p-product">
         <div class="row">
@@ -78,90 +76,97 @@
                     method="post">
                     <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                     <div class="row mt-4">
-                        <div class="col-12 col-lg-6 price-block">
+
+                        <div class="col-12">
                             <div class="row">
-                                @if ($product->getPrice() < $product->getOldPrice())
+                                <button type="button" class="btn installment-help-block"
+                                    data-toggle="dropdown">
+                                    <span class="border-bottom border-secondary">Условия рассрочки</span>
+                                    <div class="tooltip-trigger ml-2">?</div>
+                                </button>
+                                <div class="dropdown-menu p-3">
+                                    @if ($product->getPrice() >= 150)
+                                        <p class="font-size-15">
+                                            <b>РАССРОЧКА НА 3 ПЛАТЕЖА</b>
+                                        </p>
+                                        <p>
+                                            Первый взнос<br>
+                                            <b>{{ $product->getPrice() - $product->getPrice() * 0.6 }}
+                                                руб.</b><br>
+                                            Оставшиеся 2 платежа по<br>
+                                            <b class="border-bottom border-danger font-size-14">
+                                                {{ $product->getPrice() * 0.3 }} руб. в месяц
+                                            </b>
+                                        </p>
+                                    @else
+                                        <p class="font-size-15">
+                                            <b>РАССРОЧКА НА 2 ПЛАТЕЖА</b>
+                                        </p>
+                                        <p>
+                                            Первый взнос<br>
+                                            <b>{{ $product->getPrice() - $product->getPrice() * 0.5 }}
+                                                руб.</b><br>
+                                            Оставшийся платеж<br>
+                                            <b class="border-bottom border-danger font-size-14">
+                                                {{ $product->getPrice() * 0.5 }} руб.
+                                            </b>
+                                        </p>
+                                    @endif
+                                    &#9989; Без увеличения цены <br>
+                                    &#9989; Без справки о доходах
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 price-block mt-3">
+                            <div class="row">
+                                <div class="col-auto price price-new">
+                                    {!! $product->getFormattedPrice() !!}
+                                </div>
+                                @if ($product->hasDiscount())
                                     <div class="col-auto price price-old">
                                         {!! $product->getFormattedOldPrice() !!}
                                     </div>
                                 @endif
-                                <div class="col-auto price price-new">
-                                    {!! $product->getFormattedPrice() !!}
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="col-12 col-lg-6 text-right">
-                            <button type="button" class="btn installment-help-block"
-                                data-toggle="dropdown">
-                                <span class="border-bottom border-secondary">Условия рассрочки</span>
-                                <div class="tooltip-trigger ml-2">?</div>
-                            </button>
-
-                            <div class="dropdown-menu p-3">
-                                @if ($product->getPrice() >= 150)
-                                    <p class="font-size-15">
-                                        <b>РАССРОЧКА НА 3 ПЛАТЕЖА</b>
-                                    </p>
-                                    <p>
-                                        Первый взнос<br>
-                                        <b>{{ $product->getPrice() - $product->getPrice() * 0.6 }}
-                                            руб.</b><br>
-                                        Оставшиеся 2 платежа по<br>
-                                        <b class="border-bottom border-danger font-size-14">
-                                            {{ $product->getPrice() * 0.3 }} руб. в месяц
-                                        </b>
-                                    </p>
-                                @else
-                                    <p class="font-size-15">
-                                        <b>РАССРОЧКА НА 2 ПЛАТЕЖА</b>
-                                    </p>
-                                    <p>
-                                        Первый взнос<br>
-                                        <b>{{ $product->getPrice() - $product->getPrice() * 0.5 }}
-                                            руб.</b><br>
-                                        Оставшийся платеж<br>
-                                        <b class="border-bottom border-danger font-size-14">
-                                            {{ $product->getPrice() * 0.5 }} руб.
-                                        </b>
-                                    </p>
+                                @if ($product->hasDiscount())
+                                    <div class="col-auto price price-new font-weight-bold">
+                                        <b>-{{ $product->getSalePercentage() }}%</b>
+                                    </div>
+                                    <button type="button" class="btn sale-help-trigger px-1"
+                                        data-toggle="dropdown">
+                                        <div class="tooltip-trigger">?</div>
+                                    </button>
+                                    <div class="dropdown-menu px-3 py-2 font-size-12 sale-help-block">
+                                        @foreach ($product->getSales() as $sale)
+                                            <p>
+                                                <span>{{ $sale->label }}&nbsp;</span>
+                                                <b class="text-danger">
+                                                    {{ $sale->discount_percentage }}%
+                                                </b><br />
+                                                <span>-{{ Currency::convertAndFormat($sale->discount) }}</span>
+                                            </p>
+                                        @endforeach
+                                    </div>
                                 @endif
-                                &#9989; Без увеличения цены <br>
-                                &#9989; Без справки о доходах
                             </div>
                         </div>
+
                     </div>
 
-                    <div class="row my-4">
-                        @if (!empty($product->sale['label']))
+                    <div class="row my-3">
+                        @if (!empty(($generalSale = $product->getSale('general_sale'))))
                             <div class="col-12 py-3 py-xl-4 text-center">
-                                <div class="row">
-                                    <div class="col-6 text-left">
-                                        @if ($product->getDiscountPercentage())
-                                            <span class="text-danger">
-                                                скидка <span class="h4">
-                                                    {{ $product->getDiscountPercentage() }}%
-                                                </span>
-                                            </span>
-                                        @endif
-                                    </div>
-                                    <div class="col-6 bg-danger py-1">
-                                        @if ($product->getOnlySalePercentage())
-                                            <span
-                                                class="h4">+{{ $product->getOnlySalePercentage() }}%
-                                            </span> по акции
-                                        @endif
-                                    </div>
-                                </div>
                                 <div class="row py-3 align-items-center bg-danger">
                                     <div class="col-12 mb-2">
                                         <div class="flex-fill font-weight-bold text-uppercase">
-                                            {{ $product->sale['label'] }}</div>
+                                            {{ $generalSale->label }}
+                                        </div>
                                     </div>
-                                    @if (!empty($product->sale['end_datetime']))
+                                    @if (!empty($generalSale->end_datetime))
                                         <div class="col-12 text-danger">
                                             @include('includes.timer', [
-                                                'end_time' => $product->sale['end_datetime'],
+                                                'end_time' => $generalSale->end_datetime,
                                                 'badgeCountdown' => true,
                                             ])
                                         </div>
@@ -218,18 +223,16 @@
 
                     <div class="col-12 text-left text-muted mt-5">
                         <p>
-                            <img src="/images/icons/installments.svg" alt="" role="presentation"
+                            <img src="/images/icons/installments.svg" role="presentation"
                                 class="pr-2">
                             Без переплат в рассрочку
                         </p>
                         <p>
-                            <img src="/images/icons/delivery.svg" alt="" role="presentation"
-                                class="pr-2">
+                            <img src="/images/icons/delivery.svg" role="presentation" class="pr-2">
                             Примерка по Беларуси
                         </p>
                         <p>
-                            <img src="/images/icons/return.svg" alt="" role="presentation"
-                                class="pr-2">
+                            <img src="/images/icons/return.svg" role="presentation" class="pr-2">
                             Возврат 14 дней
                         </p>
                     </div>

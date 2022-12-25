@@ -379,12 +379,17 @@ button.scroll-top-btn {
     font-size: 12px;
 }
 
-.installment-help-block {
+.installment-help-block, .sale-help-trigger {
     .tooltip-trigger {
         cursor: unset;
     }
     &.btn {
         box-shadow: unset;
+    }
+}
+.sale-help-block {
+    p:last-child {
+        margin-bottom: 0;
     }
 }
 
