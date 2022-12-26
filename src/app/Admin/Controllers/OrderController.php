@@ -217,7 +217,7 @@ class OrderController extends AdminController
                 ->default(OrderStatus::DEFAULT_VALUE)->required();
             $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
             $form->hasMany('adminComments', 'Комментарии менеджера', function (Form\NestedForm $form) {
-                $form->text('comment', 'Комментарий')->rules(['required', 'max:500']);
+                $form->textarea('comment', 'Комментарий')->rules(['required', 'max:500']);
                 $form->display('created_at', 'Дата');
             });
         });

@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
+/**
+ * @property-read Collection<CartData> $items
+ */
 class Cart extends Model
 {
     use HasFactory;
@@ -24,11 +29,9 @@ class Cart extends Model
     }
 
     /**
-     * Содержимое корзины
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Cart's items
      */
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(CartData::class);
     }
