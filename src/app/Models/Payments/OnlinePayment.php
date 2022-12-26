@@ -21,6 +21,15 @@ class OnlinePayment extends Model
         'link',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+      'request_data' => 'json',
+  ];
+
     public static function boot()
     {
         parent::boot();
@@ -68,7 +77,8 @@ class OnlinePayment extends Model
         $enum = OnlinePaymentMethodEnum::enumByValue($this->method_enum_id);
         if ($enum) {
             return match ($enum) {
-                OnlinePaymentMethodEnum::ERIP => route('pay.erip', $this->payment_url, true),
+                OnlinePaymentMethodEnum::ERIP   => route('pay.erip', $this->payment_url, true),
+                OnlinePaymentMethodEnum::YANDEX => route('pay.yandex', $this->link_code, true),
             };
         }
 
