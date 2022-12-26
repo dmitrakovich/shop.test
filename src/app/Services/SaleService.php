@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Data\SaleData;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class SaleService
@@ -43,8 +44,9 @@ class SaleService
     private function setSales(): void
     {
         $this->sale = Sale::actual()->orderByDesc('id')->first();
-        /** @var \App\Models\User\User $user */
-        if ($user = auth()->user()) {
+
+        $user = auth()->user();
+        if ($user instanceof User) {
             $this->userDiscount = $user->group->discount;
             if ($user->hasReviewAfterOrder()) {
                 $this->reviewDiscount = self::REVIEW_DISCOUNT;
