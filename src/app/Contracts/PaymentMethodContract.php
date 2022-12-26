@@ -6,10 +6,10 @@ use App\Models\Orders\Order;
 
 interface PaymentMethodContract
 {
-  /**
-   * Create new payment
-   * @return array
-   */
-  public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []);
-
+    /**
+     * Create new payment
+     *
+     * @return array
+     */
+    public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []);
 }

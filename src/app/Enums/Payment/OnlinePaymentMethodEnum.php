@@ -4,7 +4,7 @@ namespace App\Enums\Payment;
 
 enum OnlinePaymentMethodEnum: int
 {
-    case ERIP   = 1;
+    case ERIP = 1;
     case YANDEX = 2;
 
     /**
@@ -15,7 +15,7 @@ enum OnlinePaymentMethodEnum: int
     public function name(): ?string
     {
         return match ($this) {
-            self::ERIP   => 'ЕРИП',
+            self::ERIP => 'ЕРИП',
             self::YANDEX => 'ЮКасса',
         };
     }
@@ -45,6 +45,7 @@ enum OnlinePaymentMethodEnum: int
     public static function enumByValue(?int $value): ?self
     {
         $enum = self::tryFrom($value);
+
         return $enum ? $enum : null;
     }
 }

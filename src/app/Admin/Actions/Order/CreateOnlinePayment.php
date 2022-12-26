@@ -41,7 +41,7 @@ class CreateOnlinePayment extends Action
         $this->textarea('comment', 'Комментарий');
         $this->radio('send_sms', 'Отправлять SMS оповещение')->options([1 => 'Да', 0 => 'Нет'])->default(1);
         $this->radio('pre_auth', 'Платеж с предавторизацией')->options([1 => 'Да', 0 => 'Нет'])->default(0);
-      }
+    }
 
     public function html()
     {
