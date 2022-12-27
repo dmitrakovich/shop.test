@@ -5,7 +5,6 @@ namespace App\Jobs\Mailing;
 use App\Models\User\User;
 use App\Notifications\DiscountAfterRegisterSms;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
