@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\Mailing\DiscountAfterRegisterJob;
 use App\Jobs\Payment\SendInstallmentNoticeJob;
 use App\Jobs\SxGeoUpdateJob;
 use App\Jobs\UpdateAvailabilityJob;
@@ -38,6 +39,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new UpdateAvailabilityJob)->withoutOverlapping()->everyThirtyMinutes();
         $schedule->job(new SxGeoUpdateJob)->dailyAt('03:07');
         $schedule->job(new SendInstallmentNoticeJob)->dailyAt('09:05');
+        $schedule->job(new DiscountAfterRegisterJob)->dailyAt('09:00');
 
         $schedule->command('feed:generate')->everySixHours();
 
