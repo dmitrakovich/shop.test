@@ -5,6 +5,7 @@ namespace App\Models\User;
 use App\Models\Cart;
 use App\Models\Country;
 use App\Models\Feedback;
+use App\Models\Logs\SmsLog;
 use App\Models\Orders\Order;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -195,6 +196,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reviews(): HasMany
     {
         return $this->hasMany(Feedback::class);
+    }
+
+    /**
+     * User's reviews
+     */
+    public function mailings(): HasMany
+    {
+        return $this->hasMany(SmsLog::class);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\Mailing\DiscountAfterRegisterJob;
 use App\Jobs\Payment\SendInstallmentNoticeJob;
 use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
@@ -15,7 +16,8 @@ class DebugController extends Controller
 {
     public function index()
     {
-        SendInstallmentNoticeJob::dispatchSync();
+        // SendInstallmentNoticeJob::dispatchSync();
+        DiscountAfterRegisterJob::dispatchSync();
 
         return 'ok';
 

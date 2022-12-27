@@ -11,9 +11,9 @@ abstract class AbstractSmsTraffic extends Notification
     use Queueable;
 
     /**
-     * @var int|null
+     * Mailing identificator if exists
      */
-    const MAILING_ID = null;
+    public ?int $mailingId = null;
 
     /**
      * Get the notification's delivery channels.
@@ -55,6 +55,6 @@ abstract class AbstractSmsTraffic extends Notification
      */
     public function getMailingId(): ?int
     {
-        return self::MAILING_ID;
+        return $this->mailingId;
     }
 }
