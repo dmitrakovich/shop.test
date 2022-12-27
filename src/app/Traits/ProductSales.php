@@ -45,7 +45,7 @@ trait ProductSales
     /**
      * Set product sales
      *
-     * @param array{list: array[], final_price: float} $sales
+     * @param  array{list: array[], final_price: float}  $sales
      */
     public function setSales(array $sales): void
     {

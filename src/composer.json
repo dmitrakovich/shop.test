@@ -37,7 +37,8 @@
         "spatie/laravel-backup": "^8.1",
         "spatie/laravel-googletagmanager": "^2.6",
         "spatie/laravel-medialibrary": "^10.3",
-        "staudenmeir/eloquent-json-relations": "^1.6"
+        "staudenmeir/eloquent-json-relations": "^1.6",
+        "yoomoney/yookassa-sdk-php": "^2.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

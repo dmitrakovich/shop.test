@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Order\CreateOnlinePayment;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
+use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Country;
 use App\Models\Currency;
@@ -322,7 +323,11 @@ class OrderController extends AdminController
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
         });
         $grid->column('admin.name', 'Менеджер');
+        $grid->column('method_enum_id', 'Способ оплаты')->display(function ($method_enum_id) {
+            return OnlinePaymentMethodEnum::tryFrom($method_enum_id)->name();
+        });
         $grid->column('amount', 'Сумма платежа');
+        $grid->column('currency_code', 'Код валюты');
 
         $grid->column('expires_at', 'Срок действия платежа')->display(function ($date) {
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;

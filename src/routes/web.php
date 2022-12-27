@@ -30,6 +30,9 @@ require __DIR__ . '/redirect.php';
 
 Route::get('/', [IndexController::class, 'index'])->name('index-page');
 Route::get('pay/erip/{payment_id?}', [PaymentController::class, 'erip'])->name('pay.erip');
+Route::get('pay/yandex/{code}', [PaymentController::class, 'yandex'])->name('pay.yandex');
+Route::get('pay/link-code/{code}', [PaymentController::class, 'linkCode'])->name('pay.link-code');
+Route::post('pay/check-link-code/{code}', [PaymentController::class, 'checkLinkCode'])->name('pay.check-link-code');
 
 Route::get('terms', [InfoPageController::class, 'terms'])->name('info.terms');
 Route::get('policy', [InfoPageController::class, 'policy'])->name('info.policy');

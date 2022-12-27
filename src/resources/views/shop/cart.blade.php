@@ -60,7 +60,8 @@
                                             @endif
                                         </div>
                                         <div class="col-12 col-md-2 mt-md-2 mb-4">
-                                            <span class="{{$item->product->hasDiscount() ? 'new_price' : 'price'}}">
+                                            <span
+                                                class="{{ $item->product->hasDiscount() ? 'new_price' : 'price' }}">
                                                 {!! $item->product->getFormattedPrice() !!}
                                             </span>
                                         </div>
