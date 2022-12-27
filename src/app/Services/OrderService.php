@@ -52,7 +52,7 @@ class OrderService implements OrderServiceInterface
                     'discount' => $item->product->getSalePercentage(),
                 ]);
                 $sales = array_map(
-                    fn (SaleData $saleData) => "- {$saleData->label} {$saleData->discount_percentage}% ({$saleData->discount})",
+                    fn (SaleData $saleData) => "- {$saleData->label} {$saleData->discount_percentage}%",
                     $item->product->getSales()
                 );
                 if (!empty($sales)) {

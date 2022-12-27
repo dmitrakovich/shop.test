@@ -199,7 +199,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * User's reviews
+     * Mailings sent to the user
      */
     public function mailings(): HasMany
     {
