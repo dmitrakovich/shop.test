@@ -2,10 +2,15 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Actions\Order\CreateOnlinePayment;
-use App\Admin\Actions\Order\PrintOrder;
-use App\Admin\Actions\Order\ProcessOrder;
+use App\Admin\Actions\Order\{
+  CancelPayment,
+  CapturePayment,
+  CreateOnlinePayment,
+  PrintOrder,
+  ProcessOrder
+};
 use App\Enums\Payment\OnlinePaymentMethodEnum;
+use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Country;
 use App\Models\Currency;
@@ -321,12 +326,16 @@ class OrderController extends AdminController
 
         $grid->column('created_at', 'Дата/время создания')->display(function ($date) {
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
+        })->width(100);
+        $grid->column('last_status_enum_id', 'Статус')->display(function ($last_status_enum_id) {
+            return OnlinePaymentStatusEnum::tryFrom($last_status_enum_id)->name();
         });
         $grid->column('admin.name', 'Менеджер');
         $grid->column('method_enum_id', 'Способ оплаты')->display(function ($method_enum_id) {
             return OnlinePaymentMethodEnum::tryFrom($method_enum_id)->name();
         });
         $grid->column('amount', 'Сумма платежа');
+        $grid->column('paid_amount', 'Сумма оплаченная клиентом');
         $grid->column('currency_code', 'Код валюты');
 
         $grid->column('expires_at', 'Срок действия платежа')->display(function ($date) {
@@ -336,6 +345,18 @@ class OrderController extends AdminController
             return '<a href="' . $link . '" target="_blank">Ссылка на станицу оплаты</a>';
         });
 
+        $grid->actions(function ($actions) {
+          $actions->disableDelete();
+          $actions->disableEdit();
+          $actions->disableView();
+
+          if($actions->row->canCapturePayment()) {
+              $actions->add(new CapturePayment($actions->row));
+          }
+          if($actions->row->canCancelPayment()) {
+              $actions->add(new CancelPayment($actions->row));
+          }
+        });
         $grid->tools(function (Grid\Tools $tools) use ($orderId) {
             $tools->append(new CreateOnlinePayment($orderId));
         });

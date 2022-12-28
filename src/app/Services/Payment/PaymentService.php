@@ -14,9 +14,9 @@ class PaymentService
     private array $paymentMethodService = [];
 
     /**
-     * Получить онлайн платеж по id платежа.
+     * Get payment by payment_url.
      *
-     * @param  string  $payment_id
+     * @param  string  $payment_url
      * @param  OnlinePaymentMethodEnum  $method_enum
      * @return OnlinePayment
      */
@@ -26,7 +26,7 @@ class PaymentService
     }
 
     /**
-     * Получить сервис способа оплаты по его enum.
+     * Get payment method service by enum.
      *
      * @param  OnlinePaymentMethodEnum  $paymentMethodEnum
      */
@@ -43,7 +43,7 @@ class PaymentService
     }
 
     /**
-     * Создать онлайн платеж.
+     * Create OnlinePayment.
      *
      * @param  array  $data
      * @return OnlinePayment
@@ -64,7 +64,33 @@ class PaymentService
     }
 
     /**
-     * Получить платеж по коду ссылки.
+     * Cancel payment.
+     *
+     * @param  OnlinePayment $payment
+     * @return OnlinePayment
+     */
+    public function cancelOnlinePayment(OnlinePayment $payment) {
+      $paymentMethodService = $this->getPaymentMethodServiceByEnum(OnlinePaymentMethodEnum::tryFrom($payment->method_enum_id));
+      return $paymentMethodService->cancel($payment);
+    }
+
+    /**
+     * Capture payment.
+     *
+     * @param OnlinePayment $payment
+     * @param float|nulls $amount
+     * @return OnlinePayment
+     */
+    public function captureOnlinePayment(
+        OnlinePayment $payment,
+        ?float $amount = null
+    ): OnlinePayment {
+      $paymentMethodService = $this->getPaymentMethodServiceByEnum(OnlinePaymentMethodEnum::tryFrom($payment->method_enum_id));
+      return $paymentMethodService->capture($payment, $amount);
+    }
+
+    /**
+     * Get OnlinePayment by link_code
      *
      * @param  string  $linkCode
      * @return OnlinePayment
@@ -75,7 +101,7 @@ class PaymentService
     }
 
     /**
-     * Создать QRcode платежа.
+     * Create payment QRcode.
      *
      * @param  OnlinePayment  $onlinePayment
      * @return OnlinePayment
@@ -83,7 +109,21 @@ class PaymentService
     public function createOnlinePaymentQrCode(OnlinePayment $onlinePayment): OnlinePayment
     {
         $paymentMethodService = $this->getPaymentMethodServiceByEnum(OnlinePaymentMethodEnum::tryFrom($onlinePayment->method_enum_id));
-
         return $paymentMethodService->createQrCode($onlinePayment);
+    }
+
+    /**
+     * Webhook handler.
+     *
+     * @param  array $requestData
+     * @param  OnlinePaymentMethodEnum $paymentMethodEnum
+     * @return bool
+     */
+    public function webhookHandler(
+      array $requestData,
+      OnlinePaymentMethodEnum $paymentMethodEnum
+    ): bool {
+      $paymentMethodService = $this->getPaymentMethodServiceByEnum($paymentMethodEnum);
+      return $paymentMethodService->webhookHandler($requestData);
     }
 }
