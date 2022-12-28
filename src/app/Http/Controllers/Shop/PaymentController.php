@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Shop;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Services\Payment\PaymentService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use SeoFacade;
 
 class PaymentController extends BaseController
@@ -79,4 +80,31 @@ class PaymentController extends BaseController
             'payment_url' => $payment->payment_url,
         ];
     }
+
+  /**
+   * Payment webhook handler.
+   *
+   * @param  Request  $request
+   * @param  string  $paymentMethod
+   * @param  PaymentService  $paymentService
+   * @return response
+   */
+  public function webhook(
+    Request $request,
+    $paymentMethod,
+    PaymentService $paymentService
+  ) {
+      $result = null;
+      $data = $request->all();
+      switch (mb_strtolower($paymentMethod)) {
+          case 'yandex':
+              $result = $paymentService->webhookHandler($data, OnlinePaymentMethodEnum::YANDEX);
+
+              break;
+          default:
+              abort(404);
+      }
+
+      return $result ? response('ok', 200) : response('Something went wrong', 400);
+  }
 }

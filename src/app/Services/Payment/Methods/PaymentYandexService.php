@@ -2,14 +2,16 @@
 
 namespace App\Services\Payment\Methods;
 
-use App\Contracts\PaymentMethodContract;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
+use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
 use Encore\Admin\Facades\Admin;
 use YooKassa\Client;
+use YooKassa\Model\Notification\NotificationFactory;
+use YooKassa\Model\NotificationEventType;
 
-class PaymentYandexService implements PaymentMethodContract
+class PaymentYandexService extends AbstractPaymentService
 {
     private Client $api;
 
@@ -84,7 +86,7 @@ class PaymentYandexService implements PaymentMethodContract
             $dbData['payment_id'] = $paymentId;
             $dbData['payment_num'] = $paymentNum;
             $dbData['payment_url'] = $paymentUrl;
-            $dbData['admin_user_id'] = Admin::user()->id ?? null;
+            $dbData['admin_user_id'] = Admin::user() ? Admin::user()->id : null;
             $dbData['fio'] = $payment_info['fio'] ?? null;
             $dbData['phone'] = $payment_info['phone'] ?? null;
             $dbData['email'] = $payment_info['email'] ?? null;
@@ -95,5 +97,84 @@ class PaymentYandexService implements PaymentMethodContract
 
             return OnlinePayment::create($dbData);
         }
+    }
+
+    /**
+     * Cancel payment
+     *
+     * @param  OnlinePayment  $payment
+     * @return OnlinePayment
+     */
+    public function cancel(OnlinePayment $payment): OnlinePayment
+    {
+        $idempotenceKey = uniqid('', true);
+        $response = $this->api->cancelPayment($payment->payment_id, $idempotenceKey);
+        if (isset($response->status) && $response->status === 'canceled') {
+            $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::CANCELED);
+        }
+
+        return $payment;
+    }
+
+    /**
+     * Capture payment
+     *
+     * @param  OnlinePayment  $payment
+     * @return OnlinePayment
+     */
+    public function capture(
+        OnlinePayment $payment,
+        float $amount = null
+    ): OnlinePayment {
+        $idempotenceKey = uniqid('', true);
+        $response = $this->api->capturePayment([
+            'amount' => [
+                'value' => $amount ?? $payment->amount,
+                'currency' => $payment->currency_code,
+            ],
+        ], $payment->payment_id, $idempotenceKey);
+        if (isset($response->status) && $response->status === 'succeeded') {
+            $payment->paid_amount = $response->amount->value;
+            $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::SUCCEEDED);
+        }
+
+        return $payment;
+    }
+
+    /**
+     * Webhook handler.
+     *
+     * @param  array  $requestData
+     * @return bool
+     */
+    public function webhookHandler(
+      array $requestData,
+    ): bool {
+        $requestData['object']['refundable'] = false;
+        $factory = new NotificationFactory();
+        $notificationObject = $factory->factory($requestData);
+        $responseObject = $notificationObject->getObject();
+        $payment = $this->getOnlinePaymentByPaymentId($responseObject->getId(), OnlinePaymentMethodEnum::YANDEX);
+        $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? null;
+        if (!$this->api->isNotificationIPTrusted($remoteAddr)) {
+            return false;
+        }
+
+        switch ($notificationObject->getEvent()) {
+            case NotificationEventType::PAYMENT_SUCCEEDED:
+                $payment->paid_amount = $responseObject->getAmount()->value ?? null;
+                $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::SUCCEEDED);
+                break;
+            case NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE:
+                $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE);
+                break;
+            case NotificationEventType::PAYMENT_CANCELED:
+                $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::CANCELED);
+                break;
+            default:
+                return false;
+        }
+
+        return true;
     }
 }

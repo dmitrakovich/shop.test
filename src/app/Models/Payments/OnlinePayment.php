@@ -33,6 +33,9 @@ class OnlinePayment extends Model
     public static function boot()
     {
         parent::boot();
+        self::creating(function ($model) {
+            $model->last_status_enum_id = OnlinePaymentStatusEnum::PENDING;
+        });
         self::created(function ($model) {
             $model->statuses()->create([
                 'admin_user_id' => Admin::user()->id ?? null,
@@ -83,5 +86,29 @@ class OnlinePayment extends Model
         }
 
         return null;
+    }
+
+    /**
+     * Is can cancel the payment?
+     *
+     * @return bool
+     */
+    public function canCancelPayment(): bool
+    {
+        $statusEnum = OnlinePaymentStatusEnum::tryFrom($this->last_status_enum_id);
+
+        return $statusEnum === OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE;
+    }
+
+    /**
+     * Is can capture the payment?
+     *
+     * @return bool
+     */
+    public function canCapturePayment(): bool
+    {
+        $statusEnum = OnlinePaymentStatusEnum::tryFrom($this->last_status_enum_id);
+
+        return $statusEnum === OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE;
     }
 }
