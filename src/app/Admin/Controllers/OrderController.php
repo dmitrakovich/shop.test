@@ -2,13 +2,11 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Actions\Order\{
-  CancelPayment,
-  CapturePayment,
-  CreateOnlinePayment,
-  PrintOrder,
-  ProcessOrder
-};
+use App\Admin\Actions\Order\CancelPayment;
+use App\Admin\Actions\Order\CapturePayment;
+use App\Admin\Actions\Order\CreateOnlinePayment;
+use App\Admin\Actions\Order\PrintOrder;
+use App\Admin\Actions\Order\ProcessOrder;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Facades\Currency as CurrencyFacade;
@@ -346,16 +344,16 @@ class OrderController extends AdminController
         });
 
         $grid->actions(function ($actions) {
-          $actions->disableDelete();
-          $actions->disableEdit();
-          $actions->disableView();
+            $actions->disableDelete();
+            $actions->disableEdit();
+            $actions->disableView();
 
-          if($actions->row->canCapturePayment()) {
-              $actions->add(new CapturePayment($actions->row));
-          }
-          if($actions->row->canCancelPayment()) {
-              $actions->add(new CancelPayment($actions->row));
-          }
+            if ($actions->row->canCapturePayment()) {
+                $actions->add(new CapturePayment($actions->row));
+            }
+            if ($actions->row->canCancelPayment()) {
+                $actions->add(new CancelPayment($actions->row));
+            }
         });
         $grid->tools(function (Grid\Tools $tools) use ($orderId) {
             $tools->append(new CreateOnlinePayment($orderId));

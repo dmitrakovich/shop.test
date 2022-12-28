@@ -93,8 +93,10 @@ class OnlinePayment extends Model
      *
      * @return bool
      */
-    public function canCancelPayment(): bool {
+    public function canCancelPayment(): bool
+    {
         $statusEnum = OnlinePaymentStatusEnum::tryFrom($this->last_status_enum_id);
+
         return $statusEnum === OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE;
     }
 
@@ -103,8 +105,10 @@ class OnlinePayment extends Model
      *
      * @return bool
      */
-    public function canCapturePayment(): bool {
+    public function canCapturePayment(): bool
+    {
         $statusEnum = OnlinePaymentStatusEnum::tryFrom($this->last_status_enum_id);
+
         return $statusEnum === OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE;
     }
 }

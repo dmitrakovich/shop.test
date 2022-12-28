@@ -1,10 +1,10 @@
 <?php
 
 use App\Admin\Controllers\Api\ProductController;
-use App\Http\Controllers\Shop\PaymentController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CropperController;
 use App\Http\Controllers\Shop\OrderController;
+use App\Http\Controllers\Shop\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*

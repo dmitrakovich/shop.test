@@ -2,15 +2,14 @@
 
 namespace App\Services\Payment\Methods;
 
-use App\Models\Payments\OnlinePayment;
-use App\Models\Orders\Order;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
+use App\Models\Orders\Order;
+use App\Models\Payments\OnlinePayment;
 use Encore\Admin\Facades\Admin;
 
 abstract class AbstractPaymentService
 {
-
     /**
      * Create new payment
      *
@@ -25,40 +24,41 @@ abstract class AbstractPaymentService
      * Get payment by payment_id.
      *
      * @param  string  $paymentId
-     * @param  OnlinePaymentMethodEnum $methodEnum
+     * @param  OnlinePaymentMethodEnum  $methodEnum
      * @return OnlinePayment
      */
     public function getOnlinePaymentByPaymentId(
       string $paymentId,
       ?OnlinePaymentMethodEnum $methodEnum = null
     ): ?OnlinePayment {
-      $result = OnlinePayment::where('payment_id', $paymentId);
-      if($methodEnum) {
-          $result =$result->where('method_enum_id', $methodEnum);
-      }
-      return $result->first();
+        $result = OnlinePayment::where('payment_id', $paymentId);
+        if ($methodEnum) {
+            $result = $result->where('method_enum_id', $methodEnum);
+        }
+
+        return $result->first();
     }
 
     /**
      * Set OnlinePayment status.
      *
-     * @param OnlinePayment $payment
-     * @param OnlinePaymentStatusEnum $status
+     * @param  OnlinePayment  $payment
+     * @param  OnlinePaymentStatusEnum  $status
      * @return OnlinePayment
      */
     public function setPaymentStatus(
       OnlinePayment $payment,
       OnlinePaymentStatusEnum $status
     ): OnlinePayment {
-      if($payment->last_status_enum_id !== $status->value) {
-          $payment->last_status_enum_id = $status->value;
-          $payment->save();
-          $payment->statuses()->create([
-              'admin_user_id' => Admin::user() ? Admin::user()->id : null,
-              'payment_status_enum_id' => $status->value
-          ]);
-      }
-      return $payment;
-    }
+        if ($payment->last_status_enum_id !== $status->value) {
+            $payment->last_status_enum_id = $status->value;
+            $payment->save();
+            $payment->statuses()->create([
+                'admin_user_id' => Admin::user() ? Admin::user()->id : null,
+                'payment_status_enum_id' => $status->value,
+            ]);
+        }
 
+        return $payment;
+    }
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('admin_user_id')->unsigned()->nullable()->change();
         });
         Schema::table('online_payment_statuses', function (Blueprint $table) {
-          $table->integer('admin_user_id')->unsigned()->nullable()->change();
+            $table->integer('admin_user_id')->unsigned()->nullable()->change();
         });
     }
 
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->integer('admin_user_id')->unsigned()->change();
         });
         Schema::table('online_payment_statuses', function (Blueprint $table) {
-          $table->integer('admin_user_id')->unsigned()->change();
+            $table->integer('admin_user_id')->unsigned()->change();
         });
     }
 };
