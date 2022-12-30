@@ -356,8 +356,9 @@ class SaleService
         $products = $products->sortBy('price');
 
         $productSaleList = [];
+        /** @var Product $product */
         foreach ($products as $product) {
-            if ($this->checkSaleConditions($product)) {
+            if ($this->hasSale() && $this->checkSaleConditions($product)) {
                 $productSaleList[$product->id] = [
                     'price' => $product->price,
                     'oldPrice' => $product->getFixedOldPrice(),
