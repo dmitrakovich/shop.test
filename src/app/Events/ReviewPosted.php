@@ -2,23 +2,21 @@
 
 namespace App\Events;
 
-use App\Models\Orders\Order;
 use App\Models\User\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderCreated
+class ReviewPosted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      *
-     * @param  Order  $order
      * @return void
      */
-    public function __construct(public Order $order, public ?User $user = null)
+    public function __construct(public ?User $user = null)
     {
     }
 }

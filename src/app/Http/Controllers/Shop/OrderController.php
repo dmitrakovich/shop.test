@@ -69,7 +69,7 @@ class OrderController extends BaseController
 
         Cart::clear();
 
-        event(new OrderCreated($order));
+        event(new OrderCreated($order, auth()->user()));
 
         return redirect()->route('cart-final')->with('order_id', $order->id);
     }

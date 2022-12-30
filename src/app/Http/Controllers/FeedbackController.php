@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ReviewPosted;
 use App\Http\Requests\FeedbackRequest;
 use App\Models\Feedback;
 use App\Services\GoogleTagManagerService;
@@ -56,6 +57,8 @@ class FeedbackController extends Controller
         //     }
         //     $feedback->addMedia($video->getPathname())->toMediaCollection();
         // }
+
+        event(new ReviewPosted(auth()->user()));
 
         GoogleTagManagerFacade::user('userReview');
 

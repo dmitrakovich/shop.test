@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use libphonenumber\PhoneNumberUtil;
@@ -22,6 +23,7 @@ use libphonenumber\PhoneNumberUtil;
 /**
  * Class User
  *
+ * @property int $id
  * @property string $first_name
  * @property string $last_name
  * @property string $patronymic_name
@@ -267,14 +269,51 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Check if user has review after order
-     * TODO: cache it
+     * Get calculated & cached user data
+     */
+    public function getCachedUser(): CachedUser
+    {
+        return Cache::rememberForever(
+            $this->getCacheKey(),
+            fn () => new CachedUser(...$this->getDataForCache())
+        );
+    }
+
+    /**
+     * Generate key for cache
+     */
+    public function getCacheKey(): string
+    {
+        return "user-{$this->id}";
+    }
+
+    /**
+     * Check if user has review after order (cached)
      */
     public function hasReviewAfterOrder(): bool
     {
+        return $this->getCachedUser()->hasReviewAfterOrder;
+    }
+
+    /**
+     * Calculate user data for cache
+     */
+    private function getDataForCache(): array
+    {
+        return [
+            'hasReviewAfterOrder' => $this->_hasReviewAfterOrder(),
+        ];
+    }
+
+    /**
+     * Check if user has review after order
+     */
+    private function _hasReviewAfterOrder(): bool
+    {
         /** @var Order $lastOrder */
         if ($lastOrderDate = $this->orders()->latest()->value('created_at')) {
-            return $this->reviews()->where('created_at', '>', $lastOrderDate)->exists();
+            return $this->reviews()->where('created_at', '>', $lastOrderDate)
+                ->whereHas('media')->exists();
         }
 
         return false;
