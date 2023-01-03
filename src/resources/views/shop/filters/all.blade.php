@@ -10,9 +10,6 @@
 @include('shop.filters.checkbox', ['filterName' => 'fabrics', 'filterTitle' => 'МАТЕРИАЛ'])
 <hr>
 
-@include('shop.filters.checkbox', ['filterName' => 'collections', 'filterTitle' => 'КОЛЛЕКЦИЯ'])
-<hr>
-
 @include('shop.filters.checkbox', ['filterName' => 'sizes', 'filterTitle' => 'РАЗМЕРЫ'])
 <hr>
 

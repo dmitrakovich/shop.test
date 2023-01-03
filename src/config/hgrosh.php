@@ -5,7 +5,7 @@ return [
     'token_url' => 'https://iii.by/connect/token',
     'client_id' => env('HGROSH_CLIENT_ID'),
     'client_secret' => env('HGROSH_SECRET_KEY'),
-    'serviceproviderid' => 18464,
+    'serviceproviderid' => env('HGROSH_LK_ID'),
     'serviceid' => 1,
     'retailoutletcode' => 1,
 
