@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Events\OrderCreated;
+use App\Events\ReviewPosted;
+use App\Listeners\Cache\ResetUserCache;
 use App\Listeners\LogNotification;
 use App\Listeners\MergeCart;
 use App\Listeners\MergeFavorites;
@@ -37,9 +39,13 @@ class EventServiceProvider extends ServiceProvider
         OrderCreated::class => [
             SendOrderInformationNotification::class,
             SaveDevice::class,
+            ResetUserCache::class,
         ],
         NotificationSent::class => [
             LogNotification::class,
+        ],
+        ReviewPosted::class => [
+            ResetUserCache::class,
         ],
     ];
 
