@@ -318,4 +318,19 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return false;
     }
+
+    /**
+     * Calculate user's completed orders cost
+     */
+    public function completedOrdersCost(): float
+    {
+        $cost = 0;
+        $this->orders->each(function (Order $order) use (&$cost) {
+            if ($order->isCompleted()) {
+                $cost += $order->getItemsPrice() / $order->rate;
+            }
+        });
+
+        return $cost;
+    }
 }
