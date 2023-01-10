@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers\Forms;
 
+use App\Enums\SmsTraffic\RouteOptionsEnum;
 use App\Services\LogService;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Widgets\Form;
@@ -17,12 +18,6 @@ class Sms extends Form
     {
         parent::__construct($data);
     }
-
-    const ROUTE_OPTIONS = [
-        'sms' => 'SMS',
-        'viber' => 'Viber',
-        'viber(60)-sms' => 'Vb/SMS',
-    ];
 
     /**
      * The form title.
@@ -64,7 +59,7 @@ class Sms extends Form
     {
         $this->phone('phone', 'Номер телефона')->rules('required');
         $this->textarea('text', 'Текст сообщения')->rules('required');
-        $this->select('route', 'Тип отправки')->options(self::ROUTE_OPTIONS)->rules('required');
+        $this->select('route', 'Тип отправки')->options(RouteOptionsEnum::list())->rules('required');
     }
 
     /**

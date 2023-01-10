@@ -1,0 +1,25 @@
+.banner_timer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  padding: .5rem 1rem;
+
+  &__spoiler {
+
+    &-btn {
+      text-decoration: underline;
+      word-break: break-all;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    &-body {
+      flex: 1 1 auto;
+      min-height: 1px;
+      padding: 1.25rem;
+    }
+  }
+}
