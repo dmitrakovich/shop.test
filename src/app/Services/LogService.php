@@ -9,7 +9,6 @@ use App\Models\Logs\SmsLog;
  */
 class LogService
 {
-
     /**
      * Log sms notification
      */
