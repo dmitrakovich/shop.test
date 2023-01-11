@@ -157,4 +157,12 @@ class Cart extends Model
 
         return $this;
     }
+
+    /**
+     * Check min installmnet price
+     */
+    public function availableInstallment(): bool
+    {
+        return $this->getTotalPrice() >= Config::findCacheable('installment')['min_price'];
+    }
 }

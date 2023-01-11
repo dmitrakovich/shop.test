@@ -49,6 +49,7 @@ Route::group([
         $router->resource('currencies', CurrencyController::class);
         $router->resource('order-statuses', OrderStatusController::class);
         $router->resource('order-item-statuses', OrderItemStatusController::class);
+        $router->get('installment', InstallmentForm::class);
     });
 
     $router->group(['prefix' => 'bnrs'], function ($router) {

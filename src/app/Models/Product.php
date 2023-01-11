@@ -426,4 +426,12 @@ class Product extends Model implements HasMedia
     {
         return $this->sizes->count() === 1 && $this->sizes->first()->slug === Size::ONE_SIZE_SLUG;
     }
+
+    /**
+     * Check min installmnet price
+     */
+    public function availableInstallment(): bool
+    {
+        return $this->getPrice() >= Config::findCacheable('installment')['min_price'];
+    }
 }

@@ -12,6 +12,7 @@ use App\Models\User\User;
 use App\Services\GoogleTagManagerService;
 use App\Services\ProductService;
 use Deliveries\DeliveryMethod;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Payments\PaymentMethod;
@@ -31,15 +32,20 @@ class CartController extends BaseController
         /** @var User $user */
         $user = auth()->user() ?? new User();
 
-        $deliveriesList = DeliveryMethod::where('active', true)->pluck('name', 'id');
-        $paymentsList = PaymentMethod::where('active', true)->pluck('name', 'id');
+        $deliveriesList = DeliveryMethod::query()
+            ->where('active', true)
+            ->when(!Sale::hasFitting(), function (Builder $builder) {
+                $builder->where('class', '!=', 'BelpostCourierFitting');
+            })
+            ->pluck('name', 'id');
 
-        if (!Sale::hasFitting()) {
-            unset($deliveriesList['BelpostCourierFitting']);
-        }
-        if (!Sale::hasInstallment()) {
-            unset($paymentsList['Installment']);
-        }
+        $availableInstallment = $cart->availableInstallment() && Sale::hasInstallment();
+        $paymentsList = PaymentMethod::query()
+            ->where('active', true)
+            ->when(!$availableInstallment, function (Builder $builder) {
+                $builder->where('class', '!=', 'Installment');
+            })
+            ->pluck('name', 'id');
 
         $countries = Country::getAll();
         $currentCountry = Country::getCurrent();
