@@ -3,8 +3,8 @@
 namespace App\Admin\Controllers\Forms;
 
 use App\Enums\SmsTraffic\RouteOptionsEnum;
-use App\Services\LogService;
 use App\Helpers\SmsTrafficHelper;
+use App\Services\LogService;
 use Encore\Admin\Widgets\Form;
 use Illuminate\Http\Request;
 
@@ -38,6 +38,7 @@ class Sms extends Form
         $route = $request->input('route');
         $response = SmsTrafficHelper::send($phone, $text, ['route' => $route]);
         admin_success('Сообщение отправлено. Id сообщения: ' . $response->getSmsId());
+
         return back();
     }
 
