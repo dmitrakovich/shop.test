@@ -2,11 +2,11 @@
 
 namespace App\Admin\Controllers\Forms;
 
-use App\Enums\SmsTraffic\RouteOptionsEnum;
-use App\Helpers\SmsTrafficHelper;
 use App\Services\LogService;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Widgets\Form;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Facades\SmsTraffic;
 
 class Sms extends Form
 {
@@ -17,6 +17,12 @@ class Sms extends Form
     {
         parent::__construct($data);
     }
+
+    const ROUTE_OPTIONS = [
+        'sms' => 'SMS',
+        'viber' => 'Viber',
+        'viber(60)-sms' => 'Vb/SMS',
+    ];
 
     /**
      * The form title.
@@ -36,7 +42,16 @@ class Sms extends Form
         $phone = $request->input('phone');
         $text = $request->input('text');
         $route = $request->input('route');
-        $response = SmsTrafficHelper::send($phone, $text, ['route' => $route]);
+
+        $response = SmsTraffic::send($phone, $text, ['route' => $route]);
+        $this->logService->logSms(
+            phone: $phone,
+            text: $text,
+            route: $route,
+            adminId: Admin::user()->id,
+            status: $response->getDescription()
+        );
+
         admin_success('Сообщение отправлено. Id сообщения: ' . $response->getSmsId());
 
         return back();
@@ -49,7 +64,7 @@ class Sms extends Form
     {
         $this->phone('phone', 'Номер телефона')->rules('required');
         $this->textarea('text', 'Текст сообщения')->rules('required');
-        $this->select('route', 'Тип отправки')->options(RouteOptionsEnum::list())->rules('required');
+        $this->select('route', 'Тип отправки')->options(self::ROUTE_OPTIONS)->rules('required');
     }
 
     /**
