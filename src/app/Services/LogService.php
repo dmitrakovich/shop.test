@@ -10,13 +10,6 @@ use App\Models\Logs\SmsLog;
 class LogService
 {
     /**
-     * LogService constructor.
-     */
-    public function __construct(private SmsLog $smsLog)
-    {
-    }
-
-    /**
      * Log sms notification
      */
     public function logSms(
@@ -29,7 +22,7 @@ class LogService
         ?int $mailingId = null,
         ?string $status = null,
     ): SmsLog {
-        $log = $this->smsLog->newInstance();
+        $log = new SmsLog;
         $log->phone = $phone;
         $log->text = $text;
         $log->route = $route;

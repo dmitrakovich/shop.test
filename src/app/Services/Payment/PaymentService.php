@@ -5,9 +5,9 @@ namespace App\Services\Payment;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
+use App\Notifications\PaymentSms;
 use App\Services\Payment\Methods\PaymentEripService;
 use App\Services\Payment\Methods\PaymentYandexService;
-use Illuminate\Notifications\Facades\SmsTraffic;
 
 class PaymentService
 {
@@ -56,8 +56,7 @@ class PaymentService
         $paymentMethodService = $this->getPaymentMethodServiceByEnum(OnlinePaymentMethodEnum::tryFrom($data['method_enum_id']));
         $onlinePayment = $paymentMethodService->create($order, $data['amount'], $payment_num, $data);
         if (isset($data['send_sms']) && $data['send_sms'] == 1) {
-            $smsText = ($order->first_name ? ($order->first_name . ', ') : '') . 'Вам выставлен счет № ' . $payment_num . ' - подробнее по ссылке ' . route('pay.erip', $payment_num, true);
-            SmsTraffic::send($order->phone, $smsText);
+            $order->notify(new PaymentSms($payment_num, $order->first_name));
         }
 
         return $onlinePayment;

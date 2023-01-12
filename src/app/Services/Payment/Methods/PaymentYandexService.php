@@ -160,21 +160,25 @@ class PaymentYandexService extends AbstractPaymentService
             return false;
         }
 
-        switch ($notificationObject->getEvent()) {
-            case NotificationEventType::PAYMENT_SUCCEEDED:
-                $payment->paid_amount = $responseObject->getAmount()->value ?? null;
-                $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::SUCCEEDED);
-                break;
-            case NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE:
-                $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE);
-                break;
-            case NotificationEventType::PAYMENT_CANCELED:
-                $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::CANCELED);
-                break;
-            default:
-                return false;
-        }
+        if ($payment) {
+            switch ($notificationObject->getEvent()) {
+                case NotificationEventType::PAYMENT_SUCCEEDED:
+                    $payment->paid_amount = $responseObject->getAmount()->value ?? null;
+                    $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::SUCCEEDED);
+                    break;
+                case NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE:
+                    $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE);
+                    break;
+                case NotificationEventType::PAYMENT_CANCELED:
+                    $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::CANCELED);
+                    break;
+                default:
+                    return false;
+            }
 
-        return true;
+            return true;
+        } else {
+            return false;
+        }
     }
 }
