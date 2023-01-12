@@ -240,7 +240,7 @@ class Order extends Model
         return "{$this->last_name} {$this->first_name} {$this->patronymic_name}";
     }
 
-    public function getItemsPrice()
+    public function getItemsPrice(): float
     {
         $price = 0;
         foreach ($this->data as $item) {
@@ -250,7 +250,7 @@ class Order extends Model
         return $price;
     }
 
-    public function getMaxItemsPrice()
+    public function getMaxItemsPrice(): float
     {
         $price = 0;
         foreach ($this->data as $item) {
@@ -260,7 +260,7 @@ class Order extends Model
         return $price;
     }
 
-    public function getTotalPrice()
+    public function getTotalPrice(): float
     {
         $price = $this->total_price > 0 ? $this->total_price : $this->getItemsPrice();
 
@@ -270,7 +270,7 @@ class Order extends Model
         return $price;
     }
 
-    public function getItemsCount()
+    public function getItemsCount(): int
     {
         $count = 0;
         foreach ($this->data as $item) {
@@ -296,6 +296,14 @@ class Order extends Model
     public function isOneClick(): bool
     {
         return $this->order_method == OrderMethod::ONECLICK;
+    }
+
+    /**
+     * Check if this order has been completed
+     */
+    public function isCompleted(): bool
+    {
+        return $this->status_key === 'complete';
     }
 
     /**

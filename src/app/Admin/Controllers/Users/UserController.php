@@ -8,6 +8,7 @@ use App\Models\User\User;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Filter;
 use Encore\Admin\Show;
 
 class UserController extends AdminController
@@ -33,18 +34,21 @@ class UserController extends AdminController
         $grid->column('patronymic_name', 'Отчество');
         $grid->column('email', 'Email');
         $grid->column('phone', 'Телефон');
+        $grid->column('orders', 'Сумма покупок')->display(fn () => $this->completedOrdersCost() . ' руб.');
         $grid->column('group.name', 'Группа');
+        $grid->column('reviews', 'Кол-во отзывов')->display(fn ($reviews) => count($reviews));
         $grid->column('addresses', 'Адрес')->display(fn ($addresses) => $addresses[0]['address'] ?? null);
         $grid->column('created_at', 'Дата регистрации');
 
         $grid->model()->orderBy('id', 'desc');
         $grid->paginate(50);
 
-        $grid->filter(function ($filter) {
+        $grid->filter(function (Filter $filter) {
             $filter->like('first_name', 'Имя');
             $filter->like('last_name', 'Фамилия');
             $filter->like('patronymic_name', 'Отчество');
             $filter->like('phone', 'Телефон');
+            $filter->equal('group_id', 'Группа')->select(Group::query()->pluck('name', 'id'));
             $filter->like('email', 'Email');
             $filter->like('addresses.city', 'Город');
             $filter->like('addresses.address', 'Адрес');
@@ -85,6 +89,10 @@ class UserController extends AdminController
             $form->select('country_id', 'Страна')->options(Country::query()->pluck('name', 'id'));
             $form->text('city', 'Город');
             $form->textarea('address', 'Адрес');
+        });
+
+        $form->hasMany('reviews', 'Отзывы', function (Form\NestedForm $form) {
+            $form->textarea('text', 'Отзыв')->readonly();
         });
 
         return $form;
