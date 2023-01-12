@@ -47,7 +47,7 @@ class Config extends Model
     {
         parent::boot();
 
-        static::saved(function(self $config) {
+        static::saved(function (self $config) {
             Cache::forget('config.' . $config->key);
         });
     }

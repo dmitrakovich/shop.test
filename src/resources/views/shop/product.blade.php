@@ -77,7 +77,8 @@
                     <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                     <div class="row mt-4">
 
-                        @includeWhen($product->availableInstallment(), 'partials.product.installment')
+                        @includeWhen($product->availableInstallment(),
+                            'partials.product.installment')
 
                         <div class="col-12 price-block mt-3">
                             <div class="row">
@@ -184,8 +185,7 @@
 
                     <div class="col-12 text-left text-muted mt-5">
                         <p>
-                            <img src="/images/icons/installments.svg" role="presentation"
-                                class="pr-2">
+                            <img src="/images/icons/installments.svg" role="presentation" class="pr-2">
                             Без переплат в рассрочку
                         </p>
                         <p>
