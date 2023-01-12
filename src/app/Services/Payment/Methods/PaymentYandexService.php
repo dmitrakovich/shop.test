@@ -160,7 +160,8 @@ class PaymentYandexService extends AbstractPaymentService
             return false;
         }
 
-        switch ($notificationObject->getEvent()) {
+        if($payment) {
+          switch ($notificationObject->getEvent()) {
             case NotificationEventType::PAYMENT_SUCCEEDED:
                 $payment->paid_amount = $responseObject->getAmount()->value ?? null;
                 $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::SUCCEEDED);
@@ -173,8 +174,10 @@ class PaymentYandexService extends AbstractPaymentService
                 break;
             default:
                 return false;
+          }
+          return true;
+        } else {
+          return false;
         }
-
-        return true;
     }
 }
