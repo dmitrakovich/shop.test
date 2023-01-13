@@ -58,7 +58,7 @@ class PaymentEripService extends AbstractPaymentService
                 'order_id' => $order->id,
                 'currency_code' => 'BYN',
                 'currency_value' => 1,
-                'method_enum_id' => OnlinePaymentMethodEnum::ERIP,
+                'method_enum_id' => OnlinePaymentMethodEnum::ERIP->value,
                 'admin_user_id' => Admin::user() ? Admin::user()->id : null,
                 'amount' => $response[0]['totalAmount'] ?? $amount ?? null,
                 'expires_at' => date('Y-m-d H:i:s', strtotime('+3 day')),
