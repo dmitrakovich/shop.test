@@ -75,7 +75,6 @@ class PaymentYandexService extends AbstractPaymentService
         if ($payment) {
             $paymentId = $payment->getId();
             $paymentUrl = $payment->getConfirmation()->getConfirmationUrl();
-            $paymentLinkCode = $payment_info['link_code'] ?? uniqid();
 
             $dbData = [];
             $dbData['order_id'] = $order->id;
@@ -90,7 +89,7 @@ class PaymentYandexService extends AbstractPaymentService
             $dbData['fio'] = $payment_info['fio'] ?? null;
             $dbData['phone'] = $payment_info['phone'] ?? null;
             $dbData['email'] = $payment_info['email'] ?? null;
-            $dbData['link_code'] = $paymentLinkCode;
+            $dbData['link_code'] = $paymentNum;
             $dbData['link_expires_at'] = date('Y-m-d H:i:s', strtotime('59 minutes'));
             $dbData['is_test'] = (bool)$this->isTest;
             $dbData['request_data'] = $data;
