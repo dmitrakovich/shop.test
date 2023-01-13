@@ -21,6 +21,6 @@ class PaymentSms extends AbstractSmsTraffic
    */
   public function getContent(): string
   {
-    return ($this->firstName ? ($this->firstName . ', ') : '') . 'Вам выставлен счет № ' . $this->paymentNum . ' - подробнее по ссылке ' . $this->link;
+      return ($this->firstName ? ($this->firstName . ', ') : '') . 'Вам выставлен счет № ' . $this->paymentNum . ' - подробнее по ссылке ' . $this->link;
   }
 }
