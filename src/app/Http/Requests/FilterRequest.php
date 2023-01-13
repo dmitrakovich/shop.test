@@ -105,7 +105,7 @@ class FilterRequest extends FormRequest
     protected function addTopProducts(array &$filters): void
     {
         $top = $this->input('top', '');
-        $top = array_filter(explode(',', $top));
+        $top = array_filter(explode(',', $top), 'is_numeric');
 
         if (!empty($top)) {
             $filters[Top::class] = array_map(function (int $id) {
