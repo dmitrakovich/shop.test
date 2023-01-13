@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Payments\PaymentMethod;
+use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 class CartController extends BaseController
 {
@@ -32,23 +33,19 @@ class CartController extends BaseController
         /** @var User $user */
         $user = auth()->user() ?? new User();
 
-        $deliveriesList = DeliveryMethod::query()
-            ->where('active', true)
-            ->when(!Sale::hasFitting(), function (Builder $builder) {
-                $builder->where('class', '!=', 'BelpostCourierFitting');
-            })
-            ->pluck('name', 'id');
-
-        $availableInstallment = $cart->availableInstallment() && Sale::hasInstallment();
-        $paymentsList = PaymentMethod::query()
-            ->where('active', true)
-            ->when(!$availableInstallment, function (Builder $builder) {
-                $builder->where('class', '!=', 'Installment');
-            })
-            ->pluck('name', 'id');
-
+        $countryCode = SxGeo::getCountry();
         $countries = Country::getAll();
         $currentCountry = Country::getCurrent();
+
+        $deliveriesList = DeliveryMethod::active()
+            ->filterFitting(Sale::hasFitting())
+            ->filterByCountry($countryCode)
+            ->pluck('name', 'id');
+
+        $paymentsList = PaymentMethod::active()
+            ->filterInstallment($cart->availableInstallment() && Sale::hasInstallment())
+            ->filterByCountry($countryCode)
+            ->pluck('name', 'id');
 
         $gtmService->setViewForCart($cart);
 
