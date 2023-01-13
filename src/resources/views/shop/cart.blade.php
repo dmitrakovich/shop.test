@@ -140,10 +140,11 @@
 											@endif
                                             {{-- blade-formatter-enable --}}
                                         </span>
-									@elseif (($currentCountry->id == 2 || $currentCountry->id == 3) && $value == 'При получении')
+                                    @elseif (($currentCountry->id == 2 || $currentCountry->id == 3) && $value == 'При получении')
                                         <br>
                                         <span class="text-muted font-size-12">
-                                                Условие для РФ и Казахстана! Предоплата 10% перед отправкой, остальное при получении наложенным платежом.
+                                            Условие для РФ и Казахстана! Предоплата 10% перед отправкой,
+                                            остальное при получении наложенным платежом.
                                         </span>
                                     @endif
                                 </label>
