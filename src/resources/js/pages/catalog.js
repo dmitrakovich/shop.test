@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // scroll top button
-  document.querySelector('button.scroll-top-btn').addEventListener('click', function () {
+  document.querySelector('button.scroll-top-btn')?.addEventListener('click', function () {
     window.scrollTo({top: 0, behavior: 'smooth'});
   });
 

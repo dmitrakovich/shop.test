@@ -5,10 +5,12 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\InfoPageController;
+use App\Http\Controllers\PopupController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
 use App\Http\Controllers\Shop\PaymentController;
 use App\Http\Controllers\Shop\ProductController;
+use App\Http\Middleware\OnlyAjax;
 use App\Http\Requests\FilterRequest;
 use App\Models\Product;
 use App\Models\Url;
@@ -89,6 +91,12 @@ Route::group(['namespace' => 'Shop'], function () {
     });
     Route::resource('orders', OrderController::class)->only('store');
     Route::resource('orders', OrderController::class)->only('index')->middleware('auth');
+});
+
+Route::prefix('popup')->controller(PopupController::class)->middleware(OnlyAjax::class)->group(function () {
+    Route::prefix('offer')->group(function () {
+        Route::get('register', 'offerToRegister');
+    });
 });
 
 require __DIR__ . '/sitemap.php';

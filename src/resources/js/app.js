@@ -9,3 +9,4 @@ require('./components/inputs')
 
 require('./scripts');
 require('./pages');
+require('./popups');

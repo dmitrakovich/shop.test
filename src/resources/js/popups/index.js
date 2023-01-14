@@ -1,0 +1,1 @@
+import './offer2register';

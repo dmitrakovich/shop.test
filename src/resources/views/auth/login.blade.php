@@ -3,17 +3,23 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-7 col-xl-5">
+            <div class="col-12 col-md-7 col-xl-6 mt-4">
 
                 @if (session('status'))
-                    <div class="mb-4 alert alert-success" role="alert">
+                    <div class="alert alert-success" role="alert">
                         {{ session('status') }}
                     </div>
                 @endif
 
-                <div class="card my-5">
+                <div class="alert alert-primary h4 text-dark text-center" role="alert">
+                    10% скидки <span class="font-weight-normal">
+                        на первый заказ за регистрацию!
+                    </span>
+                </div>
+
+                <div class="card mt-2 mb-5">
                     <div class="card-header">
-                        <h4>Войти/Зарегистрироваться</h4>
+                        <h1 class="h4">Войти/Зарегистрироваться</h1>
                     </div>
 
                     <div class="card-body">

@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     submitLoginForm();
   });
 
-  resendOtpButton.addEventListener('click', event => {
+  resendOtpButton?.addEventListener('click', event => {
     document.getElementById('otp')?.remove();
     submitLoginForm();
   });
