@@ -6,25 +6,21 @@
             <line x1="2.76777" y1="2.23223" x2="42.7678" y2="42.2322" stroke="white" stroke-width="5"/>
         </svg>
     </button>
-    <a href="{{ route('login') }}" class="full-link row" style="line-height: 1;">
-        <div class="col-12 col-md-6 text-danger">
+    <div class="row" style="line-height: 1;">
+        <a href="{{ route('login') }}" class="col-12 col-md-6 text-danger">
             <span style="font-size: 10rem; font-weight: 600;">10%</span>
-        </div>
-        <div class="col-12 col-md-6 mt-3 text-danger">
+        </a>
+        <a href="{{ route('login') }}" class="col-12 col-md-6 mt-3 text-danger">
             <span class="h1">скидка на первый заказ</span><br />
             <span class="h2">за регистрацию</span>
-        </div>
-        <img src="{{ asset('/images/offers/register.png') }}" alt="register" class="img-fluid">
+        </a>
+        <a href="{{ route('login') }}">
+            <img src="{{ asset('/images/offers/register.png') }}" alt="register" class="img-fluid">
+        </a>
         <div class="col-12 text-center mt-2">
-            <span class="btn btn-danger" style="font-size: 22px">
+            <a href="{{ route('login') }}" class="btn btn-danger" style="font-size: 22px">
                 зарегистрироваться
-            </span>
+            </a>
         </div>
-    </a>
+    </div>
 </div>
-
-<style>
-    .offer-to-register-popup .full-link:focus-visible {
-        outline: unset;
-    }
-</style>
