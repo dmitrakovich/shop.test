@@ -10,6 +10,7 @@ use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
 use App\Http\Controllers\Shop\PaymentController;
 use App\Http\Controllers\Shop\ProductController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Middleware\OnlyAjax;
 use App\Http\Requests\FilterRequest;
 use App\Models\Product;
@@ -99,6 +100,7 @@ Route::prefix('popup')->controller(PopupController::class)->middleware(OnlyAjax:
     });
 });
 
-require __DIR__ . '/sitemap.php';
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
+Route::get('/sitemap.{path?}.xml', [SitemapController::class, 'path'])->where('path', '.*');
 
 // Route::fallback(fn () => 'Хм… Почему ты оказался здесь?');
