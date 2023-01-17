@@ -12,7 +12,6 @@ use App\Models\User\User;
 use App\Services\GoogleTagManagerService;
 use App\Services\ProductService;
 use Deliveries\DeliveryMethod;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Payments\PaymentMethod;
