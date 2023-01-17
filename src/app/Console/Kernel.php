@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        Commands\GenerateSitemapCommand::class
         //
     ];
 
@@ -47,6 +48,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('backup:media')->weeklyOn(Schedule::MONDAY, '03:00');
         $schedule->command('backup:clean')->dailyAt('06:00');
         $schedule->command('backup:monitor')->dailyAt('06:30');
+
+        $schedule->command('generate:sitemap')->dailyAt('00:30');
     }
 
     /**
