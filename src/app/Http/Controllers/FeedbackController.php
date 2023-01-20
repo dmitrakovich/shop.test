@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\ReviewPosted;
 use App\Http\Requests\FeedbackRequest;
+use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\Feedback;
 use App\Services\GoogleTagManagerService;
-use SeoFacade;
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class FeedbackController extends Controller
@@ -41,22 +41,17 @@ class FeedbackController extends Controller
     public function store(FeedbackRequest $feedbackRequest)
     {
         $data = $feedbackRequest->validated();
+        /** @var Feedback $feedback */
         $feedback = Feedback::create($data);
 
+        /** @var \Illuminate\Http\UploadedFile $photo */
         foreach (($data['photos'] ?? []) as $photo) {
-            /** @var \Illuminate\Http\UploadedFile $photo */
-            if ($photo->getSize() > Feedback::MAX_PHOTO_SIZE) {
-                continue;
-            }
-            $feedback->addMedia($photo->getPathname())->toMediaCollection();
+            $feedback->addMedia($photo)->toMediaCollection('photos');
         }
-
-        // foreach (($data['videos'] ?? []) as $video) {
-        //     if ($video->getSize() > Feedback::MAX_VIDEO_SIZE) {
-        //         continue;
-        //     }
-        //     $feedback->addMedia($video->getPathname())->toMediaCollection();
-        // }
+        /** @var \Illuminate\Http\UploadedFile $photo */
+        foreach (($data['videos'] ?? []) as $video) {
+            $feedback->addMedia($video)->toMediaCollection('videos');
+        }
 
         event(new ReviewPosted(auth()->user()));
 

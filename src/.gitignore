@@ -1,12 +1,14 @@
 /node_modules
 /public/hot
 /public/storage
+/public/media
 /public/temp
 /public/xml
 /public/css
 /public/js
 /public/mix-manifest.json
 /storage/*.key
+/storage/media-library
 /vendor
 .env
 .env.prod

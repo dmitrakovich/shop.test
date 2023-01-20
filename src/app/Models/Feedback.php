@@ -21,6 +21,7 @@ class Feedback extends Model implements HasMedia
         'user_id',
         'user_name',
         'user_email',
+        'user_city',
         'text',
         'rating',
         'product_id',
@@ -45,13 +46,6 @@ class Feedback extends Model implements HasMedia
      * @var string
      */
     protected const DEFAULT_TYPE = 'reviews';
-
-    /**
-     * Max media sizes
-     */
-    final const MAX_PHOTO_SIZE = 5_242_880; // 5 MB
-
-    final const MAX_VIDEO_SIZE = 52_428_800; // 50 MB
 
     /**
      * Доступные типы обратной связи
@@ -115,8 +109,17 @@ class Feedback extends Model implements HasMedia
      */
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('thumb')->width(150)->height(150);
-        $this->addMediaConversion('full')->width(2000);
+        $this->addMediaConversion('thumb')
+            ->performOnCollections('photos')
+            ->width(150)->height(150);
+        $this->addMediaConversion('full')
+            ->performOnCollections('photos')
+            ->width(2000);
+
+        $this->addMediaConversion('thumb')
+            ->performOnCollections('videos')
+            ->extractVideoFrameAtSecond(2)
+            ->width(150)->height(150);
     }
 
     /**

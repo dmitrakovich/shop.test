@@ -44,9 +44,14 @@
                         </div>
                         <div class="col-7">
                             <p>{{ $feedback->text }}</p>
-                            @foreach ($feedback->getMedia() as $image)
+                            @foreach ($feedback->getMedia('photos') as $image)
                                 <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
                                     <img src="{{ $image->getUrl('thumb') }}" class="img-fluid">
+                                </a>
+                            @endforeach
+                            @foreach ($feedback->getMedia('videos') as $video)
+                                <a href="{{ $video->getUrl() }}" data-fancybox="video-gallery">
+                                    <img src="{{ $video->getUrl('thumb') }}" class="img-fluid">
                                 </a>
                             @endforeach
                         </div>
@@ -54,7 +59,6 @@
                             <span>{{ $feedback->created_at->format('d.m.Y') }}</span>
                         </div>
                     </div>
-                    {{-- {{ dump($feedback) }} --}}
                 </div>
             @endforeach
 
@@ -99,7 +103,19 @@
                 </label>
                 <div class="col-12 col-md-8">
                     <input type="text" name="user_name" id="inputName" class="form-control"
-                        placeholder="Имя" required>
+                    value="{{ optional(auth()->user())->first_name }}" autocomplete="given-name"
+                    placeholder="Имя" required>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="inputCity" class="col-12 col-md-4 col-form-label">
+                    <b>Город</b>&nbsp;<font color="red">*</font>
+                </label>
+                <div class="col-12 col-md-8">
+                    <input type="text" name="user_city" id="inputCity" class="form-control"
+                        value="{{ optional(auth()->user())->getFirstAddress()->city }}"
+                        autocomplete="address" placeholder="Город" required>
                 </div>
             </div>
 
@@ -113,14 +129,15 @@
                 </div>
             </div>
 
-            {{-- <div class="row form-group">
-            <label for="inputVideos" class="col-12 col-md-4 col-form-label">
-                <b>Загрузите видео</b>
-            </label>
-            <div class="col-12 col-md-8">
-                <input type="file"  accept="video/*" name="videos[]" id="inputVideos" class="form-control-file" multiple>
+            <div class="row form-group">
+                <label for="inputVideos" class="col-12 col-md-4 col-form-label">
+                    <b>Загрузите видео</b>
+                </label>
+                <div class="col-12 col-md-8">
+                    <input type="file" accept="video/*" name="videos[]" id="inputVideos"
+                        class="form-control-file" multiple>
+                </div>
             </div>
-        </div> --}}
 
             @include('includes.captcha-privacy-policy')
 
@@ -132,7 +149,6 @@
 
         </form>
     </div>
-
 
 
 @endsection
