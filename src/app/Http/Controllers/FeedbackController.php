@@ -20,7 +20,7 @@ class FeedbackController extends Controller
     {
         $type = Feedback::getType($type);
 
-        $feedbacks = Feedback::with(['answers', 'media'])
+        $feedbacks = Feedback::with(['answers', 'media', 'product'])
             ->where('publish', true)
             ->latest()
             ->type($type)
@@ -29,7 +29,7 @@ class FeedbackController extends Controller
         $gtmService->setViewForOther();
         SeoFacade::setTitle('Отзывы');
 
-        return view('feedbacks', compact('type', 'feedbacks'));
+        return view('feedbacks-page', compact('type', 'feedbacks'));
     }
 
     /**
