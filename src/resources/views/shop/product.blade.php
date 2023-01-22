@@ -76,9 +76,8 @@
                     method="post">
                     <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                     <div class="row mt-4">
-
-                        @includeWhen($product->availableInstallment(),
-                            'partials.product.installment')
+                        {{-- blade-formatter-disable-next-line --}}
+                        @includeWhen($product->availableInstallment(), 'partials.product.installment')
 
                         <div class="col-12 price-block mt-3">
                             <div class="row">
@@ -295,6 +294,27 @@
 
             </div>
         </div>
+
+        <div class="row justify-content-between">
+            <div class="col-auto">
+                <span class="h3">ОЦЕНКИ И ОТЗЫВЫ</span>
+            </div>
+            <div class="col-auto">
+                <button type="button" data-fancybox data-src="#leave-feedback-modal"
+                    class="btn btn-link px-0 text-decoration-underline font-weight-bold">
+                    ОСТАВИТЬ ОТЗЫВ О СВОЕЙ ПОКУПКЕ
+                </button>
+            </div>
+        </div>
+        <div class="col-12 mt-3">
+            @include('includes.feedbacks')
+        </div>
+        <div class="col-12 px-0 mb-4 text-right">
+            <a href="{{ route('feedbacks') }}" class="text-decoration-underline">
+                Смотреть все отзывы
+            </a>
+        </div>
+
         @if (!$product->trashed() && !empty($similarProducts) && count($similarProducts))
             <div class="col-md-12 mt-3 mb-5">
                 @include('partials.index.simple-slider', [

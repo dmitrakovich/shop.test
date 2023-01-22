@@ -1,37 +1,42 @@
 const { default: axios } = require("axios");
 import captcha from './../components/captcha';
 
-document.addEventListener("DOMContentLoaded", function () {
+const feedbackFormId = 'leave-feedback-form';
+const submitButtonId = 'leave-feedback-btn';
 
-  const feedbackForm = document.querySelector('form#leave-feedback');
-  const submitButton = document.querySelector('.js-leave-feedback-btn');
+document.addEventListener('click', function (event) {
+  if (event.target.id === submitButtonId) {
+    saveFeedback();
+  }
+});
 
-  submitButton?.addEventListener('click', event => {
-    submitButton.disabled = true;
-    submitButton.classList.add('btn-disabled-load');
+function saveFeedback() {
+  const feedbackForm = document.getElementById(feedbackFormId);
+  const submitButton = document.getElementById(submitButtonId);
 
-    captcha().then((token) => {
-      let data = new FormData(feedbackForm);
-      data.append('captcha_token', token);
+  submitButton.disabled = true;
+  submitButton.classList.add('btn-disabled-load');
 
-      axios.post('/feedbacks', data).then((response) => {
-        feedbackForm.outerHTML = response.data.result;
-        dataLayer.push(response.data.dataLayer);
-      }).catch((error) => {
-        if (error.response.status != 422) {
-          return false;
-        }
-        const errors = error.response.data.errors;
-        let errorMessages = [];
-        for (const inputName in errors) {
-          errorMessages.push(errors[inputName]);
-        }
-        alert(errorMessages.join('\n'))
-      }).finally(() => {
-        submitButton.disabled = false;
-        submitButton.classList.remove('btn-disabled-load');
-      });
+  captcha().then((token) => {
+    let data = new FormData(feedbackForm);
+    data.append('captcha_token', token);
+
+    axios.post('/feedbacks', data).then((response) => {
+      feedbackForm.outerHTML = response.data.result;
+      dataLayer.push(response.data.dataLayer);
+    }).catch((error) => {
+      if (error.response.status != 422) {
+        return false;
+      }
+      const errors = error.response.data.errors;
+      let errorMessages = [];
+      for (const inputName in errors) {
+        errorMessages.push(errors[inputName]);
+      }
+      alert(errorMessages.join('\n'))
+    }).finally(() => {
+      submitButton.disabled = false;
+      submitButton.classList.remove('btn-disabled-load');
     });
   });
-
-});
+}

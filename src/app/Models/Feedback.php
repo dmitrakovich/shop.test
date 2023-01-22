@@ -110,7 +110,12 @@ class Feedback extends Model implements HasMedia
         return $this->belongsTo(Product::class)->withTrashed();
     }
 
-    protected static function getType($type)
+    /**
+     * Check & return feedback type
+     *
+     * @param  mixed  $type
+     */
+    public static function getType($type): string
     {
         return in_array($type, self::$availableTypes) ? $type : self::DEFAULT_TYPE;
     }

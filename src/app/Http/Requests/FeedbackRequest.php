@@ -51,7 +51,6 @@ class FeedbackRequest extends FormRequest
             'type_id' => $captchaScore > 4 ? Feedback::TYPE_REVIEW : Feedback::TYPE_SPAM,
             'captcha_score' => intval($captchaScore),
             'rating' => intval($this->rating ?? 5),
-            'product_id' => intval($this->product_id ?? 0),
         ]);
     }
 

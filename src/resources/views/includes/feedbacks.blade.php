@@ -1,5 +1,5 @@
 <div class="row">
-    @foreach ($feedbacks as $feedback)
+    @forelse ($feedbacks as $feedback)
         <div class="col-12 item mb-3 px-2 px-md-5 py-4 bg-light">
             <div class="row">
                 <div class="col-12 col-md-3">
@@ -8,7 +8,7 @@
                         @if (!empty($feedback->user_city))
                             <div class="col-12">{{ $feedback->user_city }}</div>
                         @endif
-                        @if (!empty($feedback->product))
+                        @if (empty($product) && !empty($feedback->product))
                             <div class="col-12 mt-2">
                                 <div>{{ $feedback->product->shortName() }}</div>
                                 <div style="max-width: 150px">
@@ -58,8 +58,11 @@
                 </div>
             </div>
         </div>
-    @endforeach
-
+    @empty
+        @if (isset($product))
+            Еще никто не оставил отзыв о товаре
+        @endif
+    @endforelse
 </div>
 
 @if ($feedbacks instanceof \Illuminate\Pagination\LengthAwarePaginator)
@@ -70,8 +73,8 @@
     </div>
 @endif
 
-<div class="d-none">
-    <form id="leave-feedback" action="{{ route('feedbacks.store') }}" method="post">
+<div style="display: none;" id="leave-feedback-modal">
+    <form id="leave-feedback-form" action="{{ route('feedbacks.store') }}" method="post">
         @csrf
         <h3 class="mb-4">Оставить отзыв</h3>
 
@@ -83,7 +86,7 @@
             звезды
         </div>
     </div> --}}
-
+        <input type="hidden" name="product_id" value="{{ $product->id ?? 0 }}">
         <div class="row form-group">
             <label for="textareaText" class="col-12 col-md-4 col-form-label">
                 <b>Оставьте комментарий</b>&nbsp;<font color="red">*</font>
@@ -139,7 +142,7 @@
         @include('includes.captcha-privacy-policy')
 
         <div class="row mt-4 mb-0 form-group justify-content-end">
-            <button type="button" class="js-leave-feedback-btn btn btn-dark px-4">
+            <button type="button" id="leave-feedback-btn" class="btn btn-dark px-4">
                 Оставить отзыв
             </button>
         </div>

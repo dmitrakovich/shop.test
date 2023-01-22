@@ -13,7 +13,7 @@
             </div>
             <div class="col-12 col-md-auto">
                 <button type="button" class="btn btn-danger btn-block py-3" data-fancybox
-                    data-src="#leave-feedback">
+                    data-src="#leave-feedback-modal">
                     ОСТАВИТЬ ОТЗЫВ О СВОЕЙ ПОКУПКЕ
                 </button>
             </div>

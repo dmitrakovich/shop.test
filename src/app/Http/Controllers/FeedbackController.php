@@ -2,15 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ReviewPosted;
 use App\Http\Requests\FeedbackRequest;
 use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\Feedback;
+use App\Services\FeedbackService;
 use App\Services\GoogleTagManagerService;
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class FeedbackController extends Controller
 {
+    /**
+     * ProductController constructor.
+     */
+    public function __construct(private FeedbackService $feedbackService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,12 +26,7 @@ class FeedbackController extends Controller
     public function index(GoogleTagManagerService $gtmService, ?string $type = null)
     {
         $type = Feedback::getType($type);
-
-        $feedbacks = Feedback::with(['answers', 'media', 'product'])
-            ->where('publish', true)
-            ->latest()
-            ->type($type)
-            ->paginate(50);
+        $feedbacks = $this->feedbackService->getByType($type);
 
         $gtmService->setViewForOther();
         SeoFacade::setTitle('Отзывы');
@@ -40,20 +42,7 @@ class FeedbackController extends Controller
      */
     public function store(FeedbackRequest $feedbackRequest)
     {
-        $data = $feedbackRequest->validated();
-        /** @var Feedback $feedback */
-        $feedback = Feedback::create($data);
-
-        /** @var \Illuminate\Http\UploadedFile $photo */
-        foreach (($data['photos'] ?? []) as $photo) {
-            $feedback->addMedia($photo)->toMediaCollection('photos');
-        }
-        /** @var \Illuminate\Http\UploadedFile $photo */
-        foreach (($data['videos'] ?? []) as $video) {
-            $feedback->addMedia($video)->toMediaCollection('videos');
-        }
-
-        event(new ReviewPosted(auth()->user()));
+        $this->feedbackService->store($feedbackRequest->validated());
 
         GoogleTagManagerFacade::user('userReview');
 
