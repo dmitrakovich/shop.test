@@ -34,7 +34,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
- *
  * @property EloquentCollection<FeedbackAnswer> $answers
  * @property ?Product $product
  */

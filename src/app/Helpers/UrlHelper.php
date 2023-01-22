@@ -157,23 +157,27 @@ class UrlHelper
 
     /**
      * Get YouTube embed video url
-     * @param string $originalVideoUrl
+     *
+     * @param  string  $originalVideoUrl
      * @return string
      */
     public static function getEmbedVideoUrl(string $originalVideoUrl, $extPrams = []): string
     {
         $id = self::getYouTubeVideoId($originalVideoUrl);
+
         return 'https://www.youtube.com/embed/' . $id; //  . http_build_query($extPrams); // ?autoplay=1&rel=0
     }
 
     /**
      * Get YouTube video id
-     * @param string $originalVideoUrl
+     *
+     * @param  string  $originalVideoUrl
      * @return string
      */
     public static function getYouTubeVideoId(string $originalVideoUrl): string
     {
         parse_str(parse_url($originalVideoUrl, PHP_URL_QUERY), $params);
+
         return $params['v'] ?? 'hrwJvG8kALA';
     }
 }

@@ -8,8 +8,7 @@
                             <div class="swiper-wrapper">
                                 @foreach ($product->getMedia() as $key => $image)
                                     <div class="swiper-slide">
-                                        <img
-                                            src="{{ $image->getUrl('thumb') }}"
+                                        <img src="{{ $image->getUrl('thumb') }}"
                                             alt="{{ $product->shortName() }} миниатюра {{ ++$key }}"
                                             class="img-fluid" onerror="imageOnError(this)">
                                         @if ($image->hasCustomProperty('video'))
@@ -42,18 +41,20 @@
                         <div class="swiper js-productSlider">
                             <div class="swiper-wrapper">
                                 @foreach ($product->getMedia() as $image)
-                                        @if ($image->hasCustomProperty('video'))
-                                            <div class="swiper-slide js-swiperIrame" data-id="{{ UrlHelper::getYouTubeVideoId($image->getCustomProperty('video')) }}"></div>
-                                        @else
-                                            <div class="swiper-slide">
-                                                <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
-                                                    <img
-                                                        src="{{ $image->getUrl('normal') }}"
-                                                        alt="{{ $product->shortName() }}" class="img-fluid"
-                                                        onerror="imageOnError(this)">
-                                                </a>
-                                            </div>
-                                        @endif
+                                    @if ($image->hasCustomProperty('video'))
+                                        <div class="swiper-slide js-swiperIrame"
+                                            data-id="{{ UrlHelper::getYouTubeVideoId($image->getCustomProperty('video')) }}">
+                                        </div>
+                                    @else
+                                        <div class="swiper-slide">
+                                            <a href="{{ $image->getUrl('full') }}"
+                                                data-fancybox="images">
+                                                <img src="{{ $image->getUrl('normal') }}"
+                                                    alt="{{ $product->shortName() }}" class="img-fluid"
+                                                    onerror="imageOnError(this)">
+                                            </a>
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
@@ -203,7 +204,7 @@
                     @if (!empty($productGroup))
                         <div class="p-product__prGroup">
                             <h3 class="p-product__prGroup-title">{{ $productGroup['title'] }}</h3>
-                             <div class="swiper js-productGroup">
+                            <div class="swiper js-productGroup">
                                 <div class="swiper-wrapper">
                                     @foreach ($productGroup['products'] as $key => $productGroupItem)
                                         <a href="{{ $productGroupItem['url'] }}"

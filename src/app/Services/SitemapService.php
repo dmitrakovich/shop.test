@@ -247,7 +247,6 @@ class SitemapService
         File::ensureDirectoryExists(dirname($finalPath));
         File::move($tempPath, $finalPath);
         $this->resultFiles[] = $finalPath;
-
     }
 
     /**
@@ -262,7 +261,6 @@ class SitemapService
         $data .= "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
         File::ensureDirectoryExists(dirname($tempPath));
         File::put($tempPath, $data);
-
     }
 
     /**
@@ -276,6 +274,5 @@ class SitemapService
     {
         File::append($tempPath, $data);
         $this->totalUrlcount++;
-
     }
 }
