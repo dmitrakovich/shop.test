@@ -4,6 +4,8 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Feedbacks\ShowAnswersAction;
 use App\Admin\Actions\RatingAction;
+use App\Admin\Selectable\Product;
+use App\Admin\Selectable\User;
 use App\Models\Feedback;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -94,15 +96,15 @@ class FeedbackController extends AdminController
     {
         $form = new Form(new Feedback());
 
-        $form->number('user_id', __('User id'));
+        $form->belongsTo('user_id', User::class, 'Пользователь');
         $form->number('yandex_id', __('Yandex id'));
         $form->text('user_name', 'Имя');
         $form->text('user_email', __('User email'));
-        $form->number('user_phone', __('User phone'));
+        // $form->number('user_phone', __('User phone'));
         $form->number('user_city', 'Город');
         $form->textarea('text', __('Text'));
         $form->select('rating', 'Оценка')->options([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5]);
-        $form->number('product_id', __('Product id'));
+        $form->belongsTo('product_id', Product::class, 'Товар');
         $form->select('type_id', 'Тип')->options($this->feedbackTypes)->default(1);
         $form->switch('view_only_posted', __('View only posted'))->default(1);
         $form->switch('publish', __('Publish'))->default(1);
