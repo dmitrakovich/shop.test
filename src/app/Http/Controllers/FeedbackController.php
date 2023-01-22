@@ -2,15 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ReviewPosted;
 use App\Http\Requests\FeedbackRequest;
+use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\Feedback;
+use App\Services\FeedbackService;
 use App\Services\GoogleTagManagerService;
-use SeoFacade;
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class FeedbackController extends Controller
 {
+    /**
+     * ProductController constructor.
+     */
+    public function __construct(private FeedbackService $feedbackService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,17 +26,12 @@ class FeedbackController extends Controller
     public function index(GoogleTagManagerService $gtmService, ?string $type = null)
     {
         $type = Feedback::getType($type);
-
-        $feedbacks = Feedback::with(['answers', 'media'])
-            ->where('publish', true)
-            ->latest()
-            ->type($type)
-            ->paginate(50);
+        $feedbacks = $this->feedbackService->getByType($type);
 
         $gtmService->setViewForOther();
         SeoFacade::setTitle('Отзывы');
 
-        return view('feedbacks', compact('type', 'feedbacks'));
+        return view('feedbacks-page', compact('type', 'feedbacks'));
     }
 
     /**
@@ -40,25 +42,7 @@ class FeedbackController extends Controller
      */
     public function store(FeedbackRequest $feedbackRequest)
     {
-        $data = $feedbackRequest->validated();
-        $feedback = Feedback::create($data);
-
-        foreach (($data['photos'] ?? []) as $photo) {
-            /** @var \Illuminate\Http\UploadedFile $photo */
-            if ($photo->getSize() > Feedback::MAX_PHOTO_SIZE) {
-                continue;
-            }
-            $feedback->addMedia($photo->getPathname())->toMediaCollection();
-        }
-
-        // foreach (($data['videos'] ?? []) as $video) {
-        //     if ($video->getSize() > Feedback::MAX_VIDEO_SIZE) {
-        //         continue;
-        //     }
-        //     $feedback->addMedia($video->getPathname())->toMediaCollection();
-        // }
-
-        event(new ReviewPosted(auth()->user()));
+        $this->feedbackService->store($feedbackRequest->validated());
 
         GoogleTagManagerFacade::user('userReview');
 

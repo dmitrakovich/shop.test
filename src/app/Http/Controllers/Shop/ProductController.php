@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Models\Product;
+use App\Services\FeedbackService;
 use App\Services\GoogleTagManagerService;
 use App\Services\ProductService;
 use App\Services\Seo\ProductSeoService;
@@ -20,7 +21,8 @@ class ProductController extends BaseController
         private ProductService $productService,
         private SliderService $sliderService,
         private GoogleTagManagerService $gtmService,
-        private ProductSeoService $seoService
+        private ProductSeoService $seoService,
+        private FeedbackService $feedbackService,
     ) {
         parent::__construct($request);
     }
@@ -38,6 +40,7 @@ class ProductController extends BaseController
 
         return view('shop.product-page', [
             'product' => $product,
+            'feedbacks' => $this->feedbackService->getForProduct($product->id),
             'dataLayer' => $this->gtmService->prepareProduct($product),
             'similarProducts' => $this->sliderService->getSimilarProducts($product->id),
             'productGroup' => $this->sliderService->getProductGroup($product->product_group_id),
@@ -50,10 +53,12 @@ class ProductController extends BaseController
      */
     public function quickView(Product $product): View
     {
-        $dataLayer = $this->gtmService->prepareProduct($product);
-        $productGroup = $this->sliderService->getProductGroup($product->product_group_id);
-        $quickView = true;
-
-        return view('shop.product', compact('product', 'productGroup', 'quickView', 'dataLayer'));
+        return view('shop.product', [
+            'quickView' => true,
+            'product' => $product,
+            'feedbacks' => $this->feedbackService->getForProduct($product->id),
+            'productGroup' => $this->sliderService->getProductGroup($product->product_group_id),
+            'dataLayer' => $this->gtmService->prepareProduct($product),
+        ]);
     }
 }

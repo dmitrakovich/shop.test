@@ -45,7 +45,7 @@ class FeedbackController extends AdminController
         });
         $grid->column('user_name', __('Имя'));
         $grid->column('user_email', __('Email'))->email();
-        // $grid->column('user_phone', __('Телефон'));
+        $grid->column('user_city', 'Город');
         $grid->column('text', 'Текст')->limit(240);
         $grid->column('answers', 'Последний ответ')->display(function ($answers) {
             return empty($answers) ? null : Str::limit(end($answers)['text'], 240);
@@ -99,6 +99,7 @@ class FeedbackController extends AdminController
         $form->text('user_name', 'Имя');
         $form->text('user_email', __('User email'));
         $form->number('user_phone', __('User phone'));
+        $form->number('user_city', 'Город');
         $form->textarea('text', __('Text'));
         $form->select('rating', 'Оценка')->options([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5]);
         $form->number('product_id', __('Product id'));
@@ -106,6 +107,8 @@ class FeedbackController extends AdminController
         $form->switch('view_only_posted', __('View only posted'))->default(1);
         $form->switch('publish', __('Publish'))->default(1);
         $form->ip('ip', __('Ip'));
+        $form->multipleImage('photos', 'Фото')->readonly();
+        $form->multipleImage('videos', 'Видео')->readonly();
 
         return $form;
     }

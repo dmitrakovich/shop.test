@@ -9,6 +9,26 @@ use Illuminate\Support\Facades\Auth;
 class FeedbackRequest extends FormRequest
 {
     /**
+     * Max photo sizes in kilobytes
+     */
+    final const MAX_PHOTO_SIZE = 5_000;
+
+    /**
+     * Max video sizes in kilobytes
+     */
+    final const MAX_VIDEO_SIZE = 50_000;
+
+    /**
+     * Available mimetypes for video files
+     */
+    final const VIDEO_MIMETYPES = [
+        'video/mp4',
+        'video/avi',
+        'video/mpeg',
+        'video/quicktime',
+    ];
+
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
@@ -31,7 +51,6 @@ class FeedbackRequest extends FormRequest
             'type_id' => $captchaScore > 4 ? Feedback::TYPE_REVIEW : Feedback::TYPE_SPAM,
             'captcha_score' => intval($captchaScore),
             'rating' => intval($this->rating ?? 5),
-            'product_id' => intval($this->product_id ?? 0),
         ]);
     }
 
@@ -59,14 +78,19 @@ class FeedbackRequest extends FormRequest
         return [
             'user_name' => ['required', 'max:255'],
             'user_email' => ['email', 'max:255', 'nullable'],
+            'user_city' => ['required', 'max:255'],
             'text' => ['required'],
             'rating' => ['integer', 'between:0,5'],
             'product_id' => ['integer', 'min:0'],
             'type_id' => [],
             'captcha_score' => ['integer', 'between:0,10'],
-            'photos' => ['array'],
-            'photos.*' => ['image'],
-            'videos' => ['array'],
+            'photos' => ['array', 'max:10'],
+            'photos.*' => ['image', 'max:' . self::MAX_PHOTO_SIZE],
+            'videos' => ['array', 'max:5'],
+            'videos.*' => [
+                'mimetypes:' . implode(',', self::VIDEO_MIMETYPES),
+                'max:' . self::MAX_VIDEO_SIZE
+            ],
         ];
     }
 
@@ -79,9 +103,13 @@ class FeedbackRequest extends FormRequest
     {
         return [
             'user_name' => '"имя"',
+            'user_email' => '"email"',
+            'user_city' => '"город"',
             'text' => '"комментарий"',
             'photos' => '"фотографии"',
+            'photos.*' => '"фотографии"',
             'videos' => '"видео"',
+            'videos.*' => '"видео"',
         ];
     }
 }
