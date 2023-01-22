@@ -1,29 +1,12 @@
 <h4 class="text-center">{{ $simpleSlider['title'] }}</h4>
-<div class="js-product-carousel" data-slick='{
-    "slidesToShow": 5,
-    "slidesToScroll": 5,
-    "autoplay": true,
-    "autoplaySpeed": {{ $simpleSlider['speed'] }},
-    "responsive": [
-        {
-            "breakpoint": 1305,
-            "settings": {
-                "slidesToShow": 4,
-                "slidesToScroll": 4
-            }
-        },
-        {
-            "breakpoint": 830,
-            "settings": {
-                "slidesToShow": 1,
-                "slidesToScroll": 1
-            }
-        }
-    ]
-}'>
+<div class="swiper js-simpleSlider" data-autoplay="{{ $simpleSlider['speed'] }}">
+  <div class="swiper-wrapper">
     @foreach ($simpleSlider['products'] as $product)
-    <div class="col">
-        @include('shop.slider-product', compact('product'))
+    <div class="swiper-slide">
+      @include('shop.slider-product', compact('product'))
     </div>
     @endforeach
+  </div>
+  <div class="js-simpleSlider-next swiper-button-next"></div>
+  <div class="js-simpleSlider-prev swiper-button-prev"></div>
 </div>

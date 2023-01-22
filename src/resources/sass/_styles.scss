@@ -405,17 +405,6 @@ input.form-check-input:checked ~ label.form-check-label span {
     display: block;
 }
 
-
-span.youtube-play-icon {
-    position:absolute;
-    top:50%;
-    left:50%;
-    margin:-16px 0 0 -16px;
-    height:32px;
-    width:32px;
-    content: url(/images/icons/youtube-play-button.svg);
-}
-
 .btn-disabled-load {
     background-color: #767676 !important;
     cursor: wait;
