@@ -89,7 +89,7 @@ class FeedbackRequest extends FormRequest
             'videos' => ['array', 'max:5'],
             'videos.*' => [
                 'mimetypes:' . implode(',', self::VIDEO_MIMETYPES),
-                'max:' . self::MAX_VIDEO_SIZE
+                'max:' . self::MAX_VIDEO_SIZE,
             ],
         ];
     }

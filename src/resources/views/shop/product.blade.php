@@ -2,57 +2,62 @@
     <div class="col-12 product-page p-product">
         <div class="row">
             <div class="col-12 col-md-6 col-xl-7">
-                <div class="position-relative">
-                    @include('partials.buttons.favorite', [
-                        'favoriteProductId' => $product->id,
-                        'favoriteState' => isset($product->favorite),
-                    ])
-
-                    <div class="product-labels">
-                        @if ($product->isNew())
-                            <div class="product-label product-label-new">
-                                new
+                <div class="p-product__slider">
+                    <div class="p-product__slider-min">
+                        <div class="swiper js-productSliderThumb">
+                            <div class="swiper-wrapper">
+                                @foreach ($product->getMedia() as $key => $image)
+                                    <div class="swiper-slide">
+                                        <img src="{{ $image->getUrl('thumb') }}"
+                                            alt="{{ $product->shortName() }} миниатюра {{ ++$key }}"
+                                            class="img-fluid" onerror="imageOnError(this)">
+                                        @if ($image->hasCustomProperty('video'))
+                                            <span class="p-product__slider-youtubeIcon"></span>
+                                        @endif
+                                    </div>
+                                @endforeach
                             </div>
-                        @endif
-                        @if ($product->getSalePercentage())
-                            <div class="product-label product-label-sale">
-                                -{{ $product->getSalePercentage() }}%
-                            </div>
-                        @endif
+                        </div>
                     </div>
+                    <div class="p-product__slider-main">
+                        @include('partials.buttons.favorite', [
+                            'favoriteProductId' => $product->id,
+                            'favoriteState' => isset($product->favorite),
+                        ])
 
-                    <div class="slider-for">
-                        @foreach ($product->getMedia() as $image)
-                            @if ($image->hasCustomProperty('video'))
-                                <div>
-                                    <iframe
-                                        src="{{ UrlHelper::getEmbedVideoUrl($image->getCustomProperty('video')) }}"
-                                        class="w-100" style="min-height: 55vh" allowfullscreen
-                                        frameborder="0">
-                                    </iframe>
+                        <div class="product-labels">
+                            @if ($product->isNew())
+                                <div class="product-label product-label-new">
+                                    new
                                 </div>
-                            @else
-                                <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
-                                    <img src="{{ $image->getUrl('normal') }}"
-                                        alt="{{ $product->shortName() }}" class="img-fluid"
-                                        onerror="imageOnError(this)">
-                                </a>
                             @endif
-                        @endforeach
-                    </div>
-                    <div class="slider-nav mb-3 row" style="max-width: 720px">
-                        @foreach ($product->getMedia() as $key => $image)
-                            <div class="col-auto">
-                                <div class="position-relative d-inline-block">
-                                    <img src="{{ $image->getUrl('thumb') }}"
-                                        alt="{{ $product->shortName() }} миниатюра {{ ++$key }}"
-                                        class="img-fluid" onerror="imageOnError(this)">
-                                    @if ($image->hasCustomProperty('video'))
-                                        <span class="youtube-play-icon"></span>
-                                    @endif
+                            @if ($product->getSalePercentage())
+                                <div class="product-label product-label-sale">
+                                    -{{ $product->getSalePercentage() }}%
                                 </div>
+                            @endif
+                        </div>
+
+                        <div class="swiper js-productSlider">
+                            <div class="swiper-wrapper">
+                                @foreach ($product->getMedia() as $image)
+                                    @if ($image->hasCustomProperty('video'))
+                                        <div class="swiper-slide js-swiperIrame"
+                                            data-id="{{ UrlHelper::getYouTubeVideoId($image->getCustomProperty('video')) }}">
+                                        </div>
+                                    @else
+                                        <div class="swiper-slide">
+                                            <a href="{{ $image->getUrl('full') }}"
+                                                data-fancybox="images">
+                                                <img src="{{ $image->getUrl('normal') }}"
+                                                    alt="{{ $product->shortName() }}" class="img-fluid"
+                                                    onerror="imageOnError(this)">
+                                            </a>
+                                        </div>
+                                    @endif
+                                @endforeach
                             </div>
-                        @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
