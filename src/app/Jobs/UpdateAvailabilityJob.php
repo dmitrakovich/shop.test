@@ -127,25 +127,26 @@ class UpdateAvailabilityJob extends AbstractJob
         $resI = mb_convert_encoding($resI, 'UTF-8', 'windows-1251');
         $resI = explode("\n", $resI);
         $resD = [];
-		
-		// Склады по которым НЕ сверяется наличие
-		$place = "1";
-		$falsePlaceArr = array("ИНТЕРНЕТ МАГАЗИН","МИНСК");
-		
+
+        // Склады по которым НЕ сверяется наличие
+        $place = '1';
+        $falsePlaceArr = ['ИНТЕРНЕТ МАГАЗИН', 'МИНСК'];
+
         for ($i = 4; $i < count($resI); $i++) {
-            
-			// помечаем в каком складе
-			if (mb_strpos($resI[$i],'Место хранения')!==false) {
-				$place = str_replace("\t","",$resI[$i]);
-				$place = str_replace(array('Место хранения : ','"'),'',$place);
-				$place = trim($place);
-			}
+            // помечаем в каком складе
+            if (mb_strpos($resI[$i], 'Место хранения') !== false) {
+                $place = str_replace("\t", '', $resI[$i]);
+                $place = str_replace(['Место хранения : ', '"'], '', $place);
+                $place = trim($place);
+            }
 
-			// проверяем склад
-			if (in_array($place,$falsePlaceArr)) continue;
+            // проверяем склад
+            if (in_array($place, $falsePlaceArr)) {
+                continue;
+            }
 
-			// парсим параметры товара
-			if (mb_strpos($resI[$i], ' | ') !== false) {
+            // парсим параметры товара
+            if (mb_strpos($resI[$i], ' | ') !== false) {
                 $itemA = explode("\t", $resI[$i]);
                 $itemC = explode(' | ', $itemA[2]);
                 $brandName = trim($itemA[3]);
