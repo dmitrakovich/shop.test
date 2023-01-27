@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\Mailing\DiscountAfterRegisterJob;
-use App\Jobs\Payment\SendInstallmentNoticeJob;
 use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Notifications\TestSms;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 
@@ -16,10 +15,13 @@ class DebugController extends Controller
 {
     public function index()
     {
-        // SendInstallmentNoticeJob::dispatchSync();
-        DiscountAfterRegisterJob::dispatchSync();
+        try {
+            $this->testSqlServerConnection();
+        } catch (\Throwable $th) {
+            dd($th);
+        }
 
-        return 'ok';
+        // return 'ok';
 
         /** @var User $user */
         $user = User::findOrFail('xxxx');
@@ -28,6 +30,14 @@ class DebugController extends Controller
         // php artisan make:mail OrderShipped
 
         return $this->printOrder(Order::with('data')->find(3));
+    }
+
+    public function testSqlServerConnection()
+    {
+        dump(config('database.connections.sqlsrv'));
+        $result = DB::connection('sqlsrv')->table('SC189')->get();
+
+        dd($result);
     }
 
     /**
