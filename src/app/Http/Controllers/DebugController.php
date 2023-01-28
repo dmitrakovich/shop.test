@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\Ssh\CreateTunnelJob;
 use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
 use App\Models\User\User;
@@ -34,6 +35,8 @@ class DebugController extends Controller
 
     public function testSqlServerConnection()
     {
+        CreateTunnelJob::dispatchSync();
+
         dump(config('database.connections.sqlsrv'));
         $result = DB::connection('sqlsrv')->table('SC189')->get();
 
