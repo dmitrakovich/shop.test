@@ -19,7 +19,7 @@ class CreateTunnelJob extends AbstractJob
     /**
      * Ensure we wait long enough for it to actually connect (ms).
      */
-    const WAIT_AFTER_CONNECTION = 250_000;
+    const WAIT_AFTER_CONNECTION = 800_000;
 
     /**
      * Log messages for troubleshooting.
