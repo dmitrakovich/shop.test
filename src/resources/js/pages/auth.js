@@ -1,3 +1,4 @@
+import { validatePhone } from '../components/inputs/phone';
 import captcha from './../components/captcha';
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -17,6 +18,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function submitLoginForm() {
+    if (!validatePhone($('input[name="phone"]'))) {
+      return false;
+    }
     submitButton.disabled = true;
     submitButton.classList.add('btn-disabled-load');
 

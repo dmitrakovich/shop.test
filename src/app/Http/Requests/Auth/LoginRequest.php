@@ -40,7 +40,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone' => ['required', 'string'],
+            'phone' => ['required', 'string', 'min:6'],
             'otp' => ['nullable'],
             'captcha_score' => ['required', 'numeric', 'gt:6'],
         ];

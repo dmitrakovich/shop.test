@@ -1,3 +1,6 @@
+@php
+    $hasValidPhone = !empty(old('phone')) && !$errors->has('phone');
+@endphp
 @extends('layouts.app')
 
 @section('content')
@@ -35,12 +38,12 @@
                             <div class="form-group row">
                                 <div class="col-md-12">
                                     @include('partials.inputs.phone', [
-                                        'readonly' => !!old('phone'),
+                                        'readonly' => $hasValidPhone,
                                     ])
                                 </div>
                             </div>
 
-                            @if (old('phone'))
+                            @if ($hasValidPhone)
                                 <div class="form-group row">
                                     <div class="col-md-12">
                                         <input id="otp" type="text"
@@ -95,11 +98,7 @@
                             <div class="form-group row">
                                 <div class="col-md-12 text-center">
                                     <button type="submit" class="btn btn-dark px-4">
-                                        @if (old('phone'))
-                                            Войти
-                                        @else
-                                            Получить код
-                                        @endif
+                                        {{ $hasValidPhone ? 'Войти' : 'Получить код' }}
                                     </button>
                                 </div>
                             </div>
