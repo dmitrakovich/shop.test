@@ -217,7 +217,6 @@ class SitemapService
      * @param  string  $loc
      * @param  string  $changefreq
      * @param  float  $priority
-     * @return void
      */
     private function getUrl(string $loc, string $changefreq, float $priority = 0.7): string
     {

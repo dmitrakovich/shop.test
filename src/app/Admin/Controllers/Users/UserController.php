@@ -36,11 +36,11 @@ class UserController extends AdminController
         $grid->column('phone', 'Телефон');
         $grid->column('orders', 'Сумма покупок')->display(fn () => $this->completedOrdersCost() . ' руб.');
         $grid->column('group.name', 'Группа');
-        $grid->column('reviews', 'Кол-во отзывов')->display(fn ($reviews) => count($reviews));
+        $grid->column('reviews_count', 'Кол-во отзывов');
         $grid->column('addresses', 'Адрес')->display(fn ($addresses) => $addresses[0]['address'] ?? null);
         $grid->column('created_at', 'Дата регистрации');
 
-        $grid->model()->orderBy('id', 'desc');
+        $grid->model()->withCount('reviews')->orderBy('id', 'desc');
         $grid->paginate(50);
 
         $grid->filter(function (Filter $filter) {

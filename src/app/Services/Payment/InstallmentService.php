@@ -30,7 +30,7 @@ class InstallmentService
         $this->installment->query()
             ->where('send_notifications', true)
             ->where(function (Builder $query) {
-                $query->whereDate('notice_sent_at', '<', now()->subDays(27))
+                $query->where('notice_sent_at', '<', now()->subDays(27))
                     ->orWhereNull('notice_sent_at');
             })
             ->with(['order'])

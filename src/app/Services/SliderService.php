@@ -115,9 +115,7 @@ class SliderService
             }
 
             $products = Product::whereIn('category_id', $categories)
-                ->whereHas('media', function (Builder $query) {
-                    $query->where('custom_properties', 'like', '%is_imidj%');
-                })
+                ->whereRelation('media', 'custom_properties', 'like', '%is_imidj%')
                 ->sorting('rating')
                 ->limit($slider->count)
                 ->with(['media', 'category', 'brand', 'styles'])
