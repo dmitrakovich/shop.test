@@ -65,6 +65,10 @@ Route::group([
         $router->get('short-link', Forms\ShortLink\ShortLinkController::class)->name('short-link');
     });
 
+    $router->group(['prefix' => 'bookkeeping'], function ($router) {
+        $router->resource('payments', Bookkeeping\PaymentController::class);
+    });
+
     $router->group(['prefix' => 'docs'], function ($router) {
         $router->resource('edit', DocController::class);
         $router->get('{doc:slug}', DocController::class);
