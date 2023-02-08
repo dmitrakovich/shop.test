@@ -4,16 +4,13 @@ namespace App\Admin\Controllers\Bookkeeping;
 
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
-
-use App\Models\Payments\OnlinePayment;
 use App\Models\Orders\Order;
-
+use App\Models\Payments\OnlinePayment;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-
 
 class PaymentController extends AdminController
 {
@@ -23,7 +20,7 @@ class PaymentController extends AdminController
     {
         $grid = new Grid(new OnlinePayment);
         $grid->model()->orderBy('id', 'desc');
-        $adminUsers  = Administrator::pluck('name', 'id');
+        $adminUsers = Administrator::pluck('name', 'id');
 
         $grid->filter(function ($filter) use ($adminUsers) {
             $filter->like('payment_num', 'Номер счета');
@@ -57,6 +54,7 @@ class PaymentController extends AdminController
         $grid->column('paid_amount', 'Оплаченная сумма');
         $grid->column('lastStatus.payment_status_enum_id', 'Статус')->display(function ($last_status_enum_id) {
             $enum = OnlinePaymentStatusEnum::tryFrom($last_status_enum_id);
+
             return $enum ? $enum->name() : null;
         });
         $grid->column('comment', 'Комментарий');
@@ -83,7 +81,7 @@ class PaymentController extends AdminController
         $form->text('amount', 'Сумма платежа')->placeholder('Введите сумму платежа')->rules(['required'], ['required' => 'Поле обязательно для заполнения.']);
         $form->text('payment_id', 'Billnumber')->placeholder('Введите Billnumber')->rules(['required'], ['required' => 'Поле обязательно для заполнения.']);
         $form->text('order_id', 'Номер заказа')->rules('required|exists:orders,id', [
-            'exists' => 'Заказ с переданным id не найден'
+            'exists' => 'Заказ с переданным id не найден',
         ])->placeholder('Введите номер заказа');
         $form->textarea('comment', 'Комментарий');
         $form->hidden('fio');
@@ -93,7 +91,7 @@ class PaymentController extends AdminController
 
         $form->saving(function (Form $form) {
             $orderId = $form->order_id;
-            $order   = Order::find($orderId);
+            $order = Order::find($orderId);
             $form->fio = $order->user_full_name ?? null;
             $form->email = $order->email ?? null;
             $form->phone = $order->phone ?? null;

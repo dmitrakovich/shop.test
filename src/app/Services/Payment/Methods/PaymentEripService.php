@@ -73,7 +73,7 @@ class PaymentEripService extends AbstractPaymentService
         } else {
             $response = $payment->getBodyFormat();
             $message = $response['message'] ?? '';
-            if(strpos($message, 'с таким номером уже существует') !== false){
+            if (strpos($message, 'с таким номером уже существует') !== false) {
                 return $this->create($order, $amount, ++$paymentNum, $data);
             }
         }

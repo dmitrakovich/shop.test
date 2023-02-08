@@ -36,6 +36,7 @@ enum OnlinePaymentStatusEnum: int
         foreach ($cases as $case) {
             $result[$case->value] = $case->name();
         }
+
         return $result;
     }
 
