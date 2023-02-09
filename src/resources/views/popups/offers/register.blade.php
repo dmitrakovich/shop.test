@@ -17,6 +17,9 @@
         <a href="{{ route('login') }}">
             <img src="{{ asset('/images/offers/register.png') }}" alt="register" class="img-fluid">
         </a>
+        <div class="col-12 text-left font-size-12">
+                * скидка не суммируется с акциями и промокодами
+        </div>
         <div class="col-12 text-center mt-2">
             <a href="{{ route('login') }}" class="btn btn-danger" style="font-size: 22px">
                 зарегистрироваться
