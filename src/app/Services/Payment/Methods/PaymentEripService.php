@@ -48,7 +48,6 @@ class PaymentEripService extends AbstractPaymentService
         $postData['billingInfo']['phone']['nationalNumber'] = preg_replace('/[^0-9]/', '', $order->phone);
         $postData['billingInfo']['email'] = $order->email;
         $postData['billingInfo']['address']['line1'] = $order->user_addr;
-
         $payment = ApiHGroshFacade::invoicingCreateInvoice()->addGetParam([
             'canPayAtOnce' => 'true',
         ])->request($postData);
@@ -71,6 +70,12 @@ class PaymentEripService extends AbstractPaymentService
                 'comment' => $data['comment'] ?? null,
             ]);
             CreateQrcodeJob::dispatch($onlinePayment)->delay(now()->addSeconds(10));
+        } else {
+            $response = $payment->getBodyFormat();
+            $message = $response['message'] ?? '';
+            if (strpos($message, 'с таким номером уже существует') !== false) {
+                return $this->create($order, $amount, ++$paymentNum, $data);
+            }
         }
 
         return $onlinePayment;

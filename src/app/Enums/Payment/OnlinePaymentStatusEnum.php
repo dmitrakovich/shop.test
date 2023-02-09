@@ -25,6 +25,22 @@ enum OnlinePaymentStatusEnum: int
     }
 
     /**
+     * Получить список
+     *
+     * @return array
+     */
+    public static function list(): array
+    {
+        $result = [];
+        $cases = self::cases();
+        foreach ($cases as $case) {
+            $result[$case->value] = $case->name();
+        }
+
+        return $result;
+    }
+
+    /**
      * Получить enum по value
      *
      * @param  ?int  $value - значение
