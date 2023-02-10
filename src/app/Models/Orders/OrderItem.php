@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property float $discount
  * @property bool $promocode_applied
  * @property string $status_key
+ * @property \Carbon\Carbon $status_updated_at
  * @property \Carbon\Carbon $release_date
  * @property int $pred_period
  * @property-read Product $product
@@ -46,7 +47,27 @@ class OrderItem extends Model
         'current_price',
         'discount',
         'status_key',
+        'status_updated_at',
     ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     */
+    protected $dates = ['status_updated_at'];
+
+    /**
+     * Bootstrap the model and its traits
+     */
+    public static function boot(): void
+    {
+        parent::boot();
+
+        static::saving(function (self $orderItem) {
+            if ($orderItem->isDirty('status_key')) {
+                $orderItem->status_updated_at = now();
+            }
+        });
+    }
 
     /**
      * Product from order item
