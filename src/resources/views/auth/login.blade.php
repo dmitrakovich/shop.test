@@ -17,7 +17,8 @@
                 <div class="alert alert-primary h4 text-dark text-center" role="alert">
                     10% скидки <span class="font-weight-normal">
                         на первый заказ за регистрацию!
-                    </span>
+                    </span><br><span class="font-weight-normal font-size-12">* скидка не суммируется с акциями
+                        и промокодами</span>
                 </div>
 
                 <div class="card mt-2 mb-5">

@@ -157,7 +157,7 @@ class SitemapService
             $resultData .= <<<URL
         <sitemap>
           <loc>$resultUrl</loc>
-          <lastmod>{{ $this->lastmod }}</lastmod>
+          <lastmod>$this->lastmod</lastmod>
         </sitemap>
       URL . PHP_EOL;
         }
@@ -225,7 +225,7 @@ class SitemapService
         return <<<URL
             <url>
                 <loc>$url</loc>
-                <lastmod>{{ $this->lastmod }}</lastmod>
+                <lastmod>$this->lastmod</lastmod>
                 <changefreq>$changefreq</changefreq>
                 <priority>$priority</priority>
             </url>

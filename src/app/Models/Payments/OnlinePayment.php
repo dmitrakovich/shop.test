@@ -55,6 +55,36 @@ class OnlinePayment extends Model
     }
 
     /**
+     * Payment statuses
+     *
+     * @return Relations\HasOne
+     */
+    public function lastStatus(): Relations\HasOne
+    {
+        return $this->hasOne(OnlinePaymentStatus::class)->latest('id');
+    }
+
+    /**
+     * Last canceled status
+     *
+     * @return Relations\HasOne
+     */
+    public function lastCanceledStatus(): Relations\HasOne
+    {
+        return $this->lastStatus()->where('payment_status_enum_id', OnlinePaymentStatusEnum::CANCELED);
+    }
+
+    /**
+     * Last succeeded status
+     *
+     * @return Relations\HasOne
+     */
+    public function lastSucceededStatus(): Relations\HasOne
+    {
+        return $this->lastStatus()->where('payment_status_enum_id', OnlinePaymentStatusEnum::SUCCEEDED);
+    }
+
+    /**
      * Get the order that owns the payment.
      */
     public function order(): Relations\BelongsTo
@@ -80,8 +110,8 @@ class OnlinePayment extends Model
         $enum = OnlinePaymentMethodEnum::enumByValue($this->method_enum_id);
         if ($enum) {
             return match ($enum) {
-                OnlinePaymentMethodEnum::ERIP => route('pay.erip', $this->payment_url, true),
-                OnlinePaymentMethodEnum::YANDEX => route('pay.yandex', $this->link_code, true),
+                OnlinePaymentMethodEnum::ERIP => isset($this->payment_url) ? route('pay.erip', $this->payment_url, true) : null,
+                OnlinePaymentMethodEnum::YANDEX => isset($this->link_code) ? route('pay.yandex', $this->link_code, true) : null,
             };
         }
 
