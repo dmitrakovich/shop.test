@@ -291,28 +291,6 @@ button.scroll-top-btn {
     }
 }
 
-
-
-.product-page {
-    .product-description {
-        line-height: 30px;
-    }
-
-    .price-block {
-        .price {
-            font-weight: 300;
-            font-size: 31px;
-            line-height: 30px;
-            &.price-old {
-                text-decoration-line: line-through;
-                color: #767676;
-            }
-            &.price-new {
-                color: #D22020;
-            }
-        }
-    }
-}
 .product-characteristics {
 	@media (max-width: 1024px) {
 		order:-1;
