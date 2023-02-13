@@ -1,6 +1,27 @@
 .p-product {
     width: 100%;
 
+    .product-description {
+        line-height: 30px;
+    }
+
+    .price-block {
+        .price {
+            font-weight: 300;
+            font-size: 31px;
+            line-height: 30px;
+            &.price-old {
+                text-decoration-line: line-through;
+                color: #767676;
+            }
+            &.price-new {
+                color: #D22020;
+            }
+        }
+    }
+    &.fancybox-content {
+        max-width: 75%;
+    }
     &__slider {
         position: relative;
         flex-direction: column;

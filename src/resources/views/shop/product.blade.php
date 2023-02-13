@@ -1,5 +1,5 @@
-<div class="col-12 product-page">
-    <div class="col-12 product-page p-product">
+<div class="col-12 p-product">
+    <div class="col-12">
         <div class="row">
             <div class="col-12 col-md-6 col-xl-7">
                 <div class="p-product__slider">
@@ -57,6 +57,8 @@
                                     @endif
                                 @endforeach
                             </div>
+                            <div class="js-productSlider-next swiper-button-next"></div>
+                            <div class="js-productSlider-prev swiper-button-prev"></div>
                         </div>
                     </div>
                 </div>
