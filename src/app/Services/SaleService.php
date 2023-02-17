@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cart;
+use App\Models\Config;
 use App\Models\Data\SaleData;
 use App\Models\Product;
 use App\Models\Sale;
@@ -11,8 +12,6 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class SaleService
 {
-    private const REVIEW_DISCOUNT = 10;
-
     private ?Sale $sale;
 
     private array $discounts = [];
@@ -49,7 +48,7 @@ class SaleService
         if ($user instanceof User) {
             $this->userDiscount = $user->group->discount;
             if ($user->hasReviewAfterOrder()) {
-                $this->reviewDiscount = self::REVIEW_DISCOUNT;
+                $this->reviewDiscount = Config::findCacheable('feedback')['discount'];
             }
         }
     }
