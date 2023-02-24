@@ -90,9 +90,6 @@ class Product extends ProductModel
         }
     }
 
-    /**
-     * @return array
-     */
     public function getPhotos(): array
     {
         $photos = [];

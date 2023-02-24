@@ -16,8 +16,6 @@ class ApiResponse
 
     /**
      * ApiResponse constructor.
-     *
-     * @param  ResponseInterface|null  $response
      */
     public function __construct(ResponseInterface $response = null)
     {
@@ -57,8 +55,6 @@ class ApiResponse
 
     /**
      * Проверка корректности выполненного запроса
-     *
-     * @return bool
      */
     public function isOk(): bool
     {
@@ -67,25 +63,17 @@ class ApiResponse
 
     /**
      * Проверка наличия ошибок в запросе
-     *
-     * @return bool
      */
     public function hasErrors(): bool
     {
         return count($this->errors) > 0;
     }
 
-    /**
-     * @return string
-     */
     public function getBody(): string
     {
         return $this->body;
     }
 
-    /**
-     * @return array
-     */
     public function getLocation(): array
     {
         return $this->location;
@@ -101,17 +89,11 @@ class ApiResponse
         return is_array($result) ? $result : [];
     }
 
-    /**
-     * @return array
-     */
     public function getErrors(): array
     {
         return $this->errors;
     }
 
-    /**
-     * @return int
-     */
     public function getStatus(): int
     {
         return $this->status;

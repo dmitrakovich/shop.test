@@ -16,8 +16,6 @@ class PaymentService
     /**
      * Get payment by payment_url.
      *
-     * @param  string  $payment_url
-     * @param  OnlinePaymentMethodEnum  $method_enum
      * @return OnlinePayment
      */
     public function getOnlinePaymentByPaymentUrl(string $payment_url, OnlinePaymentMethodEnum $method_enum): ?OnlinePayment
@@ -27,8 +25,6 @@ class PaymentService
 
     /**
      * Get payment method service by enum.
-     *
-     * @param  OnlinePaymentMethodEnum  $paymentMethodEnum
      */
     private function getPaymentMethodServiceByEnum(OnlinePaymentMethodEnum $paymentMethodEnum)
     {
@@ -46,7 +42,6 @@ class PaymentService
      * Create OnlinePayment.
      *
      * @param  array  $data
-     * @return OnlinePayment
      */
     public function createOnlinePayment($data): OnlinePayment
     {
@@ -65,7 +60,6 @@ class PaymentService
     /**
      * Cancel payment.
      *
-     * @param  OnlinePayment  $payment
      * @return OnlinePayment
      */
     public function cancelOnlinePayment(OnlinePayment $payment)
@@ -78,9 +72,7 @@ class PaymentService
     /**
      * Capture payment.
      *
-     * @param  OnlinePayment  $payment
      * @param  float|nulls  $amount
-     * @return OnlinePayment
      */
     public function captureOnlinePayment(
         OnlinePayment $payment,
@@ -94,7 +86,6 @@ class PaymentService
     /**
      * Get OnlinePayment by link_code
      *
-     * @param  string  $linkCode
      * @return OnlinePayment
      */
     public function getPaymentByLinkCode(string $linkCode): ?OnlinePayment
@@ -104,9 +95,6 @@ class PaymentService
 
     /**
      * Create payment QRcode.
-     *
-     * @param  OnlinePayment  $onlinePayment
-     * @return OnlinePayment
      */
     public function createOnlinePaymentQrCode(OnlinePayment $onlinePayment): OnlinePayment
     {
@@ -117,10 +105,6 @@ class PaymentService
 
     /**
      * Webhook handler.
-     *
-     * @param  array  $requestData
-     * @param  OnlinePaymentMethodEnum  $paymentMethodEnum
-     * @return bool
      */
     public function webhookHandler(
       array $requestData,

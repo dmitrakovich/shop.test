@@ -32,9 +32,6 @@ class Action
 
     /**
      * Add get param
-     *
-     * @param  array  $param
-     * @return self
      */
     public function addGetParam(array $param): self
     {
@@ -43,10 +40,6 @@ class Action
         return $this;
     }
 
-    /**
-     * @param  array  $params
-     * @return ApiResponse
-     */
     public function request(array $params = []): ApiResponse
     {
         $params = array_merge($params, $this->params);

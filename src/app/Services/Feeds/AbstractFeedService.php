@@ -45,10 +45,6 @@ abstract class AbstractFeedService implements FeedServiceInterface
 
     /**
      * Return feed file path by instance & currency
-     *
-     * @param  string  $prefix
-     * @param  string  $postfix
-     * @return string
      */
     protected function getFilePath(string $prefix = '', string $postfix = ''): string
     {
@@ -61,8 +57,6 @@ abstract class AbstractFeedService implements FeedServiceInterface
 
     /**
      * Backup feed file
-     *
-     * @return void
      */
     public function backup(): void
     {

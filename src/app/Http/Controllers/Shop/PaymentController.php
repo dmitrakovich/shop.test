@@ -84,9 +84,7 @@ class PaymentController extends BaseController
   /**
    * Payment webhook handler.
    *
-   * @param  Request  $request
    * @param  string  $paymentMethod
-   * @param  PaymentService  $paymentService
    * @return response
    */
   public function webhook(

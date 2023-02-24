@@ -15,8 +15,6 @@ class SeoMeta implements SeoContract
 
     /**
      * Generate meta tags
-     *
-     * @return string
      */
     public function generate(): string
     {
@@ -57,11 +55,6 @@ class SeoMeta implements SeoContract
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param  string  $key
-     * @param  string|null|bool  $value
-     * @return self
-     */
     private function addToConfig(string $key, string|null|bool $value): self
     {
         if (!is_null($value)) {
@@ -73,9 +66,6 @@ class SeoMeta implements SeoContract
 
     /**
      * Set keywords
-     *
-     * @param  string|array|null  $keywords
-     * @return self
      */
     public function setKeywords(string|array|null $keywords): self
     {
@@ -91,9 +81,6 @@ class SeoMeta implements SeoContract
 
     /**
      * Set title.
-     *
-     * @param  string|null  $title
-     * @return self
      */
     public function setTitle(?string $title): self
     {
@@ -106,9 +93,6 @@ class SeoMeta implements SeoContract
 
     /**
      * Set description
-     *
-     * @param  string|null  $description
-     * @return self
      */
     public function setDescription(?string $description): self
     {
@@ -126,9 +110,6 @@ class SeoMeta implements SeoContract
 
     /**
      * Set url
-     *
-     * @param  string|null  $url
-     * @return self
      */
     public function setUrl(?string $url): self
     {
@@ -137,9 +118,6 @@ class SeoMeta implements SeoContract
 
     /**
      * Set robots
-     *
-     * @param  string|null  $robots
-     * @return self
      */
     public function setRobots(?string $robots): self
     {

@@ -15,7 +15,6 @@ class OrderCreated
     /**
      * Create a new event instance.
      *
-     * @param  Order  $order
      * @return void
      */
     public function __construct(public Order $order, public ?User $user = null)

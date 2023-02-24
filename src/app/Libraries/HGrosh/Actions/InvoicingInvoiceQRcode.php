@@ -8,10 +8,6 @@ class InvoicingInvoiceQRcode extends Action
 {
     protected string $method = 'get';
 
-    /**
-     * @param  array  $params
-     * @return ApiResponse
-     */
     public function request(array $params = []): ApiResponse
     {
         $params = array_merge($params, $this->params);

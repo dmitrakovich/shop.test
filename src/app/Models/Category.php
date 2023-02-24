@@ -68,25 +68,16 @@ class Category extends Model
         $this->generatePath();
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function parentCategory(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function childrenCategories(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id')->with('childrenCategories');

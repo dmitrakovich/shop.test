@@ -14,8 +14,6 @@ class GoogleTagManagerService
 {
     /**
      * Set GTM view event for product page
-     *
-     * @param  Product  $product
      */
     public function setViewForProduct(Product $product): void
     {
@@ -24,8 +22,6 @@ class GoogleTagManagerService
 
     /**
      * Set GTM view event for cart page
-     *
-     * @param  Cart  $cart
      */
     public function setViewForCart(Cart $cart): void
     {
@@ -85,8 +81,6 @@ class GoogleTagManagerService
 
     /**
      * Prepare products array
-     *
-     * @param  Product  $product
      */
     public static function prepareProduct(Product $product, ?int $quantity = null): DataLayer
     {
@@ -157,8 +151,6 @@ class GoogleTagManagerService
 
     /**
      * Set GTM ecommerce add to cart flash event
-     *
-     * @param  Product  $product
      */
     public function setProductAddFlashEvent(Product $product, int $quantity): void
     {
@@ -173,8 +165,6 @@ class GoogleTagManagerService
 
     /**
      * Set GTM ecommerce remove from cart flash event
-     *
-     * @param  Product  $product
      */
     public function setProductRemoveFlashEvent(Product $product, int $quantity): void
     {

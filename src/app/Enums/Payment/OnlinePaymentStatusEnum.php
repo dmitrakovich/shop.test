@@ -26,8 +26,6 @@ enum OnlinePaymentStatusEnum: int
 
     /**
      * Получить список
-     *
-     * @return array
      */
     public static function list(): array
     {
@@ -44,7 +42,6 @@ enum OnlinePaymentStatusEnum: int
      * Получить enum по value
      *
      * @param  ?int  $value - значение
-     * @return OnlinePaymentStatusEnum
      */
     public static function enumByValue(?int $value): self
     {

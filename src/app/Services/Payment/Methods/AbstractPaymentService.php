@@ -12,18 +12,12 @@ abstract class AbstractPaymentService
 {
     /**
      * Create new payment
-     *
-     * @param  Order  $order
-     * @param  float  $amount
-     * @param  string|null  $paymentNum
-     * @return OnlinePayment
      */
     abstract public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []): OnlinePayment;
 
     /**
      * Get payment by payment_id.
      *
-     * @param  string  $paymentId
      * @param  OnlinePaymentMethodEnum  $methodEnum
      * @return OnlinePayment
      */
@@ -41,10 +35,6 @@ abstract class AbstractPaymentService
 
     /**
      * Set OnlinePayment status.
-     *
-     * @param  OnlinePayment  $payment
-     * @param  OnlinePaymentStatusEnum  $status
-     * @return OnlinePayment
      */
     public function setPaymentStatus(
       OnlinePayment $payment,

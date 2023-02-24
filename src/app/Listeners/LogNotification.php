@@ -23,7 +23,6 @@ class LogNotification
     /**
      * Handle the event.
      *
-     * @param  \Illuminate\Notifications\Events\NotificationSent  $event
      * @return void
      */
     public function handle(NotificationSent $event)

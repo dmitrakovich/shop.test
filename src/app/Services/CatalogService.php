@@ -32,9 +32,6 @@ class CatalogService
     }
 
     /**
-     * @param  array  $filters
-     * @param  string  $sort
-     * @param  string|null  $search
      * @return \Illuminate\Contracts\Pagination\CursorPaginator
      */
     public function getProducts(array $filters, string $sort, ?string $search = null)
@@ -108,8 +105,6 @@ class CatalogService
 
     /**
      * Generate key for set/get query cahce
-     *
-     * @return string
      */
     protected function getQueryCacheKey(): string
     {
@@ -118,7 +113,6 @@ class CatalogService
 
     /**
      * @param  mixed  $products
-     * @param  array  $filters
      * @return void
      */
     protected function addTopProducts($products, array $filters)
@@ -144,7 +138,6 @@ class CatalogService
 
     /**
      * @param  mixed  $products
-     * @return int
      */
     protected function topProductsCount($products): int
     {
@@ -186,7 +179,6 @@ class CatalogService
      * Add GTM data to products
      *
      * @param  Collection  $products
-     * @return void
      */
     protected function addGtmData($products): void
     {

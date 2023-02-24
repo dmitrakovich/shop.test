@@ -35,11 +35,6 @@ class PaymentYandexService extends AbstractPaymentService
 
     /**
      * Create new payment
-     *
-     * @param  Order  $order
-     * @param  float  $amount
-     * @param  string|null  $paymentNum
-     * @return OnlinePayment
      */
     public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []): OnlinePayment
     {
@@ -100,9 +95,6 @@ class PaymentYandexService extends AbstractPaymentService
 
     /**
      * Cancel payment
-     *
-     * @param  OnlinePayment  $payment
-     * @return OnlinePayment
      */
     public function cancel(OnlinePayment $payment): OnlinePayment
     {
@@ -117,9 +109,6 @@ class PaymentYandexService extends AbstractPaymentService
 
     /**
      * Capture payment
-     *
-     * @param  OnlinePayment  $payment
-     * @return OnlinePayment
      */
     public function capture(
         OnlinePayment $payment,
@@ -142,9 +131,6 @@ class PaymentYandexService extends AbstractPaymentService
 
     /**
      * Webhook handler.
-     *
-     * @param  array  $requestData
-     * @return bool
      */
     public function webhookHandler(
       array $requestData,

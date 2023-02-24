@@ -9,8 +9,6 @@ class SitemapController extends Controller
 {
     /**
      * Index
-     *
-     * @return Response
      */
     public function index(): Response
     {
@@ -24,7 +22,6 @@ class SitemapController extends Controller
      * Path
      *
      * @param  string  $path
-     * @return Response
      */
     public function path($path): Response
     {
@@ -37,7 +34,6 @@ class SitemapController extends Controller
     /**
      * Render xml file
      *
-     * @param  string  $path
      * @return xml file
      */
     private function renderXmlFile(string $path): Response

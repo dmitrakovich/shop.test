@@ -25,8 +25,6 @@ class Status extends Model
     protected $guarded = ['id'];
 
     /**
-     * @param  Builder  $builder
-     * @param  array  $values
      * @return Builder
      */
     public static function applyFilter(Builder $builder, array $values)

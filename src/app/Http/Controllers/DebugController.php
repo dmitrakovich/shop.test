@@ -52,7 +52,6 @@ class DebugController extends Controller
     }
 
     /**
-     * @param  Order  $order
      * @return void
      */
     public function printOrder(Order $order)

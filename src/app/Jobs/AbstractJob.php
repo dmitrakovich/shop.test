@@ -29,7 +29,6 @@ abstract class AbstractJob implements ShouldQueue
     /**
      * Handle a job failure.
      *
-     * @param  \Throwable  $exception
      * @return void
      */
     public function failed(Throwable $exception)
@@ -46,8 +45,6 @@ abstract class AbstractJob implements ShouldQueue
 
     /**
      * Получить имя текущей задачи
-     *
-     * @return string
      */
     protected function getName(): string
     {

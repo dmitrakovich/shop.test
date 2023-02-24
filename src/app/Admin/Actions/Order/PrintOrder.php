@@ -21,9 +21,6 @@ class PrintOrder extends RowAction
 
     /**
      * Generate JS for print order
-     *
-     * @param  int  $orderId
-     * @return string
      */
     public static function printScript(int $orderId): string
     {

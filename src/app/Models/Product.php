@@ -228,8 +228,6 @@ class Product extends Model implements HasMedia
     /**
      * Сортировка товаров
      *
-     * @param  Builder  $query
-     * @param  string  $type
      * @return Builder
      */
     public function scopeSorting(Builder $query, string $type)
@@ -246,7 +244,6 @@ class Product extends Model implements HasMedia
     /**
      * Поиск товаров
      *
-     * @param  Builder  $query
      * @param  string  $search
      * @return Builder
      */
@@ -287,8 +284,6 @@ class Product extends Model implements HasMedia
     /**
      * Get only products with discount
      *
-     * @param  Builder  $query
-     * @param  float  $amount
      * @return Builder
      */
     public function scopeOnlyWithDiscount(Builder $query, float $amount = 0.01)
@@ -299,8 +294,6 @@ class Product extends Model implements HasMedia
     /**
      * Get only new products
      *
-     * @param  Builder  $query
-     * @param  int  $days
      * @return Builder
      */
     public function scopeOnlyNew(Builder $query, int $days = 10)
@@ -319,9 +312,6 @@ class Product extends Model implements HasMedia
 
     /**
      * Get product price
-     *
-     * @param  string|null  $currencyCode
-     * @return float
      */
     public function getPrice(?string $currencyCode = null): float
     {
@@ -358,9 +348,6 @@ class Product extends Model implements HasMedia
 
     /**
      * Get product old price
-     *
-     * @param  string|null  $currencyCode
-     * @return float
      */
     public function getOldPrice(?string $currencyCode = null): float
     {
@@ -379,10 +366,6 @@ class Product extends Model implements HasMedia
 
     /**
      * getFirstMediaUrl & check empty media
-     *
-     * @param  string  $collectionName
-     * @param  string  $conversionName
-     * @return string
      */
     public function getFirstMediaUrl(string $collectionName = 'default', string $conversionName = ''): string
     {
@@ -396,7 +379,6 @@ class Product extends Model implements HasMedia
     /**
      * Set default values for product
      *
-     * @param  int  $id
      * @return void
      */
     public function setDefaultValues(int $id = 0)
@@ -411,8 +393,6 @@ class Product extends Model implements HasMedia
 
     /**
      * Is the model new
-     *
-     * @return bool
      */
     public function isNew(): bool
     {

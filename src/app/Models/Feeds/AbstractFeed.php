@@ -28,22 +28,16 @@ abstract class AbstractFeed
 
     /**
      * Return part of a filename
-     *
-     * @return string
      */
     abstract public function getKey(): string;
 
     /**
      * Prepare data for xml file
-     *
-     * @return object
      */
     abstract public function getPreparedData(): object;
 
     /**
      * Return host url
-     *
-     * @return string
      */
     public function getHost(): string
     {
@@ -52,9 +46,6 @@ abstract class AbstractFeed
 
     /**
      * Prepare string to xml format
-     *
-     * @param  string  $string
-     * @return string
      */
     public function xmlSpecialChars(string $string): string
     {
@@ -63,9 +54,6 @@ abstract class AbstractFeed
 
     /**
      * Return product image urls
-     *
-     * @param  MediaCollection  $media
-     * @return array
      */
     public function getProductImages(MediaCollection $media): array
     {
@@ -76,8 +64,6 @@ abstract class AbstractFeed
 
     /**
      * Return categories list with keys by id
-     *
-     * @return NestedsetCollection
      */
     public function getCategoriesList(): NestedsetCollection
     {
@@ -90,9 +76,6 @@ abstract class AbstractFeed
 
     /**
      * Prepare sizes string from sizes list
-     *
-     * @param  EloquentCollection  $sizes
-     * @return string
      */
     protected function sizesToString(EloquentCollection $sizes): string
     {

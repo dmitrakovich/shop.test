@@ -6,8 +6,6 @@ class CsvService extends AbstractFeedService
 {
     /**
      * Generate csv file
-     *
-     * @return void
      */
     public function generate(): void
     {
@@ -16,9 +14,6 @@ class CsvService extends AbstractFeedService
 
     /**
      * Save csv data to file
-     *
-     * @param  object  $data
-     * @return void
      */
     protected function saveToFile(object $data): void
     {
