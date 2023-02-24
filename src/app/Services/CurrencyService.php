@@ -78,9 +78,7 @@ class CurrencyService
     /**
      * Set & save current currency
      *
-     * @param  string|null  $currencyCode
      * @param  bool  $save
-     * @return void
      */
     public function setCurrentCurrency(?string $currencyCode = null, $save = true): void
     {
@@ -101,7 +99,6 @@ class CurrencyService
     /**
      * Set currency by code
      *
-     * @param  string  $currencyCode
      * @return void
      */
     protected function setCurrencyByCode(string $currencyCode)
@@ -167,10 +164,6 @@ class CurrencyService
 
     /**
      * Convert price in needed or current currency
-     *
-     * @param  float  $priceInByn
-     * @param  string|null  $currencyCode
-     * @return float
      */
     public function convert(float $priceInByn, ?string $currencyCode = null): float
     {
@@ -194,10 +187,6 @@ class CurrencyService
 
     /**
      * Format price in current currency
-     *
-     * @param  float  $price
-     * @param  string|null  $currency
-     * @return string
      */
     public function format(float $price, ?string $currency = null): string
     {
@@ -210,7 +199,6 @@ class CurrencyService
      * Conver & format price in current currency
      *
      * @param  float  $value
-     * @return string
      */
     public function convertAndFormat(float $priceInByn): string
     {

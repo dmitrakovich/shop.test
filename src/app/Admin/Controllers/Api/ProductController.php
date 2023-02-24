@@ -14,9 +14,6 @@ class ProductController extends Controller
 {
     /**
      * Return paginated products by id
-     *
-     * @param  Request  $request
-     * @return LengthAwarePaginator
      */
     public function getById(Request $request): LengthAwarePaginator
     {

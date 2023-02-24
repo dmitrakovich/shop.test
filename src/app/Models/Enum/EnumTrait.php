@@ -7,9 +7,6 @@ namespace App\Models\Enum;
  */
 trait EnumTrait
 {
-    /**
-     * @return array
-     */
     public static function getKeys(): array
     {
         $class = new \ReflectionClass(get_called_class());
@@ -17,9 +14,6 @@ trait EnumTrait
         return array_keys($class->getConstants());
     }
 
-    /**
-     * @return array
-     */
     public static function getValues(): array
     {
         $class = new \ReflectionClass(get_called_class());

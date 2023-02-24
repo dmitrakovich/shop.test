@@ -49,8 +49,6 @@ class OrderItemExtended extends OrderItem
      * Product name
      *
      * @deprecated
-     *
-     * @return string
      */
     public function getProductNameAttribute(): string
     {
@@ -59,8 +57,6 @@ class OrderItemExtended extends OrderItem
 
     /**
      * Product link
-     *
-     * @return string
      */
     public function getProductLinkAttribute(): string
     {
@@ -69,8 +65,6 @@ class OrderItemExtended extends OrderItem
 
     /**
      * Product photo
-     *
-     * @return string
      */
     public function getProductPhotoAttribute(): string
     {

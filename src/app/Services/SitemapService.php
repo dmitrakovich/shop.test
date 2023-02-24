@@ -20,8 +20,6 @@ class SitemapService
 
     /**
      * Get simple product slider
-     *
-     * @return bool
      */
     public function generate(): bool
     {
@@ -172,7 +170,6 @@ class SitemapService
      *
      * @param  Model  $models
      * @param  string  $relation
-     * @return null | Relations\Relation
      */
     private function checkProductRelation(Model $productModel, string $attribute): ?Relations\Relation
     {
@@ -191,9 +188,6 @@ class SitemapService
 
     /**
      * Get catalog attribute links
-     *
-     * @param  array  $models
-     * @return array
      */
     private function getAttributeLinks(array $models): array
     {
@@ -213,10 +207,6 @@ class SitemapService
 
     /**
      * Get sitemap Url
-     *
-     * @param  string  $loc
-     * @param  string  $changefreq
-     * @param  float  $priority
      */
     private function getUrl(string $loc, string $changefreq, float $priority = 0.7): string
     {
@@ -237,7 +227,6 @@ class SitemapService
      *
      * @param  string  $tempPath - temp file path
      * @param  string  $finalPath - final file path
-     * @return void
      */
     private function urlsetFileEnd(string $tempPath, string $finalPath): void
     {
@@ -252,7 +241,6 @@ class SitemapService
      * Header sitemap
      *
      * @param  string  $tempPath - temp file path
-     * @return void
      */
     private function urlsetFileStart(string $tempPath): void
     {
@@ -266,8 +254,6 @@ class SitemapService
      * Add row to sitemap
      *
      * @param  string  $tempPath - temp file path
-     * @param  string  $data
-     * @return void
      */
     private function urlsetAppendFile(string $tempPath, string $data): void
     {

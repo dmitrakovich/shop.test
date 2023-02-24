@@ -21,8 +21,6 @@ class YandexXml extends AbstractFeed
 
     /**
      * Return part of a filename
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -31,8 +29,6 @@ class YandexXml extends AbstractFeed
 
     /**
      * Prepare data for xml file
-     *
-     * @return object
      */
     public function getPreparedData(): object
     {
@@ -48,8 +44,6 @@ class YandexXml extends AbstractFeed
 
     /**
      * Return currencies list with first current currency
-     *
-     * @return array
      */
     protected function getCurrencies(): array
     {
@@ -67,8 +61,6 @@ class YandexXml extends AbstractFeed
 
     /**
      * Return catagoies id, name & parent id
-     *
-     * @return Collection
      */
     protected function getCategories(): Collection
     {
@@ -89,8 +81,6 @@ class YandexXml extends AbstractFeed
 
     /**
      * Offers data
-     *
-     * @return array
      */
     protected function getOffers(): array
     {
@@ -115,9 +105,6 @@ class YandexXml extends AbstractFeed
 
     /**
      * Prepare color from colors for filters
-     *
-     * @param  EloquentCollection  $colors
-     * @return array
      */
     public function getColors(EloquentCollection $colors): array
     {
@@ -128,9 +115,6 @@ class YandexXml extends AbstractFeed
 
     /**
      * Prepare offer params
-     *
-     * @param  Product  $product
-     * @return array
      */
     public function getOfferParams(Product $product): array
     {
@@ -160,9 +144,6 @@ class YandexXml extends AbstractFeed
 
     /**
      * Generate product description
-     *
-     * @param  Product  $product
-     * @return string
      */
     public function getDescription(Product $product): string
     {

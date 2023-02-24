@@ -55,9 +55,6 @@ class Seo implements SeoContract
 
     /**
      * Set keywords
-     *
-     * @param  string|array|null  $keywords
-     * @return self
      */
     public function setKeywords(string|array|null $keywords): self
     {
@@ -68,9 +65,6 @@ class Seo implements SeoContract
 
     /**
      * Set title.
-     *
-     * @param  string|null  $title
-     * @return self
      */
     public function setTitle(?string $title): self
     {
@@ -84,9 +78,6 @@ class Seo implements SeoContract
 
     /**
      * Set description
-     *
-     * @param  string|null  $description
-     * @return self
      */
     public function setDescription(?string $description): self
     {
@@ -99,9 +90,6 @@ class Seo implements SeoContract
 
     /**
      * Set image
-     *
-     * @param  null|string|array  $image
-     * @return self
      */
     public function setImage(null|string|array $image): self
     {
@@ -114,9 +102,6 @@ class Seo implements SeoContract
 
     /**
      * Set url
-     *
-     * @param  string|null  $url
-     * @return self
      */
     public function setUrl(?string $url): self
     {

@@ -20,7 +20,6 @@ class SyncOrderHistory
     /**
      * Handle the event.
      *
-     * @param  Registered|Login  $event
      * @return void
      */
     public function handle(Registered|Login $event)

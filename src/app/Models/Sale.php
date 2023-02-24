@@ -63,7 +63,6 @@ class Sale extends Model
     /**
      * Выбор актуальных
      *
-     * @param  Builder  $query
      * @param  string  $search
      * @return Builder
      */
@@ -82,7 +81,6 @@ class Sale extends Model
     /**
      * Farmat date
      *
-     * @param  \DateTimeInterface  $date
      * @return string
      */
     protected function serializeDate(\DateTimeInterface $date)

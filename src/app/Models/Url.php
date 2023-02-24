@@ -28,7 +28,6 @@ class Url extends Model
     /**
      * Найти url model по slug
      *
-     * @param  string  $slug
      * @return object
      */
     public static function search(string $slug)
@@ -51,8 +50,6 @@ class Url extends Model
 
     /**
      * Return ralation model
-     *
-     * @return Model
      */
     public function getFilterModel(): Model
     {

@@ -29,7 +29,6 @@ class DashboardController extends Controller
     /**
      * Получить данные профиля
      *
-     * @param  User  $user
      * @param  Request  $request
      * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */

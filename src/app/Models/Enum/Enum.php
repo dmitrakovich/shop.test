@@ -7,14 +7,8 @@ namespace App\Models\Enum;
  */
 interface Enum
 {
-    /**
-     * @return array
-     */
     public static function getKeys(): array;
 
-    /**
-     * @return array
-     */
     public static function getValues(): array;
 
     /**

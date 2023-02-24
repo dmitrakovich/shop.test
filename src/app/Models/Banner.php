@@ -112,8 +112,6 @@ class Banner extends Model implements HasMedia
 
     /**
      * Get spoiler text color (Hex).
-     *
-     * @return string
      */
     public function getSpoilerTextColor(): string
     {
@@ -122,8 +120,6 @@ class Banner extends Model implements HasMedia
 
     /**
      * Get spoiler background color (Hex).
-     *
-     * @return string
      */
     public function getSpoilerBgColor(): string
     {

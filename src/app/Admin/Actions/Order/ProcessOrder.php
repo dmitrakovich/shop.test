@@ -22,7 +22,6 @@ class ProcessOrder extends RowAction
     /**
      * Handle action
      *
-     * @param  Model  $model
      * @return mixed
      */
     public function process(Model $model)
@@ -43,7 +42,6 @@ class ProcessOrder extends RowAction
     /**
      * Generate success response
      *
-     * @param  string  $message
      * @return mixed
      */
     public function successResponse(string $message)
@@ -58,7 +56,6 @@ class ProcessOrder extends RowAction
     /**
      * Generate warning response
      *
-     * @param  string  $message
      * @return mixed
      */
     public function warningResponse(string $message)

@@ -20,8 +20,6 @@ enum SeoLinkFolderEnum: int
 
     /**
      * Получить список
-     *
-     * @return array
      */
     public static function list(): array
     {

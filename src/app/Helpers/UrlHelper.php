@@ -157,9 +157,6 @@ class UrlHelper
 
     /**
      * Get YouTube embed video url
-     *
-     * @param  string  $originalVideoUrl
-     * @return string
      */
     public static function getEmbedVideoUrl(string $originalVideoUrl, $extPrams = []): string
     {
@@ -170,9 +167,6 @@ class UrlHelper
 
     /**
      * Get YouTube video id
-     *
-     * @param  string  $originalVideoUrl
-     * @return string
      */
     public static function getYouTubeVideoId(string $originalVideoUrl): string
     {

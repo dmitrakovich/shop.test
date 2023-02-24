@@ -17,8 +17,6 @@ class OpenGraph implements SeoContract
 
     /**
      * Generate meta tags
-     *
-     * @return string
      */
     public function generate(): string
     {
@@ -45,11 +43,6 @@ class OpenGraph implements SeoContract
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param  string  $key
-     * @param  string|null|bool  $value
-     * @return self
-     */
     private function addToConfig(string $key, string|null|bool $value): self
     {
         if (!is_null($value)) {
@@ -63,7 +56,6 @@ class OpenGraph implements SeoContract
      * Set product properties
      *
      * @param  array  $attributes opengraph product attributes
-     * @return self
      */
     public function setProduct(array $attributes = []): self
     {
@@ -82,9 +74,6 @@ class OpenGraph implements SeoContract
 
     /**
      * Set title.
-     *
-     * @param  string|null  $title
-     * @return self
      */
     public function setTitle(?string $title): self
     {
@@ -93,9 +82,6 @@ class OpenGraph implements SeoContract
 
     /**
      * Set description
-     *
-     * @param  string|null  $description
-     * @return self
      */
     public function setDescription(?string $description): self
     {
@@ -110,7 +96,6 @@ class OpenGraph implements SeoContract
      * Set image
      *
      * @param  string|null  $image
-     * @return self
      */
     public function setImage(null|string|array $image): self
     {
@@ -126,9 +111,6 @@ class OpenGraph implements SeoContract
 
     /**
      * Set url
-     *
-     * @param  string|null  $url
-     * @return self
      */
     public function setUrl(?string $url): self
     {

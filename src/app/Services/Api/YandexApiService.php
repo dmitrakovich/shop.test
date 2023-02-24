@@ -36,8 +36,6 @@ class YandexApiService
 
     /**
      * Get leftovers download link from yandex disk
-     *
-     * @return string|null
      */
     public function getLeftoversDownloadLink(): ?string
     {
@@ -50,8 +48,6 @@ class YandexApiService
     /**
      * Send GET query to yandex api
      *
-     * @param  string  $url
-     * @param  array  $params
      * @return mixed
      */
     protected function get(string $url, array $params = [])

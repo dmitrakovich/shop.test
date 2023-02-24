@@ -30,8 +30,6 @@ class GoogleCsv extends AbstractFeed
 
     /**
      * Return part of a filename
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -40,8 +38,6 @@ class GoogleCsv extends AbstractFeed
 
     /**
      * Prepare data for csv file
-     *
-     * @return object
      */
     public function getPreparedData(): object
     {
@@ -53,8 +49,6 @@ class GoogleCsv extends AbstractFeed
 
     /**
      * Columns headers
-     *
-     * @return array
      */
     protected function getHeaders(): array
     {
@@ -72,8 +66,6 @@ class GoogleCsv extends AbstractFeed
 
     /**
      * Rows data
-     *
-     * @return array
      */
     protected function getRows(): array
     {
@@ -96,10 +88,6 @@ class GoogleCsv extends AbstractFeed
 
     /**
      * Get sale price if exist
-     *
-     * @param  float  $price
-     * @param  float  $oldPrice
-     * @return string|null
      */
     protected function getSalePrice(float $price, float $oldPrice): ?string
     {
@@ -108,9 +96,6 @@ class GoogleCsv extends AbstractFeed
 
     /**
      * Format price for google csv
-     *
-     * @param  float  $price
-     * @return string
      */
     protected function formatPrice(float $price): string
     {
@@ -119,9 +104,6 @@ class GoogleCsv extends AbstractFeed
 
     /**
      * Prepared item title
-     *
-     * @param  Product  $item
-     * @return string
      */
     protected function getItemTitle(Product $item): string
     {
@@ -130,9 +112,6 @@ class GoogleCsv extends AbstractFeed
 
     /**
      * Generate product description
-     *
-     * @param  Product  $product
-     * @return string
      */
     public function getDescription(Product $product): string
     {

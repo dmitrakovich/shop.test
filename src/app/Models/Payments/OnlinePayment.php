@@ -46,8 +46,6 @@ class OnlinePayment extends Model
 
     /**
      * Payment statuses
-     *
-     * @return Relations\HasMany
      */
     public function statuses(): Relations\HasMany
     {
@@ -56,8 +54,6 @@ class OnlinePayment extends Model
 
     /**
      * Payment statuses
-     *
-     * @return Relations\HasOne
      */
     public function lastStatus(): Relations\HasOne
     {
@@ -66,8 +62,6 @@ class OnlinePayment extends Model
 
     /**
      * Last canceled status
-     *
-     * @return Relations\HasOne
      */
     public function lastCanceledStatus(): Relations\HasOne
     {
@@ -76,8 +70,6 @@ class OnlinePayment extends Model
 
     /**
      * Last succeeded status
-     *
-     * @return Relations\HasOne
      */
     public function lastSucceededStatus(): Relations\HasOne
     {
@@ -120,8 +112,6 @@ class OnlinePayment extends Model
 
     /**
      * Is can cancel the payment?
-     *
-     * @return bool
      */
     public function canCancelPayment(): bool
     {
@@ -132,8 +122,6 @@ class OnlinePayment extends Model
 
     /**
      * Is can capture the payment?
-     *
-     * @return bool
      */
     public function canCapturePayment(): bool
     {

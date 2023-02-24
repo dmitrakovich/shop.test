@@ -17,8 +17,6 @@ class GoogleXml extends AbstractFeed
 
     /**
      * Return part of a filename
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -27,8 +25,6 @@ class GoogleXml extends AbstractFeed
 
     /**
      * Prepare data for xml file
-     *
-     * @return object
      */
     public function getPreparedData(): object
     {
@@ -40,8 +36,6 @@ class GoogleXml extends AbstractFeed
 
     /**
      * Data for header
-     *
-     * @return object
      */
     protected function getChannel(): object
     {
@@ -54,8 +48,6 @@ class GoogleXml extends AbstractFeed
 
     /**
      * Items data
-     *
-     * @return array
      */
     protected function getItems(): array
     {
@@ -84,9 +76,6 @@ class GoogleXml extends AbstractFeed
      * Return google product category
      *
      * @see https://support.google.com/merchants/answer/6324436?hl=ru
-     *
-     * @param  Category  $category
-     * @return int
      */
     protected function getGoogleCategory(Category $category): int
     {
@@ -101,9 +90,6 @@ class GoogleXml extends AbstractFeed
 
     /**
      * Generate & return product type
-     *
-     * @param  Category  $category
-     * @return string
      */
     protected function getProductType(Category $category): string
     {
@@ -123,9 +109,6 @@ class GoogleXml extends AbstractFeed
 
     /**
      * Prepare color from colors for filters
-     *
-     * @param  EloquentCollection  $colors
-     * @return string
      */
     public function getColor(EloquentCollection $colors): string
     {
@@ -134,9 +117,6 @@ class GoogleXml extends AbstractFeed
 
     /**
      * Generate product description
-     *
-     * @param  Product  $product
-     * @return string
      */
     public function getDescription(Product $product): string
     {

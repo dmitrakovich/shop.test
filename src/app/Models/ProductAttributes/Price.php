@@ -41,8 +41,6 @@ class Price extends Model
     }
 
     /**
-     * @param  Builder  $builder
-     * @param  array  $values
      * @return Builder
      */
     public static function applyFilter(Builder $builder, array $values)

@@ -26,7 +26,6 @@ class RecentProductsSlider extends Form
     /**
      * Handle the form request.
      *
-     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request)

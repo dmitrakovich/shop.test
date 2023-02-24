@@ -8,8 +8,6 @@ class XmlService extends AbstractFeedService
 {
     /**
      * Generate xml file
-     *
-     * @return void
      */
     public function generate(): void
     {
@@ -23,9 +21,6 @@ class XmlService extends AbstractFeedService
 
     /**
      * Save xml data to file
-     *
-     * @param  View  $data
-     * @return void
      */
     protected function saveToFile(View $data): void
     {

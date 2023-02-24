@@ -78,8 +78,6 @@ trait ProductSales
 
     /**
      * Calculate sale percentage
-     *
-     * @return int
      */
     public function getSalePercentage(): int
     {

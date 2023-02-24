@@ -192,8 +192,6 @@ class Order extends Model
 
     /**
      * Order online payments
-     *
-     * @return Relations\HasMany
      */
     public function onlinePayments(): Relations\HasMany
     {

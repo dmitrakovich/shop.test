@@ -15,8 +15,6 @@ class Twitter implements SeoContract
 
     /**
      * Generate meta tags
-     *
-     * @return string
      */
     public function generate(): string
     {
@@ -37,11 +35,6 @@ class Twitter implements SeoContract
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param  string  $key
-     * @param  string|null|bool  $value
-     * @return self
-     */
     private function addToConfig(string $key, string|null|bool $value): self
     {
         if (!is_null($value)) {
@@ -53,9 +46,6 @@ class Twitter implements SeoContract
 
     /**
      * Set title.
-     *
-     * @param  string|null  $title
-     * @return self
      */
     public function setTitle(?string $title): self
     {
@@ -64,9 +54,6 @@ class Twitter implements SeoContract
 
     /**
      * Set description
-     *
-     * @param  string|null  $description
-     * @return self
      */
     public function setDescription(?string $description): self
     {
@@ -79,9 +66,6 @@ class Twitter implements SeoContract
 
     /**
      * Set image
-     *
-     * @param  null|string|array  $image
-     * @return self
      */
     public function setImage(null|string|array $image): self
     {
@@ -97,9 +81,6 @@ class Twitter implements SeoContract
 
     /**
      * Set url
-     *
-     * @param  string|null  $url
-     * @return self
      */
     public function setUrl(?string $url): self
     {

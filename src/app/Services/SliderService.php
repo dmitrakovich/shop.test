@@ -24,8 +24,6 @@ class SliderService
 
     /**
      * Get simple product slider
-     *
-     * @return array
      */
     public function getSimple(): array
     {
@@ -93,8 +91,6 @@ class SliderService
 
     /**
      * Get imidj product slider
-     *
-     * @return array
      */
     public function getImidj(): array
     {
@@ -155,8 +151,6 @@ class SliderService
 
     /**
      * Get similar products slider
-     *
-     * @return array
      */
     public function getSimilarProducts(int $productId): array
     {
@@ -218,8 +212,6 @@ class SliderService
 
     /**
      * Get product group
-     *
-     * @return array
      */
     public function getProductGroup(?int $productGroupId): array
     {
@@ -262,8 +254,6 @@ class SliderService
 
     /**
      * Get recent products slider
-     *
-     * @return array
      */
     public function getRecentProducts(ProductService $productService): array
     {
@@ -313,9 +303,6 @@ class SliderService
 
     /**
      * Add in products array converted and formatted price
-     *
-     * @param  array  $products
-     * @return void
      */
     protected function addConvertedAndFormattedPrice(array &$products): void
     {
@@ -327,9 +314,6 @@ class SliderService
 
     /**
      * Add favorites to products
-     *
-     * @param  array  $products
-     * @return void
      */
     protected function addFavorites(array &$products): void
     {
@@ -343,9 +327,6 @@ class SliderService
 
     /**
      * Prepare impressions data & call GTR Service
-     *
-     * @param  array  $products
-     * @return void
      */
     protected function setDataLayerForPage(array $products): void
     {

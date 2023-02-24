@@ -14,11 +14,6 @@ class PaymentEripService extends AbstractPaymentService
 {
     /**
      * Create new payment
-     *
-     * @param  Order  $order
-     * @param  float  $amount
-     * @param  string|null  $paymentNum
-     * @return OnlinePayment
      */
     public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []): OnlinePayment
     {
@@ -83,9 +78,6 @@ class PaymentEripService extends AbstractPaymentService
 
     /**
      * Create payment QRcode.
-     *
-     * @param  OnlinePayment  $onlinePayment
-     * @return OnlinePayment
      */
     public function createQrCode(OnlinePayment $onlinePayment): OnlinePayment
     {

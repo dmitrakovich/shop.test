@@ -157,7 +157,6 @@ class OrderController extends AdminController
      * Edit interface.
      *
      * @param  mixed  $id
-     * @param  Content  $content
      * @return Content
      */
     public function edit($id, Content $content)
@@ -371,9 +370,6 @@ class OrderController extends AdminController
 
     /**
      * Set utm sources in form
-     *
-     * @param  Form  $form
-     * @return void
      */
     protected function setUtmSources(Form $form): void
     {
@@ -394,7 +390,6 @@ class OrderController extends AdminController
     /**
      * Handle process order action
      *
-     * @param  Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function process(Order $order)
@@ -407,7 +402,6 @@ class OrderController extends AdminController
     /**
      * Render process tool
      *
-     * @param  int  $orderId
      * @return \Closure
      */
     protected function getProcessTool(int $orderId)
@@ -435,8 +429,6 @@ class OrderController extends AdminController
 
     /**
      * Js crutch
-     *
-     * @return string
      */
     protected function getScriptForExtendedItems(): string
     {

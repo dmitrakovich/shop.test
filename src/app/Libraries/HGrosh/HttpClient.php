@@ -29,7 +29,6 @@ class HttpClient
     /**
      * Get HGrosh token
      *
-     * @return string
      *
      * @throws TokenException
      */
@@ -66,10 +65,6 @@ class HttpClient
     }
 
     /**
-     * @param  string  $url
-     * @param  array  $params
-     * @return ApiResponse
-     *
      * @throws RequestException
      */
     public function post(string $url, array $params = [], $getParams = []): ApiResponse
@@ -78,10 +73,6 @@ class HttpClient
     }
 
     /**
-     * @param  string  $url
-     * @param  array  $params
-     * @return ApiResponse
-     *
      * @throws RequestException
      */
     public function put(string $url, array $params = []): ApiResponse
@@ -90,10 +81,6 @@ class HttpClient
     }
 
     /**
-     * @param  string  $url
-     * @param  array  $params
-     * @return ApiResponse
-     *
      * @throws RequestException
      */
     public function delete(string $url, array $params = []): ApiResponse
@@ -102,9 +89,6 @@ class HttpClient
     }
 
     /**
-     * @param  string  $url
-     * @return ApiResponse
-     *
      * @throws RequestException
      */
     public function get(string $url, array $params = []): ApiResponse
@@ -113,11 +97,6 @@ class HttpClient
     }
 
     /**
-     * @param  string  $method
-     * @param  string  $url
-     * @param  array  $params
-     * @return ApiResponse
-     *
      * @throws RequestException
      */
     protected function request(string $method, string $url, array $params = [], $getParams = []): ApiResponse
