@@ -40,6 +40,7 @@
     {{-- Google Tag Manager --}}
     @include('googletagmanager::body')
 
+    @include('includes.scripts')
     @include('includes.header')
 
     <main class="content">

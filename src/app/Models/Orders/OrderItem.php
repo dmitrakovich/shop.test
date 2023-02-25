@@ -104,4 +104,12 @@ class OrderItem extends Model
     {
         return $this->hasOne(Installment::class);
     }
+
+    /**
+     * Check if order item completed
+     */
+    public function isCompleted(): bool
+    {
+        return $this->status_key === 'complete';
+    }
 }

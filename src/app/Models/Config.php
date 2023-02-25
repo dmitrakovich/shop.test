@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\ItemNotFoundException;
 
 /**
  * Config class.
@@ -73,7 +74,7 @@ class Config extends Model
     private static function findOrException(string $key): self
     {
         if (empty($config = self::query()->find($key))) {
-            throw new \Exception("Config with key '$key' not found");
+            throw new ItemNotFoundException("Config with key '$key' not found");
         }
 
         return $config;

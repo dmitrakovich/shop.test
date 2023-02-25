@@ -12,8 +12,7 @@
                 <h2>ОЦЕНКИ И ОТЗЫВЫ</h2>
             </div>
             <div class="col-12 col-md-auto">
-                <button type="button" class="btn btn-danger btn-block py-3" data-fancybox
-                    data-src="#leave-feedback-modal">
+                <button type="button" class="btn btn-danger btn-block py-3 js-leave-feedback-btn">
                     ОСТАВИТЬ ОТЗЫВ О СВОЕЙ ПОКУПКЕ
                 </button>
             </div>

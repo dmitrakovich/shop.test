@@ -307,8 +307,8 @@
                 <span class="h3">ОЦЕНКИ И ОТЗЫВЫ</span>
             </div>
             <div class="col-auto">
-                <button type="button" data-fancybox data-src="#leave-feedback-modal"
-                    class="btn btn-link px-0 text-decoration-underline font-weight-bold">
+                <button type="button"
+                    class="btn btn-link px-0 text-decoration-underline font-weight-bold js-leave-feedback-btn">
                     ОСТАВИТЬ ОТЗЫВ О СВОЕЙ ПОКУПКЕ
                 </button>
             </div>

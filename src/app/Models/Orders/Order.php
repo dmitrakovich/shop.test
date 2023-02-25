@@ -5,6 +5,7 @@ namespace App\Models\Orders;
 use App\Models\Country;
 use App\Models\Device;
 use App\Models\Enum\OrderMethod;
+use App\Models\Logs\SmsLog;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\User;
 use Deliveries\DeliveryMethod;
@@ -241,6 +242,14 @@ class Order extends Model
     public function adminComments()
     {
         return $this->hasMany(OrderAdminComment::class);
+    }
+
+    /**
+     * Mailings sent by order
+     */
+    public function mailings(): Relations\HasMany
+    {
+        return $this->hasMany(SmsLog::class);
     }
 
     /**

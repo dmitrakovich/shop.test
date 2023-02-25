@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $short_link
  * @property string $full_link
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  */
 class ShortLink extends Model
 {

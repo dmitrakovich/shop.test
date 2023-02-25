@@ -35,6 +35,7 @@ class ProductController extends BaseController
         $product = Product::with(['tags', 'category'])->withTrashed()->findOrFail($id);
         $this->gtmService->setViewForProduct($product);
         $this->productService->addToRecent($product->id);
+        $this->setProductUrlToFeedback();
 
         $this->seoService->setProduct($product)->generate();
 
@@ -46,6 +47,14 @@ class ProductController extends BaseController
             'productGroup' => $this->sliderService->getProductGroup($product->product_group_id),
             'recentProductsSlider' => $this->sliderService->getRecentProducts($this->productService),
         ]);
+    }
+
+    /**
+     * Save url to product page with review, for auth redirect
+     */
+    protected function setProductUrlToFeedback(): void
+    {
+        $this->request->session()->put('url.intended', $this->request->fullUrl() . '#review');
     }
 
     /**

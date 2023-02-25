@@ -1,15 +1,41 @@
 const { default: axios } = require("axios");
+import { AUTH } from '../routes';
 import captcha from './../components/captcha';
 
 const feedbackFormId = 'leave-feedback-form';
+const feedbackModalId = 'leave-feedback-modal';
+const openModalButtonClass = 'js-leave-feedback-btn';
 const submitButtonId = 'leave-feedback-btn';
 
 document.addEventListener('click', function (event) {
+  if (event.target.classList.contains(openModalButtonClass)) {
+    openModal();
+  }
   if (event.target.id === submitButtonId) {
     saveFeedback();
   }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.location.hash === '#review') {
+    if (window.User) {
+      openModal();
+    } else {
+      window.location.href = AUTH;
+    }
+  }
+});
+
+/**
+ *
+ */
+function openModal() {
+  $.fancybox.open(document.getElementById(feedbackModalId));
+}
+
+/**
+ *
+ */
 function saveFeedback() {
   const feedbackForm = document.getElementById(feedbackFormId);
   const submitButton = document.getElementById(submitButtonId);
