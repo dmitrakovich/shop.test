@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Carbon;
 use Payments\PaymentMethod;
 
 /**
@@ -49,9 +48,10 @@ use Payments\PaymentMethod;
  * @property string $utm_content
  * @property string $utm_term
  * @property string $status_key
+ * @property \Carbon\Carbon $status_updated_at
  * @property int $admin_id
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  * @property-read User $user
  * @property-read Device $device
  * @property-read string $user_full_name
@@ -92,6 +92,7 @@ class Order extends Model
         'utm_content',
         'utm_term',
         'status_key',
+        'status_updated_at',
         'admin_id',
         'created_at',
     ];
@@ -99,6 +100,20 @@ class Order extends Model
     protected $appends = [
         'user_full_name',
     ];
+
+    /**
+     * Bootstrap the model and its traits
+     */
+    public static function boot(): void
+    {
+        parent::boot();
+
+        static::saving(function (self $orderItem) {
+            if ($orderItem->isDirty('status_key')) {
+                $orderItem->status_updated_at = now();
+            }
+        });
+    }
 
     /**
      * Товары заказа
