@@ -91,7 +91,7 @@ Route::group(['namespace' => 'Shop'], function () {
         Route::get('final', [CartController::class, 'final'])->name('cart-final');
     });
     Route::resource('orders', OrderController::class)->only('store');
-    Route::resource('orders', OrderController::class)->only('index')->middleware('auth');
+    Route::resource('orders', OrderController::class)->only('index')->middleware('auth')->name('index', 'orders.index');
 });
 
 Route::prefix('popup')->controller(PopupController::class)->middleware(OnlyAjax::class)->group(function () {
