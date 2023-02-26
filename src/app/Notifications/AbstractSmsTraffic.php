@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Facades\SmsTraffic;
 use Illuminate\Notifications\Messages\SmsTrafficMessage;
 use Illuminate\Notifications\Notification;
 
@@ -34,6 +35,8 @@ abstract class AbstractSmsTraffic extends Notification
      */
     public function toSmsTraffic($notifiable)
     {
+        SmsTraffic::setDefaultOption('link_in_text', 1);
+
         return (new SmsTrafficMessage)->content($this->getContent());
     }
 
