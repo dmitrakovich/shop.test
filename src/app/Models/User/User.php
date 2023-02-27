@@ -7,12 +7,14 @@ use App\Models\Country;
 use App\Models\Feedback;
 use App\Models\Logs\SmsLog;
 use App\Models\Orders\Order;
+use App\Models\User\UserPassport;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
@@ -106,6 +108,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class, 'cart_token');
+    }
+
+    /**
+     * User passport
+     */
+    public function passport(): HasOne
+    {
+        return $this->hasOne(UserPassport::class);
     }
 
     /**
