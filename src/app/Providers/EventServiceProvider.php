@@ -11,6 +11,7 @@ use App\Listeners\MergeFavorites;
 use App\Listeners\SaveDevice;
 use App\Listeners\SendOrderInformationNotification;
 use App\Listeners\SyncOrderHistory;
+use App\Listeners\User\UpdateUserGroup;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -39,6 +40,7 @@ class EventServiceProvider extends ServiceProvider
         OrderCreated::class => [
             SendOrderInformationNotification::class,
             SaveDevice::class,
+            UpdateUserGroup::class,
             ResetUserCache::class,
         ],
         NotificationSent::class => [
