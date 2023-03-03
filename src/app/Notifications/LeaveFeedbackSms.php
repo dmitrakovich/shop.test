@@ -2,10 +2,10 @@
 
 namespace App\Notifications;
 
-use App\Models\Product;
 use App\Models\Config;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
+use App\Models\Product;
 use App\Models\ShortLink;
 
 class LeaveFeedbackSms extends AbstractSmsTraffic
