@@ -88,6 +88,6 @@ class OrderData
      */
     public function prepareToSave(): array
     {
-        return (array)$this;
+        return array_filter((array)$this);
     }
 }
