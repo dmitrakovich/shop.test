@@ -13,17 +13,17 @@ class OrderData
     /**
      * The user who make the order
      */
-    public readonly ?User $user;
+    public readonly User $user;
 
     /**
      * Order payment method
      */
-    public readonly ?PaymentMethod $paymentMethod;
+    public readonly PaymentMethod $paymentMethod;
 
     /**
      * Order delivery method
      */
-    public readonly ?DeliveryMethod $deliveryMethod;
+    public readonly DeliveryMethod $deliveryMethod;
 
     /**
      * Order creation date
@@ -36,32 +36,32 @@ class OrderData
     public function __construct(
         public ?int $user_id,
         public string $first_name,
-        public ?string $patronymic_name,
-        public ?string $last_name,
-        public string $order_method,
-        public ?string $email,
         public string $phone,
-        public ?string $comment,
+        public ?string $user_addr,
+        public string $order_method,
         public string $currency,
         public float $rate,
-        public ?int $payment_id,
-        public ?int $delivery_id,
-        public ?int $country_id,
-        public ?string $city,
-        public ?string $user_addr,
         public ?string $utm_medium,
         public ?string $utm_source,
         public ?string $utm_campaign,
         public ?string $utm_content,
         public ?string $utm_term,
+        public ?string $patronymic_name = null,
+        public ?string $last_name = null,
+        public ?string $email = null,
+        public ?string $comment = null,
+        public ?int $payment_id = null,
+        public ?int $delivery_id = null,
+        public ?int $country_id = null,
+        public ?string $city = null,
         public float $total_price = 0,
         public ?string $status_key = null,
         ?string $created_at = null,
         ...$otherData
     ) {
-        $this->user = $this->findModelOrFail(new User(), $this->user_id);
-        $this->paymentMethod = $this->findModelOrFail(new PaymentMethod(), $this->payment_id);
-        $this->deliveryMethod = $this->findModelOrFail(new DeliveryMethod(), $this->delivery_id);
+        $this->user = $this->findModel(new User(), $this->user_id);
+        $this->paymentMethod = $this->findModel(new PaymentMethod(), $this->payment_id);
+        $this->deliveryMethod = $this->findModel(new DeliveryMethod(), $this->delivery_id);
         $this->created_at = $this->createDate($created_at);
     }
 
@@ -69,9 +69,9 @@ class OrderData
      * Find order property model
      * TODO: create a separate trait
      */
-    private function findModelOrFail(Model $model, ?int $id): ?Model
+    private function findModel(Model $model, ?int $id): Model
     {
-        return $id ? $model->query()->findOrFail($id) : null;
+        return $id ? $model->query()->findOrNew($id) : new $model();
     }
 
     /**
