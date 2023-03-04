@@ -27,7 +27,7 @@ class CartController extends BaseController
     public function index(GoogleTagManagerService $gtmService)
     {
         $cart = Cart::withData();
-        Sale::applyForCart($cart);
+        Sale::applyToCart($cart);
 
         /** @var User $user */
         $user = auth()->user() ?? new User();

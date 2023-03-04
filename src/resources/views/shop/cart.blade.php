@@ -137,6 +137,7 @@
                                                 Рассрочка на 2 платежа
                                                 Первый взнос <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() - Cart::getTotalPrice() * 0.5 }} руб.</span>
                                                 Оставшийся платеж <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() * 0.5 }} руб.</span>
+                                                <span class="text-danger">При покупке с рассрочкой скидка клиента не действует!</span>
 											@endif
                                             {{-- blade-formatter-enable --}}
                                         </span>

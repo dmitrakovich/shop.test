@@ -63,8 +63,6 @@ class OrderController extends BaseController
             $cart = Cart::withData();
             abort_if(empty($cart['items']) || $cart->items->isEmpty(), 404);
         }
-        Sale::applyForCart($cart);
-
         $order = app(OrderServiceInterface::class)->store($request, $cart);
 
         Cart::clear();

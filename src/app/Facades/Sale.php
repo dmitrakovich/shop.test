@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static void applyForProduct(\App\Models\Product $product) Применить скидку к продукту
  * @method static boolean hasFitting() Проверить возможноть доставки с примеркой для текущей акции
  * @method static boolean hasInstallment() Проверить возможноть оплаты в рассрочку для текущей акции
- * @method static void applyForCart(\App\Models\Cart $cart) Применить скидку к корзине
+ * @method static void applyToCart(\App\Models\Cart $cart) Apply sales to cart
+ * @method static void applyToOrder(\App\Models\Cart $cart, array $orderData) Apply sales to order
  *
  * @see \App\Services\SaleService
  */

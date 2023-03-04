@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\Config;
+use App\Models\Data\OrderData;
 use App\Models\Data\SaleData;
 use App\Models\Product;
 use App\Models\Sale;
@@ -280,6 +281,14 @@ class SaleService
     }
 
     /**
+     * Remove user sale for some conditions
+     */
+    private function removeUserSale(): void
+    {
+        $this->userDiscount = null;
+    }
+
+    /**
      * Apply sale for Product model
      */
     public function applyForProduct(Product $product): void
@@ -343,7 +352,7 @@ class SaleService
     /**
      * Apply to items in cart
      */
-    public function applyForCart(Cart $cart): void
+    public function applyToCart(Cart $cart): void
     {
         $this->hasSaleProductsInCart = false;
 
@@ -378,5 +387,17 @@ class SaleService
             $this->applyUserSales($sales, $finalPrice);
             $item->product->setSales(['list' => $sales, 'final_price' => $finalPrice]);
         }
+    }
+
+    /**
+     * Apply sales to order
+     */
+    public function applyToOrder(Cart $cart, OrderData $orderData)
+    {
+        if ($orderData->paymentMethod->instance === 'Installment') {
+            $this->removeUserSale();
+        }
+
+        $this->applyToCart($cart);
     }
 }
