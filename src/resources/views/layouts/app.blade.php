@@ -67,7 +67,7 @@
         window.chat24_static_files_domain = "https://storage.chat2desk.com/";
         window.lang = "ru";
         window.fetch("".concat(window.chat24_url, "/packs/manifest.json?nocache=").concat(new Date()
-        .getTime())).then(function(res) {
+            .getTime())).then(function(res) {
             return res.json();
         }).then(function(data) {
             var chat24 = document.createElement("script");

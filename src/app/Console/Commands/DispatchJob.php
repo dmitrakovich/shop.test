@@ -38,6 +38,6 @@ class DispatchJob extends Command
     public function handle()
     {
         $class = '\\App\\Jobs\\' . $this->argument('job');
-        $class::dispatchNow();
+        $class::dispatchSync();
     }
 }

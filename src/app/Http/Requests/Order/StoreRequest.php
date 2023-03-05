@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Order;
 
 use App\Facades\Currency;
+use App\Models\Data\OrderData;
 use App\Models\Enum\OrderMethod;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -87,5 +88,13 @@ class StoreRequest extends FormRequest
     public function isOneClick(): bool
     {
         return $this->order_method == OrderMethod::ONECLICK;
+    }
+
+    /**
+     * Validate request & make DTO order object
+     */
+    public function getValidatedData(): OrderData
+    {
+        return new OrderData(...$this->validated());
     }
 }

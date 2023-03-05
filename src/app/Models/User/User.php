@@ -26,6 +26,7 @@ use libphonenumber\PhoneNumberUtil;
  * Class User
  *
  * @property int $id
+ * @property int $group_id
  * @property string $first_name
  * @property string $last_name
  * @property string $patronymic_name
@@ -45,7 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'usergroup_id',
+        'group_id',
         'first_name',
         'last_name',
         'patronymic_name',

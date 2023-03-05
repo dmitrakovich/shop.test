@@ -51,9 +51,13 @@ class OrderItem extends Model
     ];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast.
+     *
+     * @var array
      */
-    protected $dates = ['status_updated_at'];
+    protected $casts = [
+        'status_updated_at' => 'datetime',
+    ];
 
     /**
      * Bootstrap the model and its traits

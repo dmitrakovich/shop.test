@@ -34,7 +34,10 @@ class FeedbackForm extends Form
      */
     public function form()
     {
-        $this->decimal('discount', 'Скидка (%)')->default(0.00)->required();
+        $this->decimal('discount.BYN', 'Скидка (BYN)')->default(10)->required();
+        $this->decimal('discount.USD', 'Скидка (USD)')->default(5)->required();
+        $this->decimal('discount.KZT', 'Скидка (KZT)')->default(1500)->required();
+        $this->decimal('discount.RUB', 'Скидка (RUB)')->default(350)->required();
         $this->number('send_after', 'Отправлять смс через (часов)')->default(72)->required();
     }
 

@@ -14,14 +14,14 @@ class OrderService implements OrderServiceInterface
 {
     public function store(StoreRequest $request, Cart $cart)
     {
-        $userData = $request->validated();
-        $userData['total_price'] ??= $cart->getTotalPrice();
+        $orderData = $request->getValidatedData();
 
         if (!$request instanceof SyncRequest) {
-            Sale::applyForCart($cart);
+            Sale::applyToOrder($cart, $orderData);
+            $orderData->total_price = $cart->getTotalPrice();
         }
 
-        $order = Order::create($userData);
+        $order = Order::create($orderData->prepareToSave());
 
         if ($request instanceof SyncRequest) {
             foreach ($cart->items as $item) {

@@ -93,6 +93,11 @@ Route::group([
     $router->any('rating', RatingController::class);
     $router->any('sklad', [SkladController::class, 'index']);
 
+    // Automation
+    $router->group(['prefix' => 'automation'], function ($router) {
+        $router->resource('stock', Automation\StockController::class);
+    });
+
     // logs
     $router->group(['prefix' => 'logs'], function ($router) {
         $router->resource('sms', Logs\SmsController::class);

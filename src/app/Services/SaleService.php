@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Facades\Currency;
 use App\Models\Cart;
 use App\Models\Config;
+use App\Models\Data\OrderData;
 use App\Models\Data\SaleData;
 use App\Models\Product;
 use App\Models\Sale;
@@ -48,7 +50,7 @@ class SaleService
         if ($user instanceof User) {
             $this->userDiscount = $user->group->discount;
             if ($user->hasReviewAfterOrder()) {
-                $this->reviewDiscount = Config::findCacheable('feedback')['discount'];
+                $this->reviewDiscount = $this->getReviewDiscount();
             }
         }
     }
@@ -79,6 +81,17 @@ class SaleService
         $addUserSale = $this->hasSale() ? $this->sale->add_client_sale : true;
 
         return $addUserSale && !is_null($this->userDiscount);
+    }
+
+    /**
+     * Get review discount sum by current currency
+     */
+    protected function getReviewDiscount(): ?float
+    {
+        $currency = Currency::getCurrentCurrency();
+        $discount = Config::findCacheable('feedback')['discount'][$currency->code] ?? 0;
+
+        return $discount ? $discount / $currency->rate : null;
     }
 
     /**
@@ -269,14 +282,20 @@ class SaleService
      */
     private function getReviewSaleData(float $price): SaleData
     {
-        $discountPrice = $this->round($price - $price * $this->reviewDiscount / 100);
-
         return new SaleData(
-            price: $discountPrice,
-            discount: $price - $discountPrice,
-            discount_percentage: $this->reviewDiscount,
+            price: $price - $this->reviewDiscount,
+            discount: $this->reviewDiscount,
+            discount_percentage: $this->round($this->reviewDiscount * 100 / $price),
             label: 'Скидка за отзыв'
         );
+    }
+
+    /**
+     * Remove user sale for some conditions
+     */
+    private function removeUserSale(): void
+    {
+        $this->userDiscount = null;
     }
 
     /**
@@ -343,7 +362,7 @@ class SaleService
     /**
      * Apply to items in cart
      */
-    public function applyForCart(Cart $cart): void
+    public function applyToCart(Cart $cart): void
     {
         $this->hasSaleProductsInCart = false;
 
@@ -378,5 +397,17 @@ class SaleService
             $this->applyUserSales($sales, $finalPrice);
             $item->product->setSales(['list' => $sales, 'final_price' => $finalPrice]);
         }
+    }
+
+    /**
+     * Apply sales to order
+     */
+    public function applyToOrder(Cart $cart, OrderData $orderData)
+    {
+        if ($orderData->paymentMethod->instance === 'Installment') {
+            $this->removeUserSale();
+        }
+
+        $this->applyToCart($cart);
     }
 }

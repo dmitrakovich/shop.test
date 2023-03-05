@@ -40,15 +40,7 @@ class Installment extends Model
      */
     protected $casts = [
         'send_notifications' => 'boolean',
-    ];
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'notice_sent_at',
+        'notice_sent_at' => 'datetime',
     ];
 
     /**
