@@ -15,6 +15,10 @@ const productSliders = function () {
         loop: false,
         freeMode: true,
         watchSlidesProgress: true,
+        navigation: {
+            nextEl: ".js-productSliderThumb-next",
+            prevEl: ".js-productSliderThumb-prev",
+        },
         breakpoints: {
             1024: {
                 direction: "vertical",

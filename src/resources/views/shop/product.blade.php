@@ -18,6 +18,8 @@
                                 @endforeach
                             </div>
                         </div>
+                        <div class="js-productSliderThumb-prev swiper-button-prev"></div>
+                        <div class="js-productSliderThumb-next swiper-button-next"></div>
                     </div>
                     <div class="p-product__slider-main">
                         @include('partials.buttons.favorite', [
