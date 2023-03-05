@@ -53,15 +53,6 @@ class SmsLog extends Model
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'created_at' => 'datetime:d.m.Y H:i:s',
-    ];
-
-    /**
      * The name of the "updated at" column.
      *
      * @var string
@@ -98,5 +89,13 @@ class SmsLog extends Model
     public function mailing(): BelongsTo
     {
         return $this->belongsTo(Mailing::class);
+    }
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     */
+    protected function serializeDate(\DateTimeInterface $date): string
+    {
+        return $date->format('d.m.Y H:i:s');
     }
 }
