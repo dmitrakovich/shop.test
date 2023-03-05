@@ -12,7 +12,14 @@ class SeoLink extends Model
 
     protected $guarded = ['id'];
 
-    protected $dates = ['frequency_updated_at'];
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'frequency_updated_at' => 'datetime',
+    ];
 
     public function setFrequencyAttribute($value)
     {

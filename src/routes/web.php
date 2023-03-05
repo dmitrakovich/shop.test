@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\InfoPageController;
 use App\Http\Controllers\PopupController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
+use App\Http\Controllers\Shop\OrderController;
 use App\Http\Controllers\Shop\PaymentController;
 use App\Http\Controllers\Shop\ProductController;
 use App\Http\Controllers\SitemapController;
@@ -24,8 +26,8 @@ use Illuminate\Support\Str;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
 */
 
@@ -63,7 +65,7 @@ Route::resource('favorites', FavoriteController::class)->only(['store', 'destroy
 
 Route::post('currency/switch', [CurrencyController::class, 'switch'])->name('currency-switcher');
 
-Route::group(['namespace' => 'Shop'], function () {
+Route::group([], function () {
     Route::post('/quick/{product}', [ProductController::class, 'quickView'])->name('product.quick');
     Route::get('ajax-next-page', [CatalogController::class, 'ajaxNextPage']);
     Route::post('price-filter/{path?}', [CatalogController::class, 'priceFilter'])

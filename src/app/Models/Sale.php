@@ -53,11 +53,8 @@ class Sale extends Model
         'collections' => 'array',
         'styles' => 'array',
         'seasons' => 'array',
-    ];
-
-    protected $dates = [
-        'start_datetime',
-        'end_datetime',
+        'start_datetime' => 'datetime',
+        'end_datetime' => 'datetime',
     ];
 
     /**

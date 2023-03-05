@@ -26,9 +26,13 @@ class Token extends Model
     final const INSTAGRAM = 1;
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast.
+     *
+     * @var array
      */
-    protected $dates = ['expire_date'];
+    protected $casts = [
+        'expire_date' => 'datetime',
+    ];
 
     /**
      * Convert the model to its string representation.

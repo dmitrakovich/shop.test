@@ -1,4 +1,6 @@
+/.phpunit.cache
 /node_modules
+/public/build
 /public/hot
 /public/storage
 /public/media
@@ -11,8 +13,11 @@
 /storage/media-library
 /vendor
 .env
-.env.prod
 .env.backup
+.env.production
 .phpunit.result.cache
 npm-debug.log
 yarn-error.log
+/.fleet
+/.idea
+/.vscode
