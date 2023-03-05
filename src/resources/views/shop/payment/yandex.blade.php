@@ -5,7 +5,7 @@
 <div class="mt-3 col-12 text-center">
   <h1 class="text-danger h3">Счёт № {{ $payment->payment_num }}</h1>
   <p class="text-muted">к заказу № {{ $payment->order_id }} от {{ $payment->order->created_at->format('d.m.Y') }}</p>
-  <p class="h4">Сумма {{ $payment->amount }} BYN</p>
+  <p class="h4">Сумма {{ $payment->amount }} RUB</p>
   <br>
   <p class="text-muted">Нажмите "Оплатить", чтобы перейти на защищенную страницу оплаты сервиса ЮKassa</p>
   <a href="{{ route('pay.link-code', ['code' => $linkCode]) }}" class="btn btn-dark px-5">Оплатить</a>
