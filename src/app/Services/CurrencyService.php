@@ -188,11 +188,11 @@ class CurrencyService
     /**
      * Format price in current currency
      */
-    public function format(float $price, ?string $currency = null): string
+    public function format(float $price, ?string $currency = null, string $space = '&nbsp;'): string
     {
         $currency = $this->allCurrencies[$currency] ?? $this->currency;
 
-        return number_format($price, $currency->decimals, '.', '&nbsp;') . '&nbsp;' . $currency->symbol;
+        return number_format($price, $currency->decimals, '.', $space) . $space . $currency->symbol;
     }
 
     /**

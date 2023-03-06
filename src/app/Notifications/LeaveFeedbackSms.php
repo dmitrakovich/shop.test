@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Facades\Currency;
 use App\Models\Config;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
@@ -29,7 +30,10 @@ class LeaveFeedbackSms extends AbstractSmsTraffic
      */
     public function getContent(): string
     {
-        $discount = Config::findCacheable('feedback')['discount'];
+        $currency = $this->order->currency;
+        $discount = Config::findCacheable('feedback')['discount'][$currency];
+        $discount = Currency::format($discount, $currency, '');
+
         $orderItems = $this->order->items->filter(function (OrderItem $item) {
             return $item->isCompleted();
         });
@@ -41,7 +45,7 @@ class LeaveFeedbackSms extends AbstractSmsTraffic
         return <<<SMS
         {$this->order->first_name}, к Вам приехал заказ?
         Оставьте отзыв о Вашей покупке {$link}.
-        Получите $discount% на следующий заказ, если отзыв будет с фотографией.
+        Получите $discount на следующий заказ, если отзыв будет с фотографией.
         SMS;
     }
 
