@@ -19,6 +19,7 @@ class SyncRequest extends StoreRequest
     protected function prepareForValidation()
     {
         $this->merge([
+            'user_id' => $this->user_id ?? null,
             'country_id' => empty($this->country) ? null : 1,
             'region' => $this->state,
             'order_method' => $this->getOrderMethod(),

@@ -146,6 +146,7 @@ class OrderController extends BaseController
             $order = app(OrderServiceInterface::class)
                 ->store($request, $cart);
         } catch (\Throwable $th) {
+            \Sentry\captureException($th);
             abort(OldSiteSyncService::errorResponse($th->getMessage()));
         }
 
