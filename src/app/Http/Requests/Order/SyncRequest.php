@@ -24,6 +24,12 @@ class SyncRequest extends StoreRequest
             'region' => $this->state,
             'order_method' => $this->getOrderMethod(),
             'status_key' => $this->status_key ?? OrderStatus::getDefaultValue(),
+
+            'utm_medium' => 'refferer',
+            'utm_source' => 'modny.by',
+            'utm_campaign' => 'orderoldsite',
+            'utm_content' => null,
+            'utm_term' => null,
         ]);
     }
 
