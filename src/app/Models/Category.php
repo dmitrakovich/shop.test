@@ -29,6 +29,18 @@ class Category extends Model
     public $timestamps = false;
 
     /**
+     * Bootstrap the model and its traits.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function () {
+            Cache::forget(config('cache_config.global_nav_categories.key'));
+        });
+    }
+
+    /**
      * @var int
      */
     final const ROOT_CATEGORY_ID = 1;

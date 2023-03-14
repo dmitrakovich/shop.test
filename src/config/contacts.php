@@ -5,6 +5,10 @@ return [
         'name' => '+375&nbsp;(29)&nbsp;179&nbsp;37&nbsp;90',
         'link' => 'tel:+375291793790',
     ],
+    'phone2' => [
+        'name' => '+375&nbsp;(29)&nbsp;522&nbsp;77&nbsp;22',
+        'link' => 'tel:+375295227722',
+    ],
     'instagram' => [
         'name' => 'Инстаграм',
         'link' => 'https://www.instagram.com/barocco.by/',
