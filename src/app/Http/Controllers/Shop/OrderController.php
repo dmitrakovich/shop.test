@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Shop;
 use App\Contracts\OrderServiceInterface;
 use App\Events\OrderCreated;
 use App\Facades\Cart;
-use App\Facades\Sale;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Requests\Order\SyncRequest;
 use App\Models\CartData;
@@ -147,6 +146,7 @@ class OrderController extends BaseController
             $order = app(OrderServiceInterface::class)
                 ->store($request, $cart);
         } catch (\Throwable $th) {
+            \Sentry\captureException($th);
             abort(OldSiteSyncService::errorResponse($th->getMessage()));
         }
 

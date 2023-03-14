@@ -83,6 +83,7 @@ class RegisteredUserController extends Controller
                 $user->addresses()->create($userData);
             }
         } catch (\Throwable $th) {
+            \Sentry\captureException($th);
             abort(OldSiteSyncService::errorResponse($th->getMessage()));
         }
 
