@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('one_c_id');
             $table->foreignId('city_id');
-            $table->enum('type', ['shop', 'stock']);
+            $table->enum('type', ['shop', 'stock'])->default('stock');
             $table->string('name', 50);
             $table->string('internal_name', 50);
             $table->string('description')->nullable();
@@ -30,6 +30,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        // shops
         DB::table('stocks')->insert([
             [
                 'one_c_id' => 1,
@@ -43,14 +44,6 @@ return new class extends Migration
                 'geo_latitude' => 23.696479,
                 'geo_longitude' => 52.085094,
                 'sorting' => 1,
-            ],
-            [
-                'one_c_id' => 2,
-                'city_id' => 4,
-                'type' => 'stock',
-                'name' => 'Склад брака',
-                'internal_name' => 'Склад брака',
-                'sorting' => 2,
             ],
             [
                 'one_c_id' => 3,
@@ -79,6 +72,31 @@ return new class extends Migration
                 'sorting' => 4,
             ],
             [
+                'one_c_id' => 7,
+                'city_id' => 4,
+                'type' => 'shop',
+                'name' => 'BAROCCO',
+                'internal_name' => '* ЗАО "САНДАЛ"',
+                'address' => 'ул. Советская 49',
+                'worktime' => '10.00 - 21.00 ежедневно',
+                'phone' => '+375292465824',
+                'geo_latitude' => 23.692614,
+                'geo_longitude' => 52.093012,
+                'sorting' => 7,
+            ],
+        ]);
+
+        // stocks
+        DB::table('stocks')->insert([
+            [
+                'one_c_id' => 2,
+                'city_id' => 4,
+                'type' => 'stock',
+                'name' => 'Склад брака',
+                'internal_name' => 'Склад брака',
+                'sorting' => 2,
+            ],
+            [
                 'one_c_id' => 5,
                 'city_id' => 4,
                 'type' => 'stock',
@@ -94,23 +112,11 @@ return new class extends Migration
                 'internal_name' => 'СКЛАД ЛЕТО',
                 'sorting' => 6,
             ],
-            [
-                'one_c_id' => 7,
-                'city_id' => 4,
-                'type' => 'stock',
-                'name' => 'BAROCCO',
-                'internal_name' => '* ЗАО "САНДАЛ"',
-                'address' => 'ул. Советская 49',
-                'worktime' => '10.00 - 21.00 ежедневно',
-                'phone' => '+375292465824',
-                'geo_latitude' => 23.692614,
-                'geo_longitude' => 52.093012,
-                'sorting' => 7,
-            ],
+
             [
                 'one_c_id' => 8,
                 'city_id' => 4,
-                'type' => 'shop',
+                'type' => 'stock',
                 'name' => 'ИНТЕРНЕТ МАГАЗИН',
                 'internal_name' => 'ИНТЕРНЕТ МАГАЗИН',
                 'sorting' => 8,
