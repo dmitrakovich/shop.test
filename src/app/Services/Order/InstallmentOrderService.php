@@ -2,19 +2,18 @@
 
 namespace App\Services\Order;
 
-use App\Models\Orders\Order;
 use App\Helpers\TextHelper;
-
+use App\Models\Orders\Order;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Illuminate\Support\Facades\File;
-use Carbon\Carbon;
 
 class InstallmentOrderService
 {
-
     /**
      * Create installment form
+     *
      * @return string
      */
     public function createInstallmentForm(int $orderId)
@@ -82,6 +81,7 @@ class InstallmentOrderService
 
         $writer = new Xlsx($spreadsheet);
         $writer->save(public_path($resultPath));
+
         return url($resultPath);
     }
 }

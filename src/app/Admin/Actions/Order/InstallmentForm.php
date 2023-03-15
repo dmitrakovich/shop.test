@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 class InstallmentForm extends Action
 {
     public $name = 'Создать бланк рассрочки';
+
     protected $selector = '.js-installmentForm';
+
     protected ?int $orderId = null;
 
     public function __construct(?int $orderId = null)
@@ -21,7 +23,7 @@ class InstallmentForm extends Action
 
     /**
      * Action hadle
-     * @param Request $request
+     *
      * @return Response
      */
     public function handle(Request $request)
@@ -32,12 +34,12 @@ class InstallmentForm extends Action
         }
         $installmentService = new InstallmentOrderService;
         $file = $installmentService->createInstallmentForm($request->orderId);
+
         return $this->response()->success('Бланк рассрочки успешно создан')->download($file);
     }
 
     /**
      * Html installment form
-     * @return string
      */
     public function html(): string
     {

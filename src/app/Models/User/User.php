@@ -7,7 +7,6 @@ use App\Models\Country;
 use App\Models\Feedback;
 use App\Models\Logs\SmsLog;
 use App\Models\Orders\Order;
-use App\Models\User\UserPassport;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;

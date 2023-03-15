@@ -4,9 +4,7 @@ namespace App\Providers;
 
 use App\Models\Category;
 use App\Models\InfoPage;
-
 use Illuminate\Support\Facades\Cache;
-
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 

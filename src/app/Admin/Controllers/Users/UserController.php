@@ -10,7 +10,6 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
 use Encore\Admin\Show;
-use Illuminate\Support\Facades\Validator;
 
 class UserController extends AdminController
 {
@@ -107,7 +106,6 @@ class UserController extends AdminController
         });
 
         $form->submitted(function (Form $form) {
-
             $requestData = request()->all();
             $passportData = $requestData['passport'] ?? [];
             $emptyPassport = empty(array_filter($passportData, function ($a) {
@@ -131,6 +129,7 @@ class UserController extends AdminController
                 ]);
             }
         });
+
         return $form;
     }
 }
