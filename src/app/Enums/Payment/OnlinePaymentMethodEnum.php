@@ -6,6 +6,7 @@ enum OnlinePaymentMethodEnum: int
 {
     case ERIP = 1;
     case YANDEX = 2;
+    case COD = 3;
 
     /**
      * Получить название
@@ -17,6 +18,7 @@ enum OnlinePaymentMethodEnum: int
         return match ($this) {
             self::ERIP => 'ЕРИП',
             self::YANDEX => 'ЮКасса',
+            self::COD => 'Наложенный платеж',
         };
     }
 
