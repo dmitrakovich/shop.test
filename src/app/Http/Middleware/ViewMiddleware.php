@@ -4,11 +4,10 @@ namespace App\Http\Middleware;
 
 use App\Models\Category;
 use App\Models\InfoPage;
-
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
-use Illuminate\Http\Request;
 
 class ViewMiddleware
 {
@@ -33,6 +32,7 @@ class ViewMiddleware
         );
         View::share('g_navCategories', $navCategories);
         View::share('g_navInfoPages', $navInfoPages);
+
         return $next($request);
     }
 }
