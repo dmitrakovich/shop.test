@@ -32,6 +32,8 @@
             width: 100%;
             overflow: hidden;
             order: 3;
+            padding: 20px 0;
+            position: relative;
 
             .swiper {
                 max-height: 100%;
@@ -43,9 +45,24 @@
                 position: absolute;
             }
 
+            .swiper-button-prev,
+            .swiper-button-next {
+                background: transparent;
+                color: #000;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                height: 20px;
+                transform: rotate(90deg);
+            }
+            .swiper-button-prev {
+                top: 0;
+            }
+            .swiper-button-next {
+                top: auto;
+                bottom: 0;
+            }
             .swiper-slide {
-                // background: red;
-                // padding: 2px;
                 width: 100px;
                 height: 100px;
 

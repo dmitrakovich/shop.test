@@ -197,6 +197,7 @@ return [
         Drandin\DeclensionNouns\DeclensionNounsServiceProvider::class,
         App\Providers\CartServiceProvider::class,
         App\Providers\GoogleTagManagerProvider::class,
+        App\Providers\ViewServiceProvider::class,
         App\Libraries\Seo\Providers\SeoServiceProvider::class,
 
     ],

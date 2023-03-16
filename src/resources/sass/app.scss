@@ -47,7 +47,6 @@
 
 // Styles
 @import 'extended'; // расширения функционала bootstrap своими классами
-@import 'navbar'; // переписан бутстраповский + стили к сайту для navbar
 @import 'styles'; // стили которые относятся исключительно к этому сайту
 
 // Fancybox
@@ -62,6 +61,8 @@
 @import '_swiper';
 
 @import 'banners/banner-timer';
+
+@import 'includes/header';
 
 @import 'shop/product';
 

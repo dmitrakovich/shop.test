@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Order\CancelPayment;
 use App\Admin\Actions\Order\CapturePayment;
 use App\Admin\Actions\Order\CreateOnlinePayment;
+use App\Admin\Actions\Order\InstallmentForm;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
@@ -179,13 +180,16 @@ class OrderController extends AdminController
         if ($form->isEditing()) {
             $form->tools($this->getPrintTool());
             $form->tools($this->getProcessTool((int)request('order')));
+            $form->tools(function (Form\Tools $tools) {
+                $tools->append(new InstallmentForm((int)request('order')));
+            });
         }
 
         $form->tab('Основное', function ($form) {
             $form->text('last_name', 'Фамилия');
             $form->text('first_name', 'Имя')->required();
             $form->text('patronymic_name', 'Отчество');
-            $form->number('user_id', __('User id'));
+            $form->number('user_id', 'ID клиента');
             $form->number('promocode_id', __('Promocode id'));
             $form->email('email', __('Email'));
             $form->phone('phone', 'Телефон')->required();

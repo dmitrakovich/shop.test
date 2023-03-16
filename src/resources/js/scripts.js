@@ -29,7 +29,7 @@ $(function () {
         $('body').removeClass('modal-open');
     });
     // показ
-    $('.js-show-main-menu').on('click', function () {
+    $('.js-showMainMenu').on('click', function () {
         $('#mainMenu, .overlay').addClass('active');
         $('body').addClass('modal-open');
         history.pushState(null, null, '#mainMenuOpen');
@@ -67,7 +67,7 @@ $(function () {
                       text: 'Товар успешно добавлен в корзину',
                       type: 'success',
                     }));
-                    $('.js-cart-count').text(response.total_count);
+                    $('.js-cartCount').text(response.total_count);
                 }
             }
         });

@@ -1,6 +1,11 @@
 <?php
 
 return [
+    /**
+     * Global view
+     */
+    'global_nav_categories' => ['key' => 'global_nav_categories'],
+    'global_nav_info_pages' => ['key' => 'global_nav_info_pages'],
 
     /**
      * Slider

@@ -10,10 +10,14 @@ class InfoPage extends Model
 {
     use HasFactory;
 
-    public static function getMenu()
+    /**
+     * Bootstrap the model and its traits.
+     */
+    protected static function boot(): void
     {
-        return Cache::rememberForever('info-pages-menu',
-            fn () => InfoPage::get(['slug', 'name', 'icon'])->toArray()
-        );
+        parent::boot();
+        static::saved(function () {
+            Cache::forget(config('cache_config.global_nav_info_pages.key'));
+        });
     }
 }
