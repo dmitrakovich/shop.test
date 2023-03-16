@@ -106,5 +106,5 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.i
 Route::get('/sitemap.{path?}.xml', [SitemapController::class, 'path'])->where('path', '.*');
 
 Route::fallback(function () {
-    return view("errors.404");
+    return view('errors.404');
 });
