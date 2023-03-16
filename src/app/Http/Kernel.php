@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\DeviceDetect::class,
             \Spatie\GoogleTagManager\GoogleTagManagerMiddleware::class,
+            \App\Http\Middleware\ViewMiddleware::class,
         ],
 
         'api' => [

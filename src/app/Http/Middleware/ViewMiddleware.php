@@ -1,19 +1,23 @@
 <?php
 
-namespace App\Providers;
+namespace App\Http\Middleware;
 
 use App\Models\Category;
 use App\Models\InfoPage;
+
+use Closure;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Request;
 
-class ViewServiceProvider extends ServiceProvider
+class ViewMiddleware
 {
     /**
-     * Register any events for your application.
+     * Handle an incoming request.
+     *
+     * @return mixed
      */
-    public function boot(): void
+    public function handle(Request $request, Closure $next)
     {
         $navCategories = Cache::rememberForever(
             config('cache_config.global_nav_categories.key'),
@@ -29,5 +33,6 @@ class ViewServiceProvider extends ServiceProvider
         );
         View::share('g_navCategories', $navCategories);
         View::share('g_navInfoPages', $navInfoPages);
+        return $next($request);
     }
 }
