@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('stocks', function (Blueprint $table) {
             $table->string('worktime')->comment('Рабочее время')->nullable()->change();
-
         });
     }
 

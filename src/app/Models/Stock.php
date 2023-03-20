@@ -2,30 +2,32 @@
 
 namespace App\Models;
 
-use App\Models\City;
 use App\Enums\StockTypeEnum;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Stock extends Model implements HasMedia, Sortable
 {
     use HasFactory;
     use InteractsWithMedia, SortableTrait;
+
     protected $guarded = ['id'];
-    protected $casts   = [
+
+    protected $casts = [
         'type' => StockTypeEnum::class,
     ];
+
     public $sortable = [
         'order_column_name' => 'sorting',
         'sort_when_creating' => true,
     ];
+
     protected $appends = [
         'photos',
     ];

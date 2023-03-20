@@ -2,10 +2,9 @@
 
 namespace App\Admin\Controllers;
 
+use App\Enums\StockTypeEnum;
 use App\Models\City;
 use App\Models\Stock;
-use App\Enums\StockTypeEnum;
-
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -19,7 +18,6 @@ class StockController extends AdminController
      * @var string
      */
     protected $title = 'Склады / Магазины';
-
 
     /**
      * Make a grid builder.
@@ -37,7 +35,7 @@ class StockController extends AdminController
         });
 
         $grid->column('id', 'Id');
-        $grid->column('type', 'Тип')->display(fn() => $this->type->name());
+        $grid->column('type', 'Тип')->display(fn () => $this->type->name());
         $grid->column('name', 'Название');
         $grid->column('city.name', 'Город');
         $grid->column('address', 'Адрес');

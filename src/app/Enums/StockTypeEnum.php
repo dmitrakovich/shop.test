@@ -7,7 +7,6 @@ enum StockTypeEnum: string
     case SHOP = 'shop';
     case STOCK = 'stock';
 
-
     /**
      * Получить название
      *
