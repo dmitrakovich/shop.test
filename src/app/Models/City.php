@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Stock;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -19,6 +21,14 @@ class City extends Model
     public function country(): Relations\BelongsTo
     {
         return $this->belongsTo(Country::class);
+    }
+
+    /**
+     * Stocks
+     */
+    public function stocks(): Relations\HasMany
+    {
+        return $this->hasMany(Stock::class);
     }
 
     public function setNameAttribute($value): void
