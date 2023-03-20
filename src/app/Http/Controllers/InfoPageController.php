@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InfoPage;
 use App\Services\GoogleTagManagerService;
+use App\Services\StockService;
 use Illuminate\Contracts\View\View;
 use SeoFacade;
 
@@ -45,5 +46,18 @@ class InfoPageController extends Controller
         SeoFacade::setTitle('Политика конфиденциальности');
 
         return view('static.policy');
+    }
+
+    /**
+     * Display shops info page.
+     */
+    public function shops(
+        StockService $stockService
+    ): View
+    {
+        return view('static.shops', [
+            'shops' => $stockService->getShops(),
+            'cities' => $stockService->getCitiesWithShops(),
+        ]);
     }
 }
