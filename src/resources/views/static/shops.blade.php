@@ -14,8 +14,9 @@
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 @foreach ($cities as $city)
                     <a class="nav-item nav-link @if ($loop->first) active @endif"
-                        id="js-cityTab-{{ $city->id }}-tab" data-toggle="tab" href="#js-cityTab-{{ $city->id }}"
-                        role="tab" aria-controls="nav-home" aria-selected="true">{{ $city->name }}</a>
+                        id="js-cityTab-{{ $city->id }}-tab" data-toggle="tab"
+                        href="#js-cityTab-{{ $city->id }}" role="tab" aria-controls="nav-home"
+                        aria-selected="true">{{ $city->name }}</a>
                 @endforeach
             </div>
         </nav>
@@ -25,7 +26,8 @@
                     id="js-cityTab-{{ $city->id }}" role="tabpanel" aria-labelledby="nav-home-tab">
                     <div class="row mt-4">
                         <div class="col-md-8 mb-5">
-                            <div id="js-yandexMap-{{ $city->id }}" style="width: 100%; height: 400px;"></div>
+                            <div id="js-yandexMap-{{ $city->id }}" style="width: 100%; height: 400px;">
+                            </div>
                             {{-- blade-formatter-disable --}}
                             <script>
                                 ymaps.ready(function() {
@@ -53,18 +55,20 @@
                         </div>
                         <div class="col-md-4 mb-5">
                             @foreach ($city->stocks as $shop)
-                                <div class="col-12 @if (!$loop->last) border-bottom @endif mb-2">
+                                <div
+                                    class="col-12 @if (!$loop->last) border-bottom @endif mb-2">
                                     <p>
                                         <b>{{ $shop->name }}</b>
-                                        <a href="tel:{{ $shop->phone }}" class="text-decoration-underline float-right">
+                                        <a href="tel:{{ $shop->phone }}"
+                                            class="text-decoration-underline float-right">
                                             <b>Позвонить</b>
                                         </a><br>
                                         {{ $shop->address }}
                                     </p>
                                     <p>{{ $shop->worktime }}</p>
                                     <p>
-                                        <a data-fancybox data-src="#js-shopPhotos-{{ $shop->id }}" href="javascript:;"
-                                            class="text-primary cursor-pointer">
+                                        <a data-fancybox data-src="#js-shopPhotos-{{ $shop->id }}"
+                                            href="javascript:;" class="text-primary cursor-pointer">
                                             смотреть фото
                                         </a>
                                     </p>
@@ -72,7 +76,8 @@
                                 <div style="display: none;" id="js-shopPhotos-{{ $shop->id }}"
                                     style="max-width: 400px">
                                     @foreach ($shop->photos as $photo)
-                                        <img src="{{ $photo }}" alt="{{ $shop->name }}" class="img-fluid mb-2">
+                                        <img src="{{ $photo }}" alt="{{ $shop->name }}"
+                                            class="img-fluid mb-2">
                                     @endforeach
                                 </div>
                                 {{-- blade-formatter-disable --}}

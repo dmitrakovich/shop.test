@@ -53,8 +53,7 @@ class InfoPageController extends Controller
      */
     public function shops(
         StockService $stockService
-    ): View
-    {
+    ): View {
         return view('static.shops', [
             'shops' => $stockService->getShops(),
             'cities' => $stockService->getCitiesWithShops(),

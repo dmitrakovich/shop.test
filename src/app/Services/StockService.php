@@ -2,14 +2,13 @@
 
 namespace App\Services;
 
+use App\Enums\StockTypeEnum;
 use App\Models\City;
 use App\Models\Stock;
-use App\Enums\StockTypeEnum;
 use Illuminate\Database\Eloquent\Collection;
 
 class StockService
 {
-
     /**
      * Shop collection
      */
