@@ -37,7 +37,7 @@
                                             '{{ $city->stocks->first()->geo_latitude }}',
                                             '{{ $city->stocks->first()->geo_longitude }}'
                                         ],
-                                        zoom: 10
+                                        zoom: 13
                                     }, {
                                         searchControlProvider: 'yandex#search'
                                     });
@@ -58,14 +58,22 @@
                                 <div
                                     class="col-12 @if (!$loop->last) border-bottom @endif mb-2">
                                     <p>
-                                        <b>{{ $shop->name }}</b>
-                                        <a href="tel:{{ $shop->phone }}"
-                                            class="text-decoration-underline float-right">
-                                            <b>Позвонить</b>
-                                        </a><br>
-                                        {{ $shop->address }}
+                                        @if ($shop->name)
+                                            <b>{{ $shop->name }}</b>
+                                        @endif
+                                        @if ($shop->phone)
+                                            <a href="tel:{{ preg_replace('/[^0-9+\(\)-]/', '', $shop->phone) }}"
+                                                class="text-decoration-underline float-right">
+                                                <b>Позвонить</b>
+                                            </a><br>
+                                        @endif
+                                        @if ($shop->address)
+                                            {{ $shop->address }}
+                                        @endif
                                     </p>
-                                    <p>{{ $shop->worktime }}</p>
+                                    @if ($shop->worktime)
+                                        <p>{{ $shop->worktime }}</p>
+                                    @endif
                                     <p>
                                         <a data-fancybox data-src="#js-shopPhotos-{{ $shop->id }}"
                                             href="javascript:;" class="text-primary cursor-pointer">
@@ -88,8 +96,8 @@
                                             'id': '{{ $shop->id }}',
                                             'geometry': {
                                                 'type': 'Point',
-                                                'coordinates': ['{{ $city->stocks->first()->geo_latitude }}',
-                                                    '{{ $city->stocks->first()->geo_longitude }}'
+                                                'coordinates': ['{{ $shop->geo_latitude }}',
+                                                    '{{ $shop->geo_longitude }}'
                                                 ],
                                             },
                                             'properties': {
