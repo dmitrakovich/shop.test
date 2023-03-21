@@ -25,7 +25,7 @@
                             objectManager = null;
                             let yandexMap = new ymaps.Map('js-yandexMap-{{ $city->id }}', {
                                 center: [
-                                    '{{ $city-> stocks->first()->geo_latitude }}',
+                                    '{{ $city->stocks->first()->geo_latitude }}',
                                     '{{ $city->stocks->first()->geo_longitude }}'
                                 ],
                                 zoom: 10
@@ -72,7 +72,7 @@
                                 'id': '{{ $shop->id }}',
                                 'geometry': {
                                     'type': 'Point',
-                                    'coordinates': ['{{ $city-> stocks->first()->geo_latitude }}', '{{ $city->stocks->first()->geo_longitude }}'],
+                                    'coordinates': ['{{ $city->stocks->first()->geo_latitude }}', '{{ $city->stocks->first()->geo_longitude }}'],
                                 },
                                 'properties': {
                                     'balloonContentHeader': '{{ $shop->address }}',
