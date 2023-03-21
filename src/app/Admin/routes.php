@@ -96,7 +96,7 @@ Route::group([
     $router->any('sklad', [SkladController::class, 'index']);
 
     // Automation
-    $router->group(['prefix' => 'automation'], function ($router) {
+    $router->group(['prefix' => 'automation', 'as' => 'automation.'], function ($router) {
         $router->resource('stock', Automation\StockController::class);
     });
 
