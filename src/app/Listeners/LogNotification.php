@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
+use App\Events\Notifications\NotificationSkipped;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Notifications\AbstractSmsTraffic;
 use App\Services\LogService;
-use Illuminate\Notifications\Client\Response\SmsTrafficResponse;
 use Illuminate\Notifications\Events\NotificationSent;
 
 class LogNotification
@@ -25,14 +25,17 @@ class LogNotification
      *
      * @return void
      */
-    public function handle(NotificationSent $event)
+    public function handle(NotificationSent|NotificationSkipped $event)
     {
         $notification = $event->notification;
         if (!($notification instanceof AbstractSmsTraffic)) {
             return;
         }
-        /** @var SmsTrafficResponse $response */
-        $response = $event->response;
+
+        $status = match (get_class($event)) {
+            NotificationSent::class => $event->response->getDescription(),
+            NotificationSkipped::class => $this->logService::SMS_SKIPPED_KEY,
+        };
         $notifiable = $event->notifiable;
 
         $this->logService->logSms(
@@ -42,7 +45,7 @@ class LogNotification
             userId: $notifiable instanceof User ? $notifiable->id : null,
             orderId: $notifiable instanceof Order ? $notifiable->id : null,
             mailingId: $notification->getMailingId(),
-            status: $response->getDescription()
+            status: $status
         );
     }
 }

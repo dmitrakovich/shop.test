@@ -1,6 +1,7 @@
 <?php
 
 use App\Logging\SimpleFormatter;
+use App\Logging\TelegramFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -77,6 +78,16 @@ return [
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
             'level' => env('LOG_LEVEL', 'critical'),
+        ],
+
+        'telegram' => [
+            'driver' => 'monolog',
+            'handler' => Monolog\Handler\TelegramBotHandler::class,
+            'tap' => [TelegramFormatter::class],
+            'with' => [
+                'apiKey' => env('TELEGRAM_BOT_TOKEN'),
+                'channel' => env('TELEGRAM_BOT_CHAT_ID'),
+            ],
         ],
 
         'papertrail' => [

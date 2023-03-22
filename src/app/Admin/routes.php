@@ -51,6 +51,7 @@ Route::group([
         $router->resource('order-item-statuses', OrderItemStatusController::class);
         $router->get('installment', InstallmentForm::class);
         $router->get('feedback', FeedbackForm::class);
+        $router->get('sms', SmsForm::class);
     });
 
     $router->group(['prefix' => 'bnrs'], function ($router) {

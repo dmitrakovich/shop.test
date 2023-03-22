@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Contracts\OrderServiceInterface;
+use App\Notifications\ChannelManagerWithLimits;
 use App\Services\OrderService;
+use Illuminate\Notifications\ChannelManager;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
@@ -19,7 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(ChannelManager::class, function ($app) {
+            return new ChannelManagerWithLimits($app);
+        });
     }
 
     /**

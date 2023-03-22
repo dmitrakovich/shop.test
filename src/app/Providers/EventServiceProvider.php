@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\Notifications\NotificationSkipped;
 use App\Events\OrderCreated;
 use App\Events\ReviewPosted;
 use App\Listeners\Cache\ResetUserCache;
@@ -44,6 +45,9 @@ class EventServiceProvider extends ServiceProvider
             ResetUserCache::class,
         ],
         NotificationSent::class => [
+            LogNotification::class,
+        ],
+        NotificationSkipped::class => [
             LogNotification::class,
         ],
         ReviewPosted::class => [

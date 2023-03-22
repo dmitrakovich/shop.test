@@ -10,6 +10,11 @@ use App\Models\Logs\SmsLog;
 class LogService
 {
     /**
+     * Status for skipped sms messages
+     */
+    const SMS_SKIPPED_KEY = 'skipped';
+
+    /**
      * Log sms notification
      */
     public function logSms(
