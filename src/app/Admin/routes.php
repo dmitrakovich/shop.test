@@ -89,13 +89,15 @@ Route::group([
 
     $router->get('send-sms', Forms\Sms::class);
 
+    $router->resource('stock', StockController::class);
+
     // legacy
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);
     $router->any('sklad', [SkladController::class, 'index']);
 
     // Automation
-    $router->group(['prefix' => 'automation'], function ($router) {
+    $router->group(['prefix' => 'automation', 'as' => 'automation.'], function ($router) {
         $router->resource('stock', Automation\StockController::class);
     });
 

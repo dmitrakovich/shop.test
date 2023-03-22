@@ -21,6 +21,14 @@ class City extends Model
         return $this->belongsTo(Country::class);
     }
 
+    /**
+     * Stocks
+     */
+    public function stocks(): Relations\HasMany
+    {
+        return $this->hasMany(Stock::class);
+    }
+
     public function setNameAttribute($value): void
     {
         $this->attributes['slug'] = Str::slug($value);
