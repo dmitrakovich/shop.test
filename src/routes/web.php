@@ -105,6 +105,4 @@ Route::prefix('popup')->controller(PopupController::class)->middleware(OnlyAjax:
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
 Route::get('/sitemap.{path?}.xml', [SitemapController::class, 'path'])->where('path', '.*');
 
-Route::fallback(function () {
-    return view('errors.404');
-});
+Route::fallback(fn () => view('errors.404'));
