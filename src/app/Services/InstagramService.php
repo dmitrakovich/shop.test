@@ -6,7 +6,6 @@ use App\Models\Api\Token;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class InstagramService
 {
@@ -83,6 +82,10 @@ class InstagramService
             'access_token' => $oldToken,
         ]);
 
+        if ($this->captureException($response)) {
+            return $oldToken;
+        }
+
         return $response->json('access_token');
     }
 
@@ -140,7 +143,7 @@ class InstagramService
 
         if ($response->failed() || isset($data['error']) || empty($data['data']) || is_string($data)) {
             $errorMsg = $data['error']['message'] ?? (is_string($data) ? $data : null) ?? 'Unknown instagram api error';
-            Log::error(new \Exception($errorMsg));
+            \Sentry\captureException(new \Exception($errorMsg));
 
             return true;
         }
