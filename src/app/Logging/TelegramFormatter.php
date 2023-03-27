@@ -9,7 +9,7 @@ class TelegramFormatter
     /**
      * Message format
      */
-    protected $format = "%message%";
+    protected $format = '%message%';
 
     public function __invoke($logger)
     {
