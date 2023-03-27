@@ -35,6 +35,7 @@ class StockController extends AdminController
         });
 
         $grid->column('id', 'Id');
+        $grid->column('one_c_id', 'ID в 1C');
         $grid->column('type', 'Тип')->display(fn () => $this->type->name());
         $grid->column('name', 'Название');
         $grid->column('city.name', 'Город');
@@ -74,6 +75,7 @@ class StockController extends AdminController
     {
         $form = new Form(new Stock());
 
+        $form->number('one_c_id', 'ID в 1C')->min(1)->rules('required|unique:stocks');
         $form->select('type', 'Тип')->options(StockTypeEnum::list());
         $form->select('city_id', 'Город')->options(City::pluck('name', 'id'));
         $form->text('name', 'Название')->required();
