@@ -105,7 +105,7 @@ unset($res_prod);
 
 
 // Яндекс
-$hrefF = Http::withToken(config('api.yandex.token'), 'OAuth')
+$hrefF = Http::withToken(config('services.yandex.token'), 'OAuth')
     ->get('https://cloud-api.yandex.net/v1/disk/resources/download', ['path' => '/Ostatki/ostatki.txt'])
     ->json();
 

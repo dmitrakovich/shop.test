@@ -18,7 +18,7 @@ class YandexApiService
 
     public function __construct()
     {
-        $this->token = config('api.yandex.token');
+        $this->token = config('services.yandex.token');
     }
 
     /**

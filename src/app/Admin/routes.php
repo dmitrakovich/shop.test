@@ -43,7 +43,7 @@ Route::group([
         $router->resource('collections', CollectionController::class);
     });
 
-    $router->group(['prefix' => 'config', 'namespace' => 'Config'], function ($router) {
+    $router->group(['prefix' => 'config', 'namespace' => 'Config', 'as' => 'config.'], function ($router) {
         $router->resource('payment-methods', PaymentController::class);
         $router->resource('delivery-methods', DeliveryController::class);
         $router->resource('currencies', CurrencyController::class);
@@ -52,6 +52,7 @@ Route::group([
         $router->get('installment', InstallmentForm::class);
         $router->get('feedback', FeedbackForm::class);
         $router->get('sms', SmsForm::class);
+        $router->get('instagram-token', InstagramTokenForm::class);
     });
 
     $router->group(['prefix' => 'bnrs'], function ($router) {

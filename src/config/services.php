@@ -31,4 +31,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'yandex' => [
+        'token' => env('YANDEX_TOKEN'),
+    ],
+
+    'sxgeo' => [
+        'token' => env('SXGEO_TOKEN'),
+    ],
+
 ];

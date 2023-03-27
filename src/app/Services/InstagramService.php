@@ -30,7 +30,7 @@ class InstagramService
     /**
      * Token lifetime
      */
-    protected const TTL_DAYS = 50;
+    final const TTL_DAYS = 50;
 
     /**
      * Cache keys

@@ -224,7 +224,7 @@ class UpdateProductsRatingJob extends AbstractJob
             'limit' => 3000,
         ];
 
-        $result_popular = Http::withToken(config('api.yandex.token'), 'OAuth')
+        $result_popular = Http::withToken(config('services.yandex.token'), 'OAuth')
             ->get('https://api-metrika.yandex.ru/stat/v1/data', $params)
             ->json();
 
@@ -270,7 +270,7 @@ class UpdateProductsRatingJob extends AbstractJob
             'limit' => 3000,
         ];
 
-        $result_tranding = Http::withToken(config('api.yandex.token'), 'OAuth')
+        $result_tranding = Http::withToken(config('services.yandex.token'), 'OAuth')
             ->get('https://api-metrika.yandex.ru/stat/v1/data', $params)
             ->json();
 
