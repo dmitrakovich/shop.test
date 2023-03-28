@@ -53,6 +53,7 @@ Route::group([
         $router->get('feedback', FeedbackForm::class);
         $router->get('sms', SmsForm::class);
         $router->get('instagram-token', InstagramTokenForm::class);
+        $router->get('newsletter_for_registered', NewsletterForm::class);
     });
 
     $router->group(['prefix' => 'bnrs'], function ($router) {

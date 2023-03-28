@@ -3,6 +3,8 @@
 namespace App\Jobs\Mailing;
 
 use App\Models\User\User;
+use App\Models\Config;
+
 use App\Notifications\DiscountAfterRegisterSms;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,17 +16,6 @@ use Illuminate\Queue\SerializesModels;
 class DiscountAfterRegisterJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * Max days after register check order
-     */
-    const FROM_DAYS = 30;
-
-    /**
-     * Days after register check order
-     */
-    const TO_DAYS = 5;
-
     /**
      * Mailing identificator
      */
@@ -37,13 +28,16 @@ class DiscountAfterRegisterJob implements ShouldQueue
      */
     public function handle()
     {
-        User::query()
-            ->where('created_at', '>', now()->subDays(self::FROM_DAYS))
-            ->where('created_at', '<', now()->subDays(self::TO_DAYS))
-            ->whereDoesntHave('orders')
-            ->whereDoesntHave('mailings', fn (Builder $query) => $query->where('mailing_id', self::MAILING_ID))
-            ->each(function (User $user) {
-                $user->notify(new DiscountAfterRegisterSms($user->group->discount));
-            }, 200);
+        $config = Config::findCacheable('newsletter_register');
+        if ($config['active']) {
+            User::query()
+                ->where('created_at', '>', now()->subDays($config['to_days']))
+                ->where('created_at', '<', now()->subDays($config['from_days']))
+                ->whereDoesntHave('orders')
+                ->whereDoesntHave('mailings', fn (Builder $query) => $query->where('mailing_id', self::MAILING_ID))
+                ->each(function (User $user) {
+                    $user->notify(new DiscountAfterRegisterSms($user->group->discount));
+                }, 200);
+        }
     }
 }
