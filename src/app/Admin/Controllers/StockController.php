@@ -38,6 +38,7 @@ class StockController extends AdminController
         $grid->column('one_c_id', 'ID в 1C');
         $grid->column('type', 'Тип')->display(fn () => $this->type->name());
         $grid->column('name', 'Название');
+        $grid->column('internal_name', 'Внутреннее название');
         $grid->column('city.name', 'Город');
         $grid->column('address', 'Адрес');
         $grid->column('worktime', 'Время работы');
@@ -78,8 +79,9 @@ class StockController extends AdminController
         $form->number('one_c_id', 'ID в 1C')->min(1)->rules('required|unique:stocks');
         $form->select('type', 'Тип')->options(StockTypeEnum::list());
         $form->select('city_id', 'Город')->options(City::pluck('name', 'id'));
-        $form->text('name', 'Название')->required();
-        $form->text('address', 'Название');
+        $form->text('name', 'Название')->rules('required');
+        $form->text('internal_name', 'Внутреннее название')->rules('required');
+        $form->text('address', 'Адрес');
         $form->text('worktime', 'Время работы');
         $form->phone('phone', 'Телефон');
         $form->text('geo_latitude', 'Координаты (широта)');
