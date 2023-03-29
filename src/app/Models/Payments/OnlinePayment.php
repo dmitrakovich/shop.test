@@ -27,6 +27,8 @@ class OnlinePayment extends Model
      * @var array
      */
     protected $casts = [
+        'method_enum_id' => OnlinePaymentMethodEnum::class,
+        'last_status_enum_id' => OnlinePaymentStatusEnum::class,
         'request_data' => 'json',
     ];
 
@@ -34,13 +36,18 @@ class OnlinePayment extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->last_status_enum_id = OnlinePaymentStatusEnum::PENDING;
+            $model->last_status_enum_id = match ($model->method_enum_id) {
+                OnlinePaymentMethodEnum::COD => OnlinePaymentStatusEnum::SUCCEEDED,
+                default => OnlinePaymentStatusEnum::PENDING
+            };
         });
         self::created(function ($model) {
-            $model->statuses()->create([
-                'admin_user_id' => Admin::user()->id ?? null,
-                'payment_status_enum_id' => OnlinePaymentStatusEnum::PENDING,
-            ]);
+            if ($model->last_status_enum_id === OnlinePaymentStatusEnum::PENDING) {
+                $model->statuses()->create([
+                    'admin_user_id' => Admin::user()->id ?? null,
+                    'payment_status_enum_id' => OnlinePaymentStatusEnum::PENDING,
+                ]);
+            }
         });
     }
 
@@ -99,11 +106,11 @@ class OnlinePayment extends Model
      */
     public function getLinkAttribute(): ?string
     {
-        $enum = OnlinePaymentMethodEnum::enumByValue($this->method_enum_id);
-        if ($enum) {
-            return match ($enum) {
+        if ($this->method_enum_id) {
+            return match ($this->method_enum_id) {
                 OnlinePaymentMethodEnum::ERIP => isset($this->payment_url) ? route('pay.erip', $this->payment_url, true) : null,
                 OnlinePaymentMethodEnum::YANDEX => isset($this->link_code) ? route('pay.yandex', $this->link_code, true) : null,
+                default => null
             };
         }
 
@@ -115,9 +122,7 @@ class OnlinePayment extends Model
      */
     public function canCancelPayment(): bool
     {
-        $statusEnum = OnlinePaymentStatusEnum::tryFrom($this->last_status_enum_id);
-
-        return $statusEnum === OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE;
+        return $this->last_status_enum_id === OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE;
     }
 
     /**
@@ -125,8 +130,6 @@ class OnlinePayment extends Model
      */
     public function canCapturePayment(): bool
     {
-        $statusEnum = OnlinePaymentStatusEnum::tryFrom($this->last_status_enum_id);
-
-        return $statusEnum === OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE;
+        return $this->last_status_enum_id === OnlinePaymentStatusEnum::WAITING_FOR_CAPTURE;
     }
 }

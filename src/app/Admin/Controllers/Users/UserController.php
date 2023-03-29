@@ -2,13 +2,17 @@
 
 namespace App\Admin\Controllers\Users;
 
+use App\Admin\Actions\Order\CancelPayment;
+use App\Admin\Actions\Order\CapturePayment;
 use App\Models\Country;
 use App\Models\User\Group;
 use App\Models\User\User;
+use App\Models\Payments\OnlinePayment;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
 class UserController extends AdminController
@@ -18,7 +22,7 @@ class UserController extends AdminController
      *
      * @var string
      */
-    protected $title = 'User';
+    protected $title = 'Пользователи';
 
     /**
      * Make a grid builder.
@@ -69,11 +73,25 @@ class UserController extends AdminController
     }
 
     /**
+     * Edit interface.
+     *
+     * @param  mixed  $id
+     * @return Content
+     */
+    public function edit($id, Content $content)
+    {
+        return $content
+            ->title($this->title())
+            ->description($this->description['edit'] ?? trans('admin.edit'))
+            ->body($this->form($id)->edit($id));
+    }
+
+    /**
      * Make a form builder.
      *
      * @return Form
      */
-    protected function form()
+    protected function form(?int $id = null)
     {
         $form = new Form(new User());
 
@@ -104,6 +122,13 @@ class UserController extends AdminController
             $form->date('passport.issued_date', 'Когда выдан');
             $form->text('passport.personal_number', 'Личный номер');
         });
+        if ($id) {
+            $form->tab('Платежи', function ($form) use ($id) {
+                $form->row(function ($form) use ($id) {
+                    $form->html($this->onlinePaymentGrid($id));
+                });
+            });
+        }
 
         $form->submitted(function (Form $form) {
             $requestData = request()->all();
@@ -131,5 +156,51 @@ class UserController extends AdminController
         });
 
         return $form;
+    }
+
+    private function onlinePaymentGrid($userId)
+    {
+        $grid = new Grid(new OnlinePayment());
+        $grid->model()->whereHas('order', fn ($query) => $query->where('user_id', $userId))->orderBy('id', 'desc');
+
+        $grid->column('created_at', 'Дата/время создания')->display(function ($date) {
+            return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
+        })->width(100);
+        $grid->column('order_id', '№ заказа');
+        $grid->column('last_status_enum_id', 'Статус')->display(fn () => $this->last_status_enum_id->name());
+        $grid->column('admin.name', 'Менеджер');
+        $grid->column('method_enum_id', 'Способ оплаты')->display(fn () => $this->method_enum_id->name());
+        $grid->column('amount', 'Сумма платежа');
+        $grid->column('paid_amount', 'Сумма оплаченная клиентом');
+        $grid->column('currency_code', 'Код валюты');
+
+        $grid->column('expires_at', 'Срок действия платежа')->display(function ($date) {
+            return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
+        });
+        $grid->column('link', 'Срок действия платежа')->display(function ($link) {
+            return '<a href="' . $link . '" target="_blank">Ссылка на станицу оплаты</a>';
+        });
+
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableEdit();
+            $actions->disableView();
+
+            if ($actions->row->canCapturePayment()) {
+                $actions->add(new CapturePayment($actions->row));
+            }
+            if ($actions->row->canCancelPayment()) {
+                $actions->add(new CancelPayment($actions->row));
+            }
+        });
+        $grid->setActionClass(ContextMenuActions::class);
+        $grid->disableCreateButton();
+        $grid->disablePagination();
+        $grid->disableFilter();
+        $grid->disableExport();
+        $grid->disableColumnSelector();
+        $grid->disableRowSelector();
+
+        return $grid->render();
     }
 }

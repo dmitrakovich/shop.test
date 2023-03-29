@@ -8,6 +8,8 @@ use App\Models\Payments\OnlinePayment;
 use App\Notifications\PaymentSms;
 use App\Services\Payment\Methods\PaymentEripService;
 use App\Services\Payment\Methods\PaymentYandexService;
+use App\Services\Payment\Methods\PaymentCODService;
+
 
 class PaymentService
 {
@@ -35,6 +37,9 @@ class PaymentService
             case OnlinePaymentMethodEnum::YANDEX:
                 return $this->paymentMethodService[OnlinePaymentMethodEnum::YANDEX->value] = $this->paymentMethodService[OnlinePaymentMethodEnum::YANDEX->value] ?? new PaymentYandexService;
                 break;
+            case OnlinePaymentMethodEnum::COD:
+                return $this->paymentMethodService[OnlinePaymentMethodEnum::COD->value] = $this->paymentMethodService[OnlinePaymentMethodEnum::COD->value] ?? new PaymentCODService;
+                break;
         }
     }
 
@@ -58,13 +63,23 @@ class PaymentService
     }
 
     /**
+     * Create OnlinePayment after order.
+     *
+     * @param  array  $data
+     * @return OnlinePayment
+     */
+    public function createAfterOrder(Order $order)
+    {
+    }
+
+    /**
      * Cancel payment.
      *
      * @return OnlinePayment
      */
     public function cancelOnlinePayment(OnlinePayment $payment)
     {
-        $paymentMethodService = $this->getPaymentMethodServiceByEnum(OnlinePaymentMethodEnum::tryFrom($payment->method_enum_id));
+        $paymentMethodService = $this->getPaymentMethodServiceByEnum($payment->method_enum_id);
 
         return $paymentMethodService->cancel($payment);
     }
@@ -78,7 +93,7 @@ class PaymentService
         OnlinePayment $payment,
         ?float $amount = null
     ): OnlinePayment {
-        $paymentMethodService = $this->getPaymentMethodServiceByEnum(OnlinePaymentMethodEnum::tryFrom($payment->method_enum_id));
+        $paymentMethodService = $this->getPaymentMethodServiceByEnum($payment->method_enum_id);
 
         return $paymentMethodService->capture($payment, $amount);
     }
@@ -107,8 +122,8 @@ class PaymentService
      * Webhook handler.
      */
     public function webhookHandler(
-      array $requestData,
-      OnlinePaymentMethodEnum $paymentMethodEnum
+        array $requestData,
+        OnlinePaymentMethodEnum $paymentMethodEnum
     ): bool {
         $paymentMethodService = $this->getPaymentMethodServiceByEnum($paymentMethodEnum);
 

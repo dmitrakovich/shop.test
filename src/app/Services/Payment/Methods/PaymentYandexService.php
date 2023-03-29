@@ -74,7 +74,7 @@ class PaymentYandexService extends AbstractPaymentService
             $dbData = [];
             $dbData['order_id'] = $order->id;
             $dbData['currency_code'] = $currencyCode;
-            $dbData['method_enum_id'] = OnlinePaymentMethodEnum::YANDEX->value;
+            $dbData['method_enum_id'] = OnlinePaymentMethodEnum::YANDEX;
             $dbData['amount'] = $amount;
             $dbData['expires_at'] = date('Y-m-d H:i:s', strtotime($expiresAt));
             $dbData['payment_id'] = $paymentId;
