@@ -10,16 +10,19 @@
     </div>
     <div class="col-12 col-lg-9 col-xl-8 dh_orders">
         <div class="dh_orders__tabs nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link dh_orders__tab active" id="js-allOrdersTab" data-toggle="tab" href="#js-allOrders"
-                role="tab" aria-controls="js-allOrders" aria-selected="true">Все заказы ({{ count($allOrders) }})</a>
+            <a class="nav-item nav-link dh_orders__tab active" id="js-allOrdersTab" data-toggle="tab"
+                href="#js-allOrders" role="tab" aria-controls="js-allOrders" aria-selected="true">Все
+                заказы ({{ count($allOrders) }})</a>
             @if (count($expectedOrders))
                 <a class="nav-item nav-link dh_orders__tab" id="js-expectedOrdersTab" data-toggle="tab"
-                    href="#js-expectedOrders" role="tab" aria-controls="js-expectedOrders" aria-selected="false">Ожидают
+                    href="#js-expectedOrders" role="tab" aria-controls="js-expectedOrders"
+                    aria-selected="false">Ожидают
                     отправки ({{ count($expectedOrders) }})</a>
             @endif
             @if (count($sentOrders))
-                <a class="nav-item nav-link dh_orders__tab" id="js-sentOrdersTab" data-toggle="tab" href="#js-sentOrders"
-                    role="tab" aria-controls="js-sentOrders" aria-selected="false">Отправленные
+                <a class="nav-item nav-link dh_orders__tab" id="js-sentOrdersTab" data-toggle="tab"
+                    href="#js-sentOrders" role="tab" aria-controls="js-sentOrders"
+                    aria-selected="false">Отправленные
                     ({{ count($sentOrders) }})</a>
             @endif
             @if (count($completedOrders))
@@ -39,22 +42,26 @@
                 @include('dashboard.orders_list', ['orders' => $allOrders])
             </div>
             @if (count($expectedOrders))
-                <div class="dh_orders__list tab-pane fade" id="js-expectedOrders" role="tabpanel" aria-labelledby="js-expectedOrdersTab">
+                <div class="dh_orders__list tab-pane fade" id="js-expectedOrders" role="tabpanel"
+                    aria-labelledby="js-expectedOrdersTab">
                     @include('dashboard.orders_list', ['orders' => $expectedOrders])
                 </div>
             @endif
             @if (count($sentOrders))
-                <div class="dh_orders__list tab-pane fade" id="js-sentOrders" role="tabpanel" aria-labelledby="js-sentOrdersTab">
+                <div class="dh_orders__list tab-pane fade" id="js-sentOrders" role="tabpanel"
+                    aria-labelledby="js-sentOrdersTab">
                     @include('dashboard.orders_list', ['orders' => $sentOrders])
                 </div>
             @endif
             @if (count($completedOrders))
-                <div class="dh_orders__list tab-pane fade" id="js-completedOrder" role="tabpanel" aria-labelledby="js-completedOrderTab">
+                <div class="dh_orders__list tab-pane fade" id="js-completedOrder" role="tabpanel"
+                    aria-labelledby="js-completedOrderTab">
                     @include('dashboard.orders_list', ['orders' => $completedOrders])
                 </div>
             @endif
             @if (count($canceledOrders))
-                <div class="dh_orders__list tab-pane fade" id="js-canceledOrder" role="tabpanel" aria-labelledby="js-canceledOrderTab">
+                <div class="dh_orders__list tab-pane fade" id="js-canceledOrder" role="tabpanel"
+                    aria-labelledby="js-canceledOrderTab">
                     @include('dashboard.orders_list', ['orders' => $canceledOrders])
                 </div>
             @endif
@@ -82,8 +89,8 @@
                 </label>
                 <div class="col-12 col-md-8">
                     <input type="text" name="user_name" id="inputName" class="form-control"
-                        value="{{ optional(auth()->user())->first_name }}" autocomplete="given-name" placeholder="Имя"
-                        required>
+                        value="{{ optional(auth()->user())->first_name }}" autocomplete="given-name"
+                        placeholder="Имя" required>
                 </div>
             </div>
 
@@ -93,8 +100,8 @@
                 </label>
                 <div class="col-12 col-md-8">
                     <input type="text" name="user_city" id="inputCity" class="form-control"
-                        value="{{ optional(auth()->user())->getFirstAddress()?->city }}" autocomplete="address-level2"
-                        placeholder="Город" required>
+                        value="{{ optional(auth()->user())->getFirstAddress()?->city }}"
+                        autocomplete="address-level2" placeholder="Город" required>
                 </div>
             </div>
 
@@ -103,8 +110,8 @@
                     <b>Загрузите фотографии</b>
                 </label>
                 <div class="col-12 col-md-8">
-                    <input type="file" accept="image/*" name="photos[]" id="inputPhotos" class="form-control-file"
-                        multiple>
+                    <input type="file" accept="image/*" name="photos[]" id="inputPhotos"
+                        class="form-control-file" multiple>
                 </div>
             </div>
 
@@ -113,8 +120,8 @@
                     <b>Загрузите видео</b>
                 </label>
                 <div class="col-12 col-md-8">
-                    <input type="file" accept="video/*" name="videos[]" id="inputVideos" class="form-control-file"
-                        multiple>
+                    <input type="file" accept="video/*" name="videos[]" id="inputVideos"
+                        class="form-control-file" multiple>
                 </div>
             </div>
 

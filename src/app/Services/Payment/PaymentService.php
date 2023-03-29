@@ -6,10 +6,9 @@ use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
 use App\Notifications\PaymentSms;
+use App\Services\Payment\Methods\PaymentCODService;
 use App\Services\Payment\Methods\PaymentEripService;
 use App\Services\Payment\Methods\PaymentYandexService;
-use App\Services\Payment\Methods\PaymentCODService;
-
 
 class PaymentService
 {
