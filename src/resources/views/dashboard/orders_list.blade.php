@@ -22,7 +22,8 @@
                         @endif
                     @elseif (in_array($order->status->key, ['sent', 'fitting']) && $order->delivery_track)
                         <br>
-                        <a @if ($order->delivery_track_link) href="{{ $order->delivery_track_link }}" @endif>
+                        <a
+                            @if ($order->delivery_track_link) href="{{ $order->delivery_track_link }}" @endif>
                             Трек№ {{ $order->delivery_track }}
                         </a>
                     @endif
@@ -34,8 +35,9 @@
             </div>
         </div>
         <div class="dh_order_list__products">
-            <a data-toggle="collapse" class="dh_order_list__products-more collapsed" href="#js-orderInfo-{{ $order->id }}"
-                role="button" aria-expanded="false" aria-controls="js-orderInfo-{{ $order->id }}">
+            <a data-toggle="collapse" class="dh_order_list__products-more collapsed"
+                href="#js-orderInfo-{{ $order->id }}" role="button" aria-expanded="false"
+                aria-controls="js-orderInfo-{{ $order->id }}">
                 <div class="dh_order_list__products-more_images">
                     @foreach ($order->itemsExtended as $item)
                         <span><img src="{{ $item->product->getFirstMediaUrl('default', 'catalog') }}"
@@ -57,7 +59,9 @@
                             </div>
                             <div><span>Размер:</span><span>{{ $item->size->name }}</span></div>
                             <div><span>Код:</span><span> {{ $item->product->sku ?? null }}</span></div>
-                            <div><span>Статус:</span><span>{{ $item->status->name_for_user ?? null }}</span></div>
+                            <div>
+                                <span>Статус:</span><span>{{ $item->status->name_for_user ?? null }}</span>
+                            </div>
                             <div>
                                 <span>Цена:</span>
                                 <span class="dh_order_list__products-price">
@@ -76,7 +80,8 @@
                                 </span>
                             </div>
                             @if ($item->status->key === 'complete')
-                                <button class="btn btn-dark js-leave-feedback-btn">Написать отзыв</button>
+                                <button class="btn btn-dark js-leave-feedback-btn">Написать
+                                    отзыв</button>
                             @endif
                         </div>
                     </div>

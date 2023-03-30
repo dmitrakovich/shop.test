@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Contracts\OrderServiceInterface;
+use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Events\OrderCreated;
 use App\Facades\Cart;
 use App\Http\Requests\Order\StoreRequest;
@@ -27,16 +27,17 @@ class OrderController extends BaseController
     {
         $orders = Order::with([
             'country',
-            'onlinePayments' => fn($query) => $query->where('last_status_enum_id', OnlinePaymentStatusEnum::PENDING),
+            'onlinePayments' => fn ($query) => $query->where('last_status_enum_id', OnlinePaymentStatusEnum::PENDING),
             'itemsExtended',
-            'status:key,name_for_user'
+            'status:key,name_for_user',
         ])->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
+
         return view('dashboard.orders', [
             'allOrders' => $orders,
             'expectedOrders' => $orders->whereIn('status.key', ['new', 'in_work', 'wait_payment', 'paid', 'assembled', 'packaging', 'ready']),
             'sentOrders' => $orders->whereIn('status.key', ['sent', 'fitting']),
             'completedOrders' => $orders->where('status.key', 'complete'),
-            'canceledOrders' => $orders->whereIn('status.key', ['canceled', 'return', 'return_fitting'])
+            'canceledOrders' => $orders->whereIn('status.key', ['canceled', 'return', 'return_fitting']),
         ]);
     }
 

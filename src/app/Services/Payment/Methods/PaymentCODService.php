@@ -2,17 +2,13 @@
 
 namespace App\Services\Payment\Methods;
 
+use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
-use App\Enums\Payment\OnlinePaymentMethodEnum;
-use App\Enums\Payment\OnlinePaymentStatusEnum;
-
 use Encore\Admin\Facades\Admin;
-
 
 class PaymentCODService extends AbstractPaymentService
 {
-
     /**
      * Create new payment
      */
@@ -24,6 +20,7 @@ class PaymentCODService extends AbstractPaymentService
         $data['amount'] = $amount;
         $data['payment_num'] = $paymentNum;
         $data['admin_user_id'] = Admin::user() ? Admin::user()->id : null;
+
         return OnlinePayment::create($data);
     }
 }

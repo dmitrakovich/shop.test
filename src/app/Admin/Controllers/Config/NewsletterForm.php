@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class NewsletterForm extends Form
 {
     protected $states = [
-        'on'  => ['value' => 1, 'text' => 'Да', 'color' => 'success'],
+        'on' => ['value' => 1, 'text' => 'Да', 'color' => 'success'],
         'off' => ['value' => 0, 'text' => 'Нет', 'color' => 'danger'],
     ];
 
@@ -31,6 +31,7 @@ class NewsletterForm extends Form
         $requestData['active'] = (isset($requestData['active']) && $requestData['active'] === 'on') ? true : false;
         Config::find('newsletter_register')->update(['config' => $requestData]);
         admin_success('Конфиг успешно обновлен!');
+
         return back();
     }
 
