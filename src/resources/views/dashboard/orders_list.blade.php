@@ -38,7 +38,7 @@
                 role="button" aria-expanded="false" aria-controls="js-orderInfo-{{ $order->id }}">
                 <div class="dh_order_list__products-more_images">
                     @foreach ($order->itemsExtended as $item)
-                        <span><img src="{{ $item->product->getFirstMediaUrl('catalog') }}"
+                        <span><img src="{{ $item->product->getFirstMediaUrl('default', 'catalog') }}"
                                 alt="{{ $item->product->getFullName() }}"></span>
                     @endforeach
                 </div>
@@ -48,7 +48,7 @@
                 @foreach ($order->itemsExtended as $item)
                     <div class="dh_order_list__products-item">
                         <div class="dh_order_list__products-item_img">
-                            <img src="{{ $item->product->getFirstMediaUrl('catalog') }}"
+                            <img src="{{ $item->product->getFirstMediaUrl('default', 'catalog') }}"
                                 alt="{{ $item->product->getFullName() }}">
                         </div>
                         <div class="dh_order_list__products-item_descr">
