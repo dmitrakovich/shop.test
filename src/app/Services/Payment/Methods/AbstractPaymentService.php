@@ -40,12 +40,12 @@ abstract class AbstractPaymentService
       OnlinePayment $payment,
       OnlinePaymentStatusEnum $status
     ): OnlinePayment {
-        if ($payment->last_status_enum_id !== $status->value) {
-            $payment->last_status_enum_id = $status->value;
+        if ($payment->last_status_enum_id !== $status) {
+            $payment->last_status_enum_id = $status;
             $payment->save();
             $payment->statuses()->create([
                 'admin_user_id' => Admin::user() ? Admin::user()->id : null,
-                'payment_status_enum_id' => $status->value,
+                'payment_status_enum_id' => $status,
             ]);
         }
 

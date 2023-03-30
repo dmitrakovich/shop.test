@@ -77,6 +77,9 @@ class InstallmentOrderService
             $sheet->setCellValue('AH47', substr(trim($order->phone), -9, -7));
             $sheet->setCellValue('AL47', substr(trim($order->phone), -7));
             $sheet->setCellValue('AK52', mb_strtoupper(substr($firstName, 0, 1)) . '.' . mb_strtoupper(substr($patronymicName, 0, 1)) . '. ' . $lastName);
+
+            $item->installment->installment_form_file = $resultPath;
+            $item->installment->save();
         }
 
         $writer = new Xlsx($spreadsheet);

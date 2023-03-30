@@ -27,7 +27,7 @@ class CapturePayment extends RowAction
         $paymentService = new PaymentService;
         $amount = (float)$request->input('amount');
         $result = $paymentService->captureOnlinePayment($payment, $amount);
-        if (OnlinePaymentStatusEnum::tryFrom($result->last_status_enum_id) === OnlinePaymentStatusEnum::SUCCEEDED) {
+        if ($result->last_status_enum_id === OnlinePaymentStatusEnum::SUCCEEDED) {
             return $this->response()->success('Платеж подтвержден!')->refresh();
         } else {
             return $this->response()->error('Ошибка при подтверждении платежа!')->refresh();

@@ -8,8 +8,6 @@ use App\Admin\Actions\Order\CreateOnlinePayment;
 use App\Admin\Actions\Order\InstallmentForm;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
-use App\Enums\Payment\OnlinePaymentMethodEnum;
-use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Country;
 use App\Models\Currency;
@@ -211,6 +209,8 @@ class OrderController extends AdminController
             $form->text('zip', __('Zip'));
             $form->text('user_addr', __('User addr'));
             $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
+            $form->text('delivery_track', 'Трек номер');
+            $form->url('delivery_track_link', 'Ссылка на трек номер');
             $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
             $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
             $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));
@@ -328,13 +328,9 @@ class OrderController extends AdminController
         $grid->column('created_at', 'Дата/время создания')->display(function ($date) {
             return $date ? date('d.m.Y H:i:s', strtotime($date)) : null;
         })->width(100);
-        $grid->column('last_status_enum_id', 'Статус')->display(function ($last_status_enum_id) {
-            return OnlinePaymentStatusEnum::tryFrom($last_status_enum_id)->name();
-        });
+        $grid->column('last_status_enum_id', 'Статус')->display(fn () => $this->last_status_enum_id->name());
         $grid->column('admin.name', 'Менеджер');
-        $grid->column('method_enum_id', 'Способ оплаты')->display(function ($method_enum_id) {
-            return OnlinePaymentMethodEnum::tryFrom($method_enum_id)->name();
-        });
+        $grid->column('method_enum_id', 'Способ оплаты')->display(fn () => $this->method_enum_id->name());
         $grid->column('amount', 'Сумма платежа');
         $grid->column('paid_amount', 'Сумма оплаченная клиентом');
         $grid->column('currency_code', 'Код валюты');

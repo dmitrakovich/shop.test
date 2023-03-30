@@ -1,0 +1,181 @@
+.dh_order_list {
+
+    &__item {
+        background: #f1f1f1;
+        border-radius: 2px;
+        padding: 20px;
+    }
+
+    &__top {
+        border-bottom: 1px solid #9AA0AC;
+        margin: 0 0 10px;
+        padding: 10px 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        &-item {
+
+            &>span {
+                font-size: 14px;
+                color: #9AA0AC;
+                line-height: 21px;
+            }
+
+            &>div {
+                font-size: 16px;
+                color: #000;
+                line-height: 21px;
+                font-weight: 500;
+
+                a {
+                    font-weight: 400;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+    &__products {
+
+        &-more {
+            display: flex;
+            justify-content: space-between;
+
+            &_images {
+                display: none;
+                flex-wrap: wrap;
+                gap: 20px;
+
+                span {
+                    width: 37px;
+                    height: 37px;
+                    background-color: #E0E6F2;
+
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+
+            &_arr {
+                margin: 0 0 0 auto;
+                width: 30px;
+                height: 30px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: #E0E6F2;
+                border: 1px solid #9AA0AC;
+                position: relative;
+
+                &::after {
+                    content: '';
+                    display: inline-flex;
+                    border: 6px solid transparent;
+                    border-bottom: 10px solid #9AA0AC;
+                    transform: translateY(-4px);
+                }
+            }
+
+            &.collapsed &_images {
+                display: flex;
+            }
+
+            &.collapsed &_arr::after {
+                transform: rotate(180deg) translateY(-4px);
+            }
+        }
+
+        &-price {
+            display: flex;
+            flex-direction: column;
+            text-transform: uppercase;
+
+            &_old {
+                text-decoration: line-through;
+            }
+            &_discount {
+                display: inline-flex;
+                justify-content: center;
+                padding: 2px 4px;
+                background: #D22020;
+                color: #fff;
+                min-width: 34px;
+                line-height: 100%;
+                margin: 0 0 0 5px;
+            }
+            &_cur {
+                color: #D22020;
+            }
+        }
+
+        &-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        }
+
+        &-item {
+            border-right: #9AA0AC;
+            display: flex;
+            gap: 5px;
+
+            &_img {
+                width: 55px;
+                height: 55px;
+                background-color: #E0E6F2;
+            }
+
+            &_descr {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+                flex: 1;
+
+                & .btn {
+                    margin: auto 0 0 0;
+                    border-radius: 2px;
+                    height: 30px;
+                    display: inline-flex;
+                    align-items: center;
+                }
+
+                &>div {
+                    display: flex;
+                    font-size: 12px;
+                    line-height: 18px;
+                    width: 100%;
+
+                    &>span {
+                        display: inline-flex;
+                        flex: 1;
+                    }
+
+                    &>span:first-child {
+                        max-width: 90px;
+                    }
+
+                    &>span:last-child {
+                        color: #9AA0AC;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .dh_order_list {
+
+        &__top {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+
+            &-item {
+
+                &:last-child {
+                    text-align: right;
+                }
+            }
+        }
+    }
+}
