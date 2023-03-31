@@ -44,12 +44,13 @@ trait ProductSales
 
     /**
      * Set product sales
-     *
-     * @param  array{list: array[], final_price: float}  $sales
      */
-    public function setSales(array $sales): void
+    public function setSales(array $sales, float $finalPrice): void
     {
-        $this->sales = $sales;
+        $this->sales = [
+            'list' => $sales,
+            'final_price' => $finalPrice,
+        ];
     }
 
     /**

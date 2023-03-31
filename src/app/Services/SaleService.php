@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Facades\Currency;
 use App\Models\Cart;
+use App\Models\CartData;
 use App\Models\Config;
 use App\Models\Data\OrderData;
 use App\Models\Data\SaleData;
@@ -14,10 +15,34 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class SaleService
 {
+    /**
+     * Sale model
+     */
     private ?Sale $sale;
 
+    /**
+     * Key for general sale
+     */
+    const GENERAL_SALE_KEY = 'general_sale';
+
+    /**
+     * Key for user sale
+     */
+    const USER_SALE_KEY = 'user_sale';
+
+    /**
+     * Key for review sale
+     */
+    const REVIEW_SALE_KEY = 'review_sale';
+
+    /**
+     * List of discounts
+     */
     private array $discounts = [];
 
+    /**
+     * Sign of the presence in the basket of goods with a discount
+     */
     private ?bool $hasSaleProductsInCart = null;
 
     /**
@@ -29,6 +54,11 @@ class SaleService
      * Product review discount
      */
     private ?float $reviewDiscount = null;
+
+    /**
+     * List of disabled sales
+     */
+    private array $disabled = [];
 
     /**
      * SaleService construct
@@ -70,7 +100,7 @@ class SaleService
      */
     protected function hasSale(): bool
     {
-        return !empty($this->sale);
+        return !empty($this->sale) && empty($this->disabled[self::GENERAL_SALE_KEY]);
     }
 
     /**
@@ -78,6 +108,9 @@ class SaleService
      */
     protected function hasUserSale(): bool
     {
+        if (isset($this->disabled[self::USER_SALE_KEY])) {
+            return false;
+        }
         $addUserSale = $this->hasSale() ? $this->sale->add_client_sale : true;
 
         return $addUserSale && !is_null($this->userDiscount);
@@ -99,6 +132,9 @@ class SaleService
      */
     protected function hasReviewSale(): bool
     {
+        if (isset($this->disabled[self::REVIEW_SALE_KEY])) {
+            return false;
+        }
         $addReviewSale = $this->hasSale() ? $this->sale->add_review_sale : true;
 
         return $addReviewSale && !is_null($this->reviewDiscount);
@@ -291,11 +327,19 @@ class SaleService
     }
 
     /**
-     * Remove user sale for some conditions
+     * Disable user sale for some conditions
      */
-    private function removeUserSale(): void
+    public function disableUserSale(): void
     {
-        $this->userDiscount = null;
+        $this->disabled[self::USER_SALE_KEY] = 1;
+    }
+
+    /**
+     * Enable user sale after disable
+     */
+    public function enableUserSale(): void
+    {
+        unset($this->disabled[self::USER_SALE_KEY]);
     }
 
     /**
@@ -308,13 +352,13 @@ class SaleService
 
         if ($this->hasSale() && $this->applyForOneProduct() && $this->checkSaleConditions($product)) {
             $sale = $this->getSaleData($finalPrice, $product->getFixedOldPrice());
-            $sales['general_sale'] = $sale;
+            $sales[self::GENERAL_SALE_KEY] = $sale;
             $finalPrice = $sale->price;
         }
 
         $this->applyUserSales($sales, $finalPrice);
 
-        $product->setSales(['list' => $sales, 'final_price' => $finalPrice]);
+        $product->setSales($sales, $finalPrice);
     }
 
     /**
@@ -324,13 +368,13 @@ class SaleService
     {
         if ($this->hasUserSale()) {
             $sale = $this->getUserSaleData($finalPrice);
-            $sales['user_sale'] = $sale;
+            $sales[self::USER_SALE_KEY] = $sale;
             $finalPrice = $sale->price;
         }
 
         if ($this->hasReviewSale()) {
             $sale = $this->getReviewSaleData($finalPrice);
-            $sales['review_sale'] = $sale;
+            $sales[self::REVIEW_SALE_KEY] = $sale;
             $finalPrice = $sale->price;
         }
     }
@@ -367,6 +411,9 @@ class SaleService
         $this->hasSaleProductsInCart = false;
 
         if (!$this->hasAnySale()) {
+            $cart->items->each(function (CartData $item) {
+                return $item->product->setSales([], $item->product->price);
+            });
             return;
         }
 
@@ -391,11 +438,11 @@ class SaleService
 
         foreach ($cart->items as $item) {
             $generalSale = $productSaleList[$item->product->id] ?? null;
-            $sales = $generalSale ? ['general_sale' => $generalSale] : [];
+            $sales = $generalSale ? [self::GENERAL_SALE_KEY => $generalSale] : [];
             $finalPrice = $generalSale ? $generalSale->price : $item->product->price;
 
             $this->applyUserSales($sales, $finalPrice);
-            $item->product->setSales(['list' => $sales, 'final_price' => $finalPrice]);
+            $item->product->setSales($sales, $finalPrice);
         }
     }
 
@@ -405,7 +452,7 @@ class SaleService
     public function applyToOrder(Cart $cart, OrderData $orderData)
     {
         if ($orderData->paymentMethod->instance === 'Installment') {
-            $this->removeUserSale();
+            $this->disableUserSale();
         }
 
         $this->applyToCart($cart);

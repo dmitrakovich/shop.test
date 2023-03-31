@@ -129,14 +129,14 @@
                                         <br>
                                         <span class="text-muted font-size-12">
                                             {{-- blade-formatter-disable --}}
-                                            @if (Cart::getTotalPrice() >= 150)
+                                            @if ($totalPriceWithoutUserSale >= 150)
                                                 Рассрочка на 3 платежа
-                                                Первый взнос <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() - Cart::getTotalPrice() * 0.6 }} руб.</span>
-                                                Оставшиеся 2 платежа по <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() * 0.3 }} руб.</span> в месяц
+                                                Первый взнос <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale - $totalPriceWithoutUserSale * 0.6 }} руб.</span>
+                                                Оставшиеся 2 платежа по <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale * 0.3 }} руб.</span> в месяц
 											@else
                                                 Рассрочка на 2 платежа
-                                                Первый взнос <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() - Cart::getTotalPrice() * 0.5 }} руб.</span>
-                                                Оставшийся платеж <span class="border-bottom border-secondary">{{ Cart::getTotalPrice() * 0.5 }} руб.</span>
+                                                Первый взнос <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale - $totalPriceWithoutUserSale * 0.5 }} руб.</span>
+                                                Оставшийся платеж <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale * 0.5 }} руб.</span>
 											@endif
                                             <span class="text-danger">При покупке с рассрочкой скидка клиента не действует!</span>
                                             {{-- blade-formatter-enable --}}
@@ -172,13 +172,28 @@
                                 СТОИМОСТЬ ЗАКАЗА
                             </div>
                             <div class="col-auto text-right">
-                                @if (Cart::getTotalPrice() < Cart::getTotalOldPrice())
-                                    <span class="old_price text-muted">{!! Currency::format(Cart::getTotalOldPrice()) !!}</span>
-                                    <strong class="price">{!! Currency::format(Cart::getTotalPrice()) !!}</strong><br>
-                                    <span class="new_price">Вы экономите {!! Currency::format(Cart::getTotalOldPrice() - Cart::getTotalPrice()) !!}</span>
-                                @else
-                                    <strong class="price">{!! Currency::format(Cart::getTotalPrice()) !!}</strong>
-                                @endif
+
+                                {{-- !! temporary shitcode for price !! --}}
+                                <div class="js-normal-price">
+                                    @if ($totalPrice < $totalOldPrice)
+                                        <span class="old_price text-muted">{!! Currency::format($totalOldPrice) !!}</span>
+                                        <strong class="price">{!! Currency::format($totalPrice) !!}</strong><br>
+                                        <span class="new_price">Вы экономите {!! Currency::format($totalOldPrice - $totalPrice) !!}</span>
+                                    @else
+                                        <strong class="price">{!! Currency::format($totalPrice) !!}</strong>
+                                    @endif
+                                </div>
+                                <div class="js-without-user-sale-price" style="display: none">
+                                    @if ($totalPriceWithoutUserSale < $totalOldPrice)
+                                        <span class="old_price text-muted">{!! Currency::format($totalOldPrice) !!}</span>
+                                        <strong class="price">{!! Currency::format($totalPriceWithoutUserSale) !!}</strong><br>
+                                        <span class="new_price">Вы экономите {!! Currency::format($totalOldPrice - $totalPriceWithoutUserSale) !!}</span>
+                                    @else
+                                        <strong class="price">{!! Currency::format($totalPriceWithoutUserSale) !!}</strong>
+                                    @endif
+                                </div>
+                                {{-- !! end temporary shitcode for price !! --}}
+
                             </div>
                         </div>
                         <div class="row justify-content-between mb-2">
@@ -194,7 +209,16 @@
                                 К оплате
                             </div>
                             <div class="col-auto">
-                                {!! Currency::format(Cart::getTotalPrice()) !!}
+
+                                {{-- !! temporary shitcode for price !! --}}
+                                <div class="js-normal-price">
+                                    {!! Currency::format($totalPrice) !!}
+                                </div>
+                                <div class="js-without-user-sale-price" style="display: none">
+                                    {!! Currency::format($totalPriceWithoutUserSale) !!}
+                                </div>
+                                {{-- !! end temporary shitcode for price !! --}}
+
                             </div>
                         </div>
                     </div>

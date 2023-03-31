@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static boolean hasInstallment() Проверить возможноть оплаты в рассрочку для текущей акции
  * @method static void applyToCart(\App\Models\Cart $cart) Apply sales to cart
  * @method static void applyToOrder(\App\Models\Cart $cart, array $orderData) Apply sales to order
+ * @method static void disableUserSale() Disable user sale for some conditions
+ * @method static void enableUserSale() Enable user sale after disable
  *
  * @see \App\Services\SaleService
  */

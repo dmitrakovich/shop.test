@@ -27,7 +27,7 @@ class CartController extends BaseController
     public function index(GoogleTagManagerService $gtmService)
     {
         $cart = Cart::withData();
-        Sale::applyToCart($cart);
+        $prices = $this->getCartPrices($cart);
 
         /** @var User $user */
         $user = auth()->user() ?? new User();
@@ -48,9 +48,27 @@ class CartController extends BaseController
 
         $gtmService->setViewForCart($cart);
 
-        return view('shop.cart', compact(
+        return view('shop.cart', array_merge($prices, compact(
             'cart', 'user', 'deliveriesList', 'paymentsList', 'countries', 'currentCountry'
-        ));
+        )));
+    }
+
+    /**
+     * Calc & return cart prices
+     * TODO: create CartService
+     */
+    public function getCartPrices(\App\Models\Cart $cart): array
+    {
+        Sale::disableUserSale();
+        Sale::applyToCart($cart);
+        $totalPriceWithoutUserSale = $cart->getTotalPrice();
+
+        Sale::enableUserSale();
+        Sale::applyToCart($cart);
+        $totalPrice = $cart->getTotalPrice();
+        $totalOldPrice = $cart->getTotalOldPrice();
+
+        return compact('totalPrice', 'totalOldPrice', 'totalPriceWithoutUserSale');
     }
 
     /**
