@@ -35,7 +35,6 @@ class StockController extends AdminController
         });
 
         $grid->column('id', 'Id');
-        $grid->column('one_c_id', 'ID в 1C');
         $grid->column('type', 'Тип')->display(fn () => $this->type->name());
         $grid->column('name', 'Название');
         $grid->column('internal_name', 'Внутреннее название');
@@ -45,6 +44,7 @@ class StockController extends AdminController
         $grid->column('phone', 'Телефон');
         $grid->column('geo_latitude', 'Координаты (широта)');
         $grid->column('geo_longitude', 'Координаты (долгота)');
+        $grid->column('check_availability', 'Сверка наличия')->switch();
 
         $grid->actions(function ($actions) {
             $actions->disableView();
@@ -52,6 +52,7 @@ class StockController extends AdminController
         $grid->disableExport();
         $grid->disableColumnSelector();
         $grid->disableRowSelector();
+        $grid->paginate(50);
 
         return $grid;
     }
@@ -76,7 +77,7 @@ class StockController extends AdminController
     {
         $form = new Form(new Stock());
 
-        $form->number('one_c_id', 'ID в 1C')->min(1)->rules('required|unique:stocks');
+        $form->text('one_c_id', 'ID в 1C')->rules('required|unique:stocks');
         $form->select('type', 'Тип')->options(StockTypeEnum::list());
         $form->select('city_id', 'Город')->options(City::pluck('name', 'id'));
         $form->text('name', 'Название')->rules('required');
@@ -86,6 +87,7 @@ class StockController extends AdminController
         $form->phone('phone', 'Телефон');
         $form->text('geo_latitude', 'Координаты (широта)');
         $form->text('geo_longitude', 'Координаты (долгота)');
+        $form->switch('check_availability', 'Сверка наличия');
         $form->multipleImage('photos', 'Фото магазина')->sortable()->removable();
 
         $form->tools(function (Form\Tools $tools) {
