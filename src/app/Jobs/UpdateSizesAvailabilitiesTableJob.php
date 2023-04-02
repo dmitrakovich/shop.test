@@ -90,9 +90,11 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractJob
         $this->complete('Запись полученных и сопоставленных данных в базу');
         $sizesAvailabilityTable = (new SizesAvailability)->getTable();
         DB::table($sizesAvailabilityTable)->truncate();
+        DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
         DB::table($sizesAvailabilityTable)->insert($sizesAvailability);
+        DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
 
-        $this->complete('Наличие успешно обновлено');
+        $this->complete('Таблица с наличием успешно обновлена');
     }
 
     /**
