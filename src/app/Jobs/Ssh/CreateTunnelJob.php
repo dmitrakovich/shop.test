@@ -2,9 +2,7 @@
 
 namespace App\Jobs\Ssh;
 
-use App\Jobs\AbstractJob;
-
-class CreateTunnelJob extends AbstractJob
+class CreateTunnelJob extends AbstractTunnelJob
 {
     /**
      * How often it is checked if the tunnel is created.
@@ -25,38 +23,6 @@ class CreateTunnelJob extends AbstractJob
      * Log messages for troubleshooting.
      */
     const NOHUP_LOG = '/dev/null';
-
-    /**
-     * The Command for checking if the tunnel is open
-     */
-    protected string $ncCommand = 'nc -vz %s %d > /dev/null 2>&1';
-
-    /**
-     * The command for creating the tunnel
-     */
-    protected string $sshCommand = 'ssh -N -L %d:%s:%d -p %d %s@%s';
-
-    /**
-     * Create a new job instance.
-     */
-    public function __construct()
-    {
-        $localAddress = '127.0.0.1';
-        $localPort = config('database.connections.sqlsrv.port');
-        $sshConfig = config('ssh.1c');
-
-        $this->ncCommand = sprintf($this->ncCommand, $localAddress, $localPort);
-
-        $this->sshCommand = sprintf(
-            $this->sshCommand,
-            $localPort,
-            $sshConfig['bind_address'],
-            $sshConfig['bind_port'],
-            $sshConfig['port'],
-            $sshConfig['user'],
-            $sshConfig['hostname']
-        );
-    }
 
     /**
      * Execute the job.
@@ -94,34 +60,5 @@ class CreateTunnelJob extends AbstractJob
         ));
 
         usleep(self::WAIT_AFTER_CONNECTION);
-    }
-
-    /**
-     * Verifies whether the tunnel is active or not.
-     */
-    protected function verifyTunnel(): bool
-    {
-        return $this->runCommand($this->ncCommand);
-    }
-
-    /*
-     * Use pkill to kill the SSH tunnel
-     */
-    public function destroyTunnel(): bool
-    {
-        $sshCommand = preg_replace('/[\s]{2}[\s]*/', ' ', $this->sshCommand);
-
-        return $this->runCommand('pkill -f "' . $sshCommand . '"');
-    }
-
-    /**
-     * Runs a command and converts the exit code to a boolean
-     */
-    protected function runCommand(string $command): bool
-    {
-        $resultСode = 1;
-        exec($command, $output, $resultСode);
-
-        return $resultСode === 0;
     }
 }
