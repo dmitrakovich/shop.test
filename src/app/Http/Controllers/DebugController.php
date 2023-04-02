@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\Ssh\CreateTunnelJob;
+use App\Jobs\UpdateSizesAvailabilitiesTableJob;
 use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Notifications\TestSms;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 
@@ -22,7 +21,7 @@ class DebugController extends Controller
             dd($th);
         }
 
-        // return 'ok';
+        return 'ok';
 
         /** @var User $user */
         $user = User::findOrFail('xxxx');
@@ -35,12 +34,9 @@ class DebugController extends Controller
 
     public function testSqlServerConnection()
     {
-        CreateTunnelJob::dispatchSync();
-
         dump(config('database.connections.sqlsrv'));
-        $result = DB::connection('sqlsrv')->table('SC189')->get();
 
-        dd($result);
+        UpdateSizesAvailabilitiesTableJob::dispatchSync();
     }
 
     /**
