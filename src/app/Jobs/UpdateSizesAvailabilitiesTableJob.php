@@ -15,7 +15,7 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractJob
     /**
      * Table name in 1C, contains the quantity in stock
      */
-    const ONE_C_STOCK_QUANTITY_TABLE = 'SC6046';
+    const ONE_C_STOCK_QUANTITY_TABLE = 'SC6021';
 
     /**
      * The number of seconds the job can run before timing out.
@@ -73,11 +73,39 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractJob
         DB::connection('sqlsrv')
             ->table(self::ONE_C_STOCK_QUANTITY_TABLE)
             ->select([
-                '' // перечислить нужные столбцы
+                'ROW_ID',
+                'SP6022 as one_c_product_id',
+                'SP5998 as brand_id',
+                'DESCR as category_name',
+                'SP5996 as stock_id',
+                'SP5993 as sku',
+                'SP6000 as buy_price',
+                'SP5999 as sell_price',
+                'SP6001 as size_none',
+                'SP6002 as size_31',
+                'SP6003 as size_32',
+                'SP6004 as size_33',
+                'SP6005 as size_34',
+                'SP6006 as size_35',
+                'SP6007 as size_36',
+                'SP6008 as size_37',
+                'SP6009 as size_38',
+                'SP6010 as size_39',
+                'SP6011 as size_40',
+                'SP6012 as size_41',
+                'SP6013 as size_42',
+                'SP6014 as size_43',
+                'SP6015 as size_44',
+                'SP6016 as size_45',
+                'SP6017 as size_46',
+                'SP6018 as size_47',
+                'SP6019 as size_48',
             ])
-            ->whereIn('ID', array_keys($this->stockIds))
+            ->orderBy('ROW_ID')
+            ->whereIn('SP5996', array_keys($this->stockIds))
             ->each(function (\stdClass $stockUnit) use (&$sizesAvailability) {
-                $sizesAvailability[] = [
+                dd($stockUnit);
+                $sizesAvailability[] = dd([
                     'product_id' => $stockUnit,
                     'one_c_product_id' => (int)$stockUnit,
                     'brand_id' => $stockUnit,
@@ -96,7 +124,7 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractJob
                     'size_39' => (int)$stockUnit,
                     'size_40' => (int)$stockUnit,
                     'size_41' => (int)$stockUnit,
-                ];
+                ]);
             });
 
         DestroyTunnelJob::dispatchSync();

@@ -24,6 +24,8 @@ return new class extends Migration
             $table->float('sell_price');
 
             $table->unsignedInteger('size_none')->default(0);
+            $table->unsignedInteger('size_31')->default(0);
+            $table->unsignedInteger('size_32')->default(0);
             $table->unsignedInteger('size_33')->default(0);
             $table->unsignedInteger('size_34')->default(0);
             $table->unsignedInteger('size_35')->default(0);
@@ -33,6 +35,13 @@ return new class extends Migration
             $table->unsignedInteger('size_39')->default(0);
             $table->unsignedInteger('size_40')->default(0);
             $table->unsignedInteger('size_41')->default(0);
+            $table->unsignedInteger('size_42')->default(0);
+            $table->unsignedInteger('size_43')->default(0);
+            $table->unsignedInteger('size_44')->default(0);
+            $table->unsignedInteger('size_45')->default(0);
+            $table->unsignedInteger('size_46')->default(0);
+            $table->unsignedInteger('size_47')->default(0);
+            $table->unsignedInteger('size_48')->default(0);
         });
 
         Schema::table('brands', function (Blueprint $table) {
