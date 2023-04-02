@@ -26,17 +26,12 @@ class CategoryController extends AdminController
     {
         $grid = new Grid(new Category());
 
-        $grid->column('id', __('Id'));
-        $grid->column('slug', __('Slug'));
-        $grid->column('path', __('Path'));
-        $grid->column('title', __('Title'));
-        $grid->column('description', __('Description'));
-        // $grid->column('_lft', __(' lft'));
-        // $grid->column('_rgt', __(' rgt'));
-        $grid->column('parent_id', __('Parent id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        // $grid->column('deleted_at', __('Deleted at'));
+        $grid->column('id', 'Id');
+        $grid->column('slug', 'Slug');
+        $grid->column('path', 'Path');
+        $grid->column('title', 'Название');
+        $grid->column('description', 'Описание');
+        $grid->column('parent_id', 'ID родительской категории');
 
         $grid->paginate(30);
 
@@ -63,13 +58,12 @@ class CategoryController extends AdminController
     {
         $form = new Form(new Category());
 
-        $form->text('slug', __('Slug'));
-        $form->text('title', __('Title'));
-        $form->textarea('description', __('Description'));
-        // $form->number('_lft', __(' lft'));
-        // $form->number('_rgt', __(' rgt'));
-        $form->number('parent_id', __('Parent id'))->default(1);
-        $form->hidden('path', __('Path'))->default(time());
+        $form->text('slug', 'Slug');
+        $form->text('title', 'Название на сайте');
+        $form->text('one_c_name', 'Название в 1С')->rules('unique:categories');
+        $form->textarea('description', 'Описание');
+        $form->number('parent_id', 'ID родительской категории')->default(1);
+        $form->hidden('path', 'Path')->default(time());
 
         $form->saved(function (Form $form) {
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
