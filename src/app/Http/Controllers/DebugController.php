@@ -34,8 +34,6 @@ class DebugController extends Controller
 
     public function testSqlServerConnection()
     {
-        dump(config('database.connections.sqlsrv'));
-
         UpdateSizesAvailabilitiesTableJob::dispatchSync();
     }
 
