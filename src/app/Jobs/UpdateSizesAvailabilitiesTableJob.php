@@ -253,7 +253,7 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractJob
         }
         $wrongSkuRus = str_replace($this->engSymbols, $this->rusSymbols, $sku);
         if (isset($brandProducts[$wrongSkuRus])) {
-            return $brandProducts[$wrongSkuRus];;
+            return $brandProducts[$wrongSkuRus];
         }
         $wrongSkuEng = str_replace($this->rusSymbols, $this->engSymbols, $sku);
         if (isset($brandProducts[$wrongSkuEng])) {

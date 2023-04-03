@@ -414,6 +414,7 @@ class SaleService
             $cart->items->each(function (CartData $item) {
                 return $item->product->setSales([], $item->product->price);
             });
+
             return;
         }
 
