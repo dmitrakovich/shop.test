@@ -191,6 +191,9 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractJob
         return mb_strtolower(str_replace($remove, '', $sku));
     }
 
+    /**
+     * Prepare size availability data for database insertion
+     */
     protected function prepareSizesAvailabilityData(\stdClass $stockUnit): array
     {
         $sku = trim($stockUnit->sku);
@@ -247,6 +250,7 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractJob
             return null;
         }
         $brandProducts = $this->productIds[$brandId];
+        $sku = $this->prepareSkuToCompare($sku);
 
         if (isset($brandProducts[$sku])) {
             return $brandProducts[$sku];
