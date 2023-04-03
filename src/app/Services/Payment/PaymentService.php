@@ -112,7 +112,7 @@ class PaymentService
      */
     public function createOnlinePaymentQrCode(OnlinePayment $onlinePayment): OnlinePayment
     {
-        $paymentMethodService = $this->getPaymentMethodServiceByEnum(OnlinePaymentMethodEnum::tryFrom($onlinePayment->method_enum_id));
+        $paymentMethodService = $this->getPaymentMethodServiceByEnum($onlinePayment->method_enum_id);
 
         return $paymentMethodService->createQrCode($onlinePayment);
     }
