@@ -6,7 +6,7 @@ use App\Jobs\Mailing\DiscountAfterRegisterJob;
 use App\Jobs\Mailing\LeaveFeedbackAfterOrderJob;
 use App\Jobs\Payment\SendInstallmentNoticeJob;
 use App\Jobs\SxGeoUpdateJob;
-use App\Jobs\UpdateAvailabilityJob;
+use App\Jobs\UpdateAvailabilityOldJob;
 use App\Jobs\UpdateProductsRatingJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
 
         $schedule->job(new UpdateProductsRatingJob)->withoutOverlapping()->cron('15 5,11,17,23 * * *');
-        $schedule->job(new UpdateAvailabilityJob)->withoutOverlapping()->everyThirtyMinutes();
+        $schedule->job(new UpdateAvailabilityOldJob)->withoutOverlapping()->everyThirtyMinutes();
         $schedule->job(new SxGeoUpdateJob)->dailyAt('03:07');
         $schedule->job(new DiscountAfterRegisterJob)->dailyAt('09:00');
         $schedule->job(new SendInstallmentNoticeJob)->dailyAt('09:05');

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\UpdateSizesAvailabilitiesTableJob;
+use App\Jobs\AvailableSizes\UpdateAvailabilityJob;
 use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
 use App\Models\User\User;
@@ -34,7 +34,7 @@ class DebugController extends Controller
 
     public function testSqlServerConnection()
     {
-        UpdateSizesAvailabilitiesTableJob::dispatchSync();
+        UpdateAvailabilityJob::dispatchSync();
     }
 
     /**

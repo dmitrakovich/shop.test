@@ -4,7 +4,7 @@ use App\Models\Size;
 use App\Models\Brand;
 use App\Models\Config;
 use App\Models\Product;
-use App\Jobs\UpdateAvailabilityJob;
+use App\Jobs\UpdateAvailabilityOldJob;
 use Illuminate\Support\Facades\Log;
 
 $availabilityConfigModel = Config::findOrFail('availability');
@@ -18,7 +18,7 @@ $service_message = "";
 if (isset($_POST['act'])) {
 	switch ($_POST['act']) {
         case "start":
-            $service_message = UpdateAvailabilityJob::dispatchSync(true);
+            $service_message = UpdateAvailabilityOldJob::dispatchSync(true);
 			break;
 
 		case "publish":

@@ -1,33 +1,21 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\AvailableSizes;
 
 use App\Jobs\Ssh\CreateTunnelJob;
 use App\Jobs\Ssh\DestroyTunnelJob;
+use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\SizesAvailability;
 use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
 
-class UpdateSizesAvailabilitiesTableJob extends AbstractJob
+class UpdateSizesAvailabilitiesTableJob extends AbstractAvailableSizesJob
 {
     /**
      * Table name in 1C, contains the quantity in stock
      */
     const ONE_C_STOCK_QUANTITY_TABLE = 'SC6021';
-
-    /**
-     * The number of seconds the job can run before timing out.
-     *
-     * @var int
-     */
-    public $timeout = 600;
-
-    /**
-     * @var array
-     */
-    protected $contextVars = ['usedMemory'];
 
     /**
      * Current product identificators
@@ -66,35 +54,35 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractJob
      */
     public function handle()
     {
-        $this->debug('Подготовка к синхронизации');
+        $this->log('Подготовка к синхронизации');
         $this->setCurrentStockIds();
         $this->setCurrentProductIds();
         $this->setCurrentBrandIds();
         $this->setCurrentCategoryIds();
 
-        $this->debug('Получение наличия с 1С');
+        $this->log('Получение наличия с 1С');
         CreateTunnelJob::dispatchSync();
 
-        $sizesAvailability = [];
+        $availableSizes = [];
         DB::connection('sqlsrv')
             ->table(self::ONE_C_STOCK_QUANTITY_TABLE)
             ->select($this->getStockQuantityFields())
             ->orderBy('ROW_ID')
             ->whereIn('SP5996', array_keys($this->stockIds))
-            ->each(function (\stdClass $stockUnit) use (&$sizesAvailability) {
-                $sizesAvailability[] = $this->prepareSizesAvailabilityData($stockUnit);
+            ->each(function (\stdClass $stockUnit) use (&$availableSizes) {
+                $availableSizes[] = $this->prepareAvailableSizesData($stockUnit);
             });
 
         DestroyTunnelJob::dispatchSync();
 
-        $this->complete('Запись полученных и сопоставленных данных в базу');
-        $sizesAvailabilityTable = (new SizesAvailability)->getTable();
-        DB::table($sizesAvailabilityTable)->truncate();
+        $this->log('Запись полученных и сопоставленных данных в базу');
+        $availableSizesTable = (new AvailableSizes())->getTable();
+        DB::table($availableSizesTable)->truncate();
         DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-        DB::table($sizesAvailabilityTable)->insert($sizesAvailability);
+        DB::table($availableSizesTable)->insert($availableSizes);
         DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
 
-        $this->complete('Таблица с наличием успешно обновлена');
+        $this->log('Таблица с наличием успешно обновлена');
     }
 
     /**
@@ -194,7 +182,7 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractJob
     /**
      * Prepare size availability data for database insertion
      */
-    protected function prepareSizesAvailabilityData(\stdClass $stockUnit): array
+    protected function prepareAvailableSizesData(\stdClass $stockUnit): array
     {
         $sku = trim($stockUnit->sku);
         $brandId = $this->getCurrentBrandId((int)$stockUnit->brand_id);
