@@ -41,6 +41,11 @@ class SaleService
     private array $discounts = [];
 
     /**
+     * Cache for checked products
+     */
+    private array $productHasSale = [];
+
+    /**
      * Sign of the presence in the basket of goods with a discount
      */
     private ?bool $hasSaleProductsInCart = null;
@@ -106,12 +111,12 @@ class SaleService
     /**
      * Check user's discount
      */
-    protected function hasUserSale(): bool
+    protected function hasUserSale(Product $product): bool
     {
         if (isset($this->disabled[self::USER_SALE_KEY])) {
             return false;
         }
-        $addUserSale = $this->hasSale() ? $this->sale->add_client_sale : true;
+        $addUserSale = $this->productHasGeneralSale($product) ? $this->sale->add_client_sale : true;
 
         return $addUserSale && !is_null($this->userDiscount);
     }
@@ -130,22 +135,14 @@ class SaleService
     /**
      * Check user's discount
      */
-    protected function hasReviewSale(): bool
+    protected function hasReviewSale(Product $product): bool
     {
         if (isset($this->disabled[self::REVIEW_SALE_KEY])) {
             return false;
         }
-        $addReviewSale = $this->hasSale() ? $this->sale->add_review_sale : true;
+        $addReviewSale = $this->productHasGeneralSale($product) ? $this->sale->add_review_sale : true;
 
         return $addReviewSale && !is_null($this->reviewDiscount);
-    }
-
-    /**
-     * Check any sale
-     */
-    protected function hasAnySale(): bool
-    {
-        return $this->hasSale() || $this->hasUserSale() || $this->hasReviewSale();
     }
 
     /**
@@ -211,9 +208,25 @@ class SaleService
     }
 
     /**
-     * Mix check sale conditions
+     * Check if sale is applied to a product
+     */
+    protected function productHasGeneralSale(Product $product): bool
+    {
+        return $this->hasSale() && $this->checkSaleConditions($product);
+    }
+
+    /**
+     * Check the terms of sale for a product using the cache
      */
     protected function checkSaleConditions(Product $product): bool
+    {
+        return $this->productHasSale[$product->id] ??= $this->_checkSaleConditions($product);
+    }
+
+    /**
+     * Mix check sale conditions
+     */
+    protected function _checkSaleConditions(Product $product): bool
     {
         return $this->checkSpecialConditions($product->price, $product->old_price)
             && $this->checkCategory($product->category_id)
@@ -356,7 +369,7 @@ class SaleService
             $finalPrice = $sale->price;
         }
 
-        $this->applyUserSales($sales, $finalPrice);
+        $this->applyUserSales($product, $sales, $finalPrice);
 
         $product->setSales($sales, $finalPrice);
     }
@@ -364,15 +377,15 @@ class SaleService
     /**
      * Apply user's sales to sales list by price
      */
-    private function applyUserSales(array &$sales, float &$finalPrice): void
+    private function applyUserSales(Product $product, array &$sales, float &$finalPrice): void
     {
-        if ($this->hasUserSale()) {
+        if ($this->hasUserSale($product)) {
             $sale = $this->getUserSaleData($finalPrice);
             $sales[self::USER_SALE_KEY] = $sale;
             $finalPrice = $sale->price;
         }
 
-        if ($this->hasReviewSale()) {
+        if ($this->hasReviewSale($product)) {
             $sale = $this->getReviewSaleData($finalPrice);
             $sales[self::REVIEW_SALE_KEY] = $sale;
             $finalPrice = $sale->price;
@@ -408,33 +421,27 @@ class SaleService
      */
     public function applyToCart(Cart $cart): void
     {
+        $productSaleList = [];
         $this->hasSaleProductsInCart = false;
-
-        if (!$this->hasAnySale()) {
-            $cart->items->each(function (CartData $item) {
-                return $item->product->setSales([], $item->product->price);
-            });
-
-            return;
-        }
 
         $products = $cart->items->map(fn ($item) => $item->product);
         $products = $products->sortBy('price');
 
-        $productSaleList = [];
-        /** @var Product $product */
-        foreach ($products as $product) {
-            if ($this->hasSale() && $this->checkSaleConditions($product)) {
-                $productSaleList[$product->id] = [
-                    'price' => $product->price,
-                    'oldPrice' => $product->getFixedOldPrice(),
-                ];
-                $this->hasSaleProductsInCart = true;
+        if ($this->hasSale()) {
+            /** @var Product $product */
+            foreach ($products as $product) {
+                if ($this->checkSaleConditions($product)) {
+                    $productSaleList[$product->id] = [
+                        'price' => $product->price,
+                        'oldPrice' => $product->getFixedOldPrice(),
+                    ];
+                    $this->hasSaleProductsInCart = true;
+                }
             }
-        }
-        $index = 0;
-        foreach ($productSaleList as &$sale) {
-            $sale = $this->getSaleData($sale['price'], $sale['oldPrice'], $index++, count($productSaleList));
+            $index = 0;
+            foreach ($productSaleList as &$sale) {
+                $sale = $this->getSaleData($sale['price'], $sale['oldPrice'], $index++, count($productSaleList));
+            }
         }
 
         foreach ($cart->items as $item) {
@@ -442,7 +449,7 @@ class SaleService
             $sales = $generalSale ? [self::GENERAL_SALE_KEY => $generalSale] : [];
             $finalPrice = $generalSale ? $generalSale->price : $item->product->price;
 
-            $this->applyUserSales($sales, $finalPrice);
+            $this->applyUserSales($item->product, $sales, $finalPrice);
             $item->product->setSales($sales, $finalPrice);
         }
     }
