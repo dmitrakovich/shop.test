@@ -30,7 +30,7 @@ class GroupController extends AdminController
         $grid->column('id', 'Идентификатор');
         $grid->column('name', 'Название');
         $grid->column('discount', 'Скидка')->suffix('%');
-        $grid->column('enum_type_id', 'Тип группы')->display(fn() => $this->enum_type_id ? $this->enum_type_id->name() : null);
+        $grid->column('enum_type_id', 'Тип группы')->display(fn () => $this->enum_type_id ? $this->enum_type_id->name() : null);
 
         $grid->disableFilter();
         $grid->actions(function ($actions) {

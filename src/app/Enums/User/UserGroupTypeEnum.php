@@ -18,7 +18,6 @@ enum UserGroupTypeEnum: int
         };
     }
 
-
     /**
      * Get list
      */

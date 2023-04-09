@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Enums\User\UserGroupTypeEnum;
-
 use App\Models\Category;
 use App\Models\InfoPage;
 use App\Models\User\Group;
@@ -35,8 +34,9 @@ class ViewMiddleware
         );
         $userDiscounts = Cache::remember(config('cache_config.global_user_discounts.key'), 600, function () {
             $groups = Group::whereNotNull('enum_type_id')->get();
+
             return [
-                'registered' => $groups->where('enum_type_id', UserGroupTypeEnum::REGISTERED)->first()
+                'registered' => $groups->where('enum_type_id', UserGroupTypeEnum::REGISTERED)->first(),
             ];
         });
         View::share('g_navCategories', $navCategories);

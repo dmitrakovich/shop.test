@@ -16,9 +16,11 @@
 
                 @if (isset($g_userDiscounts['registered']->discount))
                     <div class="alert alert-primary h4 text-dark text-center" role="alert">
-                        {{ $g_userDiscounts['registered']->discount }}% скидки <span class="font-weight-normal">
+                        {{ $g_userDiscounts['registered']->discount }}% скидки <span
+                            class="font-weight-normal">
                             на первый заказ за регистрацию!
-                        </span><br><span class="font-weight-normal font-size-12">* скидка не суммируется с акциями
+                        </span><br><span class="font-weight-normal font-size-12">* скидка не суммируется с
+                            акциями
                             и промокодами</span>
                     </div>
                 @endif
@@ -50,8 +52,9 @@
                                 <div class="form-group row">
                                     <div class="col-md-12">
                                         <input id="otp" type="text"
-                                            class="form-control @error('otp') is-invalid @enderror" name="otp"
-                                            placeholder="Введите код" required autocomplete="off" />
+                                            class="form-control @error('otp') is-invalid @enderror"
+                                            name="otp" placeholder="Введите код" required
+                                            autocomplete="off" />
                                         @error('otp')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -65,7 +68,8 @@
                                             <span id="sms-throttle-timer-wrapper">
                                                 <span class="text-muted">Запросить код повторно через </span>
                                                 <span class="text-danger">
-                                                    00:<span id="sms-throttle-timer">{{ session('smsThrottle') }}</span>
+                                                    00:<span
+                                                        id="sms-throttle-timer">{{ session('smsThrottle') }}</span>
                                                 </span>
                                             </span>
                                             <script>

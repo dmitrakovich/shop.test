@@ -3,7 +3,6 @@
 namespace App\Jobs\AvailableSizes;
 
 use App\Models\AvailableSizes;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class UpdateAvailabilityJob extends AbstractAvailableSizesJob
