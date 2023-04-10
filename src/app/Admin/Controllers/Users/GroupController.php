@@ -15,7 +15,7 @@ class GroupController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Group';
+    protected $title = 'Группы пользователей';
 
     /**
      * Make a grid builder.
@@ -30,6 +30,7 @@ class GroupController extends AdminController
         $grid->column('name', 'Название');
         $grid->column('discount', 'Скидка')->suffix('%');
 
+        $grid->disableFilter();
         $grid->actions(function ($actions) {
             $actions->disableDelete();
             $actions->disableView();

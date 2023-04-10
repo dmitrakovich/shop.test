@@ -57,7 +57,7 @@ abstract class AbstractFeed
      */
     public function getProductImages(MediaCollection $media): array
     {
-        return  array_slice($media->map(function ($image) {
+        return array_slice($media->map(function ($image) {
             return $image->getUrl('full');
         })->toArray(), 0, self::MAX_IMAGE_COUNT);
     }

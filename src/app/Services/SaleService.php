@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Facades\Currency;
 use App\Models\Cart;
-use App\Models\CartData;
 use App\Models\Config;
 use App\Models\Data\OrderData;
 use App\Models\Data\SaleData;

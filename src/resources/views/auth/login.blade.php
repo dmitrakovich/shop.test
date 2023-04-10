@@ -14,12 +14,16 @@
                     </div>
                 @endif
 
-                <div class="alert alert-primary h4 text-dark text-center" role="alert">
-                    10% скидки <span class="font-weight-normal">
-                        на первый заказ за регистрацию!
-                    </span><br><span class="font-weight-normal font-size-12">* скидка не суммируется с акциями
-                        и промокодами</span>
-                </div>
+                @if (isset($g_userDiscounts['registered']->discount))
+                    <div class="alert alert-primary h4 text-dark text-center" role="alert">
+                        {{ $g_userDiscounts['registered']->discount }}% скидки <span
+                            class="font-weight-normal">
+                            на первый заказ за регистрацию!
+                        </span><br><span class="font-weight-normal font-size-12">* скидка не суммируется с
+                            акциями
+                            и промокодами</span>
+                    </div>
+                @endif
 
                 <div class="card mt-2 mb-5">
                     <div class="card-header">
@@ -85,7 +89,7 @@
                                             </script>
                                         @endif
                                         <button type="button" id="resend-otp-button"
-                                            class="btn btn-link p-0 text-muted @if (session('smsThrottle') > 0) d-none @endif"
+                                            class="btn btn-link text-muted @if (session('smsThrottle') > 0) d-none @endif p-0"
                                             style="border-bottom: 1px dashed #999999">
                                             Запросить код еше раз
                                         </button>

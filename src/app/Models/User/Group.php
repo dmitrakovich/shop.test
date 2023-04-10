@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class Group
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
 class Group extends Model
 {
     use HasFactory;
+
+    const REGISTERED = 1;
 
     /**
      * The table associated with the model.
@@ -36,6 +39,14 @@ class Group extends Model
      * @var array<int, string>
      */
     protected $fillable = ['name', 'discount'];
+
+    public static function boot()
+    {
+        parent::boot();
+        self::saved(function ($model) {
+            Cache::forget(config('cache_config.global_user_discounts.key'));
+        });
+    }
 
     /**
      * Default model data
