@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Cache;
 class Group extends Model
 {
     use HasFactory;
+
     const REGISTERED = 1;
 
     /**
