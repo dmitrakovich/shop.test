@@ -31,7 +31,7 @@ class ViewMiddleware
                 return InfoPage::get(['slug', 'name', 'icon'])->toArray();
             }
         );
-        $userDiscounts = Cache::remember(config('cache_config.global_user_discounts.key'), 600, function () {
+        $userDiscounts = Cache::rememberForever(config('cache_config.global_user_discounts.key'), function () {
             $registeredGroup = Group::where('id', Group::REGISTERED)->first();
 
             return [
