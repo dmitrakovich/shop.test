@@ -2,7 +2,6 @@
 
 namespace App\Models\User;
 
-use App\Enums\User\UserGroupTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -17,6 +16,7 @@ use Illuminate\Support\Facades\Cache;
 class Group extends Model
 {
     use HasFactory;
+    const REGISTERED = 1;
 
     /**
      * The table associated with the model.
@@ -37,16 +37,7 @@ class Group extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'discount', 'enum_type_id'];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'enum_type_id' => UserGroupTypeEnum::class,
-    ];
+    protected $fillable = ['name', 'discount'];
 
     public static function boot()
     {

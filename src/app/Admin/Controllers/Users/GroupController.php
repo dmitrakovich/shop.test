@@ -2,7 +2,6 @@
 
 namespace App\Admin\Controllers\Users;
 
-use App\Enums\User\UserGroupTypeEnum;
 use App\Models\User\Group;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -30,7 +29,6 @@ class GroupController extends AdminController
         $grid->column('id', 'Идентификатор');
         $grid->column('name', 'Название');
         $grid->column('discount', 'Скидка')->suffix('%');
-        $grid->column('enum_type_id', 'Тип группы')->display(fn () => $this->enum_type_id ? $this->enum_type_id->name() : null);
 
         $grid->disableFilter();
         $grid->actions(function ($actions) {
@@ -63,7 +61,6 @@ class GroupController extends AdminController
 
         $form->text('name', 'Название')->required();
         $form->decimal('discount', 'Скидка (%)')->default(0.00)->required();
-        $form->select('enum_type_id', 'Тип группы')->options(UserGroupTypeEnum::list());
 
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
