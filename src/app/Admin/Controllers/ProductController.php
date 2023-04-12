@@ -9,6 +9,7 @@ use App\Admin\Actions\Product\RemoveFromProductGroup;
 use App\Admin\Models\Media;
 use App\Admin\Models\Product;
 use App\Admin\Services\UploadImagesService;
+use App\Enums\Product\ProductLabels;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Collection;
@@ -25,6 +26,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -114,8 +116,7 @@ class ProductController extends AdminController
      */
     public function restore(int $productId)
     {
-        $product = Product::withTrashed()->findOrFail($productId, ['id']);
-        $product->restore();
+        Product::withTrashed()->findOrFail($productId, ['id', 'label_id'])->restore();
 
         return back();
     }
@@ -181,14 +182,10 @@ class ProductController extends AdminController
             $form->text('heel_txt', 'Высота каблука/подошвы');
 
             $form->divider();
-            $form->select('label_id', 'Метка')->options([
-                0 => 'нет',
-                1 => 'хит',
-                2 => 'ликвидация',
-                3 => 'не выгружать',
-            ]);
+            $form->select('label_id', 'Метка')->options(ProductLabels::list());
             $form->text('rating', 'Рейтинг')->disable();
             $form->multipleSelect('tags', 'Теги')->options(Tag::pluck('name', 'id'));
+            $form->hidden('deleted_at', 'Дата снятия с наличия');
         });
 
         $form->column(12, function ($form) {
@@ -204,28 +201,22 @@ class ProductController extends AdminController
         }
 
         $form->saving(function (Form $form) {
+            if (!$this->checkIfMediaAdded($form)) {
+                return $this->mediaNotAddedError();
+            }
             if (empty($form->slug)) {
                 $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->sku);
             }
             if (is_null($form->manufacturer_id)) {
                 $form->manufacturer_id = 0;
             }
+            if ((int)$form->label_id === ProductLabels::DO_NOT_PUBLISH->value) {
+                $form->deleted_at = now();
+            }
 
-            $existsProduct = Product::withTrashed()
-                ->where('slug', $form->slug)
-                ->when($form->isEditing(), function ($query) use ($form) {
-                    $query->where('id', '!=', $form->model()->id);
-                })
-                ->first(['id']);
-
-            if ($existsProduct) {
-                $editLink = route('admin.products.edit', $existsProduct->id);
-                $error = new MessageBag([
-                    'title' => 'Товар с таким названием есть',
-                    'message' => '<a href="' . $editLink . '">Cсылка на редактирование этого товара<a>',
-                ]);
-
-                return back()->with(compact('error'));
+            $existingProduct = $this->findExistingProduct($form);
+            if ($existingProduct) {
+                return $this->productExistsError($existingProduct->id);
             }
         });
 
@@ -465,5 +456,59 @@ class ProductController extends AdminController
         // Log::info($data);
         $response = Http::asForm()->post('https://modny.by/saveimg_gRf5lP46jRm8s.php', $data);
         admin_info('Modny.by:', $response->body());
+    }
+
+    /**
+     * Checks if photos have been added to the product.
+     */
+    protected function checkIfMediaAdded(Form $form): bool
+    {
+        $existing = count($form->model()->getMedia());
+        $added = count($form->input('add_images') ?? []);
+        $removed = count($form->input('remove_images') ?? []);
+
+        return ($existing + $added - $removed) > 0;
+    }
+
+    /**
+     * Returns a redirect response with an error message indicating that no photos have been added to the product.
+     *
+     * @return RedirectResponse
+     */
+    protected function mediaNotAddedError(): RedirectResponse
+    {
+        $error = new MessageBag([
+            'title' => 'Не добавлены фото товара!',
+            'message' => 'Добавьте фото к товару.',
+        ]);
+
+        return back()->with(compact('error'))->withInput();
+    }
+
+    /**
+     * Finds an existing product with the same slug as the one being edited/created.
+     */
+    protected function findExistingProduct(Form $form): ?Product
+    {
+        return Product::withTrashed()
+            ->where('slug', $form->slug)
+            ->when($form->isEditing(), function ($query) use ($form) {
+                $query->where('id', '!=', $form->model()->id);
+            })
+            ->first(['id']);
+    }
+
+    /**
+     * Returns a redirect response with an error message indicating that a product with the same name already exists.
+     */
+    protected function productExistsError(int $productId): RedirectResponse
+    {
+        $editLink = route('admin.products.edit', $productId);
+        $error = new MessageBag([
+            'title' => 'Товар с таким названием есть',
+            'message' => '<a href="' . $editLink . '">Cсылка на редактирование этого товара<a>',
+        ]);
+
+        return back()->with(compact('error'));
     }
 }

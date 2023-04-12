@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Product\ProductLabels;
 use App\Facades\Currency;
 use App\Services\SearchService;
 use App\Traits\ProductSales;
@@ -422,5 +423,18 @@ class Product extends Model implements HasMedia
     public function availableInstallment(): bool
     {
         return $this->getPrice() >= Config::findCacheable('installment')['min_price'];
+    }
+
+    /**
+     * Restore a soft-deleted model instance.
+     */
+    public function restore(): bool
+    {
+        if ($this->label_id === ProductLabels::DO_NOT_PUBLISH->value) {
+            $this->label_id = ProductLabels::NONE->value;
+            $this->save();
+        }
+
+        return parent::restore();
     }
 }
