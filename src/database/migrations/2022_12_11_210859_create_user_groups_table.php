@@ -20,7 +20,7 @@ return new class extends Migration
             $table->float('discount')->default(0);
         });
 
-        DB::table('user_groups')->insert(['name' => 'Зарегистрированные', 'discount' => 5]);
+        DB::table('user_groups')->insert(['id' => 1, 'name' => 'Зарегистрированные', 'discount' => 5]);
 
         Schema::table('users', function (Blueprint $table) {
             $table->renameColumn('usergroup_id', 'group_id');

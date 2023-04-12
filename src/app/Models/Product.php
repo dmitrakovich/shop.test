@@ -19,8 +19,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * Class Product
  *
  * @property int $id
- * @property \App\Models\Category $category
- * @property \App\Models\Brand $brand
+ * @property Category $category
+ * @property Brand $brand
  * @property Collection<Size> $sizes
  * @property string $sku (new title)
  * @property string $slug
@@ -37,6 +37,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Collection|AvailableSizes[] $sizesAvailability
  * ...
  */
 class Product extends Model implements HasMedia
@@ -172,6 +173,14 @@ class Product extends Model implements HasMedia
     public function productGroup()
     {
         return $this->belongsTo(ProductGroup::class);
+    }
+
+    /**
+     * Get the available sizes associated with the product.
+     */
+    public function availableSizes(): Relations\HasMany
+    {
+        return $this->hasMany(AvailableSizes::class);
     }
 
     /**
