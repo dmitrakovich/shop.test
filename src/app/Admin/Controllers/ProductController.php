@@ -472,8 +472,6 @@ class ProductController extends AdminController
 
     /**
      * Returns a redirect response with an error message indicating that no photos have been added to the product.
-     *
-     * @return RedirectResponse
      */
     protected function mediaNotAddedError(): RedirectResponse
     {

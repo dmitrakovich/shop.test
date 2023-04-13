@@ -78,7 +78,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
             ->join('available_sizes', 'products.id', '=', 'available_sizes.product_id')
             ->update([
                 'products.buy_price' => DB::raw('available_sizes.buy_price'),
-                'products.price' => DB::raw('available_sizes.sell_price')
+                'products.price' => DB::raw('available_sizes.sell_price'),
             ]);
     }
 
@@ -94,7 +94,6 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
             ->whereNotIn('label_id', $this->excludedLabels())
             ->restore();
     }
-
 
     protected function updateSizes(): array
     {

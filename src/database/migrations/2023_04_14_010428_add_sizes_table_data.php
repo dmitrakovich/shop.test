@@ -21,7 +21,7 @@ return new class extends Migration
                 'slug' => 'size-' . $size,
                 'value' => $size,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
     }
@@ -33,6 +33,6 @@ return new class extends Migration
     {
         $slugs = array_map(fn (int $size) => 'size-' . $size, self::SIZES);
 
-        DB::table('sizes')->whereIn('slug',  $slugs)->delete();
+        DB::table('sizes')->whereIn('slug', $slugs)->delete();
     }
 };
