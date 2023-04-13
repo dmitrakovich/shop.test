@@ -2,6 +2,7 @@
 
 namespace App\Jobs\AvailableSizes;
 
+use App\Enums\Product\ProductLabels;
 use App\Models\AvailableSizes;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -20,18 +21,29 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         // $count = AvailableSizes::removeEmptySizes();
         // $this->log("Удалено $count записей с пустыми размерами в таблице наличия");
 
-        $count = $this->deleteUnavailableProducts();
-        $this->log("Снято с публикации $count товаров");
+        // $count = $this->deleteUnavailableProducts();
+        // $this->log("Снято с публикации $count товаров");
 
-        // [$attached, $detached] = $this->updateSizes();
+        [$attached, $detached] = $this->updateSizes();
         // $this->log("Удалено $detached размеров");
         // $this->log("Добавлено $attached размеров");
 
-        $count = $this->updatePrices();
-        $this->log("Обновлены цены для $count товаров");
+        // $count = $this->updatePrices();
+        // $this->log("Обновлены цены для $count товаров");
 
-        $count = $this->restoreProducts();
-        $this->log("Опубликовано $count товаров");
+        // $count = $this->restoreProducts();
+        // $this->log("Опубликовано $count товаров");
+    }
+
+    /**
+     * Returns an array of product labels that should be excluded during processing.
+     */
+    protected function excludedLabels(): array
+    {
+        return [
+            ProductLabels::DO_NOT_PUBLISH,
+            ProductLabels::DO_NOT_UPDATE,
+        ];
     }
 
     /**
@@ -41,9 +53,16 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      */
     protected function deleteUnavailableProducts(): int
     {
+        // TODO:
+        // * $query = ...
+        // * $query->get([...]);
+        // * $query->update([...]);
+        // * log
+
         return DB::table('products')
             ->leftJoin('available_sizes', 'products.id', '=', 'available_sizes.product_id')
-            ->whereNull('deleted_at')
+            ->whereNull('products.deleted_at')
+            ->whereNotIn('products.label_id', $this->excludedLabels())
             ->whereNull('available_sizes.product_id')
             ->update(['deleted_at' => now(), 'updated_at' => now()]);
     }
@@ -55,7 +74,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      */
     protected function updatePrices(): int
     {
-       return DB::table('products')
+        return DB::table('products')
             ->join('available_sizes', 'products.id', '=', 'available_sizes.product_id')
             ->update([
                 'products.buy_price' => DB::raw('available_sizes.buy_price'),
@@ -70,23 +89,43 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      */
     protected function restoreProducts(): int
     {
-        return Product::onlyTrashed()->whereHas('availableSizes')->restore();
+        return Product::onlyTrashed()
+            ->whereHas('availableSizes')
+            ->whereNotIn('label_id', $this->excludedLabels())
+            ->restore();
     }
 
 
     protected function updateSizes(): array
     {
-        // сверить размеры
-        // восстановить те что вернулись в наличие
+        $availableSizes = DB::table('available_sizes')
+            ->join('products', 'products.id', '=', 'available_sizes.product_id')
+            ->whereNotNull('product_id')
+            ->whereNotIn('products.label_id', $this->excludedLabels())
+            ->selectRaw('product_id, ' . implode(', ', AvailableSizes::getSumWrappedSizeFields()))
+            ->groupBy('product_id')
+            ->get()
+            ->keyBy('product_id')
+            ->map(function (\stdClass $productSizes) {
+                unset($productSizes->product_id);
+                $filteredSizes = array_filter((array)$productSizes, fn ($size) => (int)$size > 0);
 
-        $sizes = [1,4,5,6,7,8];
+                return array_map(
+                    fn ($sizeField) => AvailableSizes::convertFieldToSizeId($sizeField),
+                    array_keys($filteredSizes)
+                );
+            });
 
-        $products = Product::withTrashed()->with('availableSizes')->has('availableSizes')->limit(20)->get();
-        /** @var Product $product */
-        foreach ($products as $product) {
-            $product->sizes()->sync($sizes);
-        }
-        // dump($products);
+        dd($availableSizes);
+
+        // $existingSizes = DB::table('product_attributes')
+        //     ->where('attribute_type', Size::class)
+        //     ->get();
+        // тоже сгруппировать и отсортировать
+
+        // dump($availableSizes, $existingSizes->first());
+
+        // сверить так, чтобы потом легко в лог было записать
 
         return [1, 6];
     }

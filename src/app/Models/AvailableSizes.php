@@ -51,12 +51,61 @@ class AvailableSizes extends Model
      */
     public static function removeEmptySizes(): int
     {
+        $sizeFieldsSum = implode(' + ', self::getSizeFields());
+
+        return self::query()->whereRaw("$sizeFieldsSum = 0")->delete();
+    }
+
+    /**
+     * Returns an array of size fields.
+     * The array includes the "size_none" field and all size fields from "size_31" to "size_48".
+     */
+    public static function getSizeFields(): array
+    {
         $sizeFields = ['size_none'];
         for ($i = 31; $i <= 48; $i++) {
             $sizeFields[] = 'size_' . $i;
         }
-        $sizeFieldsSum = implode(' + ', $sizeFields);
 
-        return self::query()->whereRaw("$sizeFieldsSum = 0")->delete();
+        return $sizeFields;
+    }
+
+    /**
+     * Returns an array of size fields wrapped in the SUM function.
+     *
+     * The array includes the "size_none" field and all size fields, with each field name
+     * preceded by the SUM function and followed by the original field name as an alias.
+     */
+    public static function getSumWrappedSizeFields(): array
+    {
+        return array_map(fn (string $size) => "SUM($size) as $size", self::getSizeFields());
+    }
+
+    /**
+     * Converts a given field name to its corresponding Size ID.
+     */
+    public static function convertFieldToSizeId(string $field): int
+    {
+        return match ($field) {
+            'size_none' => 1,
+            'size_31' => 20,
+            'size_32' => 21,
+            'size_33' => 2,
+            'size_34' => 3,
+            'size_35' => 4,
+            'size_36' => 5,
+            'size_37' => 6,
+            'size_38' => 7,
+            'size_39' => 8,
+            'size_40' => 9,
+            'size_41' => 10,
+            'size_42' => 22,
+            'size_43' => 23,
+            'size_44' => 24,
+            'size_45' => 25,
+            'size_46' => 26,
+            'size_47' => 27,
+            'size_48' => 28,
+        };
     }
 }
