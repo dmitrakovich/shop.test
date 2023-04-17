@@ -7,7 +7,9 @@ use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Notifications\TestSms;
+use App\Services\LogService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 
@@ -34,7 +36,7 @@ class DebugController extends Controller
 
     public function testSqlServerConnection()
     {
-        UpdateAvailabilityJob::dispatchSync();
+        // UpdateAvailabilityJob::dispatchSync(app(LogService::class));
     }
 
     /**

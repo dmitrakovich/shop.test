@@ -5,10 +5,27 @@ namespace App\Jobs\AvailableSizes;
 use App\Enums\Product\ProductLabels;
 use App\Models\AvailableSizes;
 use App\Models\Product;
+use App\Models\Size;
+use App\Services\LogService;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class UpdateAvailabilityJob extends AbstractAvailableSizesJob
 {
+    /**
+     * Max items for one sql query for add/delete product sizes
+     */
+    const SIZE_QUERY_CHUNK = 200;
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct(private LogService $logService)
+    {
+    }
+
     /**
      * Execute the job.
      *
@@ -18,21 +35,21 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
     {
         // UpdateSizesAvailabilitiesTableJob::dispatchSync();
 
-        // $count = AvailableSizes::removeEmptySizes();
-        // $this->log("Удалено $count записей с пустыми размерами в таблице наличия");
+        $count = AvailableSizes::removeEmptySizes();
+        $this->log("Удалено $count записей с пустыми размерами в таблице наличия");
 
-        // $count = $this->deleteUnavailableProducts();
-        // $this->log("Снято с публикации $count товаров");
+        $count = $this->deleteUnavailableProducts();
+        $this->log("Снято с публикации $count товаров");
 
         [$attached, $detached] = $this->updateSizes();
-        // $this->log("Удалено $detached размеров");
-        // $this->log("Добавлено $attached размеров");
+        $this->log("Удалено $detached размеров");
+        $this->log("Добавлено $attached размеров");
 
         // $count = $this->updatePrices();
         // $this->log("Обновлены цены для $count товаров");
 
-        // $count = $this->restoreProducts();
-        // $this->log("Опубликовано $count товаров");
+        $count = $this->restoreProducts();
+        $this->log("Опубликовано $count товаров");
     }
 
     /**
@@ -97,6 +114,16 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
 
     protected function updateSizes(): array
     {
+        $existingSizes = [];
+        DB::table('product_attributes')
+            ->join('products', 'products.id', '=', 'product_attributes.product_id')
+            ->where('attribute_type', Size::class)
+            ->whereNotIn('products.label_id', $this->excludedLabels())
+            ->get(['product_id', 'attribute_id'])
+            ->each(function (\stdClass $attribute) use (&$existingSizes) {
+                $existingSizes[$attribute->product_id][] = $attribute->attribute_id;
+            });
+
         $availableSizes = DB::table('available_sizes')
             ->join('products', 'products.id', '=', 'available_sizes.product_id')
             ->whereNotNull('product_id')
@@ -113,19 +140,59 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
                     fn ($sizeField) => AvailableSizes::convertFieldToSizeId($sizeField),
                     array_keys($filteredSizes)
                 );
-            });
+            })
+            ->toArray();
 
-        dd($availableSizes);
+        $detached = $this->arrayDiffAssocRecursive($existingSizes, $availableSizes);
+        $attached = $this->arrayDiffAssocRecursive($availableSizes, $existingSizes);
 
-        // $existingSizes = DB::table('product_attributes')
-        //     ->where('attribute_type', Size::class)
-        //     ->get();
-        // тоже сгруппировать и отсортировать
+        foreach (array_chunk($detached, self::SIZE_QUERY_CHUNK, true) as $detachChunk) {
+            $detachQuery = DB::table('product_attributes');
+            foreach ($detachChunk as $productId => $sizeIds) {
+                foreach ($sizeIds as $sizeId) {
+                    $detachQuery->orWhere(function (Builder $query) use ($productId, $sizeId) {
+                        $query->where('product_id', $productId)
+                            ->where('attribute_type', Size::class)
+                            ->where('attribute_id', $sizeId);
+                    });
+                }
+            }
+            $detachQuery->delete();
+        }
 
-        // dump($availableSizes, $existingSizes->first());
+        foreach (array_chunk($attached, self::SIZE_QUERY_CHUNK * 10, true) as $attachChunk) {
+            $attachData = [];
+            foreach ($attachChunk as $productId => $sizeIds) {
+                foreach ($sizeIds as $sizeId) {
+                    $attachData[] = [
+                        'product_id' => $productId,
+                        'attribute_type' => Size::class,
+                        'attribute_id' => $sizeId,
+                    ];
+                }
+            }
+            DB::table('product_attributes')->insert($attachData);
+        }
 
-        // сверить так, чтобы потом легко в лог было записать
+        return [
+            array_sum(array_map('count', $attached)),
+            array_sum(array_map('count', $detached)),
+        ];
+    }
 
-        return [1, 6];
+    /**
+     * Recursively finds differences between two arrays by keys and values.
+     */
+    private function arrayDiffAssocRecursive(array $array1, array $array2): array
+    {
+        $difference = [];
+        foreach ($array1 as $key => $value) {
+            if (!isset($array2[$key])) {
+                $difference[$key] = $value;
+            } elseif ($array2[$key] !== $value) {
+                $difference[$key] = array_diff($value, $array2[$key]);
+            }
+        }
+        return array_filter($difference);
     }
 }
