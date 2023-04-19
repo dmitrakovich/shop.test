@@ -229,7 +229,7 @@ class SliderService
         $cacheConfig = config('cache_config.product_group');
         $products = Cache::remember($cacheConfig['key'] . $productGroupId, $cacheConfig['ttl'], function () use ($productGroupId, $slider) {
             $products = Product::where('product_group_id', $productGroupId)
-                    ->with(['media', 'category', 'brand', 'styles'])->limit($slider->count ?? 12)->get();
+                ->with(['media', 'category', 'brand', 'styles'])->limit($slider->count ?? 12)->get();
 
             return $products->map(function ($product) {
                 return [

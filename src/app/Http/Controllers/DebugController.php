@@ -9,7 +9,6 @@ use App\Models\User\User;
 use App\Notifications\TestSms;
 use App\Services\LogService;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 

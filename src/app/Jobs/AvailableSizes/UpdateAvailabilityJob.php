@@ -193,6 +193,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
                 $difference[$key] = array_diff($value, $array2[$key]);
             }
         }
+
         return array_filter($difference);
     }
 }

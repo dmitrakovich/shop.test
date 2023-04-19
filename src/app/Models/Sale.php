@@ -69,10 +69,10 @@ class Sale extends Model
             return $query->where('start_datetime', '<', now())
                 ->orWhereNull('start_datetime');
         })
-        ->where(function ($query) {
-            return $query->where('end_datetime', '>=', now())
-                ->orWhereNull('end_datetime');
-        });
+            ->where(function ($query) {
+                return $query->where('end_datetime', '>=', now())
+                    ->orWhereNull('end_datetime');
+            });
     }
 
     /**
