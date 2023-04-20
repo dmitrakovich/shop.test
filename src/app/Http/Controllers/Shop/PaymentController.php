@@ -23,8 +23,8 @@ class PaymentController extends BaseController
         }
 
         SeoFacade::setTitle('Счёт № ' . $online_payment->payment_num)
-          ->setDescription('Счёт № ' . $online_payment->payment_num)
-          ->setRobots('noindex, nofollow');
+            ->setDescription('Счёт № ' . $online_payment->payment_num)
+            ->setRobots('noindex, nofollow');
 
         return view('shop.payment.erip', ['online_payment' => $online_payment]);
     }
@@ -39,8 +39,8 @@ class PaymentController extends BaseController
         $payment = $paymentService->getPaymentByLinkCode($linkCode);
         if ($payment) {
             SeoFacade::setTitle('Счёт № ' . $payment->payment_num)
-              ->setDescription('Счёт № ' . $payment->payment_num)
-              ->setRobots('noindex, nofollow');
+                ->setDescription('Счёт № ' . $payment->payment_num)
+                ->setRobots('noindex, nofollow');
 
             return view('shop.payment.yandex', [
                 'payment' => $payment,
@@ -58,8 +58,8 @@ class PaymentController extends BaseController
         $payment = $paymentService->getPaymentByLinkCode($linkCode);
         if ($payment) {
             SeoFacade::setTitle('Счёт № ' . $payment->payment_num)
-              ->setDescription('Счёт № ' . $payment->payment_num)
-              ->setRobots('noindex, nofollow');
+                ->setDescription('Счёт № ' . $payment->payment_num)
+                ->setRobots('noindex, nofollow');
 
             return view('shop.payment.payment-link-code', [
                 'payment' => $payment,

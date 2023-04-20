@@ -34,21 +34,21 @@ class SitemapService
             switch ($sitemapFilesKey) {
                 case 'products':
                     Product::withTrashed()
-                      ->with('category')
-                      ->select('id', 'slug', 'category_id')
-                      ->orderBy('id', 'asc')
-                      ->chunk($sitemapLimit, function ($products) use ($path, $sitemapFile, &$sitemapPart) {
-                          $tempPath = $path . '/' . uniqid() . '.xml';
-                          $finalPath = $path . '/' . $sitemapFile['file_name'] . ($sitemapPart ? ('-' . $sitemapPart) : '') . '.xml';
-                          $this->urlsetFileStart($tempPath);
-                          foreach ($products as $product) {
-                              $url = url($product->category->getUrl() . '/' . $product->slug);
-                              $data = $this->getUrl($url, $sitemapFile['changefreq'], $sitemapFile['priority']);
-                              $this->urlsetAppendFile($tempPath, $data);
-                          }
-                          $this->urlsetFileEnd($tempPath, $finalPath);
-                          $sitemapPart++;
-                      });
+                        ->with('category')
+                        ->select('id', 'slug', 'category_id')
+                        ->orderBy('id', 'asc')
+                        ->chunk($sitemapLimit, function ($products) use ($path, $sitemapFile, &$sitemapPart) {
+                            $tempPath = $path . '/' . uniqid() . '.xml';
+                            $finalPath = $path . '/' . $sitemapFile['file_name'] . ($sitemapPart ? ('-' . $sitemapPart) : '') . '.xml';
+                            $this->urlsetFileStart($tempPath);
+                            foreach ($products as $product) {
+                                $url = url($product->category->getUrl() . '/' . $product->slug);
+                                $data = $this->getUrl($url, $sitemapFile['changefreq'], $sitemapFile['priority']);
+                                $this->urlsetAppendFile($tempPath, $data);
+                            }
+                            $this->urlsetFileEnd($tempPath, $finalPath);
+                            $sitemapPart++;
+                        });
                     break;
                 case 'static':
                     $tempPath = $path . '/' . uniqid() . '.xml';

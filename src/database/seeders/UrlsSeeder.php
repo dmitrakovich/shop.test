@@ -43,8 +43,8 @@ class UrlsSeeder extends Seeder
     private function setSlugs(string $class, bool $withTrashed = false)
     {
         $slugs = (new $class)
-                    ->when($withTrashed, fn ($query) => $query->withTrashed())
-                    ->get(['id', 'slug']);
+            ->when($withTrashed, fn ($query) => $query->withTrashed())
+            ->get(['id', 'slug']);
 
         foreach ($slugs as $slug) {
             $this->slugs[] = [

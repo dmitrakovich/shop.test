@@ -8,4 +8,4 @@ Route::permanentRedirect('/tiktok', '/catalog?utm_source=tiktok&utm_medium=socia
 Route::permanentRedirect('catalog/catalog{any?}', '/' . str_replace('catalog/catalog', 'catalog', class_exists('Request') ? Request::getRequestUri() : 'catalog'))->where('any', '.*');
 
 Route::get('lnk/{short_link:short_link}', fn (ShortLink $shortLink) => redirect($shortLink->full_link))
-  ->missing(fn () => redirect()->route('shop'))->name('short-link');
+    ->missing(fn () => redirect()->route('shop'))->name('short-link');
