@@ -104,8 +104,9 @@ Route::group([
     });
 
     // logs
-    $router->group(['prefix' => 'logs'], function ($router) {
-        $router->resource('sms', Logs\SmsController::class);
+    $router->group(['prefix' => 'logs', 'namespace' => 'Logs'], function ($router) {
+        $router->resource('sms', SmsController::class);
+        $router->resource('inventory', InventoryController::class);
     });
 
     // debug

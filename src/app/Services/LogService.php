@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Logs\InventoryLog;
 use App\Models\Logs\SmsLog;
 
 /**
@@ -39,5 +40,43 @@ class LogService
         $log->save();
 
         return $log;
+    }
+
+    /**
+     * Log availability update data
+     */
+    public function logAvailabilityUpdate(
+        array $restoreProducts,
+        array $deleteProducts,
+        array $addSizes,
+        array $deleteSizes
+    ): void {
+        $logData = [];
+        foreach ($restoreProducts as $productId) {
+            $logData[$productId]['product_id'] = $productId;
+            $logData[$productId]['action'] = InventoryLog::ACTION_RESTORE;
+        }
+        foreach ($deleteProducts as $productId) {
+            $logData[$productId]['product_id'] = $productId;
+            $logData[$productId]['action'] = InventoryLog::ACTION_DELETE;
+        }
+        foreach ($addSizes as $productId => $sizes) {
+            $logData[$productId]['product_id'] = $productId;
+            $logData[$productId]['added_sizes'] = json_encode(array_values($sizes));
+        }
+        foreach ($deleteSizes as $productId => $sizes) {
+            $logData[$productId]['product_id'] = $productId;
+            $logData[$productId]['removed_sizes'] = json_encode(array_values($sizes));
+        }
+
+        $now = now();
+        foreach ($logData as &$data) {
+            $data['action'] ??= InventoryLog::ACTION_UPDATE;
+            $data['added_sizes'] ??= null;
+            $data['removed_sizes'] ??= null;
+            $data['created_at'] = $now;
+        }
+
+        InventoryLog::insert($logData);
     }
 }

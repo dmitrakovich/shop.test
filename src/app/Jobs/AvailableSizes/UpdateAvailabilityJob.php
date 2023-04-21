@@ -18,6 +18,11 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
     const SIZE_QUERY_CHUNK = 200;
 
     /**
+     * Update data for log
+     */
+    protected array $logData = [];
+
+    /**
      * Create a new job instance.
      *
      * @return void
@@ -33,7 +38,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      */
     public function handle()
     {
-        // UpdateSizesAvailabilitiesTableJob::dispatchSync();
+        UpdateSizesAvailabilitiesTableJob::dispatchSync();
 
         $count = AvailableSizes::removeEmptySizes();
         $this->log("Удалено $count записей с пустыми размерами в таблице наличия");
@@ -50,6 +55,9 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
 
         $count = $this->restoreProducts();
         $this->log("Опубликовано $count товаров");
+
+        $this->writeLog();
+        $this->log("Обновление успешно завершено!");
     }
 
     /**
@@ -70,18 +78,15 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      */
     protected function deleteUnavailableProducts(): int
     {
-        // TODO:
-        // * $query = ...
-        // * $query->get([...]);
-        // * $query->update([...]);
-        // * log
-
-        return DB::table('products')
+        $query = DB::table('products')
             ->leftJoin('available_sizes', 'products.id', '=', 'available_sizes.product_id')
             ->whereNull('products.deleted_at')
             ->whereNotIn('products.label_id', $this->excludedLabels())
-            ->whereNull('available_sizes.product_id')
-            ->update(['deleted_at' => now(), 'updated_at' => now()]);
+            ->whereNull('available_sizes.product_id');
+
+        $this->logData['deleteProducts'] = $query->pluck('products.id')->toArray();
+
+        return $query->update(['deleted_at' => now(), 'updated_at' => now()]);
     }
 
     /**
@@ -106,10 +111,13 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      */
     protected function restoreProducts(): int
     {
-        return Product::onlyTrashed()
+        $query = Product::onlyTrashed()
             ->whereHas('availableSizes')
-            ->whereNotIn('label_id', $this->excludedLabels())
-            ->restore();
+            ->whereNotIn('label_id', $this->excludedLabels());
+
+        $this->logData['restoreProducts'] = $query->pluck('id')->toArray();
+
+        return $query->restore();
     }
 
     protected function updateSizes(): array
@@ -145,6 +153,9 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
 
         $detached = $this->arrayDiffAssocRecursive($existingSizes, $availableSizes);
         $attached = $this->arrayDiffAssocRecursive($availableSizes, $existingSizes);
+
+        $this->logData['addSizes'] = $attached;
+        $this->logData['deleteSizes'] = $detached;
 
         foreach (array_chunk($detached, self::SIZE_QUERY_CHUNK, true) as $detachChunk) {
             $detachQuery = DB::table('product_attributes');
@@ -195,5 +206,18 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         }
 
         return array_filter($difference);
+    }
+
+    /**
+     * Write log data to DB
+     */
+    protected function writeLog(): void
+    {
+        $this->logService->logAvailabilityUpdate(
+            $this->logData['restoreProducts'],
+            $this->logData['deleteProducts'],
+            $this->logData['addSizes'],
+            $this->logData['deleteSizes'],
+        );
     }
 }
