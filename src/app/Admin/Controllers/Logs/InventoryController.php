@@ -39,8 +39,11 @@ class InventoryController extends AdminController
 
         $sizeNames = Size::pluck('name', 'id');
         $formatSizes = fn (?array $sizes) => $this->formatSizes($sizes, $sizeNames);
+        $formatProduct = function (array $product) {
+            return "{$product['category']['title']} {$product['brand']['name']} {$product['id']}";
+        };
 
-        $grid->column('product_id', 'Id товара');
+        $grid->column('product', 'Товар')->display($formatProduct);
         $grid->column('action', 'Действие')->using(self::ACTIONS);
         $grid->column('added_sizes', 'Добавленные размеры')->display($formatSizes);
         $grid->column('removed_sizes', 'Удаленные размеры')->display($formatSizes);
