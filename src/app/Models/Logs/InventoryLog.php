@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
  * @property array|null $removed_sizes
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property-read Product $product
+ *
  * @mixin \Eloquent
  */
 class InventoryLog extends Model
