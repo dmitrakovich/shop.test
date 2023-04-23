@@ -57,7 +57,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         $this->log("Опубликовано $count товаров");
 
         $this->writeLog();
-        $this->log("Обновление успешно завершено!");
+        $this->log('Обновление успешно завершено!');
     }
 
     /**
