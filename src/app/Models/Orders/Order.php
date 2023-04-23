@@ -8,6 +8,8 @@ use App\Models\Enum\OrderMethod;
 use App\Models\Logs\SmsLog;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\User;
+use App\Models\Orders\Batch;
+use App\Models\Orders\OrderTrack;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -250,6 +252,22 @@ class Order extends Model
     public function mailings(): Relations\HasMany
     {
         return $this->hasMany(SmsLog::class);
+    }
+
+    /**
+     * Batch
+     */
+    public function batch(): Relations\BelongsTo
+    {
+        return $this->belongsTo(Batch::class);
+    }
+
+    /**
+     * Track number
+     */
+    public function track(): Relations\hasOne
+    {
+        return $this->hasOne(OrderTrack::class);
     }
 
     /**

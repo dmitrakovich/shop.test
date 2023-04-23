@@ -20,11 +20,11 @@
                                 Счет №{{ $order->onlinePayments->first()->payment_num }}
                             </a>
                         @endif
-                    @elseif (in_array($order->status->key, ['sent', 'fitting']) && $order->delivery_track)
+                    @elseif (in_array($order->status->key, ['sent', 'fitting']) && $order->track->track_number)
                         <br>
                         <a
-                            @if ($order->delivery_track_link) href="{{ $order->delivery_track_link }}" @endif>
-                            Трек№ {{ $order->delivery_track }}
+                            @if ($order->track->track_link) href="{{ $order->track->track_link }}" @endif>
+                            Трек№ {{ $order->track->track_number }}
                         </a>
                     @endif
                 </div>
