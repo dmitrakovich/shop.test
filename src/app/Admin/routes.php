@@ -26,7 +26,7 @@ Route::group([
         $router->resource('groups', Users\GroupController::class);
     });
 
-    $router->resource('products', ProductController::class);
+    $router->resource('products', ProductControllerOld::class); // !!!
     $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('products.restore');
 
     $router->group(['prefix' => 'product-attributes', 'namespace' => 'ProductAttributes'], function ($router) {
@@ -99,12 +99,13 @@ Route::group([
     $router->any('sklad', [SkladController::class, 'index']);
 
     // Automation
-    $router->group(['prefix' => 'automation', 'as' => 'automation.'], function ($router) {
-        $router->resource('stock', Automation\StockController::class);
+    $router->group(['prefix' => 'automation', 'namespace' => 'Automation', 'as' => 'automation.'], function ($router) {
+        $router->resource('inventory', InventoryController::class);
+        $router->resource('stock', StockController::class);
     });
 
     // logs
-    $router->group(['prefix' => 'logs', 'namespace' => 'Logs'], function ($router) {
+    $router->group(['prefix' => 'logs', 'namespace' => 'Logs', 'as' => 'logs.'], function ($router) {
         $router->resource('sms', SmsController::class);
         $router->resource('inventory', InventoryController::class);
     });

@@ -17,7 +17,7 @@ class InventoryController extends AdminController
      *
      * @var string
      */
-    protected $title = 'InventoryLog';
+    protected $title = 'История автоматического обновления товаров';
 
     /**
      * Actions list

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * AvailableSizes model
@@ -47,6 +48,63 @@ class AvailableSizes extends Model
     public $timestamps = false;
 
     /**
+     * Map of field names and theirs size ids
+     */
+    const FIELD_TO_SIZE_ID_MAP = [
+        'size_none' => 1,
+        'size_31' => 20,
+        'size_32' => 21,
+        'size_33' => 2,
+        'size_34' => 3,
+        'size_35' => 4,
+        'size_36' => 5,
+        'size_37' => 6,
+        'size_38' => 7,
+        'size_39' => 8,
+        'size_40' => 9,
+        'size_41' => 10,
+        'size_42' => 22,
+        'size_43' => 23,
+        'size_44' => 24,
+        'size_45' => 25,
+        'size_46' => 26,
+        'size_47' => 27,
+        'size_48' => 28,
+    ];
+
+    /**
+     * Get the product that owns the available size.
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * Get the category that owns the available product size.
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Get the brand that owns the available product size.
+     */
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    /**
+     * Get the stock that owns the available size.
+     */
+    public function stock(): BelongsTo
+    {
+        return $this->belongsTo(Stock::class);
+    }
+
+    /**
      * Remove records where sum all sizes = 0
      */
     public static function removeEmptySizes(): int
@@ -86,26 +144,46 @@ class AvailableSizes extends Model
      */
     public static function convertFieldToSizeId(string $field): int
     {
-        return match ($field) {
-            'size_none' => 1,
-            'size_31' => 20,
-            'size_32' => 21,
-            'size_33' => 2,
-            'size_34' => 3,
-            'size_35' => 4,
-            'size_36' => 5,
-            'size_37' => 6,
-            'size_38' => 7,
-            'size_39' => 8,
-            'size_40' => 9,
-            'size_41' => 10,
-            'size_42' => 22,
-            'size_43' => 23,
-            'size_44' => 24,
-            'size_45' => 25,
-            'size_46' => 26,
-            'size_47' => 27,
-            'size_48' => 28,
-        };
+        return self::FIELD_TO_SIZE_ID_MAP[$field];
+    }
+
+    /**
+     * Get the size attributes for this model instance.
+     */
+    protected function getSizeAttributes(): array
+    {
+        return array_map('intval', $this->only($this->getSizeFields()));
+    }
+
+    /**
+     * Get the available size attributes for this model instance.
+     */
+    protected function getAvailableSizeAttributes(): array
+    {
+        return array_filter($this->getSizeAttributes());
+    }
+
+    /**
+     * Get the available size IDs for this model instance.
+     */
+    public function getAvailableSizeIds(): array
+    {
+        return array_map(
+            fn ($field) => self::convertFieldToSizeId($field),
+            array_keys($this->getAvailableSizeAttributes())
+        );
+    }
+
+    /**
+     * Returns a formatted string containing the available sizes for this model instance.
+     */
+    public function getFormatedSizes(): string
+    {
+        $sizes = [];
+        foreach ($this->getAvailableSizeAttributes() as $sizeField => $count) {
+            $sizes[] = $sizeField === 'size_none' ? 'без размера' : str_replace('size_', '', $sizeField);
+        }
+
+        return implode(', ', $sizes);
     }
 }

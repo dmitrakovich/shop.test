@@ -10,7 +10,6 @@ use App\Admin\Models\Media;
 use App\Admin\Models\Product;
 use App\Admin\Services\UploadImagesService;
 use App\Enums\Product\ProductLabels;
-use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Collection;
@@ -29,11 +28,12 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 
-class ProductController extends AdminController
+class ProductControllerOld extends AdminController
 {
     /**
      * Title for current resource.
@@ -129,7 +129,6 @@ class ProductController extends AdminController
     protected function form()
     {
         $form = new Form(new Product());
-        $productFromStock = $this->getStockProduct();
 
         if ($form->isEditing()) {
             $product = Product::withTrashed()->find(request('product'));
@@ -145,7 +144,7 @@ class ProductController extends AdminController
             });
         }
 
-        $form->column(6, function ($form) use ($productFromStock) {
+        $form->column(6, function ($form) {
             $form->html(function ($form) {
                 if ($form->model()->trashed()) {
                     return '<h4 class="text-red">Товар удален</h4>';
@@ -156,22 +155,22 @@ class ProductController extends AdminController
             $form->html(fn ($form) => $uploadImagesService->show($form->model()->getMedia()))->setWidth(12, 0);
             $form->html($this->uploadImagesService->getImagesInput(), 'Картинки');
 
-            $form->text('slug', __('Slug'))->default(Str::slug($productFromStock->sku));
+            $form->text('slug', __('Slug'))->default(Str::slug(request('slug')));
             $form->text('path', 'Путь')->disable();
-            $form->text('sku', 'Артикул')->required()->default($productFromStock->sku);
+            $form->text('sku', 'Артикул')->required()->default(request('title'));
             $form->currency('buy_price', 'Цена покупки')->symbol('BYN');
             $form->currency('price', 'Цена')->symbol('BYN')->required();
             $form->currency('old_price', 'Старая цена')->symbol('BYN');
         });
-        $form->column(6, function ($form) use ($productFromStock) {
-            $form->multipleSelect('sizes', 'Размеры')->options(Size::pluck('name', 'id'))->default($productFromStock->getAvailableSizeIds())->required();
+        $form->column(6, function ($form) {
+            $form->multipleSelect('sizes', 'Размеры')->options(Size::pluck('name', 'id'))->default($this->getSizesIdFormRequest())->required();
             $form->multipleSelect('colors', 'Цвет для фильтра')->options(Color::orderBy('name')->pluck('name', 'id'));
             $form->multipleSelect('fabrics', 'Материал для фильтра')->options(Fabric::orderBy('name')->pluck('name', 'id'));
             $form->multipleSelect('styles', 'Стиль')->options(Style::orderBy('name')->pluck('name', 'id'));
             $form->multipleSelect('heels', 'Тип каблука/подошвы')->options(Heel::pluck('name', 'id'));
-            $form->select('category_id', 'Категория')->options(Category::getFormatedTree())->default($productFromStock->category_id)->required();
+            $form->select('category_id', 'Категория')->options(Category::getFormatedTree())->default($this->getCategoryIdFromRequeset())->required();
             $form->select('season_id', 'Сезон')->options(Season::pluck('name', 'id'))->required();
-            $form->select('brand_id', 'Бренд')->options(Brand::orderBy('name')->pluck('name', 'id'))->required()->default($productFromStock->brand_id);
+            $form->select('brand_id', 'Бренд')->options(Brand::orderBy('name')->pluck('name', 'id'))->required()->default(Brand::where('name', request('brand_name'))->value('id'));
             $form->select('collection_id', 'Коллекция')->options(Collection::pluck('name', 'id'))->required();
             $form->select('manufacturer_id', 'Производитель')->options(Manufacturer::pluck('name', 'id'));
             $form->text('color_txt', 'Цвет');
@@ -297,24 +296,48 @@ class ProductController extends AdminController
         return $grid->render();
     }
 
-    protected function getStockProduct(): AvailableSizes
+    /**
+     * Получить id категории из запроса
+     *
+     * @return int|null
+     */
+    protected function getCategoryIdFromRequeset()
     {
-        if (empty($stockIds = request('stock_ids'))) {
-            return new AvailableSizes();
+        if (empty($categoryName = request('category_name'))) {
+            return null;
+        }
+        $removeWords = [
+            'женская', 'женские', 'женский', // ...
+        ];
+        $categoryName = trim(str_replace($removeWords, '', $categoryName));
+
+        $categories = DB::table('categories')
+            ->where('title', 'like', "%$categoryName%")
+            ->get(['id', 'title']);
+
+        if (count($categories) == 1) {
+            return $categories[0]->id;
+        }
+        foreach ($categories as $category) {
+            if ($category->title == $categoryName) {
+                return $category->id;
+            }
         }
 
-        return AvailableSizes::query()
-            ->selectRaw(implode(', ', [
-                'sku',
-                'brand_id',
-                'category_id',
-                'MAX(buy_price) as buy_price',
-                'MAX(sell_price) as sell_price',
-                implode(', ', AvailableSizes::getSumWrappedSizeFields()),
-            ]))
-            ->groupBy(['sku', 'brand_id', 'category_id'])
-            ->whereIn('id', explode(',', $stockIds))
-            ->first();
+        return null;
+    }
+
+    /**
+     * Получить id размеров из запроса
+     */
+    public function getSizesIdFormRequest(): ?array
+    {
+        if (empty($sizes = request('new_sizes'))) {
+            return null;
+        }
+        $sizes = explode(';', (string)$sizes);
+
+        return Size::whereIn('name', $sizes)->pluck('id')->toArray();
     }
 
     /**

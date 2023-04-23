@@ -30,7 +30,7 @@ class SmsController extends AdminController
         $grid->column('id', 'id')->hide();
         $grid->column('admin.name', 'Менеджер');
         $grid->column('order_id', 'Заказ')->modal(function ($model) {
-            if (empty($model->order_id) || empty($order = $model->order()->first())) {
+            if (empty($model->order_id) || empty($order = $model->order)) {
                 return 'Смс сообщение не связанно с заказом';
             }
 
@@ -50,7 +50,7 @@ class SmsController extends AdminController
         $grid->column('status', 'Статус');
         $grid->column('created_at', 'Дата и время отправки');
 
-        $grid->model()->orderBy('id', 'desc');
+        $grid->model()->with('order')->orderBy('id', 'desc');
         $grid->paginate(50);
 
         $grid->disableActions();
