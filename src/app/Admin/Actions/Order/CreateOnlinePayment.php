@@ -28,6 +28,7 @@ class CreateOnlinePayment extends Action
     ) {
         $paymentService = new PaymentService;
         $data = $request->all();
+        $data['amount'] = str_replace(',', '.', $data['amount']);
         $paymentService->createOnlinePayment($data);
 
         return $this->response()->success('Счет на оплату создан!')->refresh();
@@ -37,7 +38,7 @@ class CreateOnlinePayment extends Action
     {
         $this->text('order_id', 'Номер заказа')->default($this->orderId ?? null)->readonly();
         $this->select('method_enum_id', 'Способ оплаты')->options(OnlinePaymentMethodEnum::list())->default(OnlinePaymentMethodEnum::ERIP->value);
-        $this->text('amount', 'Сумма платежа')->rules('required');
+        $this->text('amount', 'Сумма платежа')->rules(["required", "regex:/^\d{1,10}(\.\d{1,6}|\,\d{1,6})?$/"]);
         $this->textarea('comment', 'Комментарий');
         $this->radio('send_sms', 'Отправлять SMS оповещение')->options([1 => 'Да', 0 => 'Нет'])->default(1);
         $this->radio('pre_auth', 'Платеж с предавторизацией')->options([1 => 'Да', 0 => 'Нет'])->default(0);
