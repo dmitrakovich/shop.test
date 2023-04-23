@@ -1,11 +1,10 @@
 <?php
 
+use App\Models\Orders\Order;
+use App\Models\Orders\OrderTrack;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
-use App\Models\Orders\Order;
-use App\Models\Orders\OrderTrack;
 
 return new class extends Migration
 {
@@ -43,7 +42,7 @@ return new class extends Migration
         foreach ($orderTracks as $orderTrack) {
             Order::where('id', $orderTrack->order_id)->update([
                 'delivery_track' => $orderTrack->track_number,
-                'delivery_track_link' => $orderTrack->track_link
+                'delivery_track_link' => $orderTrack->track_link,
             ]);
             $orderTrack->delete();
         }

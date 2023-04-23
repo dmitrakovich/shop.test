@@ -3,8 +3,6 @@
 namespace App\Models\Orders;
 
 use App\Enums\DeliveryTypeEnum;
-use App\Models\Orders\Order;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -12,10 +10,12 @@ use Illuminate\Database\Eloquent\Relations;
 class OrderTrack extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
 
     /**
      * The attributes that should be cast.
+     *
      * @var array
      */
     protected $casts = [

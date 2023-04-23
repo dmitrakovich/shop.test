@@ -4,7 +4,6 @@ namespace App\Admin\Actions\Order;
 
 use App\Enums\DeliveryTypeEnum;
 use App\Models\Orders\OrderTrack;
-
 use Encore\Admin\Actions\Action;
 use Illuminate\Http\Request;
 
@@ -29,9 +28,10 @@ class TrackRange extends Action
         }
         for ($i = $rangeStartNum; $i <= $rangeEndNum; $i++) {
             OrderTrack::firstOrCreate([
-                'track_number' => $departureSeries . $i . 'BY'
+                'track_number' => $departureSeries . $i . 'BY',
             ]);
         }
+
         return $this->response()->success('Диапазон трек номеров успешно создан')->refresh();
     }
 

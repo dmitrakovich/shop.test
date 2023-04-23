@@ -2,14 +2,12 @@
 
 namespace App\Admin\Controllers\Departures;
 
+use App\Admin\Actions\Order\TrackRange;
 use App\Enums\DeliveryTypeEnum;
 use App\Models\Orders\OrderTrack;
-
-use App\Admin\Actions\Order\TrackRange;
-
 use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Grid;
 use Encore\Admin\Form;
+use Encore\Admin\Grid;
 
 class OrderTrackController extends AdminController
 {
@@ -55,6 +53,7 @@ class OrderTrackController extends AdminController
         });
         $grid->paginate(50);
         $grid->disableExport();
+
         return $grid;
     }
 
@@ -80,6 +79,7 @@ class OrderTrackController extends AdminController
             $footer->disableEditingCheck();
             $footer->disableCreatingCheck();
         });
+
         return $form;
     }
 }
