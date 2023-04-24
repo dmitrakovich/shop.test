@@ -263,7 +263,7 @@ class Order extends Model
     /**
      * Track number
      */
-    public function track(): Relations\hasOne
+    public function track(): Relations\HasOne
     {
         return $this->hasOne(OrderTrack::class);
     }
