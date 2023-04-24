@@ -27,6 +27,7 @@ class OrderController extends BaseController
     {
         $orders = Order::with([
             'country',
+            'track',
             'onlinePayments' => fn ($query) => $query->where('last_status_enum_id', OnlinePaymentStatusEnum::PENDING),
             'itemsExtended',
             'status:key,name_for_user',

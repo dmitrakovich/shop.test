@@ -55,6 +55,7 @@ class InventoryController extends AdminController
         $grid->column('sell_price', 'Цена продажи');
         $grid->column('stock_ids', 'Опции')->display(function (string $stockIds) {
             $link = route('admin.products.create', ['stock_ids' => $stockIds]);
+
             return '<a href="' . $link . '" class="btn btn-xs btn-primary" target="_blank">Создать</a>';
         });
 
@@ -70,7 +71,7 @@ class InventoryController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)

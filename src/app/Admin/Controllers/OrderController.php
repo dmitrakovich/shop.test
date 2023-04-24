@@ -209,8 +209,8 @@ class OrderController extends AdminController
             $form->text('zip', __('Zip'));
             $form->text('user_addr', __('User addr'));
             $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
-            $form->text('delivery_track', 'Трек номер');
-            $form->url('delivery_track_link', 'Ссылка на трек номер');
+            $form->text('track.track_number', 'Трек номер');
+            $form->url('track.track_link', 'Ссылка на трек номер');
             $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
             $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
             $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));

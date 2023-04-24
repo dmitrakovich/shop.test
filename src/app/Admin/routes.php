@@ -77,6 +77,12 @@ Route::group([
         $router->get('{doc:slug}', DocController::class);
     });
 
+    $router->group(['prefix' => 'departures'], function ($router) {
+        $router->resource('order-to-send', Departures\OrderToSendController::class);
+        $router->resource('batches', Departures\BatchController::class);
+        $router->resource('track-numbers', Departures\OrderTrackController::class);
+    });
+
     $router->group(['prefix' => 'seo'], function ($router) {
         $router->resource('seo-links', Seo\SeoLinkController::class);
     });

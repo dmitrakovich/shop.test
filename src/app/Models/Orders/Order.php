@@ -253,6 +253,22 @@ class Order extends Model
     }
 
     /**
+     * Batch
+     */
+    public function batch(): Relations\BelongsTo
+    {
+        return $this->belongsTo(Batch::class);
+    }
+
+    /**
+     * Track number
+     */
+    public function track(): Relations\HasOne
+    {
+        return $this->hasOne(OrderTrack::class);
+    }
+
+    /**
      * Get the user's full name.
      *
      * @return string
