@@ -14,9 +14,9 @@ class PaymentController extends BaseController
      * Страница оплаты ЕРИП
      */
     public function erip(
-    string $paymentUrl,
-    PaymentService $paymentService
-  ): View {
+        string $paymentUrl,
+        PaymentService $paymentService
+    ): View {
         $online_payment = $paymentService->getOnlinePaymentByPaymentUrl($paymentUrl, OnlinePaymentMethodEnum::ERIP);
         if (!$online_payment) {
             abort(404);
@@ -33,9 +33,9 @@ class PaymentController extends BaseController
      * Страница оплаты Yandex
      */
     public function yandex(
-    string $linkCode,
-    PaymentService $paymentService
-  ) {
+        string $linkCode,
+        PaymentService $paymentService
+    ) {
         $payment = $paymentService->getPaymentByLinkCode($linkCode);
         if ($payment) {
             SeoFacade::setTitle('Счёт № ' . $payment->payment_num)
@@ -52,9 +52,9 @@ class PaymentController extends BaseController
     }
 
     public function linkCode(
-    string $linkCode,
-    PaymentService $paymentService
-  ) {
+        string $linkCode,
+        PaymentService $paymentService
+    ) {
         $payment = $paymentService->getPaymentByLinkCode($linkCode);
         if ($payment) {
             SeoFacade::setTitle('Счёт № ' . $payment->payment_num)
@@ -71,9 +71,9 @@ class PaymentController extends BaseController
     }
 
     public function checkLinkCode(
-    string $linkCode,
-    PaymentService $paymentService
-  ) {
+        string $linkCode,
+        PaymentService $paymentService
+    ) {
         $payment = $paymentService->getPaymentByLinkCode($linkCode);
 
         return [
@@ -88,9 +88,9 @@ class PaymentController extends BaseController
    * @return response
    */
   public function webhook(
-    Request $request,
-    $paymentMethod,
-    PaymentService $paymentService
+      Request $request,
+      $paymentMethod,
+      PaymentService $paymentService
   ) {
       $result = null;
       $data = $request->all();

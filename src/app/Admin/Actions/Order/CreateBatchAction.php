@@ -2,15 +2,15 @@
 
 namespace App\Admin\Actions\Order;
 
-use App\Models\Orders\Order;
 use App\Models\Orders\Batch;
-
+use App\Models\Orders\Order;
 use Encore\Admin\Actions\BatchAction;
 use Illuminate\Database\Eloquent\Collection;
 
 class CreateBatchAction extends BatchAction
 {
-    public $name        = 'Создать партию';
+    public $name = 'Создать партию';
+
     protected $selector = '.js-createBatchAction';
 
     public function handle(Collection $collection)
@@ -19,9 +19,10 @@ class CreateBatchAction extends BatchAction
         if (!empty($orderIds)) {
             $batch = Batch::create();
             Order::whereIn('id', $orderIds)->update([
-                'batch_id' => $batch->id
+                'batch_id' => $batch->id,
             ]);
         }
+
         return $this->response()->success('Партия успешно создана!')->refresh();
     }
 

@@ -133,7 +133,7 @@ class PaymentYandexService extends AbstractPaymentService
      * Webhook handler.
      */
     public function webhookHandler(
-      array $requestData,
+        array $requestData,
     ): bool {
         $requestData['object']['refundable'] = false;
         $factory = new NotificationFactory();

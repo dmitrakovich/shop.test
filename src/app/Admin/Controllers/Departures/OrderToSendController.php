@@ -3,19 +3,17 @@
 namespace App\Admin\Controllers\Departures;
 
 use App\Admin\Actions\Order\CreateBatchAction;
+use App\Admin\Actions\Order\InstallmentFormRowAction;
 use App\Admin\Actions\Order\LabelAction;
 use App\Admin\Actions\Order\StatusBulkChange;
-use App\Admin\Actions\Order\InstallmentFormRowAction;
-
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderStatus;
 use Deliveries\DeliveryMethod;
-
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Layout\Content;
-use Encore\Admin\Grid;
 use Encore\Admin\Form;
+use Encore\Admin\Grid;
+use Encore\Admin\Layout\Content;
 
 class OrderToSendController extends AdminController
 {
@@ -39,7 +37,6 @@ class OrderToSendController extends AdminController
         $admins = Administrator::pluck('name', 'id');
         $orderStatuses = OrderStatus::ordered()->pluck('name_for_admin', 'key');
         $deliveryMethods = DeliveryMethod::pluck('name', 'id');
-
 
         $grid->filter(function ($filter) use ($orderStatuses, $admins, $deliveryMethods) {
             $filter->disableIdFilter();

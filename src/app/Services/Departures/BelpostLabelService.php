@@ -12,8 +12,6 @@ class BelpostLabelService
 {
     /**
      * Create label
-     *
-     * @return string
      */
     public function createLabel(Order $order): string
     {
@@ -37,7 +35,6 @@ class BelpostLabelService
 
         $sheet->setCellValue('AW25', $order->user_addr ?? null);
         $sheet->setCellValue('BC28', $order->city ?? null);
-
 
         $sheet->setCellValue('BF35', substr(trim($order->phone), -9, -7));
         $sheet->setCellValue('BJ35', substr(trim($order->phone), -7));
