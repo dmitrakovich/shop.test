@@ -22,8 +22,8 @@ abstract class AbstractPaymentService
      * @return OnlinePayment
      */
     public function getOnlinePaymentByPaymentId(
-      string $paymentId,
-      ?OnlinePaymentMethodEnum $methodEnum = null
+        string $paymentId,
+        ?OnlinePaymentMethodEnum $methodEnum = null
     ): ?OnlinePayment {
         $result = OnlinePayment::where('payment_id', $paymentId);
         if ($methodEnum) {
@@ -37,8 +37,8 @@ abstract class AbstractPaymentService
      * Set OnlinePayment status.
      */
     public function setPaymentStatus(
-      OnlinePayment $payment,
-      OnlinePaymentStatusEnum $status
+        OnlinePayment $payment,
+        OnlinePaymentStatusEnum $status
     ): OnlinePayment {
         if ($payment->last_status_enum_id !== $status) {
             $payment->last_status_enum_id = $status;

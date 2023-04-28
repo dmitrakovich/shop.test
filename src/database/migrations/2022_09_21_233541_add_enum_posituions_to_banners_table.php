@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::table('banners', function (Blueprint $table) {
             DB::statement("ALTER TABLE banners CHANGE position position ENUM('catalog_top', 'index_main', 'index_top', 'index_bottom', 'main_menu_catalog', 'catalog_mob', 'feedback', 'feedback_mob')");
-          //
+            //
         });
     }
 
@@ -29,7 +29,7 @@ return new class extends Migration
     {
         Schema::table('banners', function (Blueprint $table) {
             DB::statement("ALTER TABLE banners CHANGE position position ENUM('catalog_top', 'index_main', 'index_top', 'index_bottom', 'main_menu_catalog', 'catalog_mob')");
-          //
+            //
         });
     }
 };

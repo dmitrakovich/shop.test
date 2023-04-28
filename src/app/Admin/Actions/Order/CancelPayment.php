@@ -12,7 +12,7 @@ class CancelPayment extends RowAction
     public $name = 'Отменить платеж';
 
     public function handle(
-      OnlinePayment $payment
+        OnlinePayment $payment
     ) {
         $paymentService = new PaymentService;
         $result = $paymentService->cancelOnlinePayment($payment);
