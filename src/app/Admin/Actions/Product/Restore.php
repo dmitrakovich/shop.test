@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\Actions\Post;
+namespace App\Admin\Actions\Product;
 
 use Encore\Admin\Actions\RowAction;
 use Illuminate\Database\Eloquent\Model;

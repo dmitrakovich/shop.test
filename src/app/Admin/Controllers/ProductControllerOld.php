@@ -2,10 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Actions\Post\BatchRestore;
-use App\Admin\Actions\Post\Restore;
-use App\Admin\Actions\Product\AddToProductGroup;
-use App\Admin\Actions\Product\RemoveFromProductGroup;
+use App\Admin\Actions\Product as ProductActions;
 use App\Admin\Models\Media;
 use App\Admin\Models\Product;
 use App\Admin\Services\UploadImagesService;
@@ -79,10 +76,10 @@ class ProductControllerOld extends AbstractAdminController
         $grid->paginate(30);
 
         $grid->actions(function ($actions) {
-            $actions->add(new Restore());
+            $actions->add(new ProductActions\Restore());
         });
         $grid->batchActions(function ($batch) {
-            $batch->add(new BatchRestore());
+            $batch->add(new ProductActions\BatchRestore());
         });
 
         $grid->filter(function ($filter) {
@@ -266,9 +263,9 @@ class ProductControllerOld extends AbstractAdminController
 
         $grid->tools(function (Grid\Tools $tools) use ($product) {
             if ($product->product_group_id) {
-                $tools->append(new RemoveFromProductGroup($product->id, $product->product_group_id));
+                $tools->append(new ProductActions\RemoveFromProductGroup($product->id, $product->product_group_id));
             } else {
-                $tools->append(new AddToProductGroup($product->id));
+                $tools->append(new ProductActions\AddToProductGroup($product->id));
             }
         });
         $grid->setActionClass(ContextMenuActions::class);

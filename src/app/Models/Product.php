@@ -43,7 +43,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Product extends Model implements HasMedia
 {
-    use SoftDeletes;
+    use SoftDeletes {
+        restore as restoreSoftDeletes;
+    }
     use ProductSales;
     use InteractsWithMedia;
 
@@ -433,6 +435,6 @@ class Product extends Model implements HasMedia
             $this->save();
         }
 
-        return parent::restore();
+        return $this->restoreSoftDeletes();
     }
 }
