@@ -2,13 +2,11 @@
 
 namespace App\Admin\Controllers\Automation;
 
+use App\Admin\Controllers\AbstractAdminController;
 use App\Models\AvailableSizes;
-use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Show;
 
-class InventoryController extends AdminController
+class InventoryController extends AbstractAdminController
 {
     /**
      * Title for current resource.
@@ -66,26 +64,5 @@ class InventoryController extends AdminController
         $grid->disableRowSelector();
 
         return $grid;
-    }
-
-    /**
-     * Make a show builder.
-     *
-     * @param  mixed  $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        return back();
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        return back();
     }
 }

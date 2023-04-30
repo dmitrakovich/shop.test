@@ -14,7 +14,7 @@
                             <div class="row">
                                 <div class="pl-0 col-6 col-md-2 ">
                                     <a href="{{ $item->product->getUrl() }}" target="_blank">
-                                        <img src="{{ $item->product->getFirstMedia()->getUrl('catalog') }}"
+                                        <img src="{{ $item->product->getFirstMediaUrl('default', 'catalog') }}"
                                             alt="{{ $item->product->sku }}" class="img-fluid">
                                     </a>
                                 </div>

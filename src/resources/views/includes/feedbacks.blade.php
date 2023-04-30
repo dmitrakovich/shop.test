@@ -12,7 +12,7 @@
                             <div class="col-12 mt-2">
                                 <div>{{ $feedback->product->shortName() }}</div>
                                 <div style="max-width: 150px">
-                                    <img src="{{ $feedback->product->getFirstMedia()->getUrl('catalog') }}"
+                                    <img src="{{ $feedback->product->getFirstMediaUrl('default', 'catalog') }}"
                                         alt="{{ $feedback->product->sku }}" class="img-fluid">
                                 </div>
                                 <div class="mt-2">

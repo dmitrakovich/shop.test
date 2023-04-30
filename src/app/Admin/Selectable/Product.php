@@ -11,8 +11,10 @@ class Product extends Selectable
 
     public function make()
     {
+        $this->model()->with('media');
+
         $this->column('media', 'Фото')->display(
-            fn () => optional($this->getFirstMedia())->getUrl('thumb')
+            fn () => $this->getFirstMediaUrl('default', 'thumb')
         )->image();
         $this->column('id', 'Id');
         $this->column('category.title', 'Категория');

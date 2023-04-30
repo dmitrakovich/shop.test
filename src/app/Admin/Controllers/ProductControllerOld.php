@@ -22,10 +22,8 @@ use App\Models\Size;
 use App\Models\Style;
 use App\Models\Tag;
 use Database\Seeders\ProductSeeder;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Show;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +31,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 
-class ProductControllerOld extends AdminController
+class ProductControllerOld extends AbstractAdminController
 {
     /**
      * Title for current resource.
@@ -63,7 +61,7 @@ class ProductControllerOld extends AdminController
         $grid = new Grid(new Product());
 
         $grid->column('id', 'Id')->sortable();
-        $grid->column('media', 'Фото')->display(fn ($pictures) => optional($this->getFirstMedia())->getUrl('thumb'))->image();
+        $grid->column('media', 'Фото')->display(fn () => $this->getFirstMediaUrl('default', 'thumb'))->image();
         $grid->column('deleted_at', 'Опубликован')->display(
             fn ($deleted) => !$deleted ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>'
         )->sortable();
@@ -96,17 +94,6 @@ class ProductControllerOld extends AdminController
         });
 
         return $grid;
-    }
-
-    /**
-     * Make a show builder.
-     *
-     * @param  mixed  $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        return back();
     }
 
     /**

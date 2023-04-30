@@ -30,10 +30,10 @@
                 @endif
             </div>
 
-            <img src="{{ $product->getFirstMedia()->getUrl('catalog') }}"
+            <img src="{{ $product->getFirstMediaUrl('default', 'catalog') }}"
                 alt="{{ $product->shortName() }}" class="img-fluid product-first-image"
                 onerror="imageOnError(this)" />
-            <img src="{{ ($product->getMedia()->get(1) ?? $product->getFirstMedia())->getUrl('catalog') }}"
+            <img src="{{ optional($product->getMedia()->get(1))->getUrl('catalog') ?? $product->getFirstMediaUrl('default', 'catalog') }}"
                 alt="{{ $product->shortName() }}" class="img-fluid product-second-image"
                 onerror="imageOnError(this)" />
         </a>

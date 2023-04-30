@@ -42,7 +42,7 @@
 
                         <div class="swiper js-productSlider">
                             <div class="swiper-wrapper">
-                                @foreach ($product->getMedia() as $image)
+                                @forelse ($product->getMedia() as $image)
                                     @if ($image->hasCustomProperty('video'))
                                         <div class="swiper-slide js-swiperIrame"
                                             data-id="{{ UrlHelper::getYouTubeVideoId($image->getCustomProperty('video')) }}">
@@ -57,7 +57,10 @@
                                             </a>
                                         </div>
                                     @endif
-                                @endforeach
+                                @empty
+                                    <img src="{{ $product->getFallbackMediaUrl() }}" class="img-fluid"
+                                        onerror="imageOnError(this)" alt="{{ $product->shortName() }}" />
+                                @endforelse
                             </div>
                             <div class="js-productSlider-next swiper-button-next"></div>
                             <div class="js-productSlider-prev swiper-button-prev"></div>

@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * AvailableSizes model
@@ -38,9 +42,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $size_47
  * @property int $size_48
  */
-class AvailableSizes extends Model
+class AvailableSizes extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     /**
      * Indicates if the model should be timestamped.
@@ -102,6 +107,26 @@ class AvailableSizes extends Model
     public function stock(): BelongsTo
     {
         return $this->belongsTo(Stock::class);
+    }
+
+    /**
+     * Get all of the media for the product.
+     */
+    public function media(): MorphMany
+    {
+        $mediaInstance = new Media();
+        $query = $mediaInstance->newQuery();
+        $table = $mediaInstance->getTable();
+
+        return new MorphMany($query, new Product(), "$table.model_type", "$table.model_id", 'product_id');
+    }
+
+    /**
+     * Get the fallback media URL.
+     */
+    public function getFallbackMediaUrl(): string
+    {
+        return asset('/images/no-image.png');
     }
 
     /**

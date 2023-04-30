@@ -45,9 +45,7 @@ class Product extends Model implements HasMedia
 {
     use SoftDeletes;
     use ProductSales;
-    use InteractsWithMedia {
-        getFirstMediaUrl as traitGetFirstMediaUrl;
-    }
+    use InteractsWithMedia;
 
     /**
      * Default sorting
@@ -225,7 +223,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Размеры изображений
+     * Register media conversions.
      */
     public function registerMediaConversions(Media $media = null): void
     {
@@ -233,6 +231,18 @@ class Product extends Model implements HasMedia
         $this->addMediaConversion('catalog')->width(300);
         $this->addMediaConversion('normal')->width(700);
         $this->addMediaConversion('full')->width(1200);
+    }
+
+    /**
+     * Get the fallback media URL.
+     */
+    public function getFallbackMediaUrl(string $collectionName = 'default', string $conversionName = ''): string
+    {
+        return match($conversionName) {
+            'thumb' => asset('/images/no-image-100.png'),
+            'catalog' => asset('/images/no-image-300.png'),
+            default => asset('/images/no-image.png'),
+        };
     }
 
     /**
@@ -372,18 +382,6 @@ class Product extends Model implements HasMedia
     public function getFormattedOldPrice()
     {
         return Currency::convertAndFormat($this->getFinalOldPrice());
-    }
-
-    /**
-     * getFirstMediaUrl & check empty media
-     */
-    public function getFirstMediaUrl(string $collectionName = 'default', string $conversionName = ''): string
-    {
-        if (!($url = $this->traitGetFirstMediaUrl($collectionName, $conversionName))) {
-            $url = '/storage/products/0/deleted.jpg';
-        }
-
-        return $url;
     }
 
     /**

@@ -55,6 +55,6 @@ class ProductSeoService
     {
         SeoFacade::setTitle($this->getProductTitle())
             ->setDescription($this->getProductDescription())
-            ->setImage($this->product->getFirstMedia()->getUrl('catalog'));
+            ->setImage($this->product->getFirstMediaUrl('default', 'catalog'));
     }
 }

@@ -133,7 +133,7 @@
                             <td style="border-left: 1px solid #DDDDDD" width="10px"></td>
                             <td width="100px" valign="top">
                                 <a href="{{ $item->product->getUrl() }}" style="border: none; text-decoration: none;" title="{{ $item->product->getUrl() }}" target="_blank">
-                                    <img alt="{{ $item->product->getFullName() }}" src="{{ $item->product->getFirstMedia()->getUrl('thumb') }}" width="100" style="display: block;">
+                                    <img alt="{{ $item->product->getFullName() }}" src="{{ $item->product->getFirstMediaUrl('default', 'thumb') }}" width="100" style="display: block;">
                                 </a>
                             </td>
                             <td width="10px"></td>
