@@ -240,7 +240,7 @@ class Product extends Model implements HasMedia
      */
     public function getFallbackMediaUrl(string $collectionName = 'default', string $conversionName = ''): string
     {
-        return match($conversionName) {
+        return match ($conversionName) {
             'thumb' => asset('/images/no-image-100.png'),
             'catalog' => asset('/images/no-image-300.png'),
             default => asset('/images/no-image.png'),
