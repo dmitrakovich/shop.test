@@ -38,8 +38,7 @@ class InventoryController extends AbstractAdminController
         $grid->model()->selectRaw(implode(', ', $select))
             // ->join('stocks', 'stocks.id', '=', 'available_sizes.stock_id')
             ->groupBy(['sku', 'brand_id', 'category_id'])
-            ->whereNull('product_id')
-            ->where('sku', '!=', ''); //TODO на этапе создания таблицы отсеивать такие значения!!!
+            ->whereNull('product_id');
 
         $unknownCategory = '<span class="text-red">неизветная категория</span>';
         $unknownBrand = '<span class="text-red">неизветный бренд</span>';

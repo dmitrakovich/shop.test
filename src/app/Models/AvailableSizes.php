@@ -126,7 +126,7 @@ class AvailableSizes extends Model implements HasMedia
      */
     public function getFallbackMediaUrl(): string
     {
-        return asset('/images/no-image.png');
+        return asset('/images/no-image-100.png');
     }
 
     /**

@@ -63,8 +63,6 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractAvailableSizesJob
         $this->log('Получение наличия с 1С');
         CreateTunnelJob::dispatchSync();
 
-        // TODO: отфильтровать пустые артикулы
-
         $availableSizes = [];
         DB::connection('sqlsrv')
             ->table(self::ONE_C_STOCK_QUANTITY_TABLE)
@@ -76,6 +74,10 @@ class UpdateSizesAvailabilitiesTableJob extends AbstractAvailableSizesJob
             });
 
         DestroyTunnelJob::dispatchSync();
+
+        //todo: отфильтровать значения с пустым sku
+        //todo: отфильтровать категории, заданные в конфиге
+        //todo: либо отфильтровывать все ненайденные категории
 
         $this->log('Запись полученных и сопоставленных данных в базу');
         $availableSizesTable = (new AvailableSizes())->getTable();
