@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -122,6 +123,14 @@ class AvailableSizes extends Model implements HasMedia
     }
 
     /**
+     * Get all sizes associated with the product.
+     */
+    public function sizes(): MorphToMany
+    {
+        return $this->morphedByMany(Size::class, 'attribute', 'product_attributes', 'product_id', 'attribute_id', 'product_id');
+    }
+
+    /**
      * Get the fallback media URL.
      */
     public function getFallbackMediaUrl(): string
@@ -165,6 +174,17 @@ class AvailableSizes extends Model implements HasMedia
     }
 
     /**
+     * Returns an array of size fields wrapped in the GROUP_CONCAT function.
+     *
+     * The array includes the "size_none" field and all size fields, with each field name
+     * preceded by the GROUP_CONCAT function and followed by the original field name as an alias.
+     */
+    public static function getGroupConcatWrappedSizeFields(): array
+    {
+        return array_map(fn (string $size) => "GROUP_CONCAT($size) as $size", self::getSizeFields());
+    }
+
+    /**
      * Converts a given field name to its corresponding Size ID.
      */
     public static function convertFieldToSizeId(string $field): int
@@ -202,7 +222,7 @@ class AvailableSizes extends Model implements HasMedia
     /**
      * Returns a formatted string containing the available sizes for this model instance.
      */
-    public function getFormatedSizes(): string
+    public function getFormattedSizes(): string
     {
         $sizes = [];
         foreach ($this->getAvailableSizeAttributes() as $sizeField => $count) {
@@ -210,5 +230,50 @@ class AvailableSizes extends Model implements HasMedia
         }
 
         return implode(', ', $sizes);
+    }
+
+    /**
+     * Returns a formatted string containing the available sizes for specific stock.
+     */
+    public function getFormattedSizesForStock(string $stockField): ?string
+    {
+        $stockId = explode('_', $stockField)[1];
+        $i = array_search($stockId, explode(',', $this->{$stockField}));
+
+        if ($i === false) {
+            return null;
+        }
+        $sizes = [];
+        foreach ($this->only($this->getSizeFields()) as $sizeField => $counts) {
+            if (!($count = explode(',', $counts)[$i])) {
+                continue;
+            }
+            $size = $sizeField === 'size_none' ? 'б/р' : str_replace('size_', '', $sizeField);
+            $sizes[] = "<b>$size</b>($count)";
+        }
+
+        return implode(', ', $sizes);
+    }
+
+    /**
+     * Get formatted discount percentage for the product.
+     */
+    public function getFormatedDiscountForStock(): ?string
+    {
+        if (empty($sellPrice = (float)$this->sell_price) || empty($currentPrice = (float)$this->current_price)) {
+            return null;
+        }
+
+        return ((($sellPrice - $currentPrice) / $sellPrice) * 100) . '%';
+    }
+
+    /**
+     * Get the name for the stock.
+     */
+    public function getNameForStock(): string
+    {
+        $brandName = $this->brand->name ?? null;
+
+        return "$brandName {$this->product_id} ({$this->sku})";
     }
 }

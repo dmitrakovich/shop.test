@@ -47,7 +47,7 @@ class InventoryController extends AbstractAdminController
         $grid->column('brand.name', 'Бренд')->display(fn ($value) => $value ?: $unknownBrand);
         $grid->column('sku', 'Артикул');
         // $grid->column('stocks', 'Склады');
-        $grid->column('Размеры')->display(fn () => $this->getFormatedSizes());
+        $grid->column('Размеры')->display(fn () => $this->getFormattedSizes());
         $grid->column('buy_price', 'Цена покупки');
         $grid->column('sell_price', 'Цена продажи');
         $grid->column('stock_ids', 'Опции')->display(function (string $stockIds) {
