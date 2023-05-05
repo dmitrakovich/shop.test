@@ -264,7 +264,7 @@ class AvailableSizes extends Model implements HasMedia
             return null;
         }
 
-        return ((($sellPrice - $currentPrice) / $sellPrice) * 100) . '%';
+        return round((($sellPrice - $currentPrice) / $sellPrice) * 100, 2) . '%';
     }
 
     /**

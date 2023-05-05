@@ -105,7 +105,7 @@ class StockController extends AbstractAdminController
     private function addFiltersForAvailableSizes(Filter $filter, array $stockNames, array $defaultStockList): void
     {
         $filter->disableIdFilter();
-        //? какой-той еще фильтр
+        //? какой-той еще фильтр !!!
         $filter->where($this->getProductFilter(), 'Код товара / артикул', 'product');
         $filter->in('stock_id', 'Склад')->multipleSelect($stockNames)->default($defaultStockList);
         $filter->where($this->getStatusFilter(), 'Статус', 'status')->checkbox(self::statusfilters);
