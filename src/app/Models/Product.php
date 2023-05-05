@@ -426,6 +426,17 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Returns an array of product labels that should be excluded during processing.
+     */
+    public static function excludedLabels(): array
+    {
+        return [
+            ProductLabels::DO_NOT_PUBLISH->value,
+            ProductLabels::DO_NOT_UPDATE->value,
+        ];
+    }
+
+    /**
      * Restore a soft-deleted model instance.
      */
     public function restore(): bool

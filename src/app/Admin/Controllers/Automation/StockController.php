@@ -8,6 +8,7 @@ use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Collection;
+use App\Models\Product;
 use App\Models\Season;
 use App\Models\Stock;
 use Encore\Admin\Grid;
@@ -31,6 +32,7 @@ class StockController extends AbstractAdminController
         'discounts' => 'скидки',
         'new_items' => 'новинки',
         'out_of_stock' => 'нет в наличии',
+        'excluded' => 'исключенные',
         'not_added' => 'не выставлено',
     ];
 
@@ -48,6 +50,7 @@ class StockController extends AbstractAdminController
         $select = [
             'ANY_VALUE(products.id) as product_id',
             'ANY_VALUE(available_sizes.product_id) as available_sizes_product_id',
+            'ANY_VALUE(products.label_id) as label_id',
             'IFNULL(available_sizes.brand_id, products.brand_id) as brand_id',
             'IFNULL(available_sizes.category_id, products.category_id) as category_id ',
             'IFNULL(available_sizes.sku, products.sku) as sku',
@@ -159,6 +162,7 @@ class StockController extends AbstractAdminController
                 match ($status) {
                     'discounts' => $query->whereColumn('products.old_price', '>', 'products.price'),
                     'new_items' => $query->where('products.old_price', 0),
+                    'excluded' => $query->whereIn('products.label_id', Product::excludedLabels()),
                     'out_of_stock' => $query->whereNotNull('products.deleted_at'),
                     'not_added' => $query->whereNull('products.id')->whereNull('available_sizes.product_id'),
                 };
@@ -206,15 +210,19 @@ class StockController extends AbstractAdminController
         $yellow = 'rgba(255, 255, 0, 0.3)';
         $red = 'rgba(255, 0, 0, 0.3)';
         $turquoise = 'rgba(64, 224, 208, 0.3)';
+        $gray = '#CCCCCC';
 
-        return function (Row $row) use ($yellow, $red, $turquoise) {
+        return function (Row $row) use ($yellow, $red, $turquoise, $gray) {
             $isInCatalogue = !empty($row->column('product_id'));
             $isInStock = !empty($row->column('available_sizes_product_id'));
+            $isExcluded = in_array((int)$row->column('label_id'), Product::excludedLabels());
             $oldPrice = (float)$row->column('old_price');
             $currentPrice = (float)$row->column('current_price');
 
             if (!$isInCatalogue) {
                 $row->style("background-color: $turquoise;");
+            } elseif ($isInCatalogue && $isExcluded) {
+                $row->style("background-color: $gray;");
             } elseif ($isInCatalogue && !$isInStock) {
                 $row->style("background-color: $red;");
             } elseif ($oldPrice > $currentPrice) {
