@@ -2,17 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Tag;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\{
-    Model,
-    Relations
-};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations;
 
 class TagGroup extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
 
     /**

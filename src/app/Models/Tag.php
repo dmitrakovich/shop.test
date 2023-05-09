@@ -2,13 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\TagGroup;
-
 use App\Traits\AttributeFilterTrait;
-use Illuminate\Database\Eloquent\{
-    Model,
-    Relations
-};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations;
 
 class Tag extends Model
 {

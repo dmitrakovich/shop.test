@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\TagGroup;
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
         });
         TagGroup::create([
-            'name' => 'Без группы'
+            'name' => 'Без группы',
         ]);
     }
 

@@ -43,6 +43,7 @@ class TagGroupController extends AdminController
         $grid->disableColumnSelector();
         $grid->disableExport();
         $grid->disableRowSelector();
+
         return $grid;
     }
 
@@ -80,6 +81,7 @@ class TagGroupController extends AdminController
             $footer->disableEditingCheck();
             $footer->disableCreatingCheck();
         });
+
         return $form;
     }
 }

@@ -10,9 +10,6 @@ class StockExporter extends ExcelExporter // implements WithMapping
 {
     protected $fileName = 'Склад.xlsx';
 
-    /**
-     * @return array
-     */
     public function headings(): array
     {
         return $this->grid->getColumns()->map(function (Column $column) {

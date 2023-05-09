@@ -17,7 +17,6 @@ use App\Models\ProductAttributes\Manufacturer;
 use App\Models\Season;
 use App\Models\Size;
 use App\Models\Style;
-use App\Models\Tag;
 use App\Models\TagGroup;
 use Database\Seeders\ProductSeeder;
 use Encore\Admin\Form;
@@ -28,7 +27,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
-use Encore\Admin\Admin;
 
 class ProductControllerOld extends AbstractAdminController
 {
@@ -176,7 +174,7 @@ class ProductControllerOld extends AbstractAdminController
             $form->checkbox('tags', 'Теги');
             $form->html(view('admin.product.tags', [
                 'tagGroups' => TagGroup::with('tags')->get(),
-                'productTags' => $product->tags ?? []
+                'productTags' => $product->tags ?? [],
             ]));
             $form->hidden('deleted_at', 'Дата снятия с наличия');
         });

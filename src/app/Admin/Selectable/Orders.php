@@ -23,7 +23,7 @@ class Orders extends Selectable
 
         $this->filter(function (Filter $filter) {
             $filter->disableIdFilter();
-            $filter->like('id',   'ID');
+            $filter->like('id', 'ID');
         });
     }
 }
