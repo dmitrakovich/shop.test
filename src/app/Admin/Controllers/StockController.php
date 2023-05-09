@@ -5,7 +5,9 @@ namespace App\Admin\Controllers;
 use App\Enums\StockTypeEnum;
 use App\Models\City;
 use App\Models\Stock;
+use Illuminate\Validation\Rule;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -69,15 +71,32 @@ class StockController extends AdminController
     }
 
     /**
+     * Edit interface.
+     *
+     * @param  mixed  $id
+     * @return Content
+     */
+    public function edit($id, Content $content)
+    {
+        return $content
+            ->title($this->title())
+            ->description($this->description['edit'] ?? trans('admin.edit'))
+            ->body($this->form($id)->edit($id));
+    }
+
+    /**
      * Make a form builder.
      *
      * @return Form
      */
-    protected function form()
+    protected function form($id = null)
     {
         $form = new Form(new Stock());
 
-        $form->number('one_c_id', 'ID в 1C')->min(1)->rules('required|unique:stocks');
+        $form->number('one_c_id', 'ID в 1C')->min(1)->rules([
+            'required',
+            Rule::unique('stocks')->ignore($id)
+        ]);
         $form->select('type', 'Тип')->options(StockTypeEnum::list());
         $form->select('city_id', 'Город')->options(City::pluck('name', 'id'));
         $form->text('name', 'Название')->rules('required');

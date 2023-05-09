@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers\ProductAttributes;
 
 use App\Models\Tag;
+use App\Models\TagGroup;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -32,6 +33,7 @@ class TagController extends AdminController
         $grid->column('name', __('Название'));
         $grid->column('slug', __('Slug'));
         $grid->column('seo', __('Seo'));
+        $grid->column('group.name', 'Группа');
         $grid->column('products_count', __('Товаров содержит'));
         $grid->column('created_at', __('Дата создания'));
         $grid->column('updated_at', __('Дата обновления'));
@@ -75,10 +77,12 @@ class TagController extends AdminController
     protected function form()
     {
         $form = new Form(new Tag());
+        $tagGroups = TagGroup::pluck('name', 'id');
 
         $form->text('name', __('Name'));
         $form->text('slug', __('Slug'));
         $form->textarea('seo', __('Seo'));
+        $form->select('tag_group_id', 'Группа')->options($tagGroups);
 
         $form->saved(function (Form $form) {
             $form->model()->url()->updateOrCreate(['slug' => $form->slug]);
