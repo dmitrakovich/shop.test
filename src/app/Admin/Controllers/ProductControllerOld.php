@@ -17,7 +17,7 @@ use App\Models\ProductAttributes\Manufacturer;
 use App\Models\Season;
 use App\Models\Size;
 use App\Models\Style;
-use App\Models\Tag;
+use App\Models\TagGroup;
 use Database\Seeders\ProductSeeder;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -113,6 +113,7 @@ class ProductControllerOld extends AbstractAdminController
     protected function form()
     {
         $form = new Form(new Product());
+        $product = null;
 
         if ($form->isEditing()) {
             $product = Product::withTrashed()->find(request('product'));
@@ -146,7 +147,7 @@ class ProductControllerOld extends AbstractAdminController
             $form->currency('price', 'Цена')->symbol('BYN')->required();
             $form->currency('old_price', 'Старая цена')->symbol('BYN');
         });
-        $form->column(6, function ($form) {
+        $form->column(6, function ($form) use ($product) {
             $form->multipleSelect('sizes', 'Размеры')->options(Size::pluck('name', 'id'))->default($this->getSizesIdFormRequest())->required();
             $form->multipleSelect('colors', 'Цвет для фильтра')->options(Color::orderBy('name')->pluck('name', 'id'));
             $form->multipleSelect('fabrics', 'Материал для фильтра')->options(Fabric::orderBy('name')->pluck('name', 'id'));
@@ -164,20 +165,27 @@ class ProductControllerOld extends AbstractAdminController
             $form->text('fabric_outsole_txt', 'Материал подошвы');
             $form->text('bootleg_height_txt', 'Высота голенища');
             $form->text('heel_txt', 'Высота каблука/подошвы');
+            $form->text('key_features', 'Ключевая особенность');
 
             $form->divider();
             $form->select('label_id', 'Метка')->options(ProductLabels::list());
             $form->text('rating', 'Рейтинг')->disable();
-            $form->multipleSelect('tags', 'Теги')->options(Tag::pluck('name', 'id'));
+
+            $form->checkbox('tags', 'Теги');
+            $form->html(view('admin.product.tags', [
+                'tagGroups' => TagGroup::with('tags')->get(),
+                'productTags' => $product->tags ?? [],
+            ]));
             $form->hidden('deleted_at', 'Дата снятия с наличия');
         });
 
-        $form->column(12, function ($form) {
+        $form->column(12, function ($form) use ($product) {
             $form->divider('Описание');
+            $form->html(view('admin.product.description-promt', ['product' => $product]));
             $form->ckeditor('description', '');
         });
 
-        if (isset($product)) {
+        if ($product) {
             $form->column(12, function ($form) use ($product) {
                 $form->divider('Группа товаров');
                 $form->html($this->productGroupGrid($product));
@@ -223,6 +231,25 @@ class ProductControllerOld extends AbstractAdminController
             }
             if (!empty($sorting)) {
                 Media::setNewOrder($sorting);
+            }
+
+            $mediaData = $form->input('mediaData');
+            if (!empty($mediaData)) {
+                $mediaList = Media::whereIn('id', array_keys($mediaData))->get();
+                foreach ($mediaData as $mediaId => $mediaDataItem) {
+                    $media = $mediaList->where('id', $mediaId)->first();
+                    if (isset($mediaDataItem['media_video'])) {
+                        $media->setCustomProperty('video', $mediaDataItem['media_video']);
+                    } else {
+                        $media->forgetCustomProperty('video');
+                    }
+                    if (isset($mediaDataItem['media_is_imidj'])) {
+                        $media->setCustomProperty('is_imidj', (bool)$mediaDataItem['media_is_imidj']);
+                    } else {
+                        $media->forgetCustomProperty('is_imidj');
+                    }
+                    $media->save();
+                }
             }
 
             $form->model()->url()->delete();

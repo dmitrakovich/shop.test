@@ -2,7 +2,6 @@
 
 namespace App\Jobs\AvailableSizes;
 
-use App\Enums\Product\ProductLabels;
 use App\Models\AvailableSizes;
 use App\Models\Product;
 use App\Models\Size;

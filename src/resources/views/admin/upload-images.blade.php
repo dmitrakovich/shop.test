@@ -19,6 +19,13 @@
                             class="kv-file-zoom btn btn-sm btn-kv btn-default btn-outline-secondary">
                             <i class="glyphicon glyphicon-zoom-in"></i>
                         </a>
+                        <button type="button" data-id="{{ $image->id }}"
+                            data-video="{{ $image->getCustomProperty('video') }}"
+                            data-is_imidj="{{ $image->getCustomProperty('is_imidj') }}"
+                            class="btn btn-sm btn-kv btn-default btn-outline-secondary js-productMediaCustomDataModalBtn"
+                            data-toggle="modal">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -44,5 +51,38 @@
     </div>
     <div class="form-group">
         <button class="btn btn-primary" id="save-cropped-image">Сохранить</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="js-productMediaCustomDataModal" tabindex="-1" role="dialog"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Ссылка на видео</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
+                            <input type="text" class="form-control"
+                                id="js-productMediaCustomDataModalVideo" placeholder="Ссылка на видео">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3">Имиджевое</label>
+                    <div class="col-sm-9" style="text-align: left;">
+                        <input type="checkbox" id="js-productMediaCustomDataModalIsImidj"
+                            class="la_checkbox" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+                <button type="button"
+                    class="btn btn-primary js-productMediaCustomDataModalSave">Сохранить</button>
+            </div>
+        </div>
     </div>
 </div>
