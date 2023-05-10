@@ -2,15 +2,14 @@
 
 namespace App\Admin\Controllers\Departures;
 
-use App\Models\Orders\Batch;
-use App\Admin\Selectable\Orders;
-
 use App\Admin\Actions\Order\DeleteBatchAction;
 use App\Admin\Actions\Order\SendBatchAction;
+use App\Admin\Selectable\Orders;
+use App\Models\Orders\Batch;
 use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Layout\Content;
-use Encore\Admin\Grid;
 use Encore\Admin\Form;
+use Encore\Admin\Grid;
+use Encore\Admin\Layout\Content;
 
 class BatchController extends AdminController
 {

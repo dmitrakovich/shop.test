@@ -19,11 +19,12 @@ class BatchService
             $result[] = [++$key, $order->first_name, $order->last_name, $order->patronymic_name, 'BY', 'БЕЛАРУСЬ', ($order->zip ?? ''), '', '', '', $order->city, $order->user_addr, '', '', '', 10, 2, 0, 2, 0, 0, ($order->weight ?? 1200), 0, $price, '', $cod, 0, '', '', '', '', '', $order->phohe, 'info@modny.by'];
         }
         array_unshift($result, [291711523, date('d.m.Y', strtotime('now')), (count($batch->orders) * $price), count($batch->orders), 50, 1, 0, 0, 1, 375291793790, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']);
-        $fp = fopen(storage_path('app/public/departures/batch_send/' .  $batch->id . '.csv'), 'w');
+        $fp = fopen(storage_path('app/public/departures/batch_send/' . $batch->id . '.csv'), 'w');
         foreach ($result as $fields) {
             fputcsv($fp, $fields);
         }
         fclose($fp);
-        return url('/storage/departures/batch_send/' .  $batch->id . '.csv');
+
+        return url('/storage/departures/batch_send/' . $batch->id . '.csv');
     }
 }

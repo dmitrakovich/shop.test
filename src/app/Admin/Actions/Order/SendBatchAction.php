@@ -16,6 +16,7 @@ class SendBatchAction extends RowAction
         $file = $batchService->createBatchCsv($model);
         $model->dispatch_date = now();
         $model->save();
+
         return $this->response()->success('Партия успешно отправлена!')->download($file);
     }
 }
