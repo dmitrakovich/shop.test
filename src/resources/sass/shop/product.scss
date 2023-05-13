@@ -47,6 +47,7 @@
 
             .swiper-button-prev,
             .swiper-button-next {
+                display: none;
                 background: transparent;
                 color: #000;
                 left: 0;
@@ -133,7 +134,7 @@
     }
 }
 
-@media (min-width: 1024px) {
+@include media-breakpoint-up(lg) {
     .p-product {
 
         &__slider {
@@ -142,6 +143,11 @@
             &-min {
                 width: 100px;
                 order: 1;
+
+                .swiper-button-prev,
+                .swiper-button-next {
+                    display: flex;
+                }
             }
         }
     }

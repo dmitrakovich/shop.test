@@ -101,7 +101,6 @@ class StockController extends AbstractAdminController
         return $grid;
     }
 
-
     private function addFiltersForAvailableSizes(Filter $filter, array $stockNames, array $defaultStockList): void
     {
         $filter->disableIdFilter();
@@ -205,7 +204,7 @@ class StockController extends AbstractAdminController
     /**
      * Highlight rows in a table.
      */
-    function highlightRows(): \Closure
+    public function highlightRows(): \Closure
     {
         $yellow = '#FFFFB2';
         $red = '#FFB2B2';
