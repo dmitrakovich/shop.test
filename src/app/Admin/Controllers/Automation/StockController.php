@@ -207,9 +207,9 @@ class StockController extends AbstractAdminController
      */
     function highlightRows(): \Closure
     {
-        $yellow = 'rgba(255, 255, 0, 0.3)';
-        $red = 'rgba(255, 0, 0, 0.3)';
-        $turquoise = 'rgba(64, 224, 208, 0.3)';
+        $yellow = '#FFFFB2';
+        $red = '#FFB2B2';
+        $turquoise = '#C5F6F1';
         $gray = '#CCCCCC';
 
         return function (Row $row) use ($yellow, $red, $turquoise, $gray) {
