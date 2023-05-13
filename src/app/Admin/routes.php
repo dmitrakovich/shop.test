@@ -1,6 +1,5 @@
 <?php
 
-use App\Admin\Controllers\SkladController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\Shop\OrderController;
 use Encore\Admin\Facades\Admin;
@@ -103,7 +102,6 @@ Route::group([
     // legacy
     $router->any('availability', AvailiabilityController::class);
     $router->any('rating', RatingController::class);
-    $router->any('sklad', [SkladController::class, 'index']);
 
     // Automation
     $router->group(['prefix' => 'automation', 'namespace' => 'Automation', 'as' => 'automation.'], function ($router) {
