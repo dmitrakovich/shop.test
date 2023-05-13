@@ -77,14 +77,16 @@ class StockController extends AbstractAdminController
         $grid->model()->selectRaw(implode(', ', $select))
             ->leftJoin('products', 'products.id', '=', 'available_sizes.product_id')
             ->groupBy(['sku', 'brand_id', 'category_id'])
-            ->union(
-                DB::table('products')
-                    ->selectRaw(implode(', ', $select))
-                    ->leftJoin('available_sizes', 'available_sizes.product_id', '=', 'products.id')
-                    ->where($this->addFiltersForProducts())
-                    ->whereNull('available_sizes.product_id')
-                    ->groupBy(['sku', 'brand_id', 'category_id'])
-            )
+            ->when(request('show') !== 'only_in_stock', function ($query) use ($select) {
+                return $query->union(
+                    DB::table('products')
+                        ->selectRaw(implode(', ', $select))
+                        ->leftJoin('available_sizes', 'available_sizes.product_id', '=', 'products.id')
+                        ->where($this->addFiltersForProducts())
+                        ->whereNull('available_sizes.product_id')
+                        ->groupBy(['sku', 'brand_id', 'category_id'])
+                );
+            })
             ->orderBy('product_id', 'desc')
             ->with(['media', 'brand:id,name', 'sizes:id,name']);
 
@@ -104,7 +106,7 @@ class StockController extends AbstractAdminController
     private function addFiltersForAvailableSizes(Filter $filter, array $stockNames, array $defaultStockList): void
     {
         $filter->disableIdFilter();
-        //? какой-той еще фильтр !!!
+        $filter->where(fn ($query) => $query, 'Товары, которых нет на складе', 'show')->radio(['all' => 'показывать', 'only_in_stock' => 'скрыть'])->default('all');
         $filter->where($this->getProductFilter(), 'Код товара / артикул', 'product');
         $filter->in('stock_id', 'Склад')->multipleSelect($stockNames)->default($defaultStockList);
         $filter->where($this->getStatusFilter(), 'Статус', 'status')->checkbox(self::statusfilters);

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Exports;
 
+use Encore\Admin\Grid;
 use Encore\Admin\Grid\Row;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\WithDrawings;
@@ -19,13 +20,21 @@ class StockExporter extends ExcelExporterFromCollection implements WithEvents, W
     protected $fileName = 'Склад.xlsx';
 
     /**
-     * Prepare rows for excel
+     * Create a new exporter instance.
      */
-    public function prepareRows(): Collection
+    public function __construct(Grid $grid = null)
     {
         ini_set('memory_limit', '512M');
         set_time_limit(60);
 
+        parent::__construct($grid);
+    }
+
+    /**
+     * Prepare rows for excel
+     */
+    public function prepareRows(): Collection
+    {
         $this->grid->build();
         $columns = $this->grid->visibleColumnNames();
 
