@@ -23,6 +23,7 @@ use App\Models\Size;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\ContextMenuActions;
@@ -79,13 +80,13 @@ class OrderController extends AdminController
 
         $grid->column('status_key', 'Статус')->editable('select', $orderStatuses);
 
-        // /** @var Administrator */
-        // $adminUser = Admin::user();
-        // if ($adminUser->inRoles(['administrator', 'director'])) {
-        $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
-        // } else {
-        //     $grid->column('admin.name', 'Менеджер');
-        // }
+        /** @var Administrator */
+        $adminUser = Admin::user();
+        if ($adminUser->inRoles(['administrator', 'director'])) {
+            $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
+        } else {
+            $grid->column('admin.name', 'Менеджер');
+        }
 
         $grid->column('created_at', 'Создан');
 
@@ -223,7 +224,15 @@ class OrderController extends AdminController
 
             $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'))
                 ->default(OrderStatus::DEFAULT_VALUE)->required();
-            $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
+
+            /** @var Administrator */
+            $adminUser = Admin::user();
+            if ($adminUser->inRoles(['administrator', 'director'])) {
+                $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
+            } else {
+                $form->display('admin.name', 'Менеджер');
+            }
+
             $form->hasMany('adminComments', 'Комментарии менеджера', function (Form\NestedForm $form) {
                 $form->textarea('comment', 'Комментарий')->rules(['required', 'max:500']);
                 $form->display('created_at', 'Дата');
