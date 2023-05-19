@@ -3,6 +3,6 @@
 
     function imageOnError(image) {
         image.onerror = '';
-        image.src = '/storage/products/0/deleted.jpg';
+        image.src = '/images/no-image.png';
     }
 </script>
