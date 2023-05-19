@@ -79,15 +79,7 @@ class OrderController extends AdminController
         $grid->column('delivery.name', 'Способ доставки');
 
         $grid->column('status_key', 'Статус')->editable('select', $orderStatuses);
-
-        /** @var Administrator */
-        $adminUser = Admin::user();
-        if ($adminUser->inRoles(['administrator', 'director'])) {
-            $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
-        } else {
-            $grid->column('admin.name', 'Менеджер');
-        }
-
+        $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
         $grid->column('created_at', 'Создан');
 
         $grid->actions(function ($actions) {
@@ -224,15 +216,7 @@ class OrderController extends AdminController
 
             $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'))
                 ->default(OrderStatus::DEFAULT_VALUE)->required();
-
-            /** @var Administrator */
-            $adminUser = Admin::user();
-            if ($adminUser->inRoles(['administrator', 'director'])) {
-                $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
-            } else {
-                $form->display('admin.name', 'Менеджер');
-            }
-
+            $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
             $form->hasMany('adminComments', 'Комментарии менеджера', function (Form\NestedForm $form) {
                 $form->textarea('comment', 'Комментарий')->rules(['required', 'max:500']);
                 $form->display('created_at', 'Дата');
