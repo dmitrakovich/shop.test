@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\AvailableSizes\UpdateAvailabilityJob;
-use App\Mail\OrderCreated;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Notifications\TestSms;
@@ -30,7 +29,7 @@ class DebugController extends Controller
 
         // php artisan make:mail OrderShipped
 
-        return $this->printOrder(Order::with('data')->find(3));
+        return dd(Order::with('data')->find(3));
     }
 
     public function testSqlServerConnection()
@@ -44,19 +43,6 @@ class DebugController extends Controller
     public function phpinfo(): never
     {
         exit(phpinfo());
-    }
-
-    /**
-     * @return void
-     */
-    public function printOrder(Order $order)
-    {
-        // TODO: create route if needed
-
-        // $email = 'dmitrakovich.andrey@yandex.by';
-        // Mail::to($email)->send(new OrderCreated($order));
-
-        return view('emails.order-created', compact('order'));
     }
 
     /**

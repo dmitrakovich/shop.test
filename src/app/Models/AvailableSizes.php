@@ -193,6 +193,14 @@ class AvailableSizes extends Model implements HasMedia
     }
 
     /**
+     * Converts a given Size ID to its corresponding field name.
+     */
+    public static function convertSizeIdToField(int $sizeId): string
+    {
+        return array_search($sizeId, self::FIELD_TO_SIZE_ID_MAP);
+    }
+
+    /**
      * Get the size attributes for this model instance.
      */
     protected function getSizeAttributes(): array
