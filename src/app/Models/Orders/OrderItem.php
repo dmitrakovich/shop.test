@@ -116,4 +116,12 @@ class OrderItem extends Model
     {
         return $this->status_key === 'complete';
     }
+
+    /**
+     * Set canceled status
+     */
+    public function cancel(): bool
+    {
+        return $this->update(['status_key' => 'canceled']);
+    }
 }

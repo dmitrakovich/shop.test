@@ -2,6 +2,7 @@
 
 namespace App\Models\Orders;
 
+use App\Events\OrderStatusChanged;
 use App\Models\Country;
 use App\Models\Device;
 use App\Models\Enum\OrderMethod;
@@ -109,9 +110,10 @@ class Order extends Model
     {
         parent::boot();
 
-        static::saving(function (self $orderItem) {
-            if ($orderItem->isDirty('status_key')) {
-                $orderItem->status_updated_at = now();
+        static::saving(function (self $order) {
+            if ($order->isDirty('status_key')) {
+                $order->status_updated_at = now();
+                event(new OrderStatusChanged($order, $order->getOriginal('status_key')));
             }
         });
     }
@@ -340,6 +342,14 @@ class Order extends Model
     public function isCompleted(): bool
     {
         return $this->status_key === 'complete';
+    }
+
+    /**
+     * Check if this order has been canceled
+     */
+    public function isCanceled(): bool
+    {
+        return $this->status_key === 'canceled';
     }
 
     /**

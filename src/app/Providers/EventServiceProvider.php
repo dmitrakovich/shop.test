@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\Notifications\NotificationSkipped;
 use App\Events\OrderCreated;
+use App\Events\OrderStatusChanged;
 use App\Events\ReviewPosted;
 use App\Listeners\Cache\ResetUserCache;
 use App\Listeners\LogNotification;
@@ -12,6 +13,8 @@ use App\Listeners\MergeFavorites;
 use App\Listeners\SaveDevice;
 use App\Listeners\SendOrderInformationNotification;
 use App\Listeners\SyncOrderHistory;
+use App\Listeners\UpdateInventory;
+use App\Listeners\UpdateOrderItemsStatus;
 use App\Listeners\User\UpdateUserGroup;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
@@ -43,6 +46,10 @@ class EventServiceProvider extends ServiceProvider
             SaveDevice::class,
             UpdateUserGroup::class,
             ResetUserCache::class,
+        ],
+        OrderStatusChanged::class => [
+            UpdateInventory::class,
+            UpdateOrderItemsStatus::class,
         ],
         NotificationSent::class => [
             LogNotification::class,
