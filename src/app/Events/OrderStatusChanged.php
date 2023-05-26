@@ -13,7 +13,7 @@ class OrderStatusChanged
     /**
      * Create a new event instance.
      */
-    public function __construct(public Order $order, public string $prevStatus)
+    public function __construct(public Order $order, public ?string $prevStatus = null)
     {
     }
 }
