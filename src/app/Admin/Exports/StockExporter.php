@@ -110,7 +110,7 @@ class StockExporter extends ExcelExporterFromCollection implements WithEvents, W
             if (str_contains($imgHtml, 'no-image-100')) {
                 $imagePath = $noImagePath;
             } else {
-                $start = strpos($imgHtml, "media/products/");
+                $start = strpos($imgHtml, 'media/products/');
                 $end = strpos($imgHtml, "'", $start);
                 $imagePath = public_path(substr($imgHtml, $start, $end - $start));
                 if (!file_exists($imagePath)) {
