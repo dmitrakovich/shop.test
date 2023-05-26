@@ -70,7 +70,7 @@ class UpdateInventory implements ShouldQueue
      */
     private function removeSizeFromCatalog(int $productId, int $sizeId): void
     {
-        /** @var Product $product*/
+        /** @var Product $product */
         if (empty($product = Product::find($productId, ['id']))) {
             return;
         }

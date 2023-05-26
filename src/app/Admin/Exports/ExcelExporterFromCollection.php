@@ -27,9 +27,6 @@ class ExcelExporterFromCollection extends AbstractExporter implements FromCollec
      */
     protected $columns = [];
 
-    /**
-     * @return array
-     */
     public function headings(): array
     {
         return $this->grid->getColumns()->map(function (Column $column) {

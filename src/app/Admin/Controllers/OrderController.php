@@ -23,7 +23,6 @@ use App\Models\Size;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\ContextMenuActions;
