@@ -130,7 +130,7 @@ class UpdateAvailabilityOldJob extends AbstractJob
 
         // Склады по которым НЕ сверяется наличие
         $place = '1';
-        $falsePlaceArr = ['ИНТЕРНЕТ МАГАЗИН', 'МИНСК'];
+        $falsePlaceArr = ['ИНТЕРНЕТ МАГАЗИН', 'МИНСК', 'СКЛАД МИНСК ЗИМА'];
 
         for ($i = 4; $i < count($resI); $i++) {
             // помечаем в каком складе
