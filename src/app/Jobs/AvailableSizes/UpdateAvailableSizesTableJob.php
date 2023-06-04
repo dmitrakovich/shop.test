@@ -9,6 +9,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
@@ -82,6 +83,9 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
 
         $count = $this->updateAvailableSizesFromOrders($availableSizes);
         $this->log("Обновлено $count доступных размеров товаров на основе заказов");
+
+        $count = $this->removeEmptySizes($availableSizes);
+        $this->log("Удалено $count записей с пустыми размерами");
 
         $this->log('Запись полученных и сопоставленных данных в базу');
         $availableSizesTable = (new AvailableSizes())->getTable();
@@ -313,5 +317,23 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         }
 
         return $sizesCount;
+    }
+
+    /**
+     * Remove records where sum all sizes = 0
+     */
+    private function removeEmptySizes(array &$availableSizes): int
+    {
+        $count = 0;
+        $sizeFields = AvailableSizes::getSizeFields();
+        foreach ($availableSizes as $key => $stock) {
+            $sizes = Arr::only($stock, $sizeFields);
+            if (array_sum($sizes) <= 0) {
+                unset($availableSizes[$key]);
+                $count++;
+            }
+        }
+
+        return $count;
     }
 }

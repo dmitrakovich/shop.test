@@ -39,10 +39,6 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
     {
         UpdateAvailableSizesTableJob::dispatchSync();
 
-        //todo move to UpdateAvailableSizesTableJob
-        $count = AvailableSizes::removeEmptySizes();
-        $this->log("Удалено $count записей с пустыми размерами в таблице наличия");
-
         $count = $this->deleteUnavailableProducts();
         $this->log("Снято с публикации $count товаров");
 
