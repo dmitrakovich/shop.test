@@ -7,6 +7,7 @@ use App\Jobs\Ssh\DestroyTunnelJob;
 use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Orders\OrderItem;
 use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
 
@@ -78,6 +79,9 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         //todo: отфильтровать значения с пустым sku
         //todo: отфильтровать категории, заданные в конфиге
         //todo: либо отфильтровывать все ненайденные категории
+
+        $count = $this->updateAvailableSizesFromOrders($availableSizes);
+        $this->log("Обновлено $count доступных размеров товаров на основе заказов");
 
         $this->log('Запись полученных и сопоставленных данных в базу');
         $availableSizesTable = (new AvailableSizes())->getTable();
@@ -273,5 +277,41 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     protected function getCurrentStockId(int $stockId): ?int
     {
         return $this->stockIds[$stockId] ?? null;
+    }
+
+    /**
+     * Update available sizes of products based on orders.
+     */
+    private function updateAvailableSizesFromOrders(array &$availableSizes): int
+    {
+        $productsInOrders = [];
+        $sizesCount = OrderItem::query()->whereIn('status_key', ['new', 'reserved', 'confirmed', 'pickup'])
+            ->get(['product_id', 'size_id', 'count'])
+            ->each(function (OrderItem $orderItem) use (&$productsInOrders) {
+                $pid = $orderItem->product_id;
+                $sid = $orderItem->size_id;
+                $productsInOrders[$pid][$sid] = ($productsInOrders[$pid][$sid] ?? 0) + $orderItem->count;
+            })
+            ->count();
+
+        foreach ($availableSizes as &$stock) {
+            if (empty($stock['product_id'])) {
+                continue;
+            }
+            foreach ($productsInOrders[$stock['product_id']] ?? [] as $sizeId => &$count) {
+                $sizeField = AvailableSizes::convertSizeIdToField($sizeId);
+                if ($stock[$sizeField] - $count <= 0) {
+                    $stock[$sizeField] = 0;
+                } else {
+                    $stock[$sizeField] -= $count;
+                }
+                $count -= $stock[$sizeField];
+                if ($count <= 0) {
+                    unset($productsInOrders[$stock['product_id']][$sizeId]);
+                }
+            }
+        }
+
+        return $sizesCount;
     }
 }
