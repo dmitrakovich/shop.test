@@ -82,7 +82,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
             foreach ($this->groupByCount($products) as $count => $productIds) {
                 $fieldName = AvailableSizes::convertSizeIdToField($sizeId);
                 DB::table('available_sizes')->whereIn('product_id', $productIds)->update([
-                    $fieldName => DB::raw("CASE WHEN $fieldName >= $count THEN $fieldName - $count ELSE 0 END")
+                    $fieldName => DB::raw("CASE WHEN $fieldName >= $count THEN $fieldName - $count ELSE 0 END"),
                 ]);
             }
         }
@@ -91,7 +91,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
     /**
      * Group products by count.
      *
-     * @param  array $products The array of products with their counts.
+     * @param  array  $products The array of products with their counts.
      * @return array The grouped array where products are grouped by count.
      */
     private function groupByCount(array $products): array
@@ -100,6 +100,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         foreach ($products as $productId => $count) {
             $grouped[$count][] = $productId;
         }
+
         return $grouped;
     }
 
