@@ -10,7 +10,7 @@ use App\Models\Category;
 use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
 
-class UpdateSizesAvailabilitiesTableJob extends AbstractAvailableSizesJob
+class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
 {
     /**
      * Table name in 1C, contains the quantity in stock

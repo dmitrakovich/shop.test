@@ -3,6 +3,7 @@
 namespace App\Jobs\AvailableSizes;
 
 use App\Models\AvailableSizes;
+use App\Models\Orders\OrderItem;
 use App\Models\Product;
 use App\Models\Size;
 use App\Services\LogService;
@@ -37,9 +38,11 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      */
     public function handle()
     {
-        UpdateSizesAvailabilitiesTableJob::dispatchSync();
+        UpdateAvailableSizesTableJob::dispatchSync();
 
-        //todo: вначае отнять то что в заказа, а потом удалять товары с пустыми размерами
+        $this->updateAvailableSizesFromOrders();
+        // $count = $this->updateAvailableSizesFromOrders();
+        // $this->log("Обновлено $count доступных размеров товаров на основе заказов");
 
         $count = AvailableSizes::removeEmptySizes();
         $this->log("Удалено $count записей с пустыми размерами в таблице наличия");
@@ -59,6 +62,45 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
 
         $this->writeLog();
         $this->log('Обновление успешно завершено!');
+    }
+
+    /**
+     * Update available sizes of products based on orders.
+     */
+    private function updateAvailableSizesFromOrders(): void
+    {
+        $sizesInOrders = [];
+        OrderItem::query()->whereIn('status_key', ['new', 'reserved', 'confirmed', 'pickup'])
+            ->get(['product_id', 'size_id', 'count'])
+            ->each(function (OrderItem $orderItem) use (&$sizesInOrders) {
+                $pid = $orderItem->product_id;
+                $sid = $orderItem->size_id;
+                $sizesInOrders[$sid][$pid] = ($sizesInOrders[$sid][$pid] ?? 0) + $orderItem->count;
+            });
+
+        foreach ($sizesInOrders as $sizeId => $products) {
+            foreach ($this->groupByCount($products) as $count => $productIds) {
+                $fieldName = AvailableSizes::convertSizeIdToField($sizeId);
+                DB::table('available_sizes')->whereIn('product_id', $productIds)->update([
+                    $fieldName => DB::raw("CASE WHEN $fieldName >= $count THEN $fieldName - $count ELSE 0 END")
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Group products by count.
+     *
+     * @param  array $products The array of products with their counts.
+     * @return array The grouped array where products are grouped by count.
+     */
+    private function groupByCount(array $products): array
+    {
+        $grouped = [];
+        foreach ($products as $productId => $count) {
+            $grouped[$count][] = $productId;
+        }
+        return $grouped;
     }
 
     /**

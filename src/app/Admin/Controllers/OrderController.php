@@ -8,6 +8,7 @@ use App\Admin\Actions\Order\CreateOnlinePayment;
 use App\Admin\Actions\Order\InstallmentForm;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
+use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Country;
 use App\Models\Currency;
@@ -284,6 +285,9 @@ class OrderController extends AdminController
         $form->saved(function (Form $form) {
             if ((int)$form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
                 $this->saveInstallments($form);
+            }
+            if ($form->isCreating()) {
+                event(new OrderCreated($form->model()));
             }
             // TODO: recalc order total price
         });
