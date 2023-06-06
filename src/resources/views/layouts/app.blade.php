@@ -58,15 +58,15 @@
     <div class="overlay"></div>
 
     {{-- call center chat --}}
-<script type="text/javascript">
-    document.umnicoWidgetHash = '0aae98fb8286210cbdf29001f936950b';
-    var x = document.createElement('script');
-    x.src = 'https://umnico.com/assets/widget-loader.js';
-    x.type = 'text/javascript';
-    x.charset = 'UTF-8';
-    x.async = true;
-    document.body.appendChild(x);
-</script>
+    <script type="text/javascript">
+        document.umnicoWidgetHash = '0aae98fb8286210cbdf29001f936950b';
+        var x = document.createElement('script');
+        x.src = 'https://umnico.com/assets/widget-loader.js';
+        x.type = 'text/javascript';
+        x.charset = 'UTF-8';
+        x.async = true;
+        document.body.appendChild(x);
+    </script>
 
 </body>
 
