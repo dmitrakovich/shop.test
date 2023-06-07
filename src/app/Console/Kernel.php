@@ -21,7 +21,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\GenerateSitemapCommand::class,
-        //
+        Commands\Payment\EripStatusUpdateCommand::class,
     ];
 
     /**
@@ -49,6 +49,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('backup:monitor')->dailyAt('06:30');
 
         $schedule->command('generate:sitemap')->dailyAt('00:30');
+
+        $schedule->command('erip:update-statuses')->hourly();
     }
 
     /**
