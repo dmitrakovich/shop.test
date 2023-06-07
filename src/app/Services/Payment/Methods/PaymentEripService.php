@@ -91,7 +91,7 @@ class PaymentEripService extends AbstractPaymentService
                 $paymentsByNum = $payments->mapWithKeys(fn ($item) => [$item->payment_num => $item]);
                 $invoicingList = ApiHGroshFacade::invoicingGetListInvoice()->request([
                     'count' => $chunkSize,
-                    'searchString' => $searchString
+                    'searchString' => $searchString,
                 ]);
                 if ($invoicingList->isOk()) {
                     $responseInvoicingList = $invoicingList->getBodyFormat();
