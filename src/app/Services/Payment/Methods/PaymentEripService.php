@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Methods;
 
 use App\Enums\Payment\OnlinePaymentMethodEnum;
+use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Jobs\Payment\CreateQrcodeJob;
 use App\Libraries\HGrosh\Facades\ApiHGroshFacade;
 use App\Models\Orders\Order;
@@ -74,6 +75,40 @@ class PaymentEripService extends AbstractPaymentService
         }
 
         return $onlinePayment;
+    }
+
+    /**
+     * Update statuses
+     */
+    public function updateStatuses(): void
+    {
+        $chunkSize = 50;
+        OnlinePayment::where('method_enum_id', OnlinePaymentMethodEnum::ERIP)
+            ->whereNotNull('payment_num')
+            ->where('last_status_enum_id', OnlinePaymentStatusEnum::PENDING)
+            ->chunkById($chunkSize, function ($payments) use ($chunkSize) {
+                $searchString = $payments->implode('payment_num', ' || ');
+                $paymentsByNum = $payments->mapWithKeys(fn ($item) => [$item->payment_num => $item]);
+                $invoicingList = ApiHGroshFacade::invoicingGetListInvoice()->request([
+                    'count' => $chunkSize,
+                    'searchString' => $searchString,
+                ]);
+                if ($invoicingList->isOk()) {
+                    $responseInvoicingList = $invoicingList->getBodyFormat();
+                    $records = $responseInvoicingList['records'] ?? [];
+                    foreach ($records as $record) {
+                        $payment = $paymentsByNum[$record['number']] ?? null;
+                        $state = $record['state'] ?? null;
+                        if ($payment && $state) {
+                            match ($state) {
+                                20 => $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::SUCCEEDED),
+                                30, 80, 110 => $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::CANCELED),
+                                default => null
+                            };
+                        }
+                    }
+                }
+            });
     }
 
     /**
