@@ -25,7 +25,7 @@ Route::group([
         $router->resource('groups', Users\GroupController::class);
     });
 
-    $router->resource('products', ProductControllerOld::class); // !!!
+    $router->resource('products', ProductController::class);
     $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('products.restore');
 
     $router->group(['prefix' => 'product-attributes', 'namespace' => 'ProductAttributes'], function ($router) {
