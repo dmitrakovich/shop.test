@@ -297,7 +297,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $excludeCategories = Config::findCacheable('inventory_blacklist')['categories'];
 
         foreach ($availableSizes as $key => $stock) {
-            if (empty($stock['sku']) || in_array($stock->category_name, $excludeCategories)) {
+            if (empty($stock['sku']) || in_array($stock['category_name'], $excludeCategories)) {
                 unset($availableSizes[$key]);
                 $count++;
             }

@@ -21,7 +21,7 @@ class FeedGeneratorJob extends AbstractJob
      *
      * @var int
      */
-    public $timeout = 300;
+    public $timeout = 600;
 
     /**
      * @var array
