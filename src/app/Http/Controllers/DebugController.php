@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\AvailableSizes\UpdateAvailabilityJob;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Notifications\TestSms;
-use App\Services\LogService;
 use Illuminate\Database\Eloquent\Model;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
@@ -15,12 +13,6 @@ class DebugController extends Controller
 {
     public function index()
     {
-        try {
-            $this->testSqlServerConnection();
-        } catch (\Throwable $th) {
-            dd($th);
-        }
-
         return 'ok';
 
         /** @var User $user */
@@ -30,11 +22,6 @@ class DebugController extends Controller
         // php artisan make:mail OrderShipped
 
         return dd(Order::with('data')->find(3));
-    }
-
-    public function testSqlServerConnection()
-    {
-        // UpdateAvailabilityJob::dispatchSync(app(LogService::class));
     }
 
     /**
