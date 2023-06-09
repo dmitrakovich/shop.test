@@ -101,7 +101,7 @@ Route::group([
 
     // legacy
     $router->any('availability', AvailiabilityController::class);
-    $router->any('rating', RatingController::class);
+    $router->any('config/rating', RatingController::class);
 
     // Automation
     $router->group(['prefix' => 'automation', 'namespace' => 'Automation', 'as' => 'automation.'], function ($router) {
