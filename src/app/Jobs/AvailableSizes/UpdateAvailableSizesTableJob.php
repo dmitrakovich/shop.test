@@ -18,7 +18,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     /**
      * Table name in 1C, contains the quantity in stock
      */
-    const ONE_C_STOCK_QUANTITY_TABLE = 'SC6021';
+    const ONE_C_STOCK_QUANTITY_TABLE = 'SC5925';
 
     /**
      * Current product identificators
@@ -104,32 +104,32 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     {
         return [
             'ROW_ID',
-            'SP6022 as one_c_product_id',
-            'SP5998 as brand_id',
+            'SP5898 as one_c_product_id',
+            'SP5902 as brand_id',
             'DESCR as category_name',
-            'SP5996 as stock_id',
-            'SP5993 as sku',
-            'SP6000 as buy_price',
-            'SP5999 as sell_price',
-            'SP6001 as size_none',
-            'SP6002 as size_31',
-            'SP6003 as size_32',
-            'SP6004 as size_33',
-            'SP6005 as size_34',
-            'SP6006 as size_35',
-            'SP6007 as size_36',
-            'SP6008 as size_37',
-            'SP6009 as size_38',
-            'SP6010 as size_39',
-            'SP6011 as size_40',
-            'SP6012 as size_41',
-            'SP6013 as size_42',
-            'SP6014 as size_43',
-            'SP6015 as size_44',
-            'SP6016 as size_45',
-            'SP6017 as size_46',
-            'SP6018 as size_47',
-            'SP6019 as size_48',
+            'SP5900 as stock_id',
+            'SP5896 as sku',
+            'SP5904 as buy_price',
+            'SP5903 as sell_price',
+            'SP5905 as size_none',
+            'SP5906 as size_31',
+            'SP5907 as size_32',
+            'SP5908 as size_33',
+            'SP5909 as size_34',
+            'SP5910 as size_35',
+            'SP5911 as size_36',
+            'SP5912 as size_37',
+            'SP5913 as size_38',
+            'SP5914 as size_39',
+            'SP5915 as size_40',
+            'SP5916 as size_41',
+            'SP5917 as size_42',
+            'SP5918 as size_43',
+            'SP5919 as size_44',
+            'SP5920 as size_45',
+            'SP5921 as size_46',
+            'SP5922 as size_47',
+            'SP5923 as size_48',
         ];
     }
 
