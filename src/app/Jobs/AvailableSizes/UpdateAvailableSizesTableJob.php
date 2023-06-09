@@ -71,7 +71,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
             ->table(self::ONE_C_STOCK_QUANTITY_TABLE)
             ->select($this->getStockQuantityFields())
             ->orderBy('ROW_ID')
-            ->whereIn('SP5996', array_keys($this->stockIds))
+            ->whereIn('SP5900', array_keys($this->stockIds))
             ->each(function (\stdClass $stockUnit) use (&$availableSizes) {
                 $availableSizes[] = $this->prepareAvailableSizesData($stockUnit);
             });
