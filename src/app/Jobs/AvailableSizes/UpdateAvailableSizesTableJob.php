@@ -7,6 +7,7 @@ use App\Jobs\Ssh\DestroyTunnelJob;
 use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Config;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
 use Illuminate\Support\Arr;
@@ -77,9 +78,8 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
 
         DestroyTunnelJob::dispatchSync();
 
-        //todo: отфильтровать значения с пустым sku
-        //todo: отфильтровать категории, заданные в конфиге
-        //todo: либо отфильтровывать все ненайденные категории
+        $count = $this->filterAvailableSizes($availableSizes);
+        $this->log("Отфильтровано $count записей с неподходящими категориями или пустыми артикулами");
 
         $count = $this->updateAvailableSizesFromOrders($availableSizes);
         $this->log("Обновлено $count доступных размеров товаров на основе заказов");
@@ -197,9 +197,10 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     protected function prepareAvailableSizesData(\stdClass $stockUnit): array
     {
         $sku = trim($stockUnit->sku);
+        $categoryName = trim($stockUnit->category_name);
         $brandId = $this->getCurrentBrandId((int)$stockUnit->brand_id);
         $productId = $this->getCurrentProductId($brandId, $sku);
-        $categoryId = $this->getCurrentCategoryId($stockUnit->category_name);
+        $categoryId = $this->getCurrentCategoryId($categoryName);
         $stockId = $this->getCurrentStockId((int)$stockUnit->stock_id);
 
         return [
@@ -209,6 +210,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
             'category_id' => $categoryId,
             'stock_id' => $stockId,
             'sku' => $sku,
+            'category_name' => $categoryName,
             'buy_price' => (float)$stockUnit->buy_price,
             'sell_price' => (float)$stockUnit->sell_price,
             'size_none' => (int)$stockUnit->size_none,
@@ -272,7 +274,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
      */
     protected function getCurrentCategoryId(string $categoryName): ?int
     {
-        return $this->catagoryIds[trim($categoryName)] ?? null;
+        return $this->catagoryIds[$categoryName] ?? null;
     }
 
     /**
@@ -281,6 +283,27 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     protected function getCurrentStockId(int $stockId): ?int
     {
         return $this->stockIds[$stockId] ?? null;
+    }
+
+    /**
+     * Filters the available sizes.
+     *
+     * This method filters the given values, excluding those with an empty SKU and categories
+     * not specified in the configuration.
+     */
+    private function filterAvailableSizes(array &$availableSizes): int
+    {
+        $count = 0;
+        $excludeCategories = Config::findCacheable('inventory_blacklist')['categories'];
+
+        foreach ($availableSizes as $key => $stock) {
+            if (empty($stock['sku']) || in_array($stock->category_name, $excludeCategories)) {
+                unset($availableSizes[$key]);
+                $count++;
+            }
+        }
+
+        return $count;
     }
 
     /**

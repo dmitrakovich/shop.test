@@ -21,6 +21,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $category_id
  * @property int $stock_id
  * @property string $sku
+ * @property string $category_name
  * @property float $buy_price
  * @property float $sell_price
  * @property int $size_none

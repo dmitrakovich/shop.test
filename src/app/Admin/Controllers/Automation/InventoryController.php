@@ -28,6 +28,7 @@ class InventoryController extends AbstractAdminController
             'GROUP_CONCAT(available_sizes.id SEPARATOR \',\') as stock_ids',
             'brand_id',
             'category_id',
+            'MAX(category_name) as category_name',
             // 'GROUP_CONCAT(stocks.name SEPARATOR \', \') as stocks',
             'sku',
             'MAX(buy_price) as buy_price',
@@ -44,6 +45,7 @@ class InventoryController extends AbstractAdminController
         $unknownBrand = '<span class="text-red">неизветный бренд</span>';
 
         $grid->column('category.title', 'Категория')->display(fn ($value) => $value ?: $unknownCategory);
+        $grid->column('category_name', 'Категория с 1С');
         $grid->column('brand.name', 'Бренд')->display(fn ($value) => $value ?: $unknownBrand);
         $grid->column('sku', 'Артикул');
         // $grid->column('stocks', 'Склады');
