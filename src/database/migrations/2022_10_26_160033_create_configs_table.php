@@ -45,13 +45,26 @@ return new class extends Migration
                 'key' => 'rating',
                 'config' => $this->getRatingConfig(),
                 'created_at' => $now,
-                'updated_at' => $now,
             ],
             [
-                'key' => 'availability',
-                'config' => $this->getAvailabilityConfig(),
+                'key' => 'installment',
+                'config' => '{"min_price": "100.00"}',
                 'created_at' => $now,
-                'updated_at' => $now,
+            ],
+            [
+                'key' => 'feedback',
+                'config' => '{"discount": {"BYN": "10", "KZT": "1500", "RUB": "350", "USD": "5"}, "send_after": "72"}',
+                'created_at' => $now,
+            ],
+            [
+                'key' => 'sms',
+                'config' => '{"enabled": "on"}',
+                'created_at' => $now,
+            ],
+            [
+                'key' => 'newsletter_register',
+                'config' => '{"active": true, "to_days": 30, "from_days": 5}',
+                'created_at' => $now,
             ],
         ]);
     }
@@ -187,25 +200,6 @@ return new class extends Migration
                 ],
             ],
             'last_update' => '2021-09-15-17:15',
-        ]);
-    }
-
-    /**
-     * Availability config
-     */
-    private function getAvailabilityConfig(): string
-    {
-        return json_encode([
-            'auto_del' => 'off',
-            'ignore' => [],
-            'period' => 10,
-            'publish' => [],
-            'new' => [],
-            'add_size' => [],
-            'del' => [],
-            'del_size' => [],
-            'last_update' => null,
-            'file' => '2021-09-09 16:00:02,stub',
         ]);
     }
 };
