@@ -10,7 +10,8 @@ class RatingController extends AdminController
     public function __invoke(Content $content)
     {
         return $content
-            ->title('рейтинг')
-            ->view('legacy.rating', ['data' => 'foo']);
+            ->title('Рейтинг')
+            ->description('Конфигурация')
+            ->view('admin.rating-config');
     }
 }

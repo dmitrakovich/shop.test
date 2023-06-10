@@ -4,9 +4,12 @@ namespace App\Jobs;
 
 use App\Models\Config;
 use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Bus\Queueable;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Collection;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -35,74 +38,17 @@ class UpdateProductsRatingJob extends AbstractJob
         $this->debug('Старт');
         $ratingConfigModel = Config::findOrFail('rating');
         $ratingConfig = $ratingConfigModel->config;
-        $counterYandexId = '86365748'; // id счётчика Яндекс, поменял на новый. Старый был '31699806'
+        $counterYandexId = config('services.yandex.counter_id');
 
         // Предустановки
-        $cur_season = $ratingConfig['cur_season']; // текущие сезоны
-        $false_category = $ratingConfig['false_category']; // исключенные категории
         $Koef = $ratingConfig['algoritm'][$ratingConfig['curr_algoritm']];
 
-        $info = [];
+        $info = $this->getInitInfo();
+        $this->setNewlessesAndPrices($info);
+        $this->setDiscount($info);
+
         $rating = [];
-
-        $res_prod = DB::table('products')
-            ->whereNull('deleted_at')
-            ->where('price', '<>', 0)
-            ->where('label_id', '<>', 3)
-            ->selectRaw('MIN(price) AS price_min, MAX(price) AS price_max,
-                MIN(DATEDIFF(NOW(), created_at)) AS newless_min,
-                MAX(DATEDIFF(NOW(), created_at)) AS newless_max')
-            ->get();
-
-        $info['newless'] = [
-            'min' => $res_prod[0]->newless_min,
-            'max' => $res_prod[0]->newless_max,
-            'base' => $res_prod[0]->newless_max - $res_prod[0]->newless_min,
-            'summ' => 0,
-        ];
-
-        $info['price'] = [
-            'min' => $res_prod[0]->price_min,
-            'max' => $res_prod[0]->price_max,
-            'base' => $res_prod[0]->price_max - $res_prod[0]->price_min,
-            'summ' => 0,
-        ];
-
-        $res_prod = DB::table('products')
-            ->whereNull('deleted_at')
-            ->where('price', '<>', 0)
-            ->where('label_id', '<>', 3)
-            ->selectRaw('MAX(100*(old_price - price)/old_price) AS discount_max')
-            ->get();
-
-        $info['discount'] = [
-            'min' => 0,
-            'max' => $res_prod[0]->discount_max,
-            'base' => $res_prod[0]->discount_max,
-            'summ' => 0,
-        ];
-
-        $info['season'] = ['summ' => 0];
-        $info['action'] = ['summ' => 0];
-        $info['hit'] = ['summ' => 0];
-        $info['sale'] = ['summ' => 0];
-        $info['category'] = ['summ' => 0];
-
-        $select = "id, price, 100*(old_price - price)/old_price AS discount,
-            IF(DATEDIFF(NOW(), created_at) = 0,0.001, DATEDIFF(NOW(), created_at)) AS newless,
-            IF(season_id IN($cur_season),100,0) AS season,
-            IF(action = 1,100,0) AS action,
-            IF(label_id = 1,100,0) AS hit,
-            IF(label_id = 2,100,0) AS sale,
-            IF(category_id IN($false_category),0,100) as cat";
-
-        $products = DB::table('products')
-            ->whereNull('deleted_at')
-            ->where('price', '<>', 0)
-            ->where('label_id', '<>', 3)
-            ->selectRaw($select)
-            ->get();
-
+        $products = $this->getCalculatedProductsData($ratingConfig);
         foreach ($products as $prod) {
             $newless = 100 / sqrt($prod->newless);
             $info['newless']['summ'] += abs($newless);
@@ -137,19 +83,7 @@ class UpdateProductsRatingJob extends AbstractJob
         unset($products);
 
         // photo
-        $info['photo'] = [
-            'min' => 10,
-            'max' => 0,
-            'base' => 5,
-            'summ' => 0,
-        ];
-
-        $productsCounters = Product::select(['id'])
-            ->whereIn('id', $productsIds)
-            ->withCount('media')
-            ->withCount('sizes')
-            ->get();
-
+        $productsCounters = $this->getProductsCounters($productsIds);
         foreach ($productsCounters as $ph) {
             if (isset($rating[$ph->id])) {
                 if ($ph->media_count == 0) {
@@ -178,13 +112,6 @@ class UpdateProductsRatingJob extends AbstractJob
         }
 
         // aviable
-        $info['aviable'] = [
-            'min' => 10,
-            'max' => 0,
-            'base' => 5,
-            'summ' => 0,
-        ];
-
         foreach ($productsCounters as $av) {
             if (isset($rating[$av->id])) {
                 if ($av->sizes_count == 0) {
@@ -214,7 +141,7 @@ class UpdateProductsRatingJob extends AbstractJob
         unset($productsCounters);
 
         // popular & purshase
-        $params = [
+        $result_popular = $this->getYandexMetrikaData([
             'ids' => $counterYandexId,
             'metrics' => 'ym:s:productImpressionsUniq,ym:s:productPurchasedUniq',
             'dimensions' => 'ym:s:productID',
@@ -222,15 +149,7 @@ class UpdateProductsRatingJob extends AbstractJob
             'date2' => 'yesterday',
             'sort' => 'ym:s:productID',
             'limit' => 3000,
-        ];
-
-        $result_popular = Http::withToken(config('services.yandex.token'), 'OAuth')
-            ->get('https://api-metrika.yandex.ru/stat/v1/data', $params)
-            ->json();
-
-        if (empty($result_popular)) {
-            throw new \Exception('Яндекс метрика не вернула данные');
-        }
+        ]);
 
         $info['popular'] = [
             'min' => 0,
@@ -260,7 +179,7 @@ class UpdateProductsRatingJob extends AbstractJob
         unset($result_popular);
 
         // trand
-        $params = [
+        $result_tranding = $this->getYandexMetrikaData([
             'ids' => $counterYandexId,
             'metrics' => 'ym:s:productBasketsUniq',
             'dimensions' => 'ym:s:productID',
@@ -268,15 +187,7 @@ class UpdateProductsRatingJob extends AbstractJob
             'date2' => 'yesterday',
             'sort' => 'ym:s:productID',
             'limit' => 3000,
-        ];
-
-        $result_tranding = Http::withToken(config('services.yandex.token'), 'OAuth')
-            ->get('https://api-metrika.yandex.ru/stat/v1/data', $params)
-            ->json();
-
-        if (empty($result_tranding)) {
-            throw new \Exception('Яндекс метрика не вернула данные (2)');
-        }
+        ]);
 
         $info['trand'] = [
             'min' => 0,
@@ -295,16 +206,19 @@ class UpdateProductsRatingJob extends AbstractJob
         }
         unset($result_tranding);
 
-        foreach ($rating as $id => $val) {
-            if ($id > 0) {
-                $itemRat = 0;
-                foreach ($info as $par => $par_v) {
-                    $itemRat += $Koef[$par] * $val[$par];
+        foreach (array_chunk($rating, 1000, true) as $ratingChunk) {
+            $cases = '';
+            foreach ($ratingChunk as $id => $val) {
+                if ($id > 0) {
+                    $productRating = 0;
+                    foreach ($info as $par => $par_v) {
+                        $productRating += $Koef[$par] * $val[$par];
+                    }
+                    $productRating = intval(abs($productRating));
+                    $cases .= "WHEN id = {$id} THEN {$productRating} ";
                 }
-                DB::table('products')
-                    ->where('id', $id)
-                    ->update(['rating' => intval(abs($itemRat))]);
             }
+            DB::statement("UPDATE products SET rating = (CASE {$cases} ELSE rating END)");
         }
 
         $i_summ = 0;
@@ -327,5 +241,133 @@ class UpdateProductsRatingJob extends AbstractJob
         }
 
         $this->complete('Успешно выполнено');
+    }
+
+    private function getInitInfo(): array
+    {
+        return [
+            'season' => ['summ' => 0],
+            'action' => ['summ' => 0],
+            'hit' => ['summ' => 0],
+            'sale' => ['summ' => 0],
+            'category' => ['summ' => 0],
+            'photo' => ['min' => 10, 'max' => 0, 'base' => 5, 'summ' => 0],
+            'aviable' => ['min' => 10, 'max' => 0, 'base' => 5, 'summ' => 0],
+        ];
+    }
+
+    /**
+     * Sets the newlesses and prices information in the provided array.
+     */
+    private function setNewlessesAndPrices(array &$info): void
+    {
+        $result = DB::table('products')
+            ->whereNull('deleted_at')
+            ->where('price', '<>', 0)
+            ->where('label_id', '<>', 3)
+            ->selectRaw('MIN(price) AS price_min, MAX(price) AS price_max,
+                MIN(DATEDIFF(NOW(), created_at)) AS newless_min,
+                MAX(DATEDIFF(NOW(), created_at)) AS newless_max')
+            ->first();
+
+        $info['newless'] = [
+            'min' => $result->newless_min,
+            'max' => $result->newless_max,
+            'base' => $result->newless_max - $result->newless_min,
+            'summ' => 0,
+        ];
+        $info['price'] = [
+            'min' => $result->price_min,
+            'max' => $result->price_max,
+            'base' => $result->price_max - $result->price_min,
+            'summ' => 0,
+        ];
+    }
+
+    /**
+     * Sets the discount information in the provided array.
+     */
+    private function setDiscount(array &$info): void
+    {
+        $maxDiscount = DB::table('products')
+            ->whereNull('deleted_at')
+            ->where('price', '<>', 0)
+            ->where('label_id', '<>', 3)
+            ->selectRaw('MAX(100*(old_price - price)/old_price) AS max_discount')
+            ->value('max_discount');
+
+        $info['discount'] = [
+            'min' => 0,
+            'max' => $maxDiscount,
+            'base' => $maxDiscount,
+            'summ' => 0,
+        ];
+    }
+
+    /**
+     * Retrieves the calculated products data based on the provided configuration.
+     */
+    private function getCalculatedProductsData(array $config): Collection
+    {
+        $currentSeasonId = $config['cur_season'];
+        $excludedCategories = $config['false_category'];
+
+        return DB::table('products')
+            ->whereNull('deleted_at')
+            ->where('price', '<>', 0)
+            ->where('label_id', '<>', 3)
+            ->selectRaw(<<<SQL
+                id, price, 100*(old_price - price)/old_price AS discount,
+                IF(DATEDIFF(NOW(), created_at) = 0,0.001, DATEDIFF(NOW(), created_at)) AS newless,
+                IF(season_id IN($currentSeasonId),100,0) AS season,
+                IF(action = 1,100,0) AS action,
+                IF(label_id = 1,100,0) AS hit,
+                IF(label_id = 2,100,0) AS sale,
+                IF(category_id IN($excludedCategories),0,100) as cat
+            SQL)
+            ->get();
+    }
+
+    /**
+     * Retrieves the counters for the given product IDs.
+     */
+    private function getProductsCounters(array $productsIds) : EloquentCollection
+    {
+        $products = Product::select(['id'])
+            ->whereIn('id', $productsIds)
+            ->withCount('media')
+            ->get();
+
+        $sizeCounts = DB::table('product_attributes')
+            ->where('attribute_type', Size::class)
+            ->whereIn('product_id', $productsIds)
+            ->selectRaw('count(product_id) as count, product_id')
+            ->groupBy('product_id')
+            ->pluck('count', 'product_id')
+            ->toArray();
+
+        foreach ($products as $product) {
+            $product->sizes_count = $sizeCounts[$product->id] ?? 0;
+        }
+
+        return $products;
+    }
+
+    /**
+     * Get metrika data from yandex api
+     *
+     * @throws \Exception
+     */
+    private function getYandexMetrikaData(array $params): array
+    {
+        $result = Http::withToken(config('services.yandex.token'), 'OAuth')
+            ->get('https://api-metrika.yandex.ru/stat/v1/data', $params)
+            ->json();
+
+        if (empty($result) || isset($result['errors'])) {
+            throw new \Exception($result['message'] ?? 'Яндекс метрика не вернула данные');
+        }
+
+        return $result;
     }
 }

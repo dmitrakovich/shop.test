@@ -32,6 +32,7 @@ return [
     ],
 
     'yandex' => [
+        'counter_id' => env('YANDEX_COUNTER_ID'),
         'token' => env('YANDEX_TOKEN'),
     ],
 
