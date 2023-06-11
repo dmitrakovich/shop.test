@@ -10,26 +10,26 @@ $Koef = $ratingConfig['algoritm'][$ratingConfig['curr_algoritm']];
 
 // Методы
 switch (request()->input(['act'])) {
-	case "start":
+    case 'start':
         UpdateProductsRatingJob::dispatchSync();
         admin_success("Рейтинг обновлен успешно в $ratingConfig[last_update]");
-		break;
+        break;
 
-	case "algoritm":
-		foreach ($ratingConfig['algoritm'][$ratingConfig['curr_algoritm']] as $k => $v) {
+    case 'algoritm':
+        foreach ($ratingConfig['algoritm'][$ratingConfig['curr_algoritm']] as $k => $v) {
             $ratingConfig['algoritm'][$ratingConfig['curr_algoritm']][$k] = request()->input([$k]);
         }
-		$Koef = $ratingConfig['algoritm'][$ratingConfig['curr_algoritm']];
+        $Koef = $ratingConfig['algoritm'][$ratingConfig['curr_algoritm']];
         admin_success("Алгоритм <{$ratingConfig['algoritm_name'][$ratingConfig['curr_algoritm']]}> сохранен");
-		break;
+        break;
 
-	case "configuration":
-		$ratingConfig['cur_season'] = request()->input(['cur_season']);
-		$ratingConfig['false_category'] = request()->input(['false_category']);
-		$ratingConfig['curr_algoritm'] = request()->input(['curr_algoritm']);
-		$Koef = $ratingConfig['algoritm'][$ratingConfig['curr_algoritm']];
+    case 'configuration':
+        $ratingConfig['cur_season'] = request()->input(['cur_season']);
+        $ratingConfig['false_category'] = request()->input(['false_category']);
+        $ratingConfig['curr_algoritm'] = request()->input(['curr_algoritm']);
+        $Koef = $ratingConfig['algoritm'][$ratingConfig['curr_algoritm']];
         admin_success('Конфигурация сохранена');
-		break;
+        break;
 }
 
 // Запись в config
@@ -39,68 +39,92 @@ if (request()->input(['act'])) {
 ?>
 
 <style type="text/css">
-	.adminka_block {
-		padding-bottom: 10px;
-	}
-	@media all and (min-width: 600px) {
-		.adminka_block:nth-child(2n) {
-			float: right;
-		}
-		.adminka_block {
-			width: 45%;
-		}
-	}
-	.adminka_sub_title {
-		text-indent: 15px;
-		font-weight: bold;
-	}
-	.adminka_field {
-		margin: 10px 0;
-		padding: 0 10px;
-	}
-	.adminka_field label{
-		display: inline-block;
-		margin-right: 10px;
-	}
-	.adminka_field label input{
-		margin: 0;
-	}
-	.adminka_field table {border-collapse: collapse;}
-	.adminka_field table td {text-align: center;}
-	.adminka_field table tr:first-of-type td {font-weight: bold; text-transform: uppercase;}
-	.adminka_field table tr:nth-child(2n) {background-color: #CCCCCC;}
-	.adminka_field table input {width: 30px;text-align: center;}
+    .adminka_block {
+        padding-bottom: 10px;
+    }
+
+    @media all and (min-width: 600px) {
+        .adminka_block:nth-child(2n) {
+            float: right;
+        }
+
+        .adminka_block {
+            width: 45%;
+        }
+    }
+
+    .adminka_sub_title {
+        text-indent: 15px;
+        font-weight: bold;
+    }
+
+    .adminka_field {
+        margin: 10px 0;
+        padding: 0 10px;
+    }
+
+    .adminka_field label {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .adminka_field label input {
+        margin: 0;
+    }
+
+    .adminka_field table {
+        border-collapse: collapse;
+    }
+
+    .adminka_field table td {
+        text-align: center;
+    }
+
+    .adminka_field table tr:first-of-type td {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .adminka_field table tr:nth-child(2n) {
+        background-color: #CCCCCC;
+    }
+
+    .adminka_field table input {
+        width: 30px;
+        text-align: center;
+    }
 </style>
 
 <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        ratingSumm();
+    }, false)
 
-	document.addEventListener('DOMContentLoaded', function() {ratingSumm();},false)
+    function ratingSumm() {
+        var inps = document.getElementsByClassName('ratingAlgoritmInp'),
+            itgs = document.getElementsByClassName('ratingAlgoritmItog'),
+            summ = 0;
 
-	function ratingSumm() {
-		var inps = document.getElementsByClassName('ratingAlgoritmInp'),
-			itgs = document.getElementsByClassName('ratingAlgoritmItog'),
-			summ = 0;
+        for (var i = 0; i < inps.length; i++) {
+            var el = inps[i],
+                name = el.name,
+                k = el.value,
+                p = itgs[i],
+                s = p.getAttribute('summ');
+            summ += Math.abs(s * k);
+        }
 
-		for(var i=0; i < inps.length; i++) {
-			var el = inps[i],
-				name = el.name,
-				k = el.value,
-				p = itgs[i],
-				s = p.getAttribute('summ');
-			summ += Math.abs(s*k);
-		}
-
-		for(var i=0; i < inps.length; i++) {
-			var el = inps[i],
-				name = el.name,
-				k = el.value,
-				p = itgs[i],
-				s = p.getAttribute('summ');
-				text = Math.abs(s*k)/summ*100;
-			text=text.toFixed(2);
-			p.innerText = text+"%";
-		}
-	}
+        for (var i = 0; i < inps.length; i++) {
+            var el = inps[i],
+                name = el.name,
+                k = el.value,
+                p = itgs[i],
+                s = p.getAttribute('summ');
+            text = Math.abs(s * k) / summ * 100;
+            text = text.toFixed(2);
+            p.innerText = text + "%";
+        }
+    }
 </script>
 
 @include('admin::partials.alerts')
@@ -134,7 +158,8 @@ if (request()->input(['act'])) {
                 Активный алгоритм
                 <select name="curr_algoritm" id="curr_algoritm" onChange="this.form.submit();">
                     @foreach ($ratingConfig['algoritm_name'] as $key => $value)
-                        <option value="{{ $key }}" {{ $key == $ratingConfig['curr_algoritm'] ? 'selected' : '' }}>
+                        <option value="{{ $key }}"
+                            {{ $key == $ratingConfig['curr_algoritm'] ? 'selected' : '' }}>
                             {{ $value }}
                         </option>
                     @endforeach
@@ -143,13 +168,15 @@ if (request()->input(['act'])) {
 
             <div class="adminka_field">
                 <label>Текущий сезон (id)
-                    <input type="text" name="cur_season" id="cur_season" value="{{ $ratingConfig['cur_season'] }}">
+                    <input type="text" name="cur_season" id="cur_season"
+                        value="{{ $ratingConfig['cur_season'] }}">
                 </label>
             </div>
 
             <div class="adminka_field">
                 <label>Исключенные категории (id)
-                    <input type="text" name="false_category" id="false_category" value="{{ $ratingConfig['false_category'] }}">
+                    <input type="text" name="false_category" id="false_category"
+                        value="{{ $ratingConfig['false_category'] }}">
                 </label>
             </div>
 
@@ -173,30 +200,29 @@ if (request()->input(['act'])) {
             <input type="hidden" name="act" value="algoritm">
 
             <div class="adminka_field">
-                <table cellpadding="3px" style="width: 100%;"><tbody>
-                    <tr>
-                        <td>Параметр</td>
-                        <td>Базовые</td>
-                        <td>Коэффициент</td>
-                        <td>Итог</td>
-                    </tr>
-                    @foreach($ratingConfig['basic_summ'] as $key => $value)
+                <table cellpadding="3px" style="width: 100%;">
+                    <tbody>
                         <tr>
-                            <td>{{ $ratingConfig['parametr_name'][$key] }}</td>
-                            <td>{{ round($value['segment']*100,2) }}%</td>
-                            <td>
-                                <input
-                                    class="ratingAlgoritmInp"
-                                    type="text"
-                                    id="{{ $key }}ItogField"
-                                    name="{{ $key }}"
-                                    onBlur="ratingSumm()"
-                                    value="{{ $Koef[$key] }}">
-                                </td>
-                            <td id="{{ $key }}Itog" summ="{{ $value['summ'] }}" class="ratingAlgoritmItog"></td>
+                            <td>Параметр</td>
+                            <td>Базовые</td>
+                            <td>Коэффициент</td>
+                            <td>Итог</td>
                         </tr>
-                    @endforeach
-                </tbody></table>
+                        @foreach ($ratingConfig['basic_summ'] as $key => $value)
+                            <tr>
+                                <td>{{ $ratingConfig['parametr_name'][$key] }}</td>
+                                <td>{{ round($value['segment'] * 100, 2) }}%</td>
+                                <td>
+                                    <input class="ratingAlgoritmInp" type="text"
+                                        id="{{ $key }}ItogField" name="{{ $key }}"
+                                        onBlur="ratingSumm()" value="{{ $Koef[$key] }}">
+                                </td>
+                                <td id="{{ $key }}Itog" summ="{{ $value['summ'] }}"
+                                    class="ratingAlgoritmItog"></td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
 
             <div class="adminka_field">
