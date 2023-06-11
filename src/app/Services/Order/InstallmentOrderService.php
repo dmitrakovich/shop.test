@@ -21,7 +21,7 @@ class InstallmentOrderService
         $resultPath = '/storage/order_installments/' . $orderId . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
         $order = Order::where('id', $orderId)->with(['user.passport', 'itemsExtended'])->first();
-        $spreadsheet = IOFactory::load(storage_path('app/installment_template.xlsx'));
+        $spreadsheet = IOFactory::load(public_path('templates/installment_template.xlsx'));
         $firstName = ($order->first_name ?? $order->user->first_name ?? null);
         $lastName = ($order->last_name ?? $order->user->last_name ?? null);
         $patronymicName = ($order->patronymic_name ?? $order->user->patronymic_name ?? null);
