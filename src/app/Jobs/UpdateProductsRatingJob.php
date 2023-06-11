@@ -231,14 +231,12 @@ class UpdateProductsRatingJob extends AbstractJob
             $ratingConfig['basic_summ'][$k]['segment'] = $info[$k]['summ'] / $i_summ;
         }
 
-        $ratingConfig['last_update'] = date('Y-m-d-H:i');
+        $ratingConfig['last_update'] = date('Y-m-d H:i:s');
 
         $this->debug(count($rating) . ' товаров');
         unset($rating);
 
-        if (!isset($_POST['act'])) {
-            $ratingConfigModel->update(['config' => $ratingConfig]);
-        }
+        $ratingConfigModel->update(['config' => $ratingConfig]);
 
         $this->complete('Успешно выполнено');
     }
