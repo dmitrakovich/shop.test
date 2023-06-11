@@ -6,6 +6,7 @@ use App\Events\OrderStatusChanged;
 use App\Models\Country;
 use App\Models\Device;
 use App\Models\Enum\OrderMethod;
+use App\Models\Logs\OrderActionLog;
 use App\Models\Logs\SmsLog;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\User;
@@ -283,6 +284,14 @@ class Order extends Model
     public function track(): Relations\HasOne
     {
         return $this->hasOne(OrderTrack::class);
+    }
+
+    /**
+     * Order actions history
+     */
+    public function logs(): Relations\HasMany
+    {
+        return $this->hasMany(OrderActionLog::class);
     }
 
     /**

@@ -13,6 +13,7 @@ use App\Facades\Currency as CurrencyFacade;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Enum\OrderMethod;
+use App\Models\Logs\OrderActionLog;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItemExtended;
 use App\Models\Orders\OrderItemStatus;
@@ -269,6 +270,12 @@ class OrderController extends AdminController
                     $form->html($this->onlinePaymentGrid($id));
                 });
             });
+
+            $form->tab('История', function (Form $form) use ($id) {
+                $form->row(function ($form) use ($id) {
+                    $form->html($this->orderHistoryTable($id));
+                });
+            });
         }
 
         $form->saving(function (Form $form) {
@@ -367,6 +374,28 @@ class OrderController extends AdminController
         $grid->disableRowSelector();
 
         return $grid->render();
+    }
+
+    /**
+     * Render order histoty table
+     */
+    private function orderHistoryTable(int $orderId): string
+    {
+        $headers = ['Id заказа', 'Менеджер', 'Действие', 'Дата'];
+        $rows = OrderActionLog::query()
+            ->where('order_id', $orderId)
+            ->orderBy('id', 'desc')
+            ->with('admin:id,name')
+            ->get(['order_id', 'admin_id', 'action', 'created_at'])
+            ->map(fn (OrderActionLog $log) => [
+                $log->order_id,
+                $log->admin->name,
+                nl2br($log->action),
+                $log->created_at,
+            ])
+            ->toArray();
+
+        return (new Table($headers, $rows))->render();
     }
 
     /**
