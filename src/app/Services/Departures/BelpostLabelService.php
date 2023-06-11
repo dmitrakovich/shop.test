@@ -17,7 +17,7 @@ class BelpostLabelService
     {
         $resultPath = '/storage/departures/belpost_label/' . date('d-m-Y', strtotime('now')) . '/' . $order->id . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
-        $spreadsheet = IOFactory::load(storage_path('app/belpost_label_template.xlsx'));
+        $spreadsheet = IOFactory::load(public_path('templates/belpost_label_template.xlsx'));
         $firstName = ($order->first_name ?? $order->user->first_name ?? null);
         $lastName = ($order->last_name ?? $order->user->last_name ?? null);
         $patronymicName = ($order->patronymic_name ?? $order->user->patronymic_name ?? null);

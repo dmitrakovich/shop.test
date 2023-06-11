@@ -2,6 +2,7 @@
 
 namespace App\Services\Departures;
 
+use Illuminate\Support\Facades\File;
 use App\Models\Orders\Batch;
 
 class BatchService
@@ -12,6 +13,8 @@ class BatchService
     public function createBatchCsv(Batch $batch)
     {
         $result = [];
+        $resultPath = 'storage/departures/batch_send/' . $batch->id . '.csv';
+        File::ensureDirectoryExists(dirname(public_path($resultPath)));
         $batch->load(['orders' => fn ($query) => $query->with('items')]);
         $price = 11.46;
         foreach ($batch->orders as $key => $order) {
@@ -19,7 +22,7 @@ class BatchService
             $result[] = [++$key, $order->first_name, $order->last_name, $order->patronymic_name, 'BY', 'БЕЛАРУСЬ', ($order->zip ?? ''), '', '', '', $order->city, $order->user_addr, '', '', '', 10, 2, 0, 2, 0, 0, ($order->weight ?? 1200), 0, $price, '', $cod, 0, '', '', '', '', '', $order->phohe, 'info@modny.by'];
         }
         array_unshift($result, [291711523, date('d.m.Y', strtotime('now')), (count($batch->orders) * $price), count($batch->orders), 50, 1, 0, 0, 1, 375291793790, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']);
-        $fp = fopen(storage_path('app/public/departures/batch_send/' . $batch->id . '.csv'), 'w');
+        $fp = fopen(public_path($resultPath), 'w');
         foreach ($result as $fields) {
             fputcsv($fp, $fields);
         }
