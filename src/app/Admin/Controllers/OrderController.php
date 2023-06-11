@@ -389,7 +389,7 @@ class OrderController extends AdminController
             ->get(['order_id', 'admin_id', 'action', 'created_at'])
             ->map(fn (OrderActionLog $log) => [
                 $log->order_id,
-                $log->admin->name,
+                $log->admin->name ?? 'SYSTEM',
                 nl2br($log->action),
                 $log->created_at,
             ])
