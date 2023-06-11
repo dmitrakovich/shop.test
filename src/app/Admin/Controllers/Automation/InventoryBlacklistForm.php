@@ -25,14 +25,13 @@ class InventoryBlacklistForm extends Form
     /**
      * Handle the form request.
      *
-     * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request)
     {
         Config::find('inventory_blacklist')->update(['config' => [
-            'categories' => $request->input('categories')['values']
+            'categories' => $request->input('categories')['values'],
         ]]);
 
         admin_success('Список категорий сохранен!');

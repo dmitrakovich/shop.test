@@ -2,8 +2,8 @@
 
 namespace App\Services\Departures;
 
-use Illuminate\Support\Facades\File;
 use App\Models\Orders\Batch;
+use Illuminate\Support\Facades\File;
 
 class BatchService
 {

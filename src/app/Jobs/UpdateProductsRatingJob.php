@@ -9,8 +9,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Collection;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -331,7 +331,7 @@ class UpdateProductsRatingJob extends AbstractJob
     /**
      * Retrieves the counters for the given product IDs.
      */
-    private function getProductsCounters(array $productsIds) : EloquentCollection
+    private function getProductsCounters(array $productsIds): EloquentCollection
     {
         $products = Product::select(['id'])
             ->whereIn('id', $productsIds)
