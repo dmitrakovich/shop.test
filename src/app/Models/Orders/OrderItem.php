@@ -24,9 +24,10 @@ use Illuminate\Database\Eloquent\Relations;
  * @property float $discount
  * @property bool $promocode_applied
  * @property string $status_key
- * @property \Carbon\Carbon $status_updated_at
- * @property \Carbon\Carbon $release_date
+ * @property \Illuminate\Support\Carbon $status_updated_at
+ * @property \Illuminate\Support\Carbon $release_date
  * @property int $pred_period
+ * @property-read Order $order
  * @property-read Product $product
  * @property-read OrderItemStatus $status
  * @property-read Installment $installment
@@ -60,17 +61,11 @@ class OrderItem extends Model
     ];
 
     /**
-     * Bootstrap the model and its traits
+     * Get the order associated with the order's item.
      */
-    public static function boot(): void
+    public function order(): Relations\BelongsTo
     {
-        parent::boot();
-
-        static::saving(function (self $orderItem) {
-            if ($orderItem->isDirty('status_key')) {
-                $orderItem->status_updated_at = now();
-            }
-        });
+        return $this->belongsTo(Order::class);
     }
 
     /**

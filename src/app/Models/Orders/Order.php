@@ -104,19 +104,9 @@ class Order extends Model
     ];
 
     /**
-     * Bootstrap the model and its traits
+     * Fix for duplicate logging
      */
-    public static function boot(): void
-    {
-        parent::boot();
-
-        static::saving(function (self $order) {
-            if ($order->isDirty('status_key')) {
-                $order->status_updated_at = now();
-                event(new OrderStatusChanged($order, $order->getOriginal('status_key')));
-            }
-        });
-    }
+    public bool $isLoggingDone = false;
 
     /**
      * Товары заказа
@@ -234,6 +224,31 @@ class Order extends Model
     public function admin()
     {
         return $this->belongsTo(Administrator::class);
+    }
+
+    /**
+     * Get the admin associated with the model.
+     */
+    public function getAdmin(): Administrator
+    {
+        if (empty($this->admin) && !empty($this->admin_id)) {
+            $this->load('admin');
+        }
+
+        return $this->admin ?? new Administrator(['id' => 0, 'name' => 'SYSTEM']);
+    }
+
+    /**
+     * Get the previous admin associated with the model.
+     */
+    public function getPrevAdmin(): Administrator
+    {
+        if ($this->isClean('admin_id')) {
+            return $this->getAdmin();
+        }
+
+        return Administrator::query()->where('id', $this->getOriginal('admin_id'))->first()
+            ?? new Administrator(['id' => 0, 'name' => 'SYSTEM']);
     }
 
     /**

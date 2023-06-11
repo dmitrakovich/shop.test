@@ -24,6 +24,7 @@ use App\Models\Size;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\ContextMenuActions;
@@ -279,6 +280,9 @@ class OrderController extends AdminController
                     $form->input("itemsExtended.$key.old_price", $product->getOldPrice());
                     $form->input("itemsExtended.$key.current_price", $product->getPrice());
                 }
+            }
+            if ($form->isCreating()) {
+                $form->admin_id = Admin::user()->id;
             }
         });
 

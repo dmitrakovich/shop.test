@@ -16,6 +16,7 @@ use App\Listeners\SyncOrderHistory;
 use App\Listeners\UpdateInventory;
 use App\Listeners\UpdateOrderItemsStatus;
 use App\Listeners\User\UpdateUserGroup;
+use App\Observers;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -59,6 +60,23 @@ class EventServiceProvider extends ServiceProvider
         ],
         ReviewPosted::class => [
             ResetUserCache::class,
+        ],
+    ];
+
+    /**
+     * The model observers for your application.
+     *
+     * @var array
+     */
+    protected $observers = [
+        \App\Models\Orders\Order::class => [
+            Observers\OrderObserver::class,
+        ],
+        \App\Models\Orders\OrderItem::class => [
+            Observers\OrderItemObserver::class,
+        ],
+        \App\Models\Orders\OrderItemExtended::class => [
+            Observers\OrderItemObserver::class,
         ],
     ];
 

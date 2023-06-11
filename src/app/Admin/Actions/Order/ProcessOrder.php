@@ -29,11 +29,12 @@ class ProcessOrder extends RowAction
         if (!empty($model->admin_id)) {
             return $this->warningResponse('Заказ уже обрабатывает менеджер ' . $model->admin->name);
         }
-        if ($model->status->key != 'new') {
+        if ($model->status_key != 'new') {
             return $this->warningResponse("Заказ находится в статусе \"{$model->status->name_for_admin}\", его нельзя взять в работу");
         }
 
         $model->admin_id = Admin::user()->id;
+        $model->status_key = 'in_work';
         $model->save();
 
         return $this->successResponse('Заказ успешно принят в работу');

@@ -114,6 +114,7 @@ Route::group([
     $router->group(['prefix' => 'logs', 'namespace' => 'Logs', 'as' => 'logs.'], function ($router) {
         $router->resource('sms', SmsController::class);
         $router->resource('inventory', InventoryController::class);
+        $router->resource('order-actions', OrderActionController::class);
     });
 
     // debug
