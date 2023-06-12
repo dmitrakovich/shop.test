@@ -47,7 +47,7 @@ class EventServiceProvider extends ServiceProvider
             SaveDevice::class,
             UpdateUserGroup::class,
             ResetUserCache::class,
-            // UpdateInventory::class,
+            UpdateInventory::class,
         ],
         OrderStatusChanged::class => [
             UpdateOrderItemsStatus::class,

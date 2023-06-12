@@ -33,14 +33,14 @@ class Kernel extends ConsoleKernel
         }
         // $schedule->command('inspire')->hourly();
 
-        $schedule->job(new UpdateAvailabilityOldJob)->withoutOverlapping()->everyThirtyMinutes();
+        // $schedule->job(new UpdateAvailabilityOldJob)->withoutOverlapping()->everyThirtyMinutes();
         $schedule->job(new SxGeoUpdateJob)->dailyAt('03:07');
         $schedule->job(new DiscountAfterRegisterJob)->dailyAt('09:00');
         $schedule->job(new SendInstallmentNoticeJob)->dailyAt('09:05');
         $schedule->job(new LeaveFeedbackAfterOrderJob)->dailyAt('09:15');
 
         $schedule->command('rating:update')->withoutOverlapping()->cron('15 5,11,17,23 * * *');
-        // $schedule->command('inventory:update')->withoutOverlapping()->hourly();
+        $schedule->command('inventory:update')->withoutOverlapping()->hourly();
 
         $schedule->command('backup:run')->dailyAt('01:00');
         $schedule->command('backup:media')->weeklyOn(Schedule::MONDAY, '03:00');
