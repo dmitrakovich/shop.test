@@ -287,6 +287,9 @@ class OrderController extends AdminController
                     $form->input("itemsExtended.$key.old_price", $product->getOldPrice());
                     $form->input("itemsExtended.$key.current_price", $product->getPrice());
                 }
+                if ($form->status_key === 'canceled') {
+                    $form->input("itemsExtended.$key.status_key", 'canceled');
+                }
             }
             if ($form->isCreating()) {
                 $form->admin_id = Admin::user()->id;

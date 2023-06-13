@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\OrderStatusChanged;
-use App\Models\Orders\OrderItem;
 
 class UpdateOrderItemsStatus
 {
@@ -21,7 +20,7 @@ class UpdateOrderItemsStatus
     public function handle(OrderStatusChanged $event): void
     {
         if ($event->order->isCanceled()) {
-            $event->order->items->each(fn (OrderItem $orderItem) => $orderItem->cancel());
+            $event->order->items()->update(['status_key' => 'canceled']);
         }
     }
 }
