@@ -3,9 +3,7 @@
 namespace App\Admin\Controllers\Logs;
 
 use App\Admin\Controllers\AbstractAdminController;
-use App\Models\Logs\InventoryLog;
 use App\Models\Logs\OrderActionLog;
-use App\Models\Size;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
 

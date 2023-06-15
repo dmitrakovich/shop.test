@@ -2,7 +2,6 @@
 
 namespace App\Models\Orders;
 
-use App\Events\OrderStatusChanged;
 use App\Models\Country;
 use App\Models\Device;
 use App\Models\Enum\OrderMethod;

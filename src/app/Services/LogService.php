@@ -13,6 +13,7 @@ class LogService
 {
     /**
      * Status for skipped sms messages
+     *
      * @todo move to LogModel\SmsLog
      */
     const SMS_SKIPPED_KEY = 'skipped';
