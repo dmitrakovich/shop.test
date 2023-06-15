@@ -46,6 +46,7 @@ class OrderObserver
         if ($order->wasRecentlyCreated) {
             $logService->logOrderAction($order->id, empty($order->admin_id) ? 'Заказ принят' : 'Заказ создан');
             $order->isLoggingDone = true;
+
             return;
         }
 
@@ -81,6 +82,6 @@ class OrderObserver
         }
 
         $order->isLoggingDone = true;
-        return;
+
     }
 }
