@@ -16,8 +16,8 @@
                 <img src="/images/index/conditions-installment.png" alt="Рассрочка">
             </div>
             <div class="col col-md-5 col-lg">
-                Рассрочка<br>
-                <small class="text-muted">на 2 платежа без переплаты</small>
+                Оплата частями<br>
+                <small class="text-muted">на 3 платежа без переплаты</small>
             </div>
         </div>
     </div>
@@ -28,7 +28,7 @@
             </div>
             <div class="col col-md-5 col-lg">
                 Оплата при получении<br>
-                <small class="text-muted">наличными или картой</small>
+                <small class="text-muted">наличными или картой после примерки</small>
             </div>
         </div>
     </div>
