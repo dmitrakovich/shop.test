@@ -97,18 +97,18 @@ class FeedbackController extends AdminController
         $form = new Form(new Feedback());
 
         $form->belongsTo('user_id', User::class, 'Пользователь');
-        $form->number('yandex_id', __('Yandex id'));
-        $form->text('user_name', 'Имя');
-        $form->text('user_email', __('User email'));
+        // $form->number('yandex_id', __('Yandex id'));
+        $form->text('user_name', 'Имя')->required();
+        $form->text('user_email', 'Email');
         // $form->number('user_phone', __('User phone'));
-        $form->number('user_city', 'Город');
-        $form->textarea('text', __('Text'));
-        $form->select('rating', 'Оценка')->options([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5]);
-        $form->belongsTo('product_id', Product::class, 'Товар');
+        $form->text('user_city', 'Город');
+        $form->textarea('text', 'Текст')->required();
+        $form->select('rating', 'Оценка')->options([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5])->default(5);
+        $form->belongsTo('product_id', Product::class, 'Товар')->rules('required');
         $form->select('type_id', 'Тип')->options($this->feedbackTypes)->default(1);
         $form->switch('view_only_posted', __('View only posted'))->default(1);
         $form->switch('publish', __('Publish'))->default(1);
-        $form->ip('ip', __('Ip'));
+        $form->ip('ip', __('Ip'))->default(request()->ip())->readonly();
         $form->multipleImage('photos', 'Фото')->readonly();
         $form->multipleImage('videos', 'Видео')->readonly();
 
