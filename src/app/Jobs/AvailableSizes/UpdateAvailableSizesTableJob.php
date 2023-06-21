@@ -21,6 +21,11 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     const ONE_C_STOCK_QUANTITY_TABLE = 'SC5925';
 
     /**
+     * Table for insert data
+     */
+    protected string $availableSizesTable = 'available_sizes';
+
+    /**
      * Current product identificators
      */
     protected array $productIds = [];
@@ -88,10 +93,9 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $this->log("Удалено $count записей с пустыми размерами");
 
         $this->log('Запись полученных и сопоставленных данных в базу');
-        $availableSizesTable = (new AvailableSizes())->getTable();
-        DB::table($availableSizesTable)->truncate();
+        DB::table($this->availableSizesTable)->truncate();
         DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-        DB::table($availableSizesTable)->insert($availableSizes);
+        DB::table($this->availableSizesTable)->insert($availableSizes);
         DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
 
         $this->log('Таблица с наличием успешно обновлена');
@@ -291,7 +295,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
      * This method filters the given values, excluding those with an empty SKU and categories
      * not specified in the configuration.
      */
-    private function filterAvailableSizes(array &$availableSizes): int
+    protected function filterAvailableSizes(array &$availableSizes): int
     {
         $count = 0;
         $excludeCategories = Config::findCacheable('inventory_blacklist')['categories'];
@@ -309,7 +313,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     /**
      * Update available sizes of products based on orders.
      */
-    private function updateAvailableSizesFromOrders(array &$availableSizes): int
+    protected function updateAvailableSizesFromOrders(array &$availableSizes): int
     {
         $productsInOrders = [];
         $sizesCount = OrderItem::query()->whereIn('status_key', ['new', 'reserved', 'confirmed', 'pickup'])
@@ -346,7 +350,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     /**
      * Remove records where sum all sizes = 0
      */
-    private function removeEmptySizes(array &$availableSizes): int
+    protected function removeEmptySizes(array &$availableSizes): int
     {
         $count = 0;
         $sizeFields = AvailableSizes::getSizeFields();

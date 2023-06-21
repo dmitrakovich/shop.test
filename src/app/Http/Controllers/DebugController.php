@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\AvailableSizes\UpdateAvailableSizesFullTableJob;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Notifications\TestSms;
@@ -13,6 +14,15 @@ class DebugController extends Controller
 {
     public function index()
     {
+
+
+
+        dd(
+            dispatch_sync(UpdateAvailableSizesFullTableJob::class)
+        );
+
+
+
         return 'ok';
 
         /** @var User $user */
