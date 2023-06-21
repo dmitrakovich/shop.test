@@ -89,14 +89,11 @@ class StockController extends AdminController
      *
      * @return Form
      */
-    protected function form($id = null)
+    protected function form()
     {
         $form = new Form(new Stock());
 
-        $form->number('one_c_id', 'ID в 1C')->min(1)->rules([
-            'required',
-            Rule::unique('stocks')->ignore($id),
-        ]);
+        $form->number('one_c_id', 'ID в 1C')->min(1)->rules(['required', 'unique:stocks,one_c_id,{{id}}']);
         $form->select('type', 'Тип')->options(StockTypeEnum::list());
         $form->select('city_id', 'Город')->options(City::pluck('name', 'id'));
         $form->text('name', 'Название')->rules('required');

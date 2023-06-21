@@ -56,7 +56,7 @@ class BrandController extends AdminController
     {
         $form = new Form(new Brand());
 
-        $form->number('one_c_id', 'ID в 1С')->min(1)->rules('unique:brands');
+        $form->number('one_c_id', 'ID в 1С')->min(1)->rules('unique:brands,one_c_id,{{id}}');
         $form->text('name', 'Name');
         $form->text('slug', 'Slug');
         $form->textarea('seo', 'Seo');

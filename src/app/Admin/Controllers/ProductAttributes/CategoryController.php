@@ -60,7 +60,7 @@ class CategoryController extends AdminController
 
         $form->text('slug', 'Slug');
         $form->text('title', 'Название на сайте');
-        $form->text('one_c_name', 'Название в 1С')->rules('unique:categories');
+        $form->text('one_c_name', 'Название в 1С')->rules('unique:categories,one_c_name,{{id}}');
         $form->textarea('description', 'Описание');
         $form->number('parent_id', 'ID родительской категории')->default(1);
         $form->hidden('path', 'Path')->default(time());
