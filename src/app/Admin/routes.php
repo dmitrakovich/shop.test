@@ -107,6 +107,7 @@ Route::group([
     $router->group(['prefix' => 'automation', 'namespace' => 'Automation', 'as' => 'automation.'], function ($router) {
         $router->resource('inventory', InventoryController::class);
         $router->resource('stock', StockController::class);
+        $router->get('stock-update', [\App\Admin\Controllers\Automation\StockController::class, 'updateAvailability'])->name('stock-update');
         $router->get('inventory-blacklist', InventoryBlacklistForm::class);
     });
 
