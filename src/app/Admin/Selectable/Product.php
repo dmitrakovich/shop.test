@@ -11,7 +11,7 @@ class Product extends Selectable
 
     public function make()
     {
-        $this->model()->with('media');
+        $this->model()->withTrashed()->with('media');
 
         $this->column('media', 'Фото')->display(
             fn () => $this->getFirstMediaUrl('default', 'thumb')
