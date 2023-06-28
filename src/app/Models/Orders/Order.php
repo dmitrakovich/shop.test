@@ -2,6 +2,7 @@
 
 namespace App\Models\Orders;
 
+use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Country;
 use App\Models\Device;
 use App\Models\Enum\OrderMethod;
@@ -330,6 +331,31 @@ class Order extends Model
         // учесть стоимость доставки
         // учесть коммиссию оплаты
 
+        return $price;
+    }
+
+    /**
+     * Get the amount of paid orders.
+     *
+     * @return float
+     */
+    public function getAmountPaidOrders(): float
+    {
+        $price = $this->onlinePayments->where('last_status_enum_id', OnlinePaymentStatusEnum::SUCCEEDED)->sum('amount');
+        return $price;
+    }
+
+    /**
+     * Get installment monthly fee sum.
+     *
+     * @return float
+     */
+    public function getInstallmentMonthlyFeeSum(): float
+    {
+        $price = 0;
+        foreach ($this->itemsExtended as  $item) {
+            $price += (float)$item->installment_monthly_fee;
+        }
         return $price;
     }
 
