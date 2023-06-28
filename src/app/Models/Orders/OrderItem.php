@@ -5,7 +5,6 @@ namespace App\Models\Orders;
 use App\Models\Payments\Installment;
 use App\Models\Product;
 use App\Models\Size;
-use App\Models\Orders\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;

@@ -336,26 +336,24 @@ class Order extends Model
 
     /**
      * Get the amount of paid orders.
-     *
-     * @return float
      */
     public function getAmountPaidOrders(): float
     {
         $price = $this->onlinePayments->where('last_status_enum_id', OnlinePaymentStatusEnum::SUCCEEDED)->sum('amount');
+
         return $price;
     }
 
     /**
      * Get installment monthly fee sum.
-     *
-     * @return float
      */
     public function getInstallmentMonthlyFeeSum(): float
     {
         $price = 0;
-        foreach ($this->itemsExtended as  $item) {
+        foreach ($this->itemsExtended as $item) {
             $price += (float)$item->installment_monthly_fee;
         }
+
         return $price;
     }
 

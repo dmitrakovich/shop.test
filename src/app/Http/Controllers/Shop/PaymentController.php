@@ -81,28 +81,28 @@ class PaymentController extends BaseController
         ];
     }
 
-  /**
-   * Payment webhook handler.
-   *
-   * @param  string  $paymentMethod
-   * @return response
-   */
-  public function webhook(
-      Request $request,
-      $paymentMethod,
-      PaymentService $paymentService
-  ) {
-      $result = null;
-      $data = $request->all();
-      switch (mb_strtolower($paymentMethod)) {
-          case 'yandex':
-              $result = $paymentService->webhookHandler($data, OnlinePaymentMethodEnum::YANDEX);
+    /**
+     * Payment webhook handler.
+     *
+     * @param  string  $paymentMethod
+     * @return response
+     */
+    public function webhook(
+        Request $request,
+        $paymentMethod,
+        PaymentService $paymentService
+    ) {
+        $result = null;
+        $data = $request->all();
+        switch (mb_strtolower($paymentMethod)) {
+            case 'yandex':
+                $result = $paymentService->webhookHandler($data, OnlinePaymentMethodEnum::YANDEX);
 
-              break;
-          default:
-              abort(404);
-      }
+                break;
+            default:
+                abort(404);
+        }
 
-      return $result ? response('ok', 200) : response('Something went wrong', 400);
-  }
+        return $result ? response('ok', 200) : response('Something went wrong', 400);
+    }
 }

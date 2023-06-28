@@ -16,11 +16,11 @@ class PaymentSms extends AbstractSmsTraffic
     ) {
     }
 
-  /**
-   * Content for sms message
-   */
-  public function getContent(): string
-  {
-      return ($this->firstName ? ($this->firstName . ', ') : '') . 'Вам выставлен счет № ' . $this->paymentNum . ' - подробнее по ссылке ' . $this->link;
-  }
+    /**
+     * Content for sms message
+     */
+    public function getContent(): string
+    {
+        return ($this->firstName ? ($this->firstName . ', ') : '') . 'Вам выставлен счет № ' . $this->paymentNum . ' - подробнее по ссылке ' . $this->link;
+    }
 }
