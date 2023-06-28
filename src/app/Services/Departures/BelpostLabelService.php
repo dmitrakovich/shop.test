@@ -4,6 +4,7 @@ namespace App\Services\Departures;
 
 use App\Helpers\TextHelper;
 use App\Models\Orders\Order;
+use App\Models\Payments\Installment;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -15,6 +16,16 @@ class BelpostLabelService
      */
     public function createLabel(Order $order): string
     {
+        $order->load(['itemsExtended.installment', 'onlinePayments']);
+
+        $deliveryPrice = $order->delivery_price ? $order->delivery_price : 0;
+        $onlinePaymentsSum = $order->getAmountPaidOrders();
+        if ((int)$order->payment_id === Installment::PAYMENT_METHOD_ID) {
+            $resultTotalPrice = $order->getInstallmentMonthlyFeeSum() + $deliveryPrice - $onlinePaymentsSum;
+        } else {
+            $resultTotalPrice = $order->getItemsPrice() + $deliveryPrice - $onlinePaymentsSum;
+        }
+
         $resultPath = '/storage/departures/belpost_label/' . date('d-m-Y', strtotime('now')) . '/' . $order->id . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
         $spreadsheet = IOFactory::load(public_path('templates/belpost_label_template.xlsx'));
@@ -23,11 +34,8 @@ class BelpostLabelService
         $patronymicName = ($order->patronymic_name ?? $order->user->patronymic_name ?? null);
         $sheet = $spreadsheet->getActiveSheet();
 
-        // $sheet->setCellValue('BH3', $order->id . '/ЭЛС');
-        // $sheet->setCellValue('BP3', date('m/d/y', strtotime($order->created_at)));
-
-        $sheet->setCellValue('BB6', TextHelper::numberToMoneyShortString($order->getTotalPrice()));
-        $sheet->setCellValue('AN7', TextHelper::numberToMoneyString($order->getTotalPrice()));
+        $sheet->setCellValue('BB6', TextHelper::numberToMoneyShortString($resultTotalPrice));
+        $sheet->setCellValue('AN7', TextHelper::numberToMoneyString($resultTotalPrice));
 
         $sheet->setCellValue('AS22', $lastName);
         $sheet->setCellValue('BF22', $firstName);
