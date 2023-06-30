@@ -121,6 +121,7 @@ class UserController extends AdminController
             $form->text('passport.issued_by', 'Кем выдан');
             $form->date('passport.issued_date', 'Когда выдан');
             $form->text('passport.personal_number', 'Личный номер');
+            $form->text('passport.registration_address', 'Адрес прописки');
         });
         if ($id) {
             $form->tab('Платежи', function ($form) use ($id) {
