@@ -2,11 +2,11 @@
 
 namespace App\Admin\Controllers\Auth;
 
+use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use Encore\Admin\Facades\Admin;
-use Encore\Admin\Controllers\AdminController;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends AdminController
@@ -59,8 +59,7 @@ class UserController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
-     *
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)
