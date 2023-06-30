@@ -20,6 +20,8 @@ Route::group([
     $router->get('orders/{order}/process', [\App\Admin\Controllers\OrderController::class, 'process'])->name('orders.process');
     $router->get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
 
+    $router->resource('auth/users', Auth\UserController::class);
+
     $router->group(['prefix' => 'users'], function ($router) {
         $router->resource('users', Users\UserController::class);
         $router->resource('groups', Users\GroupController::class);
