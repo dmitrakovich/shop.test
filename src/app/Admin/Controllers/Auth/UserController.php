@@ -34,8 +34,8 @@ class UserController extends AdminController
         $grid->column('username', trans('admin.username'));
         $grid->column('user_last_name', 'Фамилия');
         $grid->column('user_patronymic_name', 'Отчество')->hide();
-        $grid->column('proxy_num', 'Номер доверенности');
-        $grid->column('proxy_date', 'Дата доверенности');
+        $grid->column('trust_number', 'Номер доверенности');
+        $grid->column('trust_date', 'Дата доверенности');
         $grid->column('name', trans('admin.name'));
         $grid->column('roles', trans('admin.roles'))->pluck('name')->label();
         $grid->column('created_at', trans('admin.created_at'));
@@ -108,8 +108,8 @@ class UserController extends AdminController
             ->updateRules(['required', "unique:{$connection}.{$userTable},username,{{id}}"]);
         $form->text('user_last_name', 'Фамилия');
         $form->text('user_patronymic_name', 'Отчество');
-        $form->text('proxy_num', 'Номер доверенности');
-        $form->date('proxy_date', 'Дата доверенности');
+        $form->text('trust_number', 'Номер доверенности');
+        $form->date('trust_date', 'Дата доверенности');
 
         $form->text('name', trans('admin.name'))->rules('required');
         $form->image('avatar', trans('admin.avatar'));

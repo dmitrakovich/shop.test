@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::table('admin_users', function (Blueprint $table) {
             $table->string('user_last_name', 64)->nullable()->comment('Фамилия');
             $table->string('user_patronymic_name', 32)->nullable()->comment('Отчество');
-            $table->string('proxy_num', 128)->nullable()->comment('Номер доверенности');
-            $table->date('proxy_date')->nullable()->comment('Дата доверенности');
+            $table->string('trust_number', 128)->nullable()->comment('Номер доверенности');
+            $table->date('trust_date')->nullable()->comment('Дата доверенности');
         });
     }
 
@@ -27,8 +27,8 @@ return new class extends Migration
         Schema::table('admin_users', function (Blueprint $table) {
             $table->dropColumn('user_last_name');
             $table->dropColumn('user_patronymic_name');
-            $table->dropColumn('proxy_num');
-            $table->dropColumn('proxy_date');
+            $table->dropColumn('trust_number');
+            $table->dropColumn('trust_date');
         });
     }
 };
