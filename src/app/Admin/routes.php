@@ -1,8 +1,8 @@
 <?php
 
+use App\Admin\Controllers\Auth\UserController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\Shop\OrderController;
-use App\Admin\Controllers\Auth\UserController;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +21,6 @@ Route::group([
     $router->resource('orders', \OrderController::class);
     $router->get('orders/{order}/process', [\App\Admin\Controllers\OrderController::class, 'process'])->name('orders.process');
     $router->get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
-
 
     $router->group(['prefix' => 'users'], function ($router) {
         $router->resource('users', Users\UserController::class);
