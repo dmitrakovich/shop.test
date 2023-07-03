@@ -29,7 +29,6 @@ class BuyoutOrderService
         $patronymicName = ($order->patronymic_name ?? $order->user->patronymic_name ?? null);
         $sheet = $spreadsheet->getActiveSheet();
 
-
         $sheet->setCellValue('F4', TextHelper::numberToMoneyShortString($totalCodSum));
         $sheet->setCellValue('V4', TextHelper::numberToMoneyString($totalCodSum));
         $sheet->setCellValue('S13', $lastName);
@@ -67,7 +66,7 @@ class BuyoutOrderService
                 $sheet->mergeCells('BK' . $itemsColNumSecond . ':BM' . $itemsColNumSecond);
                 $sheet->mergeCells('BN' . $itemsColNumSecond . ':BW' . $itemsColNumSecond);
                 $sheet->mergeCells('BX' . $itemsColNumSecond . ':DA' . $itemsColNumSecond);
-                ++$itemsColNumSecond;
+                $itemsColNumSecond++;
 
                 $sheet->insertNewRowBefore($itemsColNum);
                 $sheet->getStyle('A' . $itemsColNum . ':DB' . $itemsColNum)->applyFromArray($sheet->getStyle('A28:DB28')->exportArray());

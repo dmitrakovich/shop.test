@@ -29,6 +29,7 @@ class BuyoutFormAction extends Action
     {
         $buyoutService = new BuyoutOrderService;
         $file = $buyoutService->createBuyoutForm($request->orderId);
+
         return $this->response()->success('Бланк выкупа успешно создан')->download($file);
     }
 

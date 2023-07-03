@@ -342,6 +342,7 @@ class Order extends Model
     {
         $this->loadMissing(['onlinePayments']);
         $price = $this->onlinePayments->where('last_status_enum_id', OnlinePaymentStatusEnum::SUCCEEDED)->sum('amount');
+
         return $price;
     }
 

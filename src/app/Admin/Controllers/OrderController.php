@@ -2,10 +2,10 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Order\BuyoutFormAction;
 use App\Admin\Actions\Order\CancelPayment;
 use App\Admin\Actions\Order\CapturePayment;
 use App\Admin\Actions\Order\CreateOnlinePayment;
-use App\Admin\Actions\Order\BuyoutFormAction;
 use App\Admin\Actions\Order\InstallmentForm;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
