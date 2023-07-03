@@ -28,8 +28,11 @@ class InstallmentForm extends Action
      */
     public function handle(Request $request)
     {
-        $order = Order::where('id', $request->orderId)->whereHas('user.passport')->exists();
-        if (!$order) {
+        $order = Order::where('id', $request->orderId)->with(['user.passport'])->first();
+        if (!isset($order->user)) {
+            throw new \Exception('Привяжите клиента к заказу');
+        }
+        if (!isset($order->user->passport)) {
             throw new \Exception('Заполните паспортные данные клиента');
         }
         $installmentService = new InstallmentOrderService;
