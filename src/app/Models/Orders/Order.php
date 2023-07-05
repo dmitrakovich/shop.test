@@ -8,6 +8,7 @@ use App\Models\Device;
 use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
 use App\Models\Logs\SmsLog;
+use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\User;
 use Deliveries\DeliveryMethod;
@@ -339,9 +340,24 @@ class Order extends Model
      */
     public function getAmountPaidOrders(): float
     {
+        $this->loadMissing(['onlinePayments']);
         $price = $this->onlinePayments->where('last_status_enum_id', OnlinePaymentStatusEnum::SUCCEEDED)->sum('amount');
 
         return $price;
+    }
+
+    /**
+     * Get total COD amount.
+     */
+    public function getTotalCODSum(): float
+    {
+        $deliveryPrice = $this->delivery_price ? $this->delivery_price : 0;
+        $onlinePaymentsSum = $this->getAmountPaidOrders();
+        if ((int)$this->payment_id === Installment::PAYMENT_METHOD_ID) {
+            return $this->getInstallmentMonthlyFeeSum() + $deliveryPrice - $onlinePaymentsSum;
+        } else {
+            return $this->getItemsPrice() + $deliveryPrice - $onlinePaymentsSum;
+        }
     }
 
     /**
@@ -350,6 +366,7 @@ class Order extends Model
     public function getInstallmentMonthlyFeeSum(): float
     {
         $price = 0;
+        $this->loadMissing(['itemsExtended']);
         foreach ($this->itemsExtended as $item) {
             $price += (float)$item->installment_monthly_fee;
         }
