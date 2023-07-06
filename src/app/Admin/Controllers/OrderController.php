@@ -13,7 +13,6 @@ use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Country;
 use App\Models\Currency;
-use App\Models\User\User;
 use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
 use App\Models\Orders\Order;
@@ -24,7 +23,7 @@ use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\Product;
 use App\Models\Size;
-use Illuminate\Http\Request;
+use App\Models\User\User;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
@@ -35,6 +34,7 @@ use Encore\Admin\Grid\Displayers\ContextMenuActions;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use Illuminate\Http\Request;
 use Payments\PaymentMethod;
 
 class OrderController extends AdminController
@@ -190,7 +190,7 @@ class OrderController extends AdminController
 
             $form->hidden('user_id');
             $form->html(view('admin.order.order-client', [
-                'order' => $order
+                'order' => $order,
             ]), 'Клиент');
 
             $form->number('promocode_id', __('Promocode id'));
@@ -544,6 +544,7 @@ JS;
         $user = User::where('phone', $request->input('phone'))->first();
         if ($user) {
             Order::where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
+
             return $user;
         } else {
             throw new \Exception('Пользователь с таким телефоном не найден');
@@ -562,6 +563,7 @@ JS;
             ]);
         }
         Order::where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
+
         return $user;
     }
 }
