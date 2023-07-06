@@ -13,6 +13,7 @@ use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Country;
 use App\Models\Currency;
+use App\Models\User\User;
 use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
 use App\Models\Orders\Order;
@@ -23,6 +24,7 @@ use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\Product;
 use App\Models\Size;
+use Illuminate\Http\Request;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
@@ -170,6 +172,7 @@ class OrderController extends AdminController
     protected function form(?int $id = null)
     {
         $form = new Form(new Order());
+        $order = $id ? Order::where('id', $id)->with(['user'])->first() : null;
 
         if ($form->isEditing()) {
             $form->tools($this->getPrintTool());
@@ -180,11 +183,16 @@ class OrderController extends AdminController
             });
         }
 
-        $form->tab('Основное', function ($form) {
+        $form->tab('Основное', function ($form) use ($order) {
             $form->text('last_name', 'Фамилия');
             $form->text('first_name', 'Имя')->required();
             $form->text('patronymic_name', 'Отчество');
-            $form->number('user_id', 'ID клиента');
+
+            $form->hidden('user_id');
+            $form->html(view('admin.order.order-client', [
+                'order' => $order
+            ]), 'Клиент');
+
             $form->number('promocode_id', __('Promocode id'));
             $form->email('email', __('Email'));
             $form->phone('phone', 'Телефон')->required();
@@ -529,5 +537,31 @@ $(function () {
     }, 300);
 });
 JS;
+    }
+
+    public function changeUserByPhone(Request $request)
+    {
+        $user = User::where('phone', $request->input('phone'))->first();
+        if ($user) {
+            Order::where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
+            return $user;
+        } else {
+            throw new \Exception('Пользователь с таким телефоном не найден');
+        }
+    }
+
+    public function addUserByPhone(Request $request)
+    {
+        $user = User::where('phone', $request->input('userCreatePhone'))->first();
+        if (!$user) {
+            $user = User::create([
+                'phone' => $request->input('userCreatePhone'),
+                'last_name' => $request->input('userCreateLastName'),
+                'first_name' => $request->input('userCreateFirstName'),
+                'patronymic_name' => $request->input('userCreatePatronymicName'),
+            ]);
+        }
+        Order::where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
+        return $user;
     }
 }
