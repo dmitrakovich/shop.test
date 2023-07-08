@@ -1,6 +1,7 @@
 <?php
 
 use App\Admin\Controllers\Auth\UserController;
+use App\Admin\Controllers\OrderController as AdminOrderController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\Shop\OrderController;
 use Encore\Admin\Facades\Admin;
@@ -21,6 +22,8 @@ Route::group([
     $router->resource('orders', \OrderController::class);
     $router->get('orders/{order}/process', [\App\Admin\Controllers\OrderController::class, 'process'])->name('orders.process');
     $router->get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
+    $router->post('orders/add-user-by-phone', [AdminOrderController::class, 'addUserByPhone']);
+    $router->post('orders/change-user-by-phone', [AdminOrderController::class, 'changeUserByPhone']);
 
     $router->group(['prefix' => 'users'], function ($router) {
         $router->resource('users', Users\UserController::class);

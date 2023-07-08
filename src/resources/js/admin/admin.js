@@ -2,6 +2,13 @@ import Sortable from 'sortablejs';
 import '@fancyapps/fancybox';
 import Cropper from 'cropperjs';
 import Mustache from 'mustache';
+import axios from 'axios';
+
+window.adminAxios = axios.create({});
+adminAxios.interceptors.request.use((config) => {
+    config.url = '/admin/' + config.url;
+    return config;
+});
 
 require('./../components/inputs/phone');
 
@@ -209,3 +216,44 @@ $(document).on('ifChecked', 'input', function () {
     $('.js-productTagList').append("<li class=\"select2-selection__choice\" data-tag-id=\"" + $(this).val() + "\">" + $(this).data('name') + "</li>");
 });
 
+$(document).on('click', '.js-createOrderUser', function (e) {
+    e.preventDefault();
+    let json = {};
+    adminAxios.post('orders/add-user-by-phone', {
+        ...$('#js-createOrderUserModal input').serializeArray()
+            .reduce(function (json, { name, value }) {
+                json[name] = value;
+                return json;
+            }, {}),
+        orderId: $('#js-orderId').val()
+    }).then(response => {
+        $("#js-userInfo").load(window.location.href + ' #js-userInfo');
+        $("#js-orderUserId").val(response.data.id);
+        $('#js-createOrderUserModal').modal('hide')
+        toastr.success('Клиент успешно обновлен!');
+    }).catch(function (error) {
+        toastr.error(error?.response?.data?.message);
+    });
+});
+
+$(document).on('click', '.js-changeOrderUserByPhone', function (e) {
+    e.preventDefault();
+    if (!$('#userChangePhone').hasClass("is-invalid")) {
+        let phone = $('#userChangePhone').val();
+        let orderId = $('#js-orderId').val();
+        changeOrderUserByPhone(phone, orderId);
+    }
+});
+
+function changeOrderUserByPhone(phone, orderId) {
+    adminAxios.post('orders/change-user-by-phone', {
+        phone: phone,
+        orderId: orderId
+    }).then(response => {
+        $("#js-userInfo").load(window.location.href + ' #js-userInfo');
+        $("#js-orderUserId").val(response.data.id);
+        toastr.success('Клиент успешно обновлен!');
+    }).catch(function (error) {
+        toastr.error(error?.response?.data?.message);
+    });
+}
