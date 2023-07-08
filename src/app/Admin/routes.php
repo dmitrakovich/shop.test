@@ -105,7 +105,6 @@ Route::group([
     $router->resource('stock', StockController::class);
 
     // legacy
-    $router->any('availability', AvailiabilityController::class);
     $router->any('config/rating', RatingController::class);
 
     // Automation
