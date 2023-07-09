@@ -22,7 +22,7 @@
                 <div class="card card-body">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-                        <input data-code="BY" required="1" style="width: 250px" type="text" id="userChangePhone"
+                        <input data-code="BY" style="width: 250px" type="text" id="userChangePhone"
                             name="userChangePhone" class="form-control js-phone-input" placeholder="Введите телефон">
                     </div>
                     <br>
@@ -49,7 +49,7 @@
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-                                        <input data-code="BY" required="1" type="text" id="userCreatePhone"
+                                        <input data-code="BY" type="text" id="userCreatePhone"
                                             name="userCreatePhone" class="form-control js-phone-input"
                                             placeholder="Введите телефон">
                                     </div>
@@ -61,7 +61,7 @@
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                                        <input required="1" type="text" name="userCreateLastName"
+                                        <input type="text" name="userCreateLastName"
                                             class="form-control">
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                                        <input required="1" type="text" name="userCreateFirstName"
+                                        <input type="text" name="userCreateFirstName"
                                             class="form-control">
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                                        <input required="1" type="text" name="userCreatePatronymicName"
+                                        <input type="text" name="userCreatePatronymicName"
                                             class="form-control">
                                     </div>
                                 </div>
