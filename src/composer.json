@@ -28,7 +28,7 @@
         "laravel-admin-ext/grid-sortable": "^1.1",
         "laravel-admin-ext/helpers": "^2.0",
         "laravel-admin-ext/log-viewer": "^1.0",
-        "laravel/framework": "^10.0",
+        "laravel/framework": "^10.14",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "laravie/serialize-queries": "^2.0",
