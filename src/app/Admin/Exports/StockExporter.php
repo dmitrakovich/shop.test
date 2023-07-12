@@ -22,7 +22,7 @@ class StockExporter extends ExcelExporterFromCollection implements WithEvents, W
     /**
      * Create a new exporter instance.
      */
-    public function __construct(Grid $grid = null)
+    public function __construct(?Grid $grid = null)
     {
         ini_set('memory_limit', '512M');
         set_time_limit(60);

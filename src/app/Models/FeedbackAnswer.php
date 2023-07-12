@@ -18,7 +18,7 @@ class FeedbackAnswer extends Model implements HasMedia
     /**
      * Размеры изображений
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')->width(150)->height(150);
         $this->addMediaConversion('full')->width(2000);

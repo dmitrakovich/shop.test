@@ -43,7 +43,7 @@ class FilterService
      * @param  array  $filtersList список нужных фильтров
      * @return array
      */
-    public static function getAll(array $filtersList = null)
+    public static function getAll(?array $filtersList = null)
     {
         if (Cache::has('filters')) {
             $filters = Cache::get('filters');

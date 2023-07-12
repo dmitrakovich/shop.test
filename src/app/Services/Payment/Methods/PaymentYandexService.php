@@ -112,7 +112,7 @@ class PaymentYandexService extends AbstractPaymentService
      */
     public function capture(
         OnlinePayment $payment,
-        float $amount = null
+        ?float $amount = null
     ): OnlinePayment {
         $idempotenceKey = uniqid('', true);
         $response = $this->api->capturePayment([

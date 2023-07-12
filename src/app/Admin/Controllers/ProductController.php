@@ -19,12 +19,9 @@ use App\Models\Season;
 use App\Models\Size;
 use App\Models\Style;
 use App\Models\TagGroup;
-use Database\Seeders\ProductSeeder;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 
