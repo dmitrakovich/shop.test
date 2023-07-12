@@ -9,6 +9,7 @@ use App\Admin\Actions\Order\CreateOnlinePayment;
 use App\Admin\Actions\Order\InstallmentForm;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
+use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Country;
@@ -539,16 +540,12 @@ $(function () {
 JS;
     }
 
-    public function changeUserByPhone(Request $request)
+    public function changeUserByPhone(ChangeUserByPhoneRequest $request)
     {
         $user = User::where('phone', $request->input('phone'))->first();
-        if ($user) {
-            Order::where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
+        Order::where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
 
-            return $user;
-        } else {
-            throw new \Exception('Пользователь с таким телефоном не найден');
-        }
+        return $user;
     }
 
     public function addUserByPhone(Request $request)
