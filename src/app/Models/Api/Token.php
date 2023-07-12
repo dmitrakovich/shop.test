@@ -53,7 +53,7 @@ class Token extends Model
     /**
      * Update token in db
      */
-    public function scopeUpdateToken(Builder $builder, string $newToken, Carbon $expireDate = null): void
+    public function scopeUpdateToken(Builder $builder, string $newToken, ?Carbon $expireDate = null): void
     {
         $builder->update([
             'token' => $newToken,

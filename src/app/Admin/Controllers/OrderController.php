@@ -170,7 +170,7 @@ class OrderController extends AdminController
      *
      * @return Form
      */
-    protected function form(int $id = null)
+    protected function form(?int $id = null)
     {
         $form = new Form(new Order());
         $order = $id ? Order::where('id', $id)->with(['user'])->first() : null;

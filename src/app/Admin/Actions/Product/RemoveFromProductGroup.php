@@ -16,7 +16,7 @@ class RemoveFromProductGroup extends Action
 
     private $productGroupId;
 
-    public function __construct(int $productId = null, int $productGroupId = null)
+    public function __construct(?int $productId = null, ?int $productGroupId = null)
     {
         parent::__construct();
         $this->productId = $productId;

@@ -14,7 +14,7 @@ class BuyoutFormAction extends Action
 
     protected ?int $orderId = null;
 
-    public function __construct(int $orderId = null)
+    public function __construct(?int $orderId = null)
     {
         parent::__construct();
         $this->orderId = $orderId;

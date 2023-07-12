@@ -23,7 +23,7 @@ class FeedbackController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(GoogleTagManagerService $gtmService, string $type = null)
+    public function index(GoogleTagManagerService $gtmService, ?string $type = null)
     {
         $type = Feedback::getType($type);
         $feedbacks = $this->feedbackService->getByType($type);

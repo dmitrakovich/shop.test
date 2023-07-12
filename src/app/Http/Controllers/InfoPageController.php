@@ -13,7 +13,7 @@ class InfoPageController extends Controller
     /**
      * Display the specified info page.
      */
-    public function index(GoogleTagManagerService $gtmService, string $slug = null): View
+    public function index(GoogleTagManagerService $gtmService, ?string $slug = null): View
     {
         $currentInfoPage = InfoPage::when($slug, fn ($query) => $query->where('slug', $slug))
             ->firstOrFail(['slug', 'name', 'html'])

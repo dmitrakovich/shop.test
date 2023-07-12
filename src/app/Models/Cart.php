@@ -65,7 +65,7 @@ class Cart extends Model
     /**
      * Get all items cart price
      */
-    public function getTotalPrice(string $currencyCode = null): float
+    public function getTotalPrice(?string $currencyCode = null): float
     {
         $price = 0;
         foreach ($this->items as $item) {

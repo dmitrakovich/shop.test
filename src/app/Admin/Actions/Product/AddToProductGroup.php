@@ -14,7 +14,7 @@ class AddToProductGroup extends Action
 
     private $productId;
 
-    public function __construct(int $productId = null)
+    public function __construct(?int $productId = null)
     {
         parent::__construct();
         if ($productId) {

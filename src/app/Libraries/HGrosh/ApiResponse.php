@@ -17,7 +17,7 @@ class ApiResponse
     /**
      * ApiResponse constructor.
      */
-    public function __construct(ResponseInterface $response = null)
+    public function __construct(?ResponseInterface $response = null)
     {
         if ($response === null) {
             $this->status = 500;

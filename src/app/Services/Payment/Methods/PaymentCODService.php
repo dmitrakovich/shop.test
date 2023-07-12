@@ -12,7 +12,7 @@ class PaymentCODService extends AbstractPaymentService
     /**
      * Create new payment
      */
-    public function create(Order $order, float $amount, string $paymentNum = null, array $data = []): OnlinePayment
+    public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []): OnlinePayment
     {
         $data = [];
         $data['order_id'] = $order->id;

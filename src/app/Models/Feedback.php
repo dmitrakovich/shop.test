@@ -143,7 +143,7 @@ class Feedback extends Model implements HasMedia
     /**
      * Размеры изображений
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
             ->performOnCollections('photos')

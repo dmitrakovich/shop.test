@@ -36,7 +36,7 @@ class PaymentYandexService extends AbstractPaymentService
     /**
      * Create new payment
      */
-    public function create(Order $order, float $amount, string $paymentNum = null, array $data = []): OnlinePayment
+    public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []): OnlinePayment
     {
         $paymentData = [];
         $preAuth = (bool)($data['pre_auth'] ?? false);
@@ -112,7 +112,7 @@ class PaymentYandexService extends AbstractPaymentService
      */
     public function capture(
         OnlinePayment $payment,
-        float $amount = null
+        ?float $amount = null
     ): OnlinePayment {
         $idempotenceKey = uniqid('', true);
         $response = $this->api->capturePayment([
