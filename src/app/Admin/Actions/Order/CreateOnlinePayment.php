@@ -15,7 +15,7 @@ class CreateOnlinePayment extends Action
 
     private $orderId;
 
-    public function __construct(?int $orderId = null)
+    public function __construct(int $orderId = null)
     {
         parent::__construct();
         if ($orderId) {

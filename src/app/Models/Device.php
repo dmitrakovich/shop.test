@@ -155,7 +155,7 @@ class Device extends Model
     /**
      * Set the device's yandex id
      */
-    public function setYandexId(?int $yandexId = null): void
+    public function setYandexId(int $yandexId = null): void
     {
         $yandexId ??= (int)Cookie::get(self::YANDEX_ID_COOKIE_NAME);
 
@@ -165,7 +165,7 @@ class Device extends Model
     /**
      * Set the device's google id
      */
-    public function setGoogleId(?string $googleId = null): void
+    public function setGoogleId(string $googleId = null): void
     {
         if ($googleId) {
             $this->attributes['google_id'] = $googleId;
@@ -180,7 +180,7 @@ class Device extends Model
     /**
      * Set the device's type
      */
-    public function setType(?string $type = null): void
+    public function setType(string $type = null): void
     {
         if ($type && in_array($type, self::TYPES)) {
             $this->attributes['type'] = $type;
@@ -192,7 +192,7 @@ class Device extends Model
     /**
      * Set the device's user agent
      */
-    public function setAgent(?string $agent = null): void
+    public function setAgent(string $agent = null): void
     {
         if ($agent) {
             $this->attributes['agent'] = $agent;

@@ -30,7 +30,7 @@ class ProductService
     /**
      * Return built query
      */
-    public function getForCatalog(array $filters, string $sort, ?string $search = null): Builder
+    public function getForCatalog(array $filters, string $sort, string $search = null): Builder
     {
         return $this->applyFilters($filters)
             ->with([

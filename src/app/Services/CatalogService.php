@@ -34,7 +34,7 @@ class CatalogService
     /**
      * @return \Illuminate\Contracts\Pagination\CursorPaginator
      */
-    public function getProducts(array $filters, string $sort, ?string $search = null)
+    public function getProducts(array $filters, string $sort, string $search = null)
     {
         $productsQuery = $this->productService->getForCatalog(
             $filters, $sort, $search
@@ -53,7 +53,7 @@ class CatalogService
         return $products;
     }
 
-    public function getFilterBadges(?array $currentFiltersGroups, ?string $searchQuery = null): array
+    public function getFilterBadges(?array $currentFiltersGroups, string $searchQuery = null): array
     {
         $badges = [];
         if (!empty($currentFiltersGroups)) {

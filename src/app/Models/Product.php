@@ -269,7 +269,7 @@ class Product extends Model implements HasMedia
      * @param  string  $search
      * @return Builder
      */
-    public function scopeSearch(Builder $query, ?string $search = null)
+    public function scopeSearch(Builder $query, string $search = null)
     {
         if (empty($search)) {
             return $query;
@@ -335,7 +335,7 @@ class Product extends Model implements HasMedia
     /**
      * Get product price
      */
-    public function getPrice(?string $currencyCode = null): float
+    public function getPrice(string $currencyCode = null): float
     {
         return Currency::convert($this->getFinalPrice(), $currencyCode);
     }
@@ -371,7 +371,7 @@ class Product extends Model implements HasMedia
     /**
      * Get product old price
      */
-    public function getOldPrice(?string $currencyCode = null): float
+    public function getOldPrice(string $currencyCode = null): float
     {
         return Currency::convert($this->getFinalOldPrice(), $currencyCode);
     }

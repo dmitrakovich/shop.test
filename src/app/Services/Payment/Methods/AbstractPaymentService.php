@@ -13,7 +13,7 @@ abstract class AbstractPaymentService
     /**
      * Create new payment
      */
-    abstract public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []): OnlinePayment;
+    abstract public function create(Order $order, float $amount, string $paymentNum = null, array $data = []): OnlinePayment;
 
     /**
      * Get payment by payment_id.
@@ -23,7 +23,7 @@ abstract class AbstractPaymentService
      */
     public function getOnlinePaymentByPaymentId(
         string $paymentId,
-        ?OnlinePaymentMethodEnum $methodEnum = null
+        OnlinePaymentMethodEnum $methodEnum = null
     ): ?OnlinePayment {
         $result = OnlinePayment::where('payment_id', $paymentId);
         if ($methodEnum) {

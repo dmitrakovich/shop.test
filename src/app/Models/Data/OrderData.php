@@ -56,7 +56,7 @@ class OrderData
         public ?string $city = null,
         public float $total_price = 0,
         public ?string $status_key = null,
-        ?string $created_at = null,
+        string $created_at = null,
         ...$otherData
     ) {
         $this->user = $this->findModel(new User(), $this->user_id);

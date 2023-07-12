@@ -91,7 +91,7 @@ class UserController extends AdminController
      *
      * @return Form
      */
-    protected function form(?int $id = null)
+    protected function form(int $id = null)
     {
         $form = new Form(new User());
 

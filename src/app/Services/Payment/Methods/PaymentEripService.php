@@ -16,7 +16,7 @@ class PaymentEripService extends AbstractPaymentService
     /**
      * Create new payment
      */
-    public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []): OnlinePayment
+    public function create(Order $order, float $amount, string $paymentNum = null, array $data = []): OnlinePayment
     {
         $config = config('hgrosh');
         $postData = [];

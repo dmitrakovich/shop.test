@@ -90,7 +90,7 @@ class PaymentService
      */
     public function captureOnlinePayment(
         OnlinePayment $payment,
-        ?float $amount = null
+        float $amount = null
     ): OnlinePayment {
         $paymentMethodService = $this->getPaymentMethodServiceByEnum($payment->method_enum_id);
 

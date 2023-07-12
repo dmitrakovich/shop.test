@@ -25,11 +25,11 @@ class LogService
         string $phone,
         string $text,
         string $route,
-        ?int $adminId = null,
-        ?int $userId = null,
-        ?int $orderId = null,
-        ?int $mailingId = null,
-        ?string $status = null,
+        int $adminId = null,
+        int $userId = null,
+        int $orderId = null,
+        int $mailingId = null,
+        string $status = null,
     ): LogModel\SmsLog {
         $log = new LogModel\SmsLog;
         $log->phone = $phone;

@@ -60,7 +60,7 @@ class GoogleTagManagerService
      *
      * @param  Collection  $products
      */
-    public function setViewForCatalog($products, string|Category $category, ?string $searchQuery = null): void
+    public function setViewForCatalog($products, string|Category $category, string $searchQuery = null): void
     {
         if ($category instanceof Category) {
             $category = $category->getNameWithParents();
@@ -82,7 +82,7 @@ class GoogleTagManagerService
     /**
      * Prepare products array
      */
-    public static function prepareProduct(Product $product, ?int $quantity = null): DataLayer
+    public static function prepareProduct(Product $product, int $quantity = null): DataLayer
     {
         return new DataLayer(array_filter([
             'name' => $product->brand->name . ' ' . $product->id,
@@ -121,7 +121,7 @@ class GoogleTagManagerService
      *
      * @param  Collection  $products
      */
-    public function setForCatalog($products, string|Category $category, ?string $searchQuery = null): void
+    public function setForCatalog($products, string|Category $category, string $searchQuery = null): void
     {
         $this->setViewForCatalog($products, $category, $searchQuery);
         $this->setEcommerceForCatalog($products);
@@ -132,7 +132,7 @@ class GoogleTagManagerService
      *
      * @param  Collection  $products
      */
-    public function getForCatalogArrays($products, string|Category $category, ?string $searchQuery = null): array
+    public function getForCatalogArrays($products, string|Category $category, string $searchQuery = null): array
     {
         $this->setForCatalog($products, $category, $searchQuery);
 

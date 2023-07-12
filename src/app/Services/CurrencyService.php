@@ -80,7 +80,7 @@ class CurrencyService
      *
      * @param  bool  $save
      */
-    public function setCurrentCurrency(?string $currencyCode = null, $save = true): void
+    public function setCurrentCurrency(string $currencyCode = null, $save = true): void
     {
         if ($currencyCode) {
             $this->setCurrencyByCode($currencyCode);
@@ -165,7 +165,7 @@ class CurrencyService
     /**
      * Convert price in needed or current currency
      */
-    public function convert(float $priceInByn, ?string $currencyCode = null): float
+    public function convert(float $priceInByn, string $currencyCode = null): float
     {
         $currency = $this->allCurrencies[$currencyCode] ?? $this->currency;
         $precision = 10 ** $currency->decimals;
@@ -177,7 +177,7 @@ class CurrencyService
     /**
      * Convert price from needed or current currency to byn
      */
-    public function reverseConvert(float $priceInCurrency, ?string $currencyCode = null): float
+    public function reverseConvert(float $priceInCurrency, string $currencyCode = null): float
     {
         $currency = $this->allCurrencies[$currencyCode] ?? $this->currency;
         $priceInByn = $priceInCurrency / $currency->rate;
@@ -188,7 +188,7 @@ class CurrencyService
     /**
      * Format price in current currency
      */
-    public function format(float $price, ?string $currency = null, string $space = '&nbsp;'): string
+    public function format(float $price, string $currency = null, string $space = '&nbsp;'): string
     {
         $currency = $this->allCurrencies[$currency] ?? $this->currency;
 

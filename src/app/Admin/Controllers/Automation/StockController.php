@@ -148,7 +148,7 @@ class StockController extends AbstractAdminController
     /**
      * Adds a filter for products.
      */
-    private function getProductFilter(string $table = 'available_sizes_full', ?string $input = null): \Closure
+    private function getProductFilter(string $table = 'available_sizes_full', string $input = null): \Closure
     {
         return function ($query) use ($table, $input) {
             $input ??= $this->input;
@@ -160,7 +160,7 @@ class StockController extends AbstractAdminController
     /**
      * Adds a filter for statuses.
      */
-    private function getStatusFilter(?array $input = null): \Closure
+    private function getStatusFilter(array $input = null): \Closure
     {
         return function ($query) use ($input) {
             $statuses = $input ?? $this->input;
@@ -179,7 +179,7 @@ class StockController extends AbstractAdminController
     /**
      * Adds a filter for brands.
      */
-    private function getBrandFilter(string $table = 'available_sizes_full', ?array $input = null): \Closure
+    private function getBrandFilter(string $table = 'available_sizes_full', array $input = null): \Closure
     {
         return fn ($query) => $query->whereIn("$table.brand_id", $input ?? $this->input);
     }
@@ -187,7 +187,7 @@ class StockController extends AbstractAdminController
     /**
      * Adds a filter for seasons.
      */
-    private function getSeasonFilter(?array $input = null): \Closure
+    private function getSeasonFilter(array $input = null): \Closure
     {
         return fn ($query) => $query->whereIn('products.season_id', $input ?? $this->input);
     }
@@ -195,7 +195,7 @@ class StockController extends AbstractAdminController
     /**
      * Adds a filter for collections.
      */
-    private function getCollectionFilter(?array $input = null): \Closure
+    private function getCollectionFilter(array $input = null): \Closure
     {
         return fn ($query) => $query->whereIn('products.collection_id', $input ?? $this->input);
     }
@@ -203,7 +203,7 @@ class StockController extends AbstractAdminController
     /**
      * Adds a filter for categories.
      */
-    private function getCategoryFilter(string $table = 'available_sizes_full', ?array $input = null): \Closure
+    private function getCategoryFilter(string $table = 'available_sizes_full', array $input = null): \Closure
     {
         return fn ($query) => $query->whereIn("$table.category_id", $input ?? $this->input);
     }
