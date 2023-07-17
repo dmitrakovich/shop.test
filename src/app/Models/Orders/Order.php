@@ -353,10 +353,11 @@ class Order extends Model
     {
         $deliveryPrice = $this->delivery_price ? $this->delivery_price : 0;
         $onlinePaymentsSum = $this->getAmountPaidOrders();
+
         if ((int)$this->payment_id === Installment::PAYMENT_METHOD_ID) {
-            return $this->getInstallmentMonthlyFeeSum() + $deliveryPrice - $onlinePaymentsSum;
+            return $this->getInstallmentMonthlyFeeSum()  - $onlinePaymentsSum;
         } else {
-            return $this->getItemsPrice() + $deliveryPrice - $onlinePaymentsSum;
+            return $this->getItemsPrice() - $onlinePaymentsSum;
         }
     }
 
@@ -372,6 +373,15 @@ class Order extends Model
         }
 
         return $price;
+    }
+
+    public function getUniqItemsCount(): int
+    {
+        $items = [];
+        foreach ($this->data as $item) {
+            $items[$item->product_id] = $item->product_id;
+        }
+        return count($items);
     }
 
     public function getItemsCount(): int

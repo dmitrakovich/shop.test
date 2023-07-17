@@ -4,6 +4,7 @@ namespace App\Services\Order;
 
 use App\Helpers\TextHelper;
 use App\Models\Orders\Order;
+use App\Models\Payments\Installment;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -19,18 +20,14 @@ class BuyoutOrderService
     {
         $resultPath = '/storage/order_buyout/' . $orderId . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
-        $order = Order::where('id', $orderId)->with(['itemsExtended'])->first();
+        $order = Order::where('id', $orderId)->with(['itemsExtended', 'delivery'])->first();
         $spreadsheet = IOFactory::load(public_path('templates/buyout_template.xlsx'));
 
-        $totalCodSum = $order->getTotalCODSum();
-        $itemsPrice = $order->getItemsPrice();
         $firstName = ($order->first_name ?? $order->user->first_name ?? null);
         $lastName = ($order->last_name ?? $order->user->last_name ?? null);
         $patronymicName = ($order->patronymic_name ?? $order->user->patronymic_name ?? null);
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('F4', TextHelper::numberToMoneyShortString($totalCodSum));
-        $sheet->setCellValue('V4', TextHelper::numberToMoneyString($totalCodSum));
         $sheet->setCellValue('S13', $lastName);
         $sheet->setCellValue('AK13', $firstName);
         $sheet->setCellValue('AY13', $patronymicName);
@@ -49,10 +46,17 @@ class BuyoutOrderService
         $sheet->setCellValue('X42', $firstName);
         $sheet->setCellValue('AI42', $patronymicName);
 
-        $diffTotalPrice = ($itemsPrice - $totalCodSum);
-        $diffTotalPrice = ($diffTotalPrice > 0) ? $diffTotalPrice : 0;
+        $totalSum = 0;
+        $uniqItemsCount = $order->getUniqItemsCount();
         foreach ($order->items as $itemKey => $item) {
-            $itemPrice = ($diffTotalPrice > 0) ? (($item->current_price * 100 / $itemsPrice) / 100) * $totalCodSum : $item->current_price;
+            $itemPrice = $item->current_price;
+            if ((int)$order->payment_id === Installment::PAYMENT_METHOD_ID) {
+                $itemPrice = $itemPrice - (round(($itemPrice * 0.3), 2) * 2);
+            }
+            if($order->delivery->instance === 'BelpostCourierFitting') {
+                $itemPrice -= $order->delivery_price / $uniqItemsCount;
+            }
+            $totalSum += $itemPrice;
             $itemsColNum = (28 + $itemKey);
             $itemsColNumSecond = (46 + $itemKey);
             if ($itemKey > 0) {
@@ -93,6 +97,9 @@ class BuyoutOrderService
             $sheet->setCellValue('BD' . $itemsColNumSecond, TextHelper::numberToMoneyShortString($itemPrice));
             $sheet->setCellValue('BK' . $itemsColNumSecond, 'коп.');
         }
+
+        $sheet->setCellValue('F4', TextHelper::numberToMoneyShortString($totalSum));
+        $sheet->setCellValue('V4', TextHelper::numberToMoneyString($totalSum));
         $writer = new Xlsx($spreadsheet);
         $writer->save(public_path($resultPath));
 
