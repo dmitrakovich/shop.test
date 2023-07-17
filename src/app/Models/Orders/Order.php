@@ -355,7 +355,7 @@ class Order extends Model
         $onlinePaymentsSum = $this->getAmountPaidOrders();
 
         if ((int)$this->payment_id === Installment::PAYMENT_METHOD_ID) {
-            return $this->getInstallmentMonthlyFeeSum()  - $onlinePaymentsSum;
+            return $this->getInstallmentMonthlyFeeSum() - $onlinePaymentsSum;
         } else {
             return $this->getItemsPrice() - $onlinePaymentsSum;
         }
@@ -381,6 +381,7 @@ class Order extends Model
         foreach ($this->data as $item) {
             $items[$item->product_id] = $item->product_id;
         }
+
         return count($items);
     }
 

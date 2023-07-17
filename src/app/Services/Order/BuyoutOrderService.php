@@ -53,7 +53,7 @@ class BuyoutOrderService
             if ((int)$order->payment_id === Installment::PAYMENT_METHOD_ID) {
                 $itemPrice = $itemPrice - (round(($itemPrice * 0.3), 2) * 2);
             }
-            if($order->delivery->instance === 'BelpostCourierFitting') {
+            if ($order->delivery->instance === 'BelpostCourierFitting') {
                 $itemPrice -= $order->delivery_price / $uniqItemsCount;
             }
             $totalSum += $itemPrice;
