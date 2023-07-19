@@ -56,6 +56,8 @@ class StockExporter extends ExcelExporterFromCollection implements WithEvents, W
 
                 $sheet = $event->sheet->getDelegate();
 
+                $sheet->freezePane('A2');
+
                 $titleStyles = $sheet->getStyle(1);
                 $titleStyles->getFont()->setBold(true)->setSize(12);
 
