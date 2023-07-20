@@ -35,7 +35,7 @@ class StockController extends AbstractAdminController
     const statusfilters = [
         'discounts' => 'скидки',
         'new_items' => 'новинки',
-        'out_of_stock' => 'нет в наличии',
+        'out_of_stock' => 'продано',
         'excluded' => 'исключенные',
         'not_added' => 'не выставлено',
     ];
@@ -168,8 +168,8 @@ class StockController extends AbstractAdminController
                 match ($status) {
                     'discounts' => $query->whereColumn('products.old_price', '>', 'products.price'),
                     'new_items' => $query->where('products.old_price', 0),
+                    'out_of_stock' => $query->whereNull('available_sizes_full.product_id'),
                     'excluded' => $query->whereIn('products.label_id', Product::excludedLabels()),
-                    'out_of_stock' => $query->whereNotNull('products.deleted_at'),
                     'not_added' => $query->whereNull('products.id')->whereNull('available_sizes_full.product_id'),
                 };
             }
