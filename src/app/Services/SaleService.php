@@ -112,7 +112,7 @@ class SaleService
      */
     protected function hasUserSale(Product $product): bool
     {
-        if (isset($this->disabled[self::USER_SALE_KEY])) {
+        if (isset($this->disabled[self::USER_SALE_KEY]) || $product->old_price > $product->price) {
             return false;
         }
         $addUserSale = $this->productHasGeneralSale($product) ? $this->sale->add_client_sale : true;
