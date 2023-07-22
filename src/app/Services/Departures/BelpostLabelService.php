@@ -52,29 +52,29 @@ class BelpostLabelService
             $sheet->setCellValue('D25', 'P');
             $sheet->setCellValue('D33', 'P');
             $sheet->getStyle('D25')->applyFromArray([
-                'font'  => [
-                    'name'  => 'Wingdings 2'
-                ]
+                'font' => [
+                    'name' => 'Wingdings 2',
+                ],
             ]);
             $sheet->getStyle('D33')->applyFromArray([
-                'font'  => [
-                    'name'  => 'Wingdings 2'
-                ]
+                'font' => [
+                    'name' => 'Wingdings 2',
+                ],
             ]);
         } else {
             $sheet->setCellValue('D22', 'P');
             $sheet->getStyle('D22')->applyFromArray([
-                'font'  => [
-                    'name'  => 'Wingdings 2'
-                ]
+                'font' => [
+                    'name' => 'Wingdings 2',
+                ],
             ]);
         }
         if ((int)$order->payment_id === Installment::PAYMENT_METHOD_ID) {
             $sheet->setCellValue('D31', 'P');
             $sheet->getStyle('D31')->applyFromArray([
-                'font'  => [
-                    'name'  => 'Wingdings 2'
-                ]
+                'font' => [
+                    'name' => 'Wingdings 2',
+                ],
             ]);
         }
 
