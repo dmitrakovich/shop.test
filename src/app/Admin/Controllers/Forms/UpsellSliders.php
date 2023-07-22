@@ -52,7 +52,7 @@ class UpsellSliders extends Form
         $finalAccessories->categories_list = $requestData['final_accessories']['categories_list'] ?? [];
         $finalAccessories->additional_settings = [
             'additional_discount' => $requestData['final_accessories']['additional_settings']['additional_discount'] ?? 10,
-            'discount_period' => $requestData['final_accessories']['additional_settings']['discount_period'] ?? 10
+            'discount_period' => $requestData['final_accessories']['additional_settings']['discount_period'] ?? 10,
         ];
         $finalAccessories->save();
 
@@ -63,11 +63,12 @@ class UpsellSliders extends Form
         $finalSale->sorting = $requestData['final_sale']['sorting'] ?? 3;
         $finalSale->categories_list = $requestData['final_sale']['categories_list'] ?? [];
         $finalSale->additional_settings = [
-            'min_discount' => $requestData['final_sale']['additional_settings']['min_discount'] ?? 10
+            'min_discount' => $requestData['final_sale']['additional_settings']['min_discount'] ?? 10,
         ];
         $finalSale->save();
 
         admin_success('Слайдеры допродаж успешно сохранены!');
+
         return back();
     }
 
@@ -111,6 +112,7 @@ class UpsellSliders extends Form
         $finalUpsell = ProductCarousel::where('enum_type_id', ProductCarouselEnum::FINAL_UPSELLS)->first(['title', 'speed', 'count', 'sorting', 'additional_settings']);
         $finalAccessories = ProductCarousel::where('enum_type_id', ProductCarouselEnum::FINAL_ACCESSORIES)->first(['title', 'speed', 'count', 'sorting', 'categories', 'additional_settings']);
         $finalSale = ProductCarousel::where('enum_type_id', ProductCarouselEnum::FINAL_SALE)->first(['title', 'speed', 'count', 'sorting', 'categories', 'additional_settings']);
+
         return [
             'final_upsell' => $finalUpsell?->toArray(),
             'final_accessories' => $finalAccessories?->toArray(),

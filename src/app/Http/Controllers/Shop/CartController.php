@@ -125,7 +125,7 @@ class CartController extends BaseController
         return view('shop.cart-done', [
             'order' => $order,
             'recommended' => $productService->getRecommended(),
-            'finalSliders' => $sliderService->getFinalOrderPageSliders($order)
+            'finalSliders' => $sliderService->getFinalOrderPageSliders($order),
         ]);
     }
 }
