@@ -227,9 +227,9 @@ $(document).on('click', '.js-createOrderUser', function (e) {
             }, {}),
         orderId: $('#js-orderId').val()
     }).then(response => {
+        $('#js-createOrderUserModal').modal('hide');
         $("#js-userInfo").load(window.location.href + ' #js-userInfo');
         $("#js-orderUserId").val(response.data.id);
-        $('#js-createOrderUserModal').modal('hide')
         toastr.success('Клиент успешно обновлен!');
     }).catch(function (error) {
         toastr.error(error?.response?.data?.message);
