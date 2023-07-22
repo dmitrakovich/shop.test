@@ -5,16 +5,16 @@ namespace App\Services;
 use App\Enums\ProductCarouselEnum;
 use App\Facades\Currency;
 use App\Models\Ads\ProductCarousel;
+use App\Models\CartData;
 use App\Models\Category;
 use App\Models\Favorite;
-use App\Models\Product;
-use App\Models\CartData;
-use App\Models\Orders\OrderItem;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderItem;
+use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
-use Carbon\Carbon;
 
 /**
  * @todo Refactor DRY !
@@ -267,6 +267,7 @@ class SliderService
         usort($result, function ($a, $b) {
             return ($a['sorting'] > $b['sorting']) ? 1 : -1;
         });
+
         return $result;
     }
 
@@ -380,9 +381,9 @@ class SliderService
             $this->addConvertedAndFormattedPrice($slider['products']);
             $this->addFavorites($slider['products']);
         }
+
         return $slider;
     }
-
 
     /**
      * Get recent products slider
