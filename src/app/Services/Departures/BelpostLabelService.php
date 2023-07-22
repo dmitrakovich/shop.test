@@ -4,6 +4,7 @@ namespace App\Services\Departures;
 
 use App\Helpers\TextHelper;
 use App\Models\Orders\Order;
+use App\Models\Payments\Installment;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -15,7 +16,7 @@ class BelpostLabelService
      */
     public function createLabel(Order $order): string
     {
-        $order->load(['itemsExtended.installment', 'onlinePayments']);
+        $order->load(['itemsExtended.installment', 'onlinePayments', 'delivery']);
 
         $totalCodSum = $order->getTotalCODSum();
         $resultPath = '/storage/departures/belpost_label/' . date('d-m-Y', strtotime('now')) . '/' . $order->id . '.xlsx';
@@ -38,8 +39,47 @@ class BelpostLabelService
         $sheet->setCellValue('BC28', $order->city ?? null);
         $sheet->setCellValue('AS30', $order->region ?? null);
 
+        $sheet->setCellValue('D20', null);
+        $sheet->setCellValue('D22', null);
+        $sheet->setCellValue('D25', null);
+        $sheet->setCellValue('D28', null);
+        $sheet->setCellValue('D31', null);
+        $sheet->setCellValue('D33', null);
+        $sheet->setCellValue('D35', null);
+        $sheet->setCellValue('D37', null);
+
+        if ($order->delivery->instance === 'BelpostCourierFitting') {
+            $sheet->setCellValue('D25', 'P');
+            $sheet->setCellValue('D33', 'P');
+            $sheet->getStyle('D25')->applyFromArray([
+                'font'  => [
+                    'name'  => 'Wingdings 2'
+                ]
+            ]);
+            $sheet->getStyle('D33')->applyFromArray([
+                'font'  => [
+                    'name'  => 'Wingdings 2'
+                ]
+            ]);
+        } else {
+            $sheet->setCellValue('D22', 'P');
+            $sheet->getStyle('D22')->applyFromArray([
+                'font'  => [
+                    'name'  => 'Wingdings 2'
+                ]
+            ]);
+        }
+        if ((int)$order->payment_id === Installment::PAYMENT_METHOD_ID) {
+            $sheet->setCellValue('D31', 'P');
+            $sheet->getStyle('D31')->applyFromArray([
+                'font'  => [
+                    'name'  => 'Wingdings 2'
+                ]
+            ]);
+        }
+
         $sheet->setCellValue('BF35', substr(trim($order->phone), -9, -7));
-        $sheet->setCellValue('BJ35', substr(trim($order->phone), -7));
+        $sheet->setCellValue('BJ35', preg_replace("/^(\d{3})(\d{2})(\d{2})$/", '$1 $2 $3', substr(trim($order->phone), -7)));
 
         $writer = new Xlsx($spreadsheet);
         $writer->save(public_path($resultPath));
