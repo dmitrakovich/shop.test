@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\User\User;
 use App\Services\GoogleTagManagerService;
 use App\Services\ProductService;
+use App\Services\SliderService;
 use Deliveries\DeliveryMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -106,12 +107,16 @@ class CartController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function final(ProductService $productService, GoogleTagManagerService $gtmService)
-    {
+    public function final(
+        ProductService $productService,
+        GoogleTagManagerService $gtmService,
+        SliderService $sliderService
+    ) {
+        Session::put('order_id', 15879);
         if (!Session::has('order_id')) {
             return redirect()->route('orders.index');
         }
-        $order = Order::with('items')->findOrFail(Session::get('order_id'));
+        $order = Order::with('items', 'payment')->findOrFail(Session::get('order_id'));
         Guest::setData($order->only(['first_name', 'last_name', 'email', 'phone']));
 
         $gtmService->setViewForOrder();
@@ -120,6 +125,7 @@ class CartController extends BaseController
         return view('shop.cart-done', [
             'order' => $order,
             'recommended' => $productService->getRecommended(),
+            'finalSliders' => $sliderService->getFinalOrderPageSliders($order)
         ]);
     }
 }
