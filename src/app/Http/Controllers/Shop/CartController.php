@@ -112,7 +112,6 @@ class CartController extends BaseController
         GoogleTagManagerService $gtmService,
         SliderService $sliderService
     ) {
-        Session::put('order_id', 15879);
         if (!Session::has('order_id')) {
             return redirect()->route('orders.index');
         }
