@@ -52,6 +52,20 @@
     </div>
 
     <div class="col-12 my-5 text-center">
+        @foreach ($finalSliders as $finalSlider)
+            @if (!empty($finalSlider['products']))
+                <div class="row">
+                    <div class="col-md-12 mt-3">
+                        @include('partials.index.simple-slider', [
+                            'simpleSlider' => $finalSlider,
+                        ])
+                    </div>
+                </div>
+            @endif
+        @endforeach
+    </div>
+
+    <div class="col-12 my-5 text-center">
         <h3 class="font-weight-light">
             Специально для вас / Недавно просмотренные
         </h3>

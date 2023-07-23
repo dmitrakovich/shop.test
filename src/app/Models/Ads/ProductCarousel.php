@@ -36,6 +36,7 @@ class ProductCarousel extends Model implements Sortable
      * @var array
      */
     protected $casts = [
+        'additional_settings' => 'array',
         'categories' => 'json',
         'only_sale' => 'bool',
         'only_new' => 'bool',
