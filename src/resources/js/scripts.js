@@ -105,4 +105,18 @@ window.sizesValidate = function () {
     return true;
 }
 
-
+try {
+    if (document?.referrer && document?.referrer !== '') {
+        let referrerUrl = new URL(document.referrer);
+        if (referrerUrl.host == 'modny.by' && $.cookie('modnyRedirectPopupShowed')) {
+            $.fancybox.open({
+                src: "/images/popup_redirect_modnyby.jpg",
+                maxWidth: '90%',
+                maxHeight: '90%',
+                width: '500px'
+            });
+            $.cookie('modnyRedirectPopupShowed', '1', { expires: 1, path: '/' });
+        }
+    }
+} catch (error) {
+}
