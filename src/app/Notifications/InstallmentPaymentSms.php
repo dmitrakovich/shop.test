@@ -23,6 +23,6 @@ class InstallmentPaymentSms extends AbstractSmsTraffic
         $order = $this->installment->order;
         $nextPaymentDate = $this->installment->getNextPaymentDate()->format('d.m.Y');
 
-        return "{$order->first_name}, внесите платеж по рассрочке barocco.by за заказ {$order->id} до {$nextPaymentDate}. Сумма {$this->installment->monthly_fee}";
+        return "{$order->first_name}, внесите платеж по рассрочке barocco.by до {$nextPaymentDate}. Сумма {$this->installment->monthly_fee} руб. Счёт {$this->installment->contract_number}";
     }
 }
