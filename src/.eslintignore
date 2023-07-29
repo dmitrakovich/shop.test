@@ -1,0 +1,5 @@
+vendor/
+public/
+node_modules/
+*.min.js
+*.mix.js

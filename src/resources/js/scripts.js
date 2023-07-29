@@ -13,110 +13,104 @@ let sessionTime = sessionStorage.getItem(SESSION_TIME_KEY) ?? 0;
 setInterval(() => sessionStorage.setItem(SESSION_TIME_KEY, ++sessionTime), 1000);
 
 $(function () {
-    //#region боковое меню в мобильной версии
-
-    // скрытие
-    $('.overlay').on('click', function () {
-        $('#mainMenu, .overlay').removeClass('active');
-        $('body').removeClass('modal-open');
-        window.history.back();
-    });
-    $(window).on('popstate', function () {
-        // решение чисто для одного элемента
-        // если нужен переход по несколким,
-        // надо писать функцию
-        $('#mainMenu, .overlay').removeClass('active');
-        $('body').removeClass('modal-open');
-    });
-    // показ
-    $('.js-showMainMenu').on('click', function () {
-        $('#mainMenu, .overlay').addClass('active');
-        $('body').addClass('modal-open');
-        history.pushState(null, null, '#mainMenuOpen');
-    });
-    //#endregion
+  // скрытие
+  $('.overlay').on('click', function () {
+    $('#mainMenu, .overlay').removeClass('active');
+    $('body').removeClass('modal-open');
+    window.history.back();
+  });
+  $(window).on('popstate', function () {
+    // решение чисто для одного элемента
+    // если нужен переход по несколким,
+    // надо писать функцию
+    $('#mainMenu, .overlay').removeClass('active');
+    $('body').removeClass('modal-open');
+  });
+  // показ
+  $('.js-showMainMenu').on('click', function () {
+    $('#mainMenu, .overlay').addClass('active');
+    $('body').addClass('modal-open');
+    history.pushState(null, null, '#mainMenuOpen');
+  });
 
 
-    //#region product
+  $(document).on('click', 'label.check .checkmark', function () {
+    const $checkBox = $(this).siblings('input[type=checkbox]');
+    $checkBox.prop('checked', !$checkBox.prop('checked')).trigger('click');
+    $(this).parent().toggleClass('checked');
+  });
+  $(document).on('click', 'button.js-add-to-cart', function () {
+    // eslint-disable-next-line no-undef
+    sizesValidate();
 
-    //#endregion
-
-    //#region cart
-    $(document).on('click', 'label.check .checkmark', function () {
-        let $checkBox = $(this).siblings('input[type=checkbox]');
-        $checkBox.prop("checked", !$checkBox.prop("checked")).trigger('click');
-        $(this).parent().toggleClass("checked");
-    });
-    $(document).on('click', 'button.js-add-to-cart', function () {
-        sizesValidate();
-
-        let $form = $('form#product-info');
-        $.ajax({
-            method: "post",
-            url: $form.attr('action'),
-            data: $form.serialize(),
-            success: function (response) {
-                if (response.result != 'ok') {
-                    $.fancybox.open(Mustache.render(TEMPLATE_ADDED_TO_CART, {
-                      text: 'Ошибка добавления в корзину',
-                      type: 'danger',
-                    }));
-                } else {
-                    gtmProductAddEvent(productDetail);
-                    $.fancybox.open(Mustache.render(TEMPLATE_ADDED_TO_CART, {
-                      text: 'Товар успешно добавлен в корзину',
-                      type: 'success',
-                    }));
-                    $('.js-cartCount').text(response.total_count);
-                }
-            }
-        });
-    });
-    $(document).on('click', 'button.js-buy-one-click', function () {
-        if (sizesValidate()) {
-            $.fancybox.open($('#buy-one-click'));
+    const $form = $('form#product-info');
+    $.ajax({
+      method: 'post',
+      url: $form.attr('action'),
+      data: $form.serialize(),
+      success: function (response) {
+        if (response.result !== 'ok') {
+          $.fancybox.open(Mustache.render(TEMPLATE_ADDED_TO_CART, {
+            text: 'Ошибка добавления в корзину',
+            type: 'danger',
+          }));
+        } else {
+          // eslint-disable-next-line no-undef
+          gtmProductAddEvent(productDetail);
+          $.fancybox.open(Mustache.render(TEMPLATE_ADDED_TO_CART, {
+            text: 'Товар успешно добавлен в корзину',
+            type: 'success',
+          }));
+          $('.js-cartCount').text(response.total_count);
         }
+      },
     });
-    $(document).on('click', 'button#buy-one-click-submit', function () {
-        sizesValidate();
+  });
+  $(document).on('click', 'button.js-buy-one-click', function () {
+    // eslint-disable-next-line no-undef
+    if (sizesValidate()) {
+      $.fancybox.open($('#buy-one-click'));
+    }
+  });
+  $(document).on('click', 'button#buy-one-click-submit', function () {
+    // eslint-disable-next-line no-undef
+    sizesValidate();
 
-        // подтянуть в форму размеры
-        $('.js-sizes').clone().appendTo('form#oneclick-form').hide();
+    // подтянуть в форму размеры
+    $('.js-sizes').clone().appendTo('form#oneclick-form').hide();
 
-        if (!validatePhone($('input[name="phone"]'))) {
-            return false;
-        }
-        if ($('input[name="first_name"]').val().length < 2) {
-            return $.fancybox.open('<h3 class="py-3 text-danger">Введите имя</h3>');
-        }
+    if (!validatePhone($('input[name="phone"]'))) {
+      return false;
+    }
+    if ($('input[name="first_name"]').val().length < 2) {
+      return $.fancybox.open('<h3 class="py-3 text-danger">Введите имя</h3>');
+    }
 
-        $('form#oneclick-form').trigger('submit');
-    });
-    //#endregion
-
+    $('form#oneclick-form').trigger('submit');
+  });
 });
 
 window.sizesValidate = function () {
-    let $sizesBlock = $('.js-sizes').find('input[type=checkbox]:checked');
-    if (!$sizesBlock.length) {
-        $.fancybox.open('<h3 class="py-4 px-5">Не выбран размер</h3>');
-        return false;
-    }
-    return true;
+  const $sizesBlock = $('.js-sizes').find('input[type=checkbox]:checked');
+  if (!$sizesBlock.length) {
+    $.fancybox.open('<h3 class="py-4 px-5">Не выбран размер</h3>');
+    return false;
+  }
+  return true;
 }
 
 try {
-    if (document?.referrer && document?.referrer !== '') {
-        let referrerUrl = new URL(document.referrer);
-        if (referrerUrl.host == 'modny.by' && $.cookie('modnyRedirectPopupShowed')) {
-            $.fancybox.open({
-                src: "/images/popup_redirect_modnyby.jpg",
-                maxWidth: '90%',
-                maxHeight: '90%',
-                width: '500px'
-            });
-            $.cookie('modnyRedirectPopupShowed', '1', { expires: 1, path: '/' });
-        }
+  if (document?.referrer && document?.referrer !== '') {
+    const referrerUrl = new URL(document.referrer);
+    if (referrerUrl.host === 'modny.by' && $.cookie('modnyRedirectPopupShowed')) {
+      $.fancybox.open({
+        src: '/images/popup_redirect_modnyby.jpg',
+        maxWidth: '90%',
+        maxHeight: '90%',
+        width: '500px',
+      });
+      $.cookie('modnyRedirectPopupShowed', '1', { expires: 1, path: '/' });
     }
+  }
 } catch (error) {
 }

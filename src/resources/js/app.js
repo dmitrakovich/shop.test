@@ -5,7 +5,7 @@ require('./components/slick-slider');
 require('./components/price-slider');
 require('./components/favorites');
 require('./components/gtm-datalayer');
-require('./components/inputs')
+require('./components/inputs');
 
 require('./scripts');
 require('./pages');
