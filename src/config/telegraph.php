@@ -21,7 +21,7 @@ return [
      *
      * For reference, see https://defstudio.github.io/telegraph/webhooks/overview
      */
-    'webhook_handler' => DefStudio\Telegraph\Handlers\EmptyWebhookHandler::class,
+    'webhook_handler' => App\Http\Webhooks\TelegramBotHandler::class,
 
     /*
      * Sets a custom domain when registering a webhook. This will allow a local telegram bot api server
@@ -29,13 +29,13 @@ return [
      *
      * For reference, see https://core.telegram.org/bots/api#using-a-local-bot-api-server
      */
-    // 'custom_webhook_domain' => 'http://my.custom.domain',
+    'custom_webhook_domain' => env('APP_URL'),
 
     /*
      * If enabled, Telegraph dumps received
      * webhook messages to logs
      */
-    'debug_mode' => false,
+    'debug_mode' => true,
 
     /*
      * If enabled, unknown webhook commands are
@@ -47,17 +47,17 @@ return [
         /*
          * if enabled, allows callback queries from unregistered chats
          */
-        'allow_callback_queries_from_unknown_chats' => false,
+        'allow_callback_queries_from_unknown_chats' => true,
 
         /*
          * if enabled, allows messages and commands from unregistered chats
          */
-        'allow_messages_from_unknown_chats' => false,
+        'allow_messages_from_unknown_chats' => true,
 
         /*
          * if enabled, store unknown chats as new TelegraphChat models
          */
-        'store_unknown_chats_in_db' => false,
+        'store_unknown_chats_in_db' => true,
     ],
 
     /*
