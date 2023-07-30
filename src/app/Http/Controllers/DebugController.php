@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Bot\TelegramBotActions;
 use App\Models\Orders\Order;
 use App\Models\Product;
 use App\Models\User\User;
@@ -39,8 +40,12 @@ class DebugController extends Controller
 
 
         $keyboard = Keyboard::make()->row([
-            Button::make('✅ Отложено')->action('like')->param('id', '41'),
-            Button::make('❌ Нет в наличии')->action('dislike')->param('id', '42'),
+            Button::make(TelegramBotActions::RESERVE_CONFIRM->name())
+                ->action(TelegramBotActions::RESERVE_CONFIRM->value)
+                ->param('id', '41'),
+            Button::make(TelegramBotActions::RESERVE_DISMISS->name())
+                ->action(TelegramBotActions::RESERVE_DISMISS->value)
+                ->param('id', '42'),
         ]);
 
         $response = $chat->message($msg)->photo($product->getFirstMediaPath())->keyboard($keyboard)->send();
