@@ -41,12 +41,13 @@ class OrderItemInventoryNotification extends Notification //!!! implements Shoul
     {
         $product = $this->orderItem->product;
         $size = $this->orderItem->size;
+        $stock = $this->orderItem->invertoryNotification->stock;
         $isReserveAction = $this->orderItem->status_key === 'new';
 
         $message = <<<MSG
         <b>{$this->getActionTitleByOrderItemStatus()}</b>
         {$product->brand->name} {$product->sku}, размер: {$size->name}
-        магазин где находится товар !!!
+        {$stock->name} {$stock->address}
         MSG;
 
         return $chat->message($message)
@@ -72,10 +73,10 @@ class OrderItemInventoryNotification extends Notification //!!! implements Shoul
             return $telegraph->keyboard(Keyboard::make()->row([
                 Button::make(TelegramBotActions::RESERVE_CONFIRM->name())
                     ->action(TelegramBotActions::RESERVE_CONFIRM->value)
-                    ->param('id', '41'), // !!!
+                    ->param('id', $this->orderItem->invertoryNotification->id),
                 Button::make(TelegramBotActions::RESERVE_DISMISS->name())
                     ->action(TelegramBotActions::RESERVE_DISMISS->value)
-                    ->param('id', '42'), // !!!
+                    ->param('id',$this->orderItem->invertoryNotification->id),
             ]));
         };
     }

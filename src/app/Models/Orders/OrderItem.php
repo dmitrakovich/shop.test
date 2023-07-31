@@ -2,6 +2,7 @@
 
 namespace App\Models\Orders;
 
+use App\Models\Logs\OrderItemInventoryNotificationLog;
 use App\Models\Payments\Installment;
 use App\Models\Product;
 use App\Models\Size;
@@ -32,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property-read Size $size
  * @property-read OrderItemStatus $status
  * @property-read Installment $installment
+ * @property-read OrderItemInventoryNotificationLog $invertoryNotification
  */
 class OrderItem extends Model
 {
@@ -103,6 +105,14 @@ class OrderItem extends Model
     public function installment(): Relations\HasOne
     {
         return $this->hasOne(Installment::class);
+    }
+
+    /**
+     * Get the installment associated with the order.
+     */
+    public function invertoryNotification(): Relations\HasOne
+    {
+        return $this->hasOne(OrderItemInventoryNotificationLog::class);
     }
 
     /**

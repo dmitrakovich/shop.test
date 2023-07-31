@@ -60,7 +60,7 @@ class TelegramBotHandler extends WebhookHandler
     protected function actionReply(string $text): void
     {
         // $this->deleteKeyboard(); // editCaption enough
-        $message = $this->callbackQuery->message()->text() . PHP_EOL . $text;
+        $message = $this->callbackQuery->message()->text() . "\n\n$text";
         $this->chat->editCaption($this->messageId)->message($message)->send();
         $this->reply($text);
     }

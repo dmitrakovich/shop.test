@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Bot\TelegramBotActions;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
-use App\Models\Product;
 use App\Models\User\User;
 use App\Notifications\TestSms;
 use App\Services\Order\OrderItemInventoryService;
-use DefStudio\Telegraph\Keyboard\Button;
-use DefStudio\Telegraph\Keyboard\Keyboard;
-use DefStudio\Telegraph\Models\TelegraphChat;
 
 use Illuminate\Database\Eloquent\Model;
 use libphonenumber\PhoneNumberFormat;
@@ -21,45 +16,18 @@ class DebugController extends Controller
 {
     public function index()
     {
+        /** @var OrderItem */
+        $orderItem = OrderItem::query()->with(['invertoryNotification'])->orderBy('id', 'desc')->first();
 
-        $orderItem = OrderItem::query()->orderBy('id', 'desc')->first();
+        // $orderItem->invertoryNotification()->create([
+        //     'stock_id' => 2,
+        // ]);
+
+        dd($orderItem->invertoryNotification->stock);
+
         (new OrderItemInventoryService)->handleChangeItemStatus($orderItem);
 
         return 'ok';
-
-
-        // $bot = \DefStudio\Telegraph\Models\TelegraphBot::find(2);
-        /** @var TelegraphChat $chat */
-        $chat = TelegraphChat::find(4);
-
-
-
-        /** @var Product $product */
-        $product = Product::query()->latest()->first();
-
-
-        $msg = <<<MSG
-        <b>заголовок действия (смотри ниже)</b>
-        {$product->brand->name} {$product->sku} размер
-        магазин где находится товар
-        MSG;
-
-
-        $keyboard = Keyboard::make()->row([
-            Button::make(TelegramBotActions::RESERVE_CONFIRM->name())
-                ->action(TelegramBotActions::RESERVE_CONFIRM->value)
-                ->param('id', '41'),
-            Button::make(TelegramBotActions::RESERVE_DISMISS->name())
-                ->action(TelegramBotActions::RESERVE_DISMISS->value)
-                ->param('id', '42'),
-        ]);
-
-        $response = $chat->message($msg)->photo($product->getFirstMediaPath())->keyboard($keyboard)->send();
-
-        // $chat->deleteKeyboard(14)->send();
-        // return 'deleteKeyboard';
-
-        $response->dd();
 
         /** @var User $user */
         $user = User::findOrFail('xxxx');
