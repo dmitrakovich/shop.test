@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\Bot\TelegramBotActions;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderItem;
 use App\Models\Product;
 use App\Models\User\User;
 use App\Notifications\TestSms;
+use App\Services\Order\OrderItemInventoryService;
 use DefStudio\Telegraph\Keyboard\Button;
 use DefStudio\Telegraph\Keyboard\Keyboard;
 use DefStudio\Telegraph\Models\TelegraphChat;
@@ -19,6 +21,10 @@ class DebugController extends Controller
 {
     public function index()
     {
+
+        $orderItem = OrderItem::query()->orderBy('id', 'desc')->first();
+        (new OrderItemInventoryService)->handleChangeItemStatus($orderItem);
+
         return 'ok';
 
 

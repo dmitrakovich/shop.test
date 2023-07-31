@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property int $pred_period
  * @property-read Order $order
  * @property-read Product $product
+ * @property-read Size $size
  * @property-read OrderItemStatus $status
  * @property-read Installment $installment
  */
