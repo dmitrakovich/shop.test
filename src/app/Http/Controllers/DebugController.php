@@ -16,18 +16,12 @@ class DebugController extends Controller
 {
     public function index()
     {
+        return 'ok';
+
         /** @var OrderItem */
         $orderItem = OrderItem::query()->with(['invertoryNotification'])->orderBy('id', 'desc')->first();
-
-        // $orderItem->invertoryNotification()->create([
-        //     'stock_id' => 2,
-        // ]);
-
-        dd($orderItem->invertoryNotification->stock);
-
-        (new OrderItemInventoryService)->handleChangeItemStatus($orderItem);
-
-        return 'ok';
+        // $orderItem->invertoryNotification()->create(['stock_id' => 2]);
+        (new OrderItemInventoryService)->handleChangeItemStatus($orderItem->refresh());
 
         /** @var User $user */
         $user = User::findOrFail('xxxx');

@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('log_order_item_inventory_notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_item_id');
-            $table->foreignId('stock_id');
+            $table->foreignId('order_item_id')->unique();
+            $table->foreignId('stock_id')->index();
             $table->timestamp('created_at');
+            $table->timestamp('sended_at')->nullable();
             $table->timestamp('reserved_at')->nullable();
             $table->timestamp('canceled_at')->nullable();
             $table->timestamp('confirmed_at')->nullable();

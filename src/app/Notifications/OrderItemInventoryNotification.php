@@ -13,7 +13,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class OrderItemInventoryNotification extends Notification //!!! implements ShouldQueue
+class OrderItemInventoryNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -35,7 +35,7 @@ class OrderItemInventoryNotification extends Notification //!!! implements Shoul
     }
 
     /**
-     * Get the mail representation of the notification.
+     * Get the notification's representation for Telegram.
      */
     public function toTelegram(TelegraphChat $chat): TelegraphResponse
     {
@@ -56,6 +56,11 @@ class OrderItemInventoryNotification extends Notification //!!! implements Shoul
             ->send();
     }
 
+    /**
+     * Get the action title based on the order item status.
+     *
+     * @throws \Exception When attempting to send a message on an unknown status.
+     */
     private function getActionTitleByOrderItemStatus(): string
     {
         return match ($this->orderItem->status_key) {
@@ -67,6 +72,9 @@ class OrderItemInventoryNotification extends Notification //!!! implements Shoul
         };
     }
 
+    /**
+     * Get the closure for the reserve keyboard.
+     */
     private function getReserveKeyboard(): \Closure
     {
         return function (Telegraph $telegraph) {
@@ -76,7 +84,7 @@ class OrderItemInventoryNotification extends Notification //!!! implements Shoul
                     ->param('id', $this->orderItem->invertoryNotification->id),
                 Button::make(TelegramBotActions::RESERVE_DISMISS->name())
                     ->action(TelegramBotActions::RESERVE_DISMISS->value)
-                    ->param('id',$this->orderItem->invertoryNotification->id),
+                    ->param('id', $this->orderItem->invertoryNotification->id),
             ]));
         };
     }

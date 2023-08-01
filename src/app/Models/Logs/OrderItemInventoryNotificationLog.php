@@ -15,10 +15,11 @@ use Illuminate\Support\Carbon;
  * @property int $order_item_id
  * @property int $stock_id
  * @property Carbon $created_at
- * @property Carbon $reserved_at
- * @property Carbon $canceled_at
- * @property Carbon $confirmed_at
- * @property Carbon $completed_at
+ * @property Carbon|null $sended_at
+ * @property Carbon|null $reserved_at
+ * @property Carbon|null $canceled_at
+ * @property Carbon|null $confirmed_at
+ * @property Carbon|null $completed_at
  * @property-read OrderItem $orderItem
  * @property-read Stock $stock
  */
@@ -55,5 +56,18 @@ class OrderItemInventoryNotificationLog extends Model
     public function stock(): BelongsTo
     {
         return $this->belongsTo(Stock::class);
+    }
+
+    /**
+     * Get field with datatime by order item status
+     */
+    public static function getDateFieldByStatus(string $status): string
+    {
+        return match ($status) {
+            'new', default => 'sended_at',
+            'canceled' => 'canceled_at',
+            'confirmed' => 'confirmed_at',
+            'complete', 'installment' => 'completed_at',
+        };
     }
 }
