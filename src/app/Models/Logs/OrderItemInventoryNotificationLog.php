@@ -64,10 +64,10 @@ class OrderItemInventoryNotificationLog extends Model
     public static function getDateFieldByStatus(string $status): string
     {
         return match ($status) {
-            'new', default => 'sended_at',
             'canceled' => 'canceled_at',
             'confirmed' => 'confirmed_at',
             'complete', 'installment' => 'completed_at',
+            default => 'sended_at',
         };
     }
 }

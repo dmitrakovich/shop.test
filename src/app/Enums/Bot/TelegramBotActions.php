@@ -21,4 +21,3 @@ enum TelegramBotActions: string
         };
     }
 }
-

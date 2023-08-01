@@ -31,7 +31,6 @@ class TelegramBotHandler extends WebhookHandler
      */
     public function reserveConfirm(): void
     {
-
         //todo: handle ...
 
         $this->actionReply(TelegramBotActions::RESERVE_CONFIRM->name());
@@ -43,7 +42,6 @@ class TelegramBotHandler extends WebhookHandler
     public function reserveDismiss(): void
     {
         //todo: handle ...
-
 
         $this->actionReply(TelegramBotActions::RESERVE_DISMISS->name());
     }

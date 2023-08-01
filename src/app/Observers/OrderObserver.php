@@ -82,6 +82,5 @@ class OrderObserver
         }
 
         $order->isLoggingDone = true;
-
     }
 }
