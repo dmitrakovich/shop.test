@@ -1,3 +1,4 @@
+import Cookies from './cookies';
 import Mustache from 'mustache';
 import TEMPLATE_ADDED_TO_CART from '../templates/modals/added-to-cart.html';
 import { validatePhone } from './components/inputs/phone';
@@ -100,17 +101,23 @@ window.sizesValidate = function () {
 }
 
 try {
-  if (document?.referrer && document?.referrer !== '') {
-    const referrerUrl = new URL(document.referrer);
-    if (referrerUrl.host === 'modny.by' && $.cookie('modnyRedirectPopupShowed')) {
-      $.fancybox.open({
-        src: '/images/popup_redirect_modnyby.jpg',
-        maxWidth: '90%',
-        maxHeight: '90%',
-        width: '500px',
-      });
-      $.cookie('modnyRedirectPopupShowed', '1', { expires: 1, path: '/' });
+  document.addEventListener("DOMContentLoaded", function () {
+    const currentLocation = window?.location?.href;
+    const currentLocationUrl = new URL(currentLocation);
+    const locationReferrer = currentLocationUrl?.searchParams?.get('referrer');
+    const referrerUrl = document?.referrer ? new URL(document.referrer) : null;
+    if ((referrerUrl?.host === 'modny.by') || locationReferrer === 'modny.by') {
+      if (!Cookies.get('modnyRedirectPopupShowed')) {
+        $.fancybox.open({
+          src: '/images/popup_redirect_modnyby.jpg',
+          maxWidth: '90%',
+          maxHeight: '90%',
+          width: '500px',
+        });
+        Cookies.set('modnyRedirectPopupShowed', 1, 1);
+      }
     }
-  }
+  });
 } catch (error) {
+  console.log(error);
 }

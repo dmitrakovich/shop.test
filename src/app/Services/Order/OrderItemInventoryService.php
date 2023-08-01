@@ -19,7 +19,6 @@ class OrderItemInventoryService
             /** @var TelegraphChat */
             $chat = TelegraphChat::find(4);
 
-
             $chat->notify(new OrderItemInventoryNotification($orderItem));
         }
     }
