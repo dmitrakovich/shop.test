@@ -76,7 +76,7 @@ class OrderItemInventoryNotification extends Notification //!!! implements Shoul
                     ->param('id', $this->orderItem->invertoryNotification->id),
                 Button::make(TelegramBotActions::RESERVE_DISMISS->name())
                     ->action(TelegramBotActions::RESERVE_DISMISS->value)
-                    ->param('id',$this->orderItem->invertoryNotification->id),
+                    ->param('id', $this->orderItem->invertoryNotification->id),
             ]));
         };
     }

@@ -44,7 +44,6 @@ class TelegramBotHandler extends WebhookHandler
     {
         //todo: handle ...
 
-
         $this->actionReply(TelegramBotActions::RESERVE_DISMISS->name());
     }
 
