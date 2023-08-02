@@ -68,6 +68,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
             'canceled' => 'Убрать с отложенного',
             'confirmed' => 'Подтверждено на забор из магазина',
             'complete', 'installment' => 'Убрать с наличия',
+            'return', 'return_fitting' => 'Возврат изделия',
             default => throw new \Exception('Attempt to send message on unknown status'),
         };
     }
