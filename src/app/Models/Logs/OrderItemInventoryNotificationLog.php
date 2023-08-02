@@ -67,6 +67,7 @@ class OrderItemInventoryNotificationLog extends Model
             'canceled' => 'canceled_at',
             'confirmed' => 'confirmed_at',
             'complete', 'installment' => 'completed_at',
+            'return', 'return_fitting' => 'returned_at',
             default => 'sended_at',
         };
     }

@@ -66,8 +66,16 @@ class TelegramBotHandler extends WebhookHandler
     /**
      * Command for saving the chat to the database.
      */
-    public function addStockChat(): void
+    public function start(): void
     {
         $this->reply('Чат добавлен в список');
+    }
+
+    /**
+     * Alias for method `start`
+     */
+    public function addStockChat(): void
+    {
+        $this->start();
     }
 }
