@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment;
 
+use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Models\Payments\Installment;
 use App\Notifications\InstallmentPaymentSms;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,8 +17,10 @@ class InstallmentService
     /**
      * InstallmentService constructor.
      */
-    public function __construct(private Installment $installment)
-    {
+    public function __construct(
+        private Installment $installment,
+        private PaymentService $paymentService
+    ) {
     }
 
     /**
@@ -26,7 +29,6 @@ class InstallmentService
     public function sendNotifications(): int
     {
         $notificationsCount = 0;
-
         $this->installment->query()
             ->where('send_notifications', true)
             ->where(function (Builder $query) {
@@ -41,8 +43,14 @@ class InstallmentService
                     if ($noticeDate->isFuture()) {
                         continue;
                     }
+                    $onlinePayment = $this->paymentService->createOnlinePayment([
+                        'order_id' => $installment->order->id,
+                        'method_enum_id' => OnlinePaymentMethodEnum::ERIP->value,
+                        'amount' => $installment->monthly_fee,
+                        'send_sms' => false,
+                    ]);
                     $installment->order->notify(
-                        new InstallmentPaymentSms($installment)
+                        new InstallmentPaymentSms($installment, $onlinePayment)
                     );
                     $installment->touch('notice_sent_at');
                     $notificationsCount++;
