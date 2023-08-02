@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\StockTypeEnum;
 use App\Models\Bots\Telegram\TelegramChat;
+use App\Models\Logs\OrderItemInventoryNotificationLog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property-read TelegramChat $chat
+ * @property-read OrderItemInventoryNotificationLog $invertoryNotification
  */
 class Stock extends Model implements HasMedia, Sortable
 {
@@ -58,6 +60,14 @@ class Stock extends Model implements HasMedia, Sortable
     public function chat(): Relations\BelongsTo
     {
         return $this->belongsTo(TelegramChat::class);
+    }
+
+    /**
+     * Get the invertory notification associated with the order item.
+     */
+    public function invertoryNotification(): Relations\HasOne
+    {
+        return $this->hasOne(OrderItemInventoryNotificationLog::class);
     }
 
     /**

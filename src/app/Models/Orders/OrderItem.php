@@ -108,7 +108,7 @@ class OrderItem extends Model
     }
 
     /**
-     * Get the installment associated with the order.
+     * Get the invertory notification associated with the order item.
      */
     public function invertoryNotification(): Relations\HasOne
     {

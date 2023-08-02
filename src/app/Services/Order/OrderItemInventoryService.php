@@ -32,6 +32,7 @@ class OrderItemInventoryService
         if ($this->shouldSendNotification($orderItem)) {
             $chat = $orderItem->invertoryNotification->stock->chat;
             $chat->notify(new OrderItemInventoryNotification($orderItem));
+            $orderItem->invertoryNotification->setDateFieldForStatus($orderItem->status_key);
         }
     }
 

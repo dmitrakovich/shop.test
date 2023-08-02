@@ -59,7 +59,17 @@ class OrderItemInventoryNotificationLog extends Model
     }
 
     /**
-     * Get field with datatime by order item status
+     * Set the specified status date field to the current date and time.
+     */
+    public function setDateFieldForStatus(string $status): void
+    {
+        $dateField = $this->getDateFieldByStatus($status);
+        $this->{$dateField} = now();
+        $this->save();
+    }
+
+    /**
+     * Get the corresponding date field name for the given status.
      */
     public static function getDateFieldByStatus(string $status): string
     {
