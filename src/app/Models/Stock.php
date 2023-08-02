@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\StockTypeEnum;
+use App\Models\Bots\Telegram\TelegramChat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,9 @@ use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @property-read TelegramChat $chat
+ */
 class Stock extends Model implements HasMedia, Sortable
 {
     use HasFactory;
@@ -46,6 +50,14 @@ class Stock extends Model implements HasMedia, Sortable
     public function city(): Relations\BelongsTo
     {
         return $this->belongsTo(City::class);
+    }
+
+    /**
+     * Chat for notifications
+     */
+    public function chat(): Relations\BelongsTo
+    {
+        return $this->belongsTo(TelegramChat::class);
     }
 
     /**

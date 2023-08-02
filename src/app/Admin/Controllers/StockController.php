@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Enums\StockTypeEnum;
+use App\Models\Bots\Telegram\TelegramChat;
 use App\Models\City;
 use App\Models\Stock;
 use Encore\Admin\Controllers\AdminController;
@@ -28,6 +29,7 @@ class StockController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Stock());
+        $grid->model()->with('media');
         $grid->sortable();
 
         $grid->filter(function ($filter) {
@@ -39,12 +41,13 @@ class StockController extends AdminController
         $grid->column('type', 'Тип')->display(fn () => $this->type->name());
         $grid->column('name', 'Название');
         $grid->column('internal_name', 'Внутреннее название');
+        $grid->column('chat.name', 'Чат для уведомлений');
         $grid->column('city.name', 'Город');
         $grid->column('address', 'Адрес');
         $grid->column('worktime', 'Время работы');
         $grid->column('phone', 'Телефон');
-        $grid->column('geo_latitude', 'Координаты (широта)');
-        $grid->column('geo_longitude', 'Координаты (долгота)');
+        // $grid->column('geo_latitude', 'Координаты (широта)');
+        // $grid->column('geo_longitude', 'Координаты (долгота)');
         $grid->column('check_availability', 'Сверка наличия')->switch();
 
         $grid->actions(function ($actions) {
@@ -97,6 +100,7 @@ class StockController extends AdminController
         $form->select('city_id', 'Город')->options(City::pluck('name', 'id'));
         $form->text('name', 'Название')->rules('required');
         $form->text('internal_name', 'Внутреннее название')->rules('required');
+        $form->select('chat_id', 'Чат для отправки уведомлений')->options(TelegramChat::pluck('name', 'id'));
         $form->text('address', 'Адрес');
         $form->text('worktime', 'Время работы');
         $form->phone('phone', 'Телефон');

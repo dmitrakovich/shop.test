@@ -68,8 +68,8 @@ return [
      * Chat model must be or extend `DefStudio\Telegraph\Models\TelegraphChat::class`
      */
     'models' => [
-        'bot' => DefStudio\Telegraph\Models\TelegraphBot::class,
-        'chat' => App\Models\Bots\Telegram\TelegraphChat::class,
+        'bot' => App\Models\Bots\Telegram\TelegramBot::class,
+        'chat' => App\Models\Bots\Telegram\TelegramChat::class,
     ],
 
     'storage' => [

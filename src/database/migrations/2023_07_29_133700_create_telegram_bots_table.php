@@ -8,15 +8,12 @@ return new class() extends Migration
 {
     public function up(): void
     {
-        Schema::create('telegraph_chats', function (Blueprint $table) {
+        Schema::create('telegram_bots', function (Blueprint $table) {
             $table->id();
-            $table->string('chat_id');
+            $table->string('token')->unique();
             $table->string('name')->nullable();
 
-            $table->foreignId('telegraph_bot_id')->constrained('telegraph_bots')->cascadeOnDelete();
             $table->timestamps();
-
-            $table->unique(['chat_id', 'telegraph_bot_id']);
         });
     }
 };

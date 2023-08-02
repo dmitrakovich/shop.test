@@ -3,7 +3,7 @@
 namespace App\Notifications;
 
 use App\Enums\Bot\TelegramBotActions;
-use App\Models\Bots\Telegram\TelegraphChat;
+use App\Models\Bots\Telegram\TelegramChat;
 use App\Models\Orders\OrderItem;
 use DefStudio\Telegraph\Client\TelegraphResponse;
 use DefStudio\Telegraph\Keyboard\Button;
@@ -37,7 +37,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
     /**
      * Get the notification's representation for Telegram.
      */
-    public function toTelegram(TelegraphChat $chat): TelegraphResponse
+    public function toTelegram(TelegramChat $chat): TelegraphResponse
     {
         $product = $this->orderItem->product;
         $size = $this->orderItem->size;
