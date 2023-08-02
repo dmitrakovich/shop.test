@@ -43,6 +43,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $size_46
  * @property int $size_47
  * @property int $size_48
+ * @property-read Stock $stock
  */
 class AvailableSizes extends Model implements HasMedia
 {
