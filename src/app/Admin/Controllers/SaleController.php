@@ -11,6 +11,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\MessageBag;
 
 class SaleController extends AdminController
 {
@@ -47,17 +48,6 @@ class SaleController extends AdminController
         $grid->column('end_datetime', 'Дата завершения');
         $grid->column('algorithm', 'Алгоритм')->using(self::ALGORITHMS_LIST);
         $grid->column('sale', 'Скидка');
-        // $grid->column('categories', __('Categories'));
-        // $grid->column('collections', __('Collections'));
-        // $grid->column('styles', __('Styles'));
-        // $grid->column('seasons', __('Seasons'));
-        // $grid->column('only_new', __('Only new'));
-        // $grid->column('add_client_sale', __('Add client sale'));
-        // $grid->column('has_installment', __('Has installment'));
-        // $grid->column('has_fitting', __('Has fitting'));
-        // $grid->column('created_at', __('Created at'));
-        // $grid->column('updated_at', __('Updated at'));
-        // $grid->column('deleted_at', __('Deleted at'));
 
         $grid->actions(function ($actions) {
             $actions->disableView();
@@ -106,12 +96,18 @@ class SaleController extends AdminController
         $form->listbox('styles', 'Стиль')->options($allStylesList)->default(array_keys($allStylesList));
         $form->listbox('seasons', 'Сезон')->options($allSeasonsList)->default(array_keys($allSeasonsList));
         $form->switch('only_new', 'Участвуют только новинки');
+        $form->switch('only_discount', 'Участвуют только скидки');
         $form->switch('add_client_sale', 'Клиентская скидка суммируется');
         $form->switch('add_review_sale', 'Суммируется со скидкой за отзывы')->default(true);
         $form->switch('has_installment', 'Действует рассрочка')->default(1);
         $form->switch('has_fitting', 'Действует примерка')->default(1);
 
         $form->saving(function (Form $form) use ($allCategoriesList, $allCollectionsList, $allStylesList, $allSeasonsList) {
+            if ($form->only_new === 'on' && $form->only_discount === 'on') {
+                return back()->with('error', new MessageBag([
+                    'title' => 'взаимоисключающие условия только новинки и только скидки'
+                ]));
+            }
             $form->categories = $this->prepareIdList($form->categories, $allCategoriesList);
             $form->collections = $this->prepareIdList($form->collections, $allCollectionsList);
             $form->styles = $this->prepareIdList($form->styles, $allStylesList);

@@ -199,11 +199,12 @@ class SaleService
     }
 
     /**
-     * Check new item
+     * check all conditions related to discounts
      */
-    protected function checkNew(float $price, float $oldPrice): bool
+    protected function checkDiscountConditions(float $price, float $oldPrice): bool
     {
-        return !$this->sale->only_new || $price > $oldPrice;
+        return (!$this->sale->only_new || $price > $oldPrice)
+            && (!$this->sale->only_discount || $oldPrice > $price);
     }
 
     /**
@@ -232,7 +233,7 @@ class SaleService
             && $this->checkCollection($product->collection_id)
             && $this->checkStyles($product->styles)
             && $this->checkSeason($product->season_id)
-            && $this->checkNew($product->price, $product->old_price);
+            && $this->checkDiscountConditions($product->price, $product->old_price);
     }
 
     /**
