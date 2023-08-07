@@ -41,12 +41,12 @@ class OrderItemInventoryService
      */
     protected function shouldSendNotification(OrderItem $orderItem): bool
     {
-        if (empty($orderItem->invertoryNotification)) {
+        $notification = $orderItem->invertoryNotification;
+        if (empty($notification) || empty($notification->stock->chat)) {
             return false;
         }
 
         $status = $orderItem->status_key;
-        $notification = $orderItem->invertoryNotification;
         $dateField = $notification::getDateFieldByStatus($status);
 
         return in_array($status, self::STATUSES_FOR_NOTIFICATIONS) && is_null($notification->{$dateField});

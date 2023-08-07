@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Orders\OrderItem;
 use App\Models\Orders\OrderItemExtended;
 use App\Services\LogService;
+use App\Services\Order\OrderItemInventoryService;
 
 class OrderItemObserver
 {
@@ -31,6 +32,16 @@ class OrderItemObserver
             if ($orderItem->status_key !== 'new') {
                 (new LogService)->logOrderAction($orderItem->order_id, "Товару {$orderItem->product_id} присвоен статус “{$orderItem->status_key}”");
             }
+        }
+    }
+
+    /**
+     * Handle the OrderItem "saved" event.
+     */
+    public function saved(OrderItem $orderItem): void
+    {
+        if ($orderItem->isDirty('status_key')) {
+            (new OrderItemInventoryService)->handleChangeItemStatus($orderItem->refresh());
         }
     }
 

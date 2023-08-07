@@ -6,6 +6,7 @@ use App\Events\OrderCreated;
 use App\Models\AvailableSizes;
 use App\Models\Orders\OrderItem;
 use App\Models\Product;
+use App\Services\Order\OrderItemInventoryService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -16,9 +17,8 @@ class UpdateInventory implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct()
+    public function __construct(private OrderItemInventoryService $orderItemInventoryService)
     {
-        //
     }
 
     /**
@@ -28,6 +28,7 @@ class UpdateInventory implements ShouldQueue
     {
         $event->order->items->each(function (OrderItem $orderItem) {
             $this->deductSizeFromInventory(
+                $orderItem,
                 $orderItem->product_id,
                 $orderItem->size_id,
                 $orderItem->count
@@ -38,16 +39,21 @@ class UpdateInventory implements ShouldQueue
     /**
      * Deducts the size from the inventory after a purchase.
      */
-    private function deductSizeFromInventory(int $productId, int $sizeId, int $count): void
+    private function deductSizeFromInventory(OrderItem $orderItem, int $productId, int $sizeId, int $count): void
     {
         $totalAvailableCount = 0;
+        $singleNotification = $orderItem->invertoryNotification;
         $sizeField = AvailableSizes::convertSizeIdToField($sizeId);
 
         $availableSizes = AvailableSizes::query()
+            ->with(['stock:id'])
             ->where('product_id', $productId)
             ->where($sizeField, '>', 0)
-            ->get(['id', $sizeField]);
+            ->orderBy($sizeField, 'desc')
+            ->get(['id', 'stock_id', $sizeField])
+            ->sortBy(fn (AvailableSizes $stock) => $stock->stock_id === 17); // Minsk to the end
 
+        /** @var AvailableSizes */
         foreach ($availableSizes as $stock) {
             if ($count > $stock->{$sizeField}) {
                 $count -= $stock->{$sizeField};
@@ -58,6 +64,13 @@ class UpdateInventory implements ShouldQueue
             }
             $stock->save();
             $totalAvailableCount += $stock->{$sizeField};
+
+            if (empty($singleNotification)) {
+                $singleNotification = $orderItem->invertoryNotification()->create([
+                    'stock_id' => $stock->stock_id
+                ]);
+                $this->orderItemInventoryService->handleChangeItemStatus($orderItem->refresh());
+            }
         }
 
         if ($totalAvailableCount <= 0) {

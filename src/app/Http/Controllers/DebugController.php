@@ -19,7 +19,8 @@ class DebugController extends Controller
 
         /** @var OrderItem */
         $orderItem = OrderItem::query()->with(['invertoryNotification'])->orderBy('id', 'desc')->first();
-        // $orderItem->invertoryNotification()->create(['stock_id' => 2]);
+        $orderItem->invertoryNotification()->firstOrCreate(['stock_id' => 2]);
+
         (new OrderItemInventoryService)->handleChangeItemStatus($orderItem->refresh());
 
         /** @var User $user */

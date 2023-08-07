@@ -13,6 +13,6 @@ class TelegraphChannel
      */
     public function send(TelegramChat $chat, Notification $notification): TelegraphResponse
     {
-        return $notification->toTelegram($chat);
+        return $notification->toTelegram($chat)->throw();
     }
 }
