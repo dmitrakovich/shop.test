@@ -3,11 +3,17 @@
 namespace App\Http\Webhooks;
 
 use App\Enums\Bot\TelegramBotActions;
+use App\Services\Order\OrderItemInventoryService;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use Illuminate\Support\Stringable;
 
 class TelegramBotHandler extends WebhookHandler
 {
+    /**
+     * The service responsible for managing order item inventory.
+     */
+    private OrderItemInventoryService $inventoryService;
+
     /**
      * TelegramBotHandler constructor.
      */
@@ -15,7 +21,7 @@ class TelegramBotHandler extends WebhookHandler
     {
         parent::__construct();
 
-        //todo: add service ...
+        $this->inventoryService = app(OrderItemInventoryService::class);
     }
 
     /**
@@ -31,7 +37,7 @@ class TelegramBotHandler extends WebhookHandler
      */
     public function reserveConfirm(): void
     {
-        //todo: handle ...
+        $this->inventoryService->reserveItem($this->data->get('id'));
 
         $this->actionReply(TelegramBotActions::RESERVE_CONFIRM->name());
     }
@@ -43,7 +49,8 @@ class TelegramBotHandler extends WebhookHandler
     {
         //todo: handle ...
 
-        $this->actionReply(TelegramBotActions::RESERVE_DISMISS->name());
+        $this->reply('В разработке...');
+        // $this->actionReply(TelegramBotActions::RESERVE_DISMISS->name());
     }
 
     /**

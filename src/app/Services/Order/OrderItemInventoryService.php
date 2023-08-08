@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Models\Logs\OrderItemInventoryNotificationLog;
 use App\Models\Orders\OrderItem;
 use App\Notifications\OrderItemInventoryNotification;
 
@@ -33,6 +34,17 @@ class OrderItemInventoryService
             $chat->notify(new OrderItemInventoryNotification($orderItem));
             $orderItem->invertoryNotification->setDateFieldForStatus($orderItem->status_key);
         }
+    }
+
+    /**
+     * Reserve an item based on the given notification ID.
+     */
+    public function reserveItem(int $notificationId): void
+    {
+        /** @var OrderItemInventoryNotificationLog */
+        $invertoryNotification = OrderItemInventoryNotificationLog::find($notificationId);
+        $invertoryNotification->orderItem->update(['status_key' => 'reserved']);
+        $invertoryNotification->update(['reserved_at' => now()]);
     }
 
     /**
