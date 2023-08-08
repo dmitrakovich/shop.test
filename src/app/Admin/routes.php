@@ -25,7 +25,7 @@ Route::group([
     $router->post('orders/add-user-by-phone', [AdminOrderController::class, 'addUserByPhone']);
     $router->post('orders/change-user-by-phone', [AdminOrderController::class, 'changeUserByPhone']);
 
-    $router->group(['prefix' => 'users'], function ($router) {
+    $router->group(['prefix' => 'users'], function (Router $router) {
         $router->resource('users', Users\UserController::class);
         $router->resource('groups', Users\GroupController::class);
     });
@@ -33,7 +33,7 @@ Route::group([
     $router->resource('products', ProductController::class);
     $router->get('products/{product}/restore', [\App\Admin\Controllers\ProductController::class, 'restore'])->name('products.restore');
 
-    $router->group(['prefix' => 'product-attributes', 'namespace' => 'ProductAttributes'], function ($router) {
+    $router->group(['prefix' => 'product-attributes', 'namespace' => 'ProductAttributes'], function (Router $router) {
         $router->resource('categories', CategoryController::class);
         $router->resource('fabrics', FabricController::class);
         $router->resource('sizes', SizeController::class);
@@ -48,7 +48,7 @@ Route::group([
         $router->resource('collections', CollectionController::class);
     });
 
-    $router->group(['prefix' => 'config', 'namespace' => 'Config', 'as' => 'config.'], function ($router) {
+    $router->group(['prefix' => 'config', 'namespace' => 'Config', 'as' => 'config.'], function (Router $router) {
         $router->resource('payment-methods', PaymentController::class);
         $router->resource('delivery-methods', DeliveryController::class);
         $router->resource('currencies', CurrencyController::class);
@@ -61,7 +61,7 @@ Route::group([
         $router->get('newsletter_for_registered', NewsletterForm::class);
     });
 
-    $router->group(['prefix' => 'bnrs'], function ($router) {
+    $router->group(['prefix' => 'bnrs'], function (Router $router) {
         $router->resource('bnrs', BannerController::class);
         $router->resource('index-links', IndexLinkController::class);
         $router->resource('product-carousels', ProductCarouselController::class);
@@ -74,22 +74,22 @@ Route::group([
         $router->get('short-link', Forms\ShortLink\ShortLinkController::class)->name('short-link');
     });
 
-    $router->group(['prefix' => 'bookkeeping'], function ($router) {
+    $router->group(['prefix' => 'bookkeeping'], function (Router $router) {
         $router->resource('payments', Bookkeeping\PaymentController::class);
     });
 
-    $router->group(['prefix' => 'docs'], function ($router) {
+    $router->group(['prefix' => 'docs'], function (Router $router) {
         $router->resource('edit', DocController::class);
         $router->get('{doc:slug}', DocController::class);
     });
 
-    $router->group(['prefix' => 'departures'], function ($router) {
+    $router->group(['prefix' => 'departures'], function (Router $router) {
         $router->resource('order-to-send', Departures\OrderToSendController::class);
         $router->resource('batches', Departures\BatchController::class);
         $router->resource('track-numbers', Departures\OrderTrackController::class);
     });
 
-    $router->group(['prefix' => 'seo'], function ($router) {
+    $router->group(['prefix' => 'seo'], function (Router $router) {
         $router->resource('seo-links', Seo\SeoLinkController::class);
     });
     $router->resource('cities', CityController::class);
@@ -109,7 +109,7 @@ Route::group([
     $router->any('config/rating', RatingController::class);
 
     // Automation
-    $router->group(['prefix' => 'automation', 'namespace' => 'Automation', 'as' => 'automation.'], function ($router) {
+    $router->group(['prefix' => 'automation', 'namespace' => 'Automation', 'as' => 'automation.'], function (Router $router) {
         $router->resource('inventory', InventoryController::class);
         $router->resource('stock', StockController::class);
         $router->get('stock-update', [\App\Admin\Controllers\Automation\StockController::class, 'updateAvailability'])->name('stock-update');
@@ -117,14 +117,14 @@ Route::group([
     });
 
     // logs
-    $router->group(['prefix' => 'logs', 'namespace' => 'Logs', 'as' => 'logs.'], function ($router) {
+    $router->group(['prefix' => 'logs', 'namespace' => 'Logs', 'as' => 'logs.'], function (Router $router) {
         $router->resource('sms', SmsController::class);
         $router->resource('inventory', InventoryController::class);
         $router->resource('order-actions', OrderActionController::class);
     });
 
     // debug
-    $router->group(['prefix' => 'debug', 'namespace' => 'Debug'], function ($router) {
+    $router->group(['prefix' => 'debug', 'namespace' => 'Debug'], function (Router $router) {
         $router->any('clear-cache', CacheController::class);
     });
     Route::view('/test', 'test');
