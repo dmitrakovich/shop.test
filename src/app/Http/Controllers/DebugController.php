@@ -18,8 +18,8 @@ class DebugController extends Controller
         return 'ok';
 
         /** @var OrderItem */
-        $orderItem = OrderItem::query()->with(['invertoryNotification'])->orderBy('id', 'desc')->first();
-        $orderItem->invertoryNotification()->firstOrCreate(['stock_id' => 2]);
+        $orderItem = OrderItem::findOrFail(6666);
+        $orderItem->invertoryNotification()->firstOrCreate(['stock_id' => 14]);
 
         (new OrderItemInventoryService)->handleChangeItemStatus($orderItem->refresh());
 

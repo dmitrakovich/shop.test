@@ -46,12 +46,13 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
 
         $message = <<<MSG
         <b>{$this->getActionTitleByOrderItemStatus()}</b>
-        {$product->brand->name} {$product->sku}, размер: {$size->name}
+        {$product->brand->name} {$product->sku} ({$size->name})
+        {$this->getOrderInfo()}
         {$stock->name} {$stock->address}
         MSG;
 
         return $chat->message($message)
-            ->photo($product->getFirstMediaPath())
+            ->photo($product->getFirstMediaPath('default', 'catalog'))
             ->when($isReserveAction, $this->getReserveKeyboard())
             ->send();
     }
@@ -71,6 +72,16 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
             'return', 'return_fitting' => 'Возврат изделия',
             default => throw new \Exception('Attempt to send message on unknown status'),
         };
+    }
+
+    /**
+     * Get information about the order.
+     */
+    private function getOrderInfo(): string
+    {
+        $order = $this->orderItem->order;
+
+        return $order ? "Номер заказа: {$order->id}" : 'Оффлайн заказ';
     }
 
     /**
