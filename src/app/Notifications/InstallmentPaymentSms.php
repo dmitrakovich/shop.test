@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use App\Models\Payments\Installment;
-use App\Models\Payments\OnlinePayment;
 
 class InstallmentPaymentSms extends AbstractSmsTraffic
 {
@@ -14,7 +13,6 @@ class InstallmentPaymentSms extends AbstractSmsTraffic
      */
     public function __construct(
         private Installment $installment,
-        private OnlinePayment $onlinePayment
     ) {
     }
 
@@ -26,6 +24,6 @@ class InstallmentPaymentSms extends AbstractSmsTraffic
         $order = $this->installment->order;
         $nextPaymentDate = $this->installment->getNextPaymentDate()->format('d.m.Y');
 
-        return "{$order->first_name}, минимальный платеж по кредитному договору {$this->installment->contract_number} суммой {$this->installment->monthly_fee} руб. Оплата до {$nextPaymentDate} по счёту {$this->onlinePayment->link}. Благодарим, если уже совершили платёж";
+        return "{$order->first_name}, минимальный платеж по кредитному договору {$this->installment->contract_number} суммой {$this->installment->monthly_fee} руб. Оплата до {$nextPaymentDate}. Благодарим, если уже совершили платёж";
     }
 }
