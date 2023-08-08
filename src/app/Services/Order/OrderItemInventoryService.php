@@ -7,7 +7,6 @@ use App\Notifications\OrderItemInventoryNotification;
 
 /**
  * Class OrderItemInventoryService
- * @package App\Services\Order
  */
 class OrderItemInventoryService
 {
