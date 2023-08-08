@@ -8,7 +8,6 @@ use Illuminate\Notifications\Notifiable;
 
 /**
  * Class TelegramChat
- * @package App\Models\Bots\Telegram
  *
  * @property int $id
  * @property int $chat_id
@@ -16,7 +15,6 @@ use Illuminate\Notifications\Notifiable;
  * @property int $telegram_bot_id
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
- *
  * @property-read TelegramBot $bot
  */
 class TelegramChat extends TelegraphChat

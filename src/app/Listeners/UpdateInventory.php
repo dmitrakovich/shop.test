@@ -67,7 +67,7 @@ class UpdateInventory implements ShouldQueue
 
             if (empty($singleNotification)) {
                 $singleNotification = $orderItem->invertoryNotification()->create([
-                    'stock_id' => $stock->stock_id
+                    'stock_id' => $stock->stock_id,
                 ]);
                 $this->orderItemInventoryService->handleChangeItemStatus($orderItem->refresh());
             }

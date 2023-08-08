@@ -105,7 +105,7 @@ class SaleController extends AdminController
         $form->saving(function (Form $form) use ($allCategoriesList, $allCollectionsList, $allStylesList, $allSeasonsList) {
             if ($form->only_new === 'on' && $form->only_discount === 'on') {
                 return back()->with('error', new MessageBag([
-                    'title' => 'взаимоисключающие условия только новинки и только скидки'
+                    'title' => 'взаимоисключающие условия только новинки и только скидки',
                 ]));
             }
             $form->categories = $this->prepareIdList($form->categories, $allCategoriesList);
