@@ -8,10 +8,10 @@ use App\Jobs\Payment\CreateQrcodeJob;
 use App\Libraries\HGrosh\Facades\ApiHGroshFacade;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
-use Encore\Admin\Facades\Admin;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Encore\Admin\Facades\Admin;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentEripService extends AbstractPaymentService
 {
@@ -101,10 +101,6 @@ class PaymentEripService extends AbstractPaymentService
 
     /**
      * Update Hgrosh statuses.
-     * @param string $beginDate
-     * @param string $endDate
-     * @param int $skip
-     * @return bool
      */
     private function updateHgroshStatuses(string $beginDate, string $endDate, int $skip = 0): bool
     {
@@ -119,7 +115,7 @@ class PaymentEripService extends AbstractPaymentService
             $responseInvoicingList = $invoicingList->getBodyFormat();
             $records = $responseInvoicingList['records'] ?? [];
             if (count($records)) {
-                $paymentNums = array_map(fn ($record) => $record['number'], array_filter($records, fn($record) => isset($record['number'])));
+                $paymentNums = array_map(fn ($record) => $record['number'], array_filter($records, fn ($record) => isset($record['number'])));
                 $paymentsByNum = OnlinePayment::whereIn('payment_num', $paymentNums)
                     ->get()
                     ->mapWithKeys(fn ($item) => [$item->payment_num => $item]);
@@ -139,6 +135,7 @@ class PaymentEripService extends AbstractPaymentService
                 return true;
             }
         }
+
         return false;
     }
 
