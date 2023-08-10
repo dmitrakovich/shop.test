@@ -8,7 +8,9 @@ use App\Jobs\Payment\CreateQrcodeJob;
 use App\Libraries\HGrosh\Facades\ApiHGroshFacade;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
+use Carbon\Carbon;
 use Encore\Admin\Facades\Admin;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class PaymentEripService extends AbstractPaymentService
@@ -82,33 +84,59 @@ class PaymentEripService extends AbstractPaymentService
      */
     public function updateStatuses(): void
     {
-        $chunkSize = 50;
-        OnlinePayment::where('method_enum_id', OnlinePaymentMethodEnum::ERIP)
-            ->whereNotNull('payment_num')
-            ->where('last_status_enum_id', OnlinePaymentStatusEnum::PENDING)
-            ->chunkById($chunkSize, function ($payments) use ($chunkSize) {
-                $searchString = $payments->implode('payment_num', ' || ');
-                $paymentsByNum = $payments->mapWithKeys(fn ($item) => [$item->payment_num => $item]);
-                $invoicingList = ApiHGroshFacade::invoicingGetListInvoice()->request([
-                    'count' => $chunkSize,
-                    'searchString' => $searchString,
-                ]);
-                if ($invoicingList->isOk()) {
-                    $responseInvoicingList = $invoicingList->getBodyFormat();
-                    $records = $responseInvoicingList['records'] ?? [];
-                    foreach ($records as $record) {
-                        $payment = $paymentsByNum[$record['number']] ?? null;
-                        $state = $record['state'] ?? null;
-                        if ($payment && $state) {
-                            match ($state) {
-                                20 => $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::SUCCEEDED),
-                                30, 80, 110 => $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::CANCELED),
-                                default => null
-                            };
-                        }
-                    }
+        OnlinePayment::where('last_status_enum_id', OnlinePaymentStatusEnum::PENDING)
+            ->where('created_at', '<', Carbon::now()->subWeek(1))
+            ->chunkById(50, function ($onlinePayments) {
+                foreach ($onlinePayments as $onlinePayment) {
+                    $this->setPaymentStatus($onlinePayment, OnlinePaymentStatusEnum::CANCELED);
                 }
             });
+        $onlinePaymentDates = DB::table(app(OnlinePayment::class)->getTable())
+            ->select(\DB::raw('MIN(created_at) AS beginDate, MAX(created_at) AS endDate'))
+            ->whereNotNull('payment_num')
+            ->where('last_status_enum_id', OnlinePaymentStatusEnum::PENDING)
+            ->first();
+        $this->updateHgroshStatuses($onlinePaymentDates->beginDate, $onlinePaymentDates->endDate);
+    }
+
+    /**
+     * Update Hgrosh statuses.
+     */
+    private function updateHgroshStatuses(string $beginDate, string $endDate, int $skip = 0): bool
+    {
+        $count = 50;
+        $invoicingList = ApiHGroshFacade::invoicingGetListInvoice()->request([
+            'count' => $count,
+            'skip' => $skip,
+            'beginDate' => $beginDate,
+            'endDate' => $endDate,
+        ]);
+        if ($invoicingList->isOk()) {
+            $responseInvoicingList = $invoicingList->getBodyFormat();
+            $records = $responseInvoicingList['records'] ?? [];
+            if (count($records)) {
+                $paymentNums = array_map(fn ($record) => $record['number'], array_filter($records, fn ($record) => isset($record['number'])));
+                $paymentsByNum = OnlinePayment::whereIn('payment_num', $paymentNums)
+                    ->get()
+                    ->mapWithKeys(fn ($item) => [$item->payment_num => $item]);
+                foreach ($records as $record) {
+                    $payment = $paymentsByNum[$record['number']] ?? null;
+                    $state = $record['state'] ?? null;
+                    if ($payment && $state) {
+                        match ($state) {
+                            20 => $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::SUCCEEDED),
+                            30, 80, 110 => $this->setPaymentStatus($payment, OnlinePaymentStatusEnum::CANCELED),
+                            default => null
+                        };
+                    }
+                }
+                $this->updateHgroshStatuses($beginDate, $endDate, ($skip + $count));
+            } else {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
