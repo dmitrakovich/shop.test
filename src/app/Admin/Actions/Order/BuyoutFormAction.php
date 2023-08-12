@@ -2,6 +2,7 @@
 
 namespace App\Admin\Actions\Order;
 
+use App\Models\Orders\Order;
 use App\Services\Order\BuyoutOrderService;
 use Encore\Admin\Actions\Action;
 use Illuminate\Http\Request;
@@ -28,7 +29,14 @@ class BuyoutFormAction extends Action
     public function handle(Request $request)
     {
         $buyoutService = new BuyoutOrderService;
-        $file = $buyoutService->createBuyoutForm($request->orderId);
+        $order = Order::where('id', $request->orderId)->with([
+            'items' => fn ($query) => $query->whereHas('status', fn ($q) => $q->where('key', 'pickup')),
+            'delivery'
+        ])->first();
+        if (!count($order->items)) {
+            throw new \Exception('В заказе нет товаров со статусом Забран');
+        }
+        $file = $buyoutService->createBuyoutForm($order);
 
         return $this->response()->success('Бланк выкупа успешно создан')->download($file);
     }

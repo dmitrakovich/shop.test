@@ -18,12 +18,26 @@ class InstallmentFormRowAction extends RowAction
      */
     public function handle(Model $model)
     {
-        $order = Order::where('id', $model->id)->whereHas('user.passport')->exists();
-        if (!$order) {
+        $order = Order::where('id', $model->id)->with([
+            'user.passport',
+            'items' => fn ($query) => $query
+                ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
+                ->with('installment')
+        ])->first();
+        if (!count($order->items)) {
+            throw new \Exception('В заказе нет товаров со статусом Забран');
+        }
+        if (!count($order->items->where('installment.contract_number'))) {
+            throw new \Exception('Номер договора рассрочки не заполнен');
+        }
+        if (!isset($order->user)) {
+            throw new \Exception('Привяжите клиента к заказу');
+        }
+        if (!isset($order->user->passport)) {
             throw new \Exception('Заполните паспортные данные клиента');
         }
         $installmentService = new InstallmentOrderService;
-        $file = $installmentService->createInstallmentForm($model->id);
+        $file = $installmentService->createInstallmentForm($order);
 
         return $this->response()->success('Бланк рассрочки успешно создан')->download($file);
     }

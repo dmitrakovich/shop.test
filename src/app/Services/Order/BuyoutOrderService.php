@@ -16,11 +16,14 @@ class BuyoutOrderService
      *
      * @return string
      */
-    public function createBuyoutForm(int $orderId)
+    public function createBuyoutForm(Order $order)
     {
-        $resultPath = '/storage/order_buyout/' . $orderId . '.xlsx';
+        $order->loadMissing([
+            'items' => fn ($query) => $query->whereHas('status', fn ($q) => $q->where('key', 'pickup')),
+            'delivery'
+        ]);
+        $resultPath = '/storage/order_buyout/' . $order->id . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
-        $order = Order::where('id', $orderId)->with(['itemsExtended', 'delivery'])->first();
         $spreadsheet = IOFactory::load(public_path('templates/buyout_template.xlsx'));
 
         $firstName = ($order->first_name ?? $order->user->first_name ?? null);
