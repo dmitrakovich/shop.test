@@ -32,7 +32,7 @@ class InstallmentForm extends Action
             'user.passport',
             'items' => fn ($query) => $query
                 ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
-                ->with('installment')
+                ->with('installment'),
         ])->first();
 
         if (!count($order->items)) {

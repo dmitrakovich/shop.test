@@ -24,7 +24,7 @@ class InstallmentOrderService
             'user.passport',
             'items' => fn ($query) => $query
                 ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
-                ->with('installment')
+                ->with('installment'),
         ]);
         $spreadsheet = IOFactory::load(public_path('templates/installment_template.xlsx'));
         $firstName = ($order->first_name ?? $order->user->first_name ?? null);

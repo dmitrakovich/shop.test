@@ -22,7 +22,7 @@ class InstallmentFormRowAction extends RowAction
             'user.passport',
             'items' => fn ($query) => $query
                 ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
-                ->with('installment')
+                ->with('installment'),
         ])->first();
         if (!count($order->items)) {
             throw new \Exception('В заказе нет товаров со статусом Забран');
