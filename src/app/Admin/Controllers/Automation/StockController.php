@@ -205,12 +205,14 @@ class StockController extends AbstractAdminController
      */
     private function getCategoryFilter(string $table = 'available_sizes_full', ?array $input = null): \Closure
     {
-        $categories = [];
-        foreach ($input ?? $this->input ?? [] as $categoryId) {
-            $categories = array_merge($categories, Category::getChildrenCategoriesIdsList($categoryId));
-        }
+        return function ($query) use ($table, $input) {
+            $categories = [];
+            foreach ($input ?? $this->input ?? [] as $categoryId) {
+                $categories = array_merge($categories, Category::getChildrenCategoriesIdsList($categoryId));
+            }
 
-        return fn ($query) => $query->whereIn("$table.category_id", $categories);
+            return $query->whereIn("$table.category_id", $categories);
+        };
     }
 
     /**

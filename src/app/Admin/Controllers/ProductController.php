@@ -21,7 +21,9 @@ use App\Models\Style;
 use App\Models\TagGroup;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 
@@ -35,12 +37,19 @@ class ProductController extends AbstractAdminController
     protected $title = 'Товары';
 
     /**
-     * костыльный объект, чтобы с сидера достать соответсвие id
-     *
-     * @var [type]
+     * List of status filters
      */
-    protected static $productSeederObject = null;
+    const statusfilters = [
+        'not_in_stock' => 'нет в наличии',
+        'do_not_publish' => 'не публиковать',
+        'do_not_update' => 'не обновлять',
+        'liquidation' => 'ликвидация',
+        'hit' => 'хит',
+    ];
 
+    /**
+     * ProductController constructor
+     */
     public function __construct(private UploadImagesService $uploadImagesService)
     {
     }
@@ -85,9 +94,63 @@ class ProductController extends AbstractAdminController
                 $query->where('id', 'like', "%{$this->input}%")
                     ->orWhere('sku', 'like', "%{$this->input}%");
             }, 'Код товара / артикул');
+            $filter->where($this->getStatusFilter(), 'Статус', 'status')->checkbox(self::statusfilters);
+            $filter->in('brand_id', 'Бренд')->multipleSelect(Brand::pluck('name', 'id'));
+            $filter->where($this->getCategoryFilter(), 'Категория', 'category')->multipleSelect(Category::getFormatedTree());
+            $filter->where($this->getSizeCountFilter(), 'Количество размеров', 'size_count')->checkbox([5 => '5 и более размеров']);
         });
 
         return $grid;
+    }
+
+    /**
+     * Adds a filter for statuses.
+     */
+    private function getStatusFilter(): \Closure
+    {
+        return function (Builder $query) {
+            foreach ($this->input as $status) {
+                match ($status) {
+                    'not_in_stock' => $query->onlyTrashed(),
+                    'do_not_publish' => $query->where('label_id', ProductLabels::DO_NOT_PUBLISH->value),
+                    'do_not_update' => $query->where('label_id', ProductLabels::DO_NOT_UPDATE->value),
+                    'liquidation' => $query->where('label_id', ProductLabels::LIQUIDATION->value),
+                    'hit' => $query->where('label_id', ProductLabels::HIT->value),
+                };
+            }
+        };
+    }
+
+    /**
+     * Adds a filter for categories.
+     */
+    private function getCategoryFilter(): \Closure
+    {
+        return function (Builder $query) {
+            $categories = [];
+            foreach ($this->input ?? [] as $categoryId) {
+                $categories = array_merge($categories, Category::getChildrenCategoriesIdsList($categoryId));
+            }
+
+            return $query->whereIn('category_id', $categories);
+        };
+    }
+
+    /**
+     * Adds a size count filter.
+     */
+    private function getSizeCountFilter(): \Closure
+    {
+        return function (Builder $query) {
+            $productIds = DB::table('product_attributes')
+                ->select('product_id', DB::raw('COUNT(*) as size_count'))
+                ->where('attribute_type', Size::class)
+                ->groupBy('product_id')
+                ->having('size_count', '>=', 5)
+                ->pluck('product_id');
+
+            return $query->whereIn('id', $productIds->toArray());
+        };
     }
 
     /**

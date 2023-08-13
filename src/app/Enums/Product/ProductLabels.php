@@ -8,7 +8,7 @@ namespace App\Enums\Product;
 enum ProductLabels: int
 {
     case NONE = 0;
-    case HOT = 1;
+    case HIT = 1;
     case LIQUIDATION = 2;
     case DO_NOT_PUBLISH = 3;
     case DO_NOT_UPDATE = 4;
@@ -20,7 +20,7 @@ enum ProductLabels: int
     {
         return match ($this) {
             self::NONE => 'Нет',
-            self::HOT => 'Хит',
+            self::HIT => 'Хит',
             self::LIQUIDATION => 'Ликвидация',
             self::DO_NOT_PUBLISH => 'Не публиковать',
             self::DO_NOT_UPDATE => 'Не обновлять',
