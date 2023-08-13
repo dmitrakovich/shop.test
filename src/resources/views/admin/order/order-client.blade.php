@@ -3,12 +3,12 @@
     <input type="hidden" name="user_id" value="{{ $order?->user?->id }}" id="js-orderUserId">
     <div id="js-userInfo">
         @if (isset($order->user))
-            <p>
-                <b>ФИО:</b>
+            <b>ФИО:</b>
+            <a href="{{ route(config('admin.route.prefix') . '.users.edit', $order->user->id) }}" target="_blank">
                 {{ $order->user?->last_name }}
                 {{ $order->user?->first_name }}
                 {{ $order->user?->patronymic_name }}
-            </p>
+            </a>
             @if ($order->user?->addresses?->first()?->city)
                 <p><b>Город:</b> {{ $order->user?->addresses?->first()?->city }}</p>
             @endif
@@ -49,9 +49,8 @@
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-                                        <input data-code="BY" type="text" id="userCreatePhone"
-                                            name="userCreatePhone" class="form-control js-phone-input"
-                                            placeholder="Введите телефон">
+                                        <input data-code="BY" type="text" id="userCreatePhone" name="userCreatePhone"
+                                            class="form-control js-phone-input" placeholder="Введите телефон">
                                     </div>
                                 </div>
                             </div>
@@ -61,8 +60,7 @@
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                                        <input type="text" name="userCreateLastName"
-                                            class="form-control">
+                                        <input type="text" name="userCreateLastName" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -72,8 +70,7 @@
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                                        <input type="text" name="userCreateFirstName"
-                                            class="form-control">
+                                        <input type="text" name="userCreateFirstName" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -83,8 +80,7 @@
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                                        <input type="text" name="userCreatePatronymicName"
-                                            class="form-control">
+                                        <input type="text" name="userCreatePatronymicName" class="form-control">
                                     </div>
                                 </div>
                             </div>
