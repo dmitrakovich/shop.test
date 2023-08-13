@@ -16,11 +16,16 @@ class InstallmentOrderService
      *
      * @return string
      */
-    public function createInstallmentForm(int $orderId)
+    public function createInstallmentForm(Order $order)
     {
-        $resultPath = '/storage/order_installments/' . $orderId . '.xlsx';
+        $resultPath = '/storage/order_installments/' . $order->id . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
-        $order = Order::where('id', $orderId)->with(['user.passport', 'items'])->first();
+        $order->loadMissing([
+            'user.passport',
+            'items' => fn ($query) => $query
+                ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
+                ->with('installment'),
+        ]);
         $spreadsheet = IOFactory::load(public_path('templates/installment_template.xlsx'));
         $firstName = ($order->first_name ?? $order->user->first_name ?? null);
         $lastName = ($order->last_name ?? $order->user->last_name ?? null);
