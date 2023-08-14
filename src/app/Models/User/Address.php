@@ -3,7 +3,6 @@
 namespace App\Models\User;
 
 use App\Models\Country;
-use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;

@@ -46,14 +46,14 @@ class AuthService
         /** @var User $user */
         $user = $this->user->getByPhone($phone) ?? $this->user->query()->create([
             'phone' => $phone,
-            ...$userData
+            ...$userData,
         ]);
 
         if (!empty($userAddress)) {
             $user->load('lastAddress');
             if ($user->lastAddress) {
                 $user->lastAddress->fill($userAddress);
-                if($user->lastAddress->isDirty()) {
+                if ($user->lastAddress->isDirty()) {
                     $user->lastAddress->approve = false;
                     $user->lastAddress->save();
                 }

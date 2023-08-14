@@ -14,6 +14,7 @@ class OrderData
      * The user who make the order
      */
     public readonly User $user;
+
     public readonly int $user_id;
 
     /**
@@ -86,6 +87,7 @@ class OrderData
     {
         $this->user = $user;
         $this->user_id = $user->id;
+
         return $this;
     }
 

@@ -116,7 +116,7 @@ class UserController extends AdminController
                 $form->text('room', 'Квартира');
                 $form->text('address', 'Адрес');
                 $form->switch('approve', 'Подтверждение о проверке')->default(0)->states([
-                    'on'  => ['value' => 1, 'text' => 'Да', 'color' => 'success'],
+                    'on' => ['value' => 1, 'text' => 'Да', 'color' => 'success'],
                     'off' => ['value' => 0, 'text' => 'Нет', 'color' => 'danger'],
                 ]);
             });

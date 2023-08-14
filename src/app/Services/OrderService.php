@@ -7,9 +7,9 @@ use App\Facades\Sale;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Requests\Order\SyncRequest;
 use App\Models\Cart;
-use App\Models\User\User;
 use App\Models\Data\SaleData;
 use App\Models\Orders\Order;
+use App\Models\User\User;
 
 class OrderService implements OrderServiceInterface
 {

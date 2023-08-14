@@ -13,7 +13,6 @@ use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
 use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
-use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
@@ -176,7 +175,7 @@ class OrderController extends AdminController
         $form = new Form(new Order());
         $order = $id ? Order::where('id', $id)->with([
             'country',
-            'user' => fn ($query) => $query->with(['lastAddress' => fn ($q) => $q->with('country')])
+            'user' => fn ($query) => $query->with(['lastAddress' => fn ($q) => $q->with('country')]),
         ])->first() : null;
 
         if ($form->isEditing()) {
@@ -215,7 +214,7 @@ class OrderController extends AdminController
 
             if ($order) {
                 $form->html(view('admin.order.order-address', [
-                    'order' => $order
+                    'order' => $order,
                 ]), 'Адреса');
             }
 
@@ -579,6 +578,7 @@ JS;
                 $user->addresses()->create($request->validated());
             }
         }
+
         return $user;
     }
 }

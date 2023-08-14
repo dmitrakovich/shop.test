@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UserAddressRequest extends FormRequest
 {
-
     protected function prepareForValidation()
     {
         $this->merge([
