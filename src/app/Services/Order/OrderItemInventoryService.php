@@ -18,6 +18,7 @@ class OrderItemInventoryService
         'new',
         'canceled',
         'confirmed',
+        // 'pickup', // !!!
         'complete',
         'installment',
         'return',
@@ -30,7 +31,7 @@ class OrderItemInventoryService
     public function handleChangeItemStatus(OrderItem $orderItem): void
     {
         if ($this->shouldSendNotification($orderItem)) {
-            // $chat = $orderItem->invertoryNotification->stock->chat;
+            // $chat = $orderItem->invertoryNotification->stock->chat; //!!!
             // $chat->notify(new OrderItemInventoryNotification($orderItem));
             $orderItem->invertoryNotification->setDateFieldForStatus($orderItem->status_key);
         }
@@ -53,7 +54,7 @@ class OrderItemInventoryService
     protected function shouldSendNotification(OrderItem $orderItem): bool
     {
         $notification = $orderItem->invertoryNotification;
-        if (empty($notification) || empty($notification->stock->chat)) {
+        if (empty($notification) || empty($notification->stock->groupChat)) { //!!!
             return false;
         }
 

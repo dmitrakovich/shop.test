@@ -41,7 +41,8 @@ class StockController extends AdminController
         $grid->column('type', 'Тип')->display(fn () => $this->type->name());
         $grid->column('name', 'Название');
         $grid->column('internal_name', 'Внутреннее название');
-        $grid->column('chat.name', 'Чат для уведомлений');
+        $grid->column('privateChat.name', 'Личный чат для уведомлений');
+        $grid->column('groupChat.name', 'Групповой чат для уведомлений');
         $grid->column('city.name', 'Город');
         $grid->column('address', 'Адрес');
         $grid->column('worktime', 'Время работы');
@@ -100,7 +101,8 @@ class StockController extends AdminController
         $form->select('city_id', 'Город')->options(City::pluck('name', 'id'));
         $form->text('name', 'Название')->rules('required');
         $form->text('internal_name', 'Внутреннее название')->rules('required');
-        $form->select('chat_id', 'Чат для отправки уведомлений')->options(TelegramChat::pluck('name', 'id'));
+        $form->select('private_chat_id', 'Личный чат для отправки уведомлений')->options(TelegramChat::pluck('name', 'id'));
+        $form->select('group_chat_id', 'Групповой чат для отправки уведомлений')->options(TelegramChat::pluck('name', 'id'));
         $form->text('address', 'Адрес');
         $form->text('worktime', 'Время работы');
         $form->phone('phone', 'Телефон');
