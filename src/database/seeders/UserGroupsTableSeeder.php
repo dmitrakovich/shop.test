@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class UserGroupsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -16,54 +15,45 @@ class UserGroupsTableSeeder extends Seeder
     public function run()
     {
 
-
         DB::table('user_groups')->delete();
 
-        DB::table('user_groups')->insert(array (
-            0 =>
-            array (
+        DB::table('user_groups')->insert([
+            0 => [
                 'id' => 1,
                 'name' => 'Новая регистрация',
                 'discount' => 7.0,
-            ),
-            1 =>
-            array (
+            ],
+            1 => [
                 'id' => 2,
                 'name' => 'Скидка 5%',
                 'discount' => 5.0,
-            ),
-            2 =>
-            array (
+            ],
+            2 => [
                 'id' => 3,
                 'name' => 'Скидка 7%',
                 'discount' => 7.0,
-            ),
-            3 =>
-            array (
+            ],
+            3 => [
                 'id' => 4,
                 'name' => 'Скидка 10%',
                 'discount' => 10.0,
-            ),
-            4 =>
-            array (
+            ],
+            4 => [
                 'id' => 5,
                 'name' => 'Скидка 15%',
                 'discount' => 15.0,
-            ),
-            5 =>
-            array (
+            ],
+            5 => [
                 'id' => 6,
                 'name' => 'Контрольная группа',
                 'discount' => 0.0,
-            ),
-            6 =>
-            array (
+            ],
+            6 => [
                 'id' => 7,
                 'name' => 'Пользователь',
                 'discount' => 0.0,
-            ),
-        ));
-
+            ],
+        ]);
 
     }
 }
