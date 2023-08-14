@@ -49,6 +49,17 @@ class OrderItemInventoryService
     }
 
     /**
+     * Collect an item based on the given notification ID.
+     */
+    public function collectItem(int $notificationId): void
+    {
+        /** @var OrderItemInventoryNotificationLog */
+        $invertoryNotification = OrderItemInventoryNotificationLog::find($notificationId);
+        $invertoryNotification->orderItem->update(['status_key' => 'collect']);
+        $invertoryNotification->update(['collected_at' => now()]);
+    }
+
+    /**
      * Check if a notification should be sent for the given order item and status.
      */
     protected function shouldSendNotification(OrderItem $orderItem): bool
