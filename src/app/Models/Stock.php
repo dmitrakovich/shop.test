@@ -53,9 +53,17 @@ class Stock extends Model implements HasMedia, Sortable
     }
 
     /**
-     * Chat for notifications
+     * Private chat for notifications
      */
-    public function chat(): Relations\BelongsTo
+    public function privateChat(): Relations\BelongsTo
+    {
+        return $this->belongsTo(TelegramChat::class);
+    }
+
+    /**
+     * Group chat for notifications
+     */
+    public function groupChat(): Relations\BelongsTo
     {
         return $this->belongsTo(TelegramChat::class);
     }

@@ -43,14 +43,24 @@ class TelegramBotHandler extends WebhookHandler
     }
 
     /**
+     * Handle collect confirmation action.
+     */
+    public function collectConfirm(): void
+    {
+        $this->inventoryService->collectItem($this->data->get('id'));
+
+        $this->actionReply(TelegramBotActions::COLLECT_CONFIRM->name());
+    }
+
+    /**
      * Handle reserve dismissal action
      */
-    public function reserveDismiss(): void
+    public function outOfStock(): void
     {
         //todo: handle ...
 
         $this->reply('В разработке...');
-        // $this->actionReply(TelegramBotActions::RESERVE_DISMISS->name());
+        // $this->actionReply(TelegramBotActions::OUT_OF_STOCK->name());
     }
 
     /**

@@ -42,7 +42,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
         $product = $this->orderItem->product;
         $size = $this->orderItem->size;
         $stock = $this->orderItem->invertoryNotification->stock;
-        $isReserveAction = $this->orderItem->status_key === 'new';
+        $isConfirmAction = $this->orderItem->status_key === 'confirmed';
 
         $message = <<<MSG
         <b>{$this->getActionTitleByOrderItemStatus()}</b>
@@ -53,7 +53,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
 
         return $chat->message($message)
             ->photo($product->getFirstMediaPath('default', 'catalog'))
-            ->when($isReserveAction, $this->getReserveKeyboard())
+            ->when($isConfirmAction, $this->getConfirmKeyboard())
             ->send();
     }
 
@@ -85,17 +85,17 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the closure for the reserve keyboard.
+     * Get the closure for the confirm keyboard.
      */
-    private function getReserveKeyboard(): \Closure
+    private function getConfirmKeyboard(): \Closure
     {
         return function (Telegraph $telegraph) {
             return $telegraph->keyboard(Keyboard::make()->row([
-                Button::make(TelegramBotActions::RESERVE_CONFIRM->name())
-                    ->action(TelegramBotActions::RESERVE_CONFIRM->value)
+                Button::make(TelegramBotActions::COLLECT_CONFIRM->name())
+                    ->action(TelegramBotActions::COLLECT_CONFIRM->value)
                     ->param('id', $this->orderItem->invertoryNotification->id),
-                Button::make(TelegramBotActions::RESERVE_DISMISS->name())
-                    ->action(TelegramBotActions::RESERVE_DISMISS->value)
+                Button::make(TelegramBotActions::OUT_OF_STOCK->name())
+                    ->action(TelegramBotActions::OUT_OF_STOCK->value)
                     ->param('id', $this->orderItem->invertoryNotification->id),
             ]));
         };

@@ -8,7 +8,8 @@ namespace App\Enums\Bot;
 enum TelegramBotActions: string
 {
     case RESERVE_CONFIRM = 'reserveConfirm';
-    case RESERVE_DISMISS = 'reserveDismiss';
+    case COLLECT_CONFIRM = 'collectConfirm';
+    case OUT_OF_STOCK = 'outOfStock';
 
     /**
      * Returns the name of the action.
@@ -17,7 +18,8 @@ enum TelegramBotActions: string
     {
         return match ($this) {
             self::RESERVE_CONFIRM => '✅ Отложено',
-            self::RESERVE_DISMISS => '❌ Нет в наличии',
+            self::COLLECT_CONFIRM => '✅ Собран',
+            self::OUT_OF_STOCK => '❌ Нет в наличии',
         };
     }
 }
