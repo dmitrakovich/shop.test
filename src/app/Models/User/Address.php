@@ -3,6 +3,7 @@
 namespace App\Models\User;
 
 use App\Models\Country;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -24,16 +25,7 @@ class Address extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'country_id',
-        'city',
-        'address',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * The table associated with the model.
@@ -50,5 +42,15 @@ class Address extends Model
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    /**
+     * User
+     *
+     * @return Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

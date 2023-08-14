@@ -38,12 +38,29 @@ class AuthService
     /**
      * Find user or create new by phone number
      */
-    public function getOrCreateUser(string $phone): User
-    {
+    public function getOrCreateUser(
+        string $phone,
+        array $userData = [],
+        array $userAddress = []
+    ): User {
         /** @var User $user */
         $user = $this->user->getByPhone($phone) ?? $this->user->query()->create([
             'phone' => $phone,
+            ...$userData
         ]);
+
+        if (!empty($userAddress)) {
+            $user->load('lastAddress');
+            if ($user->lastAddress) {
+                $user->lastAddress->fill($userAddress);
+                if($user->lastAddress->isDirty()) {
+                    $user->lastAddress->approve = false;
+                    $user->lastAddress->save();
+                }
+            } else {
+                $user->addresses()->create($userAddress);
+            }
+        }
 
         if ($user->wasRecentlyCreated) {
             event(new Registered($user));

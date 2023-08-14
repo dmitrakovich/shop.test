@@ -24,6 +24,7 @@ Route::group([
     $router->get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
     $router->post('orders/add-user-by-phone', [AdminOrderController::class, 'addUserByPhone']);
     $router->post('orders/change-user-by-phone', [AdminOrderController::class, 'changeUserByPhone']);
+    $router->post('orders/update-user-address', [AdminOrderController::class, 'updateUserAddress']);
 
     $router->group(['prefix' => 'users'], function (Router $router) {
         $router->resource('users', Users\UserController::class);

@@ -10,6 +10,7 @@ use App\Admin\Actions\Order\InstallmentForm;
 use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
 use App\Admin\Requests\ChangeUserByPhoneRequest;
+use App\Admin\Requests\UserAddressRequest;
 use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Country;
@@ -173,7 +174,10 @@ class OrderController extends AdminController
     protected function form(?int $id = null)
     {
         $form = new Form(new Order());
-        $order = $id ? Order::where('id', $id)->with(['user'])->first() : null;
+        $order = $id ? Order::where('id', $id)->with([
+            'country',
+            'user' => fn ($query) => $query->with(['lastAddress' => fn ($q) => $q->with('country')])
+        ])->first() : null;
 
         if ($form->isEditing()) {
             $form->tools($this->getPrintTool());
@@ -209,11 +213,12 @@ class OrderController extends AdminController
                     $form->decimal('rate', 'Курс')->default(Currency::where('code', 'USD')->value('rate'));
                 })->default('BYN')->required();
 
-            $form->select('country_id', 'Страна')->options(Country::pluck('name', 'id'));
-            $form->text('region', __('Region'));
-            $form->text('city', 'Город');
-            $form->text('zip', __('Zip'));
-            $form->text('user_addr', __('User addr'));
+            if ($order) {
+                $form->html(view('admin.order.order-address', [
+                    'order' => $order
+                ]), 'Адреса');
+            }
+
             $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
             $form->text('track.track_number', 'Трек номер');
             $form->url('track.track_link', 'Ссылка на трек номер');
@@ -561,6 +566,19 @@ JS;
         }
         Order::where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
 
+        return $user;
+    }
+
+    public function updateUserAddress(UserAddressRequest $request)
+    {
+        $user = User::where('id', $request->input('userId'))->with('lastAddress')->first();
+        if ($user) {
+            if ($user->lastAddress) {
+                $user->lastAddress->update($request->validated());
+            } else {
+                $user->addresses()->create($request->validated());
+            }
+        }
         return $user;
     }
 }

@@ -257,3 +257,22 @@ function changeOrderUserByPhone(phone, orderId) {
         toastr.error(error?.response?.data?.message);
     });
 }
+
+$(document).on('click', '.js-updateOrderUserAddress', function (e) {
+  e.preventDefault();
+  let json = {};
+  adminAxios.post('orders/update-user-address', {
+      ...$('#js-updateOrderUserAddress input').serializeArray()
+          .reduce(function (json, { name, value }) {
+              json[name] = value;
+              return json;
+          }, {}),
+      userId: $('#js-orderUserId').val()
+  }).then(response => {
+      $('#js-updateOrderUserAddress').modal('hide');
+      $("#js-orderUserAddress").load(window.location.href + ' #js-orderUserAddress');
+      toastr.success('Адрес успешно обновлен!');
+  }).catch(function (error) {
+      toastr.error(error?.response?.data?.message);
+  });
+});

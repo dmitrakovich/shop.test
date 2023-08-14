@@ -7,14 +7,16 @@ use App\Facades\Sale;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Requests\Order\SyncRequest;
 use App\Models\Cart;
+use App\Models\User\User;
 use App\Models\Data\SaleData;
 use App\Models\Orders\Order;
 
 class OrderService implements OrderServiceInterface
 {
-    public function store(StoreRequest $request, Cart $cart)
+    public function store(StoreRequest $request, Cart $cart, User $user)
     {
         $orderData = $request->getValidatedData();
+        $orderData->setUser($user);
 
         if (!$request instanceof SyncRequest) {
             Sale::applyToOrder($cart, $orderData);

@@ -14,6 +14,7 @@ class OrderData
      * The user who make the order
      */
     public readonly User $user;
+    public readonly int $user_id;
 
     /**
      * Order payment method
@@ -34,7 +35,6 @@ class OrderData
      * OrderData constructor
      */
     public function __construct(
-        public ?int $user_id,
         public string $first_name,
         public string $phone,
         public ?string $user_addr,
@@ -59,7 +59,6 @@ class OrderData
         ?string $created_at = null,
         ...$otherData
     ) {
-        $this->user = $this->findModel(new User(), $this->user_id);
         $this->paymentMethod = $this->findModel(new PaymentMethod(), $this->payment_id);
         $this->deliveryMethod = $this->findModel(new DeliveryMethod(), $this->delivery_id);
         $this->created_at = $this->createDate($created_at);
@@ -81,6 +80,13 @@ class OrderData
     public function createDate(\DateTimeInterface|string|null $date): ?Carbon
     {
         return $date ? new Carbon($date) : null;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+        $this->user_id = $user->id;
+        return $this;
     }
 
     /**

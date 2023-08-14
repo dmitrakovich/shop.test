@@ -6,11 +6,14 @@ use App\Contracts\OrderServiceInterface;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Events\OrderCreated;
 use App\Facades\Cart;
+use App\Http\Requests\Order\UserRequest;
+use App\Http\Requests\Order\UserAddressRequest;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Requests\Order\SyncRequest;
 use App\Models\CartData;
 use App\Models\Orders\Order;
 use App\Services\OldSiteSyncService;
+use App\Services\AuthService;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
@@ -57,8 +60,12 @@ class OrderController extends BaseController
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(StoreRequest $request)
-    {
+    public function store(
+        StoreRequest $request,
+        UserRequest $userRequest,
+        UserAddressRequest $userAddressRequest,
+        AuthService $authService
+    ) {
         if ($request->isOneClick()) {
             $cart = Cart::make();
             $items = [];
@@ -74,11 +81,11 @@ class OrderController extends BaseController
             $cart = Cart::withData();
             abort_if(empty($cart['items']) || $cart->items->isEmpty(), 404);
         }
-        $order = app(OrderServiceInterface::class)->store($request, $cart);
-
+        $user = $authService->getOrCreateUser($userRequest->input('phone'), $userRequest->validated(), $userAddressRequest->validated());
+        $order = app(OrderServiceInterface::class)->store($request, $cart, $user);
         Cart::clear();
 
-        event(new OrderCreated($order, auth()->user()));
+        event(new OrderCreated($order, $user));
 
         return redirect()->route('cart-final')->with('order_id', $order->id);
     }

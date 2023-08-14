@@ -106,8 +106,19 @@ class UserController extends AdminController
 
             $form->hasMany('addresses', 'Адреса', function (Form\NestedForm $form) {
                 $form->select('country_id', 'Страна')->options(Country::query()->pluck('name', 'id'));
+                $form->text('zip', 'Почтовый индекс');
+                $form->text('region', 'Область/край');
                 $form->text('city', 'Город');
-                $form->textarea('address', 'Адрес');
+                $form->text('district', 'Район');
+                $form->text('street', 'Улица');
+                $form->text('house', 'Дом');
+                $form->text('corpus', 'Корпус');
+                $form->text('room', 'Квартира');
+                $form->text('address', 'Адрес');
+                $form->switch('approve', 'Подтверждение о проверке')->default(0)->states([
+                    'on'  => ['value' => 1, 'text' => 'Да', 'color' => 'success'],
+                    'off' => ['value' => 0, 'text' => 'Нет', 'color' => 'danger'],
+                ]);
             });
 
             $form->hasMany('reviews', 'Отзывы', function (Form\NestedForm $form) {
