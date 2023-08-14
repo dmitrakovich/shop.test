@@ -50,6 +50,7 @@
         "laravel/pint": "^1.2",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
+        "orangehill/iseed": "^3.0",
         "phpunit/phpunit": "^10.0",
         "spatie/laravel-ignition": "^2.0"
     },

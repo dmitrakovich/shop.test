@@ -35,5 +35,12 @@ class DatabaseSeeder extends Seeder
         // admin panel
         Artisan::call('admin:install');
         $this->call(AdminPanelSeeder::class);
+
+        // auto-generated
+        $this->call(StatusesTableSeeder::class);
+        $this->call(ConfigsTableSeeder::class);
+        $this->call(UserGroupsTableSeeder::class);
+        $this->call(StocksTableSeeder::class);
+        $this->call(TagGroupsTableSeeder::class);
     }
 }
