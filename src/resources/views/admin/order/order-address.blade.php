@@ -1,14 +1,22 @@
 @if ($order)
-    <h4>Адрес заказа</h4>
-    {{ $order->country->name . ', ' . $order->city . ', ' . $order->user_addr }}
+    @php
+        $resultOrderAddress = [];
+        $resultOrderAddress[] = $order?->country?->name ?? null;
+        $resultOrderAddress[] = $order->city ?? null;
+        $resultOrderAddress[] = $order->user_addr ?? null;
+        $resultOrderAddress = implode(', ', array_filter($resultOrderAddress, fn($item) => $item));
+    @endphp
+    @if ($resultOrderAddress)
+        <h4 >Адрес заказа</h4>
+        {{ $resultOrderAddress }}
+    @endif
     @php
         $lastAddress = $order?->user?->lastAddress;
     @endphp
     <h4>Адрес доставки</h4>
     <div class="row">
         <div class="col-md-10">
-            <div class="@if ($lastAddress->approve) bg-success @else bg-danger @endif"
-                id="js-orderUserAddress">
+            <div class="@if ($lastAddress->approve) bg-success @else bg-danger @endif" id="js-orderUserAddress">
                 @php
                     $resultAddress = [];
                     $resultAddress[] = $lastAddress?->country?->name;
