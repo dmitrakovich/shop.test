@@ -129,6 +129,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * User last address
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function lastAddress()
+    {
+        return $this->hasOne(Address::class)->orderBy('id', 'desc');
+    }
+
+    /**
      * Get fisrt user address if exist
      *
      * @return \App\Models\Address

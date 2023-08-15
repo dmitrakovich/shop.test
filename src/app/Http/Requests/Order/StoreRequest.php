@@ -6,7 +6,6 @@ use App\Facades\Currency;
 use App\Models\Data\OrderData;
 use App\Models\Enum\OrderMethod;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
@@ -26,7 +25,6 @@ class StoreRequest extends FormRequest
         $utm = json_decode($this->cookie('utm'), true);
 
         $this->merge([
-            'user_id' => Auth::check() ? Auth::id() : null,
             'currency' => Currency::getCurrentCurrency()->code,
             'rate' => Currency::getCurrentCurrency()->rate,
             'order_method' => $this->getOrderMethod(),
@@ -47,7 +45,6 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['integer', 'nullable'],
             'first_name' => ['required', 'max:50'],
             'patronymic_name' => ['nullable', 'max:50'],
             'last_name' => ['nullable', 'max:50'],
