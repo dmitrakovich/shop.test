@@ -1,7 +1,7 @@
-@if ($order)
+@if ($order && $order->user)
     @php
         $resultOrderAddress = [];
-        $resultOrderAddress[] = $order?->country?->name ?? null;
+        $resultOrderAddress[] = $order->country?->name ?? null;
         $resultOrderAddress[] = $order->city ?? null;
         $resultOrderAddress[] = $order->user_addr ?? null;
         $resultOrderAddress = implode(', ', array_filter($resultOrderAddress, fn($item) => $item));
@@ -11,7 +11,7 @@
         {{ $resultOrderAddress }}
     @endif
     @php
-        $lastAddress = $order?->user?->lastAddress;
+        $lastAddress = $order->user->lastAddress;
     @endphp
     <h4>Адрес доставки</h4>
     <div class="row">

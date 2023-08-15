@@ -5,6 +5,7 @@ namespace App\Models\User;
 use App\Models\Country;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Carbon;
 
 /**
@@ -19,6 +20,8 @@ use Illuminate\Support\Carbon;
  * @property string $address
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read Country $country
+ * @property-read User $user
  */
 class Address extends Model
 {
@@ -35,20 +38,16 @@ class Address extends Model
 
     /**
      * Address country
-     *
-     * @return Relations\BelongsTo
      */
-    public function country()
+    public function country(): Relations\BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
 
     /**
-     * User
-     *
-     * @return Relations\BelongsTo
+     * Get the user associated with this address.
      */
-    public function user()
+    public function user(): Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }
