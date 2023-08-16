@@ -14,7 +14,8 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
- * @property-read TelegramChat $chat
+ * @property-read TelegramChat $privateChat
+ * @property-read TelegramChat $groupChat
  */
 class Stock extends Model implements HasMedia, Sortable
 {

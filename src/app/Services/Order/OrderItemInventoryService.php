@@ -15,10 +15,10 @@ class OrderItemInventoryService
      * Possible statuses for which notifications are sent.
      */
     const STATUSES_FOR_NOTIFICATIONS = [
-        'new',
-        'canceled',
+        // 'new',
+        // 'canceled',
         'confirmed',
-        // 'pickup', // !!!
+        'pickup',
         'complete',
         'installment',
         'return',
@@ -31,8 +31,8 @@ class OrderItemInventoryService
     public function handleChangeItemStatus(OrderItem $orderItem): void
     {
         if ($this->shouldSendNotification($orderItem)) {
-            // $chat = $orderItem->invertoryNotification->stock->chat; //!!!
-            // $chat->notify(new OrderItemInventoryNotification($orderItem));
+            $chat = $orderItem->invertoryNotification->getChatByStatus($orderItem->status_key);
+            $chat->notify(new OrderItemInventoryNotification($orderItem));
             $orderItem->invertoryNotification->setDateFieldForStatus($orderItem->status_key);
         }
     }
@@ -64,12 +64,12 @@ class OrderItemInventoryService
      */
     protected function shouldSendNotification(OrderItem $orderItem): bool
     {
+        $status = $orderItem->status_key;
         $notification = $orderItem->invertoryNotification;
-        if (empty($notification) || empty($notification->stock->groupChat)) { //!!!
+        if (empty($notification) || empty($notification->getChatByStatus($status))) {
             return false;
         }
 
-        $status = $orderItem->status_key;
         $dateField = $notification::getDateFieldByStatus($status);
 
         return in_array($status, self::STATUSES_FOR_NOTIFICATIONS) && is_null($notification->{$dateField});

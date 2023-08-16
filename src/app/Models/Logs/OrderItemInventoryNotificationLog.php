@@ -2,6 +2,7 @@
 
 namespace App\Models\Logs;
 
+use App\Models\Bots\Telegram\TelegramChat;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $reserved_at
  * @property Carbon|null $canceled_at
  * @property Carbon|null $confirmed_at
+ * @property Carbon|null $collected_at
+ * @property Carbon|null $picked_up_at
  * @property Carbon|null $completed_at
  * @property-read OrderItem $orderItem
  * @property-read Stock $stock
@@ -76,9 +79,22 @@ class OrderItemInventoryNotificationLog extends Model
         return match ($status) {
             'canceled' => 'canceled_at',
             'confirmed' => 'confirmed_at',
+            'pickup' => 'picked_up_at',
             'complete', 'installment' => 'completed_at',
             'return', 'return_fitting' => 'returned_at',
             default => 'sended_at',
         };
+    }
+
+    /**
+     * Get a Telegram chat based on the given order item status.
+     */
+    public function getChatByStatus(string $status): ?TelegramChat
+    {
+        if ($status === 'confirmed') {
+            return $this->stock->privateChat;
+        }
+
+        return $this->stock->groupChat;
     }
 }
