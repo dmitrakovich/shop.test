@@ -21,6 +21,7 @@ class BuyoutOrderService
         $order->loadMissing([
             'items' => fn ($query) => $query->whereHas('status', fn ($q) => $q->where('key', 'pickup')),
             'delivery',
+            'user' => fn($query) => $query->with('lastAddress')
         ]);
         $resultPath = '/storage/order_buyout/' . $order->id . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
@@ -34,20 +35,41 @@ class BuyoutOrderService
         $sheet->setCellValue('S13', $lastName);
         $sheet->setCellValue('AK13', $firstName);
         $sheet->setCellValue('AY13', $patronymicName);
-        $sheet->setCellValue('L14', $order->user_addr ?? null);
-        $sheet->setCellValue('BK14', $order->city ?? null);
+        $sheet->setCellValue('L14', 'ул.');
+        $sheet->setCellValue('O14', $order->user->lastAddress->street ?? null);
+        $sheet->setCellValue('AF14', $order->user->lastAddress->house ?? null);
+        $sheet->setCellValue('AR14', $order->user->lastAddress->corpus ?? null);
+        $sheet->setCellValue('AY14', $order->user->lastAddress->room ?? null);
+        $sheet->setCellValue('BC14', $order->user->lastAddress->zip ?? null);
+        $sheet->setCellValue('BK14', $order->user->lastAddress->city ?? null);
+        $sheet->setCellValue('AR15', $order->user->lastAddress->district ?? null);
+        $sheet->setCellValue('BI15', $order->user->lastAddress->region ?? null);
 
         $sheet->setCellValue('M24', $lastName);
         $sheet->setCellValue('X24', $firstName);
         $sheet->setCellValue('AI24', $patronymicName);
-        $sheet->setCellValue('AW24', $order->user_addr ?? null);
-        $sheet->setCellValue('CR24', $order->city ?? null);
+        $sheet->setCellValue('AW24', 'ул.');
+        $sheet->setCellValue('AZ24', $order->user->lastAddress->street ?? null);
+        $sheet->setCellValue('BO24', $order->user->lastAddress->house ?? null);
+        $sheet->setCellValue('BX24', $order->user->lastAddress->corpus ?? null);
+        $sheet->setCellValue('CE24', $order->user->lastAddress->room ?? null);
+        $sheet->setCellValue('CI24', $order->user->lastAddress->zip ?? null);
+        $sheet->setCellValue('CR24', $order->user->lastAddress->city ?? null);
+        $sheet->setCellValue('BW25', $order->user->lastAddress->district ?? null);
+        $sheet->setCellValue('CO25', $order->user->lastAddress->region ?? null);
 
-        $sheet->setCellValue('CR42', $order->city ?? null);
-        $sheet->setCellValue('AW42', $order->user_addr ?? null);
         $sheet->setCellValue('M42', $lastName);
         $sheet->setCellValue('X42', $firstName);
         $sheet->setCellValue('AI42', $patronymicName);
+        $sheet->setCellValue('AW42', 'ул.');
+        $sheet->setCellValue('AZ42', $order->user->lastAddress->street ?? null);
+        $sheet->setCellValue('BO42', $order->user->lastAddress->house ?? null);
+        $sheet->setCellValue('BX42', $order->user->lastAddress->corpus ?? null);
+        $sheet->setCellValue('CE42', $order->user->lastAddress->room ?? null);
+        $sheet->setCellValue('CI42', $order->user->lastAddress->zip ?? null);
+        $sheet->setCellValue('CR42', $order->user->lastAddress->city ?? null);
+        $sheet->setCellValue('BW43', $order->user->lastAddress->district ?? null);
+        $sheet->setCellValue('CO43', $order->user->lastAddress->region ?? null);
 
         $totalSum = 0;
         $uniqItemsCount = $order->getUniqItemsCount();

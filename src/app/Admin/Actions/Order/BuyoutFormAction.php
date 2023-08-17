@@ -32,6 +32,7 @@ class BuyoutFormAction extends Action
         $order = Order::where('id', $request->orderId)->with([
             'items' => fn ($query) => $query->whereHas('status', fn ($q) => $q->where('key', 'pickup')),
             'delivery',
+            'user' => fn ($query) => $query->with('lastAddress')
         ])->first();
         if (!count($order->items)) {
             throw new \Exception('В заказе нет товаров со статусом Забран');

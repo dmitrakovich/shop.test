@@ -571,6 +571,7 @@ JS;
     public function updateUserAddress(UserAddressRequest $request)
     {
         $user = User::where('id', $request->input('userId'))->with('lastAddress')->first();
+        $order = Order::where('id', $request->input('orderId'))->first();
         if ($user) {
             if ($user->lastAddress) {
                 $user->lastAddress->update($request->validated());
@@ -578,7 +579,13 @@ JS;
                 $user->addresses()->create($request->validated());
             }
         }
-
+        if ($order) {
+            $order->update([
+                'country_id' => $user->lastAddress->country_id,
+                'city' => $user->lastAddress->city,
+                'user_addr' => $user->lastAddress->getAddressRow(),
+            ]);
+        }
         return $user;
     }
 }

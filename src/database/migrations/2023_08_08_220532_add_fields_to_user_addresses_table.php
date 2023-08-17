@@ -39,7 +39,6 @@ return new class extends Migration
             $table->dropForeign(['country_id']);
             $table->dropForeign(['user_id']);
 
-            $table->dropColumn('district');
             $table->dropColumn('street');
             $table->dropColumn('house');
             $table->dropColumn('corpus');
