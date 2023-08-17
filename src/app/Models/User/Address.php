@@ -64,6 +64,7 @@ class Address extends Model
         $resultAddress[] = $this?->house ? 'д. ' . $this->house : null;
         $resultAddress[] = $this?->corpus;
         $resultAddress[] = $this?->room ? 'кв. ' . $this->room : null;
+
         return implode(', ', array_filter($resultAddress, fn ($item) => $item));
     }
 }

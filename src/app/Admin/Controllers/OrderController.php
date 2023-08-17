@@ -586,6 +586,7 @@ JS;
                 'user_addr' => $user->lastAddress->getAddressRow(),
             ]);
         }
+
         return $user;
     }
 }

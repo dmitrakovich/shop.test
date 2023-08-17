@@ -21,7 +21,7 @@ class BuyoutOrderService
         $order->loadMissing([
             'items' => fn ($query) => $query->whereHas('status', fn ($q) => $q->where('key', 'pickup')),
             'delivery',
-            'user' => fn($query) => $query->with('lastAddress')
+            'user' => fn ($query) => $query->with('lastAddress'),
         ]);
         $resultPath = '/storage/order_buyout/' . $order->id . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
