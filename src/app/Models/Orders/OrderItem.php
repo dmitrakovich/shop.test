@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property-read Size $size
  * @property-read OrderItemStatus $status
  * @property-read Installment $installment
- * @property-read OrderItemInventoryNotificationLog $invertoryNotification
+ * @property-read OrderItemInventoryNotificationLog $inventoryNotification
  */
 class OrderItem extends Model
 {
@@ -109,9 +109,9 @@ class OrderItem extends Model
     }
 
     /**
-     * Get the invertory notification associated with the order item.
+     * Get the inventory notification associated with the order item.
      */
-    public function invertoryNotification(): Relations\HasOne
+    public function inventoryNotification(): Relations\HasOne
     {
         return $this->hasOne(OrderItemInventoryNotificationLog::class);
     }

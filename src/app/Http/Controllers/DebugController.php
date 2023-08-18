@@ -18,8 +18,8 @@ class DebugController extends Controller
         return 'ok';
 
         /** @var OrderItem */
-        $orderItem = OrderItem::findOrFail(6666);
-        $orderItem->invertoryNotification()->firstOrCreate(['stock_id' => 14]);
+        $orderItem = OrderItem::findOrFail(2345);
+        $orderItem->inventoryNotification()->firstOrCreate(['stock_id' => 14]);
 
         (new OrderItemInventoryService)->handleChangeItemStatus($orderItem->refresh());
 

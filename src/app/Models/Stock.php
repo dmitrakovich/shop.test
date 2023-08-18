@@ -22,6 +22,11 @@ class Stock extends Model implements HasMedia, Sortable
     use HasFactory;
     use InteractsWithMedia, SortableTrait;
 
+    /**
+     * Temp constant for Minsk stock id
+     */
+    const MINKS_ID = 17;
+
     protected $guarded = ['id'];
 
     protected $casts = [

@@ -41,7 +41,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
     {
         $product = $this->orderItem->product;
         $size = $this->orderItem->size;
-        $stock = $this->orderItem->invertoryNotification->stock;
+        $stock = $this->orderItem->inventoryNotification->stock;
         $isConfirmAction = $this->orderItem->status_key === 'confirmed';
 
         $message = <<<MSG
@@ -94,10 +94,10 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
             return $telegraph->keyboard(Keyboard::make()->row([
                 Button::make(TelegramBotActions::COLLECT_CONFIRM->name())
                     ->action(TelegramBotActions::COLLECT_CONFIRM->value)
-                    ->param('id', $this->orderItem->invertoryNotification->id),
+                    ->param('id', $this->orderItem->inventoryNotification->id),
                 Button::make(TelegramBotActions::OUT_OF_STOCK->name())
                     ->action(TelegramBotActions::OUT_OF_STOCK->value)
-                    ->param('id', $this->orderItem->invertoryNotification->id),
+                    ->param('id', $this->orderItem->inventoryNotification->id),
             ]));
         };
     }
