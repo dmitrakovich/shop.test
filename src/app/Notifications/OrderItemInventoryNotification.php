@@ -46,7 +46,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
 
         $message = <<<MSG
         <b>{$this->getActionTitleByOrderItemStatus()}</b>
-        {$product->brand->name} {$product->sku} ({$size->name})
+        {$product->brand->name} {$product->sku} ({$product->id}) р. {$size->name}
         {$this->getOrderInfo()}
         {$stock->name} {$stock->address}
         MSG;
