@@ -7,6 +7,7 @@ use App\Models\Orders\OrderItem;
 use App\Models\Stock;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
@@ -23,11 +24,14 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $collected_at
  * @property Carbon|null $picked_up_at
  * @property Carbon|null $completed_at
+ * @property Carbon|null $deleted_at
  * @property-read OrderItem $orderItem
  * @property-read Stock $stock
  */
 class OrderItemInventoryNotificationLog extends Model
 {
+    use SoftDeletes;
+
     /**
      * The table associated with the model.
      */

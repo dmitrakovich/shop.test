@@ -70,8 +70,7 @@ class OrderItemInventoryService
      */
     public function reserveItem(int $notificationId): void
     {
-        /** @var OrderItemInventoryNotificationLog */
-        $inventoryNotification = OrderItemInventoryNotificationLog::find($notificationId);
+        $inventoryNotification = $this->findNotification($notificationId);
         $inventoryNotification->orderItem->update(['status_key' => 'reserved']);
         $inventoryNotification->update(['reserved_at' => now()]);
     }
@@ -81,10 +80,20 @@ class OrderItemInventoryService
      */
     public function collectItem(int $notificationId): void
     {
-        /** @var OrderItemInventoryNotificationLog */
-        $inventoryNotification = OrderItemInventoryNotificationLog::find($notificationId);
+        $inventoryNotification = $this->findNotification($notificationId);
         $inventoryNotification->orderItem->update(['status_key' => 'collect']);
         $inventoryNotification->update(['collected_at' => now()]);
+    }
+
+    /**
+     * Collect an item based on the given notification ID.
+     */
+    public function outOfStock(int $notificationId): void
+    {
+        $inventoryNotification = $this->findNotification($notificationId);
+        $orderItems = collect([$inventoryNotification->orderItem]);
+        $inventoryNotification->delete();
+        $this->updateInventory($orderItems);
     }
 
     /**
@@ -219,5 +228,13 @@ class OrderItemInventoryService
         if ($product->sizes()->count() <= 0) {
             $product->delete();
         }
+    }
+
+    /**
+     * Find OrderItemInventoryNotificationLog model by id
+     */
+    private function findNotification(int $id): OrderItemInventoryNotificationLog
+    {
+        return OrderItemInventoryNotificationLog::query()->find($id);
     }
 }

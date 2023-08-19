@@ -57,10 +57,9 @@ class TelegramBotHandler extends WebhookHandler
      */
     public function outOfStock(): void
     {
-        //todo: handle ...
+        $this->inventoryService->outOfStock($this->data->get('id'));
 
-        $this->reply('В разработке...');
-        // $this->actionReply(TelegramBotActions::OUT_OF_STOCK->name());
+        $this->actionReply(TelegramBotActions::OUT_OF_STOCK->name());
     }
 
     /**
@@ -94,5 +93,19 @@ class TelegramBotHandler extends WebhookHandler
     public function addStockChat(): void
     {
         $this->start();
+    }
+
+    /**
+     * !!! Stub
+     */
+    public function pickupList() : void
+    {
+        $this->reply('выводит список моделей (без фото)
+            Забор на хх.хх.хххх магазин ХХХХХХ
+            - бренд артикул (код товара), размер
+            - бренд артикул (код товара), размер
+            - бренд артикул (код товара), размер');
+
+        // Если в личном чате, то сразу ответ. Если в групповом чате в следующем сообщении “Выберите магазин” и кнопки с адресами магазинов.
     }
 }

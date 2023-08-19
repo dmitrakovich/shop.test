@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Orders\Order;
-use App\Models\Orders\OrderItem;
 use App\Models\User\User;
-use App\Notifications\TestSms;
 use App\Services\Order\OrderItemInventoryService;
 use Illuminate\Database\Eloquent\Model;
 use libphonenumber\PhoneNumberFormat;
@@ -17,19 +15,7 @@ class DebugController extends Controller
     {
         return 'ok';
 
-        /** @var OrderItem */
-        $orderItem = OrderItem::findOrFail(2345);
-        $orderItem->inventoryNotification()->firstOrCreate(['stock_id' => 14]);
-
-        (new OrderItemInventoryService)->handleChangeItemStatus($orderItem->refresh());
-
-        /** @var User $user */
-        $user = User::findOrFail('xxxx');
-        dd($user, $user->notifyNow(new TestSms()));
-
-        // php artisan make:mail OrderShipped
-
-        return dd(Order::with('data')->find(3));
+        (new OrderItemInventoryService)->outOfStock(328);
     }
 
     /**
