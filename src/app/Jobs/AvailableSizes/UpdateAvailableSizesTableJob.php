@@ -89,6 +89,8 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $count = $this->updateAvailableSizesFromOrders($availableSizes);
         $this->log("Обновлено $count доступных размеров товаров на основе заказов");
 
+        //todo: find offline orders
+
         $count = $this->removeEmptySizes($availableSizes);
         $this->log("Удалено $count записей с пустыми размерами");
 
@@ -317,11 +319,15 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     {
         $productsInOrders = [];
         $sizesCount = OrderItem::query()->whereIn('status_key', ['new', 'reserved', 'confirmed', 'pickup'])
-            ->get(['product_id', 'size_id', 'count'])
+            ->has('inventoryNotification')
+            ->with('inventoryNotification:order_item_id,stock_id')
+            ->get(['id', 'product_id', 'size_id', 'count'])
             ->each(function (OrderItem $orderItem) use (&$productsInOrders) {
-                $pid = $orderItem->product_id;
-                $sid = $orderItem->size_id;
-                $productsInOrders[$pid][$sid] = ($productsInOrders[$pid][$sid] ?? 0) + $orderItem->count;
+                $productId = $orderItem->product_id;
+                $sizeId = $orderItem->size_id;
+                $stockId = $orderItem->inventoryNotification->stock_id;
+                $sizeCount = ($productsInOrders[$productId][$stockId][$sizeId] ?? 0) + $orderItem->count;
+                $productsInOrders[$productId][$stockId][$sizeId] = $sizeCount;
             })
             ->count();
 
@@ -329,7 +335,9 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
             if (empty($stock['product_id'])) {
                 continue;
             }
-            foreach ($productsInOrders[$stock['product_id']] ?? [] as $sizeId => &$count) {
+            $productId = $stock['product_id'];
+            $stockId = $stock['stock_id'];
+            foreach ($productsInOrders[$productId][$stockId] ?? [] as $sizeId => &$count) {
                 $sizeField = AvailableSizes::convertSizeIdToField($sizeId);
                 $originalStockCount = $stock[$sizeField];
                 if ($stock[$sizeField] - $count <= 0) {
@@ -339,7 +347,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
                 }
                 $count -= $originalStockCount;
                 if ($count <= 0) {
-                    unset($productsInOrders[$stock['product_id']][$sizeId]);
+                    unset($productsInOrders[$productId][$stockId][$sizeId]);
                 }
             }
         }
