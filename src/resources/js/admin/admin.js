@@ -267,10 +267,11 @@ $(document).on('click', '.js-updateOrderUserAddress', function (e) {
               json[name] = value;
               return json;
           }, {}),
-      userId: $('#js-orderUserId').val()
+      userId: $('#js-orderUserId').val(),
+      orderId: $('#js-orderId').val()
   }).then(response => {
       $('#js-updateOrderUserAddress').modal('hide');
-      $("#js-orderUserAddress").load(window.location.href + ' #js-orderUserAddress');
+      $("#js-orderAddress").load(window.location.href + ' #js-orderAddress');
       toastr.success('Адрес успешно обновлен!');
   }).catch(function (error) {
       toastr.error(error?.response?.data?.message);
