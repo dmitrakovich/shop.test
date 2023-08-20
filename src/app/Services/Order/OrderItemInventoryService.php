@@ -248,6 +248,9 @@ class OrderItemInventoryService
         $stock = Stock::query()->with('privateChat:id,chat_id')
             ->where('private_chat_id', $privateChatId)
             ->first(['id', 'name', 'address']);
+        if (!$stock) {
+            return "Чат с id {$privateChatId} не привязан ни к одному складу";
+        }
         $pickupList = 'Забор на ' . date('d.m.Y') . ' магазин ' . $stock->name . ' ' . $stock->address;
         $orderItemIds = OrderItemInventoryNotificationLog::query()
             ->where('stock_id', $stock->id)
