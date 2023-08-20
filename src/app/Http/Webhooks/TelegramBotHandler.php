@@ -104,7 +104,9 @@ class TelegramBotHandler extends WebhookHandler
     public function pickupList(): void
     {
         if ($this->isPrivateChat()) {
-            return $this->pickupListForChat($this->chat->chat_id);
+            $this->pickupListForChat($this->chat->chat_id);
+
+            return;
         }
 
         $buttons = [];
