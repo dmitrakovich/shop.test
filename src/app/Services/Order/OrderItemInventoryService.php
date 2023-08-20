@@ -237,4 +237,34 @@ class OrderItemInventoryService
     {
         return OrderItemInventoryNotificationLog::query()->find($id);
     }
+
+    /**
+     * Generate a pickup list for a specified private chat ID.
+     */
+    public function pickupList(int $privateChatId): string
+    {
+        /** @var Stock */
+        $stock = Stock::query()->with('privateChat:id,chat_id')
+            ->where('private_chat_id', $privateChatId)
+            ->first(['id', 'name', 'address']);
+        $pickupList = 'Забор на ' . date('d.m.Y') . ' магазин ' . $stock->name . ' ' . $stock->address;
+        $orderItemIds = OrderItemInventoryNotificationLog::query()
+            ->where('stock_id', $stock->id)
+            ->whereNotNull('picked_up_at')
+            ->whereNull('canceled_at')
+            ->whereNull('completed_at')
+            ->whereNull('returned_at')
+            ->pluck('order_item_id');
+        OrderItem::query()
+            ->with('product')
+            ->whereIn('id', $orderItemIds)
+            ->where('status_key', 'pickup')
+            ->each(function (OrderItem $orderItem) use (&$pickupList) {
+                $product = $orderItem->product;
+                $size = $orderItem->size;
+                $pickupList .= "\n - {$product->brand->name} {$product->sku} ({$product->id}), р. {$size->name}";
+            });
+
+        return $pickupList;
+    }
 }

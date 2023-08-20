@@ -14,6 +14,9 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
+ * @property int $id
+ * @property string $name
+ * @property string $address
  * @property-read TelegramChat $privateChat
  * @property-read TelegramChat $groupChat
  */

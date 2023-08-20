@@ -3,8 +3,11 @@
 namespace App\Http\Webhooks;
 
 use App\Enums\Bot\TelegramBotActions;
+use App\Models\Stock;
 use App\Services\Order\OrderItemInventoryService;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
+use DefStudio\Telegraph\Keyboard\Button;
+use DefStudio\Telegraph\Keyboard\Keyboard;
 use Illuminate\Support\Stringable;
 
 class TelegramBotHandler extends WebhookHandler
@@ -96,16 +99,56 @@ class TelegramBotHandler extends WebhookHandler
     }
 
     /**
-     * !!! Stub
+     * Send a pickup list to the appropriate chat or present store selection buttons.
      */
-    public function pickupList() : void
+    public function pickupList(): void
     {
-        $this->reply('выводит список моделей (без фото)
-            Забор на хх.хх.хххх магазин ХХХХХХ
-            - бренд артикул (код товара), размер
-            - бренд артикул (код товара), размер
-            - бренд артикул (код товара), размер');
+        if ($this->isPrivateChat()) {
+            return $this->pickupListForChat($this->chat->chat_id);
+        }
 
-        // Если в личном чате, то сразу ответ. Если в групповом чате в следующем сообщении “Выберите магазин” и кнопки с адресами магазинов.
+        $buttons = [];
+        Stock::query()->with('privateChat:id,chat_id')
+            ->where('group_chat_id', $this->chat->chat_id)
+            ->each(function (Stock $stock) use (&$buttons) {
+                $buttons[] = Button::make("{$stock->name} {$stock->address}")
+                    ->action(TelegramBotActions::PICKUP_LIST->value)
+                    ->param('chat_id', $stock->privateChat->chat_id);
+            });
+
+        $this->chat->message('Выберите магазин:')
+            ->keyboard(Keyboard::make()->buttons($buttons))
+            ->send();
+    }
+
+    /**
+     * Send a pickup list to a specified chat or the current chat.
+     */
+    public function pickupListForChat(?int $chatId = null): void
+    {
+        $this->replyWebhook();
+        $chatId ??= $this->data->get('chat_id');
+        $pickupList = $this->inventoryService->pickupList($chatId);
+        $this->chat->html($pickupList)->send();
+    }
+
+    /**
+     * Check if the current chat is a private chat.
+     */
+    private function isPrivateChat(): bool
+    {
+        $telegramChat = $this->message?->chat() ?? $this->callbackQuery?->message()?->chat();
+
+        return $telegramChat->type() === 'private';
+    }
+
+    /**
+     * Reply to a webhook with a specified message if applicable.
+     */
+    private function replyWebhook(string $message = 'ok'): void
+    {
+        if (isset($this->callbackQueryId)) {
+            $this->reply($message);
+        }
     }
 }

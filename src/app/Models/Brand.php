@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $name
+ */
 class Brand extends Model
 {
     use AttributeFilterTrait;
