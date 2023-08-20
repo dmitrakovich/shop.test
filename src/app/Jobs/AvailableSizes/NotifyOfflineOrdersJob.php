@@ -28,7 +28,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     public function __construct(private array $newStockItems)
     {
         $this->oldStockItems = AvailableSizes::get([
-            'product_id', 'stock_id', ...AvailableSizes::getSizeFields()
+            'product_id', 'stock_id', ...AvailableSizes::getSizeFields(),
         ])->toArray();
     }
 

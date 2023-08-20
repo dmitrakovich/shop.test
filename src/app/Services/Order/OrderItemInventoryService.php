@@ -34,7 +34,7 @@ class OrderItemInventoryService
      * Stocks priority (stock_id => priority)
      */
     private array $stocksPriority = [
-        Stock::MINKS_ID => -1
+        Stock::MINKS_ID => -1,
     ];
 
     /**
@@ -99,7 +99,7 @@ class OrderItemInventoryService
     /**
      * Update inventory based on the provided order items.
      *
-     * @param Collection<OrderItem> $orderItems
+     * @param  Collection<OrderItem>  $orderItems
      */
     public function updateInventory(Collection $orderItems): void
     {
@@ -159,7 +159,7 @@ class OrderItemInventoryService
     /**
      * Set priority for stocks based on the provided order items.
      *
-     * @param Collection<OrderItem> $orderItems
+     * @param  Collection<OrderItem>  $orderItems
      */
     private function setStocksPriority(Collection $orderItems): void
     {
@@ -203,6 +203,7 @@ class OrderItemInventoryService
             function (AvailableSizes $stock1, AvailableSizes $stock2) {
                 $stock1Priority = $this->stocksPriority[$stock1->stock_id] ?? 1;
                 $stock2Priority = $this->stocksPriority[$stock2->stock_id] ?? 1;
+
                 return $stock2Priority <=> $stock1Priority;
             },
             function (AvailableSizes $stock1, AvailableSizes $stock2) use ($sizeField) {
