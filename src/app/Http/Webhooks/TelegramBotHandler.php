@@ -104,18 +104,18 @@ class TelegramBotHandler extends WebhookHandler
     public function pickupList(): void
     {
         if ($this->isPrivateChat()) {
-            $this->pickupListForChat($this->chat->chat_id);
+            $this->pickupListForChat($this->chat->id);
 
             return;
         }
 
         $buttons = [];
         Stock::query()->with('privateChat:id,chat_id')
-            ->where('group_chat_id', $this->chat->chat_id)
+            ->where('group_chat_id', $this->chat->id)
             ->each(function (Stock $stock) use (&$buttons) {
                 $buttons[] = Button::make("{$stock->name} {$stock->address}")
                     ->action(TelegramBotActions::PICKUP_LIST->value)
-                    ->param('chat_id', $stock->privateChat->chat_id);
+                    ->param('chat_id', $stock->privateChat->id);
             });
 
         $this->chat->message('Выберите магазин:')
