@@ -25,6 +25,7 @@ class InstallmentOrderService
             'items' => fn ($query) => $query
                 ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
                 ->with('installment'),
+            'user' => fn ($query) => $query->with('lastAddress')
         ]);
         $spreadsheet = IOFactory::load(public_path('templates/installment_template.xlsx'));
         $firstName = ($order->first_name ?? $order->user->first_name ?? null);
@@ -72,16 +73,16 @@ class InstallmentOrderService
             $sheet->setCellValue('Z39', $order->user->passport->issued_by);
             $sheet->setCellValue('AH41', Carbon::parse($order->user->passport->issued_date)->translatedFormat('l, F j, Y'));
 
-            $sheet->setCellValue('Z43', null);
-            $sheet->setCellValue('AK43', null);
-            $sheet->setCellValue('AB44', $order->city ?? null);
-            $sheet->setCellValue('AC45', $order->user_addr ?? null);
-            $sheet->setCellValue('AP45', null);
-            $sheet->setCellValue('AW45', null);
-            $sheet->setCellValue('AB46', null);
+            $sheet->setCellValue('Z43', $order->user->lastAddress->region ?? null);
+            $sheet->setCellValue('AK43', $order->user->lastAddress->district ?? null);
+            $sheet->setCellValue('AB44', $order->user->lastAddress->city ?? null);
+            $sheet->setCellValue('AC45', $order->user->lastAddress->street ?? null);
+            $sheet->setCellValue('AP45', $order->user->lastAddress->house ?? null);
+            $sheet->setCellValue('AW45', $order->user->lastAddress->corpus ?? null);
+            $sheet->setCellValue('AB46', $order->user->lastAddress->room ?? null);
             $sheet->setCellValue('AH47', substr(trim($order->phone), -9, -7));
             $sheet->setCellValue('AL47', substr(trim($order->phone), -7));
-            $sheet->setCellValue('AK52', mb_strtoupper(substr($firstName, 0, 1)) . '.' . mb_strtoupper(substr($patronymicName, 0, 1)) . '. ' . $lastName);
+            $sheet->setCellValue('AK52', mb_strtoupper(mb_substr($firstName, 0, 1)) . '.' . mb_strtoupper(mb_substr($patronymicName, 0, 1)) . '. ' . $lastName);
 
             $item->installment->installment_form_file = $resultPath;
             $item->installment->save();

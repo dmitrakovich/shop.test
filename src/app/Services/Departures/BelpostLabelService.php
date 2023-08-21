@@ -16,7 +16,12 @@ class BelpostLabelService
      */
     public function createLabel(Order $order): string
     {
-        $order->load(['itemsExtended.installment', 'onlinePayments', 'delivery']);
+        $order->loadMissing([
+            'itemsExtended.installment',
+            'onlinePayments',
+            'delivery',
+            'user' => fn ($query) => $query->with('lastAddress')
+        ]);
 
         $totalCodSum = $order->getTotalCODSum();
         $resultPath = '/storage/departures/belpost_label/' . date('d-m-Y', strtotime('now')) . '/' . $order->id . '.xlsx';
@@ -34,10 +39,14 @@ class BelpostLabelService
         $sheet->setCellValue('BF22', $firstName);
         $sheet->setCellValue('BS22', $patronymicName);
 
-        $sheet->setCellValue('AT25', $order->user_addr ?? null);
-        $sheet->setCellValue('AS28', $order->zip ?? null);
-        $sheet->setCellValue('BC28', $order->city ?? null);
-        $sheet->setCellValue('AS30', $order->region ?? null);
+        $sheet->setCellValue('AW25', $order->user->lastAddress->street ?? null);
+        $sheet->setCellValue('BP25', $order->user->lastAddress->house ?? null);
+        $sheet->setCellValue('CB25', $order->user->lastAddress->corpus ?? null);
+        $sheet->setCellValue('CI25', $order->user->lastAddress->room ?? null);
+        $sheet->setCellValue('AS28', $order->user->lastAddress->zip ?? null);
+        $sheet->setCellValue('BC28', $order->user->lastAddress->city ?? null);
+        $sheet->setCellValue('AS30', $order->user->lastAddress->district ?? null);
+        $sheet->setCellValue('AS33', $order->user->lastAddress->region ?? null);
 
         $sheet->setCellValue('D20', null);
         $sheet->setCellValue('D22', null);
