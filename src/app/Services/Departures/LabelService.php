@@ -15,7 +15,7 @@ class LabelService
             'itemsExtended.installment',
             'onlinePayments',
             'delivery',
-            'user' => fn ($query) => $query->with('lastAddress')
+            'user' => fn ($query) => $query->with('lastAddress'),
         ])->first();
         $labelService = new BelpostLabelService;
 
