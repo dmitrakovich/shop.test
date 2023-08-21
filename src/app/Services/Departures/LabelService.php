@@ -11,7 +11,12 @@ class LabelService
      */
     public function createLabel(int $orderId): string
     {
-        $order = Order::where('id', $orderId)->with(['user.passport', 'itemsExtended'])->first();
+        $order = Order::where('id', $orderId)->with([
+            'itemsExtended.installment',
+            'onlinePayments',
+            'delivery',
+            'user' => fn ($query) => $query->with('lastAddress'),
+        ])->first();
         $labelService = new BelpostLabelService;
 
         return $labelService->createLabel($order);

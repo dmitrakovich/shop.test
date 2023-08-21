@@ -33,6 +33,7 @@ class InstallmentForm extends Action
             'items' => fn ($query) => $query
                 ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
                 ->with('installment'),
+            'user' => fn ($query) => $query->with('lastAddress'),
         ])->first();
 
         if (!count($order->items)) {
