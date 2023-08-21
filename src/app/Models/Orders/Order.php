@@ -353,11 +353,10 @@ class Order extends Model
     {
         $deliveryPrice = $this->delivery_price ? $this->delivery_price : 0;
         $onlinePaymentsSum = $this->getAmountPaidOrders();
-
         if ((int)$this->payment_id === Installment::PAYMENT_METHOD_ID) {
-            return $this->getInstallmentMonthlyFeeSum() - $onlinePaymentsSum;
+            return $this->getInstallmentMonthlyFeeSum() + $deliveryPrice - $onlinePaymentsSum;
         } else {
-            return $this->getItemsPrice() - $onlinePaymentsSum;
+            return $this->getItemsPrice() + $deliveryPrice - $onlinePaymentsSum;
         }
     }
 
