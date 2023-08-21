@@ -19,8 +19,8 @@ class BatchService
             [
                 'orders' => fn ($query) => $query->with([
                     'items',
-                    'user' => fn ($q) => $q->with('lastAddress')
-                ])
+                    'user' => fn ($q) => $q->with('lastAddress'),
+                ]),
             ]
         );
         $price = 11.46;
@@ -60,7 +60,7 @@ class BatchService
                 null, // Зарезервировано (AE)
                 null, // Зарезервировано (AF)
                 $order->phohe, // Телефон получателя (AG)
-                $order->email // Эл. адрес получателя (AH)
+                $order->email, // Эл. адрес получателя (AH)
             ];
         }
         array_unshift($result, [
@@ -74,7 +74,7 @@ class BatchService
             0, // Договорной тариф (H) (0– отсутствие тарифа 1 – наличие тарифа)
             1, // Наложенный платеж без объявленной ценности (I) (0 – отсутствие отметки 1 – наличие отметки)
             375291793790, // Телефон отправителя (J)
-            'info@barocco.by' // Электронный адрес отправителя (K)
+            'info@barocco.by', // Электронный адрес отправителя (K)
         ]);
         $fp = fopen(public_path($resultPath), 'w');
         foreach ($result as $fields) {

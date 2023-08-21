@@ -20,7 +20,7 @@ class BelpostLabelService
             'itemsExtended.installment',
             'onlinePayments',
             'delivery',
-            'user' => fn ($query) => $query->with('lastAddress')
+            'user' => fn ($query) => $query->with('lastAddress'),
         ]);
 
         $totalCodSum = $order->getTotalCODSum();
