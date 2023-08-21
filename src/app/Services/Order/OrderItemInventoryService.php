@@ -254,7 +254,8 @@ class OrderItemInventoryService
         $pickupList = 'Забор на ' . date('d.m.Y') . ' магазин ' . $stock->name . ' ' . $stock->address;
         $orderItemIds = OrderItemInventoryNotificationLog::query()
             ->where('stock_id', $stock->id)
-            ->whereNotNull('picked_up_at')
+            ->whereNotNull('collected_at')
+            ->whereNull('picked_up_at')
             ->whereNull('canceled_at')
             ->whereNull('completed_at')
             ->whereNull('returned_at')
@@ -262,7 +263,7 @@ class OrderItemInventoryService
         OrderItem::query()
             ->with('product')
             ->whereIn('id', $orderItemIds)
-            ->where('status_key', 'pickup')
+            ->where('status_key', 'collect')
             ->each(function (OrderItem $orderItem) use (&$pickupList) {
                 $product = $orderItem->product;
                 $size = $orderItem->size;
