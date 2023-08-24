@@ -38,7 +38,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
- * @property-read Collection|AvailableSizes[] $sizesAvailability
+ * @property-read Collection|AvailableSizes[] $availableSizes
  * ...
  */
 class Product extends Model implements HasMedia
