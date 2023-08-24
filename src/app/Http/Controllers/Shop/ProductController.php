@@ -35,7 +35,7 @@ class ProductController extends BaseController
         $product = Product::with([
             'tags',
             'category',
-            'availableSizes' => fn ($q) => $q->with(['stock' => fn ($q) => $q->with('city')])
+            'availableSizes' => fn ($q) => $q->with(['stock' => fn ($q) => $q->with('city')]),
         ])->withTrashed()->findOrFail($id);
         $this->gtmService->setViewForProduct($product);
         $this->productService->addToRecent($product->id);
