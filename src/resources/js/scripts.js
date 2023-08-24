@@ -14,6 +14,7 @@ let sessionTime = sessionStorage.getItem(SESSION_TIME_KEY) ?? 0;
 setInterval(() => sessionStorage.setItem(SESSION_TIME_KEY, ++sessionTime), 1000);
 
 $(function () {
+  $('[data-toggle="tooltip"]').tooltip();
   // скрытие
   $('.overlay').on('click', function () {
     $('#mainMenu, .overlay').removeClass('active');

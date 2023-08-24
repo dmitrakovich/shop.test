@@ -32,7 +32,11 @@ class ProductController extends BaseController
      */
     public function show(int $id): View
     {
-        $product = Product::with(['tags', 'category'])->withTrashed()->findOrFail($id);
+        $product = Product::with([
+            'tags',
+            'category',
+            'availableSizes' => fn ($q) => $q->with(['stock' => fn ($q) => $q->with('city')])
+        ])->withTrashed()->findOrFail($id);
         $this->gtmService->setViewForProduct($product);
         $this->productService->addToRecent($product->id);
         $this->setProductUrlToFeedback();
