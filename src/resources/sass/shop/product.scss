@@ -10,18 +10,22 @@
             font-weight: 300;
             font-size: 31px;
             line-height: 30px;
+
             &.price-old {
                 text-decoration-line: line-through;
                 color: #767676;
             }
+
             &.price-new {
                 color: #D22020;
             }
         }
     }
+
     &.fancybox-content {
         max-width: 75%;
     }
+
     &__slider {
         position: relative;
         flex-direction: column;
@@ -56,13 +60,16 @@
                 height: 20px;
                 transform: rotate(90deg);
             }
+
             .swiper-button-prev {
                 top: 0;
             }
+
             .swiper-button-next {
                 top: auto;
                 bottom: 0;
             }
+
             .swiper-slide {
                 width: 100px;
                 height: 100px;
@@ -129,6 +136,92 @@
 
             &.active {
                 border: 1px solid #000;
+            }
+        }
+    }
+
+    &__stock {
+
+        &-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+
+            &_icon {
+                display: inline-flex;
+                position: relative;
+                width: 12px;
+                height: 12px;
+                margin: 0 0 0 12px;
+            }
+
+            &.collapsed &_icon:after {
+                transform: rotate(135deg) translateY(0);
+            }
+
+            &_icon:after {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                left: 0;
+                display: block;
+                width: 8px;
+                height: 8px;
+                border-right: 1px solid #000;
+                border-top: 1px solid #000;
+                transform: rotate(315deg) translateY(4px);
+                transition: border-color 0.2s;
+                content: "";
+            }
+        }
+
+        &-list {
+            display: flex;
+            flex-direction: column;
+            margin: 0 0 12px;
+        }
+
+        &-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e5e5;
+            font-size: 14px;
+            padding: 5px 0;
+            line-height: 100%;
+            gap: 20px;
+        }
+
+        &-name {
+
+            &_address {
+                display: inline-block;
+                font-size: 12px;
+                margin: 0 0 5px;
+                color: #B9B9B9;
+            }
+        }
+
+        &-values {
+            word-spacing: 6px;
+            text-align: right;
+            line-height: 140%;
+        }
+
+        &-text {
+            font-size: 14px;
+            line-height: 140%;
+            margin: 0 0 8px;
+
+            a {
+                text-decoration: underline;
+                font-weight: 700;
+
+                &[href^="tel:"] {
+                    font-weight: 400;
+                }
             }
         }
     }

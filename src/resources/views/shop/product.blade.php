@@ -74,7 +74,7 @@
                         <div class="col-6 text-muted">
                             {{ $product->shortName() }}
                         </div>
-                        <div class="col-6 text-right rating-result">
+                        <div class="col-6 rating-result text-right">
                             @for ($i = 1; $i <= 5; $i++)
                                 <span class="star {{-- $frating >= $i ? 'active' : '' --}}"></span>
                             @endfor
@@ -93,24 +93,24 @@
 
                         <div class="col-12 price-block mt-3">
                             <div class="row">
-                                <div class="col-auto price price-new">
+                                <div class="price price-new col-auto">
                                     {!! $product->getFormattedPrice() !!}
                                 </div>
                                 @if ($product->hasDiscount())
-                                    <div class="col-auto price price-old">
+                                    <div class="price price-old col-auto">
                                         {!! $product->getFormattedOldPrice() !!}
                                     </div>
                                 @endif
 
                                 @if ($product->hasDiscount())
-                                    <div class="col-auto price price-new font-weight-bold">
+                                    <div class="price price-new font-weight-bold col-auto">
                                         <b>-{{ $product->getSalePercentage() }}%</b>
                                     </div>
                                     <button type="button" class="btn sale-help-trigger px-1"
                                         data-toggle="dropdown">
                                         <div class="tooltip-trigger">?</div>
                                     </button>
-                                    <div class="dropdown-menu px-3 py-2 font-size-12 sale-help-block">
+                                    <div class="dropdown-menu font-size-12 sale-help-block px-3 py-2">
                                         @foreach ($product->getSales() as $sale)
                                             <p>
                                                 <span>{{ $sale->label }}&nbsp;</span>
@@ -129,8 +129,8 @@
 
                     <div class="row my-3">
                         @if (!empty(($generalSale = $product->getSale('general_sale'))))
-                            <div class="col-12 py-3 py-xl-4 text-center">
-                                <div class="row py-3 align-items-center bg-danger">
+                            <div class="col-12 py-xl-4 py-3 text-center">
+                                <div class="row align-items-center bg-danger py-3">
                                     <div class="col-12 mb-2">
                                         <div class="flex-fill font-weight-bold text-uppercase">
                                             {{ $generalSale->label }}
@@ -153,7 +153,7 @@
                         <h4 class="h4 mb-5">Нет в наличии</h4>
                     @else
                         <div class="row mb-4">
-                            <div class="col-12 px-0 px-md-2 product-size">
+                            <div class="col-12 px-md-2 product-size px-0">
                                 <div class="row justify-content-between">
                                     <div class="col-auto">
                                         <span class="text-muted">Выберите размер:</span>
@@ -165,7 +165,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <ul class="p-0 mt-3 js-sizes">
+                                <ul class="js-sizes mt-3 p-0">
                                     @foreach ($product->sizes as $size)
                                         <li class="d-inline-block pr-2">
                                             <label for="input-size-{{ $size->id }}" class="check">
@@ -183,18 +183,18 @@
                         <div class="row justify-content-center">
                             <div class="col-12">
                                 <button type="button"
-                                    class="btn btn-dark btn-lg btn-block py-3 js-add-to-cart">
+                                    class="btn btn-dark btn-lg btn-block js-add-to-cart py-3">
                                     В КОРЗИНУ
                                 </button>
                                 <button type="button"
-                                    class="btn btn-outline-dark btn-lg btn-block py-3 js-buy-one-click">
+                                    class="btn btn-outline-dark btn-lg btn-block js-buy-one-click py-3">
                                     КУПИТЬ В ОДИН КЛИК
                                 </button>
                             </div>
                         </div>
                     @endif
 
-                    <div class="col-12 text-left text-muted mt-5">
+                    <div class="col-12 text-muted mt-5 text-left">
                         <p>
                             <img src="/images/icons/installments.svg" role="presentation" class="pr-2">
                             Без переплат в рассрочку
@@ -231,13 +231,53 @@
                         </div>
                     @endif
                 </form>
+                @if (!empty($product->availableSizes))
+                    <div class="p-product__stock col-12 mt-4">
+                        <h4 class="p-product__stock-title" data-toggle="collapse"
+                            href="#productStockInfo" role="button" aria-expanded="false"
+                            aria-controls="productStockInfo">
+                            Наличие в магазинах
+                            <span class="p-product__stock-title_icon"></span>
+                        </h4>
+                        <div class="show collapse" id="productStockInfo">
+                            <div class="p-product__stock-list">
+                                @foreach ($product->availableSizes as $availableSize)
+                                    <div class="p-product__stock-item">
+                                        <div class="p-product__stock-name" data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="{{ $availableSize?->stock?->address }}">
+                                            <span class="p-product__stock-name_address">
+                                                г. {{ $availableSize?->stock?->city?->name }}</span>
+                                            <div>{{ $availableSize?->stock?->name }}</div>
+                                        </div>
+                                        <div class="p-product__stock-values">
+                                            {{ $availableSize->getFormattedSizes() }}
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <p class="p-product__stock-text">
+                                Обращаем ваше внимание, что размеры обуви, находящиеся в магазинах, также
+                                доступны и для
+                                заказа через интернет-магазин. Для этого свяжитесь с менеджером по
+                                телефону:
+                                <a
+                                    href="{{ config('contacts.phone.link') }}">{{ config('contacts.phone.name') }}</a>,
+                                <a
+                                    href="{{ config('contacts.phone2.link') }}">{{ config('contacts.phone2.name') }}</a>
+                            </p>
+                            <p class="p-product__stock-text">Контакты магазинов можно посмотреть по <a
+                                    href="{{ route('static-shops') }}">ссылке</a>.</p>
+                        </div>
+                    </div>
+                @endif
 
             </div>
         </div>
 
         @if ($product->trashed() && !empty($similarProducts) && count($similarProducts))
             <div class="row">
-                <div class="col-md-12 mt-3 mb-5">
+                <div class="col-md-12 mb-5 mt-3">
                     @include('partials.index.simple-slider', [
                         'simpleSlider' => $similarProducts,
                     ])
@@ -245,7 +285,7 @@
             </div>
         @endif
 
-        <div class="row my-5 product-description">
+        <div class="row product-description my-5">
             <div class="col-12 font-size-15 mb-1">
                 ОПИСАНИЕ
             </div>
@@ -258,7 +298,7 @@
                     <div>
                         @foreach ($product->tags as $tag)
                             <a href="{{ (isset($product->category->path) ? '/' . $product->category->path : route('shop')) . '/' . $tag->slug }}"
-                                class="bg-dark text-white py-0 px-2 m-1 d-inline-flex alight-items-center"
+                                class="bg-dark d-inline-flex alight-items-center m-1 px-2 py-0 text-white"
                                 title="{{ ($product->category->name ?? '') . ' ' . ($tag->seo ?? $tag->name) }}">{{ $tag->name }}</a>
                         @endforeach
                     </div>
@@ -313,7 +353,7 @@
             </div>
             <div class="col-auto">
                 <button type="button"
-                    class="btn btn-link px-0 text-decoration-underline font-weight-bold js-leave-feedback-btn">
+                    class="btn btn-link text-decoration-underline font-weight-bold js-leave-feedback-btn px-0">
                     ОСТАВИТЬ ОТЗЫВ О СВОЕЙ ПОКУПКЕ
                 </button>
             </div>
@@ -321,14 +361,14 @@
         <div class="col-12 mt-3">
             @include('includes.feedbacks')
         </div>
-        <div class="col-12 px-0 mb-4 text-right">
+        <div class="col-12 mb-4 px-0 text-right">
             <a href="{{ route('feedbacks') }}" class="text-decoration-underline">
                 Смотреть все отзывы
             </a>
         </div>
 
         @if (!$product->trashed() && !empty($similarProducts) && count($similarProducts))
-            <div class="col-md-12 mt-3 mb-5">
+            <div class="col-md-12 mb-5 mt-3">
                 @include('partials.index.simple-slider', [
                     'simpleSlider' => $similarProducts,
                 ])
