@@ -293,6 +293,23 @@ class OrderController extends AdminController
             });
         }
 
+        $form->submitted(function (Form $form) {
+            $statusKey = request()->input('status_key');
+            if ($statusKey === 'packaging') {
+                $addressApprove = Order::where('id', $form->model()->id)->whereHas('user', fn ($query) => $query->whereHas('lastAddress', fn ($q) => $q->where('approve', 1)))->exists();
+                if (!$addressApprove) {
+                    $error = new \Illuminate\Support\MessageBag([
+                        'message' => 'Введите и подтвердите адрес доставки',
+                    ]);
+                    if (request()->ajax() && !request()->pjax()) {
+                        return response()->json(["errors" => [
+                            "address" => $error->first()
+                        ]], 422);
+                    }
+                    return redirect()->back()->with(['error' => $error])->withInput();
+                }
+            }
+        });
         $form->saving(function (Form $form) {
             CurrencyFacade::setCurrentCurrency($form->input('currency'), false);
             foreach ($form->itemsExtended ?? [] as $key => $item) {
