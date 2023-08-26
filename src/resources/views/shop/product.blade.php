@@ -233,21 +233,18 @@
                 </form>
                 @if (!empty($product->availableSizes))
                     <div class="p-product__stock col-12 mt-4">
-                        <h4 class="p-product__stock-title" data-toggle="collapse"
-                            href="#productStockInfo" role="button" aria-expanded="false"
-                            aria-controls="productStockInfo">
+                        <h4 class="p-product__stock-title collapsed" data-toggle="collapse" href="#productStockInfo"
+                            role="button" aria-expanded="false" aria-controls="productStockInfo">
                             Наличие в магазинах
                             <span class="p-product__stock-title_icon"></span>
                         </h4>
-                        <div class="show collapse" id="productStockInfo">
+                        <div class="collapse" id="productStockInfo">
                             <div class="p-product__stock-list">
                                 @foreach ($product->availableSizes as $availableSize)
                                     <div class="p-product__stock-item">
-                                        <div class="p-product__stock-name" data-toggle="tooltip"
-                                            data-placement="top"
-                                            title="{{ $availableSize?->stock?->address }}">
+                                        <div class="p-product__stock-name">
                                             <span class="p-product__stock-name_address">
-                                                г. {{ $availableSize?->stock?->city?->name }}</span>
+                                                {{ $availableSize?->stock?->address }}</span>
                                             <div>{{ $availableSize?->stock?->name }}</div>
                                         </div>
                                         <div class="p-product__stock-values">
@@ -256,16 +253,6 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <p class="p-product__stock-text">
-                                Обращаем ваше внимание, что размеры обуви, находящиеся в магазинах, также
-                                доступны и для
-                                заказа через интернет-магазин. Для этого свяжитесь с менеджером по
-                                телефону:
-                                <a
-                                    href="{{ config('contacts.phone.link') }}">{{ config('contacts.phone.name') }}</a>,
-                                <a
-                                    href="{{ config('contacts.phone2.link') }}">{{ config('contacts.phone2.name') }}</a>
-                            </p>
                             <p class="p-product__stock-text">Контакты магазинов можно посмотреть по <a
                                     href="{{ route('static-shops') }}">ссылке</a>.</p>
                         </div>
