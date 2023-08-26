@@ -302,10 +302,11 @@ class OrderController extends AdminController
                         'message' => 'Введите и подтвердите адрес доставки',
                     ]);
                     if (request()->ajax() && !request()->pjax()) {
-                        return response()->json(["errors" => [
-                            "address" => $error->first()
+                        return response()->json(['errors' => [
+                            'address' => $error->first(),
                         ]], 422);
                     }
+
                     return redirect()->back()->with(['error' => $error])->withInput();
                 }
             }

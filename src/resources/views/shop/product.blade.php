@@ -233,8 +233,9 @@
                 </form>
                 @if (!empty($product->availableSizes))
                     <div class="p-product__stock col-12 mt-4">
-                        <h4 class="p-product__stock-title collapsed" data-toggle="collapse" href="#productStockInfo"
-                            role="button" aria-expanded="false" aria-controls="productStockInfo">
+                        <h4 class="p-product__stock-title collapsed" data-toggle="collapse"
+                            href="#productStockInfo" role="button" aria-expanded="false"
+                            aria-controls="productStockInfo">
                             Наличие в магазинах
                             <span class="p-product__stock-title_icon"></span>
                         </h4>
