@@ -106,27 +106,24 @@ class OrderItemInventoryService
         $this->setStocksPriority($orderItems);
 
         $orderItems->each(function (OrderItem $orderItem) {
-            $this->deductSizeFromInventory(
-                $orderItem,
-                $orderItem->product_id,
-                $orderItem->size_id,
-                $orderItem->count
-            );
+            $this->deductSizeFromInventory($orderItem);
         });
     }
 
     /**
      * Deducts the size from the inventory after a purchase.
      */
-    private function deductSizeFromInventory(OrderItem $orderItem, int $productId, int $sizeId, int $count): void
+    public function deductSizeFromInventory(OrderItem $orderItem, ?int $stockId = null): void
     {
         $totalAvailableCount = 0;
+        $count = $orderItem->count;
         $singleNotification = $orderItem->inventoryNotification;
-        $sizeField = AvailableSizes::convertSizeIdToField($sizeId);
+        $sizeField = AvailableSizes::convertSizeIdToField($orderItem->size_id);
 
         $availableSizes = AvailableSizes::query()
             ->with(['stock:id'])
-            ->where('product_id', $productId)
+            ->where('product_id', $orderItem->product_id)
+            ->when($stockId, fn (Builder $query) => $query->where('stock_id', $stockId))
             ->where($sizeField, '>', 0)
             ->get(['id', 'stock_id', $sizeField])
             ->sortByDesc($this->getStocksPriority($sizeField));
@@ -152,7 +149,7 @@ class OrderItemInventoryService
         }
 
         if ($totalAvailableCount <= 0) {
-            $this->removeSizeFromCatalog($productId, $sizeId);
+            $this->removeSizeFromCatalog($orderItem->product_id, $orderItem->size_id);
         }
     }
 

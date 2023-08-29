@@ -13,6 +13,7 @@ use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
 use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
+use App\Models\AvailableSizes;
 use App\Models\Currency;
 use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
@@ -24,7 +25,9 @@ use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\Product;
 use App\Models\Size;
+use App\Models\Stock;
 use App\Models\User\User;
+use App\Services\Order\OrderItemInventoryService;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
@@ -36,6 +39,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Payments\PaymentMethod;
 
 class OrderController extends AdminController
@@ -240,10 +244,12 @@ class OrderController extends AdminController
             });
         });
 
-        $form->tab('Товары', function ($form) {
+        $form->tab('Товары', function (Form $form) {
             $form->hasMany('itemsExtended', 'Товары', function (Form\NestedForm $nestedForm) {
-                $nestedForm->hidden('id')->addElementClass('order-item-id');
+                /** @var OrderItemExtended */
+                $orderItem = $nestedForm->model();
                 $currencyCode = $nestedForm->getForm()->model()->currency;
+                $nestedForm->hidden('id')->addElementClass('order-item-id');
                 $nestedForm->select('product_id', 'Код товара')
                     ->options(function ($id) {
                         return [$id => $id];
@@ -253,6 +259,10 @@ class OrderController extends AdminController
                 $nestedForm->hidden('buy_price')->default(0);
                 $nestedForm->hidden('price');
                 $nestedForm->display('product_link', 'Название модели');
+                $nestedForm->select('stock_id', 'Склад')
+                    ->options($this->getStockListClosure($orderItem))
+                    ->addElementClass($orderItem?->status_key === 'new' ? [] : ['disabled'])
+                    ->required();
                 $nestedForm->image('product_photo', 'Фото товара')->readonly();
                 $nestedForm->select('size_id', 'Размер')->options(function ($id) {
                     if ($size = Size::find($id)) {
@@ -330,6 +340,8 @@ class OrderController extends AdminController
         });
 
         $form->saved(function (Form $form) {
+            $this->updateInventory($form);
+
             if ((int)$form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
                 $this->saveInstallments($form);
             }
@@ -494,6 +506,56 @@ class OrderController extends AdminController
     }
 
     /**
+     * Get a closure for retrieving a list of stocks based on the provided order item.
+     */
+    private function getStockListClosure(?OrderItemExtended $orderItem): \Closure
+    {
+        if (!$orderItem) {
+            return fn () => null;
+        }
+        $sizeField = AvailableSizes::convertSizeIdToField($orderItem->size_id);
+        $stockIds = AvailableSizes::query()
+            ->where('product_id', $orderItem->product_id)
+            ->where($sizeField, '>', 0)
+            ->pluck('stock_id')
+            ->toArray();
+
+        return function ($stockId) use ($stockIds) {
+            $stockIds[] = $stockId;
+            return Stock::whereIn('id', $stockIds)->pluck('internal_name', 'id');
+        };
+    }
+
+    /**
+     * Update inventory based on the changes in the provided form.
+     */
+    private function updateInventory(Form $form): void
+    {
+        $inventoryService = app(OrderItemInventoryService::class);
+        $prevItemsState = $form->model()->itemsExtended->keyBy('id');
+        $currentItemsState = $form->model()->itemsExtended()->get()->keyBy('id');
+
+        foreach ($form->itemsExtended as $item) {
+            if ($item[Form::REMOVE_FLAG_NAME]) {
+                unset($prevItemsState[$item['id']]);
+                continue;
+            }
+            $prevStockId = $item['id'] ? $prevItemsState[$item['id']]->inventoryNotification?->stock_id : 0;
+            $currentStockId = intval($item['stock_id'] ?? 0);
+            if (empty($item['id'])) {
+                $newOrderItem = $currentItemsState
+                    ->where('product_id', $item['product_id'])
+                    ->where('size_id', $item['size_id'])
+                    ->first();
+                $inventoryService->deductSizeFromInventory($newOrderItem, $currentStockId);
+            } elseif ($currentStockId !== $prevStockId && !empty($currentStockId)) {
+                $prevItemsState[$item['id']]->inventoryNotification?->delete();
+                $inventoryService->deductSizeFromInventory($currentItemsState[$item['id']], $currentStockId);
+            }
+        }
+    }
+
+    /**
      * Js crutch
      */
     protected function getScriptForExtendedItems(): string
@@ -504,6 +566,7 @@ class OrderController extends AdminController
 $(function () {
     // disable editing for current items in order
     $('select.product_id').attr('disabled', true);
+    $('select.stock_id.disabled').attr('disabled', true);
 
     // prepare current images
     $('#has-many-itemsExtended .file-input').each(function (index, element) {

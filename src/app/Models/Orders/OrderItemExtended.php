@@ -5,7 +5,14 @@ namespace App\Models\Orders;
 /**
  * class OrderItemExtended
  *
- * @property-read OrderItemStatus $status
+ * @property-read string $product_name
+ * @property-read string $product_link
+ * @property-read string $product_photo
+ * @property-read int|null $installment_contract_number
+ * @property-read float|null $installment_monthly_fee
+ * @property-read bool|null $installment_send_notifications
+ * @property-read int|null $stock_id
+ * @property-read string|null $stock_name
  */
 class OrderItemExtended extends OrderItem
 {
@@ -16,6 +23,8 @@ class OrderItemExtended extends OrderItem
         'installment_contract_number',
         'installment_monthly_fee',
         'installment_send_notifications',
+        'stock_id',
+        'stock_name',
     ];
 
     /**
@@ -93,5 +102,25 @@ class OrderItemExtended extends OrderItem
     public function getInstallmentSendNotificationsAttribute(): ?bool
     {
         return $this->installment?->send_notifications;
+    }
+
+    /**
+     * Get the order's item's stock id.
+     */
+    public function getStockIdAttribute(): ?int
+    {
+        return $this->inventoryNotification?->stock_id;
+    }
+
+    /**
+     * Get the order's item's stock name.
+     */
+    public function getStockNameAttribute(): ?string
+    {
+        if (empty($stock = $this->inventoryNotification?->stock)) {
+            return null;
+        }
+
+        return $stock->name . ' ' . $stock->address;
     }
 }
