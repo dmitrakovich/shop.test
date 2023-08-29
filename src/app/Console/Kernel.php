@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new LeaveFeedbackAfterOrderJob)->dailyAt('09:15');
 
         $schedule->command('rating:update')->withoutOverlapping()->cron('15 5,11,17,23 * * *');
-        $schedule->command('inventory:update')->withoutOverlapping()->hourly();
+        $schedule->command('inventory:update')->withoutOverlapping()->everyFifteenMinutes();
 
         $schedule->command('backup:run')->dailyAt('01:00');
         $schedule->command('backup:media')->weeklyOn(Schedule::MONDAY, '03:00');
