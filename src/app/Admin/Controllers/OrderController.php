@@ -260,15 +260,11 @@ class OrderController extends AdminController
                 $nestedForm->hidden('price');
                 $nestedForm->display('product_link', 'Название модели');
                 $nestedForm->select('stock_id', 'Склад')
-                    ->options($this->getStockListClosure($orderItem))
+                    ->options(['загрузка...'])
                     ->addElementClass($orderItem?->status_key === 'new' ? [] : ['disabled'])
                     ->required();
                 $nestedForm->image('product_photo', 'Фото товара')->readonly();
-                $nestedForm->select('size_id', 'Размер')->options(function ($id) {
-                    if ($size = Size::find($id)) {
-                        return [$size->id => $size->name];
-                    }
-                })->required();
+                $nestedForm->select('size_id', 'Размер')->options(['загрузка...'])->required();
                 $nestedForm->select('status_key', 'Статус модели')
                     ->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'))
                     ->default(OrderItemStatus::DEFAULT_VALUE)
@@ -506,27 +502,6 @@ class OrderController extends AdminController
     }
 
     /**
-     * Get a closure for retrieving a list of stocks based on the provided order item.
-     */
-    private function getStockListClosure(?OrderItemExtended $orderItem): \Closure
-    {
-        if (!$orderItem) {
-            return fn () => null;
-        }
-        $sizeField = AvailableSizes::convertSizeIdToField($orderItem->size_id);
-        $stockIds = AvailableSizes::query()
-            ->where('product_id', $orderItem->product_id)
-            ->where($sizeField, '>', 0)
-            ->pluck('stock_id')
-            ->toArray();
-
-        return function ($stockId) use ($stockIds) {
-            $stockIds[] = $stockId;
-            return Stock::whereIn('id', $stockIds)->pluck('internal_name', 'id');
-        };
-    }
-
-    /**
      * Update inventory based on the changes in the provided form.
      */
     private function updateInventory(Form $form): void
@@ -603,6 +578,29 @@ $(function () {
                 $(sizesSelectElement).val(sizesSelectElement.data('value'));
             }
             $(sizesSelectElement).trigger('change');
+        });
+    });
+
+    // size changing
+    $(document).on('change', '.itemsExtended.size_id', function () {
+        const itemBlock = $(this).parents('.has-many-itemsExtended-form');
+        const stocksSelectElement = itemBlock.find('select.stock_id');
+        const payload = {
+            productId: itemBlock.find('.product_id').val(),
+            sizeId: $(this).val(),
+            orderItemId: itemBlock.find('.order-item-id').val()
+        };
+        $.get('/api/stocks', payload, function (stocks) {
+            stocksSelectElement.find('option').remove();
+            $(stocksSelectElement).select2({
+                placeholder: 'Выбрать',
+                allowClear: true,
+                data: stocks
+            });
+            if (stocksSelectElement.data('value')) {
+                $(stocksSelectElement).val(stocksSelectElement.data('value'));
+            }
+            $(stocksSelectElement).trigger('change');
         });
     });
 
