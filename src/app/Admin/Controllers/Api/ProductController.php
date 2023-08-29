@@ -30,7 +30,7 @@ class ProductController extends Controller
     public function getProductDataById(Request $request): array
     {
         /** @var Product */
-        $product = Product::findOrFail($request->input('productId'));
+        $product = Product::withTrashed()->findOrFail($request->input('productId'));
         $sizes = $product->sizes()->get(['id', 'name as text'])->keyBy('id')->toArray();
 
         if ($orderItemId = $request->input('orderItemId')) {
