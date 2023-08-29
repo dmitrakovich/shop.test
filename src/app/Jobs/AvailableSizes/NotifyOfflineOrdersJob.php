@@ -105,7 +105,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
             'status_key' => 'complete',
         ])->setRelation('inventoryNotification', $notification);
 
-        $chat->notify(new OrderItemInventoryNotification($orderItem));
+        $chat->notifyNow(new OrderItemInventoryNotification($orderItem));
     }
 
     /**
