@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Collection extends Model
 {
-    use HasFactory, AttributeFilterTrait;
+    use AttributeFilterTrait, HasFactory;
 
     protected static function getRelationColumn()
     {

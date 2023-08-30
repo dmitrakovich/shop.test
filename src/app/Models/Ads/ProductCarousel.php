@@ -12,9 +12,9 @@ use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 
 class ProductCarousel extends Model implements Sortable
 {
-    use SortableTrait;
     use HasFactory;
     use HasJsonRelationships;
+    use SortableTrait;
 
     public static function boot()
     {

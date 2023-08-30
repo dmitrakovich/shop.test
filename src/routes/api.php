@@ -35,6 +35,5 @@ Route::middleware('throttle:none')->group(function () {
     Route::get('stocks', [StocksController::class, 'get']);
 });
 
-
 // Route::post('croppic/save', [CropperController::class, 'save']);
 Route::post('croppic/crop', [CropperController::class, 'crop']);

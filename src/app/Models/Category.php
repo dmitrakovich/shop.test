@@ -24,7 +24,7 @@ use Kalnoy\Nestedset\NodeTrait;
  */
 class Category extends Model
 {
-    use SoftDeletes, NodeTrait, AttributeFilterTrait;
+    use AttributeFilterTrait, NodeTrait, SoftDeletes;
 
     public $timestamps = false;
 

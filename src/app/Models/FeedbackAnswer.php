@@ -12,8 +12,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class FeedbackAnswer extends Model implements HasMedia
 {
     use HasFactory;
-    use SoftDeletes;
     use InteractsWithMedia;
+    use SoftDeletes;
 
     /**
      * Размеры изображений

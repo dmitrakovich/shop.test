@@ -43,11 +43,11 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Product extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+    use ProductSales;
     use SoftDeletes {
         restore as restoreSoftDeletes;
     }
-    use ProductSales;
-    use InteractsWithMedia;
 
     /**
      * Default sorting
