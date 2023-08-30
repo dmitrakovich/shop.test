@@ -506,6 +506,9 @@ class OrderController extends AdminController
      */
     private function updateInventory(Form $form): void
     {
+        if (empty($form->itemsExtended)) {
+            return;
+        }
         $inventoryService = app(OrderItemInventoryService::class);
         $prevItemsState = $form->model()->itemsExtended->keyBy('id');
         $currentItemsState = $form->model()->itemsExtended()->get()->keyBy('id');

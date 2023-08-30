@@ -1,9 +1,9 @@
 SC189 - склады
 SC418 - продукты
 SC524 - бренды
-SC6021 - остатки
+SC5925 - остатки
 
-#==TABLE no SC6021: Справочник ОстаткиТоваров     
+#==TABLE no SC5925: Справочник ОстаткиТоваров     
 #-----Fields-------
 # Name      |Descr               |Type|Length|Precision
 F=ID        |ID object           |C   |9     |0        
