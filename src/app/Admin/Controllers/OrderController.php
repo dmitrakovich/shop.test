@@ -621,7 +621,7 @@ $(function () {
         });
         // prepare installment fields
         $('.payment_id').change();
-    }, 300);
+    }, 500);
 });
 JS;
     }
