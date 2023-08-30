@@ -233,20 +233,20 @@
                 </form>
                 @if (!empty($product->availableSizes))
                     <div class="p-product__stock col-12 mt-4">
-                        <h4 class="p-product__stock-title collapsed" data-toggle="collapse"
+                        <h4 class="p-product__stock-title" data-toggle="collapse"
                             href="#productStockInfo" role="button" aria-expanded="false"
                             aria-controls="productStockInfo">
                             Наличие в магазинах
                             <span class="p-product__stock-title_icon"></span>
                         </h4>
-                        <div class="collapse" id="productStockInfo">
+                        <div class="collapse show" id="productStockInfo">
                             <div class="p-product__stock-list">
                                 @foreach ($product->availableSizes as $availableSize)
                                     <div class="p-product__stock-item">
                                         <div class="p-product__stock-name">
+                                            <div>{{ $availableSize?->stock?->name }}</div>
                                             <span class="p-product__stock-name_address">
                                                 {{ $availableSize?->stock?->address }}</span>
-                                            <div>{{ $availableSize?->stock?->name }}</div>
                                         </div>
                                         <div class="p-product__stock-values">
                                             {{ $availableSize->getFormattedSizes() }}
