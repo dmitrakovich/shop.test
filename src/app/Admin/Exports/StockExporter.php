@@ -12,7 +12,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class StockExporter extends ExcelExporterFromCollection implements WithEvents, WithDrawings
+class StockExporter extends ExcelExporterFromCollection implements WithDrawings, WithEvents
 {
     /**
      * @var string

@@ -23,9 +23,9 @@ use Spatie\EloquentSortable\SortableTrait;
  */
 class OrderStatus extends Model implements Enum, Sortable
 {
-    use SortableTrait;
     use HasFactory;
     use SoftDeletes;
+    use SortableTrait;
 
     const DEFAULT_VALUE = 'new';
 

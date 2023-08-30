@@ -26,12 +26,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/payment/webhook/{code}', [PaymentController::class, 'webhook']);
 
-Route::prefix('product')->group(function () {
-    Route::get('product', [ProductController::class, 'getById']);
-    Route::get('data', [ProductController::class, 'getProductDataById']);
-});
+Route::middleware('throttle:none')->group(function () {
 
-Route::get('stocks', [StocksController::class, 'get']);
+    Route::prefix('product')->group(function () {
+        Route::get('product', [ProductController::class, 'getById']);
+        Route::get('data', [ProductController::class, 'getProductDataById']);
+    });
+    Route::get('stocks', [StocksController::class, 'get']);
+});
 
 // Route::post('croppic/save', [CropperController::class, 'save']);
 Route::post('croppic/crop', [CropperController::class, 'crop']);

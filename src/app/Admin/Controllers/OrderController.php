@@ -13,7 +13,6 @@ use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
 use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
-use App\Models\AvailableSizes;
 use App\Models\Currency;
 use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
@@ -24,8 +23,6 @@ use App\Models\Orders\OrderStatus;
 use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\Product;
-use App\Models\Size;
-use App\Models\Stock;
 use App\Models\User\User;
 use App\Services\Order\OrderItemInventoryService;
 use Deliveries\DeliveryMethod;
@@ -39,7 +36,6 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Payments\PaymentMethod;
 
 class OrderController extends AdminController
@@ -516,6 +512,7 @@ class OrderController extends AdminController
         foreach ($form->itemsExtended as $item) {
             if ($item[Form::REMOVE_FLAG_NAME]) {
                 unset($prevItemsState[$item['id']]);
+
                 continue;
             }
             $prevStockId = $item['id'] ? $prevItemsState[$item['id']]->inventoryNotification?->stock_id : 0;

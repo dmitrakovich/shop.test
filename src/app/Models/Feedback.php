@@ -40,8 +40,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Feedback extends Model implements HasMedia
 {
     use HasFactory;
-    use SoftDeletes;
     use InteractsWithMedia;
+    use SoftDeletes;
 
     protected $table = 'feedbacks';
 
