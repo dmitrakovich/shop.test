@@ -26,6 +26,30 @@
         max-width: 75%;
     }
 
+    &__title {
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    &__rating {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 3px;
+
+        svg {
+            fill: rgb(191, 191, 209);
+        }
+
+        & .active {
+            svg {
+                width: 16px;
+                height: 16px;
+                fill: #FFD600;
+            }
+        }
+    }
+
     &__slider {
         position: relative;
         flex-direction: column;

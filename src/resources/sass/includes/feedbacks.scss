@@ -1,0 +1,67 @@
+.inc_feedbacks {
+
+    &__rating {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+
+        svg {
+            fill: rgb(191, 191, 209);
+        }
+        & .active {
+            svg {
+                width: 16px;
+                height: 16px;
+                fill: #FFD600;
+            }
+        }
+    }
+}
+
+.inc_feedbacks__form {
+
+    &-rating {
+        display: flex;
+        align-items: center;
+
+        &_stars {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+
+            &>input {
+                display: none;
+            }
+
+            &>label {
+                padding: 0 3px;
+                position: relative;
+                cursor: pointer;
+                margin: 0;
+
+                svg {
+                    width: 25px;
+                    height: 25px;
+                }
+            }
+
+            &>label svg {
+                fill: rgb(191, 191, 209);
+            }
+
+            &>label:hover svg,
+            &>label:hover~label svg {
+                fill: #FFD600 !important;
+            }
+
+            &>input:checked~label svg {
+                fill: #FFD600;
+            }
+
+            &:hover>input:checked~label svg {
+                fill: rgb(191, 191, 209);
+            }
+        }
+    }
+
+}
