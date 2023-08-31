@@ -29,7 +29,8 @@
                 <div class="col-12 col-md-7">
                     <div class="inc_feedbacks__rating">
                         @for ($i = 1; $i <= 5; $i++)
-                            <span @if($feedback->rating >= $i) class="active" @endif>@include('svg.star')</span>
+                            <span
+                                @if ($feedback->rating >= $i) class="active" @endif>@include('svg.star')</span>
                         @endfor
                     </div>
                     <p>{{ $feedback->text }}</p>
@@ -106,8 +107,8 @@
             </label>
             <div class="col-12 col-md-8">
                 <input type="text" name="user_name" id="inputName" class="form-control"
-                    value="{{ optional(auth()->user())->first_name }}" autocomplete="given-name" placeholder="Имя"
-                    required>
+                    value="{{ optional(auth()->user())->first_name }}" autocomplete="given-name"
+                    placeholder="Имя" required>
             </div>
         </div>
 
@@ -117,8 +118,8 @@
             </label>
             <div class="col-12 col-md-8">
                 <input type="text" name="user_city" id="inputCity" class="form-control"
-                    value="{{ optional(auth()->user())->getFirstAddress()?->city }}" autocomplete="address-level2"
-                    placeholder="Город" required>
+                    value="{{ optional(auth()->user())->getFirstAddress()?->city }}"
+                    autocomplete="address-level2" placeholder="Город" required>
             </div>
         </div>
 
@@ -127,8 +128,8 @@
                 <b>Загрузите фотографии</b>
             </label>
             <div class="col-12 col-md-8">
-                <input type="file" accept="image/*" name="photos[]" id="inputPhotos" class="form-control-file"
-                    multiple>
+                <input type="file" accept="image/*" name="photos[]" id="inputPhotos"
+                    class="form-control-file" multiple>
             </div>
         </div>
 
@@ -137,8 +138,8 @@
                 <b>Загрузите видео</b>
             </label>
             <div class="col-12 col-md-8">
-                <input type="file" accept="video/*" name="videos[]" id="inputVideos" class="form-control-file"
-                    multiple>
+                <input type="file" accept="video/*" name="videos[]" id="inputVideos"
+                    class="form-control-file" multiple>
             </div>
         </div>
 
