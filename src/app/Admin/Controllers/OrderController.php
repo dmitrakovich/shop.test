@@ -611,14 +611,19 @@ $(function () {
         }
     });
 
-    setTimeout(() => {
+    function onReady() {
         // prepare sizes
         $('.itemsExtended.product_id').each(function (index, element) {
             $(element).change();
         });
         // prepare installment fields
         $('.payment_id').change();
-    }, 500);
+    }
+    if (document.readyState !== "loading") {
+        onReady();
+    } else {
+        document.addEventListener("DOMContentLoaded", onReady);
+    }
 });
 JS;
     }
