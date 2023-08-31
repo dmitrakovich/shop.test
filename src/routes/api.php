@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/payment/webhook/{code}', [PaymentController::class, 'webhook']);
 
 Route::group([
-    'excluded_middleware' => 'throttle:api'
+    'excluded_middleware' => 'throttle:api',
 ], function () {
     Route::prefix('product')->group(function () {
         Route::get('product', [ProductController::class, 'getById']);
