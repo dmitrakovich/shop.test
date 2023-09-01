@@ -71,15 +71,17 @@
             <div class="col-12 col-md-6 col-xl-5">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-6 text-muted">
+                        <h1 class="col-6 text-muted p-product__title">
                             {{ $product->shortName() }}
-                        </div>
-                        <div class="col-6 rating-result text-right">
+                        </h1>
+                        <div class="col-6 p-product__rating js-scrollTo"
+                            data-scroll-to="#productFeedbacks">
                             @for ($i = 1; $i <= 5; $i++)
-                                <span class="star {{-- $frating >= $i ? 'active' : '' --}}"></span>
+                                <span
+                                    @if ($feedbacks->avg('rating') >= $i) class="active" @endif>@include('svg.star')</span>
                             @endfor
 
-                            <span class="ml-2 align-text-bottom">(0)</span>
+                            <span class="ml-2 align-text-bottom">({{ count($feedbacks) }})</span>
                         </div>
                     </div>
                 </div>
@@ -239,7 +241,7 @@
                             Наличие в магазинах
                             <span class="p-product__stock-title_icon"></span>
                         </h4>
-                        <div class="collapse show" id="productStockInfo">
+                        <div class="show collapse" id="productStockInfo">
                             <div class="p-product__stock-list">
                                 @foreach ($product->availableSizes as $availableSize)
                                     <div class="p-product__stock-item">
@@ -335,7 +337,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-between">
+        <div class="row justify-content-between" id="productFeedbacks">
             <div class="col-auto">
                 <span class="h3">ОЦЕНКИ И ОТЗЫВЫ</span>
             </div>

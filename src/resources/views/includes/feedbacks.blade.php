@@ -1,6 +1,6 @@
-<div class="row">
+<div class="inc_feedbacks row">
     @forelse ($feedbacks as $feedback)
-        <div class="col-12 item mb-3 px-2 px-md-5 py-4 bg-light">
+        <div class="col-12 item px-md-5 bg-light mb-3 px-2 py-4">
             <div class="row">
                 <div class="col-12 col-md-3">
                     <div class="row">
@@ -27,18 +27,12 @@
 
                 </div>
                 <div class="col-12 col-md-7">
-                    {{-- @if ($feedback->rating > 0)
-                            <ul>
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <li>
-                                        <label class="check">
-                                            <input type="checkbox" {{ $feedback->rating >= $i ? 'checked' : '' }}>
-                                            <i class="checkmark icon ic-star"></i>
-                                        </label>
-                                    </li>
-                                @endfor
-                            </ul>
-                        @endif --}}
+                    <div class="inc_feedbacks__rating">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <span
+                                @if ($feedback->rating >= $i) class="active" @endif>@include('svg.star')</span>
+                        @endfor
+                    </div>
                     <p>{{ $feedback->text }}</p>
                     @foreach ($feedback->getMedia('photos') as $image)
                         <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
@@ -73,19 +67,29 @@
     </div>
 @endif
 
-<div style="display: none;" id="leave-feedback-modal">
+<div class="inc_feedbacks__form" style="display: none;" id="leave-feedback-modal">
     <form id="leave-feedback-form" action="{{ route('feedbacks.store') }}" method="post">
         @csrf
         <h3 class="mb-4">Оставить отзыв</h3>
 
-        {{-- <div class="row form-group">
-        <div class="col-12 col-md-4">
-            <b>Оцените товар</b>
+        <div class="row form-group inc_feedbacks__form-rating">
+            <div class="col-12 col-md-4">
+                <b>Оцените товар</b>
+            </div>
+
+            <div class="col-12 col-md-8 inc_feedbacks__form-rating_stars">
+                <input type="radio" name="rating" value="5" id="5" checked>
+                <label for="5">@include('svg.star')</label>
+                <input type="radio" name="rating" value="4" id="4">
+                <label for="4">@include('svg.star')</label>
+                <input type="radio" name="rating" value="3" id="3">
+                <label for="3">@include('svg.star')</label>
+                <input type="radio" name="rating" value="2" id="2">
+                <label for="2">@include('svg.star')</label>
+                <input type="radio" name="rating" value="1" id="1">
+                <label for="1">@include('svg.star')</label>
+            </div>
         </div>
-        <div class="col-12 col-md-8">
-            звезды
-        </div>
-    </div> --}}
         <input type="hidden" name="product_id" value="{{ $product->id ?? 0 }}">
         <div class="row form-group">
             <label for="textareaText" class="col-12 col-md-4 col-form-label">
@@ -141,7 +145,7 @@
 
         @include('includes.captcha-privacy-policy')
 
-        <div class="row mt-4 mb-0 form-group justify-content-end">
+        <div class="row form-group justify-content-end mb-0 mt-4">
             <button type="button" id="leave-feedback-btn" class="btn btn-dark px-4">
                 Оставить отзыв
             </button>

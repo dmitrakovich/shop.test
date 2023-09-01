@@ -4,6 +4,7 @@ namespace App\Services\Departures;
 
 use App\Models\Orders\Batch;
 use Illuminate\Support\Facades\File;
+use ZipArchive;
 
 class BatchService
 {
@@ -13,8 +14,15 @@ class BatchService
     public function createBatchCsv(Batch $batch)
     {
         $result = [];
-        $resultPath = 'storage/departures/batch_send/' . $batch->id . '.csv';
-        File::ensureDirectoryExists(dirname(public_path($resultPath)));
+        $resultFileName = $batch->id . '.csv';
+        $resultDir = 'departures/batch_send';
+        $resultPath = $resultDir . '/' . $resultFileName;
+        $resultPublicPath = public_path('storage/' . $resultPath);
+        $resultStoragePath = storage_path('app/public/' . $resultPath);
+        $zipPath = $resultDir . '/' . $batch->id . '.zip';
+        $zipStoragePath = storage_path('app/public/' . $zipPath);
+
+        File::ensureDirectoryExists(dirname(public_path($resultPublicPath)));
         $batch->loadMissing(
             [
                 'orders' => fn ($query) => $query->with([
@@ -76,12 +84,17 @@ class BatchService
             375291793790, // Телефон отправителя (J)
             'info@barocco.by', // Электронный адрес отправителя (K)
         ]);
-        $fp = fopen(public_path($resultPath), 'w');
+        $fp = fopen(public_path($resultPublicPath), 'w');
         foreach ($result as $fields) {
             fputcsv($fp, array_map(fn ($value) => iconv('UTF-8', 'Windows-1251//IGNORE', $value), $fields), ';');
         }
         fclose($fp);
 
-        return url('/storage/departures/batch_send/' . $batch->id . '.csv');
+        $zip = new ZipArchive();
+        $zip->open($zipStoragePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $zip->addFile($resultStoragePath, $resultFileName);
+        $zip->close();
+
+        return url('storage/' . $zipPath);
     }
 }
