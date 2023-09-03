@@ -74,8 +74,7 @@
                         <h1 class="col-6 text-muted p-product__title">
                             {{ $product->shortName() }}
                         </h1>
-                        <div class="col-6 p-product__rating js-scrollTo"
-                            data-scroll-to="#productFeedbacks">
+                        <div class="col-6 p-product__rating js-ratingBtn">
                             @for ($i = 1; $i <= 5; $i++)
                                 <span
                                     @if ($feedbacks->avg('rating') >= $i) class="active" @endif>@include('svg.star')</span>

@@ -26,6 +26,12 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
+$(document).on('click', '.js-ratingBtn', function () {
+  openModal();
+  let scrollElem = document.getElementById("productFeedbacks")?.offsetTop;
+  window.scrollTo({ top: scrollElem, behavior: 'smooth' });
+});
+
 /**
  *
  */
