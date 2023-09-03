@@ -321,7 +321,8 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     protected function updateAvailableSizesFromOrders(array &$availableSizes): int
     {
         $productsInOrders = [];
-        $sizesCount = OrderItem::query()->whereIn('status_key', ['new', 'reserved', 'confirmed', 'pickup'])
+        $sizesCount = OrderItem::query()
+            ->whereIn('status_key', ['new', 'reserved', 'confirmed', 'collect', 'pickup'])
             ->has('inventoryNotification')
             ->with('inventoryNotification:order_item_id,stock_id')
             ->get(['id', 'product_id', 'size_id', 'count'])
