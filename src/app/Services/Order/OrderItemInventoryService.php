@@ -23,7 +23,7 @@ class OrderItemInventoryService
         // 'new',
         // 'canceled',
         'confirmed',
-        'pickup',
+        // 'pickup',
         'complete',
         'installment',
         'return',
