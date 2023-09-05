@@ -133,7 +133,7 @@ class UserController extends AdminController
         $form->display('updated_at', trans('admin.updated_at'));
 
         $form->saving(function (Form $form) {
-            if ($form->password && $form->model()->password != $form->password) {
+            if ($form->password && $form->password != $form->model()->password) {
                 $form->password = Hash::make($form->password);
             }
         });

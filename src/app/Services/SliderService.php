@@ -186,7 +186,7 @@ class SliderService
                 $recomended = isset($recomended) ? $recomended->merge($result) : $result;
                 $recomended = $recomended->take($slider->count);
                 array_pop($attrs);
-            } while (count($recomended) < $slider->count && count($attrs));
+            } while ($slider->count > count($recomended) && count($attrs));
 
             return $recomended->map(function ($product) {
                 return [
