@@ -21,6 +21,14 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     const ONE_C_STOCK_QUANTITY_TABLE = 'SC5925';
 
     /**
+     * Minimum number of records expected from 1C.
+     *
+     * If the actual number of records retrieved from 1C is less than this value,
+     * an exception should be thrown.
+     */
+    const MIN_EXPECTED_RECORDS = 1000;
+
+    /**
      * Table for insert data
      */
     protected string $availableSizesTable = 'available_sizes';
@@ -69,19 +77,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $this->setCurrentCategoryIds();
 
         $this->log('Получение наличия с 1С');
-        CreateTunnelJob::dispatchSync();
-
-        $availableSizes = [];
-        DB::connection('sqlsrv')
-            ->table(self::ONE_C_STOCK_QUANTITY_TABLE)
-            ->select($this->getStockQuantityFields())
-            ->orderBy('ROW_ID')
-            ->whereIn('SP5900', array_keys($this->stockIds))
-            ->each(function (\stdClass $stockUnit) use (&$availableSizes) {
-                $availableSizes[] = $this->prepareAvailableSizesData($stockUnit);
-            });
-
-        DestroyTunnelJob::dispatchSync();
+        $availableSizes = $this->getAvailableSizesFrom1C();
 
         $count = $this->filterAvailableSizes($availableSizes);
         $this->log("Отфильтровано $count записей с неподходящими категориями или пустыми артикулами");
@@ -104,6 +100,34 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
 
         $this->log('Таблица с наличием успешно обновлена');
+    }
+
+    /**
+     * Retrieve available sizes data from 1C and prepare it for processing.
+     *
+     * @throws \Exception If there is an error retrieving data from 1C or if the retrieved record count is below the expected minimum.
+     */
+    protected function getAvailableSizesFrom1C(): array
+    {
+        CreateTunnelJob::dispatchSync();
+
+        $availableSizes = [];
+        DB::connection('sqlsrv')
+            ->table(self::ONE_C_STOCK_QUANTITY_TABLE)
+            ->select($this->getStockQuantityFields())
+            ->orderBy('ROW_ID')
+            ->whereIn('SP5900', array_keys($this->stockIds))
+            ->each(function (\stdClass $stockUnit) use (&$availableSizes) {
+                $availableSizes[] = $this->prepareAvailableSizesData($stockUnit);
+            });
+
+        DestroyTunnelJob::dispatchSync();
+
+        if (count($availableSizes) < self::MIN_EXPECTED_RECORDS) {
+            throw new \Exception('Error retrieving data from 1C, received ' . count($availableSizes) . ' records');
+        }
+
+        return $availableSizes;
     }
 
     /**
