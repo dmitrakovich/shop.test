@@ -17,7 +17,9 @@ class BelpostLabelService
     public function createLabel(Order $order): string
     {
         $order->loadMissing([
-            'itemsExtended.installment',
+            'itemsExtended' => fn ($query) => $query
+                ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
+                ->with('installment'),
             'onlinePayments',
             'delivery',
             'user' => fn ($query) => $query->with('lastAddress'),

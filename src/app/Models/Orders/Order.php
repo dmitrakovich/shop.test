@@ -351,13 +351,22 @@ class Order extends Model
      */
     public function getTotalCODSum(): float
     {
+        $this->loadMissing([
+            'itemsExtended' => fn ($query) => $query
+                ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
+                ->with('installment')
+        ]);
         $deliveryPrice = $this->delivery_price ? $this->delivery_price : 0;
         $onlinePaymentsSum = $this->getAmountPaidOrders();
-        if ((int)$this->payment_id === Installment::PAYMENT_METHOD_ID) {
-            return $this->getInstallmentMonthlyFeeSum() + $deliveryPrice - $onlinePaymentsSum;
-        } else {
-            return $this->getItemsPrice() + $deliveryPrice - $onlinePaymentsSum;
+        $itemPrice = 0;
+        foreach ($this->itemsExtended->where('status_key', 'pickup') as $item) {
+            if ((int)$this->payment_id === Installment::PAYMENT_METHOD_ID) {
+                $itemPrice += $item->installment_monthly_fee;
+            } else {
+                $itemPrice += ($item->current_price * $item->count);
+            }
         }
+        return $itemPrice + $deliveryPrice - $onlinePaymentsSum;
     }
 
     /**

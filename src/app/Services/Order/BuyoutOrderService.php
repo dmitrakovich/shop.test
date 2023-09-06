@@ -19,12 +19,13 @@ class BuyoutOrderService
     public function createBuyoutForm(Order $order)
     {
         $order->loadMissing([
-            'items' => fn ($query) => $query->whereHas('status', fn ($q) => $q->where('key', 'pickup')),
+            'itemsExtended' => fn ($query) => $query
+                ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
+                ->with('installment'),
             'onlinePayments',
             'delivery',
             'user' => fn ($query) => $query->with('lastAddress'),
         ]);
-        $totalCodSum = $order->getTotalCODSum();
 
         $resultPath = '/storage/order_buyout/' . $order->id . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
@@ -74,15 +75,18 @@ class BuyoutOrderService
         $sheet->setCellValue('BW43', $order->user->lastAddress->district ?? null);
         $sheet->setCellValue('CO43', $order->user->lastAddress->region ?? null);
 
+        $onlinePaymentsSum = $order->getAmountPaidOrders();
         $uniqItemsCount = $order->getUniqItemsCount();
+        $totalCodSum = 0;
         foreach ($order->items as $itemKey => $item) {
             $itemPrice = $item->current_price;
             if ((int)$order->payment_id === Installment::PAYMENT_METHOD_ID) {
                 $itemPrice = $itemPrice - (round(($itemPrice * 0.3), 2) * 2);
             }
-            if ($order->delivery->instance === 'BelpostCourierFitting') {
-                $itemPrice -= $order->delivery_price / $uniqItemsCount;
-            }
+            $itemPrice += $order->delivery_price ? ($order->delivery_price / $uniqItemsCount) : 0;
+            $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $uniqItemsCount) : 0;
+            $totalCodSum += $itemPrice;
+
             $itemsColNum = (28 + $itemKey);
             $itemsColNumSecond = (46 + $itemKey);
             if ($itemKey > 0) {
