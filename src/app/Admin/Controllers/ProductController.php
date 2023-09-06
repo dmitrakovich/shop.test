@@ -263,7 +263,7 @@ class ProductController extends AbstractAdminController
             if (is_null($form->manufacturer_id)) {
                 $form->manufacturer_id = 0;
             }
-            if ((int)$form->label_id === ProductLabels::DO_NOT_PUBLISH->value) {
+            if (ProductLabels::DO_NOT_PUBLISH->value === (int)$form->label_id) {
                 $form->deleted_at = now();
             }
 

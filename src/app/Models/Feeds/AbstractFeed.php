@@ -87,8 +87,8 @@ abstract class AbstractFeed
         for ($i = 1; $i < $sizesListCount; $i++) {
             if (
                 ($i + 1) < $sizesListCount
-                && $sizesList[$i - 1] == ((int)$sizesList[$i] - 1)
-                && $sizesList[$i + 1] == ((int)$sizesList[$i] + 1)
+                && ((int)$sizesList[$i] - 1) == $sizesList[$i - 1]
+                && ((int)$sizesList[$i] + 1) == $sizesList[$i + 1]
             ) {
                 $sizesStr .= $useDash ? '' : '-';
                 $useDash = true;

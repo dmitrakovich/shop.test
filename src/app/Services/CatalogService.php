@@ -60,7 +60,7 @@ class CatalogService
             foreach ($currentFiltersGroups as $currentFiltersGroupKey => $currentFiltersGroup) {
                 foreach ($currentFiltersGroup as $currentFilterKey => $currentFilter) {
                     $filterModel = $currentFilter->filters;
-                    if ($filterModel->isInvisible() || $filterModel->slug === 'catalog' || ($currentFiltersGroupKey == Category::class) && (array_key_last($currentFiltersGroup) != $currentFilterKey)) {
+                    if ($filterModel->isInvisible() || $filterModel->slug === 'catalog' || ($currentFiltersGroupKey == Category::class) && ($currentFilterKey != array_key_last($currentFiltersGroup))) {
                         continue;
                     }
                     $badges[] = (object)[
