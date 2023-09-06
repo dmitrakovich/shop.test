@@ -401,7 +401,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     /**
      * Dispatch a job to notify offline orders based on available sizes data.
      */
-    protected function notifyOfflineOrders(array $availableSizes) : void
+    protected function notifyOfflineOrders(array $availableSizes): void
     {
         NotifyOfflineOrdersJob::dispatch($availableSizes);
     }

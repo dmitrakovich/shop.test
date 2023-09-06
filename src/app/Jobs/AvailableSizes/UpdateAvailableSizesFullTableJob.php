@@ -38,10 +38,7 @@ class UpdateAvailableSizesFullTableJob extends UpdateAvailableSizesTableJob
         //
     }
 
-    /**
-     *
-     */
-    protected function notifyOfflineOrders(array $availableSizes) : void
+    protected function notifyOfflineOrders(array $availableSizes): void
     {
         //
     }
