@@ -20,9 +20,12 @@ class BuyoutOrderService
     {
         $order->loadMissing([
             'items' => fn ($query) => $query->whereHas('status', fn ($q) => $q->where('key', 'pickup')),
+            'onlinePayments',
             'delivery',
             'user' => fn ($query) => $query->with('lastAddress'),
         ]);
+        $totalCodSum = $order->getTotalCODSum();
+
         $resultPath = '/storage/order_buyout/' . $order->id . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
         $spreadsheet = IOFactory::load(public_path('templates/buyout_template.xlsx'));
@@ -71,7 +74,6 @@ class BuyoutOrderService
         $sheet->setCellValue('BW43', $order->user->lastAddress->district ?? null);
         $sheet->setCellValue('CO43', $order->user->lastAddress->region ?? null);
 
-        $totalSum = 0;
         $uniqItemsCount = $order->getUniqItemsCount();
         foreach ($order->items as $itemKey => $item) {
             $itemPrice = $item->current_price;
@@ -81,7 +83,6 @@ class BuyoutOrderService
             if ($order->delivery->instance === 'BelpostCourierFitting') {
                 $itemPrice -= $order->delivery_price / $uniqItemsCount;
             }
-            $totalSum += $itemPrice;
             $itemsColNum = (28 + $itemKey);
             $itemsColNumSecond = (46 + $itemKey);
             if ($itemKey > 0) {
@@ -123,8 +124,8 @@ class BuyoutOrderService
             $sheet->setCellValue('BK' . $itemsColNumSecond, 'коп.');
         }
 
-        $sheet->setCellValue('F4', TextHelper::numberToMoneyShortString($totalSum));
-        $sheet->setCellValue('V4', TextHelper::numberToMoneyString($totalSum));
+        $sheet->setCellValue('F4', TextHelper::numberToMoneyShortString($totalCodSum));
+        $sheet->setCellValue('V4', TextHelper::numberToMoneyString($totalCodSum));
         $writer = new Xlsx($spreadsheet);
         $writer->save(public_path($resultPath));
 
