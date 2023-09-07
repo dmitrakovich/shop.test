@@ -9,9 +9,9 @@ use App\Models\Orders\OrderTrack;
 use App\Models\Payments\Installment;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Picqer\Barcode\BarcodeGeneratorJPG;
 
 class BelpostLabelService
@@ -79,7 +79,7 @@ class BelpostLabelService
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
-            ]
+            ],
         ]);
         $barcodeGeneratorJPG = new BarcodeGeneratorJPG();
         File::put(public_path($barcodePath), $barcodeGeneratorJPG->getBarcode($orderTrack->track_number, $barcodeGeneratorJPG::TYPE_CODE_39, 1, 58));
@@ -126,7 +126,7 @@ class BelpostLabelService
         $writer = new Xlsx($spreadsheet);
         $writer->save(public_path($resultPath));
         $orderTrack->update([
-            'order_id' => $order->id
+            'order_id' => $order->id,
         ]);
 
         return url($resultPath);
