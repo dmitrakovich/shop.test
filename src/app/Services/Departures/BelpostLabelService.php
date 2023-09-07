@@ -2,12 +2,17 @@
 
 namespace App\Services\Departures;
 
+use App\Enums\DeliveryTypeEnum;
 use App\Helpers\TextHelper;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderTrack;
 use App\Models\Payments\Installment;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Picqer\Barcode\BarcodeGeneratorJPG;
 
 class BelpostLabelService
 {
@@ -26,7 +31,15 @@ class BelpostLabelService
         ]);
 
         $totalCodSum = $order->getTotalCODSum();
+
+        $orderTrack = OrderTrack::where(
+            fn ($query) => $query->where('order_id', $order->id)->orWhereNull('order_id')
+        )->where('delivery_type_enum', DeliveryTypeEnum::BELPOST)
+            ->whereNotNull('track_number')
+            ->first();
+        $barcodePath = '/storage/departures/barcode/' . date('d-m-Y', strtotime('now')) . '/' . $order->id . '.jpg';
         $resultPath = '/storage/departures/belpost_label/' . date('d-m-Y', strtotime('now')) . '/' . $order->id . '.xlsx';
+        File::ensureDirectoryExists(dirname(public_path($barcodePath)));
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
         $spreadsheet = IOFactory::load(public_path('templates/belpost_label_template.xlsx'));
         $firstName = ($order->first_name ?? $order->user->first_name ?? null);
@@ -58,6 +71,24 @@ class BelpostLabelService
         $sheet->setCellValue('D33', null);
         $sheet->setCellValue('D35', null);
         $sheet->setCellValue('D37', null);
+
+        $sheet->mergeCells('D14:V16');
+        $sheet->mergeCells('D17:V17');
+        $sheet->setCellValue('D17', $orderTrack->track_number);
+        $sheet->getStyle('D17')->applyFromArray([
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+        $barcodeGeneratorJPG = new BarcodeGeneratorJPG();
+        File::put(public_path($barcodePath), $barcodeGeneratorJPG->getBarcode($orderTrack->track_number, $barcodeGeneratorJPG::TYPE_CODE_39, 1, 58));
+        $drawing = new Drawing();
+        $drawing->setName('Barcode');
+        $drawing->setDescription('Barcode');
+        $drawing->setPath(public_path($barcodePath));
+        $drawing->setCoordinates('D14');
+        $drawing->setWorksheet($spreadsheet->getActiveSheet());
 
         if ($order->delivery->instance === 'BelpostCourierFitting') {
             $sheet->setCellValue('D25', 'P');
@@ -94,9 +125,9 @@ class BelpostLabelService
 
         $writer = new Xlsx($spreadsheet);
         $writer->save(public_path($resultPath));
-
-        $htmlWriter = new \PhpOffice\PhpSpreadsheet\Writer\Html($spreadsheet);
-        $htmlWriter->save(public_path('/storage/departures/belpost_label/' . date('d-m-Y', strtotime('now')) . '/' . $order->id . '.html'));
+        $orderTrack->update([
+            'order_id' => $order->id,
+        ]);
 
         return url($resultPath);
     }
