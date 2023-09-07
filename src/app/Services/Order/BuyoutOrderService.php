@@ -20,7 +20,7 @@ class BuyoutOrderService
     {
         $order->loadMissing([
             'itemsExtended' => fn ($query) => $query
-                ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
+                ->where('status_key', 'pickup')
                 ->with('installment'),
             'onlinePayments',
             'delivery',

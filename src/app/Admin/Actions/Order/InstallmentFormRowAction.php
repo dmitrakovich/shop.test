@@ -21,7 +21,7 @@ class InstallmentFormRowAction extends RowAction
         $order = Order::where('id', $model->id)->with([
             'user.passport',
             'items' => fn ($query) => $query
-                ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
+                ->where('status_key', 'pickup')
                 ->with('installment'),
             'user' => fn ($query) => $query->with('lastAddress'),
         ])->first();

@@ -12,7 +12,9 @@ class LabelService
     public function createLabel(int $orderId): string
     {
         $order = Order::where('id', $orderId)->with([
-            'itemsExtended.installment',
+            'itemsExtended' => fn ($query) => $query
+                ->where('status_key', 'pickup')
+                ->with('installment'),
             'onlinePayments',
             'delivery',
             'user' => fn ($query) => $query->with('lastAddress'),

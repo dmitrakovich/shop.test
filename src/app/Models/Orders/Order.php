@@ -353,7 +353,7 @@ class Order extends Model
     {
         $this->loadMissing([
             'itemsExtended' => fn ($query) => $query
-                ->whereHas('status', fn ($q) => $q->where('key', 'pickup'))
+                ->where('status_key', 'pickup')
                 ->with('installment'),
         ]);
         $deliveryPrice = $this->delivery_price ? $this->delivery_price : 0;
