@@ -30,7 +30,10 @@ class BuyoutFormAction extends Action
     {
         $buyoutService = new BuyoutOrderService;
         $order = Order::where('id', $request->orderId)->with([
-            'items' => fn ($query) => $query->whereHas('status', fn ($q) => $q->where('key', 'pickup')),
+            'itemsExtended' => fn ($query) => $query
+                ->where('status_key', 'pickup')
+                ->with('installment'),
+            'onlinePayments',
             'delivery',
             'user' => fn ($query) => $query->with('lastAddress'),
         ])->first();
