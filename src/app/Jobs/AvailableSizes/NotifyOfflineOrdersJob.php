@@ -5,6 +5,7 @@ namespace App\Jobs\AvailableSizes;
 use App\Models\AvailableSizes;
 use App\Models\Bots\Telegram\TelegramChat;
 use App\Models\Logs\OrderItemInventoryNotificationLog;
+use App\Models\Logs\OrderItemPickupStatusLog;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
 use App\Notifications\OrderItemInventoryNotification;
@@ -16,6 +17,11 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
      * Available sizes before updating
      */
     private array $oldStockItems;
+
+    /**
+     * Picked up available sizes
+     */
+    private array $movedStockItems;
 
     /**
      * Chat models cache
@@ -39,7 +45,8 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     {
         $counter = 0;
         $emptySizes = $this->getEmptySizesStub();
-        $this->newStockItems = $this->getPreparedNewStockitems();
+        $this->setPreparedNewStockItems();
+        $this->setPreparedMovedStockItems();
 
         foreach ($this->oldStockItems as $stockItem) {
             if (empty($productId = $stockItem['product_id'])) {
@@ -51,7 +58,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
 
             foreach ($oldSizes as $sizeKey => $oldCount) {
                 $newCount = $newSizes[$sizeKey];
-                if ($newCount < $oldCount) {
+                if ($this->shouldNotify($newCount, $oldCount, $productId, $stockId, $sizeKey)) {
                     $this->notify($productId, $stockId, $sizeKey);
                     $counter++;
                 }
@@ -64,7 +71,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     /**
      * Get an array of prepared new stock items.
      */
-    private function getPreparedNewStockitems(): array
+    private function setPreparedNewStockItems(): void
     {
         $prepared = [];
         foreach ($this->newStockItems as $stockItem) {
@@ -75,7 +82,24 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
             $prepared[$stockItem['product_id']][$stockItem['stock_id']] = $sizes;
         }
 
-        return $prepared;
+        $this->newStockItems = $prepared;
+    }
+
+    /**
+     * Set up a prepared array of moved stock items for efficient processing.
+     */
+    private function setPreparedMovedStockItems(): void
+    {
+        OrderItemPickupStatusLog::query()
+            ->with(['orderItem' => fn ($query) => $query->with('inventoryNotification')])
+            ->where('moved', false)
+            ->each(function (OrderItemPickupStatusLog $movedItem) {
+                $productId = $movedItem->orderItem->product_id;
+                $sizeField = AvailableSizes::convertSizeIdToField($movedItem->orderItem->size_id);
+                $count = $movedItem->orderItem->count;
+                $stockId = $movedItem->orderItem->inventoryNotification->stock_id;
+                $this->movedStockItems[$productId][$stockId][$sizeField][$movedItem->id] = $count;
+            });
     }
 
     /**
@@ -85,6 +109,26 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     private function getEmptySizesStub(): array
     {
         return array_map(fn () => 0, array_flip(AvailableSizes::getSizeFields()));
+    }
+
+    /**
+     * Determine if a notification should be sent based on inventory count changes.
+     */
+    private function shouldNotify(int $newCount, int $oldCount, int $productId, int $stockId, string $sizeKey): bool
+    {
+        if ($newCount >= $oldCount) {
+            return false;
+        }
+        $movedItems = $this->movedStockItems[$productId][$stockId][$sizeKey] ?? [];
+        foreach ($movedItems as $id => $count) {
+            $newCount += $count;
+            OrderItemPickupStatusLog::where('id', $id)->update(['moved' => true]);
+            if ($newCount >= $oldCount) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

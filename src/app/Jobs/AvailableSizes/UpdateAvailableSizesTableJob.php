@@ -85,13 +85,10 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $count = $this->updateAvailableSizesFromOrders($availableSizes);
         $this->log("Обновлено $count доступных размеров товаров на основе заказов");
 
-        // temp disabled
-        // if ($this->availableSizesTable === 'available_sizes') {
-        //     NotifyOfflineOrdersJob::dispatch($availableSizes);
-        // }
-
         $count = $this->removeEmptySizes($availableSizes);
         $this->log("Удалено $count записей с пустыми размерами");
+
+        $this->notifyOfflineOrders($availableSizes);
 
         $this->log('Запись полученных и сопоставленных данных в базу');
         DB::table($this->availableSizesTable)->truncate();
@@ -399,5 +396,13 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         }
 
         return $count;
+    }
+
+    /**
+     * Dispatch a job to notify offline orders based on available sizes data.
+     */
+    protected function notifyOfflineOrders(array $availableSizes): void
+    {
+        NotifyOfflineOrdersJob::dispatch($availableSizes);
     }
 }

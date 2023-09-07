@@ -70,7 +70,8 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
             'confirmed' => 'Подтверждено на забор из магазина',
             'pickup' => 'Забрано из магазина',
             'complete', 'installment' => 'Убрать с наличия',
-            'return', 'return_fitting' => 'Возврат изделия',
+            'return' => 'Возврат по срокам',
+            'return_fitting' => 'Возврат после примерки',
             default => throw new \Exception('Attempt to send message on unknown status'),
         };
     }
@@ -82,7 +83,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
     {
         $order = $this->orderItem->order;
 
-        return $order ? "Номер заказа: {$order->id}" : 'Оффлайн заказ';
+        return $order ? "Номер заказа: {$order->id}" : '🏪 продажа с магазина';
     }
 
     /**
