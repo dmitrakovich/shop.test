@@ -10,6 +10,7 @@ use App\Models\Stock;
 use App\Notifications\OrderItemInventoryNotification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class OrderItemInventoryService
@@ -119,13 +120,13 @@ class OrderItemInventoryService
         $count = $orderItem->count;
         $singleNotification = $orderItem->inventoryNotification;
         $sizeField = AvailableSizes::convertSizeIdToField($orderItem->size_id);
+        $totalQuery = implode('+', AvailableSizes::getSizeFields());
 
         $availableSizes = AvailableSizes::query()
-            ->with(['stock:id'])
             ->where('product_id', $orderItem->product_id)
             ->when($stockId, fn (Builder $query) => $query->where('stock_id', $stockId))
             ->where($sizeField, '>', 0)
-            ->get(['id', 'stock_id', $sizeField])
+            ->get(['id', 'stock_id', $sizeField, DB::raw("$totalQuery as total")])
             ->sortByDesc($this->getStocksPriority($sizeField));
 
         /** @var AvailableSizes */
@@ -205,6 +206,9 @@ class OrderItemInventoryService
             },
             function (AvailableSizes $stock1, AvailableSizes $stock2) use ($sizeField) {
                 return $stock2->{$sizeField} <=> $stock1->{$sizeField};
+            },
+            function (AvailableSizes $stock1, AvailableSizes $stock2) {
+                return $stock2->total <=> $stock1->total;
             },
             function (AvailableSizes $stock1, AvailableSizes $stock2) {
                 return $stock1->id <=> $stock2->id;
