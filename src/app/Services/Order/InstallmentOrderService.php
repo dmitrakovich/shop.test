@@ -78,13 +78,13 @@ class InstallmentOrderService
             $sheet->setCellValue('AD17', date('d/m/Y', strtotime('+1 month')));
             $sheet->setCellValue('AD19', date('d/m/Y', strtotime('+2 month')));
 
-            $sheet->setCellValue('Z33', $firstName);
-            $sheet->setCellValue('Z34', $lastName);
+            $sheet->setCellValue('Z33', $lastName);
+            $sheet->setCellValue('Z34', $firstName);
             $sheet->setCellValue('AL34', $patronymicName);
             $sheet->setCellValue('AM35', $order->user->passport->series . $order->user->passport->passport_number);
             $sheet->setCellValue('Z37', $order->user->passport->personal_number);
             $sheet->setCellValue('Z39', $order->user->passport->issued_by);
-            $sheet->setCellValue('AH41', Carbon::parse($order->user->passport->issued_date)->translatedFormat('l, F j, Y'));
+            $sheet->setCellValue('AH41', Carbon::parse($order->user->passport->issued_date)->translatedFormat('F j, Y'));
 
             $sheet->setCellValue('Z43', $order->user->lastAddress->region ?? null);
             $sheet->setCellValue('AK43', $order->user->lastAddress->district ?? null);
