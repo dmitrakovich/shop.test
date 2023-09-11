@@ -53,7 +53,7 @@ class InstallmentOrderService
             $sheet->unmergeCells('AL3:AW3');
             $sheet->mergeCells('AI3:AX3');
             $sheet->setCellValue('AI3', ('"' . Carbon::parse(now())->translatedFormat('l, F j, Y') . '"'));
-            $sheet->setCellValue('E5', 'Общество с ограниченной ответственностью "БароккоСтайл", в лице директора');
+            $sheet->setCellValue('E5', 'Общество с ограниченной ответственностью "БароккоСтайл", в лице специалиста по продажам ');
             $sheet->setCellValue('B6', $adminFio . ', действующий на основании Устава, именуемый в дальнейшем Продавец, с одной');
             $sheet->setCellValue('I7', $lastName);
             $sheet->setCellValue('T7', $firstName);
@@ -65,18 +65,18 @@ class InstallmentOrderService
             $sheet->setCellValue('H13', TextHelper::numberToMoneyShortString($itemPrice));
             $sheet->setCellValue('V13', TextHelper::numberToMoneyString($itemPrice));
 
-            $sheet->setCellValue('J17', date('m/d/Y', strtotime('now')));
-            $sheet->setCellValue('J18', date('m/d/Y', strtotime('+1 month')));
-            $sheet->setCellValue('J19', date('m/d/Y', strtotime('+1 month')));
-            $sheet->setCellValue('J20', date('m/d/Y', strtotime('+2 month')));
+            $sheet->setCellValue('J17', date('d/m/Y', strtotime('now')));
+            $sheet->setCellValue('J18', date('d/m/Y', strtotime('+1 month')));
+            $sheet->setCellValue('J19', date('d/m/Y', strtotime('+1 month')));
+            $sheet->setCellValue('J20', date('d/m/Y', strtotime('+2 month')));
 
             $sheet->setCellValue('X16', ($itemPrice - (($item->installment->monthly_fee ?? 0) * 2)));
             $sheet->setCellValue('X17', $item->installment->monthly_fee ?? null);
             $sheet->setCellValue('X19', $item->installment->monthly_fee ?? null);
 
-            $sheet->setCellValue('AD16', date('m/d/Y', strtotime('now')));
-            $sheet->setCellValue('AD17', date('m/d/Y', strtotime('+1 month')));
-            $sheet->setCellValue('AD19', date('m/d/Y', strtotime('+2 month')));
+            $sheet->setCellValue('AD16', date('d/m/Y', strtotime('now')));
+            $sheet->setCellValue('AD17', date('d/m/Y', strtotime('+1 month')));
+            $sheet->setCellValue('AD19', date('d/m/Y', strtotime('+2 month')));
 
             $sheet->setCellValue('Z33', $firstName);
             $sheet->setCellValue('Z34', $lastName);
