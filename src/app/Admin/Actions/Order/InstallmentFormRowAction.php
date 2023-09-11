@@ -19,7 +19,9 @@ class InstallmentFormRowAction extends RowAction
     public function handle(Model $model)
     {
         $order = Order::where('id', $model->id)->with([
+            'admin',
             'user.passport',
+            'onlinePayments',
             'items' => fn ($query) => $query
                 ->where('status_key', 'pickup')
                 ->with('installment'),

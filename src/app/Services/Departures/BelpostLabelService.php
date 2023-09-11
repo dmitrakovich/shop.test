@@ -72,10 +72,11 @@ class BelpostLabelService
         $sheet->setCellValue('D35', null);
         $sheet->setCellValue('D37', null);
 
-        $sheet->mergeCells('D14:V16');
-        $sheet->mergeCells('D17:V17');
-        $sheet->setCellValue('D17', $orderTrack->track_number);
-        $sheet->getStyle('D17')->applyFromArray([
+        $sheet->unmergeCells('AM14:BQ17');
+        $sheet->mergeCells('AM14:BF16');
+        $sheet->mergeCells('AM17:BF17');
+        $sheet->setCellValue('AM17', $orderTrack->track_number);
+        $sheet->getStyle('AM17')->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
@@ -87,7 +88,7 @@ class BelpostLabelService
         $drawing->setName('Barcode');
         $drawing->setDescription('Barcode');
         $drawing->setPath(public_path($barcodePath));
-        $drawing->setCoordinates('D14');
+        $drawing->setCoordinates('AM14');
         $drawing->setWorksheet($spreadsheet->getActiveSheet());
 
         if ($order->delivery->instance === 'BelpostCourierFitting') {
