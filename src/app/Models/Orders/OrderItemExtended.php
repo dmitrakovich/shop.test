@@ -25,6 +25,8 @@ class OrderItemExtended extends OrderItem
         'installment_send_notifications',
         'stock_id',
         'stock_name',
+        'dispatch_date',
+        'fulfilled_date',
     ];
 
     /**
@@ -110,6 +112,22 @@ class OrderItemExtended extends OrderItem
     public function getStockIdAttribute(): ?int
     {
         return $this->inventoryNotification?->stock_id;
+    }
+
+    /**
+     * Get the dispatch date attribute for the order item.
+     */
+    public function getDispatchDateAttribute(): ?string
+    {
+        return $this->order->batch?->dispatch_date;
+    }
+
+    /**
+     * Get the fulfilled date attribute for the order item.
+     */
+    public function getFulfilledDateAttribute(): ?string
+    {
+        return $this->inventoryNotification?->completed_at;
     }
 
     /**

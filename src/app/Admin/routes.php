@@ -20,6 +20,7 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('info-pages', InfoPageController::class);
     $router->resource('orders', \OrderController::class);
+    $router->resource('order-items', OrderItemController::class);
     $router->get('orders/{order}/process', [\App\Admin\Controllers\OrderController::class, 'process'])->name('orders.process');
     $router->get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
     $router->post('orders/add-user-by-phone', [AdminOrderController::class, 'addUserByPhone']);
