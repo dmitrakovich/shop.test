@@ -78,13 +78,13 @@ class BuyoutOrderService
         $onlinePaymentsSum = $order->getAmountPaidOrders();
         $uniqItemsCount = $order->getUniqItemsCount();
         $totalCodSum = 0;
-        foreach ($order->items as $itemKey => $item) {
+        foreach ($order->itemsExtended as $itemKey => $item) {
             $itemPrice = $item->current_price;
-            if ((int)$order->payment_id === Installment::PAYMENT_METHOD_ID) {
-                $itemPrice = $itemPrice - (round(($itemPrice * 0.3), 2) * 2);
-            }
             $itemPrice += $order->delivery_price ? ($order->delivery_price / $uniqItemsCount) : 0;
             $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $uniqItemsCount) : 0;
+            if ((int)$order->payment_id === Installment::PAYMENT_METHOD_ID) {
+                $itemPrice = ($itemPrice - (2 * $item->installment_monthly_fee));
+            }
             $totalCodSum += $itemPrice;
 
             $itemsColNum = (28 + $itemKey);

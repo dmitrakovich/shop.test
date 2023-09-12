@@ -26,14 +26,18 @@ class BatchService
         $batch->loadMissing(
             [
                 'orders' => fn ($query) => $query->with([
-                    'items',
+                    'itemsExtended' => fn ($query) => $query
+                        ->where('status_key', 'pickup')
+                        ->with('installment'),
+                    'onlinePayments',
+                    'delivery',
                     'user' => fn ($q) => $q->with('lastAddress'),
                 ]),
             ]
         );
         $price = 11.46;
         foreach ($batch->orders as $key => $order) {
-            $cod = ($order->payment_id == 1) ? $order->getItemsPrice() : null;
+            $cod = ($order->payment_id == 1 || $order->payment_id == 4) ? $order->getTotalCODSum() : null;
             $result[] = [
                 ++$key, // * Порядковый номер ПО в списке (A) (1 – 9999999)
                 $order->first_name, // * Фамилия (B)
@@ -84,7 +88,7 @@ class BatchService
             375291793790, // Телефон отправителя (J)
             'info@barocco.by', // Электронный адрес отправителя (K)
         ]);
-        $fp = fopen(public_path($resultPublicPath), 'w');
+        $fp = fopen($resultStoragePath, 'w');
         foreach ($result as $fields) {
             fputcsv($fp, array_map(fn ($value) => iconv('UTF-8', 'Windows-1251//IGNORE', $value), $fields), ';');
         }

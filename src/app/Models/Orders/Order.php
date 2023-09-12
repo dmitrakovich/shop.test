@@ -358,16 +358,19 @@ class Order extends Model
         ]);
         $deliveryPrice = $this->delivery_price ? $this->delivery_price : 0;
         $onlinePaymentsSum = $this->getAmountPaidOrders();
-        $itemPrice = 0;
+        $resultItemPrice = 0;
+        $itemsCount = count($this->itemsExtended);
         foreach ($this->itemsExtended->where('status_key', 'pickup') as $item) {
+            $itemPrice = $item->current_price;
+            $itemPrice += $deliveryPrice ? ($deliveryPrice / $itemsCount) : 0;
+            $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $itemsCount) : 0;
             if ((int)$this->payment_id === Installment::PAYMENT_METHOD_ID) {
-                $itemPrice += $item->installment_monthly_fee;
-            } else {
-                $itemPrice += ($item->current_price * $item->count);
+                $itemPrice = ($itemPrice - (2 * $item->installment_monthly_fee));
             }
+            $resultItemPrice += $itemPrice;
         }
 
-        return $itemPrice + $deliveryPrice - $onlinePaymentsSum;
+        return $resultItemPrice;
     }
 
     /**
