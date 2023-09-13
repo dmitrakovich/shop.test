@@ -129,7 +129,7 @@ class OrderItem extends Model
      */
     public function isFinalStatus(): bool
     {
-        $finalStatuses = ['no_availability', 'canceled', 'complete'];
+        $finalStatuses = ['no_availability', 'canceled', 'return', 'return_fitting'];
 
         return in_array($this->status_key, $finalStatuses);
     }
