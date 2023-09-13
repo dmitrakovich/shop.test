@@ -90,7 +90,12 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
      */
     private function setPreparedMovedStockItems(): void
     {
+        // OrderItemPickupStatusLog::query()
+        //     ->whereDoesntHave('orderItem.inventoryNotification')
+        //     ->delete();
+
         OrderItemPickupStatusLog::query()
+            ->has('orderItem.inventoryNotification')
             ->with(['orderItem' => fn ($query) => $query->with('inventoryNotification')])
             ->where('moved', false)
             ->each(function (OrderItemPickupStatusLog $movedItem) {

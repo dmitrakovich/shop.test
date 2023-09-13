@@ -92,9 +92,9 @@ class OrderItemInventoryService
     public function outOfStock(int $notificationId): void
     {
         $inventoryNotification = $this->findNotification($notificationId);
-        $orderItems = collect([$inventoryNotification->orderItem]);
+        $orderItem = $inventoryNotification->orderItem;
         $inventoryNotification->delete();
-        $this->updateInventory($orderItems);
+        $this->deductSizeFromInventory($orderItem);
     }
 
     /**
@@ -147,6 +147,10 @@ class OrderItemInventoryService
                 ]);
                 $this->handleChangeItemStatus($orderItem->refresh());
             }
+        }
+
+        if ($count === $orderItem->count) {
+            $orderItem->outOfStock();
         }
 
         if ($totalAvailableCount <= 0) {

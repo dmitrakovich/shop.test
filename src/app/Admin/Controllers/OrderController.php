@@ -260,9 +260,13 @@ class OrderController extends AdminController
                     ->addElementClass($orderItem?->status_key === 'new' ? [] : ['disabled'])
                     ->required();
                 $nestedForm->image('product_photo', 'Фото товара')->readonly();
-                $nestedForm->select('size_id', 'Размер')->options(['загрузка...'])->required();
+                $nestedForm->select('size_id', 'Размер')
+                    ->options(['загрузка...'])
+                    ->addElementClass($orderItem?->isFinalStatus() ? ['disabled'] : [])
+                    ->required();
                 $nestedForm->select('status_key', 'Статус модели')
                     ->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'))
+                    ->addElementClass($orderItem?->isFinalStatus() ? ['disabled'] : [])
                     ->default(OrderItemStatus::DEFAULT_VALUE)
                     ->required();
                 $nestedForm->currency('old_price', 'Старая цена')->symbol($currencyCode);
@@ -542,6 +546,8 @@ $(function () {
     // disable editing for current items in order
     $('select.product_id').attr('disabled', true);
     $('select.stock_id.disabled').attr('disabled', true);
+    $('select.size_id.disabled').attr('disabled', true);
+    $('select.status_key.disabled').attr('disabled', true);
 
     // prepare current images
     $('#has-many-itemsExtended .file-input').each(function (index, element) {

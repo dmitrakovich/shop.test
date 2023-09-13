@@ -125,10 +125,28 @@ class OrderItem extends Model
     }
 
     /**
+     * Checks if the model's status is final.
+     */
+    public function isFinalStatus(): bool
+    {
+        $finalStatuses = ['no_availability', 'canceled', 'complete'];
+
+        return in_array($this->status_key, $finalStatuses);
+    }
+
+    /**
      * Set canceled status
      */
     public function cancel(): bool
     {
         return $this->update(['status_key' => 'canceled']);
+    }
+
+    /**
+     * Set `no_availability` status
+     */
+    public function outOfStock(): bool
+    {
+        return $this->update(['status_key' => 'no_availability']);
     }
 }

@@ -15,7 +15,9 @@ class DebugController extends Controller
     {
         return 'ok';
 
-        (new OrderItemInventoryService)->outOfStock(328);
+        (new OrderItemInventoryService)->outOfStock(1426);
+
+        return 'ok';
     }
 
     /**
