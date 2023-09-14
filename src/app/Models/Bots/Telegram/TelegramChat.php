@@ -24,6 +24,13 @@ class TelegramChat extends TelegraphChat
     use Notifiable;
 
     /**
+     * The attributes that should be cast.
+     */
+    protected $casts = [
+        'offline_notifications_pause_until' => 'datetime',
+    ];
+
+    /**
      * Get the bot that owns the chat.
      */
     public function bot(): BelongsTo

@@ -3,26 +3,30 @@
 namespace App\Http\Webhooks;
 
 use App\Enums\Bot\TelegramBotActions;
-use App\Models\Bots\Telegram\TelegramBot;
-use App\Models\Bots\Telegram\TelegramChat;
 use App\Models\Stock;
 use App\Services\Order\OrderItemInventoryService;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use DefStudio\Telegraph\Keyboard\Button;
 use DefStudio\Telegraph\Keyboard\Keyboard;
+use DefStudio\Telegraph\Models\TelegraphBot;
+use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Support\Stringable;
 
 class TelegramBotHandler extends WebhookHandler
 {
     /**
      * TelegramBot model.
+     *
+     * @var \App\Models\Bots\Telegram\TelegramBot
      */
-    protected TelegramBot $bot;
+    protected TelegraphBot $bot;
 
     /**
      * TelegramChat model.
+     *
+     * @var \App\Models\Bots\Telegram\TelegramChat
      */
-    protected TelegramChat $chat;
+    protected TelegraphChat $chat;
 
     /**
      * The service responsible for managing order item inventory.
@@ -196,7 +200,7 @@ class TelegramBotHandler extends WebhookHandler
     private function pause(int $minutes): void
     {
         $pauseUntil = $this->chat->setOfflineNotificationsPause($minutes);
-        $message = 'Уведомления по оффлайн заказам отключено до ' . $pauseUntil->format('d.m H:i:s');
+        $message = 'Уведомления по оффлайн заказам отключены до ' . $pauseUntil->format('d.m H:i:s');
 
         $this->chat->message($message)->send();
     }
