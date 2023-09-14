@@ -3,6 +3,8 @@
 namespace App\Http\Webhooks;
 
 use App\Enums\Bot\TelegramBotActions;
+use App\Models\Bots\Telegram\TelegramBot;
+use App\Models\Bots\Telegram\TelegramChat;
 use App\Models\Stock;
 use App\Services\Order\OrderItemInventoryService;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
@@ -12,6 +14,16 @@ use Illuminate\Support\Stringable;
 
 class TelegramBotHandler extends WebhookHandler
 {
+    /**
+     * TelegramBot model.
+     */
+    protected TelegramBot $bot;
+
+    /**
+     * TelegramChat model.
+     */
+    protected TelegramChat $chat;
+
     /**
      * The service responsible for managing order item inventory.
      */
@@ -135,6 +147,30 @@ class TelegramBotHandler extends WebhookHandler
     }
 
     /**
+     * Pause offline order notifications for 30 minutes and send a message about it.
+     */
+    public function pause30(): void
+    {
+        $this->pause(30);
+    }
+
+    /**
+     * Pause offline order notifications for 60 minutes and send a message about it.
+     */
+    public function pause60(): void
+    {
+        $this->pause(60);
+    }
+
+    /**
+     * Pause offline order notifications for 90 minutes and send a message about it.
+     */
+    public function pause90(): void
+    {
+        $this->pause(90);
+    }
+
+    /**
      * Check if the current chat is a private chat.
      */
     private function isPrivateChat(): bool
@@ -152,5 +188,16 @@ class TelegramBotHandler extends WebhookHandler
         if (isset($this->callbackQueryId)) {
             $this->reply($message);
         }
+    }
+
+    /**
+     * Pause offline order notifications for the specified number of minutes and send a message about it.
+     */
+    private function pause(int $minutes): void
+    {
+        $pauseUntil = $this->chat->setOfflineNotificationsPause($minutes);
+        $message = 'Уведомления по оффлайн заказам отключено до ' . $pauseUntil->format('d.m H:i:s');
+
+        $this->chat->message($message)->send();
     }
 }

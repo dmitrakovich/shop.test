@@ -141,7 +141,8 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
      */
     private function notify(int $productId, int $stockId, string $sizeField): void
     {
-        if (empty($chat = $this->getChatByStockId($stockId))) {
+        $chat = $this->getChatByStockId($stockId);
+        if (empty($chat) || $chat->areOfflineNotificationsPaused()) {
             return;
         }
 
