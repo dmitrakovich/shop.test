@@ -157,8 +157,12 @@ class TelegramBotHandler extends WebhookHandler
     {
         $minutesList = [30, 60, 90];
         $stocks = Stock::where('group_chat_id', $this->chat->id)->get(['id', 'internal_name']);
-        $keyboard = Keyboard::make();
+        if ($stocks->isEmpty()) {
+            $this->reply('Не найдены магазины для данного чата.');
 
+            return;
+        }
+        $keyboard = Keyboard::make();
         foreach ($minutesList as $minutes) {
             $buttonsRow = [];
             foreach ($stocks as $stock) {
