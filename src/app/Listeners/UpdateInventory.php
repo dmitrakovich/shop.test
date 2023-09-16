@@ -23,6 +23,8 @@ class UpdateInventory implements ShouldQueue
      */
     public function handle(OrderCreated $event): void
     {
-        $this->orderItemInventoryService->updateInventory($event->order->items);
+        if ($event->shouldUpdateInventory) {
+            $this->orderItemInventoryService->updateInventory($event->order->items);
+        }
     }
 }

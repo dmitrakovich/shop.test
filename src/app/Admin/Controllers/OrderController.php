@@ -342,7 +342,7 @@ class OrderController extends AdminController
                 $this->saveInstallments($form);
             }
             if ($form->isCreating()) {
-                event(new OrderCreated($form->model()));
+                event(new OrderCreated($form->model(), null, false));
             }
             // TODO: recalc order total price
         });

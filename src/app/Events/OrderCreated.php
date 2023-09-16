@@ -16,7 +16,10 @@ class OrderCreated
      *
      * @return void
      */
-    public function __construct(public Order $order, public ?User $user = null)
-    {
+    public function __construct(
+        public Order $order,
+        public ?User $user = null,
+        public bool $shouldUpdateInventory = true
+    ) {
     }
 }
