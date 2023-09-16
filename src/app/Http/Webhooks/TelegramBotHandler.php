@@ -177,13 +177,15 @@ class TelegramBotHandler extends WebhookHandler
     /**
      * Pause offline notifications for a specific stock.
      */
-    public function pauseAction() : void
+    public function pauseAction(): void
     {
-        $stockId = (int)$this->data->get('stock_id');
-        $minutes = (int)$this->data->get('minutes');
-        $pauseUntil = Stock::find($stockId)->setOfflineNotificationsPause($minutes);
+        $stock = Stock::find((int)$this->data->get('stock_id'));
+        $pauseUntil = $stock->setOfflineNotificationsPause((int)$this->data->get('minutes'));
 
-        $this->reply('Отключено до ' . $pauseUntil->format('d.m H:i:s'));
+        $this->chat->edit($this->messageId)
+            ->message("⏸ {$stock->internal_name} до {$pauseUntil->format('d.m H:i:s')}")
+            ->send();
+        $this->reply('Уведомления отключены');
     }
 
     /**
