@@ -40,7 +40,7 @@ class OrderItemController extends AbstractAdminController
             'product',
             'order.batch',
             'installment',
-            'inventoryNotification.stock.media'
+            'inventoryNotification.stock.media',
         ])->orderBy('id', 'desc');
 
         $grid->filter(function (Filter $filter) {
