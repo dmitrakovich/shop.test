@@ -34,8 +34,12 @@ class Stock extends Model implements HasMedia, Sortable
 
     protected $guarded = ['id'];
 
+    /**
+     * The attributes that should be cast.
+     */
     protected $casts = [
         'type' => StockTypeEnum::class,
+        'offline_notifications_pause_until' => 'datetime',
     ];
 
     public $sortable = [
