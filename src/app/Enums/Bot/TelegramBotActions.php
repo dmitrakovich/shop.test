@@ -11,6 +11,7 @@ enum TelegramBotActions: string
     case COLLECT_CONFIRM = 'collectConfirm';
     case OUT_OF_STOCK = 'outOfStock';
     case PICKUP_LIST = 'pickupListForChat';
+    case PAUSE = 'pauseAction';
 
     /**
      * Returns the name of the action.
@@ -22,6 +23,7 @@ enum TelegramBotActions: string
             self::COLLECT_CONFIRM => '✅ Собран',
             self::OUT_OF_STOCK => '❌ Нет в наличии',
             self::PICKUP_LIST => 'Список товаров для отгрузки',
+            self::PAUSE => 'Поставить на паузу уведомления о продажах с магазина',
         };
     }
 }

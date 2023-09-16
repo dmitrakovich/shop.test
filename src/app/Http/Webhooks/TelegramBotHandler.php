@@ -151,27 +151,39 @@ class TelegramBotHandler extends WebhookHandler
     }
 
     /**
-     * Pause offline order notifications for 30 minutes and send a message about it.
+     * Pause command. Initiate a pause action for offline notifications.
      */
-    public function pause30(): void
+    public function pause(): void
     {
-        $this->pause(30);
+        $minutesList = [30, 60, 90];
+        $stocks = Stock::where('group_chat_id', $this->chat->id)->get(['id', 'internal_name']);
+        $keyboard = Keyboard::make();
+
+        foreach ($minutesList as $minutes) {
+            $buttonsRow = [];
+            foreach ($stocks as $stock) {
+                $buttonsRow[] = Button::make("{$stock->internal_name} - {$minutes} мин.")
+                    ->action(TelegramBotActions::PAUSE->value)
+                    ->param('stock_id', $stock->id)
+                    ->param('minutes', $minutes);
+            }
+            $keyboard->row($buttonsRow);
+        }
+        $this->chat->message('Выберите магазин и продолжительность:')
+            ->keyboard($keyboard)
+            ->send();
     }
 
     /**
-     * Pause offline order notifications for 60 minutes and send a message about it.
+     * Pause offline notifications for a specific stock.
      */
-    public function pause60(): void
+    public function pauseAction() : void
     {
-        $this->pause(60);
-    }
+        $stockId = (int)$this->data->get('stock_id');
+        $minutes = (int)$this->data->get('minutes');
+        $pauseUntil = Stock::find($stockId)->setOfflineNotificationsPause($minutes);
 
-    /**
-     * Pause offline order notifications for 90 minutes and send a message about it.
-     */
-    public function pause90(): void
-    {
-        $this->pause(90);
+        $this->reply('Отключено до ' . $pauseUntil->format('d.m H:i:s'));
     }
 
     /**
@@ -192,16 +204,5 @@ class TelegramBotHandler extends WebhookHandler
         if (isset($this->callbackQueryId)) {
             $this->reply($message);
         }
-    }
-
-    /**
-     * Pause offline order notifications for the specified number of minutes and send a message about it.
-     */
-    private function pause(int $minutes): void
-    {
-        $pauseUntil = $this->chat->setOfflineNotificationsPause($minutes);
-        $message = 'Уведомления по оффлайн заказам отключены до ' . $pauseUntil->format('d.m H:i:s');
-
-        $this->chat->message($message)->send();
     }
 }

@@ -10,6 +10,7 @@ use App\Models\Orders\OrderItem;
 use App\Models\Stock;
 use App\Notifications\OrderItemInventoryNotification;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
 {
@@ -24,9 +25,11 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     private array $movedStockItems;
 
     /**
-     * Chat models cache
+     * Stock models collection
+     *
+     * @var Collection<Stock>
      */
-    private array $chats = [];
+    private Collection $stocks;
 
     /**
      * NotifyOfflineOrders constructor
@@ -45,6 +48,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     {
         $counter = 0;
         $emptySizes = $this->getEmptySizesStub();
+        $this->setStocks();
         $this->setPreparedNewStockItems();
         $this->setPreparedMovedStockItems();
 
@@ -142,7 +146,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     private function notify(int $productId, int $stockId, string $sizeField): void
     {
         $chat = $this->getChatByStockId($stockId);
-        if (empty($chat) || $chat->areOfflineNotificationsPaused()) {
+        if (empty($chat) || $this->areStockNotificationsPaused($stockId)) {
             return;
         }
 
@@ -159,14 +163,29 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     }
 
     /**
+     * Set the stocks for the current context.
+     */
+    private function setStocks(): void
+    {
+        $this->stocks = Stock::with(['groupChat'])
+            ->where('check_availability', true)
+            ->get(['id', 'group_chat_id', 'offline_notifications_pause_until'])
+            ->keyBy('id');
+    }
+
+    /**
      * Get the Telegram chat model associated with the specified stock ID.
      */
     private function getChatByStockId(int $stockId): ?TelegramChat
     {
-        if (empty($this->chats[$stockId])) {
-            $this->chats[$stockId] = Stock::find($stockId)->groupChat;
-        }
+        return $this->stocks[$stockId]->groupChat;
+    }
 
-        return $this->chats[$stockId];
+    /**
+     * Check if offline notifications are paused for a specific stock.
+     */
+    private function areStockNotificationsPaused(int $stockId): bool
+    {
+        return $this->stocks[$stockId]->areOfflineNotificationsPaused();
     }
 }

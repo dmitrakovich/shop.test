@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use Illuminate\Support\Carbon;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\HasMedia;
@@ -15,6 +16,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property int $id
+ * @property Carbon $offline_notifications_pause_until
  * @property string $name
  * @property string $address
  * @property-read TelegramChat $privateChat
@@ -115,5 +117,27 @@ class Stock extends Model implements HasMedia, Sortable
     public function getPhotosAttribute()
     {
         return $this->getMedia()->map(fn ($media) => $media->getUrl());
+    }
+
+    /**
+     * Set a pause for offline order notifications and return the new pause time.
+     */
+    public function setOfflineNotificationsPause(int $minutes): Carbon
+    {
+        $newPauseUntil = now()->addMinutes($minutes);
+
+        $this->offline_notifications_pause_until = $newPauseUntil;
+        $this->save();
+
+        return $newPauseUntil;
+    }
+
+    /**
+     * Check if offline order notifications are paused relative to the current time.
+     */
+    public function areOfflineNotificationsPaused(): bool
+    {
+        return $this->offline_notifications_pause_until !== null
+            && $this->offline_notifications_pause_until->isFuture();
     }
 }
