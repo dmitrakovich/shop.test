@@ -6,7 +6,6 @@ use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Services\Order\OrderItemInventoryService;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 
@@ -14,8 +13,6 @@ class DebugController extends Controller
 {
     public function index()
     {
-        Log::channel('debug')->debug('test debug', ['contex' => 556]);
-
         return 'ok';
 
         (new OrderItemInventoryService)->outOfStock(1426);

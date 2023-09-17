@@ -63,6 +63,9 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
             foreach ($oldSizes as $sizeKey => $oldCount) {
                 $newCount = $newSizes[$sizeKey];
                 if ($this->shouldNotify($newCount, $oldCount, $productId, $stockId, $sizeKey)) {
+
+                    $this->debug('try notify about:', compact('productId', 'stockId', 'sizeKey', 'oldCount', 'newCount'));
+
                     $this->notify($productId, $stockId, $sizeKey);
                     $counter++;
                 }

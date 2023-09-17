@@ -12,6 +12,7 @@ use DefStudio\Telegraph\Telegraph;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 
 class OrderItemInventoryNotification extends Notification implements ShouldQueue
 {
@@ -50,6 +51,8 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
         {$this->getOrderInfo()}
         {$stock->name} {$stock->address}
         MSG;
+
+        Log::channel('debug')->debug($message);
 
         return $chat->message($message)
             ->photo($product->getFirstMediaPath('default', 'catalog'))

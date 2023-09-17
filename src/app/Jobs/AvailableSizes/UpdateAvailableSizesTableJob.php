@@ -343,20 +343,24 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     protected function updateAvailableSizesFromOrders(array &$availableSizes): int
     {
         $productsInOrders = [];
+        $productsInOrdersDebug = [];
         $sizesCount = OrderItem::query()
             ->whereIn('status_key', ['new', 'reserved', 'confirmed', 'collect', 'pickup'])
             ->has('inventoryNotification')
             ->whereDoesntHave('moving', fn (Builder $query) => $query->where('moved', true))
             ->with('inventoryNotification:order_item_id,stock_id')
             ->get(['id', 'product_id', 'size_id', 'count'])
-            ->each(function (OrderItem $orderItem) use (&$productsInOrders) {
+            ->each(function (OrderItem $orderItem) use (&$productsInOrders, &$productsInOrdersDebug) {
                 $productId = $orderItem->product_id;
                 $sizeId = $orderItem->size_id;
                 $stockId = $orderItem->inventoryNotification->stock_id;
                 $sizeCount = ($productsInOrders[$productId][$stockId][$sizeId] ?? 0) + $orderItem->count;
                 $productsInOrders[$productId][$stockId][$sizeId] = $sizeCount;
+                $productsInOrdersDebug[$orderItem->id][$productId][$stockId][$sizeId] = $sizeCount;
             })
             ->count();
+
+        $this->debug("productsInOrdersDebug:", $productsInOrdersDebug);
 
         foreach ($availableSizes as &$stock) {
             if (empty($stock['product_id'])) {
@@ -367,6 +371,9 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
             foreach ($productsInOrders[$productId][$stockId] ?? [] as $sizeId => &$count) {
                 $sizeField = AvailableSizes::convertSizeIdToField($sizeId);
                 $originalStockCount = $stock[$sizeField];
+
+                $this->debug('subtract to order:', compact('stockId', 'productId', 'sizeField', 'count', 'originalStockCount'));
+
                 if ($stock[$sizeField] - $count <= 0) {
                     $stock[$sizeField] = 0;
                 } else {
