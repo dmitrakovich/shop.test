@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Config;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
@@ -345,6 +346,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $sizesCount = OrderItem::query()
             ->whereIn('status_key', ['new', 'reserved', 'confirmed', 'collect', 'pickup'])
             ->has('inventoryNotification')
+            ->whereDoesntHave('moving', fn (Builder $query) => $query->where('moved', true))
             ->with('inventoryNotification:order_item_id,stock_id')
             ->get(['id', 'product_id', 'size_id', 'count'])
             ->each(function (OrderItem $orderItem) use (&$productsInOrders) {
