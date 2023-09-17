@@ -162,19 +162,17 @@ class TelegramBotHandler extends WebhookHandler
 
             return;
         }
-        $keyboard = Keyboard::make();
-        foreach ($minutesList as $minutes) {
-            $buttonsRow = [];
-            foreach ($stocks as $stock) {
-                $buttonsRow[] = Button::make("{$stock->internal_name} - {$minutes} мин.")
+        $buttons = [];
+        foreach ($stocks as $stock) {
+            foreach ($minutesList as $minutes) {
+                $buttons[] = Button::make("{$stock->internal_name} - {$minutes} мин.")
                     ->action(TelegramBotActions::PAUSE->value)
                     ->param('stock_id', $stock->id)
                     ->param('minutes', $minutes);
             }
-            $keyboard->row($buttonsRow);
         }
         $this->chat->message('Выберите магазин и продолжительность:')
-            ->keyboard($keyboard)
+            ->keyboard(Keyboard::make()->buttons($buttons))
             ->send();
     }
 
