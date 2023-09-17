@@ -33,7 +33,7 @@ class UpdateAvailableSizesFullTableJob extends UpdateAvailableSizesTableJob
     /**
      * Write message in logs
      */
-    protected function log(string $message, string $level = 'info'): void
+    protected function log(string $message, string $level = '', string $channel = ''): void
     {
         //
     }

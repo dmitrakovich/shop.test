@@ -20,10 +20,10 @@ class SendInstallmentNoticeJob extends AbstractJob
      */
     public function handle(InstallmentService $installmentService)
     {
-        $this->debug('Отправка уведомлений о рассрочке');
+        $this->log('Отправка уведомлений о рассрочке');
 
         $count = $installmentService->sendNotifications();
 
-        $this->debug('Отправлено ' . DeclensionNoun::make($count, 'уведомление'));
+        $this->log('Отправлено ' . DeclensionNoun::make($count, 'уведомление'));
     }
 }

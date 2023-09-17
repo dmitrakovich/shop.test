@@ -156,6 +156,14 @@ return [
             'level' => 'debug',
         ],
 
+        'debug' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/debug.log'),
+            'tap' => [SimpleFormatter::class],
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 7,
+        ],
+
     ],
 
 ];

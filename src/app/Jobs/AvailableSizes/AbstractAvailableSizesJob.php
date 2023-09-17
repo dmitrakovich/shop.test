@@ -3,6 +3,7 @@
 namespace App\Jobs\AvailableSizes;
 
 use App\Jobs\AbstractJob;
+use Illuminate\Support\Facades\Log;
 
 abstract class AbstractAvailableSizesJob extends AbstractJob
 {
@@ -21,8 +22,16 @@ abstract class AbstractAvailableSizesJob extends AbstractJob
     /**
      * Write message in logs
      */
-    protected function log(string $message, string $level = 'info'): void
+    protected function log(string $message, string $level = 'info', string $channel = ''): void
     {
-        $this->debug($message, 'update_availability', $level);
+        parent::log($message, $level, 'update_availability');
+    }
+
+    /**
+     * Write message in debug log
+     */
+    protected function debug(string $message, array $context = []): void
+    {
+        Log::channel('debug')->debug($message, $context);
     }
 }

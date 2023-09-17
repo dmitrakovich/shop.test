@@ -40,7 +40,7 @@ abstract class AbstractJob implements ShouldQueue
             File: {$exception->getFile()};
             MSG;
         // Trace: {$exception->getTraceAsString()};
-        $this->complete("{$exception->getMessage()} [{$this->getName()}]", 'jobs', 'error');
+        $this->error("{$exception->getMessage()} [{$this->getName()}]");
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class AbstractJob implements ShouldQueue
     /**
      * Запись отадочных сообщений в логd
      */
-    protected function debug(string $msg, string $channel = 'jobs', string $type = 'info'): void
+    protected function log(string $msg, string $level = 'info', string $channel = 'jobs'): void
     {
         $msg = "$msg [{$this->getName()}]";
         $context = [];
@@ -69,7 +69,7 @@ abstract class AbstractJob implements ShouldQueue
                     break;
             }
         }
-        Log::channel($channel)->$type($msg, $context);
+        Log::channel($channel)->log($level, $msg, $context);
     }
 
     /**
@@ -77,16 +77,7 @@ abstract class AbstractJob implements ShouldQueue
      */
     protected function error(string $msg): void
     {
-        $this->debug($msg, 'jobs', 'error');
-    }
-
-    /**
-     * Запись сообщения об окончании работы
-     */
-    protected function complete(string $msg, string $channel = 'jobs', string $type = 'info'): void
-    {
-        $this->debug($msg, $channel, $type);
-        // Log::channel($channel)->info(str_repeat('-', 40));
+        $this->log($msg, 'error');
     }
 
     /**

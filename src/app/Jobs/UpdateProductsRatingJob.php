@@ -35,7 +35,7 @@ class UpdateProductsRatingJob extends AbstractJob
      */
     public function handle()
     {
-        $this->debug('Старт');
+        $this->log('Старт');
         $ratingConfigModel = Config::findOrFail('rating');
         $ratingConfig = $ratingConfigModel->config;
         $counterYandexId = config('services.yandex.counter_id');
@@ -233,12 +233,12 @@ class UpdateProductsRatingJob extends AbstractJob
 
         $ratingConfig['last_update'] = date('Y-m-d H:i:s');
 
-        $this->debug(count($rating) . ' товаров');
+        $this->log(count($rating) . ' товаров');
         unset($rating);
 
         $ratingConfigModel->update(['config' => $ratingConfig]);
 
-        $this->complete('Успешно выполнено');
+        $this->log('Успешно выполнено');
     }
 
     private function getInitInfo(): array

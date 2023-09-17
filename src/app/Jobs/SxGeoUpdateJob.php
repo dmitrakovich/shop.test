@@ -67,7 +67,7 @@ class SxGeoUpdateJob extends AbstractJob
      */
     public function handle()
     {
-        $this->debug('Старт. Скачиваем архив с сервера');
+        $this->log('Старт. Скачиваем архив с сервера');
 
         $zipFile = $this->sxGeoPath . '/SxGeoTmp.zip';
 
@@ -84,11 +84,11 @@ class SxGeoUpdateJob extends AbstractJob
         if ($response->status() == 304) {
             @unlink($zipFile);
 
-            return $this->debug('Архив не обновился, с момента предыдущего скачивания');
+            return $this->log('Архив не обновился, с момента предыдущего скачивания');
         }
 
         $this->lastModified = $response->header('Last-Modified');
-        $this->debug('Архив скачан с сервера. Распаковываем');
+        $this->log('Архив скачан с сервера. Распаковываем');
 
         $zip = new ZipArchive;
         if ($zip->open($zipFile) === true) {
@@ -101,7 +101,7 @@ class SxGeoUpdateJob extends AbstractJob
 
         file_put_contents($this->lastUpdFile, $this->lastModified);
 
-        $this->debug('База успешно обновлена');
+        $this->log('База успешно обновлена');
     }
 
     /**
