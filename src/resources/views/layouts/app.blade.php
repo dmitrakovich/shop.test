@@ -25,8 +25,13 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('/apple-touch-icon-180x180.png') }}">
 
     <!-- Scripts -->
-    {{-- <script src="{{ mix('js/manifest.js') }}" defer></script>
-        <script src="{{ mix('js/vendor.js') }}" defer></script> --}}
+    <script src="{{ mix('js/manifest.js') }}" defer></script>
+    <script src="{{ mix('js/lodash.js') }}" defer></script>
+    <script src="{{ mix('js/jquery.js') }}" defer></script>
+    <script src="{{ mix('js/fancybox.js') }}" defer></script>
+    <script src="{{ mix('js/ui.js') }}" defer></script>
+    <script src="{{ mix('js/utils.js') }}" defer></script>
+    <script src="{{ mix('js/vendor.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}" defer></script>
 
     {{-- Google Tag Manager --}}
