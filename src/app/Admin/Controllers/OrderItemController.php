@@ -29,7 +29,9 @@ class OrderItemController extends AbstractAdminController
         $grid->column('product_id', 'Код товара');
         $grid->column('product_name', 'Наименование товара');
         $grid->column('size.name', 'Размер');
-        $grid->column('order_id', 'Номер заказа');
+        $grid->column('order_id', 'Номер заказа')->display(function ($orderId) {
+            return "<a href='orders/$orderId/edit' target='_blank'>$orderId</a>";
+        });
         $grid->column('status.name_for_admin', 'Статус модели');
         $grid->column('stock_name', 'Склад');
         $grid->column('order.created_at', 'Дата заказа');
