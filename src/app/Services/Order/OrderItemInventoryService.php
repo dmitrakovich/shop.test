@@ -3,7 +3,7 @@
 namespace App\Services\Order;
 
 use App\Models\AvailableSizes;
-use App\Models\Logs\OrderItemInventoryNotificationLog;
+use App\Models\Logs\OrderItemStatusLog;
 use App\Models\Orders\OrderItem;
 use App\Models\Product;
 use App\Models\Stock;
@@ -19,12 +19,11 @@ class OrderItemInventoryService
 {
     /**
      * Possible statuses for which notifications are sent.
+     *
+     * @var array<string>
      */
     const STATUSES_FOR_NOTIFICATIONS = [
-        // 'new',
-        // 'canceled',
         'confirmed',
-        // 'pickup',
         'complete',
         'installment',
         'return',
@@ -46,8 +45,9 @@ class OrderItemInventoryService
         if ($this->shouldSendNotification($orderItem)) {
             $chat = $orderItem->inventoryNotification->getChatByStatus($orderItem->status_key);
             $chat->notify(new OrderItemInventoryNotification($orderItem));
-            $orderItem->inventoryNotification->setDateFieldForStatus($orderItem->status_key);
+
         }
+        $orderItem->statusLog->setDateFieldForStatus($orderItem->status_key);
     }
 
     /**
@@ -237,11 +237,11 @@ class OrderItemInventoryService
     }
 
     /**
-     * Find OrderItemInventoryNotificationLog model by id
+     * Find notification model by id
      */
-    private function findNotification(int $id): OrderItemInventoryNotificationLog
+    private function findNotification(int $id): OrderItemStatusLog
     {
-        return OrderItemInventoryNotificationLog::query()->find($id);
+        return OrderItemStatusLog::query()->find($id);
     }
 
     /**
@@ -257,7 +257,7 @@ class OrderItemInventoryService
             return "Чат с id {$privateChatId} не привязан ни к одному складу";
         }
         $pickupList = 'Забор на ' . date('d.m.Y') . ' магазин ' . $stock->name . ' ' . $stock->address;
-        $orderItemIds = OrderItemInventoryNotificationLog::query()
+        $orderItemIds = OrderItemStatusLog::query()
             ->where('stock_id', $stock->id)
             ->whereNotNull('collected_at')
             ->whereNull('picked_up_at')

@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Models\Logs\OrderItemPickupStatusLog;
 use App\Models\Orders\OrderItem;
 use App\Models\Orders\OrderItemExtended;
 use App\Services\LogService;
@@ -43,12 +42,6 @@ class OrderItemObserver
     {
         if ($orderItem->isDirty('status_key')) {
             (new OrderItemInventoryService)->handleChangeItemStatus($orderItem->refresh());
-
-            if ($orderItem->status_key === 'pickup') {
-                OrderItemPickupStatusLog::query()->firstOrCreate([
-                    'order_item_id' => $orderItem->id,
-                ]);
-            }
         }
     }
 

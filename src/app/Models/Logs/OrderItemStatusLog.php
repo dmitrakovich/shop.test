@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Logs\OrderItemInventoryNotificationLog
+ * App\Models\Logs\OrderItemStatusLog
  *
  * @property int $id
  * @property int $order_item_id
@@ -28,14 +28,14 @@ use Illuminate\Support\Carbon;
  * @property-read OrderItem $orderItem
  * @property-read Stock $stock
  */
-class OrderItemInventoryNotificationLog extends Model
+class OrderItemStatusLog extends Model
 {
     use SoftDeletes;
 
     /**
      * The table associated with the model.
      */
-    protected $table = 'log_order_item_inventory_notifications';
+    protected $table = 'log_order_item_statuses';
 
     /**
      * The attributes that aren't mass assignable.
@@ -70,23 +70,25 @@ class OrderItemInventoryNotificationLog extends Model
      */
     public function setDateFieldForStatus(string $status): void
     {
-        $dateField = $this->getDateFieldByStatus($status);
-        $this->{$dateField} = now();
-        $this->save();
+        if ($dateField = $this->getDateFieldByStatus($status)) {
+            $this->{$dateField} = now();
+            $this->save();
+        }
     }
 
     /**
      * Get the corresponding date field name for the given status.
      */
-    public static function getDateFieldByStatus(string $status): string
+    public static function getDateFieldByStatus(string $status): ?string
     {
         return match ($status) {
             'canceled' => 'canceled_at',
             'confirmed' => 'confirmed_at',
             'pickup' => 'picked_up_at',
+            'sent', 'fitting' => 'sended_at',
             'complete', 'installment' => 'completed_at',
             'return', 'return_fitting' => 'returned_at',
-            default => 'sended_at',
+            default => null
         };
     }
 

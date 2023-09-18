@@ -2,8 +2,7 @@
 
 namespace App\Models\Orders;
 
-use App\Models\Logs\OrderItemInventoryNotificationLog;
-use App\Models\Logs\OrderItemPickupStatusLog;
+use App\Models\Logs\OrderItemStatusLog;
 use App\Models\Payments\Installment;
 use App\Models\Product;
 use App\Models\Size;
@@ -34,8 +33,8 @@ use Illuminate\Database\Eloquent\Relations;
  * @property-read Size $size
  * @property-read OrderItemStatus $status
  * @property-read Installment $installment
- * @property-read OrderItemInventoryNotificationLog $inventoryNotification
- * @property-read OrderItemPickupStatusLog $moving
+ * @property-read OrderItemStatusLog $inventoryNotification
+ * @property-read OrderItemStatusLog $statusLog
  */
 class OrderItem extends Model
 {
@@ -111,19 +110,19 @@ class OrderItem extends Model
     }
 
     /**
-     * Get the inventory notification associated with the order item.
+     * Get the inventory notification associated with the order item. Alias for statusLog
      */
     public function inventoryNotification(): Relations\HasOne
     {
-        return $this->hasOne(OrderItemInventoryNotificationLog::class);
+        return $this->hasOne(OrderItemStatusLog::class);
     }
 
     /**
-     * Get order item moving status.
+     * Get the status log associated with the order item.
      */
-    public function moving(): Relations\HasOne
+    public function statusLog(): Relations\HasOne
     {
-        return $this->hasOne(OrderItemPickupStatusLog::class);
+        return $this->hasOne(OrderItemStatusLog::class);
     }
 
     /**

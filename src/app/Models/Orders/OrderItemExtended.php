@@ -111,7 +111,7 @@ class OrderItemExtended extends OrderItem
      */
     public function getStockIdAttribute(): ?int
     {
-        return $this->inventoryNotification?->stock_id;
+        return $this->statusLog?->stock_id;
     }
 
     /**
@@ -119,7 +119,7 @@ class OrderItemExtended extends OrderItem
      */
     public function getDispatchDateAttribute(): ?string
     {
-        return $this->order->batch?->dispatch_date;
+        return $this->statusLog?->sended_at;
     }
 
     /**
@@ -127,7 +127,7 @@ class OrderItemExtended extends OrderItem
      */
     public function getFulfilledDateAttribute(): ?string
     {
-        return $this->inventoryNotification?->completed_at;
+        return $this->statusLog?->completed_at;
     }
 
     /**
@@ -135,7 +135,7 @@ class OrderItemExtended extends OrderItem
      */
     public function getStockNameAttribute(): ?string
     {
-        if (empty($stock = $this->inventoryNotification?->stock)) {
+        if (empty($stock = $this->statusLog?->stock)) {
             return null;
         }
 

@@ -4,8 +4,7 @@ namespace App\Jobs\AvailableSizes;
 
 use App\Models\AvailableSizes;
 use App\Models\Bots\Telegram\TelegramChat;
-use App\Models\Logs\OrderItemInventoryNotificationLog;
-use App\Models\Logs\OrderItemPickupStatusLog;
+use App\Models\Logs\OrderItemStatusLog;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
 use App\Notifications\OrderItemInventoryNotification;
@@ -97,19 +96,14 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
      */
     private function setPreparedMovedStockItems(): void
     {
-        // OrderItemPickupStatusLog::query()
-        //     ->whereDoesntHave('orderItem.inventoryNotification')
-        //     ->delete();
-
-        OrderItemPickupStatusLog::query()
-            ->has('orderItem.inventoryNotification')
-            ->with(['orderItem' => fn ($query) => $query->with('inventoryNotification')])
-            ->where('moved', false)
-            ->each(function (OrderItemPickupStatusLog $movedItem) {
+        OrderItemStatusLog::with(['orderItem'])
+            ->whereNotNull('picked_up_at')
+            ->whereNull('moved_at')
+            ->each(function (OrderItemStatusLog $movedItem) {
                 $productId = $movedItem->orderItem->product_id;
                 $sizeField = AvailableSizes::convertSizeIdToField($movedItem->orderItem->size_id);
                 $count = $movedItem->orderItem->count;
-                $stockId = $movedItem->orderItem->inventoryNotification->stock_id;
+                $stockId = $movedItem->stock_id;
                 $this->movedStockItems[$productId][$stockId][$sizeField][$movedItem->id] = $count;
             });
     }
@@ -134,7 +128,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
         $movedItems = $this->movedStockItems[$productId][$stockId][$sizeKey] ?? [];
         foreach ($movedItems as $id => $count) {
             $newCount += $count;
-            OrderItemPickupStatusLog::where('id', $id)->update(['moved' => true]);
+            OrderItemStatusLog::where('id', $id)->update(['moved_at' => now()]);
             if ($newCount >= $oldCount) {
                 return false;
             }
@@ -153,14 +147,11 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
             return;
         }
 
-        $notification = OrderItemInventoryNotificationLog::make([
-            'stock_id' => $stockId,
-        ]);
         $orderItem = OrderItem::make([
             'product_id' => $productId,
             'size_id' => AvailableSizes::convertFieldToSizeId($sizeField),
             'status_key' => 'complete',
-        ])->setRelation('inventoryNotification', $notification);
+        ])->setRelation('statusLog', OrderItemStatusLog::make(['stock_id' => $stockId]));
 
         $chat->notifyNow(new OrderItemInventoryNotification($orderItem));
     }
