@@ -97,6 +97,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     private function setPreparedMovedStockItems(): void
     {
         OrderItemStatusLog::with(['orderItem'])
+            ->has('orderItem')
             ->whereNotNull('picked_up_at')
             ->whereNull('moved_at')
             ->each(function (OrderItemStatusLog $movedItem) {
