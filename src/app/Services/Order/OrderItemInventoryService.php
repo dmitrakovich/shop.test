@@ -47,7 +47,7 @@ class OrderItemInventoryService
             $chat->notify(new OrderItemInventoryNotification($orderItem));
 
         }
-        $orderItem->statusLog->setDateFieldForStatus($orderItem->status_key);
+        $orderItem->statusLog?->setDateFieldForStatus($orderItem->status_key);
     }
 
     /**
