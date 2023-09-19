@@ -4,6 +4,7 @@ namespace App\Admin\Actions\Order;
 
 use App\Enums\DeliveryTypeEnum;
 use App\Models\Orders\OrderTrack;
+use App\Services\Departures\BelpostLabelService;
 use Encore\Admin\Actions\Action;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,20 @@ class TrackRange extends Action
     public $name = 'Добавить диапазон';
 
     protected $selector = '.js-trackRange';
+
+    /**
+     * Instance of the BelpostLabelService for handling Belarus Post label operations.
+     */
+    private BelpostLabelService $belpostLabelService;
+
+    /**
+     * TrackRange Action constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->belpostLabelService = app(BelpostLabelService::class);
+    }
 
     /**
      * Action hadle
@@ -27,8 +42,10 @@ class TrackRange extends Action
             throw new \Exception('Номер начала диапазона должно быть больше номера конца диапазона');
         }
         for ($i = $rangeStartNum; $i <= $rangeEndNum; $i++) {
+            $labelNumber = str_pad($i, 8, '0', STR_PAD_LEFT);
+            $checkSum = $this->belpostLabelService->calculateCheckSum($labelNumber);
             OrderTrack::firstOrCreate([
-                'track_number' => $departureSeries . $i . 'BY',
+                'track_number' => $departureSeries . $labelNumber . $checkSum . 'BY',
             ]);
         }
 

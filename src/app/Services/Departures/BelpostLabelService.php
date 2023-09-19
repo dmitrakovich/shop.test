@@ -17,6 +17,11 @@ use Picqer\Barcode\BarcodeGeneratorJPG;
 class BelpostLabelService
 {
     /**
+     * Label number multipliers
+     */
+    const MULTIPLIERS = [8, 6, 4, 2, 3, 5, 9, 7];
+
+    /**
      * Create label
      */
     public function createLabel(Order $order): string
@@ -131,5 +136,30 @@ class BelpostLabelService
         ]);
 
         return url($resultPath);
+    }
+
+    /**
+     * Calculate the checksum for a Belarus Post label.
+     */
+    public function calculateCheckSum(string $labelNumber): int
+    {
+        if (strlen($labelNumber) !== 8 || !is_numeric($labelNumber)) {
+            throw new \Exception('Invalid label number');
+        }
+        $sum = 0;
+        for ($i = 0; $i < 8; $i++) {
+            $digit = (int)$labelNumber[$i];
+            $sum += $digit * self::MULTIPLIERS[$i];
+        }
+        $remainder = $sum % 11;
+        $result = 11 - $remainder;
+
+        if ($result > 10) {
+            return 5;
+        } elseif ($result === 10) {
+            return 0;
+        } else {
+            return $result;
+        }
     }
 }
