@@ -266,7 +266,6 @@ class Product extends Model implements HasMedia
     /**
      * Поиск товаров
      *
-     * @param  string  $search
      * @return Builder
      */
     public function scopeSearch(Builder $query, ?string $search = null)

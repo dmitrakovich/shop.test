@@ -10,8 +10,6 @@ enum OnlinePaymentMethodEnum: int
 
     /**
      * Получить название
-     *
-     * @return string
      */
     public function name(): ?string
     {
@@ -40,7 +38,6 @@ enum OnlinePaymentMethodEnum: int
      * Получить enum по value
      *
      * @param  ?int  $value - значение
-     * @return OnlinePaymentMethodEnum
      */
     public static function enumByValue(?int $value): ?self
     {

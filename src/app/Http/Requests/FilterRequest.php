@@ -70,8 +70,6 @@ class FilterRequest extends FormRequest
 
     /**
      * Get city
-     *
-     * @return City
      */
     public function getCity(): ?City
     {

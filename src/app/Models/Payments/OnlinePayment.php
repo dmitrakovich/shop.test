@@ -101,8 +101,6 @@ class OnlinePayment extends Model
 
     /**
      * Get online paymeny link.
-     *
-     * @return string
      */
     public function getLinkAttribute(): ?string
     {

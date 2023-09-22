@@ -16,8 +16,6 @@ class PaymentService
 
     /**
      * Get payment by payment_url.
-     *
-     * @return OnlinePayment
      */
     public function getOnlinePaymentByPaymentUrl(string $payment_url, OnlinePaymentMethodEnum $method_enum): ?OnlinePayment
     {
@@ -99,8 +97,6 @@ class PaymentService
 
     /**
      * Get OnlinePayment by link_code
-     *
-     * @return OnlinePayment
      */
     public function getPaymentByLinkCode(string $linkCode): ?OnlinePayment
     {
