@@ -32,7 +32,7 @@ class OrderToSendController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Order());
-        $grid->model()->whereIn('status_key', ['packaging', 'ready'])->doesntHave('batch')->orderBy('id', 'desc');
+        $grid->model()->whereIn('status_key', ['packaging', 'ready', 'sent'])->doesntHave('batch')->orderBy('id', 'desc');
 
         $admins = Administrator::pluck('name', 'id');
         $orderStatuses = OrderStatus::ordered()->pluck('name_for_admin', 'key');

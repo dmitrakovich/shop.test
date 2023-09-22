@@ -27,7 +27,7 @@ class BatchService
             [
                 'orders' => fn ($query) => $query->with([
                     'itemsExtended' => fn ($query) => $query
-                        ->where('status_key', 'pickup')
+                        ->whereIn('status_key', ['pickup', 'sent', 'fitting'])
                         ->with('installment'),
                     'onlinePayments',
                     'delivery',
