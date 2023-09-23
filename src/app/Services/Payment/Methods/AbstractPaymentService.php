@@ -17,9 +17,6 @@ abstract class AbstractPaymentService
 
     /**
      * Get payment by payment_id.
-     *
-     * @param  OnlinePaymentMethodEnum  $methodEnum
-     * @return OnlinePayment
      */
     public function getOnlinePaymentByPaymentId(
         string $paymentId,

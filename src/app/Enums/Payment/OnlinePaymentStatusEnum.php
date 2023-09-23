@@ -11,8 +11,6 @@ enum OnlinePaymentStatusEnum: int
 
     /**
      * Получить название
-     *
-     * @return string
      */
     public function name(): ?string
     {

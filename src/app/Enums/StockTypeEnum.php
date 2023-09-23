@@ -9,8 +9,6 @@ enum StockTypeEnum: string
 
     /**
      * Получить название
-     *
-     * @return string
      */
     public function name(): ?string
     {

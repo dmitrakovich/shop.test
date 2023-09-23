@@ -359,7 +359,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
             })
             ->count();
 
-        $this->debug("productsInOrdersDebug:", $productsInOrdersDebug);
+        $this->debug('productsInOrdersDebug:', $productsInOrdersDebug);
 
         foreach ($availableSizes as &$stock) {
             if (empty($stock['product_id'])) {

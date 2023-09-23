@@ -8,8 +8,6 @@ enum DeliveryTypeEnum: int
 
     /**
      * Получить название
-     *
-     * @return string
      */
     public function name(): ?string
     {
