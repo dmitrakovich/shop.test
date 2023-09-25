@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Exports\OrderItemsExporter;
 use App\Models\Orders\OrderItemExtended;
 use App\Models\Orders\OrderItemStatus;
 use Encore\Admin\Grid;
@@ -14,7 +15,7 @@ class OrderItemController extends AbstractAdminController
      *
      * @var string
      */
-    protected $title = 'OrderItemExtended';
+    protected $title = 'Товары в заказах';
 
     /**
      * Make a grid builder.
@@ -56,7 +57,7 @@ class OrderItemController extends AbstractAdminController
             $filter->equal('status_key', 'Статус товара')->select(OrderItemStatus::pluck('name_for_admin', 'key'));
         });
 
-        // $grid->exporter(new StockExporter());
+        $grid->exporter(new OrderItemsExporter());
         // $grid->paginate(100);
         // $grid->perPages([50, 100, 250, 500, 1000]);
         $grid->disableActions();
