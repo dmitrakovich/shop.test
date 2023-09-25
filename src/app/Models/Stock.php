@@ -5,27 +5,32 @@ namespace App\Models;
 use App\Enums\StockTypeEnum;
 use App\Models\Bots\Telegram\TelegramChat;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Carbon;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use WendellAdriel\Lift\Attributes\Relations\BelongsTo;
+use WendellAdriel\Lift\Lift;
 
 /**
  * @property int $id
  * @property Carbon $offline_notifications_pause_until
  * @property string $name
  * @property string $address
- * @property-read TelegramChat $privateChat
- * @property-read TelegramChat $groupChat
+ * @property-read City $city City
+ * @property-read TelegramChat $privateChat Private chat for notifications
+ * @property-read TelegramChat $groupChat Group chat for notifications
  */
+#[BelongsTo(City::class)]
+#[BelongsTo(TelegramChat::class, 'privateChat', 'private_chat_id')]
+#[BelongsTo(TelegramChat::class, 'groupChat', 'group_chat_id')]
 class Stock extends Model implements HasMedia, Sortable
 {
-    use HasFactory;
-    use InteractsWithMedia, SortableTrait;
+    use InteractsWithMedia;
+    use SortableTrait;
+    use Lift;
 
     /**
      * Temp constant for Minsk stock id
@@ -57,30 +62,6 @@ class Stock extends Model implements HasMedia, Sortable
         static::addGlobalScope('order', function (Builder $builder) {
             $builder->orderBy('sorting', 'asc');
         });
-    }
-
-    /**
-     * City
-     */
-    public function city(): Relations\BelongsTo
-    {
-        return $this->belongsTo(City::class);
-    }
-
-    /**
-     * Private chat for notifications
-     */
-    public function privateChat(): Relations\BelongsTo
-    {
-        return $this->belongsTo(TelegramChat::class);
-    }
-
-    /**
-     * Group chat for notifications
-     */
-    public function groupChat(): Relations\BelongsTo
-    {
-        return $this->belongsTo(TelegramChat::class);
     }
 
     /**

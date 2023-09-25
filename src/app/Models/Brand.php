@@ -4,22 +4,43 @@ namespace App\Models;
 
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use WendellAdriel\Lift\Attributes\Cast;
+use WendellAdriel\Lift\Attributes\Column;
+use WendellAdriel\Lift\Attributes\Fillable;
+use WendellAdriel\Lift\Lift;
 
-/**
- * @property string $name
- */
 class Brand extends Model
 {
     use AttributeFilterTrait;
+    use Lift;
 
-    public $timestamps = false;
+    #[Cast('int')]
+    #[Column(default: 57)]
+    public int $id;
 
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = [];
+    #[Fillable]
+    #[Cast('int')]
+    public int $one_c_id;
+
+    #[Fillable]
+    #[Column(default: 'BAROCCO')]
+    public string $name;
+
+    #[Fillable]
+    #[Column(default: 'barocco')]
+    public string $slug;
+
+    #[Fillable]
+    public string $seo;
+
+    #[Fillable]
+    #[Cast('datetime')]
+    public ?Carbon $created_at;
+
+    #[Fillable]
+    #[Cast('datetime')]
+    public ?Carbon $updated_at;
 
     protected static function getRelationColumn()
     {
@@ -28,15 +49,9 @@ class Brand extends Model
 
     /**
      * Make dafault brand
-     *
-     * @return self
      */
-    public static function getDefault()
+    public static function getDefault(): self
     {
-        return self::make([
-            'id' => 57,
-            'name' => 'BAROCCO',
-            'slug' => 'barocco',
-        ]);
+        return self::make(self::defaultValues());
     }
 }
