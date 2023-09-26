@@ -259,10 +259,12 @@ class AvailableSizes extends Model implements HasMedia
                 continue;
             }
             $size = $sizeField === 'size_none' ? 'б/р' : str_replace('size_', '', $sizeField);
-            $sizes[] = "$size($count)";
+            while ($count-- > 0) {
+                $sizes[] = "<span class='stock-size'>$size</span>";
+            }
         }
 
-        return implode(', ', $sizes);
+        return implode(' ', $sizes);
     }
 
     /**
