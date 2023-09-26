@@ -23,7 +23,7 @@ class InstallmentFormRowAction extends RowAction
             'user.passport',
             'onlinePayments',
             'items' => fn ($query) => $query
-                ->where('status_key', 'pickup')
+                ->whereIn('status_key', ['installment', 'packaging', 'pickup', 'sent', 'fitting', 'complete', 'return', 'return_fitting'])
                 ->with('installment'),
             'user' => fn ($query) => $query->with('lastAddress'),
         ])->first();

@@ -31,7 +31,7 @@ class InstallmentForm extends Action
         $order = Order::where('id', $request->orderId)->with([
             'user.passport',
             'items' => fn ($query) => $query
-                ->where('status_key', 'pickup')
+                ->whereIn('status_key', ['installment', 'packaging', 'pickup', 'sent', 'fitting', 'complete', 'return', 'return_fitting'])
                 ->with('installment'),
             'user' => fn ($query) => $query->with('lastAddress'),
         ])->first();
