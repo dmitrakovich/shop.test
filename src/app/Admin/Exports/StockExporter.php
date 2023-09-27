@@ -39,8 +39,24 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
         $columns = $this->grid->visibleColumnNames();
 
         return $this->grid->rows()->map(function (Row $row) use ($columns) {
-            return array_map(fn ($name) => $name === 'media' ? null : $row->column($name), $columns);
+            return array_map(fn ($name) => $this->prepareRow($name, $row), $columns);
         });
+    }
+
+    /**
+     * Prepare a data row for the specified column.
+     */
+    private function prepareRow(string $columnName, Row $row): mixed
+    {
+        if ($columnName === 'media') {
+            return null;
+        }
+        $data = $row->column($columnName);
+        if (str_starts_with($columnName, 'stock_')) {
+            $data = strip_tags($data);
+        }
+
+        return $data;
     }
 
     /**
