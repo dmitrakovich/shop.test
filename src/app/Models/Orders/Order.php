@@ -105,6 +105,10 @@ class Order extends Model
         'user_full_name',
     ];
 
+    public static $itemDepartureStatuses = [
+        'installment', 'packaging', 'pickup', 'sent', 'fitting', 'complete', 'return', 'return_fitting',
+    ];
+
     /**
      * Fix for duplicate logging
      */
