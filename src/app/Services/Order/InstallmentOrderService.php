@@ -25,7 +25,7 @@ class InstallmentOrderService
             'user.passport',
             'onlinePayments',
             'items' => fn ($query) => $query
-                ->whereIn('status_key', ['installment', 'packaging', 'pickup', 'sent', 'fitting', 'complete', 'return', 'return_fitting'])
+                ->whereIn('status_key', Order::$itemDepartureStatuses)
                 ->with('installment'),
             'user' => fn ($query) => $query->with('lastAddress'),
         ]);

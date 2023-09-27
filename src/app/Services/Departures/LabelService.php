@@ -13,7 +13,7 @@ class LabelService
     {
         $order = Order::where('id', $orderId)->with([
             'itemsExtended' => fn ($query) => $query
-                ->whereIn('status_key', ['installment', 'packaging', 'pickup', 'sent', 'fitting', 'complete', 'return', 'return_fitting'])
+                ->whereIn('status_key', Order::$itemDepartureStatuses)
                 ->with('installment'),
             'onlinePayments',
             'delivery',
