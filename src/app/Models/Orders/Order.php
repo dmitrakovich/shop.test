@@ -106,7 +106,7 @@ class Order extends Model
     ];
 
     public static $itemDepartureStatuses = [
-        'installment', 'packaging', 'pickup', 'sent', 'fitting', 'complete', 'return', 'return_fitting'
+        'installment', 'packaging', 'pickup', 'sent', 'fitting', 'complete', 'return', 'return_fitting',
     ];
 
     /**
