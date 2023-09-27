@@ -201,6 +201,10 @@
                 }
             }
 
+            &_sale {
+                display: none;
+            }
+
             &_backdrop {
                 display: none;
                 position: absolute;
@@ -302,8 +306,9 @@
             &-nav {
 
                 &_list {
+                    font-size: 13.8px;
                     flex-direction: row;
-                    gap: 18px;
+                    gap: 14px;
 
                     li {
                         border: none;
@@ -352,5 +357,11 @@
                 width: 402px;
             }
         }
+    }
+}
+
+@media (min-width: 1240px) {
+    .inc-header__menu-nav_sale {
+        display: block;
     }
 }

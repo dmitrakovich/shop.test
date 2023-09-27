@@ -113,6 +113,9 @@
                                     @endforeach
                                 </div>
                             </li>
+                            <li><a href="{{ route('shop', ['st-new']) }}">Новинки</a></li>
+                            <li class="d-md-none"><a
+                                    href="{{ route('shop', ['st-sale']) }}">Распродажа</a></li>
                             <li><a href="{{ route('static-shops') }}">Магазины</a></li>
                             <li class="inc-header__menu-nav_dropdown">
                                 <a href="{{ route('info') }}" class="d-none d-md-block">Условия</a>
@@ -137,6 +140,8 @@
                             <li><a href="{{ route('feedbacks') }}">Отзывы</a></li>
                             <li class="d-none d-lg-block"><a href="{{ route('dashboard-card') }}">Карта
                                     клиента</a></li>
+                            <li class="inc-header__menu-nav_sale"><a
+                                    href="{{ route('shop', ['st-sale']) }}">Распродажа</a></li>
                             <li class="inc-header__menu-nav_backdrop"></li>
                         </ul>
                     </nav>
