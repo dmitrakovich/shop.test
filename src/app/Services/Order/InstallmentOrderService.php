@@ -50,14 +50,15 @@ class InstallmentOrderService
             $itemPrice += $order->delivery_price ? ($order->delivery_price / $uniqItemsCount) : 0;
             $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $uniqItemsCount) : 0;
             $adminFio = $order?->admin?->user_last_name . ' ' . mb_strtoupper(mb_substr($order?->admin?->name, 0, 1)) . '.' . mb_strtoupper(mb_substr($order?->admin?->user_patronymic_name, 0, 1)) . '.';
+            $adminTrustDate = isset($order->admin->trust_date) ? date('d.m.Y', strtotime($order?->admin?->trust_date)) : null;
+            $adminTrustNumber = $order->admin->trust_number ?? null;
             $sheet->unmergeCells('AL3:AW3');
             $sheet->mergeCells('AI3:AX3');
             $sheet->setCellValue('AI3', ('"' . Carbon::parse(now())->translatedFormat('l, F j, Y') . '"'));
-            $sheet->setCellValue('E5', 'Общество с ограниченной ответственностью "БароккоСтайл", в лице специалиста по продажам ');
-            $sheet->setCellValue('B6', $adminFio . ', действующий на основании Устава, именуемый в дальнейшем Продавец, с одной');
-            $sheet->setCellValue('I7', $lastName);
-            $sheet->setCellValue('T7', $firstName);
-            $sheet->setCellValue('AC7', $patronymicName);
+            $sheet->setCellValue('E5', "Общество с ограниченной ответственностью \"БароккоСтайл\", в лице специалиста по продажам");
+            $sheet->setCellValue('B6', $adminFio . ", действующий на основании Доверенности №$adminTrustNumber от $adminTrustDate, именуемый в дальнейшем");
+            $sheet->setCellValue('B7', "Продавец, с одной стороны, и $lastName $firstName $patronymicName, именуемая в дальнейшем");
+            $sheet->setCellValue('B8', "Покупатель, с другой стороны, заключили настоящий договор о нижеследующем:");
 
             $sheet->setCellValue('C11', ($item->product->brand->name ?? null) . ', ' . mb_strtolower($item->product->category->name ?? ''));
             $sheet->setCellValue('AD11', $item->product->sku ?? $item->product->title ?? null);
