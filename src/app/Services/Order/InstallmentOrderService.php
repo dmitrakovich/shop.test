@@ -55,10 +55,10 @@ class InstallmentOrderService
             $sheet->unmergeCells('AL3:AW3');
             $sheet->mergeCells('AI3:AX3');
             $sheet->setCellValue('AI3', ('"' . Carbon::parse(now())->translatedFormat('l, F j, Y') . '"'));
-            $sheet->setCellValue('E5', "Общество с ограниченной ответственностью \"БароккоСтайл\", в лице специалиста по продажам");
+            $sheet->setCellValue('E5', 'Общество с ограниченной ответственностью "БароккоСтайл", в лице специалиста по продажам');
             $sheet->setCellValue('B6', $adminFio . ", действующий на основании Доверенности №$adminTrustNumber от $adminTrustDate, именуемый в дальнейшем");
             $sheet->setCellValue('B7', "Продавец, с одной стороны, и $lastName $firstName $patronymicName, именуемая в дальнейшем");
-            $sheet->setCellValue('B8', "Покупатель, с другой стороны, заключили настоящий договор о нижеследующем:");
+            $sheet->setCellValue('B8', 'Покупатель, с другой стороны, заключили настоящий договор о нижеследующем:');
 
             $sheet->setCellValue('C11', ($item->product->brand->name ?? null) . ', ' . mb_strtolower($item->product->category->name ?? ''));
             $sheet->setCellValue('AD11', $item->product->sku ?? $item->product->title ?? null);
