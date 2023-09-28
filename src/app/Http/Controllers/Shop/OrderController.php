@@ -16,7 +16,6 @@ use App\Services\AuthService;
 use App\Services\OldSiteSyncService;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends BaseController
@@ -46,16 +45,6 @@ class OrderController extends BaseController
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -78,60 +67,16 @@ class OrderController extends BaseController
             }
             $cart->setRelation('items', new EloquentCollection($items));
         } else {
-            $cart = Cart::withData();
-            abort_if(empty($cart['items']) || $cart->items->isEmpty(), 404);
+            $cart = Cart::getCart();
+            abort_if(empty($cart['items']) || $cart->availableItems()->isEmpty(), 404);
         }
         $user = $authService->getOrCreateUser($userRequest->input('phone'), $userRequest->validated(), $userAddressRequest->validated());
         $order = app(OrderServiceInterface::class)->store($request, $cart, $user);
-        Cart::clear();
+        Cart::clear(true);
 
         event(new OrderCreated($order, $user));
 
         return redirect()->route('cart-final')->with('order_id', $order->id);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     /**

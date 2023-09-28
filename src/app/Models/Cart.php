@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use App\Services\CartService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
@@ -17,23 +18,19 @@ class Cart extends Model
     use HasFactory;
 
     /**
-     * Инициализация корзины
-     *
-     * @return $this
-     */
-    public function setCart()
-    {
-        $cartId = Auth::user() ? Auth::user()->cart_token : Cookie::get('cart_token');
-
-        return self::findOrNew($cartId);
-    }
-
-    /**
      * Cart's items
      */
     public function items(): HasMany
     {
         return $this->hasMany(CartData::class);
+    }
+
+    /**
+     * Get the available items in the shopping cart.
+     */
+    public function availableItems(): Collection
+    {
+        return $this->items->filter(fn (CartData $item) => $item->isAvailable());
     }
 
     /**
@@ -55,7 +52,7 @@ class Cart extends Model
     public function getTotalOldPrice(): float
     {
         $price = 0;
-        foreach ($this->items as $item) {
+        foreach ($this->availableItems() as $item) {
             $price += ($item->product->getOldPrice() * $item->count);
         }
 
@@ -68,7 +65,7 @@ class Cart extends Model
     public function getTotalPrice(?string $currencyCode = null): float
     {
         $price = 0;
-        foreach ($this->items as $item) {
+        foreach ($this->availableItems() as $item) {
             $price += ($item->product->getPrice($currencyCode) * $item->count);
         }
 
@@ -129,33 +126,24 @@ class Cart extends Model
     }
 
     /**
-     * Очистить содержимое корзины
+     * Clear items from the shopping cart.
      */
-    public function clear(): void
+    public function clear($onlyAvailable = false): void
     {
-        $this->items()->delete();
+        if ($onlyAvailable) {
+            $itemIds = $this->availableItems()->pluck('id');
+            $this->items()->whereIn('id', $itemIds)->delete();
+        } else {
+            $this->items()->delete();
+        }
     }
 
     /**
-     * Получить содержимое корзины
-     *
-     * @return $this
+     * Get the current instance of the cart.
      */
-    public function withData()
+    public function getCart(): self
     {
-        $this->load('items');
-        $this->items->load('product');
-
-        foreach ($this->items as $key => $item) {
-            if (empty($item->product)) {
-                $item->delete();
-                $this->items->forget($key);
-            }
-        }
-
-        $this->items->load('size:id,name');
-
-        return $this;
+        return app(CartService::class)->prepareCart($this);
     }
 
     /**

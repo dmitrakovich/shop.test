@@ -42,7 +42,7 @@ class OrderService implements OrderServiceInterface
             ]);
         } else {
             $adminComment = '';
-            foreach ($cart->items as $item) {
+            foreach ($cart->availableItems() as $item) {
                 $order->data()->create([
                     'product_id' => $item->product_id,
                     'size_id' => $item->size_id,

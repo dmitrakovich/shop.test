@@ -4,14 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property-read Product $product
+ * @todo rename to CartItem
  */
 class CartData extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'id',
         'cart_id',
@@ -25,23 +32,39 @@ class CartData extends Model
     ];
 
     /**
-     * Связть с товарами
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * Indicates whether the product is available.
      */
-    public function product()
+    private bool $available = true;
+
+    /**
+     * Get the product associated with this cart data.
+     */
+    public function product(): BelongsTo
     {
-        return $this->hasOne(Product::class, 'id', 'product_id')
-            ->with(['category', 'brand', 'media', 'styles']);
+        return $this->belongsTo(Product::class)->withTrashed();
     }
 
     /**
-     * Связть с размерами
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * Get the size associated with this cart data.
      */
-    public function size()
+    public function size(): BelongsTo
     {
-        return $this->hasOne(Size::class, 'id', 'size_id');
+        return $this->belongsTo(Size::class);
+    }
+
+    /**
+     * Set the product as not available.
+     */
+    public function setNotAvailable(): void
+    {
+        $this->available = false;
+    }
+
+    /**
+     * Determine if the product is available.
+     */
+    public function isAvailable(): bool
+    {
+        return $this->available;
     }
 }

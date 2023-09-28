@@ -424,7 +424,7 @@ class SaleService
         $productSaleList = [];
         $this->hasSaleProductsInCart = false;
 
-        $products = $cart->items->map(fn ($item) => $item->product);
+        $products = $cart->availableItems()->map(fn ($item) => $item->product);
         $products = $products->sortBy('price');
 
         if ($this->hasSale()) {
@@ -444,7 +444,7 @@ class SaleService
             }
         }
 
-        foreach ($cart->items as $item) {
+        foreach ($cart->availableItems() as $item) {
             $generalSale = $productSaleList[$item->product->id] ?? null;
             $sales = $generalSale ? [self::GENERAL_SALE_KEY => $generalSale] : [];
             $finalPrice = $generalSale ? $generalSale->price : $item->product->price;

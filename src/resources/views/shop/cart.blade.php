@@ -32,39 +32,46 @@
                                         <div class="col-12 col-md-2 mt-md-2">
                                             {{ DeclensionNoun::make($item->count, 'пара') }}
                                         </div>
-                                        <div class="col-12 col-md-2 mt-md-2">
-                                            @if ($item->product->hasDiscount())
-                                                <span class="old_price text-muted">
-                                                    {!! $item->product->getFormattedOldPrice() !!}
-                                                </span>
-                                            @endif
-                                        </div>
-                                        <div class="col-12 col-md-3 mt-md-2 item-sales">
-                                            @if ($item->product->hasDiscount())
-                                                @foreach ($item->product->getSales() as $sale)
-                                                    <p class="sale-block">
-                                                        <span class="product-label product-label-sale px-1">
-                                                            {{ $sale->discount_percentage }}%
-                                                        </span>&nbsp;
-                                                        <span>{{ $sale->label }}</span>
-                                                        @if (!empty($sale->end_datetime))
-                                                            <span class="text-danger">
-                                                                {{-- blade-formatter-disable-next-line --}}
+                                        @if ($item->isAvailable())
+                                            <div class="col-12 col-md-2 mt-md-2">
+                                                @if ($item->product->hasDiscount())
+                                                    <span class="old_price text-muted">
+                                                        {!! $item->product->getFormattedOldPrice() !!}
+                                                    </span>
+                                                @endif
+                                            </div>
+                                            <div class="col-12 col-md-3 mt-md-2 item-sales">
+                                                @if ($item->product->hasDiscount())
+                                                    @foreach ($item->product->getSales() as $sale)
+                                                        <p class="sale-block">
+                                                            <span
+                                                                class="product-label product-label-sale px-1">
+                                                                {{ $sale->discount_percentage }}%
+                                                            </span>&nbsp;
+                                                            <span>{{ $sale->label }}</span>
+                                                            @if (!empty($sale->end_datetime))
+                                                                <span class="text-danger">
+                                                                    {{-- blade-formatter-disable-next-line --}}
                                                                 @include('includes.timer', ['end_time' => $sale->end_datetime])
-                                                            </span>
-                                                        @endif
-                                                        <br />
-                                                        <span>-{{ Currency::convertAndFormat($sale->discount) }}</span>
-                                                    </p>
-                                                @endforeach
-                                            @endif
-                                        </div>
-                                        <div class="col-12 col-md-2 mt-md-2 mb-4">
-                                            <span
-                                                class="{{ $item->product->hasDiscount() ? 'new_price' : 'price' }}">
-                                                {!! $item->product->getFormattedPrice() !!}
-                                            </span>
-                                        </div>
+                                                                </span>
+                                                            @endif
+                                                            <br />
+                                                            <span>-{{ Currency::convertAndFormat($sale->discount) }}</span>
+                                                        </p>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                            <div class="col-12 col-md-2 mt-md-2 mb-4">
+                                                <span
+                                                    class="{{ $item->product->hasDiscount() ? 'new_price' : 'price' }}">
+                                                    {!! $item->product->getFormattedPrice() !!}
+                                                </span>
+                                            </div>
+                                        @else
+                                            <div class="col-12 col-md-2 offset-md-5 mt-md-2 mb-4">
+                                                <span class="text-danger text-right">нет в наличии</span>
+                                            </div>
+                                        @endif
 
                                         <div class="col-12 col-auto mt-auto">
                                             <div class="row">

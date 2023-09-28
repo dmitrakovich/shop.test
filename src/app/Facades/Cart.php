@@ -5,7 +5,8 @@ namespace App\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \App\Models\Cart withData() Get cart model with data
+ * @method static \App\Models\Cart getCart() Get cart model with data
+ * @method static void clear($onlyAvailable = false) Clear items from the shopping cart.
  *
  * @see \App\Models\Cart
  */

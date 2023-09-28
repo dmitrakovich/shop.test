@@ -9,10 +9,12 @@ use App\Models\Guest;
 use App\Models\Orders\Order;
 use App\Models\Product;
 use App\Models\User\User;
+use App\Services\CartService;
 use App\Services\GoogleTagManagerService;
 use App\Services\ProductService;
 use App\Services\SliderService;
 use Deliveries\DeliveryMethod;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Payments\PaymentMethod;
@@ -22,13 +24,11 @@ class CartController extends BaseController
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index(GoogleTagManagerService $gtmService)
+    public function index(GoogleTagManagerService $gtmService, CartService $cartService): View
     {
-        $cart = Cart::withData();
-        $prices = $this->getCartPrices($cart);
+        $cart = Cart::getCart();
+        $prices = $cartService->getCartPrices($cart);
 
         /** @var User $user */
         $user = auth()->user() ?? new User();
@@ -52,24 +52,6 @@ class CartController extends BaseController
         return view('shop.cart', array_merge($prices, compact(
             'cart', 'user', 'deliveriesList', 'paymentsList', 'countries', 'currentCountry'
         )));
-    }
-
-    /**
-     * Calc & return cart prices
-     * TODO: create CartService
-     */
-    public function getCartPrices(\App\Models\Cart $cart): array
-    {
-        Sale::disableUserSale();
-        Sale::applyToCart($cart);
-        $totalPriceWithoutUserSale = $cart->getTotalPrice();
-
-        Sale::enableUserSale();
-        Sale::applyToCart($cart);
-        $totalPrice = $cart->getTotalPrice();
-        $totalOldPrice = $cart->getTotalOldPrice();
-
-        return compact('totalPrice', 'totalOldPrice', 'totalPriceWithoutUserSale');
     }
 
     /**
