@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property-read Product $product
+ *
  * @todo rename to CartItem
  */
 class CartData extends Model
