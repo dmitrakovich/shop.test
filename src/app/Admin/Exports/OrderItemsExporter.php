@@ -2,39 +2,12 @@
 
 namespace App\Admin\Exports;
 
-use Encore\Admin\Grid;
 use Encore\Admin\Grid\Row;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class OrderItemsExporter extends ExcelExporterFromCollection implements WithEvents
+class OrderItemsExporter extends AbstractExporter
 {
     protected $fileName = 'Товары в заказах.xlsx';
-
-    /**
-     * Create a new exporter instance.
-     */
-    public function __construct(?Grid $grid = null)
-    {
-        ini_set('memory_limit', '512M');
-        set_time_limit(90);
-
-        parent::__construct($grid);
-    }
-
-    /**
-     * Prepare rows for excel
-     */
-    public function prepareRows(): Collection
-    {
-        $this->grid->build();
-        $columns = $this->grid->visibleColumnNames();
-
-        return $this->grid->rows()->map(function (Row $row) use ($columns) {
-            return array_map(fn ($name) => $row->column($name), $columns);
-        });
-    }
 
     /**
      * Setup height, wedth, color & other styles
