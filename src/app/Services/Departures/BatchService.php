@@ -3,6 +3,7 @@
 namespace App\Services\Departures;
 
 use App\Models\Orders\Batch;
+use App\Models\Orders\Order;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
 
@@ -27,7 +28,7 @@ class BatchService
             [
                 'orders' => fn ($query) => $query->with([
                     'itemsExtended' => fn ($query) => $query
-                        ->whereIn('status_key', ['pickup', 'sent', 'fitting'])
+                        ->whereIn('status_key', Order::$itemDepartureStatuses)
                         ->with('installment'),
                     'onlinePayments',
                     'delivery',

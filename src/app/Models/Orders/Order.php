@@ -357,14 +357,14 @@ class Order extends Model
     {
         $this->loadMissing([
             'itemsExtended' => fn ($query) => $query
-                ->where('status_key', 'pickup')
+                ->whereIn('status_key', self::$itemDepartureStatuses)
                 ->with('installment'),
         ]);
         $deliveryPrice = $this->delivery_price ? $this->delivery_price : 0;
         $onlinePaymentsSum = $this->getAmountPaidOrders();
         $resultItemPrice = 0;
         $itemsCount = count($this->itemsExtended);
-        foreach ($this->itemsExtended->where('status_key', 'pickup') as $item) {
+        foreach ($this->itemsExtended->whereIn('status_key', self::$itemDepartureStatuses) as $item) {
             $itemPrice = $item->current_price;
             $itemPrice += $deliveryPrice ? ($deliveryPrice / $itemsCount) : 0;
             $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $itemsCount) : 0;
