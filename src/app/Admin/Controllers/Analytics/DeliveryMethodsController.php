@@ -5,21 +5,21 @@ namespace App\Admin\Controllers\Analytics;
 use App\Models\Orders\Order;
 use Encore\Admin\Grid;
 
-class ManagerOrderItemsController extends AbstractOrderItemAnalyticController
+class DeliveryMethodsController extends AbstractOrderItemAnalyticController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Менеджер-товар статистика';
+    protected $title = 'Статистика по способам доставки';
 
     /**
      * Get the column title for the countries
      */
     protected function getInstanceColumnTitle(): string
     {
-        return 'Менеджер';
+        return 'Способ доставки';
     }
 
     /**
@@ -27,7 +27,7 @@ class ManagerOrderItemsController extends AbstractOrderItemAnalyticController
      */
     protected function getInstanceNameColumn(): string
     {
-        return 'admin_users.name';
+        return 'delivery_methods.name';
     }
 
     /**
@@ -38,9 +38,9 @@ class ManagerOrderItemsController extends AbstractOrderItemAnalyticController
         $grid = new Grid(new Order());
 
         $grid->model()->selectRaw($this->getSelectSql())
-            ->leftJoin('admin_users', 'orders.admin_id', '=', 'admin_users.id')
+            ->leftJoin('delivery_methods', 'orders.delivery_id', '=', 'delivery_methods.id')
             ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->groupBy('admin_users.id');
+            ->groupBy('delivery_methods.id');
 
         return $grid;
     }

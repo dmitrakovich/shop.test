@@ -2,6 +2,9 @@
 
 namespace App\Admin\Controllers\Analytics;
 
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
+
 abstract class AbstractCustomerAnalyticController extends AbstractAnalyticController
 {
     /**
@@ -25,7 +28,14 @@ abstract class AbstractCustomerAnalyticController extends AbstractAnalyticContro
     }
 
     /**
-     * Get the name of the database table associated with the analysis instance (Abstract Method).
+     * Get a query to retrieve the last order ID for each user.
      */
-    abstract protected function getInstanceNameColumn(): string;
+    protected function getLastUserOrdersQuery() : Builder
+    {
+        return DB::table('users')
+            ->select(['users.id as user_id', DB::raw('MAX(orders.id) AS order_id')])
+            ->leftJoin('orders', 'users.id', '=', 'orders.user_id')
+            ->whereNotNull('orders.id')
+            ->groupBy('users.id');
+    }
 }

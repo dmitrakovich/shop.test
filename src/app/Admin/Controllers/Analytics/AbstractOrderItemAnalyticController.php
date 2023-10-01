@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers\Analytics;
 
-abstract class AbstractOrderItemAnalyticController extends AbstractCustomerAnalyticController
+abstract class AbstractOrderItemAnalyticController extends AbstractAnalyticController
 {
     /**
      * Get the SQL SELECT statement for the analysis.
@@ -10,7 +10,7 @@ abstract class AbstractOrderItemAnalyticController extends AbstractCustomerAnaly
     protected function getSelectSql(): string
     {
         return <<<SQL
-        admin_users.name AS instance_name,
+        {$this->getInstanceNameColumn()} AS instance_name,
         SUM(CASE WHEN orders.status_key IN ({$this->statuses['accepted']}) THEN 1 ELSE 0 END) AS accepted_count,
         SUM(CASE WHEN orders.status_key IN ({$this->statuses['in_progress']}) THEN 1 ELSE 0 END) AS in_progress_count,
         SUM(CASE WHEN orders.status_key IN ({$this->statuses['purchased']}) THEN 1 ELSE 0 END) AS purchased_count,

@@ -6,8 +6,6 @@ use App\Admin\Controllers\AbstractAdminController;
 use App\Admin\Exports\AnalyticsExporter;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Facades\DB;
 
 abstract class AbstractAnalyticController extends AbstractAdminController
 {
@@ -68,16 +66,9 @@ abstract class AbstractAnalyticController extends AbstractAdminController
     }
 
     /**
-     * Get a query to retrieve the last order ID for each user.
+     * Get the name of the database table associated with the analysis instance (Abstract Method).
      */
-    protected function getLastUserOrdersQuery() : Builder
-    {
-        return DB::table('users')
-            ->select(['users.id as user_id', DB::raw('MAX(orders.id) AS order_id')])
-            ->leftJoin('orders', 'users.id', '=', 'orders.user_id')
-            ->whereNotNull('orders.id')
-            ->groupBy('users.id');
-    }
+    abstract protected function getInstanceNameColumn(): string;
 
     /**
      * Get the column title for the instance (Abstract Method).
