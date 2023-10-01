@@ -32,7 +32,7 @@ abstract class AbstractAnalyticController extends AbstractAdminController
     {
         $grid = $this->getPreparedGrid();
 
-        $grid->column('instance_name', $this->getInstanceColumnTitle());
+        $grid->column('instance_name', $this->getInstanceColumnTitle())->default('Неопределено');
         $grid->column('total_count', 'Все');
         $grid->column('accepted_count', 'Принят');
         $grid->column('in_progress_count', 'В работе');

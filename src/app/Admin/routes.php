@@ -125,7 +125,7 @@ Route::group([
         $router->resource('payment-methods', PaymentMethodsController::class);
         $router->resource('delivery-methods', DeliveryMethodsController::class);
         $router->resource('manager-customers', ManagerCustomersController::class);
-        $router->resource('manager-goods', ManagerGoodsController::class);
+        $router->resource('manager-order-items', ManagerOrderItemsController::class);
     });
 
     // logs

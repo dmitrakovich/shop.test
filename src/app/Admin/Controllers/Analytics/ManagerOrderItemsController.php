@@ -5,21 +5,21 @@ namespace App\Admin\Controllers\Analytics;
 use App\Models\Orders\Order;
 use Encore\Admin\Grid;
 
-class CountriesController extends AbstractCustomerAnalyticController
+class ManagerOrderItemsController extends AbstractOrderItemAnalyticController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Статистика по странам';
+    protected $title = 'Менеджер-товар статистика';
 
     /**
      * Get the column title for the countries
      */
     protected function getInstanceColumnTitle(): string
     {
-        return 'Страна';
+        return 'Менеджер';
     }
 
     /**
@@ -27,7 +27,7 @@ class CountriesController extends AbstractCustomerAnalyticController
      */
     protected function getInstanceNameColumn(): string
     {
-        return 'countries.name';
+        return 'admin_users.name';
     }
 
     /**
@@ -39,11 +39,10 @@ class CountriesController extends AbstractCustomerAnalyticController
 
         $grid->model()->selectRaw($this->getSelectSql())
             ->withExpression('LastUserOrders', $this->getLastUserOrdersQuery())
-            ->leftJoin('users', 'users.id', '=', 'orders.user_id')
-            ->leftJoin('user_addresses', 'user_addresses.user_id', '=', 'users.id')
-            ->leftJoin('countries', 'countries.id', '=', 'user_addresses.country_id')
+            ->leftJoin('admin_users', 'orders.admin_id', '=', 'admin_users.id')
+            ->leftJoin('users', 'orders.user_id', '=', 'users.id')
             ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->groupBy('countries.id');
+            ->groupBy('admin_users.id');
 
         return $grid;
     }
