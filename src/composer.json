@@ -42,6 +42,7 @@
         "spatie/laravel-googletagmanager": "^2.6",
         "spatie/laravel-medialibrary": "^10.9",
         "staudenmeir/eloquent-json-relations": "^1.6",
+        "staudenmeir/laravel-cte": "^1.9",
         "yoomoney/yookassa-sdk-php": "^2.2"
     },
     "require-dev": {

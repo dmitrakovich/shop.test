@@ -118,6 +118,16 @@ Route::group([
         $router->get('inventory-blacklist', InventoryBlacklistForm::class);
     });
 
+    // Automation
+    $router->group(['prefix' => 'analytics', 'namespace' => 'Analytics', 'as' => 'analytics.'], function (Router $router) {
+        $router->resource('countries', CountriesController::class);
+        $router->resource('installment', InstallmentController::class);
+        $router->resource('payment-methods', PaymentMethodsController::class);
+        $router->resource('delivery-methods', DeliveryMethodsController::class);
+        $router->resource('manager-customers', ManagerCustomersController::class);
+        $router->resource('manager-goods', ManagerGoodsController::class);
+    });
+
     // logs
     $router->group(['prefix' => 'logs', 'namespace' => 'Logs', 'as' => 'logs.'], function (Router $router) {
         $router->resource('sms', SmsController::class);
