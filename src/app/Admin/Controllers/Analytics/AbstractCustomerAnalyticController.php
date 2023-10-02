@@ -13,6 +13,7 @@ abstract class AbstractCustomerAnalyticController extends AbstractAnalyticContro
     protected function getSelectSql(): string
     {
         $isLastUserOrder = 'orders.id IN (SELECT order_id FROM LastUserOrders)';
+
         return <<<SQL
         {$this->getInstanceNameColumn()} AS instance_name,
         SUM(CASE WHEN $isLastUserOrder AND orders.status_key IN ({$this->statuses['accepted']}) THEN 1 ELSE 0 END) AS accepted_count,
@@ -30,7 +31,7 @@ abstract class AbstractCustomerAnalyticController extends AbstractAnalyticContro
     /**
      * Get a query to retrieve the last order ID for each user.
      */
-    protected function getLastUserOrdersQuery() : Builder
+    protected function getLastUserOrdersQuery(): Builder
     {
         return DB::table('users')
             ->select(['users.id as user_id', DB::raw('MAX(orders.id) AS order_id')])

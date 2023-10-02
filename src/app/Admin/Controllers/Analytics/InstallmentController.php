@@ -41,7 +41,7 @@ class InstallmentController extends AbstractOrderItemAnalyticController
         $grid->model()->selectRaw($this->getSelectSql())
             ->leftJoin('payment_methods', function (JoinClause $join) {
                 $join->on('payment_methods.id', '=', 'orders.payment_id')
-                     ->where('payment_methods.id', '=', 4);
+                    ->where('payment_methods.id', '=', 4);
             })
             ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
             ->groupBy('payment_methods.id');
