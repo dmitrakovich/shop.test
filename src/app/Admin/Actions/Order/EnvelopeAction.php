@@ -33,6 +33,7 @@ class EnvelopeAction extends Action
             'user' => fn ($query) => $query->with('lastAddress'),
         ])->first();
         $file = $envelopeService->createEnvelope($order);
+
         return $this->response()->success('Конверт успешно создан')->download($file);
     }
 
