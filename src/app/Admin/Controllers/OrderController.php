@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Order\BuyoutFormAction;
+use App\Admin\Actions\Order\EnvelopeAction;
 use App\Admin\Actions\Order\CancelPayment;
 use App\Admin\Actions\Order\CapturePayment;
 use App\Admin\Actions\Order\CreateOnlinePayment;
@@ -183,6 +184,7 @@ class OrderController extends AdminController
             $form->tools($this->getProcessTool((int)request('order')));
             $form->tools(function (Form\Tools $tools) {
                 $tools->append(new BuyoutFormAction((int)request('order')));
+                $tools->append(new EnvelopeAction((int)request('order')));
                 $tools->append(new InstallmentForm((int)request('order')));
             });
         }
