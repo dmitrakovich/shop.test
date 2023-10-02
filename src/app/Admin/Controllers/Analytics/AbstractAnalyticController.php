@@ -43,12 +43,12 @@ abstract class AbstractAnalyticController extends AbstractAdminController
 
         $grid->filter(function (Filter $filter) {
             $filter->disableIdFilter();
-            $filter->column(1/2, function (Filter $filter) {
+            $filter->column(1 / 2, function (Filter $filter) {
                 $filter->where(function ($query) {
                     return $query->where('orders.created_at', '>=', $this->input);
                 }, 'Начальная дата', 'order_created_at_start')->datetime();
             });
-            $filter->column(1/2, function (Filter $filter) {
+            $filter->column(1 / 2, function (Filter $filter) {
                 $filter->where(function ($query) {
                     return $query->where('orders.created_at', '<=', $this->input);
                 }, 'Конечная дата', 'order_created_at_end')->datetime();
