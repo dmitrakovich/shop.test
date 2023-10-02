@@ -76,7 +76,7 @@ class BuyoutOrderService
         $sheet->setCellValue('CO43', $order->user->lastAddress->region ?? null);
 
         $onlinePaymentsSum = $order->getAmountPaidOrders();
-        $uniqItemsCount = $order->getUniqItemsCount();
+        $uniqItemsCount = count($order->itemsExtended);
         $totalCodSum = 0;
         foreach ($order->itemsExtended as $itemKey => $item) {
             $itemPrice = $item->current_price;

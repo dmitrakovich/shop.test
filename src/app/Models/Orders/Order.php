@@ -363,8 +363,9 @@ class Order extends Model
         $deliveryPrice = $this->delivery_price ? $this->delivery_price : 0;
         $onlinePaymentsSum = $this->getAmountPaidOrders();
         $resultItemPrice = 0;
-        $itemsCount = count($this->itemsExtended);
-        foreach ($this->itemsExtended->whereIn('status_key', self::$itemDepartureStatuses) as $item) {
+        $items = $this->itemsExtended->whereIn('status_key', self::$itemDepartureStatuses);
+        $itemsCount = count($items);
+        foreach ($items as $item) {
             $itemPrice = $item->current_price;
             $itemPrice += $deliveryPrice ? ($deliveryPrice / $itemsCount) : 0;
             $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $itemsCount) : 0;
