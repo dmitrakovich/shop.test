@@ -47,24 +47,27 @@ abstract class AbstractAnalyticController extends AbstractAdminController
         $grid->column('total_lost_price', 'Сумма потерянных')->suffix('BYN', ' ');
 
         $grid->expandFilter();
-        $grid->filter(function (Filter $filter) {
+        $hasDefaultFilter = request()->has('default-filter');
+        $grid->filter(function (Filter $filter) use ($hasDefaultFilter) {
             $filter->disableIdFilter();
-            $filter->column(1 / 2, function (Filter $filter) {
+            $filter->column(1 / 2, function (Filter $filter) use ($hasDefaultFilter) {
                 $filter->where(function ($query) {
                     return $query->where('orders.created_at', '>=', $this->input);
                 }, 'Начальная дата', 'order_created_at_start')
-                    ->default(now()->subDays(8))
+                    ->default($hasDefaultFilter ? now()->subDays(8) : null)
                     ->datetime();
             });
-            $filter->column(1 / 2, function (Filter $filter) {
+            $filter->column(1 / 2, function (Filter $filter) use ($hasDefaultFilter) {
                 $filter->where(function ($query) {
                     return $query->where('orders.created_at', '<=', $this->input);
                 }, 'Конечная дата', 'order_created_at_end')
-                    ->default(now()->subDays(1))
+                    ->default($hasDefaultFilter ? now()->subDays(1) : null)
                     ->datetime();
             });
         });
-        $this->applyDefaultFilter($grid);
+        if ($hasDefaultFilter) {
+            $this->applyDefaultFilter($grid);
+        }
 
         $grid->exporter((new AnalyticsExporter())->setFileName($this->title));
         $grid->disablePagination();
@@ -77,14 +80,10 @@ abstract class AbstractAnalyticController extends AbstractAdminController
     }
 
     /**
-     * Apply a default filter to the grid if requested.
+     * Apply a default filter to the grid.
      */
     protected function applyDefaultFilter(Grid $grid): void
     {
-        if (request()->missing('default-filter')) {
-            return;
-        }
-
         $values = [now()->subDays(8), now()->subDays(1)];
         $grid->model()->whereBetween('orders.created_at', $values);
     }
