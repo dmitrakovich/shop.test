@@ -38,7 +38,12 @@ abstract class AbstractAnalyticController extends AbstractAdminController
         $grid->column('canceled_count', 'Отменен');
         $grid->column('returned_count', 'Возврат');
         $grid->column('total_purchased_price', 'Сумма выкупленных')->suffix('BYN', ' ');
-        $grid->column('purchase_percentage', 'Процент выкупа')->suffix('%', ' ');
+        $grid->column('purchase_percentage', 'Процент выкупа')->display(function () {
+            $purchased = (int)$this->getAttribute('purchased_count');
+            $total = (int)$this->getAttribute('total_count');
+
+            return round(($purchased / $total) * 100, 2);
+        })->suffix('%', ' ');
         $grid->column('total_lost_price', 'Сумма потерянных')->suffix('BYN', ' ');
 
         $grid->expandFilter();
