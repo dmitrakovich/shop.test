@@ -41,19 +41,25 @@ abstract class AbstractAnalyticController extends AbstractAdminController
         $grid->column('purchase_percentage', 'Процент выкупа')->suffix('%', ' ');
         $grid->column('total_lost_price', 'Сумма потерянных')->suffix('BYN', ' ');
 
+        $grid->expandFilter();
         $grid->filter(function (Filter $filter) {
             $filter->disableIdFilter();
             $filter->column(1 / 2, function (Filter $filter) {
                 $filter->where(function ($query) {
                     return $query->where('orders.created_at', '>=', $this->input);
-                }, 'Начальная дата', 'order_created_at_start')->datetime();
+                }, 'Начальная дата', 'order_created_at_start')
+                    ->default(now()->subDays(8))
+                    ->datetime();
             });
             $filter->column(1 / 2, function (Filter $filter) {
                 $filter->where(function ($query) {
                     return $query->where('orders.created_at', '<=', $this->input);
-                }, 'Конечная дата', 'order_created_at_end')->datetime();
+                }, 'Конечная дата', 'order_created_at_end')
+                    ->default(now()->subDays(1))
+                    ->datetime();
             });
         });
+        $this->applyDefaultFilter($grid);
 
         $grid->exporter((new AnalyticsExporter())->setFileName($this->title));
         $grid->disablePagination();
@@ -63,6 +69,19 @@ abstract class AbstractAnalyticController extends AbstractAdminController
         $grid->disableRowSelector();
 
         return $grid;
+    }
+
+    /**
+     * Apply a default filter to the grid if requested.
+     */
+    protected function applyDefaultFilter(Grid $grid): void
+    {
+        if (request()->missing('default-filter')) {
+            return;
+        }
+
+        $values = [now()->subDays(8), now()->subDays(1)];
+        $grid->model()->whereBetween('orders.created_at', $values);
     }
 
     /**
