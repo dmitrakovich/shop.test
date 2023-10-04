@@ -54,14 +54,14 @@ abstract class AbstractAnalyticController extends AbstractAdminController
                 $filter->where(function ($query) {
                     return $query->where('orders.created_at', '>=', $this->input);
                 }, 'Начальная дата', 'order_created_at_start')
-                    ->default($hasDefaultFilter ? now()->subDays(8) : null)
+                    ->default($hasDefaultFilter ? now()->subDays(8)->startOfDay() : null)
                     ->datetime();
             });
             $filter->column(1 / 2, function (Filter $filter) use ($hasDefaultFilter) {
                 $filter->where(function ($query) {
                     return $query->where('orders.created_at', '<=', $this->input);
                 }, 'Конечная дата', 'order_created_at_end')
-                    ->default($hasDefaultFilter ? now()->subDays(1) : null)
+                    ->default($hasDefaultFilter ? now()->subDays(1)->endOfDay() : null)
                     ->datetime();
             });
         });
@@ -84,7 +84,7 @@ abstract class AbstractAnalyticController extends AbstractAdminController
      */
     protected function applyDefaultFilter(Grid $grid): void
     {
-        $values = [now()->subDays(8), now()->subDays(1)];
+        $values = [now()->subDays(8)->startOfDay(), now()->subDays(1)->endOfDay()];
         $grid->model()->whereBetween('orders.created_at', $values);
     }
 
