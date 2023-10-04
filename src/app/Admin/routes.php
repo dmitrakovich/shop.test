@@ -121,7 +121,6 @@ Route::group([
     // Automation
     $router->group(['prefix' => 'analytics', 'namespace' => 'Analytics', 'as' => 'analytics.'], function (Router $router) {
         $router->resource('countries', CountriesController::class);
-        $router->resource('installment', InstallmentController::class);
         $router->resource('payment-methods', PaymentMethodsController::class);
         $router->resource('delivery-methods', DeliveryMethodsController::class);
         $router->resource('manager-customers', ManagerCustomersController::class);
