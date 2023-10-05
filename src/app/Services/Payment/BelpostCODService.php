@@ -10,11 +10,10 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class BelpostCODService
 {
-
     /**
      * Imports an Excel file to process COD payments.
      *
-     * @param UploadedFile $file The uploaded Excel file.
+     * @param  UploadedFile  $file The uploaded Excel file.
      * @return array The result of the import process, including the count and sum of payments.
      */
     public function importExcelCOD(UploadedFile $file): array
@@ -27,7 +26,7 @@ class BelpostCODService
         $parsedData = [];
         $result = [
             'count' => 0,
-            'sum' => 0
+            'sum' => 0,
         ];
 
         while (!$isEndOfRow || $currentRow <= $sheet->getHighestRow()) {
@@ -38,12 +37,12 @@ class BelpostCODService
             } else {
                 $isEndOfRow = $isStartOfRow ? true : $isEndOfRow;
             }
-            ++$currentRow;
+            $currentRow++;
         }
 
         $orders = Order::with([
             'onlinePayments',
-            'track'
+            'track',
         ])->whereHas('track', fn ($query) => $query->whereIn('track_number', array_keys($parsedData)))
             ->get();
         foreach ($orders as $order) {
@@ -56,15 +55,16 @@ class BelpostCODService
                     'amount' => $paymentSum,
                     'paid_amount' => $paymentSum,
                     'method_enum_id' => OnlinePaymentMethodEnum::COD,
-                    'last_status_enum_id' => OnlinePaymentStatusEnum::SUCCEEDED
+                    'last_status_enum_id' => OnlinePaymentStatusEnum::SUCCEEDED,
                 ]);
                 $payment->statuses()->create([
-                    'payment_status_enum_id' => OnlinePaymentStatusEnum::SUCCEEDED
+                    'payment_status_enum_id' => OnlinePaymentStatusEnum::SUCCEEDED,
                 ]);
                 $result['count']++;
                 $result['sum'] += $paymentSum;
             }
         }
+
         return $result;
     }
 }

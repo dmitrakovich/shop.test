@@ -9,12 +9,13 @@ use Illuminate\Http\Request;
 class BelpostImportCODAction extends Action
 {
     protected $selector = '.belpost-import-cod';
+
     public $name = 'Импортировать';
 
     /**
      * Handle the request.
      *
-     * @param Request $request the request object
+     * @param  Request  $request the request object
      * @return mixed the response object
      */
     public function handle(
@@ -26,6 +27,7 @@ class BelpostImportCODAction extends Action
             Импортировано платежей: {$result['count']}
             На сумму: {$result['sum']} BYN
         TEXT;
+
         return $this->response()->swal()->success($resultText)->refresh();
     }
 
