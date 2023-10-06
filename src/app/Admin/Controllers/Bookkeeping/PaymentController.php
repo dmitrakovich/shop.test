@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers\Bookkeeping;
 
+
+use App\Admin\Actions\Order\BelpostImportCODAction;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
@@ -34,7 +36,11 @@ class PaymentController extends AdminController
             $filter->between('lastSucceededStatus.created_at', 'Дата оплаты')->datetime();
             $filter->like('amount', 'Выставленная сумма');
             $filter->like('paid_amount', 'Оплаченная сумма');
-            $filter->in('status', 'Статус заказа')->multipleSelect(OnlinePaymentStatusEnum::list());
+            $filter->where(function ($query) {
+                $query->whereHas('lastStatus', function ($q) {
+                    $q->where('payment_status_enum_id', $this->input);
+                });
+            }, 'Статус заказа')->multipleSelect(OnlinePaymentStatusEnum::list());
             $filter->disableIdFilter();
         });
 
@@ -47,18 +53,20 @@ class PaymentController extends AdminController
         $grid->column('method_enum_id', 'Тип платежа')->display(fn ($method_enum_id) => OnlinePaymentMethodEnum::tryFrom($method_enum_id)->name());
         $grid->column('admin.name', 'Менеджер');
         $grid->column('fio', 'ФИО клиента')->hide();
-        $grid->column('created_at', 'Дата создания')->display(fn ($created_at) => date('d.m.Y H:i:s', strtotime($created_at)));
+        $grid->column('created_at', 'Дата создания')->display(fn ($created_at) => date('d.m.Y H:i:s', strtotime($created_at)))->sortable();
         $grid->column('lastCanceledStatus.created_at', 'Дата отмены')->display(fn ($created_at) => $created_at ? date('d.m.Y H:i:s', strtotime($created_at)) : null);
         $grid->column('lastSucceededStatus.created_at', 'Дата оплаты')->display(fn ($created_at) => $created_at ? date('d.m.Y H:i:s', strtotime($created_at)) : null);
         $grid->column('amount', 'Выставленная сумма');
         $grid->column('paid_amount', 'Оплаченная сумма');
         $grid->column('lastStatus.payment_status_enum_id', 'Статус')->display(function ($last_status_enum_id) {
             $enum = OnlinePaymentStatusEnum::tryFrom($last_status_enum_id);
-
             return $enum ? $enum->name() : null;
         });
         $grid->column('comment', 'Комментарий');
 
+        $grid->tools(function (Grid\Tools $tools) {
+            $tools->append(new BelpostImportCODAction);
+        });
         $grid->actions(function ($actions) {
             $actions->disableDelete();
             $actions->disableView();
