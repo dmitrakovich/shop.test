@@ -2,7 +2,6 @@
 
 namespace App\Admin\Controllers\Bookkeeping;
 
-
 use App\Admin\Actions\Order\BelpostImportCODAction;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
@@ -60,6 +59,7 @@ class PaymentController extends AdminController
         $grid->column('paid_amount', 'Оплаченная сумма');
         $grid->column('lastStatus.payment_status_enum_id', 'Статус')->display(function ($last_status_enum_id) {
             $enum = OnlinePaymentStatusEnum::tryFrom($last_status_enum_id);
+
             return $enum ? $enum->name() : null;
         });
         $grid->column('comment', 'Комментарий');
