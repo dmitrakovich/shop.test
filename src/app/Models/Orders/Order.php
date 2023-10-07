@@ -364,11 +364,11 @@ class Order extends Model
         $onlinePaymentsSum = $this->getAmountPaidOrders();
         $resultItemPrice = 0;
         $items = $this->itemsExtended->whereIn('status_key', self::$itemDepartureStatuses);
-        $itemsCount = count($items);
+        $uniqItemsCount = $this->getUniqItemsCount();
         foreach ($items as $item) {
             $itemPrice = $item->current_price;
-            $itemPrice += $deliveryPrice ? ($deliveryPrice / $itemsCount) : 0;
-            $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $itemsCount) : 0;
+            $itemPrice += $deliveryPrice ? ($deliveryPrice / $uniqItemsCount) : 0;
+            $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $uniqItemsCount) : 0;
             if ((int)$this->payment_id === Installment::PAYMENT_METHOD_ID) {
                 $itemPrice = ($itemPrice - (2 * $item->installment_monthly_fee));
             }
