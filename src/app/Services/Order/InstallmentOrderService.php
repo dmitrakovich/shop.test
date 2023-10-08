@@ -87,13 +87,7 @@ class InstallmentOrderService
             $sheet->setCellValue('Z39', $order->user->passport->issued_by);
             $sheet->setCellValue('AH41', Carbon::parse($order->user->passport->issued_date)->translatedFormat('F j, Y'));
 
-            $sheet->setCellValue('Z43', $order->user->lastAddress->region ?? null);
-            $sheet->setCellValue('AK43', $order->user->lastAddress->district ?? null);
-            $sheet->setCellValue('AB44', $order->user->lastAddress->city ?? null);
-            $sheet->setCellValue('AC45', $order->user->lastAddress->street ?? null);
-            $sheet->setCellValue('AP45', $order->user->lastAddress->house ?? null);
-            $sheet->setCellValue('AW45', $order->user->lastAddress->corpus ?? null);
-            $sheet->setCellValue('AB46', $order->user->lastAddress->room ?? null);
+            $sheet->setCellValue('Z43', $order->user->passport->registration_address ?? null);
             $sheet->setCellValue('AH47', substr(trim($order->phone), -9, -7));
             $sheet->setCellValue('AL47', substr(trim($order->phone), -7));
             $sheet->setCellValue('AK52', mb_strtoupper(mb_substr($firstName, 0, 1)) . '.' . mb_strtoupper(mb_substr($patronymicName, 0, 1)) . '. ' . $lastName);
