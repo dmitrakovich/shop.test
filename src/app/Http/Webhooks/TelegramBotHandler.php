@@ -155,7 +155,7 @@ class TelegramBotHandler extends WebhookHandler
      */
     public function pause(): void
     {
-        $minutesList = [30, 60, 90];
+        $minutesList = [5, 30, 60, 90];
         $stocks = Stock::where('group_chat_id', $this->chat->id)->get(['id', 'internal_name']);
         if ($stocks->isEmpty()) {
             $this->reply('Не найдены магазины для данного чата.');
@@ -181,6 +181,7 @@ class TelegramBotHandler extends WebhookHandler
      */
     public function pauseAction(): void
     {
+        /** @var Stock */
         $stock = Stock::find((int)$this->data->get('stock_id'));
         $pauseUntil = $stock->setOfflineNotificationsPause((int)$this->data->get('minutes'));
 
