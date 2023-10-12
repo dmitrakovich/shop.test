@@ -17,6 +17,8 @@ class OrderData
 
     public readonly int $user_id;
 
+    public readonly int $admin_id;
+
     /**
      * Order payment method
      */
@@ -63,6 +65,7 @@ class OrderData
         $this->paymentMethod = $this->findModel(new PaymentMethod(), $this->payment_id);
         $this->deliveryMethod = $this->findModel(new DeliveryMethod(), $this->delivery_id);
         $this->created_at = $this->createDate($created_at);
+        $this->setAdminId();
     }
 
     /**
@@ -88,6 +91,16 @@ class OrderData
         $this->user = $user;
         $this->user_id = $user->id;
 
+        return $this;
+    }
+
+    public function setAdminId(): self
+    {
+        if(!empty($this->utm_campaign) && $this->utm_campaign === 'manager') {
+            $orderUtmContent = $orderData['utm_content'] ?? null;
+            $admin = Admin::where('login', $orderUtmContent)->first();
+            $this->admin_id = $admin->id ?? null;
+        }
         return $this;
     }
 
