@@ -96,11 +96,12 @@ class OrderData
 
     public function setAdminId(): self
     {
-        if(!empty($this->utm_campaign) && $this->utm_campaign === 'manager') {
+        if (!empty($this->utm_campaign) && $this->utm_campaign === 'manager') {
             $orderUtmContent = $orderData['utm_content'] ?? null;
             $admin = Admin::where('login', $orderUtmContent)->first();
             $this->admin_id = $admin->id ?? null;
         }
+
         return $this;
     }
 
