@@ -15,7 +15,7 @@ class CategoryController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Category';
+    protected $title = 'Категории';
 
     /**
      * Make a grid builder.
@@ -25,6 +25,7 @@ class CategoryController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Category());
+        $grid->sortable();
 
         $grid->column('id', 'Id');
         $grid->column('slug', 'Slug');
@@ -33,8 +34,13 @@ class CategoryController extends AdminController
         $grid->column('description', 'Описание');
         $grid->column('parent_id', 'ID родительской категории');
 
+        $grid->actions(function ($actions) {
+            $actions->disableView();
+        });
         $grid->paginate(30);
-
+        $grid->perPages([10, 30, 60, 100]);
+        $grid->disableExport();
+        $grid->disableRowSelector();
         return $grid;
     }
 

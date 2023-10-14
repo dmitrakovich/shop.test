@@ -112,15 +112,11 @@
         &-catalog {
             display: grid;
             flex-wrap: wrap;
-            grid-template-columns: 4fr 3fr 3fr;
+            grid-template-columns: 2fr 2fr 3fr 3fr;
 
             &>div {
                 display: grid;
                 gap: 13px;
-
-                &:first-child {
-                    grid-template-columns: 1fr 1fr;
-                }
 
                 & a:first-child {
                     font-size: 16px;

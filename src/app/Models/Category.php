@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Kalnoy\Nestedset\NodeTrait;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 /**
  * Product category class
@@ -22,11 +24,16 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property-read string $name
  * @property string $description
  */
-class Category extends Model
+class Category extends Model implements Sortable
 {
-    use AttributeFilterTrait, NodeTrait, SoftDeletes;
+    use AttributeFilterTrait, NodeTrait, SoftDeletes, SortableTrait;
 
     public $timestamps = false;
+
+    public $sortable = [
+        'order_column_name' => 'order',
+        'sort_when_creating' => true,
+    ];
 
     /**
      * Bootstrap the model and its traits.
@@ -34,7 +41,9 @@ class Category extends Model
     protected static function boot(): void
     {
         parent::boot();
-
+        static::addGlobalScope('order', function ($builder) {
+            $builder->orderBy('order', 'asc');
+        });
         static::saved(function () {
             Cache::forget(config('cache_config.global_nav_categories.key'));
         });
