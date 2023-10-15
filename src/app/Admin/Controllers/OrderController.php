@@ -17,6 +17,7 @@ use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
 use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
+use App\Models\Orders\OrderAdminComment;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItemExtended;
 use App\Models\Orders\OrderItemStatus;
@@ -64,7 +65,7 @@ class OrderController extends AdminController
         $grid->column('user_full_name', 'ФИО');
         $grid->column('phone', 'Телефон');
 
-        $grid->model()->with(['items']);
+        $grid->model()->with(['items', 'adminComments']);
         $grid->column('goods', 'Товары')->expand(function ($model) {
             $items = $model->items->map(function ($item) use ($model) {
                 return [
@@ -84,6 +85,12 @@ class OrderController extends AdminController
         $grid->column('user_addr', 'Адрес');
         $grid->column('payment.name', 'Способ оплаты');
         $grid->column('delivery.name', 'Способ доставки');
+        $grid->column('adminCommentsCollection', 'Коммент')->display(fn () => '💬')->expand(function ($model) {
+            $comments = $model->adminComments->map(function ($comment) {
+                return $comment->only(['created_at', 'comment']);
+            });
+            return new Table(['Дата создания', 'Коммент'], $comments->toArray());
+        });
 
         $grid->column('status_key', 'Статус')->editable('select', $orderStatuses);
         $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
@@ -202,7 +209,7 @@ class OrderController extends AdminController
             $form->number('promocode_id', __('Promocode id'));
             $form->email('email', __('Email'));
             $form->phone('phone', 'Телефон')->required();
-            $form->textarea('comment', 'Коммментарий');
+            $form->textarea('comment', 'Комментарий (виден клиенту!)');
             $form->select('currency', 'Валюта')->options(Currency::pluck('code', 'code'))
                 ->when('BYN', function (Form $form) {
                     $form->decimal('rate', 'Курс')->default(Currency::where('code', 'BYN')->value('rate'));
@@ -235,10 +242,6 @@ class OrderController extends AdminController
 
             $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'))
                 ->default(OrderStatus::DEFAULT_VALUE)->required();
-            $form->hasMany('adminComments', 'Комментарии менеджера', function (Form\NestedForm $form) {
-                $form->textarea('comment', 'Комментарий')->rules(['required', 'max:500']);
-                $form->display('created_at', 'Дата');
-            });
             $form->select('admin_id', 'Менеджер')->options((new AdministratorService)->getAdministratorList());
         });
 
@@ -288,6 +291,15 @@ class OrderController extends AdminController
         });
 
         if ($id) {
+            $form->tab('Комментарии менеджера', function (Form $form) use ($id) {
+                $form->row(function ($form) use ($id) {
+                    $form->html($this->adminCommentsGrid($id));
+                    $form->html(view('admin.order.order-comment', [
+                        'orderId' => $id,
+                    ]), 'Комментарии');
+                });
+            });
+
             $form->tab('Платежи', function ($form) use ($id) {
                 $form->row(function ($form) use ($id) {
                     $form->html($this->onlinePaymentGrid($id));
@@ -372,6 +384,29 @@ class OrderController extends AdminController
             $installment->send_notifications = $sendNotifications;
             $installment->save();
         }
+    }
+
+    private function adminCommentsGrid($orderId)
+    {
+        $grid = new Grid(new OrderAdminComment());
+        $grid->model()->where('order_id', $orderId)->orderBy('id', 'desc');
+        $grid->resource('/' . config('admin.route.prefix') . '/order-comments');
+
+        $grid->column('created_at', 'Дата/время создания')->display(fn ($date) => ($date ? date('d.m.Y H:i:s', strtotime($date)) : null))->width(100);
+        $grid->column('comment', 'Комментарий')->editable();
+
+        $grid->actions(function ($actions) {
+            $actions->disableView();
+            $actions->disableEdit();
+        });
+        $grid->disableCreateButton();
+        $grid->disablePagination();
+        $grid->disableFilter();
+        $grid->disableExport();
+        $grid->disableColumnSelector();
+        $grid->disableRowSelector();
+
+        return $grid->render();
     }
 
     private function onlinePaymentGrid($orderId)
@@ -680,5 +715,21 @@ JS;
         }
 
         return $user;
+    }
+
+    /**
+     * Adds an order comment.
+     *
+     * @param Request $request The request object.
+     * @return OrderAdminComment|null The created order comment, or null if the order ID or comment is missing.
+     */
+    public function addOrderComment(Request $request): ?OrderAdminComment
+    {
+        $orderId = $request->input('orderId');
+        $comment = $request->input('comment');
+        return ($orderId && $comment) ? OrderAdminComment::create([
+            'comment' => $comment,
+            'order_id' => $orderId
+        ]) : null;
     }
 }

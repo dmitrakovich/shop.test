@@ -21,11 +21,13 @@ Route::group([
     $router->resource('info-pages', InfoPageController::class);
     $router->resource('orders', \OrderController::class);
     $router->resource('order-items', OrderItemController::class);
+    $router->resource('order-comments', OrderCommentController::class);
     $router->get('orders/{order}/process', [\App\Admin\Controllers\OrderController::class, 'process'])->name('orders.process');
     $router->get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
     $router->post('orders/add-user-by-phone', [AdminOrderController::class, 'addUserByPhone']);
     $router->post('orders/change-user-by-phone', [AdminOrderController::class, 'changeUserByPhone']);
     $router->post('orders/update-user-address', [AdminOrderController::class, 'updateUserAddress']);
+    $router->post('orders/add-order-comment', [AdminOrderController::class, 'addOrderComment']);
 
     $router->group(['prefix' => 'users'], function (Router $router) {
         $router->resource('users', Users\UserController::class);
