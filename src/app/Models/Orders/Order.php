@@ -12,7 +12,7 @@ use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\User;
 use Deliveries\DeliveryMethod;
-use Encore\Admin\Auth\Database\Administrator;
+use App\Admin\Models\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;

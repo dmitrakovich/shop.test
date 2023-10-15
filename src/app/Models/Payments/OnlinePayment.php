@@ -5,7 +5,7 @@ namespace App\Models\Payments;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
-use Encore\Admin\Auth\Database\Administrator;
+use App\Admin\Models\Administrator;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

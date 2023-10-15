@@ -5,7 +5,7 @@ namespace App\Models\Logs;
 use App\Models\Ads\Mailing;
 use App\Models\Orders\Order;
 use App\Models\User\User;
-use Encore\Admin\Auth\Database\Administrator;
+use App\Admin\Models\Administrator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

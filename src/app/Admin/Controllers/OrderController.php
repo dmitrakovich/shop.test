@@ -26,8 +26,8 @@ use App\Models\Payments\OnlinePayment;
 use App\Models\Product;
 use App\Models\User\User;
 use App\Services\Order\OrderItemInventoryService;
+use App\Services\AdministratorService;
 use Deliveries\DeliveryMethod;
-use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
@@ -58,7 +58,7 @@ class OrderController extends AdminController
         $grid = new Grid(new Order());
 
         $orderStatuses = OrderStatus::ordered()->pluck('name_for_admin', 'key');
-        $admins = Administrator::pluck('name', 'id');
+        $admins = (new AdministratorService)->getAdministratorList();
 
         $grid->column('id', 'Номер заказа');
         $grid->column('user_full_name', 'ФИО');
@@ -235,11 +235,11 @@ class OrderController extends AdminController
 
             $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'))
                 ->default(OrderStatus::DEFAULT_VALUE)->required();
-            $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
             $form->hasMany('adminComments', 'Комментарии менеджера', function (Form\NestedForm $form) {
                 $form->textarea('comment', 'Комментарий')->rules(['required', 'max:500']);
                 $form->display('created_at', 'Дата');
             });
+            $form->select('admin_id', 'Менеджер')->options((new AdministratorService)->getAdministratorList());
         });
 
         $form->tab('Товары', function (Form $form) {
