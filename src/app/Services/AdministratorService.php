@@ -9,8 +9,6 @@ class AdministratorService
 {
     /**
      * Get the administrator list.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public function getAdministratorList(): Collection
     {

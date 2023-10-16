@@ -29,6 +29,7 @@ class SendingTracksSms extends AbstractSmsTraffic
         $track = $this->order->track->track_number;
         $orderId = $this->order->id;
         $link = "https://belpost.by/Otsleditotpravleniye?number=$track";
+
         return "Ваш заказ №{$orderId} отправлен. Трек-номер {$track}. Отследите посылку {$link}";
     }
 }

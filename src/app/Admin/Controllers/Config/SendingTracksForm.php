@@ -31,6 +31,7 @@ class SendingTracksForm extends Form
         $requestData['active'] = (isset($requestData['active']) && $requestData['active'] === 'on') ? true : false;
         Config::find('sending_tracks')->update(['config' => $requestData]);
         admin_success('Конфиг успешно обновлен!');
+
         return back();
     }
 
