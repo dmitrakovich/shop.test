@@ -17,8 +17,8 @@ use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
 use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
-use App\Models\Orders\OrderAdminComment;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderAdminComment;
 use App\Models\Orders\OrderItemExtended;
 use App\Models\Orders\OrderItemStatus;
 use App\Models\Orders\OrderStatus;
@@ -26,8 +26,8 @@ use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\Product;
 use App\Models\User\User;
-use App\Services\Order\OrderItemInventoryService;
 use App\Services\AdministratorService;
+use App\Services\Order\OrderItemInventoryService;
 use Deliveries\DeliveryMethod;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
@@ -89,6 +89,7 @@ class OrderController extends AdminController
             $comments = $model->adminComments->map(function ($comment) {
                 return $comment->only(['created_at', 'comment']);
             });
+
             return new Table(['Дата создания', 'Коммент'], $comments->toArray());
         });
 
@@ -720,16 +721,17 @@ JS;
     /**
      * Adds an order comment.
      *
-     * @param Request $request The request object.
+     * @param  Request  $request The request object.
      * @return OrderAdminComment|null The created order comment, or null if the order ID or comment is missing.
      */
     public function addOrderComment(Request $request): ?OrderAdminComment
     {
         $orderId = $request->input('orderId');
         $comment = $request->input('comment');
+
         return ($orderId && $comment) ? OrderAdminComment::create([
             'comment' => $comment,
-            'order_id' => $orderId
+            'order_id' => $orderId,
         ]) : null;
     }
 }

@@ -41,6 +41,7 @@ class CategoryController extends AdminController
         $grid->perPages([10, 30, 60, 100]);
         $grid->disableExport();
         $grid->disableRowSelector();
+
         return $grid;
     }
 

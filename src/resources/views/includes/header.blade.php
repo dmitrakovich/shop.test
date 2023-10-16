@@ -23,10 +23,12 @@
                         <a href="{{ config('contacts.viber.link') }}" data-gtm-user-event="callViber">
                             {{ config('contacts.viber.name') }}
                         </a> /
-                        <a href="{{ config('contacts.telegram.link') }}" data-gtm-user-event="callTelegram">
+                        <a href="{{ config('contacts.telegram.link') }}"
+                            data-gtm-user-event="callTelegram">
                             {{ config('contacts.telegram.name') }}
                         </a> /
-                        <a href="{{ config('contacts.whats-app.link') }}" data-gtm-user-event="callWhatsApp">
+                        <a href="{{ config('contacts.whats-app.link') }}"
+                            data-gtm-user-event="callWhatsApp">
                             {{ config('contacts.whats-app.name') }}
                         </a>
                     </p>
@@ -65,13 +67,15 @@
                                         <div>
                                             <a href="{{ route('shop') }}">Обувь ></a>
                                             @foreach ($g_navCategories->take(ceil(count($g_navCategories) / 2)) as $category)
-                                                <a href="{{ route('shop', $category) }}">{{ $category->title }}</a>
+                                                <a
+                                                    href="{{ route('shop', $category) }}">{{ $category->title }}</a>
                                             @endforeach
                                         </div>
                                         <div>
                                             <a>&nbsp;</a>
                                             @foreach ($g_navCategories->skip(floor(count($g_navCategories) / 2)) as $category)
-                                                <a href="{{ route('shop', $category) }}">{{ $category->title }}</a>
+                                                <a
+                                                    href="{{ route('shop', $category) }}">{{ $category->title }}</a>
                                             @endforeach
                                         </div>
                                         <div>
@@ -107,14 +111,17 @@
                                     class="inc-header__menu-nav_collapse-btn collapsed">
                                     Категории
                                 </a>
-                                <div class="inc-header__menu-nav_collapse collapse" id="mainMenuCategoryCollapse">
+                                <div class="inc-header__menu-nav_collapse collapse"
+                                    id="mainMenuCategoryCollapse">
                                     @foreach ($g_navCategories as $category)
-                                        <a href="{{ route('shop', $category) }}">{{ $category->title }}</a>
+                                        <a
+                                            href="{{ route('shop', $category) }}">{{ $category->title }}</a>
                                     @endforeach
                                 </div>
                             </li>
                             <li><a href="{{ route('shop', ['st-new']) }}">Новинки</a></li>
-                            <li class="d-md-none"><a href="{{ route('shop', ['st-sale']) }}">Распродажа</a></li>
+                            <li class="d-md-none"><a
+                                    href="{{ route('shop', ['st-sale']) }}">Распродажа</a></li>
                             <li><a href="{{ route('static-shops') }}">Магазины</a></li>
                             <li class="inc-header__menu-nav_dropdown">
                                 <a href="{{ route('info') }}" class="d-none d-md-block">Условия</a>
@@ -124,7 +131,8 @@
                                     aria-controls="mainMenuInfoCollapse">
                                     Условия
                                 </a>
-                                <div class="inc-header__menu-nav_collapse collapse" id="mainMenuInfoCollapse">
+                                <div class="inc-header__menu-nav_collapse collapse"
+                                    id="mainMenuInfoCollapse">
                                     <div class="inc-header__menu-info">
                                         @foreach ($g_navInfoPages as $item)
                                             <a href="{{ route('info', $item['slug']) }}">
@@ -157,7 +165,8 @@
             </div>
             <form class="inc-header__search collapse" action="{{ route('shop') }}" method="get"
                 id="js-headerSearchInput">
-                <input type="text" name="search" value="{{ request()->get('search') }}" placeholder="Поиск">
+                <input type="text" name="search" value="{{ request()->get('search') }}"
+                    placeholder="Поиск">
                 <button type="submit" class="btn p-0">
                     @include('svg.search')
                 </button>

@@ -3,11 +3,10 @@
 namespace App\Services;
 
 use App\Admin\Models\Administrator;
-use \Illuminate\Support\Collection;
+use Illuminate\Support\Collection;
 
 class AdministratorService
 {
-
     /**
      * Get the administrator list.
      *

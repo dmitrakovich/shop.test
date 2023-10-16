@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Logs as LogModel;
 use App\Admin\Models\Administrator;
+use App\Models\Logs as LogModel;
 use Illuminate\Support\Facades\Auth;
 
 /**

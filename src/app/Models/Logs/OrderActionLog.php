@@ -2,8 +2,8 @@
 
 namespace App\Models\Logs;
 
-use App\Models\Orders\Order;
 use App\Admin\Models\Administrator;
+use App\Models\Orders\Order;
 use Illuminate\Database\Eloquent\Model;
 
 /**
