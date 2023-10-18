@@ -86,6 +86,7 @@ class YandexXml extends AbstractFeed
         return (new ProductService)->getForFeed()
             ->map(function (Product $item) {
                 $media = $this->getProductMedia($item->getMedia());
+
                 return (object)[
                     'id' => $item->id,
                     'url' => $this->getHost() . $item->getUrl(),
@@ -148,7 +149,7 @@ class YandexXml extends AbstractFeed
     /**
      * Retrieves the sales notes for a given product.
      *
-     * @param Product $product The product object.
+     * @param  Product  $product The product object.
      * @return string The sales notes for the product.
      */
     public function getSalesNotes(Product $product): string

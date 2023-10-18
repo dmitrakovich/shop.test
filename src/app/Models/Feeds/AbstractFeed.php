@@ -57,7 +57,7 @@ abstract class AbstractFeed
     /**
      * Retrieves the product media from the given MediaCollection.
      *
-     * @param MediaCollection $media The collection of media objects.
+     * @param  MediaCollection  $media The collection of media objects.
      * @return array The array containing the images and videos.
      */
     public function getProductMedia(MediaCollection $media): array
@@ -71,9 +71,10 @@ abstract class AbstractFeed
                 $images[] = $image->getUrl('full');
             }
         }
+
         return [
             'images' => array_slice($images, 0, self::MAX_IMAGE_COUNT),
-            'videos' => $videos
+            'videos' => $videos,
         ];
     }
 
@@ -119,7 +120,7 @@ abstract class AbstractFeed
     /**
      * Generates the description for a product.
      *
-     * @param Product $product The product to generate the description for.
+     * @param  Product  $product The product to generate the description for.
      * @return string The generated description for the product.
      */
     public function getDescription(Product $product): string
@@ -129,11 +130,12 @@ abstract class AbstractFeed
         $description = $product->category->name . ' ' . $product->brand->name;
         $description .= match (true) {
             ($discount >= 10) => " со скидкой {$discount}%. ",
-            ($discount < 10) => " - новинка. ",
+            ($discount < 10) => ' - новинка. ',
         };
-        $description .= (!empty($product->sizes) && ((count($product->sizes) > 1) || !($product->sizes?->first()?->id == 1))) ? "Размеры: " . $product->sizes->implode('name', ',') . '. ' : '';
+        $description .= (!empty($product->sizes) && ((count($product->sizes) > 1) || !($product->sizes?->first()?->id == 1))) ? 'Размеры: ' . $product->sizes->implode('name', ',') . '. ' : '';
         $description .= $product->fabric_top_txt ? "Материал - {$product->fabric_top_txt}. " : '';
         $description .= "Цена {$product->getPrice()} {$currentCurrency->symbol}. ";
+
         return $this->xmlSpecialChars(trim($description));
     }
 }
