@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Support\Str;
 
 class GoogleXml extends AbstractFeed
 {
@@ -53,6 +52,8 @@ class GoogleXml extends AbstractFeed
     {
         return (new ProductService)->getForFeed(true)
             ->map(function (Product $item) {
+                $media = $this->getProductMedia($item->getMedia());
+
                 return (object)[
                     'id' => $item->id,
                     'link' => $this->getHost() . $item->getUrl(),
@@ -60,7 +61,7 @@ class GoogleXml extends AbstractFeed
                     'availability' => $item->trashed() ? 'out of stock' : 'in stock',
                     'price' => $item->getPrice(),
                     'old_price' => $item->getOldPrice(),
-                    'images' => $this->getProductImages($item->getMedia()),
+                    'images' => $media['images'],
                     'brand' => $this->xmlSpecialChars($item->brand->name),
                     'google_product_category' => $this->getGoogleCategory($item->category),
                     'product_type' => $this->getProductType($item->category),
@@ -113,42 +114,5 @@ class GoogleXml extends AbstractFeed
     public function getColor(EloquentCollection $colors): string
     {
         return count($colors) == 1 ? $colors[0]->name : 'разноцветный';
-    }
-
-    /**
-     * Generate product description
-     */
-    public function getDescription(Product $product): string
-    {
-        $description = $product->extendedName() . '. ';
-        $description .= $this->sizesToString($product->sizes) . '. ';
-        $description .= "Цвет: {$product->color_txt}. ";
-
-        if (!empty($product->fabric_top_txt)) {
-            $description .= 'Материал';
-            if ($product->category->parent_id != Category::ACCESSORIES_PARENT_ID) {
-                $description .= ' верха';
-            }
-            $description .= ": {$product->fabric_top_txt}. ";
-        }
-
-        if (!empty($product->fabric_insole_txt)) {
-            $description .= "Материал подкладки: {$product->fabric_insole_txt}. ";
-        }
-
-        if (!empty($product->fabric_outsole_txt)) {
-            $description .= "Материал подошвы: {$product->fabric_outsole_txt}. ";
-        }
-
-        if (!empty($product->heel_txt)) {
-            $description .= "Высота каблука: {$product->heel_txt}. ";
-        }
-
-        $description .= $product->description;
-
-        $description = trim(strip_tags($description));
-        $description = Str::limit($description, self::DESCRIPTION_MAX_WIDTH - 3, '...');
-
-        return $description;
     }
 }

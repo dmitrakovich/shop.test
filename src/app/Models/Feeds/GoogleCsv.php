@@ -73,11 +73,13 @@ class GoogleCsv extends AbstractFeed
 
         return (new ProductService)->getForFeed()
             ->map(function (Product $item) {
+                $media = $this->getProductMedia($item->getMedia());
+
                 return [
                     $item->id,
                     $this->getItemTitle($item),
                     $this->getHost() . $item->getUrl(),
-                    $this->getProductImages($item->getMedia())[0],
+                    $media['images'][0] ?? [],
                     $this->getDescription($item),
                     $item->category->name,
                     $this->formatPrice($item->getOldPrice()),

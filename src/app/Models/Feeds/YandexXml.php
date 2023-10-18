@@ -10,7 +10,6 @@ use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class YandexXml extends AbstractFeed
 {
@@ -86,19 +85,23 @@ class YandexXml extends AbstractFeed
     {
         return (new ProductService)->getForFeed()
             ->map(function (Product $item) {
+                $media = $this->getProductMedia($item->getMedia());
                 return (object)[
                     'id' => $item->id,
                     'url' => $this->getHost() . $item->getUrl(),
+                    'name' => $this->xmlSpecialChars($item->category->name . ' ' . $item->brand->name),
                     'price' => $item->getPrice(),
                     'old_price' => $item->getOldPrice(),
                     'colors' => $this->getColors($item->colors),
                     'params' => $this->getOfferParams($item),
                     'category_id' => $item->category_id,
-                    'pictures' => $this->getProductImages($item->getMedia()),
+                    'pictures' => $media['images'],
                     'type_prefix' => $item->category->name,
                     'vendor' => $this->xmlSpecialChars($item->brand->name),
                     'model' => $this->xmlSpecialChars($item->sku),
                     'description' => $this->getDescription($item),
+                    'sales_notes' => $this->getSalesNotes($item),
+                    'video' => $media['videos'][0] ?? null,
                 ];
             })->toArray();
     }
@@ -143,15 +146,17 @@ class YandexXml extends AbstractFeed
     }
 
     /**
-     * Generate product description
+     * Retrieves the sales notes for a given product.
+     *
+     * @param Product $product The product object.
+     * @return string The sales notes for the product.
      */
-    public function getDescription(Product $product): string
+    public function getSalesNotes(Product $product): string
     {
-        $description = $product->description;
-
-        $description = trim(strip_tags($description));
-        $description = Str::limit($description, self::DESCRIPTION_MAX_WIDTH - 3, '...');
-
-        return $description;
+        return match (true) {
+            ($product->category->parent_id == Category::ACCESSORIES_PARENT_ID) => 'Оплата при получении. Курьером или почтой.',
+            ($product->getPrice() < 150) => 'Оплата при получении. Курьером или почтой. Примерка!',
+            ($product->getPrice() >= 150) => 'Примерка. Оплата при получении. Рассрочка на 3 платежа!',
+        };
     }
 }
