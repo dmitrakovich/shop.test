@@ -8,8 +8,8 @@ use App\Admin\Actions\Order\LabelAction;
 use App\Admin\Actions\Order\StatusBulkChange;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderStatus;
+use App\Services\AdministratorService;
 use Deliveries\DeliveryMethod;
-use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -34,7 +34,7 @@ class OrderToSendController extends AdminController
         $grid = new Grid(new Order());
         $grid->model()->whereIn('status_key', ['packaging', 'ready', 'sent'])->doesntHave('batch')->orderBy('id', 'desc');
 
-        $admins = Administrator::pluck('name', 'id');
+        $admins = (new AdministratorService)->getAdministratorList();
         $orderStatuses = OrderStatus::ordered()->pluck('name_for_admin', 'key');
         $deliveryMethods = DeliveryMethod::pluck('name', 'id');
 
@@ -104,7 +104,7 @@ class OrderToSendController extends AdminController
         $form->tab('Основное', function ($form) {
             $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'))
                 ->default(OrderStatus::DEFAULT_VALUE)->required();
-            $form->select('admin_id', 'Менеджер')->options(Administrator::pluck('name', 'id'));
+            $form->select('admin_id', 'Менеджер')->options((new AdministratorService)->getAdministratorList());
         });
 
         $form->tools(function (Form\Tools $tools) {

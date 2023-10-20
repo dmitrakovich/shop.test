@@ -277,3 +277,17 @@ $(document).on('click', '.js-updateOrderUserAddress', function (e) {
       toastr.error(error?.response?.data?.message);
   });
 });
+
+$(document).on('click', '#js-addNewOrderComment', function (e) {
+  e.preventDefault();
+  adminAxios.post('orders/add-order-comment', {
+    orderId: $('#js-orderId').val(),
+    comment: $('#js-newOrderComment').val()
+  }).then(response => {
+    $('#js-newOrderComment').val('');
+    $.pjax.reload('#pjax-container');
+    toastr.success('Комментарий успешно добавлен!');
+  }).catch(function (error) {
+    toastr.error(error?.response?.data?.message);
+  });
+});

@@ -21,8 +21,9 @@
         </categories>
         <offers>
 @foreach ($data->offers as $offer)
-            <offer id="{{ $offer->id }}" type="vendor.model" available="true" bid="3">
+            <offer id="{{ $offer->id }}" type="vendor.model" available="true">
                 <url>{{ $offer->url }}</url>
+                <name>{{ $offer->name }}</name>
                 <price>{{ $offer->price }}</price>
 @if ($offer->price < $offer->old_price)
                 <oldprice>{{ $offer->old_price }}</oldprice>
@@ -47,6 +48,10 @@
                 <vendor>{{ $offer->vendor }}</vendor>
                 <model>{{ $offer->model }}</model>
                 <description><![CDATA[{!! $offer->description !!}]]></description>
+                <sales_notes>{{ $offer->sales_notes }}</sales_notes>
+@if($offer->video)
+                <video>{{ $offer->video }}</video>
+@endif
             </offer>
 @endforeach
         </offers>

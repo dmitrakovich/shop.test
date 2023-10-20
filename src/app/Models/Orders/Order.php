@@ -2,6 +2,8 @@
 
 namespace App\Models\Orders;
 
+use App\Admin\Models\Administrator;
+use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Country;
 use App\Models\Device;
@@ -12,7 +14,6 @@ use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\User;
 use Deliveries\DeliveryMethod;
-use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -61,6 +62,7 @@ use Payments\PaymentMethod;
  * @property-read string $user_full_name
  * @property-read OrderStatus $status
  * @property-read Administrator $admin
+ * @property-read OrderTypeEnum $order_type
  */
 class Order extends Model
 {
@@ -90,6 +92,7 @@ class Order extends Model
         'delivery_price',
         'delivery_point_id',
         'order_method',
+        'order_type',
         'utm_medium',
         'utm_source',
         'utm_campaign',
@@ -107,6 +110,15 @@ class Order extends Model
 
     public static $itemDepartureStatuses = [
         'installment', 'packaging', 'pickup', 'sent', 'fitting', 'complete', 'return', 'return_fitting',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'order_type' => OrderTypeEnum::class,
     ];
 
     /**

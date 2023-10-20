@@ -7,7 +7,7 @@ use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
-use Encore\Admin\Auth\Database\Administrator;
+use App\Services\AdministratorService;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
@@ -21,7 +21,7 @@ class PaymentController extends AdminController
     {
         $grid = new Grid(new OnlinePayment);
         $grid->model()->orderBy('id', 'desc');
-        $adminUsers = Administrator::pluck('name', 'id');
+        $adminUsers = (new AdministratorService)->getAdministratorList();
 
         $grid->filter(function ($filter) use ($adminUsers) {
             $filter->like('payment_num', 'Номер счета');
@@ -50,7 +50,7 @@ class PaymentController extends AdminController
             return '<a href="' . route(config('admin.route.prefix') . '.orders.edit', $order_id) . '" target="_blank" > ' . $order_id . '</a>';
         });
         $grid->column('method_enum_id', 'Тип платежа')->display(fn ($method_enum_id) => OnlinePaymentMethodEnum::tryFrom($method_enum_id)->name());
-        $grid->column('admin.name', 'Менеджер');
+        $grid->column('admin.name', 'Менеджер')->display(fn () => $this->admin?->short_name);
         $grid->column('fio', 'ФИО клиента')->hide();
         $grid->column('created_at', 'Дата создания')->display(fn ($created_at) => date('d.m.Y H:i:s', strtotime($created_at)))->sortable();
         $grid->column('lastCanceledStatus.created_at', 'Дата отмены')->display(fn ($created_at) => $created_at ? date('d.m.Y H:i:s', strtotime($created_at)) : null);

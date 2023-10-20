@@ -20,6 +20,7 @@ class OrderAdminComment extends Model
 
     protected $fillable = [
         'comment',
+        'order_id',
     ];
 
     /**

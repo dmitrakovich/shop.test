@@ -27,7 +27,7 @@ class ManagerOrderItemsController extends AbstractOrderItemAnalyticController
      */
     protected function getInstanceNameColumn(): string
     {
-        return 'admin_users.name';
+        return 'CONCAT(admin_users.user_last_name, \' \', SUBSTRING(admin_users.name, 1, 1), \'.\')';
     }
 
     /**

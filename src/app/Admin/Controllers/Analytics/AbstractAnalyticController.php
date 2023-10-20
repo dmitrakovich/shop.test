@@ -42,7 +42,7 @@ abstract class AbstractAnalyticController extends AbstractAdminController
             $purchased = (int)$this->getAttribute('purchased_count');
             $total = (int)$this->getAttribute('total_count');
 
-            return round(($purchased / $total) * 100, 2);
+            return $total ? round(($purchased / $total) * 100, 2) : 0;
         })->suffix('%', ' ');
         $grid->column('total_lost_price', 'Сумма потерянных')->suffix('BYN', ' ');
 

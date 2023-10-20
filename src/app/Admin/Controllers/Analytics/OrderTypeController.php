@@ -5,21 +5,21 @@ namespace App\Admin\Controllers\Analytics;
 use App\Models\Orders\Order;
 use Encore\Admin\Grid;
 
-class ManagerCustomersController extends AbstractCustomerAnalyticController
+class OrderTypeController extends AbstractOrderItemAnalyticController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Менеджер-покупатель статистика';
+    protected $title = 'Статистика по типу заказов';
 
     /**
      * Get the column title for the countries
      */
     protected function getInstanceColumnTitle(): string
     {
-        return 'Менеджер';
+        return 'Тип заказа';
     }
 
     /**
@@ -27,7 +27,7 @@ class ManagerCustomersController extends AbstractCustomerAnalyticController
      */
     protected function getInstanceNameColumn(): string
     {
-        return 'CONCAT(admin_users.user_last_name, \' \', SUBSTRING(admin_users.name, 1, 1), \'.\')';
+        return 'order_type';
     }
 
     /**
@@ -38,11 +38,8 @@ class ManagerCustomersController extends AbstractCustomerAnalyticController
         $grid = new Grid(new Order());
 
         $grid->model()->selectRaw($this->getSelectSql())
-            ->withExpression('LastUserOrders', $this->getLastUserOrdersQuery())
-            ->leftJoin('admin_users', 'orders.admin_id', '=', 'admin_users.id')
-            ->leftJoin('users', 'orders.user_id', '=', 'users.id')
             ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->groupBy('admin_users.id');
+            ->groupBy('order_type');
 
         return $grid;
     }
