@@ -83,11 +83,11 @@
                                             <a href="/catalog/heel-low">
                                                 На низком каблуке
                                             </a>
-                                            <a href="/catalog/krossovki">
+                                            <a href="/catalog/sport">
                                                 Спортивная обувь
                                             </a>
-                                            <a href="/catalog/eco">
-                                                Экокожа
+                                            <a href="/catalog/office">
+                                                Офисная обувь
                                             </a>
                                             <a href="/catalog?sort=rating">
                                                 Бестселлеры
@@ -95,8 +95,8 @@
                                             <a href="/catalog/heel-stiletto">
                                                 На шпильке
                                             </a>
-                                            <a href="/catalog/tufli/tufli-na-spilke">
-                                                Свадебная коллекция
+                                            <a href="/catalog/evening">
+                                                Вечерняя коллекция
                                             </a>
                                         </div>
                                         <div>
@@ -119,9 +119,9 @@
                                     @endforeach
                                 </div>
                             </li>
-                            <li><a href="{{ route('shop', ['st-new']) }}">Новинки</a></li>
-                            <li class="d-md-none"><a
-                                    href="{{ route('shop', ['st-sale']) }}">Распродажа</a></li>
+                            <li><a href="{{ route('shop', ['st-new']) }}">New!</a></li>
+                            <li class="d-md-none"><a href="{{ route('shop', ['st-sale']) }}">Sale</a>
+                            </li>
                             <li><a href="{{ route('static-shops') }}">Магазины</a></li>
                             <li class="inc-header__menu-nav_dropdown">
                                 <a href="{{ route('info') }}" class="d-none d-md-block">Условия</a>
@@ -147,7 +147,7 @@
                             <li class="d-none d-lg-block"><a href="{{ route('dashboard-card') }}">Карта
                                     клиента</a></li>
                             <li class="inc-header__menu-nav_sale"><a
-                                    href="{{ route('shop', ['st-sale']) }}">Распродажа</a></li>
+                                    href="{{ route('shop', ['st-sale']) }}">Sale</a></li>
                             <li class="inc-header__menu-nav_backdrop"></li>
                         </ul>
                     </nav>
