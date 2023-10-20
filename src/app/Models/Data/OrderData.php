@@ -2,13 +2,13 @@
 
 namespace App\Models\Data;
 
+use App\Enums\Order\OrderTypeEnum;
 use App\Models\User\User;
 use Deliveries\DeliveryMethod;
-use App\Enums\Order\OrderTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Payments\PaymentMethod;
 use Jenssegers\Agent\Facades\Agent;
+use Payments\PaymentMethod;
 
 class OrderData
 {

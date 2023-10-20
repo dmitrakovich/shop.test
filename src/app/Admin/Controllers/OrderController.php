@@ -12,8 +12,8 @@ use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
 use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
-use App\Events\OrderCreated;
 use App\Enums\Order\OrderTypeEnum;
+use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
 use App\Models\Enum\OrderMethod;
@@ -206,11 +206,11 @@ class OrderController extends AdminController
                 $form->select('order_method', 'Способ заказа')
                     ->options(OrderMethod::getOptionsForSelect())
                     ->default(OrderMethod::UNDEFINED);
-            } else if ($order) {
+            } elseif ($order) {
                 $orderSource = (!$order->utm_source || ($order->utm_source == 'none')) ? 'Неизвестен' : "{$order->utm_source} {$order->utm_campaign}";
                 $orderType = $order->order_type?->name();
                 $form->html(
-                    "<h5>" . ($orderType ? "{$orderType} - " : '') . "{$orderSource}</h5>",
+                    '<h5>' . ($orderType ? "{$orderType} - " : '') . "{$orderSource}</h5>",
                     'Тип / источник заказа'
                 );
             }
@@ -252,7 +252,6 @@ class OrderController extends AdminController
             $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
             $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
             $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));
-
 
             $this->setUtmSources($form);
 

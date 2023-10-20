@@ -3,8 +3,8 @@
 namespace App\Models\Orders;
 
 use App\Admin\Models\Administrator;
-use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Enums\Order\OrderTypeEnum;
+use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Country;
 use App\Models\Device;
 use App\Models\Enum\OrderMethod;
