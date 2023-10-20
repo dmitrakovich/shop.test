@@ -13,6 +13,7 @@ use App\Admin\Actions\Order\ProcessOrder;
 use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
 use App\Events\OrderCreated;
+use App\Enums\Order\OrderTypeEnum;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
 use App\Models\Enum\OrderMethod;
@@ -187,6 +188,9 @@ class OrderController extends AdminController
             'user' => fn ($query) => $query->with(['lastAddress' => fn ($q) => $q->with('country')]),
         ])->first() : null;
 
+        if ($form->isCreating()) {
+            $form->hidden('order_type')->value(OrderTypeEnum::MANAGER);
+        }
         if ($form->isEditing()) {
             $form->tools($this->getPrintTool());
             $form->tools($this->getProcessTool((int)request('order')));
@@ -198,6 +202,19 @@ class OrderController extends AdminController
         }
 
         $form->tab('Основное', function ($form) use ($order) {
+            if ($form->isCreating()) {
+                $form->select('order_method', 'Способ заказа')
+                    ->options(OrderMethod::getOptionsForSelect())
+                    ->default(OrderMethod::UNDEFINED);
+            } else if ($order) {
+                $orderSource = (!$order->utm_source || ($order->utm_source == 'none')) ? 'Неизвестен' : "{$order->utm_source} {$order->utm_campaign}";
+                $orderType = $order->order_type?->name();
+                $form->html(
+                    "<h5>" . ($orderType ? "{$orderType} - " : '') . "{$orderSource}</h5>",
+                    'Тип / источник заказа'
+                );
+            }
+
             $form->text('last_name', 'Фамилия');
             $form->text('first_name', 'Имя')->required();
             $form->text('patronymic_name', 'Отчество');
@@ -235,9 +252,7 @@ class OrderController extends AdminController
             $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
             $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
             $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));
-            $form->select('order_method', 'Способ заказа')
-                ->options(OrderMethod::getOptionsForSelect())
-                ->default(OrderMethod::DEFAULT);
+
 
             $this->setUtmSources($form);
 

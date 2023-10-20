@@ -6,6 +6,8 @@ class OrderMethod implements Enum
 {
     use EnumTrait;
 
+    final const UNDEFINED = 'undefined';
+
     final const DEFAULT = 'default';
 
     final const ONECLICK = 'oneclick';
@@ -32,7 +34,8 @@ class OrderMethod implements Enum
     public static function getOptionsForSelect(): array
     {
         return [
-            self::DEFAULT => 'через корзину',
+            self::UNDEFINED => 'Неопределенный (по умолчанию)',
+            // self::DEFAULT => 'через корзину',
             self::ONECLICK => 'в один клик',
             self::CHAT => 'через чат сайта',
             self::PHONE => 'по телефону',
@@ -41,7 +44,7 @@ class OrderMethod implements Enum
             self::TELEGRAM => 'через telegram',
             self::WHATSAPP => 'через whatsapp',
             self::EMAIL => 'по email',
-            self::OTHER => 'другое',
+            // self::OTHER => 'другое',
         ];
     }
 

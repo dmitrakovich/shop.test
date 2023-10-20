@@ -4,9 +4,11 @@ namespace App\Models\Data;
 
 use App\Models\User\User;
 use Deliveries\DeliveryMethod;
+use App\Enums\Order\OrderTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Payments\PaymentMethod;
+use Jenssegers\Agent\Facades\Agent;
 
 class OrderData
 {
@@ -33,6 +35,11 @@ class OrderData
      * Order creation date
      */
     public readonly ?Carbon $created_at;
+
+    /**
+     * Order type
+     */
+    public readonly OrderTypeEnum $order_type;
 
     /**
      * OrderData constructor
@@ -65,6 +72,7 @@ class OrderData
         $this->paymentMethod = $this->findModel(new PaymentMethod(), $this->payment_id);
         $this->deliveryMethod = $this->findModel(new DeliveryMethod(), $this->delivery_id);
         $this->created_at = $this->createDate($created_at);
+        $this->order_type = Agent::isDesktop() ? OrderTypeEnum::DESKTOP : OrderTypeEnum::MOBILE;
         $this->setAdminId();
     }
 

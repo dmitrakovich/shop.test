@@ -44,8 +44,7 @@ class GenerateLink extends StepForm
 
         $orderMethods = OrderMethod::getOptionsForSelect();
         unset(
-            $orderMethods[OrderMethod::DEFAULT],
-            $orderMethods[OrderMethod::ONECLICK],
+            $orderMethods[OrderMethod::UNDEFINED],
             $orderMethods[OrderMethod::PHONE],
         );
         $this->select('source', 'Источник заказа')
