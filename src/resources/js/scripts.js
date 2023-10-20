@@ -71,16 +71,15 @@ $(function () {
   $(document).on('click', 'button.js-buy-one-click', function () {
     // eslint-disable-next-line no-undef
     if (sizesValidate()) {
+      // подтянуть в форму размеры
+      $('form#oneclick-form').find('.js-sizes').remove();
+      $('.js-sizes').clone().appendTo('form#oneclick-form').hide();
       $.fancybox.open($('#buy-one-click'));
     }
   });
   $(document).on('click', 'button#buy-one-click-submit', function () {
     // eslint-disable-next-line no-undef
     sizesValidate();
-
-    // подтянуть в форму размеры
-    $('.js-sizes').clone().appendTo('form#oneclick-form').hide();
-
     if (!validatePhone($('input[name="phone"]'))) {
       return false;
     }
