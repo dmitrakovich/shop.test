@@ -128,6 +128,8 @@ Route::group([
         $router->resource('delivery-methods', DeliveryMethodsController::class);
         $router->resource('manager-customers', ManagerCustomersController::class);
         $router->resource('manager-order-items', ManagerOrderItemsController::class);
+        $router->resource('type', OrderTypeController::class);
+        $router->resource('source', OrderSourceController::class);
     });
 
     // logs
