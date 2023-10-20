@@ -114,8 +114,8 @@
                                 </div>
                             </li>
                             <li><a href="{{ route('shop', ['st-new']) }}">New!</a></li>
-                            <li class="d-md-none"><a
-                                    href="{{ route('shop', ['st-sale']) }}">Sale</a></li>
+                            <li class="d-md-none"><a href="{{ route('shop', ['st-sale']) }}">Sale</a>
+                            </li>
                             <li><a href="{{ route('static-shops') }}">Магазины</a></li>
                             <li class="inc-header__menu-nav_dropdown">
                                 <a href="{{ route('info') }}" class="d-none d-md-block">Условия</a>
