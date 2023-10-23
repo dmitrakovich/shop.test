@@ -86,13 +86,14 @@ class OrderController extends AdminController
         $grid->column('user_addr', 'Адрес');
         $grid->column('payment.name', 'Способ оплаты');
         $grid->column('delivery.name', 'Способ доставки');
-        $grid->column('adminCommentsCollection', 'Коммент')->display(fn () => '💬')->expand(function ($model) {
-            $comments = $model->adminComments->map(function ($comment) {
-                return $comment->only(['created_at', 'comment']);
-            });
-
-            return new Table(['Дата создания', 'Коммент'], $comments->toArray());
-        });
+        $grid->column('adminCommentsCollection', 'Коммент')
+            ->display(fn () => count($this->adminComments) ? '💬' : null)
+            ->display(fn ($value, $row) => count($this->adminComments) ? $row->expand(function ($model) {
+                $comments = $model->adminComments->map(function ($comment) {
+                    return $comment->only(['created_at', 'comment']);
+                });
+                return new Table(['Дата создания', 'Коммент'], $comments->toArray());
+            }) : null);
 
         $grid->column('status_key', 'Статус')->editable('select', $orderStatuses);
         $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
