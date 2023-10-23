@@ -92,6 +92,7 @@ class OrderController extends AdminController
                 $comments = $model->adminComments->map(function ($comment) {
                     return $comment->only(['created_at', 'comment']);
                 });
+
                 return new Table(['Дата создания', 'Коммент'], $comments->toArray());
             }) : null);
 
