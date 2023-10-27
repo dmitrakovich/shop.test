@@ -5,7 +5,7 @@ namespace App\Admin\Controllers\Analytics;
 use App\Models\Orders\Order;
 use Encore\Admin\Grid;
 
-class OrderSourceController extends AbstractOrderItemAnalyticController
+class OrderSourceController extends AbstractCustomerAnalyticController
 {
     /**
      * Title for current resource.
@@ -38,6 +38,8 @@ class OrderSourceController extends AbstractOrderItemAnalyticController
         $grid = new Grid(new Order());
 
         $grid->model()->selectRaw($this->getSelectSql())
+            ->withExpression('LastUserOrders', $this->getLastUserOrdersQuery())
+            ->leftJoin('users', 'users.id', '=', 'orders.user_id')
             ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
             ->groupBy('instance_name');
 
