@@ -10,7 +10,7 @@ class BackupMediaCommand extends BackupCommand
 
     protected $description = 'Run the backup media.';
 
-    public function handle()
+    public function handle(): int
     {
         config(['backup.backup.source.files.exclude' => []]);
 
@@ -21,6 +21,8 @@ class BackupMediaCommand extends BackupCommand
             ]);
             parent::handle();
         }
+
+        return static::SUCCESS;
     }
 
     /**
