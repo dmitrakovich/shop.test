@@ -15,7 +15,7 @@
         "appstract/laravel-opcache": "^4.0",
         "default-089/sxgeo": "0.16.*@dev",
         "defstudio/telegraph": "^1.37",
-        "deployer/deployer": "^7.0",
+        "deployer/deployer": "7.3.0",
         "diglactic/laravel-breadcrumbs": "^8.1",
         "dmitrakovich/smstraffic-for-laravel": "^0.1.5",
         "drandin/declension-nouns": "dev-master",
