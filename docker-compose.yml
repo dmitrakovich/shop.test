@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.x"
 
 x-general:
   &general-env
@@ -38,8 +38,7 @@ services:
       - mysql
       - redis
     environment:
-      <<: *general-env
-      <<: *php-env
+      <<: [*general-env, *php-env]
     volumes:
       - ./docker/data/php:/var/php
       - ./src:/var/www/app
@@ -58,8 +57,7 @@ services:
     depends_on:
       - php
     environment:
-      <<: *general-env
-      <<: *php-env
+      <<: [*general-env, *php-env]
     volumes:
       - ./docker/data/php:/var/php
       - ./src:/var/www/app
@@ -77,8 +75,7 @@ services:
     depends_on:
       - php
     environment:
-      <<: *general-env
-      <<: *php-env
+      <<: [*general-env, *php-env]
       SUPERVISOR_STOP_WAIT_SECS: ${SUPERVISOR_STOP_WAIT_SECS}
     volumes:
       - ./docker/data/php:/var/php
