@@ -86,10 +86,11 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $count = $this->updateAvailableSizesFromOrders($availableSizes);
         $this->log("Обновлено $count доступных размеров товаров на основе заказов");
 
+        $this->notifyOfflineOrders($availableSizes);
+
+        $this->replaceNegativeSizesWithZero($availableSizes);
         $count = $this->removeEmptySizes($availableSizes);
         $this->log("Удалено $count записей с пустыми размерами");
-
-        $this->notifyOfflineOrders($availableSizes);
 
         $this->log('Запись полученных и сопоставленных данных в базу');
         DB::table($this->availableSizesTable)->truncate();
@@ -369,16 +370,12 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
             $stockId = $stock['stock_id'];
             foreach ($productsInOrders[$productId][$stockId] ?? [] as $sizeId => &$count) {
                 $sizeField = AvailableSizes::convertSizeIdToField($sizeId);
-                $originalStockCount = $stock[$sizeField];
+                $stockCount = $stock[$sizeField];
 
-                $this->debug('subtract to order:', compact('stockId', 'productId', 'sizeField', 'count', 'originalStockCount'));
+                $this->debug('subtract to order:', compact('stockId', 'productId', 'sizeField', 'count', 'stockCount'));
 
-                if ($stock[$sizeField] - $count <= 0) {
-                    $stock[$sizeField] = 0;
-                } else {
-                    $stock[$sizeField] -= $count;
-                }
-                $count -= $originalStockCount;
+                $stock[$sizeField] -= $count;
+                $count -= $stockCount;
                 if ($count <= 0) {
                     unset($productsInOrders[$productId][$stockId][$sizeId]);
                 }
@@ -404,6 +401,21 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         }
 
         return $count;
+    }
+
+    /**
+     * Replaces negative sizes with zero.
+     */
+    protected function replaceNegativeSizesWithZero(array &$availableSizes): void
+    {
+        $sizeFields = AvailableSizes::getSizeFields();
+        foreach ($availableSizes as &$stock) {
+            foreach ($sizeFields as $sizeField) {
+                if ($stock[$sizeField] < 0) {
+                    $stock[$sizeField] = 0;
+                }
+            }
+        }
     }
 
     /**

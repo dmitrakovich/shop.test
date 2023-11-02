@@ -100,6 +100,8 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
             ->has('orderItem')
             ->whereNotNull('picked_up_at')
             ->whereNull('moved_at')
+            ->whereNull('completed_at')
+            ->whereNull('returned_at')
             ->each(function (OrderItemStatusLog $movedItem) {
                 $productId = $movedItem->orderItem->product_id;
                 $sizeField = AvailableSizes::convertSizeIdToField($movedItem->orderItem->size_id);
