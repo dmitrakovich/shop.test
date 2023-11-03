@@ -13,6 +13,14 @@ use App\Models\User\User;
 
 class OrderService implements OrderServiceInterface
 {
+    /**
+     * @var int Maximum quantity of items per size
+     */
+    const MAX_PER_SIZE_LIMIT = 1;
+
+    /**
+     * {@inheritdoc}
+     */
     public function store(StoreRequest $request, Cart $cart, User $user)
     {
         $orderData = $request->getValidatedData();
@@ -46,7 +54,7 @@ class OrderService implements OrderServiceInterface
                 $order->data()->create([
                     'product_id' => $item->product_id,
                     'size_id' => $item->size_id,
-                    'count' => $item->count,
+                    'count' => min($item->count, self::MAX_PER_SIZE_LIMIT),
                     'buy_price' => $item->product->buy_price,
                     'price' => $item->product->price,
                     'old_price' => $item->product->getOldPrice(),
