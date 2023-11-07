@@ -253,7 +253,11 @@ class OrderController extends AdminController
             $form->currency('weight', 'Вес заказа')->symbol('Кг');
             $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
             $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
-            $form->select('payment_id', 'Способ оплаты')->options(PaymentMethod::pluck('name', 'id'));
+            $form->select('payment_id', 'Способ оплаты')
+                ->options(PaymentMethod::pluck('name', 'id'))
+                ->when(Installment::PAYMENT_METHOD_ID, function (Form $form) {
+                    $form->date('date_contract_installment', 'Дата договора');
+                });
 
             $this->setUtmSources($form);
 
