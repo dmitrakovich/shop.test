@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use Encore\Admin\Auth\Database\Administrator;
 use App\Models\Logs as LogModel;
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\Auth;
 
 /**
