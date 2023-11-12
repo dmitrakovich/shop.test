@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->date('date_contract_installment')->nullable()->comment('Дата заключения договора рассрочки');
+        Schema::table('installments', function (Blueprint $table) {
+            $table->date('contract_date')->nullable()->comment('Дата заключения договора рассрочки');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('date_contract_installment');
+        Schema::table('installments', function (Blueprint $table) {
+            $table->dropColumn('contract_date');
         });
     }
 };

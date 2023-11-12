@@ -52,7 +52,7 @@ class InstallmentOrderService
             $adminFio = $order?->admin?->user_last_name . ' ' . mb_strtoupper(mb_substr($order?->admin?->name, 0, 1)) . '.' . mb_strtoupper(mb_substr($order?->admin?->user_patronymic_name, 0, 1)) . '.';
             $adminTrustDate = isset($order->admin->trust_date) ? date('d.m.Y', strtotime($order?->admin?->trust_date)) : null;
             $adminTrustNumber = $order->admin->trust_number ?? null;
-            $dateContractInstallment = Carbon::parse(($order->date_contract_installment ?? 'now'))->translatedFormat('d.m.Y');
+            $dateContractInstallment = Carbon::parse(($item->installment->contract_date ?? 'now'))->translatedFormat('d.m.Y');
             $sheet->unmergeCells('AL3:AW3');
             $sheet->mergeCells('AI3:AX3');
             $sheet->setCellValue('AI3', $dateContractInstallment);

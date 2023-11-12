@@ -256,7 +256,7 @@ class OrderController extends AdminController
             $form->select('payment_id', 'Способ оплаты')
                 ->options(PaymentMethod::pluck('name', 'id'))
                 ->when(Installment::PAYMENT_METHOD_ID, function (Form $form) {
-                    $form->date('date_contract_installment', 'Дата договора');
+                    $form->date('installment_contract_date', 'Дата договора');
                 });
 
             $this->setUtmSources($form);
@@ -403,6 +403,7 @@ class OrderController extends AdminController
             $installment->contract_number = $contractNumber;
             $installment->monthly_fee = $monthlyFee;
             $installment->send_notifications = $sendNotifications;
+            $installment->contract_date = $form->input('installment_contract_date');
             $installment->save();
         }
     }
