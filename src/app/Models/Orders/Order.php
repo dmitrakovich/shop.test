@@ -322,7 +322,6 @@ class Order extends Model
         return "{$this->last_name} {$this->first_name} {$this->patronymic_name}";
     }
 
-
     /**
      * Retrieves the contract date from the installment items of the current model.
      *
@@ -339,6 +338,7 @@ class Order extends Model
                 }
             }
         }
+
         return $contractDate;
     }
 
