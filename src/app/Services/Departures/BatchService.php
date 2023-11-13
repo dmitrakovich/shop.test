@@ -41,8 +41,8 @@ class BatchService
             $cod = ($order->payment_id == 1 || $order->payment_id == 4) ? $order->getTotalCODSum() : null;
             $result[] = [
                 ++$key, // * Порядковый номер ПО в списке (A) (1 – 9999999)
-                $order->first_name, // * Фамилия (B)
-                $order->last_name, // Имя (C)
+                $order->last_name, // * Фамилия (B)
+                $order->first_name, // Имя (C)
                 $order->patronymic_name, // Отчество (D)
                 'BY', // * ISO страны назначения (E) (BY – для Белоруссии)
                 'БЕЛАРУСЬ', // * Страна назначения (F)

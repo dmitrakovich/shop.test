@@ -105,6 +105,7 @@ class Order extends Model
     ];
 
     protected $appends = [
+        'installment_contract_date',
         'user_full_name',
     ];
 
@@ -319,6 +320,30 @@ class Order extends Model
     public function getUserFullNameAttribute()
     {
         return "{$this->last_name} {$this->first_name} {$this->patronymic_name}";
+    }
+
+    /**
+     * Retrieves the contract date from the installment items of the current model.
+     *
+     * @return string|null The contract date or null if not found.
+     */
+    public function getInstallmentContractDateAttribute(): ?string
+    {
+        $contractDate = null;
+        if ($this->relationLoaded('itemsExtended')) {
+            foreach ($this->itemsExtended as $itemExtended) {
+                if (isset($itemExtended->installment->contract_date)) {
+                    $contractDate = $itemExtended->installment->contract_date;
+                    break;
+                }
+            }
+        }
+
+        return $contractDate;
+    }
+
+    public function setInstallmentContractDateAttribute($value)
+    {
     }
 
     public function getItemsPrice(): float

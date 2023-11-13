@@ -52,9 +52,10 @@ class InstallmentOrderService
             $adminFio = $order?->admin?->user_last_name . ' ' . mb_strtoupper(mb_substr($order?->admin?->name, 0, 1)) . '.' . mb_strtoupper(mb_substr($order?->admin?->user_patronymic_name, 0, 1)) . '.';
             $adminTrustDate = isset($order->admin->trust_date) ? date('d.m.Y', strtotime($order?->admin?->trust_date)) : null;
             $adminTrustNumber = $order->admin->trust_number ?? null;
+            $dateContractInstallment = Carbon::parse(($item->installment->contract_date ?? 'now'))->translatedFormat('d.m.Y');
             $sheet->unmergeCells('AL3:AW3');
             $sheet->mergeCells('AI3:AX3');
-            $sheet->setCellValue('AI3', ('"' . Carbon::parse(now())->translatedFormat('l, F j, Y') . '"'));
+            $sheet->setCellValue('AI3', $dateContractInstallment);
             $sheet->setCellValue('E5', 'Общество с ограниченной ответственностью "БароккоСтайл", в лице специалиста по продажам');
             $sheet->setCellValue('B6', $adminFio . ", действующий на основании Доверенности №$adminTrustNumber от $adminTrustDate, именуемый в дальнейшем");
             $sheet->setCellValue('B7', "Продавец, с одной стороны, и $lastName $firstName $patronymicName, именуемая в дальнейшем");
@@ -66,26 +67,27 @@ class InstallmentOrderService
             $sheet->setCellValue('H13', TextHelper::numberToMoneyShortString($itemPrice));
             $sheet->setCellValue('V13', TextHelper::numberToMoneyString($itemPrice));
 
-            $sheet->setCellValue('J17', date('d/m/Y', strtotime('now')));
-            $sheet->setCellValue('J18', date('d/m/Y', strtotime('+1 month')));
-            $sheet->setCellValue('J19', date('d/m/Y', strtotime('+1 month')));
-            $sheet->setCellValue('J20', date('d/m/Y', strtotime('+2 month')));
+            $sheet->setCellValue('J17', $dateContractInstallment);
+            $sheet->setCellValue('J18', Carbon::parse($dateContractInstallment)->addMonth()->translatedFormat('d.m.Y'));
+            $sheet->setCellValue('J19', Carbon::parse($dateContractInstallment)->addMonth()->translatedFormat('d.m.Y'));
+            $sheet->setCellValue('J20', Carbon::parse($dateContractInstallment)->addMonths(2)->translatedFormat('d.m.Y'));
 
             $sheet->setCellValue('X16', ($itemPrice - (($item->installment->monthly_fee ?? 0) * 2)));
             $sheet->setCellValue('X17', $item->installment->monthly_fee ?? null);
             $sheet->setCellValue('X19', $item->installment->monthly_fee ?? null);
 
-            $sheet->setCellValue('AD16', date('d/m/Y', strtotime('now')));
-            $sheet->setCellValue('AD17', date('d/m/Y', strtotime('+1 month')));
-            $sheet->setCellValue('AD19', date('d/m/Y', strtotime('+2 month')));
+            $sheet->setCellValue('AD16', $dateContractInstallment);
+            $sheet->setCellValue('AD17', Carbon::parse($dateContractInstallment)->addMonth()->translatedFormat('d.m.Y'));
+            $sheet->setCellValue('AD19', Carbon::parse($dateContractInstallment)->addMonths(2)->translatedFormat('d.m.Y'));
 
             $sheet->setCellValue('Z33', $lastName);
             $sheet->setCellValue('Z34', $firstName);
+            $sheet->setCellValue('Z35', 'Паспорт');
             $sheet->setCellValue('AL34', $patronymicName);
             $sheet->setCellValue('AM35', $order->user->passport->series . $order->user->passport->passport_number);
             $sheet->setCellValue('Z37', $order->user->passport->personal_number);
             $sheet->setCellValue('Z39', $order->user->passport->issued_by);
-            $sheet->setCellValue('AH41', Carbon::parse($order->user->passport->issued_date)->translatedFormat('F j, Y'));
+            $sheet->setCellValue('AH41', Carbon::parse($order->user->passport->issued_date)->translatedFormat('d.m.Y'));
 
             $sheet->setCellValue('Z43', $order->user->passport->registration_address ?? null);
             $sheet->setCellValue('AH47', substr(trim($order->phone), -9, -7));
