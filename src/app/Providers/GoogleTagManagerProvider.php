@@ -17,6 +17,16 @@ class GoogleTagManagerProvider extends ServiceProvider
      */
     public function register()
     {
+        //
+    }
+
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
         GoogleTagManagerFacade::macro('view', function (string $page, ?array $content = null) {
             $currency = Currency::getCurrentCurrency();
             $userData = Auth::check() ? Auth::user() : Guest::getData();
@@ -69,15 +79,5 @@ class GoogleTagManagerProvider extends ServiceProvider
                 'event_action' => $action,
             ]);
         });
-    }
-
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
     }
 }
