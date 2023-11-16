@@ -52,7 +52,7 @@ class PaymentService
         $payment_num = $order->id . '-' . (++$paymentCount);
         $paymentMethodService = $this->getPaymentMethodServiceByEnum(OnlinePaymentMethodEnum::tryFrom($data['method_enum_id']));
         $onlinePayment = $paymentMethodService->create($order, $data['amount'], $payment_num, $data);
-        if (isset($data['send_sms']) && $data['send_sms'] == 1) {
+        if (isset($data['send_sms']) && $data['send_sms'] == 1 && $onlinePayment->link) {
             $order->notify(new PaymentSms($payment_num, $onlinePayment->link, $order->first_name));
         }
 
