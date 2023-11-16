@@ -66,7 +66,7 @@ Route::resource('favorites', FavoriteController::class)->only(['store', 'destroy
 Route::post('currency/switch', [CurrencyController::class, 'switch'])->name('currency-switcher');
 
 Route::group([], function () {
-    Route::post('/quick/{product}', [ProductController::class, 'quickView'])->name('product.quick');
+    Route::post('/quick/{product}', [ProductController::class, 'quickView'])->withTrashed()->name('product.quick');
     Route::get('ajax-next-page', [CatalogController::class, 'ajaxNextPage']);
     Route::post('price-filter/{path?}', [CatalogController::class, 'priceFilter'])
         ->where('path', '[a-zA-Z0-9/_-]+');
