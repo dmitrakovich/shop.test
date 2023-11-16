@@ -201,7 +201,7 @@ class ProductController extends AbstractAdminController
             $form->html(fn ($form) => $uploadImagesService->show($form->model()->getMedia()))->setWidth(12, 0);
             $form->html($this->uploadImagesService->getImagesInput(), 'Картинки');
 
-            $form->text('slug', __('Slug'))->default(Str::slug($productFromStock->sku));
+            $form->text('slug', __('Slug'))->default($this->generateSlug($productFromStock->brand_id, $productFromStock->sku));
             $form->text('path', 'Путь')->disable();
             $form->text('sku', 'Артикул')->required()->default($productFromStock->sku);
             $form->currency('buy_price', 'Цена покупки')->symbol('BYN');
@@ -258,7 +258,7 @@ class ProductController extends AbstractAdminController
                 return $this->mediaNotAddedError();
             }
             if (empty($form->slug)) {
-                $form->slug = Str::slug(Brand::where('id', $form->brand_id)->value('name') . '-' . $form->sku);
+                $form->slug = $this->generateSlug($form->brand_id, $form->sku);
             }
             if (is_null($form->manufacturer_id)) {
                 $form->manufacturer_id = 0;
@@ -362,6 +362,14 @@ class ProductController extends AbstractAdminController
         $grid->disableRowSelector();
 
         return $grid->render();
+    }
+
+    /**
+     * Generate a slug based on brand name and SKU.
+     */
+    private function generateSlug(int $brandId, string $sku): string
+    {
+        return Str::slug(Brand::where('id', $brandId)->value('name') . '-' . $sku);
     }
 
     protected function getStockProduct(): AvailableSizes
