@@ -33,7 +33,7 @@ abstract class AbstractAnalyticController extends AbstractAdminController
         $grid->model()->orderBy('total_purchased_price', 'desc');
         $grid->footer(function ($query) {
             return view('admin.analytics.footer-total', [
-                'data' => $query->get()
+                'data' => $query->get(),
             ]);
         });
         $grid->column('instance_name', $this->getInstanceColumnTitle())->default('Неопределено');
