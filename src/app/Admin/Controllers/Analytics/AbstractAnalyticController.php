@@ -30,21 +30,27 @@ abstract class AbstractAnalyticController extends AbstractAdminController
     {
         $grid = $this->getPreparedGrid();
 
+        $grid->model()->orderBy('total_purchased_price', 'desc');
+        $grid->footer(function ($query) {
+            return view('admin.analytics.footer-total', [
+                'data' => $query->get()
+            ]);
+        });
         $grid->column('instance_name', $this->getInstanceColumnTitle())->default('Неопределено');
-        $grid->column('total_count', 'Все');
-        $grid->column('accepted_count', 'Принят');
-        $grid->column('in_progress_count', 'В работе');
-        $grid->column('purchased_count', 'Выкуплен');
-        $grid->column('canceled_count', 'Отменен');
-        $grid->column('returned_count', 'Возврат');
-        $grid->column('total_purchased_price', 'Сумма выкупленных')->suffix('BYN', ' ');
-        $grid->column('purchase_percentage', 'Процент выкупа')->display(function () {
+        $grid->column('total_count', 'Все')->width(70)->sortable();
+        $grid->column('accepted_count', 'Принят')->width(85)->sortable();
+        $grid->column('in_progress_count', 'В работе')->width(100)->sortable();
+        $grid->column('purchased_count', 'Выкуплен')->width(105)->sortable();
+        $grid->column('canceled_count', 'Отменен')->width(100)->sortable();
+        $grid->column('returned_count', 'Возврат')->width(95)->sortable();
+        $grid->column('total_purchased_price', 'Сумма выкупленных')->width(180)->sortable()->suffix('BYN', ' ');
+        $grid->column('purchase_percentage', 'Процент выкупа')->width(140)->display(function () {
             $purchased = (int)$this->getAttribute('purchased_count');
             $total = (int)$this->getAttribute('total_count');
 
             return $total ? round(($purchased / $total) * 100, 2) : 0;
         })->suffix('%', ' ');
-        $grid->column('total_lost_price', 'Сумма потерянных')->suffix('BYN', ' ');
+        $grid->column('total_lost_price', 'Сумма потерянных')->width(180)->sortable()->suffix('BYN', ' ');
 
         $grid->expandFilter();
         $hasDefaultFilter = request()->has('default-filter');
