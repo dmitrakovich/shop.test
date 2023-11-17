@@ -201,7 +201,11 @@ class ProductController extends AbstractAdminController
             $form->html(fn ($form) => $uploadImagesService->show($form->model()->getMedia()))->setWidth(12, 0);
             $form->html($this->uploadImagesService->getImagesInput(), 'Картинки');
 
-            $form->text('slug', __('Slug'))->default($this->generateSlug($productFromStock->brand_id, $productFromStock->sku));
+            $defaultSlug = null;
+            if (!empty($productFromStock->brand_id) && !empty($productFromStock->sku)) {
+                $defaultSlug = $this->generateSlug($productFromStock->brand_id, $productFromStock->sku);
+            }
+            $form->text('slug', __('Slug'))->default($defaultSlug);
             $form->text('path', 'Путь')->disable();
             $form->text('sku', 'Артикул')->required()->default($productFromStock->sku);
             $form->currency('buy_price', 'Цена покупки')->symbol('BYN');
