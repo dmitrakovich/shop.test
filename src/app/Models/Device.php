@@ -88,7 +88,7 @@ class Device extends Model
      *
      * @var string|null
      */
-    protected ?string $currentDeviceId = null;
+    protected static ?string $currentDeviceId = null;
 
     /**
      * Generate new device id for new device
