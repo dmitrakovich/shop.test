@@ -101,7 +101,7 @@ window.sizesValidate = function () {
 }
 
 try {
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener('DOMContentLoaded', function () {
     const currentLocation = window?.location?.href;
     const currentLocationUrl = new URL(currentLocation);
     const locationReferrer = currentLocationUrl?.searchParams?.get('referrer');
