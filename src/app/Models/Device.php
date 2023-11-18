@@ -84,13 +84,22 @@ class Device extends Model
     ];
 
     /**
-     * Generate device id for new device
+     * Stores the current device id
+     *
+     * @var string|null
      */
-    public static function generateId(Request $request): string
+    protected ?string $currentDeviceId = null;
+
+    /**
+     * Generate new device id for new device
+     */
+    public static function generateNewId(Request $request): string
     {
-        return md5(
+        self::$currentDeviceId = md5(
             uniqid($request->getHost()) . $request->ip()
         );
+
+        return self::$currentDeviceId;
     }
 
     /**
@@ -98,9 +107,7 @@ class Device extends Model
      */
     public static function getOrNew(): self
     {
-        $id = Cookie::get(self::DEVICE_ID_COOKIE_NAME, self::getDefaultId());
-
-        return self::firstOrNew(compact('id'));
+        return self::firstOrNew(['id' => self::getId()]);
     }
 
     /**
@@ -116,7 +123,9 @@ class Device extends Model
      */
     public static function getId(): string
     {
-        return Cookie::get(self::DEVICE_ID_COOKIE_NAME) ?? self::getDefaultId();
+        return self::$currentDeviceId
+            ?? Cookie::get(self::DEVICE_ID_COOKIE_NAME)
+            ?? self::getDefaultId();
     }
 
     /**

@@ -19,7 +19,7 @@ class DeviceDetect
         if (!$request->hasCookie(Device::DEVICE_ID_COOKIE_NAME)) {
             Cookie::queue(cookie(
                 Device::DEVICE_ID_COOKIE_NAME,
-                Device::generateId($request),
+                Device::generateNewId($request),
                 Device::COOKIE_LIFE_TIME,
                 '/'
             ));
