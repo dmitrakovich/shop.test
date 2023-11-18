@@ -40,4 +40,12 @@ return [
         'token' => env('SXGEO_TOKEN'),
     ],
 
+    'facebook' => [
+        'enabled' => env('FACEBOOK_ENABLED', false),
+        'account_id' => env('FACEBOOK_ACCOUNT_ID', ''),
+        'pixel_id' => env('FACEBOOK_PIXEL_ID', ''),
+        'token' => env('FACEBOOK_TOKEN', ''),
+        'log_file' => storage_path('logs/facebook.log'),
+    ],
+
 ];

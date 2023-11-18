@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 use App\Contracts\OrderServiceInterface;
+use App\Logging\FacebookApiLogger;
 use App\Notifications\ChannelManagerWithLimits;
+use App\Services\Api\Facebook\ConversionsApiService;
 use App\Services\OrderService;
+use FacebookAds\Api;
 use Illuminate\Notifications\ChannelManager;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
@@ -23,6 +26,15 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ChannelManager::class, function ($app) {
             return new ChannelManagerWithLimits($app);
+        });
+
+        $this->app->singleton(ConversionsApiService::class, function () {
+            $pixelId = config('services.facebook.pixel_id');
+            $api = Api::init(null, null, config('services.facebook.token'));
+            $logger = new FacebookApiLogger(fopen(config('services.facebook.log_file'), 'a'));
+            $api->setLogger($logger->setJsonPrettyPrint(true));
+
+            return new ConversionsApiService($api, $pixelId);
         });
     }
 

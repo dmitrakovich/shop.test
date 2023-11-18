@@ -20,6 +20,7 @@
         "dmitrakovich/smstraffic-for-laravel": "^0.1.5",
         "drandin/declension-nouns": "dev-master",
         "encore/laravel-admin": "^1.8",
+        "facebook/php-business-sdk": "^18.0",
         "giggsey/libphonenumber-for-php": "8.12.47.1",
         "guzzlehttp/guzzle": "^7.5",
         "jenssegers/agent": "^2.6",
