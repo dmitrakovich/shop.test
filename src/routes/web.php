@@ -13,6 +13,7 @@ use App\Http\Controllers\Shop\OrderController;
 use App\Http\Controllers\Shop\PaymentController;
 use App\Http\Controllers\Shop\ProductController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\SocialSubscriptionController;
 use App\Http\Middleware\OnlyAjax;
 use App\Http\Requests\FilterRequest;
 use App\Models\Product;
@@ -44,7 +45,11 @@ Route::get('policy', [InfoPageController::class, 'policy'])->name('info.policy')
 Route::get('online-shopping/{slug?}', [InfoPageController::class, 'index'])->name('info');
 Route::get('shops', [InfoPageController::class, 'shops'])->name('static-shops');
 
-Route::view('channel', 'channel')->name('channel');
+
+Route::group(['prefix' => 'channel', 'as' => 'channel.'], function () {
+    Route::view('/', 'channel')->name('channel');
+    Route::get('subscribe/{channel}/{eventId}', [SocialSubscriptionController::class, 'subscribe'])->name('subscribe');
+});
 
 require __DIR__ . '/auth.php';
 

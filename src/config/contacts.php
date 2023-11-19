@@ -25,6 +25,10 @@ return [
         'name' => 'Telegram',
         'link' => 'https://t.me/BaroccoBot',
     ],
+    'telegram-channel' => [
+        'name' => 'Telegram',
+        'link' => 'https://t.me/barocco_by',
+    ],
     'viber-old' => [
         'name' => 'Viber',
         'link' => 'viber://chat?number=%2B375447286606',
@@ -32,6 +36,10 @@ return [
     'viber' => [
         'name' => 'Viber',
         'link' => 'viber://pa?chatURI=barocco_by',
+    ],
+    'viber-channel' => [
+        'name' => 'Viber',
+        'link' => 'https://invite.viber.com/?g2=AQB8PUyG5C7u507fc5vO1d9qgVguM3f2bR1PvGloHCrNNZJU4SGHHigjhYWQF5D2&lang=ru',
     ],
     'whats-app' => [
         'name' => 'What\'s App',

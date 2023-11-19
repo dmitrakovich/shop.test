@@ -211,6 +211,9 @@ class GoogleTagManagerService
         }
     }
 
+    /**
+     * Push GTM view_page event
+     */
     private function pushViewEvent(string $page, string $eventId, UserData $userData, ?array $content = null): void
     {
         $gtmUserData = $userData->normalizeForGtm();

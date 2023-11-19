@@ -68,6 +68,9 @@ class EventServiceProvider extends ServiceProvider
         ReviewPosted::class => [
             ResetUserCache::class,
         ],
+        Analytics\SocialSubscription::class => [
+            FacebookPixel\SendLeadEvent::class,
+        ],
     ];
 
     /**

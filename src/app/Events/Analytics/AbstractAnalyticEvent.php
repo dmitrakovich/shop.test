@@ -69,7 +69,9 @@ abstract class AbstractAnalyticEvent
      */
     protected function setEventId(): void
     {
-        $this->eventId = Str::ulid();
+        if (!isset($this->eventId)) {
+            $this->eventId = Str::ulid();
+        }
     }
 
     /**

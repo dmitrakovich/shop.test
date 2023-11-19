@@ -1,3 +1,4 @@
+@php $eventId = Str::ulid(); @endphp
 <!doctype html>
 <html>
 
@@ -112,6 +113,7 @@
             try {
                 window.dataLayer.push({
                     'event': 'user_event',
+                    'event_id': '{{ $eventId }}',
                     'event_label': label,
                     'event_category': 'user',
                     'event_action': 'AddToChannel'
@@ -157,13 +159,12 @@
         <div class="text">Выберите приложение<br>для подписки на канал:</div>
 
         <div class="box">
-            <a class="button button_tg" href="https://t.me/barocco_by" title="канал Telegram"
+            <a class="button button_tg" href="{{ route('channel.subscribe', ['telegram', $eventId]) }}" title="канал Telegram"
                 onClick="leadComplete('telegram_subscribe');"><img
-                    src="{{ url('/uploads/channel/tg_white.png') }}" alt="канал Telegram">Telegram</a>
-            <a class="button button_vb"
-                href="https://invite.viber.com/?g2=AQB8PUyG5C7u507fc5vO1d9qgVguM3f2bR1PvGloHCrNNZJU4SGHHigjhYWQF5D2&lang=ru"
-                title="канал Viber" onClick="leadComplete('viber_subscribe');"><img
-                    src="{{ url('/uploads/channel/vb_white.png') }}" alt="канал Viber">Viber</a>
+                src="{{ url('/uploads/channel/tg_white.png') }}" alt="канал Telegram">Telegram</a>
+            <a class="button button_vb" href="{{ route('channel.subscribe', ['viber', $eventId]) }}" title="канал Viber"
+                onClick="leadComplete('viber_subscribe');"><img
+                src="{{ url('/uploads/channel/vb_white.png') }}" alt="канал Viber">Viber</a>
         </div>
     </div>
 </body>
