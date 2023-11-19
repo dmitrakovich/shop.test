@@ -31,13 +31,34 @@ $(function () {
  * @param {Object} ecommerce
  * @param {Function} eventCallback
  */
-gtmEcomEvent = function (eventName, ecommerce, eventCallback = () => {}) {
+gtmEcomEvent = function (eventName, ecommerce, eventCallback = () => {}, eventId = null) {
   dataLayer.push({
     ecommerce: {
       currencyCode: 'USD',
       ...ecommerce,
     },
     event: 'ecom_event',
+    event_label: eventName,
+    event_category: 'ecommerce',
+    event_action: eventName,
+    eventCallback,
+  });
+}
+
+/**
+ * @param {string} eventName
+ * @param {string} eventId
+ * @param {Object} ecommerce
+ * @param {Function} eventCallback
+ */
+gtmEcomEventWithId = function (eventName, eventId, ecommerce, eventCallback = () => {}) {
+  dataLayer.push({
+    ecommerce: {
+      currencyCode: 'USD',
+      ...ecommerce,
+    },
+    event: 'ecom_event',
+    event_id: eventId,
     event_label: eventName,
     event_category: 'ecommerce',
     event_action: eventName,
@@ -58,9 +79,9 @@ gtmProductDetailEvent = function (product) {
  * @param {Object} product
  * @param {Number} quantity
  */
-gtmProductAddEvent = function (product, quantity = 1) {
+gtmProductAddEvent = function (eventId, product, quantity = 1) {
   product.quantity = quantity;
-  gtmEcomEvent('productAdd', {
+  gtmEcomEventWithId('productAdd', eventId, {
     add: { products: [product] },
   });
 }

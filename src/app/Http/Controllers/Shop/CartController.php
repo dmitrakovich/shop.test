@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Events\Analytics\AddToCart;
 use App\Facades\Cart;
 use App\Facades\Sale;
 use App\Models\Country;
@@ -78,8 +79,11 @@ class CartController extends BaseController
             Cart::addItem($product->id, $sizeId);
         }
 
+        event($event = new AddToCart($product));
+
         return [
             'result' => 'ok',
+            'event_id' => $event->eventId,
             'total_count' => Cart::itemsCount(),
         ];
     }

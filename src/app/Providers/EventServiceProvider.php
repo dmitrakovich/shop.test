@@ -49,6 +49,9 @@ class EventServiceProvider extends ServiceProvider
             GoogleTag\SetProductViewData::class,
             FacebookPixel\SendProductViewEvent::class,
         ],
+        Analytics\AddToCart::class => [
+            FacebookPixel\SendAddToCartEvent::class,
+        ],
         OrderCreated::class => [
             SendOrderInformationNotification::class,
             SaveDevice::class,

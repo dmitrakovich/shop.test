@@ -58,7 +58,7 @@ $(function () {
           }));
         } else {
           // eslint-disable-next-line no-undef
-          gtmProductAddEvent(productDetail);
+          gtmProductAddEvent(response.event_id, productDetail);
           $.fancybox.open(Mustache.render(TEMPLATE_ADDED_TO_CART, {
             text: 'Товар успешно добавлен в корзину',
             type: 'success',

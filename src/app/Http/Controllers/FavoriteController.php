@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Analytics\AddToCart;
 use App\Models\Device;
 use App\Models\Favorite;
+use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -29,13 +31,21 @@ class FavoriteController extends Controller
      */
     public function store(Request $request)
     {
+        /** @var Product */
+        $product = Product::findOrFail((int)$request->input('productId'));
         $favorite = Favorite::create([
             'user_id' => Auth::id(),
             'device_id' => Device::getId(),
-            'product_id' => (int)$request->input('productId'),
+            'product_id' => $product->id,
         ]);
 
-        return $favorite->id;
+        event($event = new AddToCart($product));
+
+        return [
+            'result' => 'ok',
+            'favorite_id' => $favorite->id,
+            'event_id' => $event->eventId,
+        ];
     }
 
     /**
