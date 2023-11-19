@@ -4,13 +4,9 @@ namespace App\Events\Analytics;
 
 use App\Models\Product;
 use FacebookAds\Object\ServerSide\ActionSource;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
 class ProductView extends AbstractAnalyticEvent
 {
-    use Dispatchable, SerializesModels;
-
     /**
      * Create a new event instance.
      */

@@ -34,8 +34,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+        Analytics\Registered::class => [
+            GoogleTag\SetUserRegistrationData::class,
+            FacebookPixel\SendCompleteRegistrationEvent::class,
             // SyncOrderHistory::class,
         ],
         Login::class => [

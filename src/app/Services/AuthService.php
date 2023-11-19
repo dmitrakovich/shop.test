@@ -2,11 +2,10 @@
 
 namespace App\Services;
 
+use App\Events\Analytics\Registered;
 use App\Models\User\User;
 use App\Notifications\VerificationPhoneSms;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
-use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 /**
  * Class AuthService
@@ -64,7 +63,6 @@ class AuthService
 
         if ($user->wasRecentlyCreated) {
             event(new Registered($user));
-            GoogleTagManagerFacade::user('userRegistration');
         }
 
         return $user;

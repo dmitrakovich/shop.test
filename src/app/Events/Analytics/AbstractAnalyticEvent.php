@@ -7,6 +7,7 @@ use App\Models\Device;
 use App\Models\Guest;
 use FacebookAds\Object\ServerSide\ActionSource;
 use FacebookAds\Object\ServerSide\Util;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -18,6 +19,8 @@ use Illuminate\Support\Str;
  */
 abstract class AbstractAnalyticEvent
 {
+    use SerializesModels;
+
     /**
      * Event ID for the analytic event.
      */
