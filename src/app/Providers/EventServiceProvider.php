@@ -59,6 +59,10 @@ class EventServiceProvider extends ServiceProvider
             ResetUserCache::class,
             UpdateInventory::class,
         ],
+        Analytics\Purchase::class => [
+            GoogleTag\SetPurchaseData::class,
+            FacebookPixel\SendPurchaseEvent::class,
+        ],
         OrderStatusChanged::class => [
             UpdateOrderItemsStatus::class,
         ],

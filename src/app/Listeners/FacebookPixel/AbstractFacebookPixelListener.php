@@ -34,4 +34,12 @@ abstract class AbstractFacebookPixelListener
     {
         app(ConversionsApiService::class)->sendEvent($event);
     }
+
+    /**
+     * Send the generated Facebook Pixel events using the Conversions API service.
+     */
+    protected function sendEvents(array $events): void
+    {
+        app(ConversionsApiService::class)->sendEvents($events);
+    }
 }

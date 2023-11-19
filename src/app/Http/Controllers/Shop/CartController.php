@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Events\Analytics\AddToCart;
+use App\Events\Analytics\Purchase;
 use App\Facades\Cart;
 use App\Facades\Sale;
 use App\Models\Country;
@@ -95,7 +96,6 @@ class CartController extends BaseController
      */
     public function final(
         ProductService $productService,
-        GoogleTagManagerService $gtmService,
         SliderService $sliderService
     ) {
         if (!Session::has('order_id')) {
@@ -104,8 +104,7 @@ class CartController extends BaseController
         $order = Order::with('items', 'payment')->findOrFail(Session::get('order_id'));
         Guest::setData($order->only(['first_name', 'last_name', 'email', 'phone']));
 
-        $gtmService->setViewForOrder();
-        $gtmService->setPurchaseEvent($order->items, $order->id, $order->isOneClick());
+        event(new Purchase($order));
 
         return view('shop.cart-done', [
             'order' => $order,

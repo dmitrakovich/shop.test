@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\Analytics\ProductView;
+use App\Events\Analytics\Purchase;
 use App\Facades\Currency;
 use App\Models\Cart;
 use App\Models\Category;
@@ -153,20 +154,6 @@ class GoogleTagManagerService
     }
 
     /**
-     * Set GTM ecommerce add to cart flash event
-     */
-    public function setProductAddFlashEvent(Product $product, int $quantity): void
-    {
-        GoogleTagManagerFacade::ecommerceFlash('productAdd', [
-            'add' => [
-                'products' => [
-                    self::prepareProduct($product, $quantity)->toArray(),
-                ],
-            ],
-        ]);
-    }
-
-    /**
      * Set GTM ecommerce remove from cart flash event
      */
     public function setProductRemoveFlashEvent(Product $product, int $quantity): void
@@ -182,31 +169,22 @@ class GoogleTagManagerService
 
     /**
      * Set GTM ecommerce purchase event
-     *
-     * @param  Collection  $orderItems
      */
-    public function setPurchaseEvent($orderItems, int $orderId, bool $isOneClick): void
+    public function setPurchaseEvent(Purchase $event): void
     {
-        $gtmProducts = $orderItems->map(
+        $order = $event->order;
+        $gtmProducts = $order->items->map(
             fn (OrderItem $item) => self::prepareProduct($item->product, $item->count)->toArray()
         )->toArray();
 
-        if ($isOneClick) {
-            $item = $orderItems->first();
-            $this->setProductAddFlashEvent($item->product, $item->count);
+        if ($order->isOneClick()) {
+            $item = $order->items->first();
+            $this->pushProductAddEvent($event->eventId, $item->product, $item->count);
         }
 
-        GoogleTagManagerFacade::ecommerce('productPurchase', [
-            'purchase' => [
-                'actionField' => [
-                    'id' => $orderId,
-                    'goal_id' => 230549930,
-                ],
-                'products' => $gtmProducts,
-            ],
-        ]);
+        $this->pushProductPurchaseEvent($event->eventId, $order->id, $gtmProducts);
 
-        if ($isOneClick) {
+        if ($order->isOneClick()) {
             GoogleTagManagerFacade::ecommerce('productOneClickOrder', []);
         }
     }
@@ -232,5 +210,51 @@ class GoogleTagManagerService
             'event' => 'view_page',
             'event_id' => $eventId,
         ]));
+    }
+
+    /**
+     * Set GTM ecommerce add to cart event
+     */
+    private function pushProductAddEvent(string $eventId, Product $product, int $quantity): void
+    {
+        GoogleTagManagerFacade::push([
+            'ecommerce' => [
+                'currencyCode' => 'USD',
+                'add' => [
+                    'products' => [
+                        self::prepareProduct($product, $quantity)->toArray(),
+                    ],
+                ],
+            ],
+            'event' => 'ecom_event',
+            'event_id' => $eventId,
+            'event_label' => 'productAdd',
+            'event_category' => 'ecommerce',
+            'event_action' => 'productAdd',
+        ]);
+    }
+
+    /**
+     * Push GTM ProductPurchase ecommerce event
+     */
+    private function pushProductPurchaseEvent(string $eventId, int $orderId, array $products): void
+    {
+        GoogleTagManagerFacade::push([
+            'ecommerce' => [
+                'currencyCode' => 'USD',
+                'purchase' => [
+                    'actionField' => [
+                        'id' => $orderId,
+                        'goal_id' => 230549930,
+                    ],
+                    'products' => $products,
+                ],
+            ],
+            'event' => 'ecom_event',
+            'event_id' => $eventId,
+            'event_label' => 'productPurchase',
+            'event_category' => 'ecommerce',
+            'event_action' => 'productPurchase',
+        ]);
     }
 }
