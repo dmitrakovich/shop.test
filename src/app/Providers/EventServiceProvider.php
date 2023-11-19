@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\Analytics;
 use App\Events\Notifications\NotificationSkipped;
 use App\Events\OrderCreated;
 use App\Events\OrderStatusChanged;
 use App\Events\ReviewPosted;
 use App\Listeners\Cache\ResetUserCache;
+use App\Listeners\FacebookPixel;
+use App\Listeners\GoogleTag;
 use App\Listeners\LogNotification;
 use App\Listeners\MergeCart;
 use App\Listeners\MergeFavorites;
@@ -40,6 +43,10 @@ class EventServiceProvider extends ServiceProvider
             MergeFavorites::class,
             SyncOrderHistory::class,
             // MergeCart::class,
+        ],
+        Analytics\ProductView::class => [
+            GoogleTag\SetProductViewData::class,
+            FacebookPixel\SendProductViewEvent::class,
         ],
         OrderCreated::class => [
             SendOrderInformationNotification::class,

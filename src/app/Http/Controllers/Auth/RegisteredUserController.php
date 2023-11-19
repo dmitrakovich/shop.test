@@ -11,7 +11,6 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class RegisteredUserController extends Controller
 {
@@ -41,8 +40,6 @@ class RegisteredUserController extends Controller
     //     ]);
 
     //     event(new Registered($user));
-
-    //     GoogleTagManagerFacade::user('userRegistration');
 
     //     Auth::login($user);
 

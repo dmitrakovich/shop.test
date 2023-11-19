@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Events\Analytics\ProductView;
+use App\Facades\Currency;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Data\UserData;
 use App\Models\Orders\OrderItem;
 use App\Models\Product;
 use Illuminate\Support\Collection;
@@ -15,9 +18,9 @@ class GoogleTagManagerService
     /**
      * Set GTM view event for product page
      */
-    public function setViewForProduct(Product $product): void
+    public function setViewForProduct(ProductView $event): void
     {
-        GoogleTagManagerFacade::view('product', ['id' => $product->id]);
+        $this->pushViewEvent('product', $event->eventId, $event->userData, ['id' => $event->product->id]);
     }
 
     /**
@@ -206,5 +209,25 @@ class GoogleTagManagerService
         if ($isOneClick) {
             GoogleTagManagerFacade::ecommerce('productOneClickOrder', []);
         }
+    }
+
+    private function pushViewEvent(string $page, string $eventId, UserData $userData, ?array $content = null): void
+    {
+        $gtmUserData = $userData->normalizeForGtm();
+        $currency = Currency::getCurrentCurrency();
+
+        GoogleTagManagerFacade::push(array_filter([
+            'pageType' => $page,
+            'user_type' => $gtmUserData['user_type'] ?? null,
+            'user_id' => $gtmUserData['user_id'] ?? null,
+            'user_data' => $gtmUserData,
+            'site_price' => [
+                'name' => $currency->code,
+                'rate' => $currency->rate,
+            ],
+            'page_content' => $content,
+            'event' => 'view_page',
+            'event_id' => $eventId,
+        ]));
     }
 }

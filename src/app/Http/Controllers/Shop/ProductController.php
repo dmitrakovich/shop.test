@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Events\Analytics\ProductView;
 use App\Models\Product;
 use App\Services\FeedbackService;
-use App\Services\GoogleTagManagerService;
 use App\Services\ProductService;
 use App\Services\Seo\ProductSeoService;
 use App\Services\SliderService;
@@ -20,7 +20,6 @@ class ProductController extends BaseController
         Request $request,
         private ProductService $productService,
         private SliderService $sliderService,
-        private GoogleTagManagerService $gtmService,
         private ProductSeoService $seoService,
         private FeedbackService $feedbackService,
     ) {
@@ -37,16 +36,16 @@ class ProductController extends BaseController
             'category',
             'availableSizes' => fn ($q) => $q->with(['stock' => fn ($q) => $q->with('city')]),
         ])->withTrashed()->findOrFail($id);
-        $this->gtmService->setViewForProduct($product);
         $this->productService->addToRecent($product->id);
         $this->setProductUrlToFeedback();
 
         $this->seoService->setProduct($product)->generate();
 
+        event(new ProductView($product));
+
         return view('shop.product-page', [
             'product' => $product,
             'feedbacks' => $this->feedbackService->getForProduct($product->id),
-            'dataLayer' => $this->gtmService->prepareProduct($product),
             'similarProducts' => $this->sliderService->getSimilarProducts($product->id),
             'productGroup' => $this->sliderService->getProductGroup($product->product_group_id),
             'recentProductsSlider' => $this->sliderService->getRecentProducts($this->productService),
@@ -66,12 +65,13 @@ class ProductController extends BaseController
      */
     public function quickView(Product $product): View
     {
+        event(new ProductView($product, true));
+
         return view('shop.product', [
             'quickView' => true,
             'product' => $product,
             'feedbacks' => $this->feedbackService->getForProduct($product->id),
             'productGroup' => $this->sliderService->getProductGroup($product->product_group_id),
-            'dataLayer' => $this->gtmService->prepareProduct($product),
         ]);
     }
 }
