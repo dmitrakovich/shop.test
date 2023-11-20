@@ -182,7 +182,7 @@ class GoogleTagManagerService
             $this->pushProductAddEvent($event->eventId, $item->product, $item->count);
         }
 
-        $this->pushProductPurchaseEvent($event->eventId, $order->id, $gtmProducts);
+        $this->pushProductPurchaseEvent($order->id, $gtmProducts);
 
         if ($order->isOneClick()) {
             GoogleTagManagerFacade::ecommerce('productOneClickOrder', []);
@@ -237,7 +237,7 @@ class GoogleTagManagerService
     /**
      * Push GTM ProductPurchase ecommerce event
      */
-    private function pushProductPurchaseEvent(string $eventId, int $orderId, array $products): void
+    private function pushProductPurchaseEvent(int $orderId, array $products): void
     {
         GoogleTagManagerFacade::push([
             'ecommerce' => [
@@ -251,7 +251,7 @@ class GoogleTagManagerService
                 ],
             ],
             'event' => 'ecom_event',
-            'event_id' => $eventId,
+            'event_id' => $orderId,
             'event_label' => 'productPurchase',
             'event_category' => 'ecommerce',
             'event_action' => 'productPurchase',

@@ -29,6 +29,7 @@ class SendPurchaseEvent extends AbstractFacebookPixelListener implements ShouldQ
         }
 
         $events[] = $this->generateEvent($purchaseEvent)
+            ->setEventId($order->id)
             ->setEventName('Purchase')
             ->setCustomData($customData);
 
