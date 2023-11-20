@@ -12,7 +12,7 @@
         </p>
         <h3 class="text-danger">Заказ №{{ $order->id }}</h3>
         <p>
-            от {{ date('j F') }} 2021 на сумму
+            от {{ $order->created_at->translatedFormat('j F Y') }} на сумму
             {!! Currency::format($order->getTotalPrice(), $order->currency) !!}
         </p>
         <div class="row px-5 py-4 text-left" style="background: #FBFBFD">
