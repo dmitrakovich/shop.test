@@ -14,6 +14,7 @@ use App\Models\Collection;
 use App\Models\Color;
 use App\Models\Fabric;
 use App\Models\Heel;
+use App\Models\ProductAttributes\CountryOfOrigin;
 use App\Models\ProductAttributes\Manufacturer;
 use App\Models\Season;
 use App\Models\Size;
@@ -223,6 +224,7 @@ class ProductController extends AbstractAdminController
             $form->select('brand_id', 'Бренд')->options(Brand::orderBy('name')->pluck('name', 'id'))->required()->default($productFromStock->brand_id);
             $form->select('collection_id', 'Коллекция')->options(Collection::pluck('name', 'id'))->required();
             $form->select('manufacturer_id', 'Производитель')->options(Manufacturer::pluck('name', 'id'));
+            $form->select('country_of_origin_id', 'Страна производитель')->options(CountryOfOrigin::pluck('name', 'id'));
             $form->text('color_txt', 'Цвет');
             $form->text('fabric_top_txt', 'Материал верха');
             $form->text('fabric_inner_txt', 'Материал внутри');

@@ -153,6 +153,14 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Страна производитель
+     */
+    public function countryOfOrigin(): Relations\BelongsTo
+    {
+        return $this->belongsTo(ProductAttributes\CountryOfOrigin::class);
+    }
+
+    /**
      * Slug для фильтра
      */
     public function url(): Relations\MorphOne
