@@ -85,8 +85,6 @@ class Device extends Model
 
     /**
      * Stores the current device id
-     *
-     * @var string|null
      */
     protected static ?string $currentDeviceId = null;
 

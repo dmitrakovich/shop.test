@@ -8,9 +8,7 @@ use FacebookAds\Logger\CurlLogger;
 class FacebookApiLogger extends CurlLogger
 {
     /**
-     * @param string $level
-     * @param ResponseInterface $response
-     * @param array $context
+     * @param  string  $level
      */
     public function logResponse($level, ResponseInterface $response, array $context = [])
     {

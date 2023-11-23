@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 
 class CountryOfOrigin extends Model
 {
-    use HasFactory, AttributeFilterTrait;
+    use AttributeFilterTrait, HasFactory;
+
     protected $guarded = ['id'];
 
     protected static function boot(): void

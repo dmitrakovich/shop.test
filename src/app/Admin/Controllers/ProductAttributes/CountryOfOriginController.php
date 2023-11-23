@@ -30,8 +30,8 @@ class CountryOfOriginController extends AdminController
         $grid->column('name', 'Название');
         $grid->column('slug', 'Slug');
         $grid->column('seo', 'Seo');
-        $grid->column('created_at', 'Дата создания')->display(fn() => date('d.m.Y H:i:s', strtotime($this->created_at)));
-        $grid->column('updated_at', 'Дата обновления')->display(fn() => date('d.m.Y H:i:s', strtotime($this->updated_at)));
+        $grid->column('created_at', 'Дата создания')->display(fn () => date('d.m.Y H:i:s', strtotime($this->created_at)));
+        $grid->column('updated_at', 'Дата обновления')->display(fn () => date('d.m.Y H:i:s', strtotime($this->updated_at)));
 
         $grid->disableFilter();
         $grid->disableColumnSelector();

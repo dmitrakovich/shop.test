@@ -21,8 +21,6 @@ use App\Listeners\UpdateOrderItemsStatus;
 use App\Listeners\User\UpdateUserGroup;
 use App\Observers;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Events\NotificationSent;
 

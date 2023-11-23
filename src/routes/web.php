@@ -45,7 +45,6 @@ Route::get('policy', [InfoPageController::class, 'policy'])->name('info.policy')
 Route::get('online-shopping/{slug?}', [InfoPageController::class, 'index'])->name('info');
 Route::get('shops', [InfoPageController::class, 'shops'])->name('static-shops');
 
-
 Route::group(['prefix' => 'channel', 'as' => 'channel.'], function () {
     Route::view('/', 'channel')->name('channel');
     Route::get('subscribe/{channel}/{eventId}', [SocialSubscriptionController::class, 'subscribe'])->name('subscribe');
