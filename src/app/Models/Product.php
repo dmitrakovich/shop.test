@@ -153,7 +153,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Страна производитель
+     * Country of origin
      */
     public function countryOfOrigin(): Relations\BelongsTo
     {
