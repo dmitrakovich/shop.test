@@ -333,6 +333,10 @@
                     Высота каблука - {{ $product->heel_txt }} <br>
                 @endif
 
+                @if (!empty($product->countryOfOrigin->name))
+                    Страна производитель - {{ $product->countryOfOrigin->name }} <br>
+                @endif
+
             </div>
         </div>
 

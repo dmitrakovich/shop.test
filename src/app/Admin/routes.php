@@ -50,6 +50,7 @@ Route::group([
         $router->resource('brands', BrandController::class);
         $router->resource('manufacturers', ManufacturerController::class);
         $router->resource('collections', CollectionController::class);
+        $router->resource('country-of-origin', CountryOfOriginController::class);
     });
 
     $router->group(['prefix' => 'config', 'namespace' => 'Config', 'as' => 'config.'], function (Router $router) {
@@ -64,6 +65,7 @@ Route::group([
         $router->get('instagram-token', InstagramTokenForm::class);
         $router->get('newsletter_for_registered', NewsletterForm::class);
         $router->get('sending-tracks', SendingTracksForm::class);
+        $router->get('auto-order-statuses', AutoOrderStatusesForm::class);
     });
 
     $router->group(['prefix' => 'bnrs'], function (Router $router) {
