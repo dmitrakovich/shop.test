@@ -50,6 +50,7 @@ Route::group([
         $router->resource('brands', BrandController::class);
         $router->resource('manufacturers', ManufacturerController::class);
         $router->resource('collections', CollectionController::class);
+        $router->resource('country-of-origin', CountryOfOriginController::class);
     });
 
     $router->group(['prefix' => 'config', 'namespace' => 'Config', 'as' => 'config.'], function (Router $router) {
