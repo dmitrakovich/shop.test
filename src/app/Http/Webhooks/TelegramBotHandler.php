@@ -126,12 +126,13 @@ class TelegramBotHandler extends WebhookHandler
         }
 
         $buttons = [];
-        Stock::query()->with('privateChat:id,chat_id')
+        Stock::query()
             ->where('group_chat_id', $this->chat->id)
+            ->whereNotNull('private_chat_id')
             ->each(function (Stock $stock) use (&$buttons) {
                 $buttons[] = Button::make("{$stock->name} {$stock->address}")
                     ->action(TelegramBotActions::PICKUP_LIST->value)
-                    ->param('chat_id', $stock->privateChat?->id);
+                    ->param('chat_id', $stock->private_chat_id);
             });
 
         $this->chat->message('Выберите магазин:')
