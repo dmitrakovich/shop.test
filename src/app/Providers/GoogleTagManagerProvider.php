@@ -6,7 +6,9 @@ use App\Facades\Currency;
 use App\Models\Data\UserData;
 use App\Models\Device;
 use App\Models\Guest;
+use App\View\Creators\UserDataCreator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
@@ -32,7 +34,7 @@ class GoogleTagManagerProvider extends ServiceProvider
         GoogleTagManagerFacade::macro('view', function (string $page, ?array $content = null) {
             $currency = Currency::getCurrentCurrency();
             $userData = new UserData(Auth::check() ? Auth::user()->toArray() : Guest::getData());
-            $userData->setExternalId(Device::getId());
+            $userData->setExternalIds([Device::getId(), Auth::id()]);
             GoogleTagManagerFacade::push(array_filter([
                 'pageType' => $page,
                 'user_type' => Auth::check() ? Auth::user()->usergroup_id : 'guest',
@@ -77,5 +79,7 @@ class GoogleTagManagerProvider extends ServiceProvider
                 'event_action' => $action,
             ]);
         });
+
+        View::creator('googletagmanager::head', UserDataCreator::class);
     }
 }
