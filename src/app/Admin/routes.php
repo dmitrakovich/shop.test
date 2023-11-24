@@ -65,7 +65,6 @@ Route::group([
         $router->get('instagram-token', InstagramTokenForm::class);
         $router->get('newsletter_for_registered', NewsletterForm::class);
         $router->get('sending-tracks', SendingTracksForm::class);
-        $router->get('auto-order-statuses', AutoOrderStatusesForm::class);
     });
 
     $router->group(['prefix' => 'bnrs'], function (Router $router) {
