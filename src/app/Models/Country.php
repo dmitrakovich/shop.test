@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
+/**
+ * class Country
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $code
+ */
 class Country extends Model
 {
     use HasFactory;

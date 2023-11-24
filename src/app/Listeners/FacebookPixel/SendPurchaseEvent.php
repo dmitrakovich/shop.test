@@ -2,6 +2,7 @@
 
 namespace App\Listeners\FacebookPixel;
 
+use App\Events\Analytics\OfflinePurchase;
 use App\Events\Analytics\Purchase;
 use App\Facades\Currency;
 use FacebookAds\Object\ServerSide\CustomData;
@@ -22,7 +23,7 @@ class SendPurchaseEvent extends AbstractFacebookPixelListener implements ShouldQ
             ->setContentIds($order->items->pluck('product_id')->toArray())
             ->setContentType('product');
 
-        if ($order->isOneClick()) {
+        if ($order->isOneClick() && !$purchaseEvent instanceof OfflinePurchase) {
             $events[] = $this->generateEvent($purchaseEvent)
                 ->setEventName('AddToCart')
                 ->setCustomData($customData);

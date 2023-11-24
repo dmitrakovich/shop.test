@@ -13,6 +13,7 @@ use App\Admin\Actions\Order\ProcessOrder;
 use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
 use App\Enums\Order\OrderTypeEnum;
+use App\Events\Analytics\OfflinePurchase;
 use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
@@ -49,6 +50,11 @@ class OrderController extends AdminController
      * @var string
      */
     protected $title = 'Заказы';
+
+    /**
+     * Number of days after an order to trigger an event.
+     */
+    protected const DAYS_AFTER_ORDER_TO_SEND_EVENT = 7;
 
     /**
      * Make a grid builder.
@@ -378,6 +384,9 @@ class OrderController extends AdminController
             }
             if ($form->isCreating()) {
                 event(new OrderCreated($form->model(), null, false));
+            }
+            if (now()->diffInDays($form->model()->created_at) < self::DAYS_AFTER_ORDER_TO_SEND_EVENT) {
+                event(new OfflinePurchase($form->model()));
             }
             // TODO: recalc order total price
         });

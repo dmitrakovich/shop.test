@@ -3,6 +3,7 @@
 namespace App\Models\Orders;
 
 use App\Admin\Models\Administrator;
+use App\Enums\Order\OrderMethods;
 use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Country;
@@ -35,7 +36,7 @@ use Payments\PaymentMethod;
  * @property float $total_price
  * @property string $currency
  * @property float $rate
- * @property string $country
+ * @property int $country_id
  * @property string $region
  * @property string $city
  * @property string $zip
@@ -46,7 +47,7 @@ use Payments\PaymentMethod;
  * @property float $delivery_cost
  * @property float $delivery_price
  * @property int $delivery_point_id
- * @property string $order_method
+ * @property OrderMethods $order_method
  * @property string $utm_medium
  * @property string $utm_source
  * @property string $utm_campaign
@@ -59,6 +60,7 @@ use Payments\PaymentMethod;
  * @property \Carbon\Carbon $updated_at
  * @property-read User $user
  * @property-read Device $device
+ * @property-read Country|null $country
  * @property-read string $user_full_name
  * @property-read OrderStatus $status
  * @property-read Administrator $admin
@@ -119,6 +121,7 @@ class Order extends Model
      * @var array
      */
     protected $casts = [
+        'order_method' => OrderMethods::class,
         'order_type' => OrderTypeEnum::class,
     ];
 

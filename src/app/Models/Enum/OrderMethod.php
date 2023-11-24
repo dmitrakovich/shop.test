@@ -2,6 +2,10 @@
 
 namespace App\Models\Enum;
 
+/**
+ * @deprecated
+ * @see \App\Enums\Order\OrderMethods
+ */
 class OrderMethod implements Enum
 {
     use EnumTrait;

@@ -34,7 +34,7 @@ abstract class AbstractAnalyticEvent
     /**
      * Source URL for the analytic event.
      */
-    public string $sourceUrl;
+    public ?string $sourceUrl;
 
     /**
      * Where the Conversion occurred
@@ -44,7 +44,7 @@ abstract class AbstractAnalyticEvent
     /**
      * Visit ID for the analytic event.
      */
-    public string $visitId;
+    public ?string $visitId;
 
     /**
      * User data for the analytic event.

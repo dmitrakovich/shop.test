@@ -61,6 +61,9 @@ class EventServiceProvider extends ServiceProvider
             GoogleTag\SetPurchaseData::class,
             FacebookPixel\SendPurchaseEvent::class,
         ],
+        Analytics\OfflinePurchase::class => [
+            FacebookPixel\SendPurchaseEvent::class,
+        ],
         OrderStatusChanged::class => [
             UpdateOrderItemsStatus::class,
         ],
