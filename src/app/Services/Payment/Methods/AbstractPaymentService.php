@@ -4,7 +4,9 @@ namespace App\Services\Payment\Methods;
 
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
+use App\Models\Config;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderItem;
 use App\Models\Payments\OnlinePayment;
 use Encore\Admin\Facades\Admin;
 
@@ -44,6 +46,15 @@ abstract class AbstractPaymentService
                 'admin_user_id' => Admin::user() ? Admin::user()->id : null,
                 'payment_status_enum_id' => $status,
             ]);
+            $autoOrderStatuses = (bool)(Config::findCacheable('auto_order_statuses')['active'] ?? false);
+            if ($autoOrderStatuses && $status === OnlinePaymentStatusEnum::SUCCEEDED) {
+                $payment->load('order.items');
+                $payment->order->update(['status_key' => 'paid']);
+                $payment->order->items->whereIn('status_key', ['new', 'reserved', 'collect', 'pickup'])
+                    ->each(function (OrderItem $orderItem) {
+                        $orderItem->update(['status_key' => 'confirmed']);
+                    });
+            }
         }
 
         return $payment;
