@@ -102,7 +102,7 @@ class GenerateLink extends StepForm
                 if (utm) {
                     url.searchParams.append('utm_source', utm[0]);
                     url.searchParams.append('utm_medium', utm[1]);
-                    url.searchParams.append('utm_campaign', utm[2]);
+                    url.searchParams.append('utm_campaign', utm[2]+'link');
                 }
                 url.searchParams.append('utm_content', adminLogin);
                 url.searchParams.append('utm_term', currentDate);
