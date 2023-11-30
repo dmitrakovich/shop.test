@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('feed:generate')->everySixHours();
         $schedule->command('generate:sitemap')->dailyAt('00:30');
 
-        $schedule->command('erip:update-statuses')->hourly();
+        $schedule->command('erip:update-statuses')->everyTenMinutes();
     }
 
     /**
