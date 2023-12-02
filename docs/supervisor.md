@@ -20,9 +20,13 @@ stopasgroup=true
 killasgroup=true
 user=www-root
 numprocs=3
-redirect_stderr=true
-stdout_logfile=/home/www-root/deploy/current/storage/logs/worker.log
+stdout_logfile=/home/www-root/deploy/current/storage/logs/worker/stdout.log
+stderr_logfile=/home/www-root/deploy/current/storage/logs/worker/stderr.log
 stopwaitsecs=3600
+stdout_logfile_maxbytes=50MB
+stdout_logfile_backups=10
+stderr_logfile_maxbytes=50MB
+stderr_logfile_backups=10
 ```
 
 ## Starting Supervisor

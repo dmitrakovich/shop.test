@@ -23,7 +23,7 @@ set('shared_dirs', [
 ]);
 set('writable_dirs', [
     'bootstrap/cache',
-    'storage',
+    'storage/logs',
     'public/uploads',
 ]);
 
@@ -49,7 +49,7 @@ task('deploy:upload', function () {
 task('deploy:writable', function () {
     within('{{release_path}}', function () {
         $dirs = implode(' ', get('writable_dirs'));
-        run("chmod -R 0755 $dirs");
+        run(command: "chmod -R 0755 $dirs", no_throw: true);
     });
 });
 
