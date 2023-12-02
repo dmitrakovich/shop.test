@@ -6,7 +6,7 @@ use Spatie\Backup\Commands\BackupCommand;
 
 class BackupMediaCommand extends BackupCommand
 {
-    protected $signature = 'backup:media {--filename=} {--only-db} {--db-name=*} {--only-files=true} {--only-to-disk=} {--disable-notifications} {--timeout=}';
+    protected $signature = 'backup:media {--filename=} {--only-db} {--db-name=*} {--only-files=true} {--only-to-disk=} {--disable-notifications} {--timeout=} {--tries=}';
 
     protected $description = 'Run the backup media.';
 
