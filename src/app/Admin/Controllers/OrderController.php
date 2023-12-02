@@ -39,7 +39,9 @@ use Encore\Admin\Grid\Displayers\ContextMenuActions;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
 use Payments\PaymentMethod;
 
 class OrderController extends AdminController
@@ -50,11 +52,6 @@ class OrderController extends AdminController
      * @var string
      */
     protected $title = 'Заказы';
-
-    /**
-     * Number of days after an order to trigger an event.
-     */
-    protected const DAYS_AFTER_ORDER_TO_SEND_EVENT = 7;
 
     /**
      * Make a grid builder.
@@ -341,6 +338,10 @@ class OrderController extends AdminController
         }
 
         $form->submitted(function (Form $form) {
+            $orderItems = array_filter(request()->input('itemsExtended') ?? [], fn (array $item) => !$item['_remove_']);
+            if (empty($orderItems) && request()->pjax()) {
+                return $this->emptyItemsError();
+            }
             $statusKey = request()->input('status_key');
             if ($statusKey === 'packaging') {
                 $addressApprove = Order::where('id', $form->model()->id)->whereHas('user', fn ($query) => $query->whereHas('lastAddress', fn ($q) => $q->where('approve', 1)))->exists();
@@ -384,8 +385,6 @@ class OrderController extends AdminController
             }
             if ($form->isCreating()) {
                 event(new OrderCreated($form->model(), null, false));
-            }
-            if (now()->diffInDays($form->model()->created_at) < self::DAYS_AFTER_ORDER_TO_SEND_EVENT) {
                 event(new OfflinePurchase($form->model()));
             }
             // TODO: recalc order total price
@@ -763,5 +762,18 @@ JS;
             'comment' => $comment,
             'order_id' => $orderId,
         ]) : null;
+    }
+
+    /**
+     * Redirect with an error message when there are no items added to the order.
+     */
+    protected function emptyItemsError(): RedirectResponse
+    {
+        $error = new MessageBag([
+            'title' => 'Не добавлены товары к заказу!',
+            'message' => 'Добавьте товар.',
+        ]);
+
+        return back()->with(compact('error'))->withInput();
     }
 }
