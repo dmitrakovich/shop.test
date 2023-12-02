@@ -4,11 +4,19 @@ namespace App\Observers;
 
 use App\Models\Orders\OrderItem;
 use App\Models\Orders\OrderItemExtended;
+use App\Models\Size;
 use App\Services\LogService;
 use App\Services\Order\OrderItemInventoryService;
 
 class OrderItemObserver
 {
+    /**
+     * OrderItemObserver constructor.
+     */
+    public function __construct(private LogService $logService)
+    {
+    }
+
     /**
      * Handle the OrderItem "created" event.
      */
@@ -16,7 +24,7 @@ class OrderItemObserver
     {
         if ($orderItem instanceof OrderItemExtended) {
             if ($orderItem->order->created_at->addSeconds(5)->isPast()) {
-                (new LogService)->logOrderAction($orderItem->order_id, "Товар {$orderItem->product_id} добавлен к заказу");
+                $this->logService->logOrderAction($orderItem->order_id, "Товар {$orderItem->product_id} добавлен к заказу");
             }
         }
     }
@@ -30,7 +38,7 @@ class OrderItemObserver
             $orderItem->status_updated_at = now();
 
             if ($orderItem->status_key !== 'new') {
-                (new LogService)->logOrderAction($orderItem->order_id, "Товару {$orderItem->product_id} присвоен статус “{$orderItem->status_key}”");
+                $this->logService->logOrderAction($orderItem->order_id, "Товару {$orderItem->product_id} присвоен статус “{$orderItem->status_key}”");
             }
         }
     }
@@ -46,10 +54,25 @@ class OrderItemObserver
     }
 
     /**
+     * Handle the OrderItem "updating" event.
+     */
+    public function updating(OrderItem $orderItem): void
+    {
+        if ($orderItem->isDirty('size_id')) {
+            $oldSize = Size::find($orderItem->getOriginal('size_id'))?->name;
+            $newSize = Size::find($orderItem->size_id)?->name;
+            $this->logService->logOrderAction(
+                $orderItem->order_id,
+                "В товаре {$orderItem->product_id} изменен размер “{$oldSize}” &rarr; “{$newSize}”"
+            );
+        }
+    }
+
+    /**
      * Handle the OrderItem "deleting" event.
      */
     public function deleting(OrderItem $orderItem): void
     {
-        (new LogService)->logOrderAction($orderItem->order_id, "Товар {$orderItem->product_id} удален из заказа");
+        $this->logService->logOrderAction($orderItem->order_id, "Товар {$orderItem->product_id} удален из заказа");
     }
 }
