@@ -2,15 +2,16 @@
 
 namespace App\Services\Imap;
 
-use Ddeboer\Imap\Server;
+use DateTimeImmutable;
+use Ddeboer\Imap\MessageIterator;
 use Ddeboer\Imap\Search\Date\On;
 use Ddeboer\Imap\SearchExpression;
-use Ddeboer\Imap\MessageIterator;
-use DateTimeImmutable;
+use Ddeboer\Imap\Server;
 
 class ImapParseEmailService
 {
     private Server $server;
+
     private $connection;
 
     public function __construct(
@@ -25,38 +26,40 @@ class ImapParseEmailService
     /**
      * Retrieves an array of messages from the specified mailbox.
      *
-     * @param string $mailbox_name The name of the mailbox to retrieve messages from. Default is 'INBOX'.
+     * @param  string  $mailbox_name The name of the mailbox to retrieve messages from. Default is 'INBOX'.
      * @return array An array of messages.
      */
     public function getMessages(string $mailbox_name = 'INBOX'): array
     {
-        $mailbox      = $this->connection->getMailbox($mailbox_name);
-        $messages     = $mailbox->getMessages();
+        $mailbox = $this->connection->getMailbox($mailbox_name);
+        $messages = $mailbox->getMessages();
         $messagesData = [];
         foreach ($messages as $message) {
             $messagesData[] = $message;
         }
+
         return $messagesData;
     }
 
     /**
      * Retrieves messages from a specific mailbox by date.
      *
-     * @param string $mailbox_name The name of the mailbox. Defaults to 'INBOX'.
-     * @param string $date The date to filter the messages by. Defaults to null.
+     * @param  string  $mailbox_name The name of the mailbox. Defaults to 'INBOX'.
+     * @param  string  $date The date to filter the messages by. Defaults to null.
      * @return MessageIterator The iterator containing the retrieved messages.
      */
-    public function getMessagesByDate(string $mailbox_name = 'INBOX', string $date = null): MessageIterator
+    public function getMessagesByDate(string $mailbox_name = 'INBOX', ?string $date = null): MessageIterator
     {
         $mailbox = $this->connection->getMailbox($mailbox_name);
-        $search  = new SearchExpression();
+        $search = new SearchExpression();
         if ($date) {
-            $today   = new DateTimeImmutable($date);
+            $today = new DateTimeImmutable($date);
         } else {
-            $today   = new DateTimeImmutable();
+            $today = new DateTimeImmutable();
         }
         $search->addCondition(new On($today));
         $messages = $mailbox->getMessages($search, null, false, 'utf-8');
+
         return $messages;
     }
 

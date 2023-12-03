@@ -6,19 +6,16 @@ use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
-use Illuminate\Http\UploadedFile;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use Illuminate\Support\Facades\File;
-
 use App\Services\Imap\ImapParseEmailService;
-
+use DateInterval;
 use DatePeriod;
 use DateTime;
-use DateInterval;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class BelpostCODService
 {
-
     /**
      * Imports an Excel file to process COD payments.
      *
@@ -38,7 +35,7 @@ class BelpostCODService
 
         while (($currentRow <= $sheet->getHighestRow())) {
             $trackCell = trim($sheet->getCell('F' . $currentRow)->getValue());
-            preg_match("/№(.*?),/", $trackCell, $currentTrack);
+            preg_match('/№(.*?),/', $trackCell, $currentTrack);
             $currentTrack = $currentTrack[1] ?? null;
             if ($currentTrack) {
                 $parsedData[$currentTrack] = trim($sheet->getCell('C' . $currentRow)->getValue());
@@ -72,7 +69,7 @@ class BelpostCODService
                     $payment->order->data->each(function (OrderItem $orderItem) {
                         $orderItem->update(['status_key' => 'complete']);
                     });
-                } else if ($order->data->where('current_price', $paymentSum)->count() === 1) {
+                } elseif ($order->data->where('current_price', $paymentSum)->count() === 1) {
                     $order->update(['status_key' => 'complete']);
                     $payment->order->data->each(function (OrderItem $orderItem) use ($paymentSum) {
                         if ($orderItem->current_price === $paymentSum) {
@@ -83,7 +80,7 @@ class BelpostCODService
                     });
                 } else {
                     $order->adminComments()->create([
-                        'comment' => 'Пришла оплата! Но не распределена сумма по товарам!'
+                        'comment' => 'Пришла оплата! Но не распределена сумма по товарам!',
                     ]);
                 }
 
@@ -97,8 +94,6 @@ class BelpostCODService
 
     /**
      * Parses the email and imports the COD Excel file into the system.
-     *
-     * @return bool
      */
     public function parseEmail(): bool
     {
@@ -117,7 +112,7 @@ class BelpostCODService
                 if (!empty($mails)) {
                     foreach ($mails as $mail) {
                         $subject = $mail->getSubject();
-                        if (str_contains($subject, "Приложение к ППИ от Брестского филиала РУП")) {
+                        if (str_contains($subject, 'Приложение к ППИ от Брестского филиала РУП')) {
                             $attachments = $mail->getAttachments();
                             foreach ($attachments as $attachment) {
                                 $path = storage_path('app/public/belpost/cod/' . date('d-m-Y') . '/') . $attachment->getFilename();
@@ -129,8 +124,10 @@ class BelpostCODService
                     }
                 }
             }
+
             return true;
         }
+
         return false;
     }
 }

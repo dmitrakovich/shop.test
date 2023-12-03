@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Payment;
 
 use App\Models\Config;
-
 use App\Services\Payment\BelpostCODService;
 use Illuminate\Console\Command;
 
@@ -28,7 +27,7 @@ class BelpostCODParseFromEmailCommand extends Command
      */
     public function handle(BelpostCODService $belpostCODService)
     {
-        if((Config::findCacheable('auto_order_statuses')['belpost_parse_email'] ?? false)) {
+        if ((Config::findCacheable('auto_order_statuses')['belpost_parse_email'] ?? false)) {
             $belpostCODService->parseEmail();
         }
     }
