@@ -31,8 +31,7 @@ class SendingTracksJob implements ShouldQueue
         $config = Config::findCacheable('sending_tracks');
         if (!empty($config) && $config['active']) {
             Order::query()
-                ->where('status_key', 'sent')
-                ->where('status_updated_at', '>', now()->subDays(1))
+                ->whereHas('items', fn (Builder $query) => $query->whereHas('statusLog', fn (Builder $query) => $query->where('sended_at', '>', now()->subDays(1))))
                 ->whereHas('track', fn (Builder $query) => $query->whereNotNull('track_number'))
                 ->whereDoesntHave('mailings', fn (Builder $query) => $query->where('mailing_id', self::MAILING_ID))
                 ->with(['user', 'track'])
