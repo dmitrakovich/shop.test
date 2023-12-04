@@ -67,8 +67,8 @@ class BelpostCODService
                 $advancePayment = $order->onlinePayments->filter(function ($item) {
                     return stripos($item->comment, 'Аванс') !== false;
                 })->sum('amount');
-                $codSum = $paymentSum - $advancePayment;
-                $itemCodSum = $codSum / count($order->data);
+                $codSum = $paymentSum + $advancePayment;
+                $itemCodSum = $paymentSum + ($advancePayment / count($order->data));
                 if ($order->getItemsPrice() == $codSum) {
                     $order->update(['status_key' => 'complete']);
                     $payment->order->data->each(function (OrderItem $orderItem) {
