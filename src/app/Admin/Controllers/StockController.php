@@ -50,6 +50,7 @@ class StockController extends AdminController
         // $grid->column('geo_latitude', 'Координаты (широта)');
         // $grid->column('geo_longitude', 'Координаты (долгота)');
         $grid->column('check_availability', 'Сверка наличия')->switch();
+        $grid->column('site_sorting', 'Сортировка на сайте')->editable();
 
         $grid->actions(function ($actions) {
             $actions->disableView();
@@ -110,6 +111,8 @@ class StockController extends AdminController
         $form->text('geo_longitude', 'Координаты (долгота)');
         $form->switch('check_availability', 'Сверка наличия');
         $form->multipleImage('photos', 'Фото магазина')->sortable()->removable();
+        $form->number('site_sorting', 'Сортировка на сайте');
+
 
         $form->tools(function (Form\Tools $tools) {
             $tools->disableView();
