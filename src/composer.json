@@ -13,6 +13,7 @@
     "require": {
         "php": "^8.1",
         "appstract/laravel-opcache": "^4.0",
+        "ddeboer/imap": "^1.18",
         "default-089/sxgeo": "0.16.*@dev",
         "defstudio/telegraph": "^1.37",
         "deployer/deployer": "7.3.0",
