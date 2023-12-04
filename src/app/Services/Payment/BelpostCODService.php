@@ -65,7 +65,7 @@ class BelpostCODService
                     'payment_status_enum_id' => OnlinePaymentStatusEnum::SUCCEEDED,
                 ]);
                 $advancePayment = $order->onlinePayments->filter(function ($item) {
-                    return false !== stripos($item->comment, 'Аванс');
+                    return stripos($item->comment, 'Аванс') !== false;
                 })->sum('amount');
                 $codSum = $paymentSum - $advancePayment;
                 $itemCodSum = $codSum / count($order->data);
