@@ -64,23 +64,29 @@ class BelpostCODService
                 $payment->statuses()->create([
                     'payment_status_enum_id' => OnlinePaymentStatusEnum::SUCCEEDED,
                 ]);
-                if ($order->getItemsPrice() == $paymentSum) {
+                $advancePayment = $order->onlinePayments->filter(function ($item) {
+                    return false !== stripos($item->comment, 'Аванс');
+                })->sum('amount');
+                $codSum = $paymentSum - $advancePayment;
+                $itemCodSum = $codSum / count($order->data);
+                if ($order->getItemsPrice() == $codSum) {
                     $order->update(['status_key' => 'complete']);
                     $payment->order->data->each(function (OrderItem $orderItem) {
                         $orderItem->update(['status_key' => 'complete']);
                     });
-                } elseif ($order->data->where('current_price', $paymentSum)->count() === 1) {
+                } elseif ($order->data->where('current_price', $itemCodSum)->count() === 1) {
                     $order->update(['status_key' => 'complete']);
-                    $payment->order->data->each(function (OrderItem $orderItem) use ($paymentSum) {
-                        if ($orderItem->current_price === $paymentSum) {
+                    $payment->order->data->each(function (OrderItem $orderItem) use ($itemCodSum) {
+                        if ($orderItem->current_price == $itemCodSum) {
                             $orderItem->update(['status_key' => 'complete']);
                         } else {
                             $orderItem->update(['status_key' => 'return_fitting']);
                         }
                     });
                 } else {
+                    $order->update(['status_key' => 'delivered']);
                     $order->adminComments()->create([
-                        'comment' => 'Пришла оплата! Но не распределена сумма по товарам!',
+                        'comment' => "Получен наложенный платеж на сумму {$paymentSum}. Распределите сумму по товарам!",
                     ]);
                 }
 
