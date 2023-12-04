@@ -113,7 +113,6 @@ class StockController extends AdminController
         $form->multipleImage('photos', 'Фото магазина')->sortable()->removable();
         $form->number('site_sorting', 'Сортировка на сайте');
 
-
         $form->tools(function (Form\Tools $tools) {
             $tools->disableView();
         });
