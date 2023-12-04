@@ -97,9 +97,9 @@ class BelpostCODService
      */
     public function parseEmail(): bool
     {
-        $imapConfigHost = config('imap.belpost_host');
-        $imapConfigUser = config('imap.belpost_user');
-        $imapConfigPass = config('imap.belpost_password');
+        $imapConfigHost = config('services.imap.belpost_host');
+        $imapConfigUser = config('services.imap.belpost_user');
+        $imapConfigPass = config('services.imap.belpost_password');
         if ($imapConfigHost && $imapConfigUser && $imapConfigPass) {
             $parseEmailService = new ImapParseEmailService($imapConfigHost, $imapConfigUser, $imapConfigPass);
             $periods = new DatePeriod(
