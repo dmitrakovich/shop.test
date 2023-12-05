@@ -242,7 +242,9 @@
                         </h4>
                         <div class="show collapse" id="productStockInfo">
                             <div class="p-product__stock-list">
-                                @foreach ($product->availableSizes as $availableSize)
+                                @foreach ($product->availableSizes->sortBy(function ($item, $key) {
+        return $item?->stock?->site_sorting;
+    }) as $availableSize)
                                     <div class="p-product__stock-item">
                                         <div class="p-product__stock-name">
                                             <div>{{ $availableSize?->stock?->name }}</div>
