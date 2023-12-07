@@ -21,7 +21,6 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\GenerateSitemapCommand::class,
         Commands\Payment\EripStatusUpdateCommand::class,
-        Commands\Payment\BelpostCODParseFromEmailCommand::class,
     ];
 
     /**
@@ -52,7 +51,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('generate:sitemap')->dailyAt('00:30');
 
         $schedule->command('erip:update-statuses')->everyTenMinutes();
-        $schedule->command('belpost:cod-parse-from-email')->dailyAt('01:30');
+        $schedule->command('belpost:cod-parse-from-email')->hourly()->between('8:00', '18:00');
     }
 
     /**

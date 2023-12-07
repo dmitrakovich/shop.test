@@ -6,6 +6,7 @@ use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
+use App\Models\Payments\Installment;
 use App\Services\Imap\ImapParseEmailService;
 use DateInterval;
 use DatePeriod;
@@ -45,7 +46,7 @@ class BelpostCODService
 
         $orders = Order::with([
             'onlinePayments',
-            'data',
+            'data' => fn ($query) => $query->with('installment'),
             'track',
         ])->whereHas('track', fn ($query) => $query->whereIn('track_number', array_keys($parsedData)))
             ->get();
@@ -64,32 +65,53 @@ class BelpostCODService
                 $payment->statuses()->create([
                     'payment_status_enum_id' => OnlinePaymentStatusEnum::SUCCEEDED,
                 ]);
-                $advancePayment = $order->onlinePayments->filter(function ($item) {
-                    return stripos($item->comment, 'Аванс') !== false;
-                })->sum('amount');
-                $codSum = $paymentSum + $advancePayment;
-                $itemCodSum = $paymentSum + ($advancePayment / count($order->data));
-                if ($order->getItemsPrice() == $codSum) {
-                    $order->update(['status_key' => 'complete']);
-                    $payment->order->data->each(function (OrderItem $orderItem) {
-                        $orderItem->update(['status_key' => 'complete']);
-                    });
-                } elseif ($order->data->where('current_price', $itemCodSum)->count() === 1) {
-                    $order->update(['status_key' => 'complete']);
-                    $payment->order->data->each(function (OrderItem $orderItem) use ($itemCodSum) {
-                        if ($orderItem->current_price == $itemCodSum) {
-                            $orderItem->update(['status_key' => 'complete']);
-                        } else {
-                            $orderItem->update(['status_key' => 'return_fitting']);
-                        }
-                    });
-                } else {
-                    $order->update(['status_key' => 'delivered']);
-                    $order->adminComments()->create([
-                        'comment' => "Получен наложенный платеж на сумму {$paymentSum}. Распределите сумму по товарам!",
-                    ]);
-                }
 
+                if (in_array($order->status_key, ['fitting', 'sent'])) {
+                    $partialBuybackItemsCount = 0;
+                    $isInstallment = $order->payment_id === Installment::PAYMENT_METHOD_ID;
+                    $successfulPaymentsSum = $order->onlinePayments->where('last_status_enum_id', OnlinePaymentStatusEnum::SUCCEEDED)->sum('amount');
+                    $itemCodSum = (float)($paymentSum + ($successfulPaymentsSum / count($order->data)));
+                    $orderTotalPrice = (float)($order->getItemsPrice() - $successfulPaymentsSum);
+                    $firstPaymentsSum = $isInstallment ? $order->data->map(function ($item) use ($isInstallment, $itemCodSum, &$partialBuybackItemsCount) {
+                        $firstPaymentSum = $isInstallment ? $item->current_price - ($item->installment->monthly_fee * 2) : 0;
+                        if ($item->current_price == $itemCodSum || ($isInstallment && $firstPaymentSum == $itemCodSum)) {
+                            ++$partialBuybackItemsCount;
+                        }
+                        return $firstPaymentSum;
+                    })->sum() : 0;
+                    $firstPaymentsSum = $firstPaymentsSum ? ($firstPaymentsSum - $successfulPaymentsSum) : 0;
+
+                    if (
+                        $orderTotalPrice == $paymentSum ||
+                        ($isInstallment && $firstPaymentsSum == $paymentSum)
+                    ) {
+                        $order->update(['status_key' => 'complete']);
+                        $order->data->each(function (OrderItem $orderItem) {
+                            $orderItem->update(['status_key' => 'complete']);
+                        });
+                    } elseif ($partialBuybackItemsCount === 1) {
+                        $order->update(['status_key' => 'delivered']);
+                        $order->data->each(function (OrderItem $orderItem) use ($order, $itemCodSum, $isInstallment) {
+                            $firstPaymentSum = $isInstallment ? $orderItem->current_price - ($orderItem->installment->monthly_fee * 2) : 0;
+                            if (
+                                $orderItem->current_price == $itemCodSum ||
+                                $isInstallment && $firstPaymentSum == $itemCodSum
+                            ) {
+                                $orderItem->update(['status_key' => 'complete']);
+                            } else {
+                                $productFullName = $orderItem->product->getFullName();
+                                $order->adminComments()->create([
+                                    'comment' => "Товар {$productFullName} не выкуплен - ожидайте возврат",
+                                ]);
+                            }
+                        });
+                    } else {
+                        $order->update(['status_key' => 'delivered']);
+                        $order->adminComments()->create([
+                            'comment' => "Получен наложенный платеж на сумму {$paymentSum}. Распределите сумму по товарам!",
+                        ]);
+                    }
+                }
                 $result['count']++;
                 $result['sum'] += $paymentSum;
             }
