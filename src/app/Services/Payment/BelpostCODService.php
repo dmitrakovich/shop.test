@@ -75,8 +75,9 @@ class BelpostCODService
                     $firstPaymentsSum = $isInstallment ? $order->data->map(function ($item) use ($isInstallment, $itemCodSum, &$partialBuybackItemsCount) {
                         $firstPaymentSum = $isInstallment ? $item->current_price - ($item->installment->monthly_fee * 2) : 0;
                         if ($item->current_price == $itemCodSum || ($isInstallment && $firstPaymentSum == $itemCodSum)) {
-                            ++$partialBuybackItemsCount;
+                            $partialBuybackItemsCount++;
                         }
+
                         return $firstPaymentSum;
                     })->sum() : 0;
                     $firstPaymentsSum = $firstPaymentsSum ? ($firstPaymentsSum - $successfulPaymentsSum) : 0;
