@@ -114,6 +114,7 @@ class PaymentEripService extends AbstractPaymentService
         if ($invoicingList->isOk()) {
             $responseInvoicingList = $invoicingList->getBodyFormat();
             $records = $responseInvoicingList['records'] ?? [];
+            \File::append(storage_path('logs/erip_statuses_' . date('Y-m-d') . '.log'), print_r($records, true) . PHP_EOL);
             if (count($records)) {
                 $paymentNums = array_map(fn ($record) => $record['number'], array_filter($records, fn ($record) => isset($record['number'])));
                 $paymentsByNum = OnlinePayment::whereIn('payment_num', $paymentNums)
