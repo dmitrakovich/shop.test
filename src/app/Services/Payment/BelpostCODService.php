@@ -134,7 +134,7 @@ class BelpostCODService
             $periods = new DatePeriod(
                 new DateTime(date('Y-m-d', strtotime('-2 day'))),
                 new DateInterval('P1D'),
-                new DateTime(date('Y-m-d', strtotime('now')))
+                new DateTime(date('Y-m-d', strtotime('+1 day')))
             );
             foreach ($periods as $period) {
                 $mails = $parseEmailService->getMessagesByDate('barocco.by', $period->format('Y-m-d'));
