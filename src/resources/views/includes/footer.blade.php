@@ -21,6 +21,9 @@
                 <a href="{{ route('info.policy') }}" title="Политика конфиденциальности">
                     Политика конфиденциальности
                 </a><br>
+                <a href="{{ route('info', 'certificate') }}" title="Сертификаты">
+                    Сертификаты
+                </a><br>
             </div>
             <div class="col-12 col-sm text-center text-sm-left">
                 <h5 class="mt-5 mb-4">Контакты</h5>
