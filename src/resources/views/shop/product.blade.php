@@ -335,10 +335,13 @@
                     Высота каблука - {{ $product->heel_txt }} <br>
                 @endif
 
+                Гарантийный срок - 30 дней <br>
+
                 @if (!empty($product->countryOfOrigin->name))
                     Страна производитель - {{ $product->countryOfOrigin->name }} <br>
                 @endif
 
+                Потребительские свойства - товар для повседневного использования <br>
             </div>
         </div>
 
