@@ -1,0 +1,67 @@
+#!/bin/bash
+
+#!!!!!!!!!!!!!!
+# composer install --ignore-platform-req=php
+
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#? вначале права 777
+#? потов проверить наличие папки vendor, если нет, то установить с помощью laravelsail/php81-composer:latest
+#? дальше чекаем .env
+#? проверяем node_modules
+#? делаем alias для sail
+#? запускаем различные artisan команды
+
+cd ./src/
+
+chmod -R 777 src/storage
+chmod -R 777 src/bootstrap/cache
+
+docker-compose up -d
+
+FIRST_INSTALL=0
+if ! [ -f ".env" ]; then
+    FIRST_INSTALL=1
+    cp .env.example .env
+fi
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+if ! [ -d "src/vendor" ]; then
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v "$(pwd):/var/www/html" \
+        -w /var/www/html \
+        laravelsail/php81-composer:latest \
+        composer install --ignore-platform-reqs
+
+
+    # ./composer install --no-ansi
+fi
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+if ! [ -d "node_modules" ]; then
+    ./npm install --no-optional
+    ./npm run dev
+fi
+
+./artisan migrate
+# ./artisan db:seed
+
+if [ "$FIRST_INSTALL" -eq 1 ]; then
+    ./artisan job:dispatch SxGeoUpdateJob
+    ./artisan storage:link
+fi
+
+
+# Installing Composer Dependencies For Existing Applications
+# If you are developing an application with a team, you may not be the one that initially creates the Laravel application. Therefore, none of the application's Composer dependencies, including Sail, will be installed after you clone the application's repository to your local computer.
+
+# You may install the application's dependencies by navigating to the application's directory and executing the following command. This command uses a small Docker container containing PHP and Composer to install the application's dependencies:
+
+
+
+
+# ./artisan optimize
+./artisan cache:clear
+./artisan config:clear
+./artisan route:clear
