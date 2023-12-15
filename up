@@ -1,56 +1,49 @@
-#!/bin/bash
+#!/bin/bash -i
 
-chmod -R 777 src/storage
-chmod -R 777 src/bootstrap/cache
-chmod +x composer
-chmod +x artisan
-chmod +x npm
-chmod +x down
+cd ./src/
 
-mkdir -p ./docker/data/nginx-logs ./docker/data/php ./docker/data/mysql ./docker/data/redis
+chmod -R 777 storage
+chmod -R 777 bootstrap/cache
 
-# Check if "nginx-proxy" is runnig:
-NGINX_PROXY_CONTAINER_NAME="docker-proxy-nginx"
-NGINX_PROXY_CONTAINER_ID=$(docker ps -q --filter "name=${NGINX_PROXY_CONTAINER_NAME}")
-if [ -z ${NGINX_PROXY_CONTAINER_ID} ]; then
-  echo "FAIL: You have to download and start '${NGINX_PROXY_CONTAINER_NAME}' container first"
-  exit 1
+if ! [ -d "vendor" ]; then
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v "$(pwd):/var/www/html" \
+        -w /var/www/html \
+        laravelsail/php81-composer:latest \
+        composer install --ignore-platform-reqs --no-cache
 fi
+
+# Path to the shell configuration file (replace with your path if necessary)
+CONFIG_FILE="$HOME/.bashrc"
+# Alias command to be added
+ALIAS_COMMAND="alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'"
+# Check if the alias already exists in the configuration file
+if ! grep -Fq "$ALIAS_COMMAND" "$CONFIG_FILE"; then
+    # If not, add it to the end of the file
+    echo "$ALIAS_COMMAND" >> "$CONFIG_FILE"
+    echo "Alias added to $CONFIG_FILE"
+
+    # Load the updated settings into the current shell
+    source "$CONFIG_FILE"
+else
+    echo "Alias already exists in $CONFIG_FILE"
+fi
+
+sail up -d
 
 if ! [ -f ".env" ]; then
     cp .env.example .env
-    cp .env.example .env.testing
 fi
 
-docker-compose up -d
-
-FIRST_INSTALL=0
-if ! [ -f "src/.env" ]; then
-    FIRST_INSTALL=1
-    cp src/.env.example src/.env
+if ! [ -d "node_modules" ]; then
+    sail npm install --no-optional
+    sail npm run dev
 fi
 
-if ! [ -d "src/vendor" ]; then
-    ./composer install --no-ansi
-fi
-
-if ! [ -d "src/node_modules" ]; then
-    ./npm install --no-optional
-    ./npm run dev
-fi
-
-./artisan migrate
-# ./artisan db:seed
-
-if [ "$FIRST_INSTALL" -eq 1 ]; then
-    ./artisan job:dispatch SxGeoUpdateJob
-    ./artisan storage:link
-fi
-
-# ./artisan optimize
-./artisan cache:clear
-./artisan config:clear
-./artisan route:clear
-
-docker-compose exec mysql mysql -uroot -e "CREATE DATABASE IF NOT EXISTS \`test\` CHARACTER SET utf8 COLLATE utf8_general_ci;"
-docker-compose exec mysql mysql -uroot -e "GRANT ALL PRIVILEGES ON \`test\`.* TO 'login'@'%';"
+sail artisan migrate
+sail artisan job:dispatch SxGeoUpdateJob
+sail artisan storage:link
+sail artisan cache:clear
+sail artisan config:clear
+sail artisan route:clear
