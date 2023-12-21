@@ -89,7 +89,7 @@ Route::group([], function () {
     Route::get('catalog/city-{city}/{path?}', $check_catalog)->where('path', '[a-zA-Z0-9/_-]+')->name('shop-city');
     Route::get('catalog/{path?}', $check_catalog)->where('path', '[a-zA-Z0-9/_-]+')->name('shop');
 
-    Route::prefix('cart')->group(function () {
+    Route::prefix('cart')->middleware('cache.headers:no_cache;no_store;max_age=0;must_revalidate')->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('cart');
         Route::post('add', [CartController::class, 'addToCart'])->name('cart-add');
         Route::get('delete/{item}', [CartController::class, 'delete'])->name('cart-delete');
