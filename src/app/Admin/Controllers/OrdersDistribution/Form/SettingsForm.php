@@ -4,13 +4,13 @@ namespace App\Admin\Controllers\OrdersDistribution\Form;
 
 use App\Models\Config;
 use App\Services\AdministratorService;
-
 use Encore\Admin\Widgets\Form;
 use Illuminate\Http\Request;
 
 class SettingsForm extends Form
 {
     public $title = 'Настройки';
+
     protected $states = [
         'on' => ['value' => 1, 'text' => 'Да', 'color' => 'success'],
         'off' => ['value' => 0, 'text' => 'Нет', 'color' => 'danger'],
@@ -29,18 +29,20 @@ class SettingsForm extends Form
             'schedule' => array_map(
                 function ($item) {
                     return [
-                        "user_id" => $item['user_id'],
-                        "time_from" => $item['time_from'],
-                        "time_to" => $item['time_to']
+                        'user_id' => $item['user_id'],
+                        'time_from' => $item['time_from'],
+                        'time_to' => $item['time_to'],
                     ];
                 },
                 array_filter(array_values($scheduleData), function ($item) {
                     $remove = (int)($item['_remove_'] ?? 0);
+
                     return ($remove !== 1) ? true : false;
                 })
-            )
+            ),
         ]]);
         admin_success('Настройки успешно сохранены!');
+
         return back();
     }
 
@@ -66,6 +68,7 @@ class SettingsForm extends Form
     public function data()
     {
         $config = Config::findCacheable('distrib_order_setup');
+
         return [
             'active' => (bool)($config['active'] ?? false),
             'schedule' => (array)($config['schedule'] ?? []),

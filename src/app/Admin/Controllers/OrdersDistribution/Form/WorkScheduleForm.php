@@ -5,10 +5,9 @@ namespace App\Admin\Controllers\OrdersDistribution\Form;
 use App\Models\Config;
 use App\Models\WorkSchedule;
 use App\Services\AdministratorService;
-
+use Carbon\Carbon;
 use Encore\Admin\Widgets\Form;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
 class WorkScheduleForm extends Form
 {
@@ -30,11 +29,12 @@ class WorkScheduleForm extends Form
             foreach ($adminIdsArr as $adminId) {
                 WorkSchedule::updateOrCreate([
                     'admin_user_id' => $adminId,
-                    'date' => $date
+                    'date' => $date,
                 ]);
             }
         }
         admin_success('Настройки успешно сохранены!');
+
         return back();
     }
 
@@ -50,14 +50,14 @@ class WorkScheduleForm extends Form
             'date',
             [
                 Carbon::parse($date)->startOfMonth(),
-                Carbon::parse($date)->endOfMonth()
+                Carbon::parse($date)->endOfMonth(),
             ]
         )->get();
         $this->html(view('admin.orders_distribution.work_schedule', [
             'admins' => $admins,
             'date' => $date,
             'schedule' => $distribOrderSetup['schedule'] ?? [],
-            'workSchedules' => $workSchedules
+            'workSchedules' => $workSchedules,
         ]))->setWidth(12, 0);
     }
 }
