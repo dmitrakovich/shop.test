@@ -7,7 +7,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
-use ZipArchive;
 
 class SxGeoUpdateJob extends AbstractJob
 {
@@ -16,7 +15,8 @@ class SxGeoUpdateJob extends AbstractJob
     /**
      * Путь к скачиваемому файлу
      */
-    final const URL = 'https://sypexgeo.net/ru/pc/download/%s/SxGeoCountry.zip';
+    // final const URL = 'https://sypexgeo.net/ru/pc/download/%s/SxGeoCountry.zip'; // premium
+    final const URL = 'https://sypexgeo.net/files/SxGeoCountry.zip';
 
     protected $jobName = 'Обновление базы Sypex Geo';
 
@@ -90,7 +90,7 @@ class SxGeoUpdateJob extends AbstractJob
         $this->lastModified = $response->header('Last-Modified');
         $this->log('Архив скачан с сервера. Распаковываем');
 
-        $zip = new ZipArchive;
+        $zip = new \ZipArchive;
         if ($zip->open($zipFile) === true) {
             $zip->extractTo($this->sxGeoPath);
             $zip->close();

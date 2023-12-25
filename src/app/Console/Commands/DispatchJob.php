@@ -37,7 +37,13 @@ class DispatchJob extends Command
      */
     public function handle()
     {
-        $class = '\\App\\Jobs\\' . $this->argument('job');
-        $class::dispatchSync();
+        $class = '\\App\\Jobs\\' . ($jobName = $this->argument('job'));
+
+        try {
+            $class::dispatchSync();
+            $this->components->info("$jobName completed successfully");
+        } catch (\Throwable $th) {
+            $this->components->error($th->getMessage());
+        }
     }
 }
