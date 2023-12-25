@@ -134,6 +134,11 @@ Route::group([
         $router->resource('source', OrderSourceController::class);
     });
 
+    // Orders distribution
+    $router->group(['prefix' => 'orders_distribution'], function (Router $router) {
+        $router->get('settings', [\App\Admin\Controllers\OrdersDistribution\SettingsController::class, 'index']);
+    });
+
     // logs
     $router->group(['prefix' => 'logs', 'namespace' => 'Logs', 'as' => 'logs.'], function (Router $router) {
         $router->resource('sms', SmsController::class);
