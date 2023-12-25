@@ -29,9 +29,9 @@ class SettingsForm extends Form
             'schedule' => array_map(
                 function ($item) {
                     return [
-                        "admin_user_id" => (int)$item['admin_user_id'],
-                        "time_from" => $item['time_from'],
-                        "time_to" => $item['time_to']
+                        'admin_user_id' => (int)$item['admin_user_id'],
+                        'time_from' => $item['time_from'],
+                        'time_to' => $item['time_to'],
                     ];
                 },
                 array_filter(array_values($scheduleData), function ($item) {
