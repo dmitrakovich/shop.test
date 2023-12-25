@@ -135,7 +135,7 @@ Route::group([
     });
 
     // Orders distribution
-    $router->group(['prefix' => 'orders_distribution', 'namespace' => 'OrdersDistribution', 'as' => 'orders_distribution.'], function (Router $router) {
+    $router->group(['prefix' => 'orders_distribution'], function (Router $router) {
         $router->get('settings', [\App\Admin\Controllers\OrdersDistribution\SettingsController::class, 'index']);
     });
 

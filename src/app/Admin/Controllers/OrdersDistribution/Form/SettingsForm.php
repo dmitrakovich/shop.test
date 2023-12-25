@@ -29,9 +29,9 @@ class SettingsForm extends Form
             'schedule' => array_map(
                 function ($item) {
                     return [
-                        'user_id' => $item['user_id'],
-                        'time_from' => $item['time_from'],
-                        'time_to' => $item['time_to'],
+                        "admin_user_id" => (int)$item['admin_user_id'],
+                        "time_from" => $item['time_from'],
+                        "time_to" => $item['time_to']
                     ];
                 },
                 array_filter(array_values($scheduleData), function ($item) {
@@ -54,7 +54,7 @@ class SettingsForm extends Form
         $admins = app(AdministratorService::class)->getAdministratorList();
         $this->switch('active', 'Распределение заказов включено')->states($this->states);
         $this->table('schedule', 'Расписание', function ($table) use ($admins) {
-            $table->select('user_id', 'Менеджер')->options($admins)->required();
+            $table->select('admin_user_id', 'Менеджер')->options($admins)->required();
             $table->time('time_from', 'Время работы с')->required();
             $table->time('time_to', 'Время работы до')->required();
         });
