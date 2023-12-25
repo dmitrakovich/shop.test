@@ -19,8 +19,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\GenerateSitemapCommand::class,
-        Commands\Payment\EripStatusUpdateCommand::class,
+        //
     ];
 
     /**
@@ -33,7 +32,7 @@ class Kernel extends ConsoleKernel
         }
         // $schedule->command('inspire')->hourly();
 
-        // $schedule->job(new SxGeoUpdateJob)->dailyAt('03:07'); // temp disabled
+        $schedule->job(new SxGeoUpdateJob)->dailyAt('03:07');
         $schedule->job(new DiscountAfterRegisterJob)->dailyAt('09:00');
         $schedule->job(new SendInstallmentNoticeJob)->dailyAt('09:05');
         $schedule->job(new LeaveFeedbackAfterOrderJob)->dailyAt('09:15');

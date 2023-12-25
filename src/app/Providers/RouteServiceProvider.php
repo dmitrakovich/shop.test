@@ -24,7 +24,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app['request']->server->set('HTTPS', 'on');
+        /** @var \Illuminate\Foundation\Application */
+        $app = $this->app;
+
+        if ($app->isProduction()) {
+            $app['request']->server->set('HTTPS', 'on');
+        }
 
         $this->configureRateLimiting();
 
