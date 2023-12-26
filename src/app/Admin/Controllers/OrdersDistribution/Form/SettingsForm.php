@@ -30,8 +30,10 @@ class SettingsForm extends Form
                 function ($item) {
                     return [
                         'admin_user_id' => (int)$item['admin_user_id'],
-                        'time_from' => $item['time_from'],
-                        'time_to' => $item['time_to'],
+                        'time_to_even' => $item['time_to_even'],
+                        'time_from_even' => $item['time_from_even'],
+                        'time_to_odd' => $item['time_to_odd'],
+                        'time_from_odd' => $item['time_from_odd'],
                     ];
                 },
                 array_filter(array_values($scheduleData), function ($item) {
@@ -53,11 +55,12 @@ class SettingsForm extends Form
     {
         $admins = app(AdministratorService::class)->getAdministratorList();
         $this->switch('active', 'Распределение заказов включено')->states($this->states);
-        $this->table('schedule', 'Расписание', function ($table) use ($admins) {
+        $this->divider('Расписание');
+        $this->table('schedule', ' ', function ($table) use ($admins) {
             $table->select('admin_user_id', 'Менеджер')->options($admins)->required();
-            $table->time('time_from', 'Время работы с')->required();
-            $table->time('time_to', 'Время работы до')->required();
-        });
+            $table->timeRange('time_to_even', 'time_from_even', 'Время работы (четные дни)')->required();
+            $table->timeRange('time_to_odd', 'time_from_odd', 'Время работы (нечетные дни)')->required();
+        })->setWidth(12, 0);
     }
 
     /**
