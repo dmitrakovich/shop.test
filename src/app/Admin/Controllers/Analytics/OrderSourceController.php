@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers\Analytics;
 
+use App\Enums\Order\UtmEnum;
+
 use App\Models\Orders\Order;
 use Encore\Admin\Grid;
 
@@ -28,6 +30,18 @@ class OrderSourceController extends AbstractCustomerAnalyticController
     protected function getInstanceNameColumn(): string
     {
         return 'CONCAT(utm_source, \'-\', utm_campaign)';
+    }
+
+    /**
+     * Generates additional grid columns for the given grid.
+     *
+     * @param $grid The grid object to generate columns for.
+     * @return void
+     */
+    protected function additionalGridColumns($grid): void
+    {
+        $grid->column('channel_name', 'Канал')->display(fn () => UtmEnum::tryFrom($this->instance_name)?->channelName());
+        $grid->column('company_name', 'Компания')->display(fn () => UtmEnum::tryFrom($this->instance_name)?->companyName());
     }
 
     /**
