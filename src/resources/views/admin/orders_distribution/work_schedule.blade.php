@@ -21,17 +21,17 @@
         <tbody>
             @foreach ($schedule as $scheduleItem)
                 <tr>
-                    <td>{{ $admins[$scheduleItem['user_id']] ?? null }}</td>
+                    <td>{{ $admins[$scheduleItem['admin_user_id']] ?? null }}</td>
                     @for ($i = 1; $i <= $days; $i++)
                         @php
                             $i = str_pad($i, 2, '0', STR_PAD_LEFT);
                             $fullDate = $date . '-' . $i;
                         @endphp
                         <td>
-                            <input type="hidden" name="schedule[{{ $fullDate }}][{{ $scheduleItem['user_id'] }}]"
+                            <input type="hidden" name="schedule[{{ $fullDate }}][{{ $scheduleItem['admin_user_id'] }}]"
                                 value="false">
-                            <input type="checkbox" name="schedule[{{ $fullDate }}][{{ $scheduleItem['user_id'] }}]"
-                                @if ($workSchedules->where('admin_user_id', $scheduleItem['user_id'])->where('date', $fullDate)->first()) checked @endif value="true">
+                            <input type="checkbox" name="schedule[{{ $fullDate }}][{{ $scheduleItem['admin_user_id'] }}]"
+                                @if ($workSchedules->where('admin_user_id', $scheduleItem['admin_user_id'])->where('date', $fullDate)->first()) checked @endif value="true">
                         </td>
                     @endfor
                 </tr>
