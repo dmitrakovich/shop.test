@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers\Analytics;
 
 use App\Enums\Order\UtmEnum;
-
 use App\Models\Orders\Order;
 use Encore\Admin\Grid;
 
@@ -36,7 +35,6 @@ class OrderSourceController extends AbstractCustomerAnalyticController
      * Generates additional grid columns for the given grid.
      *
      * @param $grid The grid object to generate columns for.
-     * @return void
      */
     protected function additionalGridColumns($grid): void
     {

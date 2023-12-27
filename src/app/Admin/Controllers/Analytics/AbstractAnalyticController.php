@@ -99,7 +99,6 @@ abstract class AbstractAnalyticController extends AbstractAdminController
      * Generates additional grid columns for the given grid.
      *
      * @param $grid The grid object to generate columns for.
-     * @return void
      */
     protected function additionalGridColumns($grid): void
     {

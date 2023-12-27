@@ -4,25 +4,25 @@ namespace App\Enums\Order;
 
 enum UtmEnum: string
 {
-    case GOOGLE_ADS = "googleads-max_by";
-    case INSTAGRAM_MANAGER = "instagram-manager";
-    case INSTAGRAM_ACCOUNT = "instagram-accaunt_link";
-    case VIBER_PROMO = "viber-promo";
-    case YANDEX_SHOPPING = "yandex-shopping";
-    case YANDEX_RETARGET = "yandex-by_dyn_retarget";
-    case FB_CATALOG_RETARGET = "fb.com-catalog_retarget_all14";
-    case VIBER_CHANNEL = "viber-channel";
-    case PHONE_MANAGER = "phone-manager";
-    case FB_TARGET_CART = "fb.com-conv_target-cart_ki-full";
-    case INSTAGRAM_STORIES = "instagram-stories";
-    case YANDEX_CONTEXT_ASSORTIMENT = "yandex-context_assortiment";
-    case TELEGRAM_CHANNEL = "telegram-channel";
-    case GOOGLE_ADS_REMARCETING = "googleads-dyn_remarceting_by";
-    case VIBER_AUTO = "viber-auto";
-    case YANDEX_ASSORTIMENT = "yandex-search_assortiment";
-    case INSTAGRAM_MANAGERLINK = "instagram-managerlink";
-    case YANDEX_CONTEXT_CHANNEL = "yandex-context_channel";
-    case YANDEX_UNI_PERFORMANCE = "yandex-uni_performance";
+    case GOOGLE_ADS = 'googleads-max_by';
+    case INSTAGRAM_MANAGER = 'instagram-manager';
+    case INSTAGRAM_ACCOUNT = 'instagram-accaunt_link';
+    case VIBER_PROMO = 'viber-promo';
+    case YANDEX_SHOPPING = 'yandex-shopping';
+    case YANDEX_RETARGET = 'yandex-by_dyn_retarget';
+    case FB_CATALOG_RETARGET = 'fb.com-catalog_retarget_all14';
+    case VIBER_CHANNEL = 'viber-channel';
+    case PHONE_MANAGER = 'phone-manager';
+    case FB_TARGET_CART = 'fb.com-conv_target-cart_ki-full';
+    case INSTAGRAM_STORIES = 'instagram-stories';
+    case YANDEX_CONTEXT_ASSORTIMENT = 'yandex-context_assortiment';
+    case TELEGRAM_CHANNEL = 'telegram-channel';
+    case GOOGLE_ADS_REMARCETING = 'googleads-dyn_remarceting_by';
+    case VIBER_AUTO = 'viber-auto';
+    case YANDEX_ASSORTIMENT = 'yandex-search_assortiment';
+    case INSTAGRAM_MANAGERLINK = 'instagram-managerlink';
+    case YANDEX_CONTEXT_CHANNEL = 'yandex-context_channel';
+    case YANDEX_UNI_PERFORMANCE = 'yandex-uni_performance';
 
     /**
      * Returns the channel name based on the value of $this.
