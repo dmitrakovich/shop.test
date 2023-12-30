@@ -37,6 +37,7 @@ abstract class AbstractAnalyticController extends AbstractAdminController
             ]);
         });
         $grid->column('instance_name', $this->getInstanceColumnTitle())->default('Неопределено');
+        $this->additionalGridColumns($grid);
         $grid->column('total_count', 'Все')->width(70)->sortable();
         $grid->column('accepted_count', 'Принят')->width(85)->sortable();
         $grid->column('in_progress_count', 'В работе')->width(100)->sortable();
@@ -92,6 +93,15 @@ abstract class AbstractAnalyticController extends AbstractAdminController
     {
         $values = [now()->subDays(8)->startOfDay(), now()->subDays(1)->endOfDay()];
         $grid->model()->whereBetween('orders.created_at', $values);
+    }
+
+    /**
+     * Generates additional grid columns for the given grid.
+     *
+     * @param $grid The grid object to generate columns for.
+     */
+    protected function additionalGridColumns($grid): void
+    {
     }
 
     /**
