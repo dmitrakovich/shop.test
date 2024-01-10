@@ -1,47 +1,47 @@
 <?php /** @var \App\Models\Product $product */ ?>
 
-<div class="col-3 js-product-item product-item mb-3 text-center text-lg-left"
-    data-gtm-product='{!! $product->dataLayer->toJson() !!}'>
-    <div class="mb-3 image position-relative">
-
-        <a class="d-inline-block position-relative" href="{{ $product->getUrl() }}"
+<div class="col-3 js-product-item product-item text-lg-left mb-3 text-center" data-gtm-product='{!! $product->dataLayer->toJson() !!}'>
+    <div class="image position-relative">
+        <a class="position-relative product-item-link js-productItemImages mb-3" href="{{ $product->getUrl() }}"
             data-gtm-click="productClick">
+            <div class="product-item-link-container">
+                @include('partials.buttons.favorite', [
+                    'favoriteProductId' => $product->id,
+                    'favoriteState' => isset($product->favorite),
+                ])
 
-            @include('partials.buttons.favorite', [
-                'favoriteProductId' => $product->id,
-                'favoriteState' => isset($product->favorite),
-            ])
-
-            <div class="product-labels">
-                @if ($product->isNew())
-                    <div class="product-label product-label-new">
-                        new
-                    </div>
-                @endif
-                @if ($product->getSalePercentage())
-                    <div class="product-label product-label-sale">
-                        -{{ $product->getSalePercentage() }}%
-                    </div>
-                @endif
-                @if (!empty($product->getSale('general_sale')))
-                    <div class="product-label product-label-sale">
-                        акция
-                    </div>
-                @endif
+                <div class="product-labels">
+                    @if ($product->isNew())
+                        <div class="product-label product-label-new">
+                            new
+                        </div>
+                    @endif
+                    @if ($product->getSalePercentage())
+                        <div class="product-label product-label-sale">
+                            -{{ $product->getSalePercentage() }}%
+                        </div>
+                    @endif
+                    @if (!empty($product->getSale('general_sale')))
+                        <div class="product-label product-label-sale">
+                            акция
+                        </div>
+                    @endif
+                </div>
+                <div class="product-item-images js-productItemImagesContainer">
+                    @foreach ($product->getMedia()->take(5) as $key => $image)
+                        <div style="@if ($key > 0) display: none; @endif">
+                            <img src="{{ $image->getUrl('catalog') }}" alt="{{ $product->shortName() }}"
+                                onerror="imageOnError(this)" loading="lazy" decoding="async" />
+                        </div>
+                    @endforeach
+                </div>
+                <button type="button" aria-label="быстрый просмотр"
+                    data-src="{{ route('product.quick', $product->id) }}"
+                    class="quick-link btn btn-block btn-outline-dark d-none d-lg-block">
+                    быстрый просмотр
+                </button>
             </div>
-
-            <img src="{{ $product->getFirstMediaUrl('default', 'catalog') }}"
-                alt="{{ $product->shortName() }}" class="img-fluid product-first-image"
-                onerror="imageOnError(this)" />
-            <img src="{{ optional($product->getMedia()->get(1))->getUrl('catalog') ?? $product->getFirstMediaUrl('default', 'catalog') }}"
-                alt="{{ $product->shortName() }}" class="img-fluid product-second-image"
-                onerror="imageOnError(this)" />
         </a>
-        <button type="button" aria-label="быстрый просмотр"
-            data-src="{{ route('product.quick', $product->id) }}"
-            class="quick-link btn btn-block btn-outline-dark d-none d-lg-block">
-            быстрый просмотр
-        </button>
     </div>
 
     <b>{{ $product->shortName() }}</b> <br>
