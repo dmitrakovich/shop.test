@@ -1,31 +1,38 @@
-
 .font-roboto {
     font-family: 'Roboto';
 }
+
 .font-popins {
     font-family: 'Poppins';
 }
+
 .font-gilroy {
     font-family: 'Gill Sans MT';
 }
+
 .font-gill-sans-mt {
     font-family: 'Gilroy';
 }
 
-html, body {
+html,
+body {
     height: 100%;
 }
+
 .wrapper {
     @include media-breakpoint-up(lg) {
         margin: 0 100px;
     }
 }
+
 body {
     min-width: 360px;
     display: flex;
     flex-direction: column;
+
     &.modal-open {
         height: 100vh;
+
         @include media-breakpoint-up(lg) {
             padding-right: 1.05rem;
         }
@@ -42,9 +49,11 @@ body {
 .content {
     flex: 1 0 auto;
 }
+
 footer {
     background-color: $footer-bg;
 }
+
 // оверлей
 .overlay {
     display: none;
@@ -58,6 +67,7 @@ footer {
     top: 0;
     left: 0;
 }
+
 .overlay.active {
     display: block;
     opacity: 1;
@@ -67,9 +77,12 @@ footer {
     cursor: pointer;
     display: block;
     padding: 0.8rem 0;
-    &:hover, &:focus {
+
+    &:hover,
+    &:focus {
         background-color: $footer-bg;
     }
+
     img {
         height: 28px;
         width: 28px;
@@ -79,11 +92,13 @@ footer {
 .static-page {
     // margin-bottom: 160px;
     margin-bottom: 30px;
+
     .title {
         font-weight: bold;
         font-size: 18px;
         border-bottom: 0.1rem dashed $body-color;
     }
+
     .step-num {
         display: flex;
         justify-content: center;
@@ -97,6 +112,7 @@ footer {
     @include media-breakpoint-up(lg) {
         margin-bottom: 100px;
     }
+
     .order-row {
         @include media-breakpoint-up(lg) {
             border: 1px solid #E8E8E8;
@@ -104,7 +120,8 @@ footer {
     }
 }
 
-.catalog-page, .favorites-page {
+.catalog-page,
+.favorites-page {
     padding-left: 5px;
     padding-right: 5px;
 
@@ -119,22 +136,27 @@ footer {
         @include media-breakpoint-down(sm) {
             margin-bottom: 100px;
         }
+
         @include media-breakpoint-down(sm) {
             flex: 0 0 100%;
             max-width: 100%;
         }
+
         @include media-breakpoint-up(sm) {
             flex: 0 0 50%;
             max-width: 50%;
         }
+
         @include media-breakpoint-up(md) {
             flex: 0 0 25%;
             max-width: 25%;
         }
+
         @media (min-width: 1360px) {
             flex: 0 0 20%;
             max-width: 20%;
         }
+
         @include media-breakpoint-up(xl) {
             flex: 0 0 16.666666666666%;
             max-width: 16.666666666666%;
@@ -158,12 +180,14 @@ button.scroll-top-btn {
     cursor: pointer;
     user-select: none;
 }
+
 .checkmark {
     position: absolute;
     top: 0;
     left: 0;
     background-color: transparent;
 }
+
 .checkmark:after {
     content: "";
     position: absolute;
@@ -171,7 +195,7 @@ button.scroll-top-btn {
 }
 
 .check.checked .checkmark:after,
-.check input:checked ~ .checkmark:after {
+.check input:checked~.checkmark:after {
     display: block;
 }
 
@@ -184,10 +208,12 @@ button.scroll-top-btn {
     height: 10px;
     background: #000000;
 }
+
 .filter-block.colors .check.checked,
 .product-size .check.checked {
     .checkmark {
         border: 2px solid #000000;
+
         &:after {
             display: none;
         }
@@ -198,8 +224,9 @@ button.scroll-top-btn {
     ul {
         list-style-type: none;
     }
+
     .filter-block {
-        .title{
+        .title {
             position: relative;
             display: block;
             font-size: 14px;
@@ -207,6 +234,7 @@ button.scroll-top-btn {
             text-transform: uppercase;
             cursor: pointer;
         }
+
         .list {
             ul {
                 width: auto;
@@ -215,6 +243,7 @@ button.scroll-top-btn {
                 padding-left: 0;
                 overflow-y: auto;
             }
+
             li {
                 position: relative;
                 display: inline-block;
@@ -222,6 +251,7 @@ button.scroll-top-btn {
                 width: 100%;
             }
         }
+
         .check {
             span {
                 display: inline-block;
@@ -231,11 +261,13 @@ button.scroll-top-btn {
                 font-size: 14px;
             }
         }
+
         .checkmark {
             height: 20px;
             width: 20px;
             border: 1px solid #E8E8E8;
         }
+
         // &.categories { }
         &.colors {
             .list li {
@@ -245,6 +277,7 @@ button.scroll-top-btn {
                 margin-right: 13px;
                 margin-bottom: 11px;
             }
+
             .checkmark {
                 height: 30px;
                 width: 30px;
@@ -253,17 +286,47 @@ button.scroll-top-btn {
                 border: 1px solid #E8E8E8;
             }
         }
+
         // &.brand { }
     }
 }
 
+.product-item {
+
+    &-link {
+        display: block;
+        position: relative;
+        padding-bottom: 100%;
+        max-width: 100%;
+
+        &-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &-images {
+        max-width: 100%;
+
+        &>div {
+            max-width: 100%;
+
+            img {
+                font-size: 0;
+                width: 100%;
+            }
+        }
+    }
+}
+
 .product-item .image {
-    .product-first-image{
+    .product-first-image {
         display: block;
     }
-    .product-second-image{
-        display: none;
-    }
+
     .quick-link {
         position: absolute;
         left: 50%;
@@ -274,27 +337,23 @@ button.scroll-top-btn {
         transition: all .3s;
         z-index: 5;
         opacity: 0;
+
         &:focus {
             opacity: 1;
         }
     }
+
     &:hover {
         .quick-link {
             opacity: 1;
-        }
-        .product-first-image{
-            display: none;
-        }
-        .product-second-image{
-            display: block;
         }
     }
 }
 
 .product-characteristics {
-	@media (max-width: 1024px) {
-		order:-1;
-	}
+    @media (max-width: 1024px) {
+        order: -1;
+    }
 }
 
 
@@ -304,9 +363,11 @@ button.scroll-top-btn {
         font-size: 26px;
         margin: 0 2px;
         color: lightgrey;
+
         &:before {
             content: '★';
         }
+
         &.active {
             color: #000;
         }
@@ -321,13 +382,16 @@ button.scroll-top-btn {
                 height: 40px;
                 line-height: 40px;
                 text-align: center;
-                &.checked, &:hover {
+
+                &.checked,
+                &:hover {
                     .checkmark {
                         background: #000;
                         color: #fff;
                     }
                 }
             }
+
             .checkmark {
                 height: 100%;
                 width: 100%;
@@ -353,14 +417,17 @@ button.scroll-top-btn {
     font-size: 12px;
 }
 
-.installment-help-block, .sale-help-trigger {
+.installment-help-block,
+.sale-help-trigger {
     .tooltip-trigger {
         cursor: unset;
     }
+
     &.btn {
         box-shadow: unset;
     }
 }
+
 .sale-help-block {
     p:last-child {
         margin-bottom: 0;
@@ -368,7 +435,9 @@ button.scroll-top-btn {
 }
 
 .form-check {
-    .form-check-input, .form-check-label {
+
+    .form-check-input,
+    .form-check-label {
         cursor: pointer;
     }
 }
@@ -379,22 +448,26 @@ label.form-check-label span {
     display: none;
 }
 
-input.form-check-input:checked ~ label.form-check-label span {
+input.form-check-input:checked~label.form-check-label span {
     display: block;
 }
 
 span {
-    &.youtube-play-icon, &.video-play-button {
-        position:absolute;
-        top:50%;
-        left:50%;
-        margin:-16px 0 0 -16px;
-        height:32px;
-        width:32px;
+
+    &.youtube-play-icon,
+    &.video-play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -16px 0 0 -16px;
+        height: 32px;
+        width: 32px;
     }
+
     &.youtube-play-icon {
         content: url(/images/icons/youtube-play-button.svg);
     }
+
     &.video-play-button {
         content: url(/images/icons/video-play-button.svg);
     }
@@ -409,19 +482,24 @@ span {
     .nav-item {
         a {
             padding: 0.5rem 1.2rem;
+
             @include media-breakpoint-down(sm) {
                 padding: 0 0.2rem;
             }
+
             @include media-breakpoint-down(xs) {
                 font-size: 16px;
             }
+
             letter-spacing: 0.3px;
         }
+
         @include media-breakpoint-down(xs) {
             margin: 12px 0px;
         }
+
         @include media-breakpoint-up(sm) {
-            + .nav-item::before {
+            +.nav-item::before {
                 padding-left: 6px;
                 content: "/";
             }
@@ -431,10 +509,12 @@ span {
 
 // prices
 span {
+
     // &.price { }
     &.new_price {
         color: #D22020;
     }
+
     &.old_price {
         text-decoration: line-through;
     }
@@ -446,7 +526,8 @@ span {
     width: 1px;
     overflow: hidden;
     clip: rect(1px, 1px, 1px, 1px);
-    white-space: nowrap; /* added line */
+    white-space: nowrap;
+    /* added line */
 }
 
 .btn-favorite {
@@ -458,9 +539,11 @@ span {
     background-position: center;
     -webkit-transition: background-image .3s ease 0s;
     transition: background-image .3s ease 0s;
+
     &.active {
         background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2221%22%20height%3D%2219%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M10.5%2018C5.56%2013.75%201%209.592%201%206.082%201%203.216%203.28%201%206.225%201c1.615%200%203.23.74%204.275%201.94C11.545%201.74%2013.16%201%2014.775%201%2017.72%201%2020%203.217%2020%206.082c0%203.51-4.56%207.668-9.5%2011.918z%22%20fill%3D%22%23000000%22%20stroke%3D%22%23000000%22%20stroke-width%3D%222%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E);
     }
+
     &:focus {
         box-shadow: unset;
     }
@@ -475,16 +558,20 @@ span {
     flex-direction: column;
     align-items: flex-end;
 }
+
 .product-label {
     color: $white;
     font-size: 14px;
     padding: 0 0.5rem;
-    + .product-label {
+
+    +.product-label {
         margin-top: 0.3rem;
     }
+
     &.product-label-sale {
         background: $red;
     }
+
     &.product-label-new {
         background: $success
     }
@@ -495,4 +582,5 @@ span {
         max-width: 180px;
     }
 }
+
 // jdiv { display: none !important; }
