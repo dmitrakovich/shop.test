@@ -13,6 +13,7 @@ use App\Admin\Actions\Order\ProcessOrder;
 use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
 use App\Enums\Order\OrderTypeEnum;
+use App\Enums\Order\UtmEnum;
 use App\Events\Analytics\OfflinePurchase;
 use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
@@ -63,7 +64,7 @@ class OrderController extends AdminController
         $grid = new Grid(new Order());
 
         $orderStatuses = OrderStatus::ordered()->pluck('name_for_admin', 'key');
-        $admins = (new AdministratorService)->getAdministratorList();
+        $admins = app(AdministratorService::class)->getAdministratorList();
 
         $grid->column('id', 'Номер заказа');
         $grid->column('user_full_name', 'ФИО');
@@ -193,6 +194,10 @@ class OrderController extends AdminController
             'user' => fn ($query) => $query->with(['lastAddress' => fn ($q) => $q->with('country')]),
         ])->first() : null;
 
+        $administratorService = app(AdministratorService::class);
+        $adminList = $administratorService->getAdministratorList();
+        $adminLoginList = $administratorService->getAdministratorLoginList();
+
         if ($form->isCreating()) {
             $form->hidden('order_type')->value(OrderTypeEnum::MANAGER);
         }
@@ -206,13 +211,20 @@ class OrderController extends AdminController
             });
         }
 
-        $form->tab('Основное', function ($form) use ($order) {
+        $form->tab('Основное', function ($form) use ($adminList, $adminLoginList, $order) {
             if ($form->isCreating()) {
                 $form->select('order_method', 'Способ заказа')
                     ->options(OrderMethod::getOptionsForSelect())
                     ->default(OrderMethod::UNDEFINED);
             } elseif ($order) {
-                $orderSource = (!$order->utm_source || ($order->utm_source == 'none')) ? 'Неизвестен' : "{$order->utm_source} {$order->utm_campaign}";
+                $utmEnum = UtmEnum::tryFrom("{$order->utm_source}-{$order->utm_campaign}");
+                if (!$order->utm_source || ($order->utm_source == 'none')) {
+                    $orderSource = 'Неизвестен';
+                } else {
+                    $utmContent = $order->utm_content ? mb_strtolower($order->utm_content) : null;
+                    $managerName = ($order->utm_campaign === 'manager' && $utmContent) ? ($adminLoginList[$utmContent] ?? '') : '';
+                    $orderSource = $utmEnum ? $utmEnum->channelName() . ' ' . $utmEnum->companyName() : trim("{$order->utm_source} {$order->utm_campaign} $managerName");
+                }
                 $orderType = $order->order_type?->name();
                 $form->html(
                     '<h5>' . ($orderType ? "{$orderType} - " : '') . "{$orderSource}</h5>",
@@ -266,7 +278,7 @@ class OrderController extends AdminController
 
             $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'))
                 ->default(OrderStatus::DEFAULT_VALUE)->required();
-            $form->select('admin_id', 'Менеджер')->options((new AdministratorService)->getAdministratorList());
+            $form->select('admin_id', 'Менеджер')->options($adminList);
         });
 
         $form->tab('Товары', function (Form $form) {

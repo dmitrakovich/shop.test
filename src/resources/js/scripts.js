@@ -89,6 +89,27 @@ $(function () {
 
     $('form#oneclick-form').trigger('submit');
   });
+
+  $(document).on('mouseenter', '.js-productItemImages', function () {
+    let imageBlocks = $(this).find('.js-productItemImagesContainer').children('div');
+    let childsCount = imageBlocks.length;
+    let width = $(this).width();
+    let curIndex = 0;
+    $(this).mousemove(function (getCurrentPos) {
+      let percentPart = (getCurrentPos.offsetX * 100) / width;
+      let index = Math.abs(Math.floor(percentPart / (100 / childsCount)));
+      if (index < childsCount && index !== curIndex) {
+        imageBlocks.css({ 'display': 'none' });
+        $(imageBlocks[index]).css({ 'display': 'block' });
+        curIndex = index;
+      }
+    });
+  });
+
+  $(document).on('mouseleave', '.js-productItemImages', function () {
+    $(this).find('.js-productItemImagesContainer').css({ 'display': 'none' });
+    $(this).find('.js-productItemImagesContainer').first().css({ 'display': 'block' });
+  });
 });
 
 window.sizesValidate = function () {
