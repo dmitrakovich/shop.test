@@ -18,6 +18,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property int $id
  * @property Carbon $offline_notifications_pause_until
  * @property string $name
+ * @property string $internal_name
  * @property string $address
  * @property-read TelegramChat $privateChat
  * @property-read TelegramChat $groupChat

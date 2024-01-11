@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Logs as LogModel;
+use App\Models\Logs;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +14,7 @@ class LogService
     /**
      * Status for skipped sms messages
      *
-     * @todo move to LogModel\SmsLog
+     * @todo move to Logs\SmsLog
      */
     const SMS_SKIPPED_KEY = 'skipped';
 
@@ -30,8 +30,8 @@ class LogService
         ?int $orderId = null,
         ?int $mailingId = null,
         ?string $status = null,
-    ): LogModel\SmsLog {
-        $log = new LogModel\SmsLog;
+    ): Logs\SmsLog {
+        $log = new Logs\SmsLog;
         $log->phone = $phone;
         $log->text = $text;
         $log->route = $route;
@@ -57,11 +57,11 @@ class LogService
         $logData = [];
         foreach ($restoreProducts as $productId) {
             $logData[$productId]['product_id'] = $productId;
-            $logData[$productId]['action'] = LogModel\InventoryLog::ACTION_RESTORE;
+            $logData[$productId]['action'] = Logs\InventoryLog::ACTION_RESTORE;
         }
         foreach ($deleteProducts as $productId) {
             $logData[$productId]['product_id'] = $productId;
-            $logData[$productId]['action'] = LogModel\InventoryLog::ACTION_DELETE;
+            $logData[$productId]['action'] = Logs\InventoryLog::ACTION_DELETE;
         }
         foreach ($addSizes as $productId => $sizes) {
             $logData[$productId]['product_id'] = $productId;
@@ -74,23 +74,23 @@ class LogService
 
         $now = now();
         foreach ($logData as &$data) {
-            $data['action'] ??= LogModel\InventoryLog::ACTION_UPDATE;
+            $data['action'] ??= Logs\InventoryLog::ACTION_UPDATE;
             $data['added_sizes'] ??= null;
             $data['removed_sizes'] ??= null;
             $data['created_at'] = $now;
         }
 
-        LogModel\InventoryLog::insert($logData);
+        Logs\InventoryLog::insert($logData);
     }
 
     /**
      * Log order changes data
      */
-    public function logOrderAction(int $orderId, string $action): LogModel\OrderActionLog
+    public function logOrderAction(int $orderId, string $action): Logs\OrderActionLog
     {
         $user = Auth::user();
 
-        $log = new LogModel\OrderActionLog();
+        $log = new Logs\OrderActionLog();
         $log->order_id = $orderId;
         $log->admin_id = $user instanceof Administrator ? $user->id : null;
         $log->action = $action;

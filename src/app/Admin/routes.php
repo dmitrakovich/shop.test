@@ -139,6 +139,7 @@ Route::group([
         $router->resource('sms', SmsController::class);
         $router->resource('inventory', InventoryController::class);
         $router->resource('order-actions', OrderActionController::class);
+        $router->resource('order-item-statuses', OrderItemStatusController::class);
     });
 
     // debug

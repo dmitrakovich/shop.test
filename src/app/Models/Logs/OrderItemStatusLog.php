@@ -17,12 +17,13 @@ use Illuminate\Support\Carbon;
  * @property int $order_item_id
  * @property int $stock_id
  * @property Carbon $created_at
- * @property Carbon|null $sended_at
  * @property Carbon|null $reserved_at
  * @property Carbon|null $canceled_at
  * @property Carbon|null $confirmed_at
  * @property Carbon|null $collected_at
  * @property Carbon|null $picked_up_at
+ * @property Carbon|null $moved_at
+ * @property Carbon|null $sended_at
  * @property Carbon|null $completed_at
  * @property Carbon|null $deleted_at
  * @property-read OrderItem $orderItem
@@ -41,6 +42,22 @@ class OrderItemStatusLog extends Model
      * The attributes that aren't mass assignable.
      */
     protected $guarded = ['id'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'sended_at' => 'datetime',
+        'reserved_at' => 'datetime',
+        'canceled_at' => 'datetime',
+        'confirmed_at' => 'datetime',
+        'collected_at' => 'datetime',
+        'picked_up_at' => 'datetime',
+        'sended_at' => 'datetime',
+        'completed_at' => 'datetime',
+    ];
 
     /**
      * The name of the "updated at" column.
@@ -102,5 +119,13 @@ class OrderItemStatusLog extends Model
         }
 
         return $this->stock->groupChat;
+    }
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     */
+    protected function serializeDate(\DateTimeInterface $date): string
+    {
+        return $date->format('d.m.Y H:i:s');
     }
 }
