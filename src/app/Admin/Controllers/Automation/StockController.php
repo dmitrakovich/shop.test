@@ -11,6 +11,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Collection;
 use App\Models\Product;
+use App\Models\ProductAttributes\CountryOfOrigin;
 use App\Models\Season;
 use App\Models\Stock;
 use Encore\Admin\Grid;
@@ -119,6 +120,7 @@ class StockController extends AbstractAdminController
         $filter->where($this->getSeasonFilter(), 'Сезон', 'season')->multipleSelect(Season::pluck('name', 'id'));
         $filter->where($this->getCollectionFilter(), 'Коллекция', 'collection')->multipleSelect(Collection::pluck('name', 'id'));
         $filter->where($this->getCategoryFilter(), 'Категория', 'category')->multipleSelect(Category::getFormatedTree());
+        $filter->where($this->getCountryOfOriginFilter(), 'Страна производитель', 'country_of_origin')->multipleSelect(CountryOfOrigin::pluck('name', 'id'));
     }
 
     private function addFiltersForProducts(): \Closure
@@ -141,6 +143,9 @@ class StockController extends AbstractAdminController
             }
             if (!empty($categoryQuery = request('category'))) {
                 $query->where($this->getCategoryFilter('products', (array)$categoryQuery));
+            }
+            if (!empty($countryOfOriginQuery = request('country_of_origin'))) {
+                $query->where($this->getCountryOfOriginFilter((array)$countryOfOriginQuery));
             }
         };
     }
@@ -213,6 +218,14 @@ class StockController extends AbstractAdminController
 
             return $query->whereIn("$table.category_id", $categories);
         };
+    }
+
+    /**
+     * Adds a filter for countryOfOrigin.
+     */
+    private function getCountryOfOriginFilter(?array $input = null): \Closure
+    {
+        return fn ($query) => $query->whereIn('products.country_of_origin_id', $input ?? $this->input);
     }
 
     /**
