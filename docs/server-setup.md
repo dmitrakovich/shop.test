@@ -50,6 +50,7 @@ Install php:
 ```shell
 apt-get install php-common php-dev php-mysql php-mbstring php-xml php-zip php-gd php-cli php-fpm
 apt install ffmpeg
+pecl install redis
 ```
 In /etc/php/8.1/fpm/pool.d/www.conf change user to `www-root`
 ```properties

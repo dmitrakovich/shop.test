@@ -36,19 +36,21 @@ class CatalogService
      */
     public function getProducts(array $filters, string $sort, ?string $search = null)
     {
-        $productsQuery = $this->productService->getForCatalog(
-            $filters, $sort, $search
-        );
+        $productsQuery = $this->productService
+            ->applyFilters($filters)
+            ->search($search)
+            ->sorting($sort);
 
         $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
         $this->addTopProducts($products, $filters);
         $products->totalCount = $productsQuery->count() + $this->topProductsCount($products);
 
-        $this->addMinMaxPrices($products, $productsQuery);
-        $this->addGtmData($products);
-
         // save query in cache (1 hour)
         Cache::put($this->getQueryCacheKey(), Eloquent::serialize($productsQuery), 3600);
+
+        $this->productService->addEager($products);
+        $this->addMinMaxPrices($products, $productsQuery);
+        $this->addGtmData($products);
 
         return $products;
     }
@@ -98,6 +100,7 @@ class CatalogService
             abort(419, 'Page maby expired. Error: ' . $th->getMessage());
         }
 
+        $this->productService->addEager($products);
         $this->addGtmData($products);
 
         return $products;

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\Session;
@@ -12,7 +13,7 @@ class ProductService
     /**
      * Применить фильтры к выборке
      */
-    protected function applyFilters(array $filters): Builder
+    public function applyFilters(array $filters): Builder
     {
         $query = (new Product())->newQuery();
 
@@ -28,21 +29,19 @@ class ProductService
     }
 
     /**
-     * Return built query
+     * Load the relationships that should be eager loaded.
      */
-    public function getForCatalog(array $filters, string $sort, ?string $search = null): Builder
+    public function addEager(CursorPaginator|EloquentCollection $products): void
     {
-        return $this->applyFilters($filters)
-            ->with([
-                'category:id,parent_id,title,path',
-                'brand:id,name',
-                'sizes:id,name',
-                'media',
-                'styles:id,name',
-                'favorite:product_id',
-            ])
-            ->search($search)
-            ->sorting($sort);
+        $products->load([
+            'category:id,parent_id,title,path',
+            'category.parentCategory:id,parent_id,title,path',
+            'brand:id,name',
+            'sizes:id,name',
+            'media',
+            'styles:id,name',
+            'favorite:product_id',
+        ]);
     }
 
     public function getById(array $ids): EloquentCollection
