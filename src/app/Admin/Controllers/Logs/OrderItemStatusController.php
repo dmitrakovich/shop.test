@@ -60,7 +60,7 @@ class OrderItemStatusController extends AbstractAdminController
             ->orderBy('id', 'desc');
         // $grid->paginate(50);
         $grid->filter($this->getFilters());
-        $grid->rows(fn (Row $row) => $row->column('_sku') ?: $row->style("background-color: #CCCCCC;"));
+        $grid->rows(fn (Row $row) => $row->column('_sku') ?: $row->style('background-color: #CCCCCC;'));
         $grid->disableActions();
         $grid->disableCreateButton();
         $grid->disableColumnSelector();

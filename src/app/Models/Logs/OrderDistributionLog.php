@@ -2,14 +2,14 @@
 
 namespace App\Models\Logs;
 
+use App\Admin\Models\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-use App\Admin\Models\Administrator;
 
 class OrderDistributionLog extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
 
     /**

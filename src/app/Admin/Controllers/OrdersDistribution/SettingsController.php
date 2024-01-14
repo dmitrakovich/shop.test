@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers\OrdersDistribution;
 
-use \App\Admin\Controllers\OrdersDistribution\Form\LogGrid;
+use App\Admin\Controllers\OrdersDistribution\Form\LogGrid;
 use App\Admin\Controllers\OrdersDistribution\Form\SettingsForm;
 use App\Admin\Controllers\OrdersDistribution\Form\WorkScheduleForm;
 use App\Http\Controllers\Controller;
@@ -24,6 +24,7 @@ class SettingsController extends Controller
         } else {
             $tabs->addLink($logGrid->title, 'settings?active=log');
         }
+
         return $content
             ->title('Настройки')
             ->body($tabs);
