@@ -17,6 +17,7 @@ use App\Listeners\SaveDevice;
 use App\Listeners\SendOrderInformationNotification;
 use App\Listeners\SyncOrderHistory;
 use App\Listeners\UpdateInventory;
+use App\Listeners\Order\DistributeOrder;
 use App\Listeners\UpdateOrderItemsStatus;
 use App\Listeners\User\UpdateUserGroup;
 use App\Observers;
@@ -55,6 +56,7 @@ class EventServiceProvider extends ServiceProvider
             SaveDevice::class,
             UpdateUserGroup::class,
             ResetUserCache::class,
+            DistributeOrder::class,
             UpdateInventory::class,
         ],
         Analytics\Purchase::class => [

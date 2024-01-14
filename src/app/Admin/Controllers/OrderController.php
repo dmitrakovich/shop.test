@@ -6,6 +6,7 @@ use App\Admin\Actions\Order\BuyoutFormAction;
 use App\Admin\Actions\Order\CancelPayment;
 use App\Admin\Actions\Order\CapturePayment;
 use App\Admin\Actions\Order\CreateOnlinePayment;
+use App\Admin\Actions\Order\DistributeOrderAction;
 use App\Admin\Actions\Order\EnvelopeAction;
 use App\Admin\Actions\Order\InstallmentForm;
 use App\Admin\Actions\Order\PrintOrder;
@@ -107,6 +108,11 @@ class OrderController extends AdminController
         $grid->actions(function ($actions) {
             $actions->add(new ProcessOrder());
             $actions->add(new PrintOrder());
+        });
+
+        $grid->batchActions(function ($batch) {
+            $batch->disableDelete();
+            $batch->add(new DistributeOrderAction());
         });
 
         $grid->model()->orderBy('id', 'desc');

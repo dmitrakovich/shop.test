@@ -58,8 +58,8 @@ class SettingsForm extends Form
         $this->divider('Расписание');
         $this->table('schedule', ' ', function ($table) use ($admins) {
             $table->select('admin_user_id', 'Менеджер')->options($admins)->required();
-            $table->timeRange('time_to_even', 'time_from_even', 'Время работы (четные дни)')->required();
-            $table->timeRange('time_to_odd', 'time_from_odd', 'Время работы (нечетные дни)')->required();
+            $table->timeRange('time_from_even', 'time_to_even', 'Время работы (четные дни)')->required();
+            $table->timeRange('time_from_odd', 'time_to_odd', 'Время работы (нечетные дни)')->required();
         })->setWidth(12, 0);
     }
 
