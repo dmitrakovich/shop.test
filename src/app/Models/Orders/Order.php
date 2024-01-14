@@ -10,6 +10,7 @@ use App\Models\Country;
 use App\Models\Device;
 use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
+use App\Models\Logs\OrderDistributionLog;
 use App\Models\Logs\SmsLog;
 use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
@@ -313,6 +314,14 @@ class Order extends Model
     public function logs(): Relations\HasMany
     {
         return $this->hasMany(OrderActionLog::class);
+    }
+
+    /**
+     * Order distribution history
+     */
+    public function distributionLogs(): Relations\HasMany
+    {
+        return $this->hasMany(OrderDistributionLog::class);
     }
 
     /**
