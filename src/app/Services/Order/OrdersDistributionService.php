@@ -89,7 +89,7 @@ class OrdersDistributionService
                 'sent',
                 'fitting',
                 'return',
-                'return_fitting'
+                'return_fitting',
             ])->orWhere('created_at', '>', date('Y-m-d H:i:s', strtotime('-3 days')));
         })->where('user_id', $order->user_id)
             ->where('id', '!=', $order->id)
