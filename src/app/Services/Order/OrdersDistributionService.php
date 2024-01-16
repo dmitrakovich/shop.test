@@ -86,9 +86,11 @@ class OrdersDistributionService
             return $query->whereNotIn('status_key', [
                 'complete',
                 'canceled',
+                'sent',
+                'fitting',
                 'return',
-                'return_fitting',
-            ])->orWhere('created_at', '<', date('Y-m-d H:i:s', strtotime('-3 days')));
+                'return_fitting'
+            ])->orWhere('created_at', '>', date('Y-m-d H:i:s', strtotime('-3 days')));
         })->where('user_id', $order->user_id)
             ->where('id', '!=', $order->id)
             ->orderBy('id', 'desc')
