@@ -48,7 +48,7 @@ In nginx.conf change user to `www-root` and add site config ([example](https://g
 ## Php setup
 Install php:
 ```shell
-apt-get install php-common php-dev php-mysql php-mbstring php-xml php-zip php-gd php-cli php-fpm
+apt-get install php-common php-dev php-mysql php-mbstring php-xml php-zip php-gd php-cli php-fpm php-redis
 apt install ffmpeg
 pecl install redis
 ```
