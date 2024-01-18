@@ -21,6 +21,12 @@ body {
 
 .wrapper {
     @include media-breakpoint-up(lg) {
+        margin: 0 20px;
+    }
+}
+
+.wrapper {
+    @include media-breakpoint-up(xl) {
         margin: 0 100px;
     }
 }
