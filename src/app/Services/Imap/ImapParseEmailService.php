@@ -26,7 +26,7 @@ class ImapParseEmailService
     /**
      * Retrieves an array of messages from the specified mailbox.
      *
-     * @param  string  $mailbox_name The name of the mailbox to retrieve messages from. Default is 'INBOX'.
+     * @param  string  $mailbox_name  The name of the mailbox to retrieve messages from. Default is 'INBOX'.
      * @return array An array of messages.
      */
     public function getMessages(string $mailbox_name = 'INBOX'): array
@@ -44,8 +44,8 @@ class ImapParseEmailService
     /**
      * Retrieves messages from a specific mailbox by date.
      *
-     * @param  string  $mailbox_name The name of the mailbox. Defaults to 'INBOX'.
-     * @param  string  $date The date to filter the messages by. Defaults to null.
+     * @param  string  $mailbox_name  The name of the mailbox. Defaults to 'INBOX'.
+     * @param  string  $date  The date to filter the messages by. Defaults to null.
      * @return MessageIterator The iterator containing the retrieved messages.
      */
     public function getMessagesByDate(string $mailbox_name = 'INBOX', ?string $date = null): MessageIterator

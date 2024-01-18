@@ -225,8 +225,8 @@ class SitemapService
     /**
      * Footer sitemap and move to final path
      *
-     * @param  string  $tempPath - temp file path
-     * @param  string  $finalPath - final file path
+     * @param  string  $tempPath  - temp file path
+     * @param  string  $finalPath  - final file path
      */
     private function urlsetFileEnd(string $tempPath, string $finalPath): void
     {
@@ -240,7 +240,7 @@ class SitemapService
     /**
      * Header sitemap
      *
-     * @param  string  $tempPath - temp file path
+     * @param  string  $tempPath  - temp file path
      */
     private function urlsetFileStart(string $tempPath): void
     {
@@ -253,7 +253,7 @@ class SitemapService
     /**
      * Add row to sitemap
      *
-     * @param  string  $tempPath - temp file path
+     * @param  string  $tempPath  - temp file path
      */
     private function urlsetAppendFile(string $tempPath, string $data): void
     {

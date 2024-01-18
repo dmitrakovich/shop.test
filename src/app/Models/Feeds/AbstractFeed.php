@@ -57,7 +57,7 @@ abstract class AbstractFeed
     /**
      * Retrieves the product media from the given MediaCollection.
      *
-     * @param  MediaCollection  $media The collection of media objects.
+     * @param  MediaCollection  $media  The collection of media objects.
      * @return array The array containing the images and videos.
      */
     public function getProductMedia(MediaCollection $media): array
@@ -120,7 +120,7 @@ abstract class AbstractFeed
     /**
      * Generates the description for a product.
      *
-     * @param  Product  $product The product to generate the description for.
+     * @param  Product  $product  The product to generate the description for.
      * @return string The generated description for the product.
      */
     public function getDescription(Product $product): string

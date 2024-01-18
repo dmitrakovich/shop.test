@@ -15,7 +15,7 @@ class BelpostImportCODAction extends Action
     /**
      * Handle the request.
      *
-     * @param  Request  $request the request object
+     * @param  Request  $request  the request object
      * @return mixed the response object
      */
     public function handle(

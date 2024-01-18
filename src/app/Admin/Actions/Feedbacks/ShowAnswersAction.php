@@ -9,7 +9,7 @@ class ShowAnswersAction extends RowAction
     public $name = 'Все ответы';
 
     /**
-     * @return  string
+     * @return string
      */
     public function href()
     {

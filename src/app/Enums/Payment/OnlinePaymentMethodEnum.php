@@ -37,7 +37,7 @@ enum OnlinePaymentMethodEnum: int
     /**
      * Получить enum по value
      *
-     * @param  ?int  $value - значение
+     * @param  ?int  $value  - значение
      */
     public static function enumByValue(?int $value): ?self
     {

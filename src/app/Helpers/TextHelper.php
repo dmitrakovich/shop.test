@@ -10,7 +10,7 @@ class TextHelper
     /**
      * The number in the sum in words.
      *
-     * @param  float  $value value
+     * @param  float  $value  value
      */
     public static function numberToMoneyString(float $value): string
     {
@@ -25,7 +25,7 @@ class TextHelper
     /**
      * The number in the sum in words (short).
      *
-     * @param  float  $value value
+     * @param  float  $value  value
      */
     public static function numberToMoneyShortString(float $value): string
     {

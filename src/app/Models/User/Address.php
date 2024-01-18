@@ -32,7 +32,7 @@ class Address extends Model
     /**
      * The table associated with the model.
      *
-     * @var  string
+     * @var string
      */
     protected $table = 'user_addresses';
 

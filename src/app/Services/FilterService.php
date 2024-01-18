@@ -40,7 +40,7 @@ class FilterService
     /**
      * Получить все фильтра
      *
-     * @param  array  $filtersList список нужных фильтров
+     * @param  array  $filtersList  список нужных фильтров
      * @return array
      */
     public static function getAll(?array $filtersList = null)
