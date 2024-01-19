@@ -52,7 +52,6 @@ class OrderSourceController extends AbstractCustomerAnalyticController
         // $orderCreatedAtStart = request()->input('order_created_at_start');
         // $orderCreatedAtEnd = request()->input('order_created_at_end');
 
-
         // $subQuery = <<<SQL
         // (SELECT {$this->getInstanceNameColumn()} AS instance_name,
         // users.id AS user_id,
@@ -84,13 +83,12 @@ class OrderSourceController extends AbstractCustomerAnalyticController
             ->where('orders.created_at', '>=', '2024-01-04 00:00:00')
             ->groupBy('instance_name');
 
-
         $grid->model()
             ->select('qq.instance_name', 'qq.total_purchased_price', 'qq.total_lost_price')
             ->from($sub, 'qq');
-            // ->leftJoin('users', 'users.id', '=', 'orders.user_id')
-            // ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
-            // ->groupBy('instance_name');
+        // ->leftJoin('users', 'users.id', '=', 'orders.user_id')
+        // ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
+        // ->groupBy('instance_name');
 
         return $grid;
     }
