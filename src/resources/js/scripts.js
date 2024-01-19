@@ -95,12 +95,23 @@ $(function () {
     let childsCount = imageBlocks.length;
     let width = $(this).width();
     let curIndex = 0;
+    const pagination = document.createElement("div");
+    pagination.classList.add('product-item-images-pagination');
+    for (let i = 0; i < childsCount; i++) {
+      let paginationItem = document.createElement("span");
+      paginationItem.setAttribute('data-index', i);
+      pagination.appendChild(paginationItem);
+    }
+    $(this).append(pagination);
+
     $(this).mousemove(function (getCurrentPos) {
       let percentPart = (getCurrentPos.offsetX * 100) / width;
       let index = Math.abs(Math.floor(percentPart / (100 / childsCount)));
       if (index < childsCount && index !== curIndex) {
         imageBlocks.css({ 'display': 'none' });
         $(imageBlocks[index]).css({ 'display': 'block' });
+        pagination.children[curIndex].classList.remove('active');
+        pagination.children[index].classList.add('active');
         curIndex = index;
       }
     });
@@ -109,6 +120,7 @@ $(function () {
   $(document).on('mouseleave', '.js-productItemImages', function () {
     $(this).find('.js-productItemImagesContainer').css({ 'display': 'none' });
     $(this).find('.js-productItemImagesContainer').first().css({ 'display': 'block' });
+    $(this).find('.product-item-images-pagination').remove();
   });
 });
 
