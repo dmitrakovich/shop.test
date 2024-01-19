@@ -20,7 +20,7 @@ class LogGrid
         $grid->column('created_at', 'Дата и время')->display(fn () => date('d.m.Y H:i:s', strtotime($this->created_at)));
         $grid->column('order_id', '№ заказа');
         $grid->column('action', 'Комментарий');
-        $grid->column('admin.username', 'Менеджер')->display(fn () => $this->admin->getShortNameAttribute());
+        $grid->column('admin.username', 'Менеджер')->display(fn () => $this->admin ? $this->admin->getShortNameAttribute() : null);
 
         $grid->disableCreateButton();
         $grid->disableFilter();
