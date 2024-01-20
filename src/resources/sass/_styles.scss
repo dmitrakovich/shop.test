@@ -21,6 +21,12 @@ body {
 
 .wrapper {
     @include media-breakpoint-up(lg) {
+        margin: 0 20px;
+    }
+}
+
+.wrapper {
+    @include media-breakpoint-up(xl) {
         margin: 0 100px;
     }
 }
@@ -322,6 +328,26 @@ button.scroll-top-btn {
     }
 }
 
+.product-item-images-pagination {
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    gap: 2px;
+
+    span {
+        background-color: rgba(0, 0, 0, 0.25);
+        display: inline-flex;
+        height: 3px;
+        flex: 1;
+
+        &.active {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+    }
+}
+
 .product-item .image {
     .product-first-image {
         display: block;
@@ -551,7 +577,7 @@ span {
 
 .product-labels {
     position: absolute;
-    top: 0;
+    top: 5px;
     right: 0;
     z-index: 20;
     display: flex;
