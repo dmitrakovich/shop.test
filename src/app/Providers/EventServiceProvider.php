@@ -13,6 +13,7 @@ use App\Listeners\GoogleTag;
 use App\Listeners\LogNotification;
 use App\Listeners\MergeCart;
 use App\Listeners\MergeFavorites;
+use App\Listeners\Order\CreateInstallment;
 use App\Listeners\Order\DistributeOrder;
 use App\Listeners\SaveDevice;
 use App\Listeners\SendOrderInformationNotification;
@@ -56,6 +57,7 @@ class EventServiceProvider extends ServiceProvider
             SaveDevice::class,
             UpdateUserGroup::class,
             ResetUserCache::class,
+            CreateInstallment::class,
             DistributeOrder::class,
             UpdateInventory::class,
         ],

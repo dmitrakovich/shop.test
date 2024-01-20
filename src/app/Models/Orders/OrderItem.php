@@ -52,6 +52,7 @@ class OrderItem extends Model
         'current_price',
         'discount',
         'status_key',
+        'item_status_key', // stub for admin panel
         'status_updated_at',
     ];
 

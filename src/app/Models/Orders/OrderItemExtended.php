@@ -8,7 +8,7 @@ namespace App\Models\Orders;
  * @property-read string $product_name
  * @property-read string $product_link
  * @property-read string $product_photo
- * @property-read int|null $installment_contract_number
+ * @property-read string|null $installment_contract_number
  * @property-read float|null $installment_monthly_fee
  * @property-read bool|null $installment_send_notifications
  * @property-read int|null $stock_id
@@ -27,6 +27,7 @@ class OrderItemExtended extends OrderItem
         'stock_name',
         'dispatch_date',
         'fulfilled_date',
+        'item_status_key',
     ];
 
     /**
@@ -85,7 +86,7 @@ class OrderItemExtended extends OrderItem
     /**
      * Installment contract number for this order item
      */
-    public function getInstallmentContractNumberAttribute(): ?int
+    public function getInstallmentContractNumberAttribute(): ?string
     {
         return $this->installment?->contract_number;
     }
@@ -140,5 +141,21 @@ class OrderItemExtended extends OrderItem
         }
 
         return $stock->name . ' ' . $stock->address;
+    }
+
+    /**
+     * Accessor for stupid admin panel
+     */
+    public function getItemStatusKeyAttribute(): string
+    {
+        return $this->status_key;
+    }
+
+    /**
+     * Mutator for stupid admin panel
+     */
+    public function setItemStatusKeyAttribute($value): void
+    {
+        $this->attributes['status_key'] = $value;
     }
 }

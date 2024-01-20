@@ -16,6 +16,7 @@ use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\User;
 use Deliveries\DeliveryMethod;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -59,6 +60,7 @@ use Payments\PaymentMethod;
  * @property int $admin_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property-read EloquentCollection|OrderItem[] $items
  * @property-read User $user
  * @property-read Device $device
  * @property-read Country|null $country
@@ -418,7 +420,7 @@ class Order extends Model
             $itemPrice = $item->current_price;
             $itemPrice += $deliveryPrice ? ($deliveryPrice / $uniqItemsCount) : 0;
             $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $uniqItemsCount) : 0;
-            if ((int)$this->payment_id === Installment::PAYMENT_METHOD_ID) {
+            if ($this->hasInstallment()) {
                 $itemPrice = ($itemPrice - (2 * $item->installment_monthly_fee));
             }
             $resultItemPrice += $itemPrice;
@@ -502,5 +504,15 @@ class Order extends Model
     public function routeNotificationForSmsTraffic($notification)
     {
         return $this->phone;
+    }
+
+    /**
+     * Check if the payment method is an installment.
+     *
+     * @return boolean
+     */
+    public function hasInstallment(): bool
+    {
+        return $this->payment_id === Installment::PAYMENT_METHOD_ID;
     }
 }

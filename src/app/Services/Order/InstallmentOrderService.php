@@ -4,6 +4,7 @@ namespace App\Services\Order;
 
 use App\Helpers\TextHelper;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -103,5 +104,19 @@ class InstallmentOrderService
         $writer->save(public_path($resultPath));
 
         return url($resultPath);
+    }
+
+    /**
+     * Create installment records for each order item.
+     */
+    public function createInstallmentForOrder(Order $order): void
+    {
+        $order->load('items')->items->each(function (OrderItem $orderItem) {
+            $orderItem->installment()->create([
+               'contract_number' => "{$orderItem->order_id}/{$orderItem->id}",
+               'monthly_fee' => 0,
+               'send_notifications' => false,
+            ]);
+        });
     }
 }

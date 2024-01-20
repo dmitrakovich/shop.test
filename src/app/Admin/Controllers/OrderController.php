@@ -311,7 +311,7 @@ class OrderController extends AdminController
                     ->options(['загрузка...'])
                     ->addElementClass($orderItem?->isFinalStatus() ? ['disabled'] : [])
                     ->required();
-                $nestedForm->select('status_key', 'Статус модели')
+                $nestedForm->select('item_status_key', 'Статус модели')
                     ->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'))
                     ->addElementClass($orderItem?->isFinalStatus() ? ['disabled'] : [])
                     ->default(OrderItemStatus::DEFAULT_VALUE)
@@ -321,7 +321,8 @@ class OrderController extends AdminController
                 $nestedForm->currency('discount', 'Скидка')->symbol('%');
 
                 // installment
-                $nestedForm->number('installment_contract_number', 'Номер договора рассрочки')
+                $nestedForm->text('installment_contract_number', 'Номер договора рассрочки')
+                    ->placeholder('Номер заказа / номер позиции заказа. При создании оставить пустым!')
                     ->addElementClass(['installment-field']);
                 $nestedForm->currency('installment_monthly_fee', 'Ежемесячный платёж')
                     ->symbol($currencyCode)
@@ -376,6 +377,13 @@ class OrderController extends AdminController
                     return redirect()->back()->with(['error' => $error])->withInput();
                 }
             }
+            if (request()->integer('payment_id') === Installment::PAYMENT_METHOD_ID && !$form->isCreating()) {
+                foreach ($orderItems as $orderItem) {
+                    if (empty($orderItem['installment_contract_number'])) {
+                        $this->emptyContractNumberError();
+                    }
+                }
+            }
         });
         $form->saving(function (Form $form) {
             CurrencyFacade::setCurrentCurrency($form->input('currency'), false);
@@ -398,12 +406,12 @@ class OrderController extends AdminController
         $form->saved(function (Form $form) {
             $this->updateInventory($form);
 
-            if ((int)$form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
-                $this->saveInstallments($form);
-            }
             if ($form->isCreating()) {
                 event(new OrderCreated($form->model(), null, false));
                 event(new OfflinePurchase($form->model()));
+            }
+            if ((int)$form->input('payment_id') === Installment::PAYMENT_METHOD_ID) {
+                $this->saveInstallments($form);
             }
             // TODO: recalc order total price
         });
@@ -418,10 +426,7 @@ class OrderController extends AdminController
     {
         /** @var OrderItemExtended $itemExtended */
         foreach ($form->model()->itemsExtended as $itemExtended) {
-            $contractNumber = (int)$form->input("itemsExtended.{$itemExtended->id}.installment_contract_number");
-            if (!$contractNumber) {
-                continue;
-            }
+            $contractNumber = $form->input("itemsExtended.{$itemExtended->id}.installment_contract_number");
             $monthlyFee = (float)$form->input("itemsExtended.{$itemExtended->id}.installment_monthly_fee");
             $sendNotifications = $form->input("itemsExtended.{$itemExtended->id}.installment_send_notifications") === 'on';
             /** @var Installment $installment */
@@ -629,10 +634,18 @@ class OrderController extends AdminController
         return <<<JS
 $(function () {
     // disable editing for current items in order
-    $('select.product_id').attr('disabled', true);
+    document.querySelectorAll('select.product_id').forEach(function(selectElement) {
+        const hiddenProductField = document.createElement('input');
+        hiddenProductField.type = 'hidden';
+        hiddenProductField.name = selectElement.getAttribute('name');
+        hiddenProductField.value = selectElement.value;
+        selectElement.parentNode.insertBefore(hiddenProductField, selectElement.nextSibling);
+        selectElement.removeAttribute('name');
+        selectElement.disabled = true;
+    });
     $('select.stock_id.disabled').attr('disabled', true);
     $('select.size_id.disabled').attr('disabled', true);
-    $('select.status_key.disabled').attr('disabled', true);
+    $('select.item_status_key.disabled').attr('disabled', true);
 
     // prepare current images
     $('#has-many-itemsExtended .file-input').each(function (index, element) {
@@ -793,5 +806,18 @@ JS;
         ]);
 
         return back()->with(compact('error'))->withInput();
+    }
+
+    /**
+     * Throw an error for an empty installment contract number.
+     */
+    protected function emptyContractNumberError(): never
+    {
+        $error = new MessageBag([
+            'title' => 'Номер договора рассрочки не может быть пустым!',
+            'message' => 'Заполните номер договора рассрочки.',
+        ]);
+
+        abort(back()->with(compact('error'))->withInput());
     }
 }
