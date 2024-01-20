@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers\Analytics;
 
 use App\Models\Orders\Order;
-use App\Models\User\User;
 use Encore\Admin\Grid;
 
 class OrderSourceController extends AbstractCustomerAnalyticController
@@ -39,10 +38,10 @@ class OrderSourceController extends AbstractCustomerAnalyticController
         $grid = new Grid(new Order());
 
         $grid->model()->selectRaw($this->getSelectSql())
-        ->withExpression('UserOrderStatusCount', $this->getUserOrderStatusCountQuery())
-        ->leftJoin('users', 'users.id', '=', 'orders.user_id')
-        ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
-        ->groupBy('instance_name');
+            ->withExpression('UserOrderStatusCount', $this->getUserOrderStatusCountQuery())
+            ->leftJoin('users', 'users.id', '=', 'orders.user_id')
+            ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->groupBy('instance_name');
 
         return $grid;
     }

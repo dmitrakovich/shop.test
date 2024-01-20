@@ -113,9 +113,9 @@ class InstallmentOrderService
     {
         $order->load('items')->items->each(function (OrderItem $orderItem) {
             $orderItem->installment()->create([
-               'contract_number' => "{$orderItem->order_id}/{$orderItem->id}",
-               'monthly_fee' => 0,
-               'send_notifications' => false,
+                'contract_number' => "{$orderItem->order_id}/{$orderItem->id}",
+                'monthly_fee' => 0,
+                'send_notifications' => false,
             ]);
         });
     }

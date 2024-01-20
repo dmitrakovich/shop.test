@@ -38,6 +38,7 @@ abstract class AbstractCustomerAnalyticController extends AbstractAnalyticContro
             SUM(CASE WHEN orders.status_key IN ({$this->statuses['canceled']}) THEN 1 ELSE 0 END) as canceled_count,
             SUM(CASE WHEN orders.status_key IN ({$this->statuses['returned']}) THEN 1 ELSE 0 END) as returned_count
         SQL;
+
         return DB::table('users')
             ->selectRaw($selectRaw)
             ->leftJoin('orders', 'users.id', '=', 'orders.user_id')

@@ -2,8 +2,6 @@
 
 namespace App\Admin\Controllers\Analytics;
 
-use App\Admin\Controllers\Analytics\OrderSourceController;
-
 use App\Enums\Order\UtmEnum;
 
 class OrderSourceDetailController extends OrderSourceController
@@ -11,7 +9,7 @@ class OrderSourceDetailController extends OrderSourceController
     /**
      * Generates additional grid columns for the given grid.
      *
-     * @param $grid The grid object to generate columns for.
+     * @param  $grid  The grid object to generate columns for.
      */
     protected function additionalGridColumns($grid): void
     {
