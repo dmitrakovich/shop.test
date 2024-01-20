@@ -55,7 +55,7 @@ class OpenGraph implements SeoContract
     /**
      * Set product properties
      *
-     * @param  array  $attributes opengraph product attributes
+     * @param  array  $attributes  opengraph product attributes
      */
     public function setProduct(array $attributes = []): self
     {

@@ -15,7 +15,7 @@ class OrdersDistributionService
     /**
      * Distributes an order.
      *
-     * @param  Order  $order The order to be distributed.
+     * @param  Order  $order  The order to be distributed.
      * @return Order The distributed order.
      */
     public function distributeOrder(Order $order): Order
@@ -77,7 +77,7 @@ class OrdersDistributionService
     /**
      * Distribute additional order.
      *
-     * @param  Order  $order The order to distribute.
+     * @param  Order  $order  The order to distribute.
      * @return bool Returns true if the additional order was successfully distributed, false otherwise.
      */
     public function distributeAdditionalOrder(Order $order): bool
@@ -120,7 +120,7 @@ class OrdersDistributionService
     /**
      * A function to distribute an order based on the provided link.
      *
-     * @param  Order  $order The order object to be distributed.
+     * @param  Order  $order  The order object to be distributed.
      * @return bool Returns true if the order is successfully distributed, false otherwise.
      */
     public function distributeOrderByLink(Order $order): bool

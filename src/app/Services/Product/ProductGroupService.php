@@ -11,8 +11,8 @@ class ProductGroupService
     /**
      * Удалить товар из группы товаров / Удалить группу если в ней нет товаров
      *
-     * @param  int  $productId - id товара
-     * @param  int  $productGroupId - id группы товаровы
+     * @param  int  $productId  - id товара
+     * @param  int  $productGroupId  - id группы товаровы
      */
     public function removeFromProductGroup(int $productId, int $productGroupId): bool
     {
@@ -31,8 +31,8 @@ class ProductGroupService
     /**
      * Создать группу из товаров или добавить к существующей группе
      *
-     * @param  int  $curProductId - какой id товара добавить в группу
-     * @param  int  $curProductId - к какому id товара добавить в группу
+     * @param  int  $curProductId  - какой id товара добавить в группу
+     * @param  int  $curProductId  - к какому id товара добавить в группу
      */
     public function addToProductGroup(int $curProductId, int $toProductId): bool
     {

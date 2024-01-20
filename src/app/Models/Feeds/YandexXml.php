@@ -149,7 +149,7 @@ class YandexXml extends AbstractFeed
     /**
      * Retrieves the sales notes for a given product.
      *
-     * @param  Product  $product The product object.
+     * @param  Product  $product  The product object.
      * @return string The sales notes for the product.
      */
     public function getSalesNotes(Product $product): string

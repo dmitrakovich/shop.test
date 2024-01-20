@@ -768,7 +768,7 @@ JS;
     /**
      * Adds an order comment.
      *
-     * @param  Request  $request The request object.
+     * @param  Request  $request  The request object.
      * @return OrderAdminComment|null The created order comment, or null if the order ID or comment is missing.
      */
     public function addOrderComment(Request $request): ?OrderAdminComment

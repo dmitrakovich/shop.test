@@ -56,9 +56,9 @@ class OrderMethod implements Enum
      * Return umt sources for selected order method
      *
      * @return array<string> utm sources:
-     * - utm_source
-     * - utm_medium
-     * - utm_campaign
+     *                       - utm_source
+     *                       - utm_medium
+     *                       - utm_campaign
      */
     public static function getUtmSources(string $orderMethod): array
     {

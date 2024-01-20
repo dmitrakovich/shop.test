@@ -13,8 +13,8 @@ class NotificationSkipped
     /**
      * Create a new event instance.
      *
-     * @param  mixed  $notifiable The notifiable entity who received the notification.
-     * @param  Notification  $notification The notification instance.
+     * @param  mixed  $notifiable  The notifiable entity who received the notification.
+     * @param  Notification  $notification  The notification instance.
      */
     public function __construct(
         public mixed $notifiable,

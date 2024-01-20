@@ -132,7 +132,7 @@ class Feedback extends Model implements HasMedia
      * Отзывы для товаров
      *
      * @param [type] $query
-     * @param  int  $productId идентификатор товара
+     * @param  int  $productId  идентификатор товара
      * @return void
      */
     public function scopeForProduct($query, int $productId)

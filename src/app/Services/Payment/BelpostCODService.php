@@ -20,7 +20,7 @@ class BelpostCODService
     /**
      * Imports an Excel file to process COD payments.
      *
-     * @param  UploadedFile  $file The uploaded Excel file.
+     * @param  UploadedFile  $file  The uploaded Excel file.
      * @return array The result of the import process, including the count and sum of payments.
      */
     public function importExcelCOD(UploadedFile $file): array
