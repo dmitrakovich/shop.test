@@ -132,6 +132,7 @@ Route::group([
         $router->resource('manager-order-items', ManagerOrderItemsController::class);
         $router->resource('type', OrderTypeController::class);
         $router->resource('source', OrderSourceController::class);
+        $router->resource('source-detail', OrderSourceDetailController::class);
     });
 
     // Orders distribution

@@ -38,7 +38,7 @@ class ManagerCustomersController extends AbstractCustomerAnalyticController
         $grid = new Grid(new Order());
 
         $grid->model()->selectRaw($this->getSelectSql())
-            ->withExpression('LastUserOrders', $this->getLastUserOrdersQuery())
+            ->withExpression('UserOrderStatusCount', $this->getUserOrderStatusCountQuery())
             ->leftJoin('admin_users', 'orders.admin_id', '=', 'admin_users.id')
             ->leftJoin('users', 'orders.user_id', '=', 'users.id')
             ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
