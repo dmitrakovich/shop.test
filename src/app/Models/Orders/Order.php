@@ -508,8 +508,6 @@ class Order extends Model
 
     /**
      * Check if the payment method is an installment.
-     *
-     * @return boolean
      */
     public function hasInstallment(): bool
     {

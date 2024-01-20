@@ -4,8 +4,6 @@ namespace App\Listeners\Order;
 
 use App\Events\OrderCreated;
 use App\Services\Order\InstallmentOrderService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class CreateInstallment
 {

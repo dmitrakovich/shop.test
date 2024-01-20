@@ -38,7 +38,7 @@ class OrderTypeController extends AbstractCustomerAnalyticController
         $grid = new Grid(new Order());
 
         $grid->model()->selectRaw($this->getSelectSql())
-            ->withExpression('LastUserOrders', $this->getLastUserOrdersQuery())
+            ->withExpression('UserOrderStatusCount', $this->getUserOrderStatusCountQuery())
             ->leftJoin('users', 'users.id', '=', 'orders.user_id')
             ->leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
             ->groupBy('order_type');

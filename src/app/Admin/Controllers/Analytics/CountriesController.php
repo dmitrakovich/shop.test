@@ -38,7 +38,7 @@ class CountriesController extends AbstractCustomerAnalyticController
         $grid = new Grid(new Order());
 
         $grid->model()->selectRaw($this->getSelectSql())
-            ->withExpression('LastUserOrders', $this->getLastUserOrdersQuery())
+            ->withExpression('UserOrderStatusCount', $this->getUserOrderStatusCountQuery())
             ->leftJoin('users', 'users.id', '=', 'orders.user_id')
             ->leftJoin('user_addresses', 'user_addresses.user_id', '=', 'users.id')
             ->leftJoin('countries', 'countries.id', '=', 'user_addresses.country_id')
