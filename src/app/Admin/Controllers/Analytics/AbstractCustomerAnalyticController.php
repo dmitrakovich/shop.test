@@ -30,6 +30,9 @@ abstract class AbstractCustomerAnalyticController extends AbstractAnalyticContro
      */
     protected function getUserOrderStatusCountQuery(): Builder
     {
+        $defaultFilter = request()->input('default_filter');
+        $orderCreatedAtStart = $defaultFilter ? now()->subDays(8)->startOfDay() : request()->input('order_created_at_start');
+        $orderCreatedAtEnd = $defaultFilter ? now()->subDays(1)->endOfDay() : request()->input('order_created_at_end');
         $selectRaw = <<<SQL
             users.id as user_id,
             SUM(CASE WHEN orders.status_key IN ({$this->statuses['purchased']}) THEN 1 ELSE 0 END) as purchased_count,
@@ -42,6 +45,8 @@ abstract class AbstractCustomerAnalyticController extends AbstractAnalyticContro
         return DB::table('users')
             ->selectRaw($selectRaw)
             ->leftJoin('orders', 'users.id', '=', 'orders.user_id')
+            ->when($orderCreatedAtStart, fn ($query) => $query->whereDate('orders.created_at', '>=', $orderCreatedAtStart))
+            ->when($orderCreatedAtEnd, fn ($query) => $query->whereDate('orders.created_at', '<=', $orderCreatedAtEnd))
             ->groupBy('users.id');
     }
 }
