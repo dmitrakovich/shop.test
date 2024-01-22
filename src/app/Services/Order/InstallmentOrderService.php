@@ -111,9 +111,10 @@ class InstallmentOrderService
      */
     public function createInstallmentForOrder(Order $order): void
     {
-        $order->load('items')->items->each(function (OrderItem $orderItem) {
+        $order->load('items')->items->each(function (OrderItem $orderItem, int $key) {
+            $orderItemPosition = $key + 1;
             $orderItem->installment()->create([
-                'contract_number' => "{$orderItem->order_id}/{$orderItem->id}",
+                'contract_number' => "{$orderItem->order_id}/{$orderItemPosition}",
                 'monthly_fee' => 0,
                 'send_notifications' => false,
             ]);
