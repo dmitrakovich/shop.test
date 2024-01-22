@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // quick view
   $(document).on('click', '.quick-link', function (e) {
     e.preventDefault();
+    e.stopPropagation();
     $.fancybox.close();
     let url = $(this).data('src');
     $.fancybox.open({
