@@ -5,11 +5,34 @@ namespace App\Models\Ads;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Cache;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
+use Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ *
+ * @property int $id
+ * @property string|null $title
+ * @property bool $is_imidj
+ * @property bool $only_sale
+ * @property bool $only_new
+ * @property int $speed
+ * @property int $count
+ * @property bool $sorting
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property bool|null $enum_type_id
+ * @property array|null $additional_settings Дополнительные настройки
+ * @property mixed $categories_list
+ * @property \App\Models\Category|null $categories
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categoriesList
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ads\ProductCarousel ordered(string $direction = 'asc')
+ */
 class ProductCarousel extends Model implements Sortable
 {
     use HasFactory;
@@ -62,7 +85,7 @@ class ProductCarousel extends Model implements Sortable
      *
      * @return \Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson
      */
-    public function categories()
+    public function categories(): BelongsToJson
     {
         return $this->belongsToJson(Category::class, 'categories');
     }
@@ -72,7 +95,7 @@ class ProductCarousel extends Model implements Sortable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function categoriesList()
+    public function categoriesList(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
     }

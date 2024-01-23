@@ -6,15 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Index page's links class
+ * @mixin \Illuminate\Database\Eloquent\Builder
  *
  * @property int $id
  * @property string $title
  * @property array $links
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- *
- * @mixin Builder
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  */
 class IndexLink extends Model
 {
