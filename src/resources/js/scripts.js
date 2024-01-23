@@ -118,8 +118,8 @@ $(function () {
   });
 
   $(document).on('mouseleave', '.js-productItemImages', function () {
-    $(this).find('.js-productItemImagesContainer').css({ 'display': 'none' });
-    $(this).find('.js-productItemImagesContainer').first().css({ 'display': 'block' });
+    $(this).find('.js-productItemImagesContainer').children('div').css({ 'display': 'none' });
+    $(this).find('.js-productItemImagesContainer').children('div').first().css({ 'display': 'block' });
     $(this).find('.product-item-images-pagination').remove();
   });
 });
