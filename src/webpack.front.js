@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 require('laravel-mix-merge-manifest');
 
 /*
@@ -23,8 +24,18 @@ mix.js('resources/js/app.js', 'public/js')
 
 if (mix.inProduction()) {
   mix.disableNotifications().version();
-} else {
-  mix.sourceMaps(true, 'source-map');
 }
+
+mix.webpackConfig({
+  devtool: 'source-map',
+  plugins: [
+    sentryWebpackPlugin({
+      org: 'baroccostyle',
+      project: 'javascript',
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      telemetry: false,
+    }),
+  ],
+});
 
 mix.mergeManifest();

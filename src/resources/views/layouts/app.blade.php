@@ -37,6 +37,8 @@
     {{-- Google Tag Manager --}}
     @include('googletagmanager::head')
 
+    {!! \Sentry\Laravel\Integration::sentryMeta() !!}
+
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
