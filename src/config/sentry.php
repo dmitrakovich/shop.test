@@ -4,8 +4,8 @@ return [
 
     'dsn' => env('SENTRY_LARAVEL_DSN', env('SENTRY_DSN')),
 
-    // capture release as git sha
-    'release' => trim(file_get_contents(str_replace('releases/', '', base_path('../.dep/latest_release')))),
+    // The release version of your application
+    'release' => env('SENTRY_RELEASE'),
 
     // When left empty or `null` the Laravel environment will be used
     'environment' => env('SENTRY_ENVIRONMENT'),
