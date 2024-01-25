@@ -173,10 +173,11 @@ footer {
 button.scroll-top-btn {
     position: fixed;
     padding: 0;
-    bottom: 70px;
-    right: 60px;
+    bottom: 20px;
+    right: 100px;
     width: 35px;
     height: 35px;
+    z-index: 99;
 }
 
 .check {

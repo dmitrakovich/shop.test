@@ -82,8 +82,6 @@ class ProductCarousel extends Model implements Sortable
 
     /**
      * Categories products
-     *
-     * @return \Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson
      */
     public function categories(): BelongsToJson
     {
@@ -92,8 +90,6 @@ class ProductCarousel extends Model implements Sortable
 
     /**
      * Categories products
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function categoriesList(): BelongsToMany
     {
