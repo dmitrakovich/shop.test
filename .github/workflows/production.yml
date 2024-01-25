@@ -47,7 +47,7 @@ jobs:
       run: npm install
     - name: Minify CSS and JS files
       env:
-        SENTRY_FRONT_AUTH_TOKEN: ${{ secrets.SENTRY_FRONT_AUTH_TOKEN }}
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_FRONT_AUTH_TOKEN }}
       run: npm run production
     - name: Remove node_modules folder
       run: rm -R node_modules
