@@ -46,6 +46,8 @@ jobs:
     - name: Install NPM dependencies
       run: npm install
     - name: Minify CSS and JS files
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_FRONT_AUTH_TOKEN }}
       run: npm run production
     - name: Remove node_modules folder
       run: rm -R node_modules
@@ -74,6 +76,15 @@ jobs:
         (echo ${{ secrets.DEPLOY_SSH_KEY }} | base64 --decode -i > ~/.ssh/deploy)
         chmod 700 ~/.ssh/deploy
         php ./vendor/bin/dep deploy ${{ inputs.verbosity }}
+
+    - name: Create Sentry release
+      uses: getsentry/action-release@v1
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+        SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      with:
+        environment: production
 
     - name: Send success status
       uses: appleboy/telegram-action@master

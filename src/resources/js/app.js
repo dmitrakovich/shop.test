@@ -1,12 +1,13 @@
-require('./bootstrap');
+import './sentry';
+import './bootstrap';
 
-// require('./components/instagramPosts');
-require('./components/slick-slider');
-require('./components/price-slider');
-require('./components/favorites');
-require('./components/gtm-datalayer');
-require('./components/inputs');
+// import('./components/instagramPosts');
+import './components/slick-slider';
+import './components/price-slider';
+import './components/favorites';
+import './components/gtm-datalayer';
+import './components/inputs';
 
-require('./scripts');
-require('./pages');
-require('./popups');
+import './scripts';
+import './pages';
+import './popups';

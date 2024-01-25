@@ -18,11 +18,11 @@ class StocksController extends Controller
      */
     public function get(Request $request): array
     {
-        $productId = (int)$request->input('productId');
-        $sizeId = (int)$request->input('sizeId');
+        $productId = $request->integer('productId');
+        $sizeId = $request->integer('sizeId');
         $sizeField = AvailableSizes::convertSizeIdToField($sizeId);
 
-        $stockIds = AvailableSizes::query()
+        $stockIds = empty($sizeField) ? [] : AvailableSizes::query()
             ->where('product_id', $productId)
             ->where($sizeField, '>', 0)
             ->pluck('stock_id')
