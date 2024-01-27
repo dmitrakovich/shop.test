@@ -7,8 +7,8 @@ on:
     types: [ retry-* ]
   workflow_dispatch:
     inputs:
-      verbosity:
-        description: 'Verbosity level'
+      deploy_params:
+        description: 'Deploy params'
         default: "-vvv"
         type: string
 
@@ -75,7 +75,7 @@ jobs:
         touch ~/.ssh/deploy
         (echo ${{ secrets.DEPLOY_SSH_KEY }} | base64 --decode -i > ~/.ssh/deploy)
         chmod 700 ~/.ssh/deploy
-        php ./vendor/bin/dep deploy ${{ inputs.verbosity }}
+        php ./vendor/bin/dep deploy release_name=${{ env.sha_short }} ${{ inputs.deploy_params }}
 
     - name: Create Sentry release
       uses: getsentry/action-release@v1
