@@ -45,7 +45,9 @@ host('production')
 // Tasks
 
 task('deploy:release:git-sha', function () {
-    run('echo ' . get('release_name') . ' > .dep/latest_release');
+    within('{{deploy_path}}', function () {
+        run('echo ' . get('release_name') . ' > .dep/latest_release');
+    });
 });
 
 task('deploy:upload', function () {
