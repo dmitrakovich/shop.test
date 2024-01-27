@@ -15,10 +15,7 @@ set('application', 'Barocco');
 // Project repository
 // set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
-// set('release_name', substr(getenv('GITHUB_SHA'), 0, 8));
-set('release_name', function () {
-    return substr(getenv('GITHUB_SHA'), 0, 8);
-});
+set('release_name', substr(getenv('GITHUB_SHA'), 0, 8));
 
 set('shared_files', ['.env']);
 set('shared_dirs', [
@@ -45,11 +42,15 @@ host('production')
     ])
     ->setIdentityFile('~/.ssh/deploy');
 
+// Tasks
+
+task('deploy:release:git-sha', function () {
+    run('echo ' . get('release_name') . ' > .dep/latest_release');
+});
+
 task('deploy:upload', function () {
     upload('', '{{release_path}}');
 });
-
-// Tasks
 
 task('deploy:writable', function () {
     within('{{release_path}}', function () {
@@ -69,6 +70,7 @@ task('deploy', [
     'deploy:setup',
     'deploy:lock',
     'deploy:release',
+    'deploy:release:git-sha',
     'deploy:upload',
     'deploy:shared',
     'deploy:writable',
