@@ -26,16 +26,16 @@ if (mix.inProduction()) {
   mix.disableNotifications().version();
 }
 
-mix.webpackConfig({
-  devtool: 'source-map',
-  plugins: [
-    sentryWebpackPlugin({
-      org: 'baroccostyle',
-      project: 'javascript',
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-      telemetry: false,
-    }),
-  ],
-});
+// mix.webpackConfig({
+//   devtool: 'source-map',
+//   plugins: [
+//     sentryWebpackPlugin({
+//       org: 'baroccostyle',
+//       project: 'javascript',
+//       authToken: process.env.SENTRY_AUTH_TOKEN,
+//       telemetry: false,
+//     }),
+//   ],
+// });
 
 mix.mergeManifest();

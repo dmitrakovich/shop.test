@@ -1,4 +1,4 @@
-import './sentry';
+// import './sentry';
 import './bootstrap';
 
 // import('./components/instagramPosts');
