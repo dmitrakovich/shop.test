@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f71aacceeea2a934f63f71783bff9621",
+    "content-hash": "5b8413096bbc489503346145243128a3",
     "packages": [
         {
             "name": "appstract/laravel-opcache",
@@ -12597,16 +12597,16 @@
         },
         {
             "name": "romanzipp/laravel-model-doc",
-            "version": "2.1.1",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/romanzipp/Laravel-Model-Doc.git",
-                "reference": "470b42c2079f64742ea28daeb622572dacf14228"
+                "url": "https://github.com/dmitrakovich/Laravel-Model-Doc.git",
+                "reference": "79359d35ad03665a3197781d3844fdcad6e5ccd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/romanzipp/Laravel-Model-Doc/zipball/470b42c2079f64742ea28daeb622572dacf14228",
-                "reference": "470b42c2079f64742ea28daeb622572dacf14228",
+                "url": "https://api.github.com/repos/dmitrakovich/Laravel-Model-Doc/zipball/79359d35ad03665a3197781d3844fdcad6e5ccd4",
+                "reference": "79359d35ad03665a3197781d3844fdcad6e5ccd4",
                 "shasum": ""
             },
             "require": {
@@ -12637,7 +12637,16 @@
                     "romanzipp\\ModelDoc\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "romanzipp\\ModelDoc\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/phpunit"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -12650,16 +12659,15 @@
             ],
             "description": "Laravel Model PHPDoc Generator",
             "support": {
-                "issues": "https://github.com/romanzipp/Laravel-Model-Doc/issues",
-                "source": "https://github.com/romanzipp/Laravel-Model-Doc/tree/2.1.1"
+                "source": "https://github.com/dmitrakovich/Laravel-Model-Doc/tree/2.2.0"
             },
             "funding": [
                 {
-                    "url": "https://github.com/romanzipp",
-                    "type": "github"
+                    "type": "github",
+                    "url": "https://github.com/romanzipp"
                 }
             ],
-            "time": "2023-08-05T08:46:05+00:00"
+            "time": "2024-01-28T10:13:52+00:00"
         },
         {
             "name": "sebastian/cli-parser",

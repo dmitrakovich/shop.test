@@ -15,7 +15,7 @@ set('application', 'Barocco');
 // Project repository
 // set('repository', 'https://github.com/dmitrakovich/shop.test.git');
 
-set('release_name', substr(getenv('GITHUB_SHA'), 0, 8));
+set('release_name', getenv('GITHUB_SHA'));
 
 set('shared_files', ['.env']);
 set('shared_dirs', [

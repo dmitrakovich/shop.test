@@ -21,7 +21,7 @@ return [
         'enabled' => true,
 
         // Use dbal class type if col type not mapped
-        'fallback_type' => false,
+        'fallback_type' => true,
     ],
 
     // Generate properties for model accessors like `getTitleAttribute`
@@ -56,5 +56,11 @@ return [
             // \Illuminate\Database\Eloquent\Model::class,
             \Illuminate\Database\Eloquent\Builder::class,
         ],
+    ],
+
+    'tag_sorting' => [
+        'see', 'author', 'property', 'property-read', 'property-write',
+        'method', 'deprecated', 'since', 'version', 'var', 'type', 'param',
+        'throws', 'mixin', 'return',
     ],
 ];

@@ -8,6 +8,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/dmitrakovich/log-viewer.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/dmitrakovich/Laravel-Model-Doc.git"
         }
     ],
     "require": {
@@ -57,7 +61,7 @@
         "nunomaduro/collision": "^7.0",
         "orangehill/iseed": "^3.0",
         "phpunit/phpunit": "^10.0",
-        "romanzipp/laravel-model-doc": "^2.1",
+        "romanzipp/laravel-model-doc": "^2.2",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
