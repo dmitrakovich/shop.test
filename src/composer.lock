@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b8413096bbc489503346145243128a3",
+    "content-hash": "0f5703e7fd4a64d59b0264faaf48e19d",
     "packages": [
         {
             "name": "appstract/laravel-opcache",
@@ -12597,16 +12597,16 @@
         },
         {
             "name": "romanzipp/laravel-model-doc",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmitrakovich/Laravel-Model-Doc.git",
-                "reference": "79359d35ad03665a3197781d3844fdcad6e5ccd4"
+                "reference": "017c1290ce1674d153ab912683a665be06f09ed5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/Laravel-Model-Doc/zipball/79359d35ad03665a3197781d3844fdcad6e5ccd4",
-                "reference": "79359d35ad03665a3197781d3844fdcad6e5ccd4",
+                "url": "https://api.github.com/repos/dmitrakovich/Laravel-Model-Doc/zipball/017c1290ce1674d153ab912683a665be06f09ed5",
+                "reference": "017c1290ce1674d153ab912683a665be06f09ed5",
                 "shasum": ""
             },
             "require": {
@@ -12659,7 +12659,7 @@
             ],
             "description": "Laravel Model PHPDoc Generator",
             "support": {
-                "source": "https://github.com/dmitrakovich/Laravel-Model-Doc/tree/2.2.0"
+                "source": "https://github.com/dmitrakovich/Laravel-Model-Doc/tree/2.3.0"
             },
             "funding": [
                 {
@@ -12667,7 +12667,7 @@
                     "url": "https://github.com/romanzipp"
                 }
             ],
-            "time": "2024-01-28T10:13:52+00:00"
+            "time": "2024-01-28T19:55:30+00:00"
         },
         {
             "name": "sebastian/cli-parser",
