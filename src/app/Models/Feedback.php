@@ -14,28 +14,35 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * Class Feedback
- *
  * @property int $id
- * @property int $user_id
- * @property int $yandex_id
+ * @property int|null $user_id
+ * @property int|null $yandex_id
  * @property string $user_name
- * @property string $user_email
- * @property string $user_phone
- * @property string $user_city
+ * @property string|null $user_email
+ * @property int|null $user_phone
+ * @property string|null $user_city
  * @property string $text
- * @property int $rating
+ * @property bool $rating
  * @property int $product_id
- * @property int $type_id
- * @property int $captcha_score
+ * @property bool $type_id
+ * @property bool $captcha_score
  * @property bool $view_only_posted
  * @property bool $publish
  * @property string $ip
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
- * @property EloquentCollection<FeedbackAnswer> $answers
- * @property ?Product $product
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Collection $photos
+ * @property \Illuminate\Support\Collection $videos
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FeedbackAnswer[] $answers
+ * @property-read \App\Models\Product|null $product
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feedback type($type)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feedback forProduct(int $productId)
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Feedback extends Model implements HasMedia
 {

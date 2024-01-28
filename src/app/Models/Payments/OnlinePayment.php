@@ -11,6 +11,45 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 
+/**
+ * @property int $id
+ * @property int $order_id Номер заказа
+ * @property string|null $currency_code Код валюты в ISO 4217
+ * @property float $currency_value Валютный курс
+ * @property \App\Enums\Payment\OnlinePaymentMethodEnum|null $method_enum_id enum ID платежной системы
+ * @property int|null $admin_user_id ID admin пользователя
+ * @property float|null $amount Сумма оплаты
+ * @property string|null $expires_at Время жизни платежа
+ * @property string|null $payment_id ID платежа в платежной системе
+ * @property string|null $payment_num Номер платежа
+ * @property string|null $payment_url Ссылка на платеж
+ * @property bool|null $card_last4 Последние 4 цифры карты
+ * @property string|null $card_type Тип карты
+ * @property string|null $email Email плательщика
+ * @property string|null $phone Телефон плательщика
+ * @property string|null $fio ФИО плательщика
+ * @property string|null $comment Комментарий
+ * @property bool|null $is_test Тестовый платеж
+ * @property string|null $payed_at Дата оплаты платежа
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $qr_code QR code платежа
+ * @property string|null $link_code Уникальный код ссылки на платеж
+ * @property string|null $link_expires_at Времся жизни ссылки на платеж
+ * @property array|null $request_data
+ * @property \App\Enums\Payment\OnlinePaymentStatusEnum|null $last_status_enum_id enum ID последнего статуса платежа
+ * @property float|null $paid_amount Оплаченная клиентом сумма
+ * @property ?string $link
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePaymentStatus[] $statuses
+ * @property-read \App\Models\Payments\OnlinePaymentStatus|null $lastStatus
+ * @property-read \App\Models\Payments\OnlinePaymentStatus|null $lastCanceledStatus
+ * @property-read \App\Models\Payments\OnlinePaymentStatus|null $lastSucceededStatus
+ * @property-read \App\Models\Orders\Order|null $order
+ * @property-read \App\Admin\Models\Administrator|null $admin
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class OnlinePayment extends Model
 {
     use HasFactory;

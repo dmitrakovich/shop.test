@@ -3,16 +3,42 @@
 namespace App\Models\Orders;
 
 /**
- * class OrderItemExtended
+ * @property int $id
+ * @property int $order_id
+ * @property int $product_id
+ * @property int $size_id
+ * @property int $count
+ * @property float $buy_price
+ * @property float $price
+ * @property float $old_price
+ * @property float $current_price
+ * @property float $discount
+ * @property bool $promocode_applied
+ * @property string $status_key
+ * @property \Illuminate\Support\Carbon $status_updated_at
+ * @property \Illuminate\Support\Carbon|null $release_date
+ * @property bool|null $pred_period
+ * @property string $product_name
+ * @property string $product_link
+ * @property string $product_photo
+ * @property ?string $installment_contract_number
+ * @property ?float $installment_monthly_fee
+ * @property ?bool $installment_send_notifications
+ * @property ?int $stock_id
+ * @property ?string $dispatch_date
+ * @property ?string $fulfilled_date
+ * @property ?string $stock_name
+ * @property string $item_status_key
  *
- * @property-read string $product_name
- * @property-read string $product_link
- * @property-read string $product_photo
- * @property-read string|null $installment_contract_number
- * @property-read float|null $installment_monthly_fee
- * @property-read bool|null $installment_send_notifications
- * @property-read int|null $stock_id
- * @property-read string|null $stock_name
+ * @property-read \App\Models\Orders\Order|null $order
+ * @property-read \App\Models\Product|null $product
+ * @property-read \App\Models\Size|null $size
+ * @property-read \App\Models\Orders\OrderItemStatus|null $status
+ * @property-read \App\Models\Payments\Installment|null $installment
+ * @property-read \App\Models\Logs\OrderItemStatusLog|null $inventoryNotification
+ * @property-read \App\Models\Logs\OrderItemStatusLog|null $statusLog
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderItemExtended extends OrderItem
 {

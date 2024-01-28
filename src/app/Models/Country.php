@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 /**
- * class Country
- *
  * @property int $id
  * @property string $name
  * @property string $code
+ * @property string $mask
+ * @property string $img
+ * @property string $prefix
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Country extends Model
 {

@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class SmsLog
- *
  * @property int $id
  * @property int|null $admin_id
  * @property int|null $user_id
@@ -20,8 +18,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $route
  * @property string $phone
  * @property string $text
- * @property string $status
- * @property \Carbon\Carbon $created_at
+ * @property string|null $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ *
+ * @property-read \App\Admin\Models\Administrator|null $admin
+ * @property-read \App\Models\User\User|null $user
+ * @property-read \App\Models\Orders\Order|null $order
+ * @property-read \App\Models\Ads\Mailing|null $mailing
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */

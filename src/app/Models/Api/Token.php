@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Token class.
- *
  * @property int $id
  * @property string $token
- * @property Carbon|null $expire_date
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $expire_date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  *
- * @method static Builder instagram() for instagram token
- * @method static void updateToken(string $newToken, ?Carbon $expireDate = null) update token in db
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Api\Token updateToken(string $newToken, ?\Carbon\Carbon $expireDate = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Api\Token instagram()
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Token extends Model
 {

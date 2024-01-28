@@ -2,20 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * WorkSchedule class
+ * @property int $id
+ * @property int|null $admin_user_id
+ * @property \Illuminate\Support\Carbon|null $date Дата
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  *
- * @property int $admin_user_id
- * @property string $date
- * @property \Illuminate\Support\Carbon created_at
- * @property \Illuminate\Support\Carbon updated_at
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class WorkSchedule extends Model
 {
-    use HasFactory;
-
     protected $guarded = ['id'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'date' => 'datetime',
+    ];
 }

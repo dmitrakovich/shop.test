@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 
 /**
- * class OrderItem
- *
  * @property int $id
  * @property int $order_id
  * @property int $product_id
@@ -26,15 +24,18 @@ use Illuminate\Database\Eloquent\Relations;
  * @property bool $promocode_applied
  * @property string $status_key
  * @property \Illuminate\Support\Carbon $status_updated_at
- * @property \Illuminate\Support\Carbon $release_date
- * @property int $pred_period
- * @property-read Order $order
- * @property-read Product $product
- * @property-read Size $size
- * @property-read OrderItemStatus $status
- * @property-read Installment $installment
- * @property-read OrderItemStatusLog $inventoryNotification
- * @property-read OrderItemStatusLog $statusLog
+ * @property \Illuminate\Support\Carbon|null $release_date
+ * @property bool|null $pred_period
+ *
+ * @property-read \App\Models\Orders\Order|null $order
+ * @property-read \App\Models\Product|null $product
+ * @property-read \App\Models\Size|null $size
+ * @property-read \App\Models\Orders\OrderItemStatus|null $status
+ * @property-read \App\Models\Payments\Installment|null $installment
+ * @property-read \App\Models\Logs\OrderItemStatusLog|null $inventoryNotification
+ * @property-read \App\Models\Logs\OrderItemStatusLog|null $statusLog
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderItem extends Model
 {
@@ -63,6 +64,7 @@ class OrderItem extends Model
      */
     protected $casts = [
         'status_updated_at' => 'datetime',
+        'release_date' => 'datetime',
     ];
 
     /**

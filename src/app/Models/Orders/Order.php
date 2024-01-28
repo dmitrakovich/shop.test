@@ -16,7 +16,6 @@ use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\User;
 use Deliveries\DeliveryMethod;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -24,50 +23,58 @@ use Illuminate\Notifications\Notifiable;
 use Payments\PaymentMethod;
 
 /**
- * class Order
- *
  * @property int $id
- * @property int $user_id
+ * @property int|null $user_id
+ * @property string|null $device_id
  * @property string $first_name
- * @property string $last_name
- * @property string $patronymic_name
- * @property int $promocode_id
- * @property string $email
+ * @property string|null $last_name
+ * @property string|null $patronymic_name
+ * @property int|null $promocode_id
+ * @property string|null $email
  * @property string $phone
- * @property string $comment
+ * @property string|null $comment
  * @property float $total_price
  * @property string $currency
  * @property float $rate
- * @property int $country_id
- * @property string $region
- * @property string $city
- * @property string $zip
- * @property string $user_addr
- * @property int $payment_id
- * @property float $payment_cost
- * @property int $delivery_id
- * @property float $delivery_cost
- * @property float $delivery_price
- * @property int $delivery_point_id
- * @property OrderMethods $order_method
- * @property string $utm_medium
- * @property string $utm_source
- * @property string $utm_campaign
- * @property string $utm_content
- * @property string $utm_term
+ * @property int|null $country_id
+ * @property string|null $region
+ * @property string|null $city
+ * @property string|null $zip
+ * @property string|null $user_addr
+ * @property int|null $payment_id
+ * @property float|null $payment_cost
+ * @property int|null $delivery_id
+ * @property float|null $delivery_cost
+ * @property float|null $delivery_price
+ * @property int|null $delivery_point_id
+ * @property \App\Enums\Order\OrderMethods $order_method
+ * @property string|null $utm_medium
+ * @property string|null $utm_source
+ * @property string|null $utm_campaign
+ * @property string|null $utm_content
+ * @property string|null $utm_term
  * @property string $status_key
- * @property \Carbon\Carbon $status_updated_at
- * @property int $admin_id
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property-read EloquentCollection|OrderItem[] $items
- * @property-read User $user
- * @property-read Device $device
- * @property-read Country|null $country
- * @property-read string $user_full_name
- * @property-read OrderStatus $status
- * @property-read Administrator $admin
- * @property-read OrderTypeEnum $order_type
+ * @property \Illuminate\Support\Carbon $status_updated_at
+ * @property int|null $admin_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $batch_id Номер партии
+ * @property float|null $weight
+ * @property \App\Enums\Order\OrderTypeEnum|null $order_type Типы заказа
+ * @property string $user_full_name
+ * @property ?string $installment_contract_date
+ *
+ * @property-read \App\Models\User\User|null $user
+ * @property-read \App\Models\Device|null $device
+ * @property-read \Payments\PaymentMethod|null $payment
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePayment[] $onlinePayments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
+ * @property-read \App\Models\Orders\Batch|null $batch
+ * @property-read \App\Models\Orders\OrderTrack|null $track
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\OrderActionLog[] $logs
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\OrderDistributionLog[] $distributionLogs
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Order extends Model
 {
@@ -126,6 +133,7 @@ class Order extends Model
     protected $casts = [
         'order_method' => OrderMethods::class,
         'order_type' => OrderTypeEnum::class,
+        'status_updated_at' => 'datetime',
     ];
 
     /**
@@ -328,10 +336,8 @@ class Order extends Model
 
     /**
      * Get the user's full name.
-     *
-     * @return string
      */
-    public function getUserFullNameAttribute()
+    public function getUserFullNameAttribute(): string
     {
         return "{$this->last_name} {$this->first_name} {$this->patronymic_name}";
     }

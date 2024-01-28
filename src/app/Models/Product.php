@@ -17,29 +17,57 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * Class Product
- *
  * @property int $id
- * @property Category $category
- * @property Brand $brand
- * @property Collection<Size> $sizes
- * @property string $sku (new title)
  * @property string $slug
+ * @property string $sku
+ * @property int $label_id
+ * @property float $buy_price
  * @property float $price
  * @property float $old_price
  * @property int $category_id
- * @property string $color_txt
- * @property string $fabric_top_txt
- * @property string $fabric_inner_txt
- * @property string $fabric_insole_txt
- * @property string $fabric_outsole_txt
- * @property string $heel_txt
- * @property string $description
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
- * @property-read Collection|AvailableSizes[] $availableSizes
- * ...
+ * @property int $season_id
+ * @property int $brand_id
+ * @property int $manufacturer_id
+ * @property int $collection_id
+ * @property string|null $color_txt
+ * @property string|null $fabric_top_txt
+ * @property string|null $fabric_inner_txt
+ * @property string|null $fabric_insole_txt
+ * @property string|null $fabric_outsole_txt
+ * @property string|null $heel_txt
+ * @property string|null $bootleg_height_txt
+ * @property string|null $description
+ * @property bool $action
+ * @property int $rating
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $product_group_id ID группы товаров
+ * @property string|null $key_features Ключевая особенность товара
+ * @property int|null $country_of_origin_id
+ *
+ * @property-read \App\Models\Category|null $category
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Size[] $sizes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Color[] $colors
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Fabric[] $fabrics
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Heel[] $heels
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Style[] $styles
+ * @property-read \App\Models\Season|null $season
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
+ * @property-read \App\Models\Brand|null $brand
+ * @property-read \App\Models\ProductAttributes\Manufacturer|null $manufacturer
+ * @property-read \App\Models\ProductAttributes\CountryOfOrigin|null $countryOfOrigin
+ * @property-read \App\Models\Url|null $url
+ * @property-read \App\Models\Favorite|null $favorite
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AvailableSizes[] $availableSizes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product sorting(string $type)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product search(?string $search = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyWithDiscount(float $amount = 0.01)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyNew(int $days = 10)
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Product extends Model implements HasMedia
 {

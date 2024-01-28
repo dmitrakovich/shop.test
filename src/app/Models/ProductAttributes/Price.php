@@ -9,9 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
- * @property int $id
- * @property string $slug
- * @property float $price
+ * @property string $id
+ * @property int $price
+ * @property string $model
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Price extends Model
 {

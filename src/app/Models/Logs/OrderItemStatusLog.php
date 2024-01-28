@@ -8,26 +8,27 @@ use App\Models\Stock;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Logs\OrderItemStatusLog
- *
  * @property int $id
  * @property int $order_item_id
  * @property int $stock_id
- * @property Carbon $created_at
- * @property Carbon|null $reserved_at
- * @property Carbon|null $canceled_at
- * @property Carbon|null $confirmed_at
- * @property Carbon|null $collected_at
- * @property Carbon|null $picked_up_at
- * @property Carbon|null $moved_at
- * @property Carbon|null $sended_at
- * @property Carbon|null $completed_at
- * @property Carbon|null $deleted_at
- * @property-read OrderItem $orderItem
- * @property-read Stock $stock
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon|null $reserved_at
+ * @property \Illuminate\Support\Carbon|null $canceled_at
+ * @property \Illuminate\Support\Carbon|null $confirmed_at
+ * @property \Illuminate\Support\Carbon|null $collected_at
+ * @property \Illuminate\Support\Carbon|null $picked_up_at
+ * @property \Illuminate\Support\Carbon|null $moved_at
+ * @property \Illuminate\Support\Carbon|null $sended_at
+ * @property \Illuminate\Support\Carbon|null $completed_at
+ * @property \Illuminate\Support\Carbon|null $returned_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ *
+ * @property-read \App\Models\Orders\OrderItem|null $orderItem
+ * @property-read \App\Models\Stock|null $stock
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderItemStatusLog extends Model
 {
@@ -54,9 +55,11 @@ class OrderItemStatusLog extends Model
         'canceled_at' => 'datetime',
         'confirmed_at' => 'datetime',
         'collected_at' => 'datetime',
+        'moved_at' => 'datetime',
         'picked_up_at' => 'datetime',
         'sended_at' => 'datetime',
         'completed_at' => 'datetime',
+        'returned_at' => 'datetime',
     ];
 
     /**

@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * class OrderAdminComment
- *
  * @property int $id
  * @property int $order_id
  * @property string $comment
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderAdminComment extends Model
 {

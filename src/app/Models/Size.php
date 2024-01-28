@@ -6,24 +6,21 @@ use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Product size class
- *
  * @property int $id
  * @property string $name
  * @property string $slug
  * @property string $value
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $model
  *
- * @mixin Builder
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Size extends Model
 {
     use AttributeFilterTrait;
 
     final const ONE_SIZE_SLUG = 'size-none';
-
-    public $timestamps = false;
 
     /**
      * Generate filter badge name

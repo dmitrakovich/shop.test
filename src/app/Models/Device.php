@@ -11,19 +11,20 @@ use Illuminate\Support\Facades\Cookie;
 use Jenssegers\Agent\Facades\Agent;
 
 /**
- * Class Product
- *
  * @property string $id
- * @property int $user_id
- * @property int $cart_id
- * @property int $yandex_id
- * @property string $google_id
+ * @property int|null $user_id
+ * @property int|null $cart_id
+ * @property int|null $yandex_id
+ * @property string|null $google_id
  * @property string $type
  * @property string $agent
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property-read User $user
- * @property-read Cart $cart
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @property-read \App\Models\User\User|null $user
+ * @property-read \App\Models\Cart|null $cart
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Device extends Model
 {

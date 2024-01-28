@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Url class
- *
  * @property string $slug
  * @property string $model_type
  * @property int $model_id
- * @property string $redirect
+ * @property string|null $redirect
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Url extends Model
 {

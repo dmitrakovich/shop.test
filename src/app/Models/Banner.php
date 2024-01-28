@@ -8,6 +8,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @property int $id
+ * @property string|null $position
+ * @property string|null $title
+ * @property string|null $url
+ * @property int $priority
+ * @property bool $active
+ * @property string|null $start_datetime
+ * @property string|null $end_datetime
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property bool|null $show_timer
+ * @property array|null $spoiler
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Banner active()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Banner bannerFields()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Banner orderByPriority()
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class Banner extends Model implements HasMedia
 {
     use HasFactory,

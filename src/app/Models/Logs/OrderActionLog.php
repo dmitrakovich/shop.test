@@ -7,15 +7,13 @@ use App\Models\Orders\Order;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\Logs\OrderActionLog
- *
  * @property int $id
  * @property int $order_id
- * @property int $admin_id
+ * @property int|null $admin_id
  * @property string $action
  * @property \Illuminate\Support\Carbon $created_at
- * @property-read Order $order
- * @property-read Administrator $admin
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderActionLog extends Model
 {

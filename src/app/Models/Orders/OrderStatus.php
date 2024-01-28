@@ -11,15 +11,17 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
 /**
- * OrderStatus class
- *
  * @property string $key
  * @property string $name_for_admin
  * @property string $name_for_user
  * @property int $sorting
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property Carbon $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Orders\OrderStatus ordered(string $direction = 'asc')
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderStatus extends Model implements Enum, Sortable
 {

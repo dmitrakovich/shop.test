@@ -12,16 +12,14 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * AvailableSizes model
- *
  * @property int $id
- * @property int $product_id
- * @property int $one_c_product_id
- * @property int $brand_id
- * @property int $category_id
- * @property int $stock_id
+ * @property int|null $product_id
+ * @property int|null $one_c_product_id
+ * @property int|null $brand_id
+ * @property int|null $category_id
+ * @property int|null $stock_id
  * @property string $sku
- * @property string $category_name
+ * @property string|null $category_name
  * @property float $buy_price
  * @property float $sell_price
  * @property int $size_none
@@ -43,7 +41,15 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $size_46
  * @property int $size_47
  * @property int $size_48
- * @property-read Stock $stock
+ *
+ * @property-read \App\Models\Product|null $product
+ * @property-read \App\Models\Category|null $category
+ * @property-read \App\Models\Brand|null $brand
+ * @property-read \App\Models\Stock|null $stock
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Size[] $sizes
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class AvailableSizes extends Model implements HasMedia
 {

@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * ShortLink provide full link by short link
- *
  * @property int $id
  * @property string $short_link
  * @property string $full_link
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class ShortLink extends Model
 {

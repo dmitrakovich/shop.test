@@ -8,15 +8,16 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
- * Class TelegramChat
- *
  * @property int $id
- * @property int $chat_id
- * @property string $name
+ * @property string $chat_id
+ * @property string|null $name
  * @property int $telegram_bot_id
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property-read TelegramBot $bot
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @property-read \App\Models\Bots\Telegram\TelegramBot|null $bot
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class TelegramChat extends TelegraphChat
 {

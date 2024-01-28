@@ -9,6 +9,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
+/**
+ * @property string $key
+ * @property string $name_for_admin
+ * @property string $name_for_user
+ * @property int $sorting
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Orders\OrderItemStatus ordered(string $direction = 'asc')
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class OrderItemStatus extends Model implements Enum, Sortable
 {
     use HasFactory;

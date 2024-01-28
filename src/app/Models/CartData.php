@@ -7,9 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property-read Product $product
+ * @property int $id
+ * @property int $cart_id
+ * @property int $product_id
+ * @property int $count
+ * @property int $size_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  *
- * @todo rename to CartItem
+ * @property-read \App\Models\Product|null $product
+ * @property-read \App\Models\Size|null $size
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class CartData extends Model
 {

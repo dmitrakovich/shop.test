@@ -8,17 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 
 /**
- * App\Models\Logs\InventoryLog
- *
  * @property int $id
  * @property int $product_id
  * @property string $action
  * @property array|null $added_sizes
  * @property array|null $removed_sizes
  * @property \Illuminate\Support\Carbon|null $created_at
- * @property-read Product $product
  *
- * @mixin \Eloquent
+ * @property-read \App\Models\Product|null $product
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class InventoryLog extends Model
 {

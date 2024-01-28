@@ -6,13 +6,15 @@ use DefStudio\Telegraph\Models\TelegraphBot;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Class TelegramBot
- *
  * @property int $id
- * @property string $name
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<TelegramChat> $chats
+ * @property string $token
+ * @property string|null $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bots\Telegram\TelegramChat[] $chats
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class TelegramBot extends TelegraphBot
 {

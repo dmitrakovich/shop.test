@@ -6,6 +6,24 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property bool|null $folder_enum_id Enum id каталога
+ * @property string|null $seo_url Seo ссылка
+ * @property string|null $destination Куда приведет seo ссылка
+ * @property string|null $tag Тег
+ * @property int|null $frequency Частота
+ * @property \Illuminate\Support\Carbon|null $frequency_updated_at Дата/время обновления поля частота
+ * @property string|null $h1 h1 заголовок
+ * @property string|null $main_text Основной текст
+ * @property string|null $meta_title Meta title
+ * @property string|null $meta_description Meta description
+ * @property string|null $meta_keywords Meta keywords
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class SeoLink extends Model
 {
     use HasFactory;

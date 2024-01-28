@@ -6,11 +6,23 @@ use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property string|null $seo
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $tag_group_id Номер группы
+ * @property string $model
+ *
+ * @property-read \App\Models\TagGroup|null $group
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class Tag extends Model
 {
     use AttributeFilterTrait;
-
-    public $timestamps = false;
 
     /**
      * Теги

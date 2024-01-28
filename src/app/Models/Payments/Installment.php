@@ -10,17 +10,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Installment class
- *
  * @property int $id
  * @property int $order_item_id
  * @property string $contract_number
  * @property float $monthly_fee
  * @property bool $send_notifications
- * @property Carbon|null $notice_sent_at
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property-read Order $order
+ * @property \Illuminate\Support\Carbon|null $notice_sent_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $installment_form_file Файл бланка рассрочки
+ * @property \Illuminate\Support\Carbon|null $contract_date Дата заключения договора рассрочки
+ *
+ * @property-read \App\Models\Orders\OrderItem|null $orderItem
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Installment extends Model
 {
@@ -41,6 +44,7 @@ class Installment extends Model
     protected $casts = [
         'send_notifications' => 'boolean',
         'notice_sent_at' => 'datetime',
+        'contract_date' => 'datetime',
     ];
 
     /**

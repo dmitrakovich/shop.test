@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * DeliveryMethod class
- *
  * @property int $id
  * @property string $name
  * @property string $instance
  * @property bool $active
  * @property int $sorting
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  *
- * @method static Builder active() Only include active delivery method
+ * @method static \Illuminate\Database\Eloquent\Builder|\Deliveries\DeliveryMethod active()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Deliveries\DeliveryMethod filterFitting(bool $availableFitting)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Deliveries\DeliveryMethod filterByCountry(string $countryCode)
  *
- * @mixin Builder
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class DeliveryMethod extends Model
 {

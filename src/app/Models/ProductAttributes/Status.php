@@ -8,15 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Product status class
- *
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $model
  *
- * @mixin Builder
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Status extends Model
 {

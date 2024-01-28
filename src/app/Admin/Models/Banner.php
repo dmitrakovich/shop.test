@@ -5,6 +5,32 @@ namespace App\Admin\Models;
 use App\Models\Banner as BannerModel;
 use Illuminate\Support\Facades\File;
 
+/**
+ * @property int $id
+ * @property string|null $position
+ * @property string|null $title
+ * @property string|null $url
+ * @property int $priority
+ * @property bool $active
+ * @property string|null $start_datetime
+ * @property string|null $end_datetime
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property bool|null $show_timer
+ * @property array|null $spoiler
+ * @property mixed $resource
+ * @property mixed $type
+ * @property mixed $videos
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Banner active()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Banner bannerFields()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Banner orderByPriority()
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class Banner extends BannerModel
 {
     protected $appends = [

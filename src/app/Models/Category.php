@@ -15,20 +15,34 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
 /**
- * Product category class
- *
  * @property int $id
  * @property string $slug
  * @property string $path
  * @property string $title
- * @property-read string $name
- * @property string $description
+ * @property string|null $one_c_name
+ * @property string|null $description
+ * @property int $_lft
+ * @property int $_rgt
+ * @property int|null $parent_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int $order Порядок сортировки
+ * @property string $model
+ * @property mixed $name
+ *
+ * @property-read \App\Models\Category|null $parentCategory
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $childrenCategories
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category d()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category ordered(string $direction = 'asc')
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Category extends Model implements Sortable
 {
     use AttributeFilterTrait, NodeTrait, SoftDeletes, SortableTrait;
-
-    public $timestamps = false;
 
     public $sortable = [
         'order_column_name' => 'order',

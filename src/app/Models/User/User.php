@@ -9,7 +9,6 @@ use App\Models\Logs\SmsLog;
 use App\Models\Orders\Order;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,18 +21,30 @@ use Laravel\Sanctum\HasApiTokens;
 use libphonenumber\PhoneNumberUtil;
 
 /**
- * Class User
- *
  * @property int $id
+ * @property int|null $cart_token
  * @property int $group_id
+ * @property string|null $email
+ * @property string|null $last_name
+ * @property string|null $patronymic_name
+ * @property string|null $phone
+ * @property \Illuminate\Support\Carbon|null $birth_date
+ * @property \Illuminate\Support\Carbon|null $phone_verified_at
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $firstName
  * @property string $first_name
- * @property string $last_name
- * @property string $patronymic_name
- * @property string $phone
- * @property \Carbon\Carbon $phone_verified_at
- * @property-read Cart $cart
- * @property-read Group $group
- * @property-read Collection<Order> $orders
+ *
+ * @property-read \App\Models\User\Group|null $group
+ * @property-read \App\Models\Cart|null $cart
+ * @property-read \App\Models\User\UserPassport|null $passport
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feedback[] $reviews
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -70,6 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
+        'birth_date' => 'datetime',
         'phone_verified_at' => 'datetime',
         'email_verified_at' => 'datetime',
     ];
@@ -200,7 +212,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function firstName(): Attribute
     {
         return Attribute::make(
-            get: fn ($firstName) => Str::ucfirst($firstName)
+            get: fn ($firstName): string => Str::ucfirst($firstName)
         );
     }
 

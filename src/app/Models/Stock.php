@@ -16,12 +16,36 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property int $id
- * @property Carbon $offline_notifications_pause_until
+ * @property int|null $one_c_id
+ * @property int $city_id
+ * @property int|null $private_chat_id
+ * @property int|null $group_chat_id
+ * @property \Illuminate\Support\Carbon|null $offline_notifications_pause_until
+ * @property \App\Enums\StockTypeEnum $type
  * @property string $name
  * @property string $internal_name
- * @property string $address
- * @property-read TelegramChat $privateChat
- * @property-read TelegramChat $groupChat
+ * @property string|null $description
+ * @property string|null $address
+ * @property string|null $worktime Рабочее время
+ * @property string|null $phone
+ * @property bool $has_pickup
+ * @property float|null $geo_latitude
+ * @property float|null $geo_longitude
+ * @property bool $check_availability
+ * @property int $sorting
+ * @property int $site_sorting Сортировка на сайте
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property mixed $photos
+ *
+ * @property-read \App\Models\City|null $city
+ * @property-read \App\Models\Bots\Telegram\TelegramChat|null $privateChat
+ * @property-read \App\Models\Bots\Telegram\TelegramChat|null $groupChat
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Stock ordered(string $direction = 'asc')
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Stock extends Model implements HasMedia, Sortable
 {

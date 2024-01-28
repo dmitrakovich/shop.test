@@ -13,10 +13,9 @@ use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 use Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson;
 
 /**
- * @mixin \Illuminate\Database\Eloquent\Builder
- *
  * @property int $id
  * @property string|null $title
+ * @property array|null $categories
  * @property bool $is_imidj
  * @property bool $only_sale
  * @property bool $only_new
@@ -28,10 +27,13 @@ use Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson;
  * @property bool|null $enum_type_id
  * @property array|null $additional_settings Дополнительные настройки
  * @property mixed $categories_list
- * @property \App\Models\Category|null $categories
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categoriesList
+ *
+ * @property-read \App\Models\Category|null $categories
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categoriesList
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ads\ProductCarousel ordered(string $direction = 'asc')
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class ProductCarousel extends Model implements Sortable
 {

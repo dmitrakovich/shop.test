@@ -11,7 +11,12 @@ use Illuminate\Support\Str;
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property string $seo
+ * @property string|null $seo
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $model
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class CountryOfOrigin extends Model
 {
