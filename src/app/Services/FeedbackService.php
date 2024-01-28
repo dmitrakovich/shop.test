@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Events\ReviewPosted;
 use App\Models\Feedback;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\Paginator;
 
 class FeedbackService
 {
@@ -34,16 +34,16 @@ class FeedbackService
     /**
      * Get feedbacks by type
      *
-     * @return LengthAwarePaginator<Feedback>
+     * @return Paginator|Feedback[]
      */
-    public function getByType(string $type): LengthAwarePaginator
+    public function getByType(string $type): Paginator
     {
         return $this->feedback->newQuery()
             ->with(['answers', 'media', 'product'])
             ->where('publish', true)
             ->latest()
             ->type($type)
-            ->paginate(50);
+            ->simplePaginate(50);
     }
 
     /**

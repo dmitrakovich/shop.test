@@ -59,7 +59,7 @@
     @endforelse
 </div>
 
-@if ($feedbacks instanceof \Illuminate\Pagination\LengthAwarePaginator)
+@if ($feedbacks instanceof \Illuminate\Pagination\Paginator)
     <div class="row justify-content-center justify-content-md-end mb-5">
         <div class="col-md-auto">
             {{ $feedbacks->links() }}
