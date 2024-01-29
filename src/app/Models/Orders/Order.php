@@ -63,7 +63,6 @@ use Payments\PaymentMethod;
  * @property \App\Enums\Order\OrderTypeEnum|null $order_type Типы заказа
  * @property string $user_full_name
  * @property ?string $installment_contract_date
- *
  * @property-read \App\Models\User\User|null $user
  * @property-read \App\Models\Device|null $device
  * @property-read \Payments\PaymentMethod|null $payment

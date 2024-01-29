@@ -40,7 +40,6 @@ use Illuminate\Database\Eloquent\Relations;
  * @property \App\Enums\Payment\OnlinePaymentStatusEnum|null $last_status_enum_id enum ID последнего статуса платежа
  * @property float|null $paid_amount Оплаченная клиентом сумма
  * @property ?string $link
- *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePaymentStatus[] $statuses
  * @property-read \App\Models\Payments\OnlinePaymentStatus|null $lastStatus
  * @property-read \App\Models\Payments\OnlinePaymentStatus|null $lastCanceledStatus

@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $registration_address Адрес прописки
- *
  * @property-read \App\Models\User\User|null $user
  *
  * @mixin \Illuminate\Database\Eloquent\Builder

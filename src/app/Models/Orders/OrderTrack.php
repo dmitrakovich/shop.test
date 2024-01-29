@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations;
  * @property \App\Enums\DeliveryTypeEnum $delivery_type_enum Тип доставки
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- *
  * @property-read \App\Models\Orders\Order|null $order
  *
  * @mixin \Illuminate\Database\Eloquent\Builder

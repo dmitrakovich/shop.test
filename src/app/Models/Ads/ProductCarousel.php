@@ -27,7 +27,6 @@ use Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson;
  * @property bool|null $enum_type_id
  * @property array|null $additional_settings Дополнительные настройки
  * @property mixed $categories_list
- *
  * @property-read \App\Models\Category|null $categories
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categoriesList
  *

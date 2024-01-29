@@ -37,7 +37,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int|null $country_of_origin_id
  * @property string $path
  * @property mixed $photos
- *
  * @property-read \App\Models\Category|null $category
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Size[] $sizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Color[] $colors

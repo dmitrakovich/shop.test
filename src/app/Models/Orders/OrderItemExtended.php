@@ -29,7 +29,6 @@ namespace App\Models\Orders;
  * @property ?string $fulfilled_date
  * @property ?string $stock_name
  * @property string $item_status_key
- *
  * @property-read \App\Models\Orders\Order|null $order
  * @property-read \App\Models\Product|null $product
  * @property-read \App\Models\Size|null $size

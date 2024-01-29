@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $completed_at
  * @property \Illuminate\Support\Carbon|null $returned_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- *
  * @property-read \App\Models\Orders\OrderItem|null $orderItem
  * @property-read \App\Models\Stock|null $stock
  *
