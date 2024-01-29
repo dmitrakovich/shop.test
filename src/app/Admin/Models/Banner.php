@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\File;
  * @property mixed $resource
  * @property mixed $type
  * @property mixed $videos
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Banner active()

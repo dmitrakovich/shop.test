@@ -22,6 +22,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property bool|null $show_timer
  * @property array|null $spoiler
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Banner active()

@@ -32,6 +32,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media as MediaModel;
  * @property mixed $preview_url
  * @property mixed $originalUrl
  * @property mixed $original_url
+ *
  * @property-read \Illuminate\Database\Eloquent\Model|null $model
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Media ordered()

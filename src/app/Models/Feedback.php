@@ -33,6 +33,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Collection $photos
  * @property \Illuminate\Support\Collection $videos
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FeedbackAnswer[] $answers
  * @property-read \App\Models\Product|null $product
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media

@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property \Illuminate\Support\Carbon $status_updated_at
  * @property \Illuminate\Support\Carbon|null $release_date
  * @property bool|null $pred_period
+ *
  * @property-read \App\Models\Orders\Order|null $order
  * @property-read \App\Models\Product|null $product
  * @property-read \App\Models\Size|null $size

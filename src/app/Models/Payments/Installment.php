@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $installment_form_file Файл бланка рассрочки
  * @property \Illuminate\Support\Carbon|null $contract_date Дата заключения договора рассрочки
+ *
  * @property-read \App\Models\Orders\OrderItem|null $orderItem
  *
  * @mixin \Illuminate\Database\Eloquent\Builder

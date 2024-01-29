@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
  * @property array|null $added_sizes
  * @property array|null $removed_sizes
  * @property \Illuminate\Support\Carbon|null $created_at
+ *
  * @property-read \App\Models\Product|null $product
  *
  * @mixin \Illuminate\Database\Eloquent\Builder

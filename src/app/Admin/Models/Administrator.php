@@ -18,6 +18,7 @@ use Encore\Admin\Auth\Database\Administrator as AdministratorBase;
  * @property \Illuminate\Support\Carbon|null $trust_date Дата доверенности
  * @property string $short_name
  * @property mixed $avatar
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\Encore\Admin\Auth\Database\Role[] $roles
  * @property-read \Illuminate\Database\Eloquent\Collection|\Encore\Admin\Auth\Database\Permission[] $permissions
  *

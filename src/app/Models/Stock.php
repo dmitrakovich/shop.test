@@ -37,6 +37,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property mixed $photos
+ *
  * @property-read \App\Models\City|null $city
  * @property-read \App\Models\Bots\Telegram\TelegramChat|null $privateChat
  * @property-read \App\Models\Bots\Telegram\TelegramChat|null $groupChat

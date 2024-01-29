@@ -45,6 +45,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int|null $product_group_id ID группы товаров
  * @property string|null $key_features Ключевая особенность товара
  * @property int|null $country_of_origin_id
+ *
  * @property-read \App\Models\Category|null $category
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Size[] $sizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Color[] $colors

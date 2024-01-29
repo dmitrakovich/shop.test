@@ -30,6 +30,7 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property int $order Порядок сортировки
  * @property string $model
  * @property mixed $name
+ *
  * @property-read \App\Models\Category|null $parentCategory
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $childrenCategories

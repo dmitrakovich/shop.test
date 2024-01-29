@@ -34,6 +34,7 @@ use App\Models\AvailableSizes;
  * @property int $size_46
  * @property int $size_47
  * @property int $size_48
+ *
  * @property-read \App\Models\Product|null $product
  * @property-read \App\Models\Category|null $category
  * @property-read \App\Models\Brand|null $brand

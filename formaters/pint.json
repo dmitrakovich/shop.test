@@ -10,6 +10,12 @@
         "not_operator_with_successor_space": false,
         "nullable_type_declaration_for_default_null_value": {
             "use_nullable_type_declaration": true
+        },
+        "phpdoc_separation": {
+            "groups": [
+                ["property-read"]
+            ],
+            "skip_unlisted_annotations": true
         }
     }
 }

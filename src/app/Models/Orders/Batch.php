@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property string|null $dispatch_date Дата отправки
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
  *
  * @mixin \Illuminate\Database\Eloquent\Builder

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $tag_group_id Номер группы
  * @property string $model
+ *
  * @property-read \App\Models\TagGroup|null $group
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
