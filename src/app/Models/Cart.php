@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Cookie;
  * @property bool $cancel_promocode
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CartData[] $items
  *
  * @mixin \Illuminate\Database\Eloquent\Builder

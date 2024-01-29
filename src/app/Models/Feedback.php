@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,7 +33,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Collection $photos
  * @property \Illuminate\Support\Collection $videos
- *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FeedbackAnswer[] $answers
  * @property-read \App\Models\Product|null $product
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media

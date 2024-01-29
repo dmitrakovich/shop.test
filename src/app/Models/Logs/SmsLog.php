@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $text
  * @property string|null $status
  * @property \Illuminate\Support\Carbon|null $created_at
- *
  * @property-read \App\Admin\Models\Administrator|null $admin
  * @property-read \App\Models\User\User|null $user
  * @property-read \App\Models\Orders\Order|null $order

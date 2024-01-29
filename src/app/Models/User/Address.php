@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\Relations;
  * @property string|null $room Квартира
  * @property bool $approve Подтверждение о проверке
  * @property string|null $district Район
- *
  * @property-read \App\Models\Country|null $country
  * @property-read \App\Models\User\User|null $user
  *

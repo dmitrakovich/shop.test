@@ -36,7 +36,6 @@ use libphonenumber\PhoneNumberUtil;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $firstName
  * @property string $first_name
- *
  * @property-read \App\Models\User\Group|null $group
  * @property-read \App\Models\Cart|null $cart
  * @property-read \App\Models\User\UserPassport|null $passport

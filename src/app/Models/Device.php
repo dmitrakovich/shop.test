@@ -20,7 +20,6 @@ use Jenssegers\Agent\Facades\Agent;
  * @property string $agent
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- *
  * @property-read \App\Models\User\User|null $user
  * @property-read \App\Models\Cart|null $cart
  *
