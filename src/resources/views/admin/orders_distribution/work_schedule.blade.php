@@ -28,10 +28,15 @@
                             $fullDate = $date . '-' . $i;
                         @endphp
                         <td>
-                            <input type="hidden" name="schedule[{{ $fullDate }}][{{ $scheduleItem['admin_user_id'] }}]"
-                                value="false">
-                            <input type="checkbox" name="schedule[{{ $fullDate }}][{{ $scheduleItem['admin_user_id'] }}]"
-                                @if ($workSchedules->where('admin_user_id', $scheduleItem['admin_user_id'])->where('date', $fullDate)->first()) checked @endif value="true">
+                            <input type="hidden"
+                                name="schedule[{{ $fullDate }}][{{ $scheduleItem['admin_user_id'] }}]" value="false">
+                            <input type="checkbox"
+                                name="schedule[{{ $fullDate }}][{{ $scheduleItem['admin_user_id'] }}]"
+                                @if (
+                                    $workSchedules->filter(function ($item) use ($scheduleItem, $fullDate) {
+                                            return $item['admin_user_id'] == $scheduleItem['admin_user_id'] &&
+                                                date('Y-m-d', strtotime($item['date'])) == $fullDate;
+                                        })->first()) checked @endif value="true">
                         </td>
                     @endfor
                 </tr>
