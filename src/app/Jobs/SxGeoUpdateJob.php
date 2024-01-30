@@ -112,6 +112,7 @@ class SxGeoUpdateJob extends AbstractJob
      */
     protected function getDownloadUrl(): string
     {
-        return sprintf(self::URL, config('services.sxgeo.token'));
+        // return sprintf(self::URL, config('services.sxgeo.token')); // premium
+        return self::URL;
     }
 }

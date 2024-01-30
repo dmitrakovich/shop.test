@@ -22,12 +22,16 @@ use App\Models\Style;
 use App\Models\TagGroup;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Displayers\ContextMenuActions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 
+/**
+ * @mixin Product
+ */
 class ProductController extends AbstractAdminController
 {
     /**
