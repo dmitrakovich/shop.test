@@ -50,7 +50,6 @@ class OrderItemStatusLog extends Model
      * @var array
      */
     protected $casts = [
-        'sended_at' => 'datetime',
         'reserved_at' => 'datetime',
         'canceled_at' => 'datetime',
         'confirmed_at' => 'datetime',

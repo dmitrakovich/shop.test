@@ -3,17 +3,20 @@
 namespace App\Admin\Controllers\Bookkeeping;
 
 use App\Admin\Actions\Order\BelpostImportCODAction;
+use App\Admin\Controllers\AbstractAdminController;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
 use App\Services\AdministratorService;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 
-class PaymentController extends AdminController
+/**
+ * @mixin OnlinePayment
+ */
+class PaymentController extends AbstractAdminController
 {
     protected $title = 'Платежи';
 

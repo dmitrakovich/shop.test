@@ -2,8 +2,8 @@
 
 namespace App\Services\Seo;
 
+use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\Product;
-use SeoFacade;
 
 class ProductSeoService
 {

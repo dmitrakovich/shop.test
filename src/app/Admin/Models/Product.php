@@ -107,10 +107,7 @@ class Product extends ProductModel
         );
     }
 
-    /**
-     * @return void
-     */
-    public function setPhotos(array $photos)
+    public function setPhotos(array $photos): void
     {
         $currentPhotos = [];
         $mediaItems = $this->getMedia();
@@ -131,8 +128,9 @@ class Product extends ProductModel
             foreach ($photos as $value) {
                 $ordering[] = $mediaItems[$mediaPointer[$value]]->id;
             }
+            Media::setNewOrder($ordering);
 
-            return Media::setNewOrder($ordering);
+            return;
         }
 
         foreach ($newPhotos as $photo) {

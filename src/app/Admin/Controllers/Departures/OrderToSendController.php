@@ -6,16 +6,16 @@ use App\Admin\Actions\Order\CreateBatchAction;
 use App\Admin\Actions\Order\InstallmentFormRowAction;
 use App\Admin\Actions\Order\LabelAction;
 use App\Admin\Actions\Order\StatusBulkChange;
+use App\Admin\Controllers\AbstractAdminController;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderStatus;
 use App\Services\AdministratorService;
 use Deliveries\DeliveryMethod;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 
-class OrderToSendController extends AdminController
+class OrderToSendController extends AbstractAdminController
 {
     /**
      * Title for current resource.

@@ -67,7 +67,7 @@ class Banner extends BannerModel
      */
     public function setResourceAttribute($resource)
     {
-        $this->clearMediaCollection()
+        return $this->clearMediaCollection()
             ->addMedia(public_path("uploads/$resource"))
             ->toMediaCollection();
     }

@@ -4,6 +4,9 @@ namespace App\Admin\Controllers\Analytics;
 
 use App\Enums\Order\UtmEnum;
 
+/**
+ * @property-read string $instance_name
+ */
 class OrderSourceDetailController extends OrderSourceController
 {
     /**

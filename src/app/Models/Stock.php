@@ -111,10 +111,9 @@ class Stock extends Model implements HasMedia, Sortable
     /**
      * Photos mutator
      *
-     * @param  string  $resource
-     * @return \Spatie\MediaLibrary\MediaCollections\Models\Media
+     * @param  array  $photos
      */
-    public function setPhotosAttribute($photos)
+    public function setPhotosAttribute(array $photos)
     {
         $currentPhotos = [];
         $mediaPointer = [];

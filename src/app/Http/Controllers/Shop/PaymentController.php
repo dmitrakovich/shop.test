@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Enums\Payment\OnlinePaymentMethodEnum;
+use App\Libraries\Seo\Facades\SeoFacade;
 use App\Services\Payment\PaymentService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use SeoFacade;
 
 class PaymentController extends BaseController
 {

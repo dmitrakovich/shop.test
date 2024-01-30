@@ -83,8 +83,9 @@ class SxGeoUpdateJob extends AbstractJob
 
         if ($response->status() == 304) {
             @unlink($zipFile);
+            $this->log('Архив не обновился, с момента предыдущего скачивания');
 
-            return $this->log('Архив не обновился, с момента предыдущего скачивания');
+            return;
         }
 
         $this->lastModified = $response->header('Last-Modified');
@@ -96,7 +97,9 @@ class SxGeoUpdateJob extends AbstractJob
             $zip->close();
             unlink($zipFile);
         } else {
-            return $this->error('Ошибка при распаковке архива');
+            $this->error('Ошибка при распаковке архива');
+
+            return;
         }
 
         file_put_contents($this->lastUpdFile, $this->lastModified);

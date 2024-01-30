@@ -63,7 +63,6 @@ class PaymentService
      * Create OnlinePayment after order.
      *
      * @param  array  $data
-     * @return OnlinePayment
      */
     public function createAfterOrder(Order $order)
     {

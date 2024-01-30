@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\InfoPage;
 use App\Services\GoogleTagManagerService;
 use App\Services\StockService;
 use Illuminate\Contracts\View\View;
-use SeoFacade;
 
 class InfoPageController extends Controller
 {

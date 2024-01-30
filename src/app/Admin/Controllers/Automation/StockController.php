@@ -21,6 +21,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @mixin AvailableSizesFull
+ */
 class StockController extends AbstractAdminController
 {
     /**
