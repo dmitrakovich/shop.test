@@ -17,6 +17,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
+        working-directory: ./src
         run: composer install --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Execute PHPStan
