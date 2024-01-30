@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f5703e7fd4a64d59b0264faaf48e19d",
+    "content-hash": "cc763046efa2f5a4cd7306854189913f",
     "packages": [
         {
             "name": "appstract/laravel-opcache",
@@ -12174,6 +12174,68 @@
             "time": "2021-09-22T16:57:06+00:00"
         },
         {
+            "name": "phpstan/phpstan",
+            "version": "1.10.57",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "1627b1d03446904aaa77593f370c5201d2ecc34e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1627b1d03446904aaa77593f370c5201d2ecc34e",
+                "reference": "1627b1d03446904aaa77593f370c5201d2ecc34e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-01-24T11:51:34+00:00"
+        },
+        {
             "name": "phpunit/php-code-coverage",
             "version": "10.1.7",
             "source": {
@@ -12597,16 +12659,16 @@
         },
         {
             "name": "romanzipp/laravel-model-doc",
-            "version": "2.3.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmitrakovich/Laravel-Model-Doc.git",
-                "reference": "017c1290ce1674d153ab912683a665be06f09ed5"
+                "reference": "1c1cb7400c807c95523e975fe6b27349ba2ac392"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/Laravel-Model-Doc/zipball/017c1290ce1674d153ab912683a665be06f09ed5",
-                "reference": "017c1290ce1674d153ab912683a665be06f09ed5",
+                "url": "https://api.github.com/repos/dmitrakovich/Laravel-Model-Doc/zipball/1c1cb7400c807c95523e975fe6b27349ba2ac392",
+                "reference": "1c1cb7400c807c95523e975fe6b27349ba2ac392",
                 "shasum": ""
             },
             "require": {
@@ -12614,7 +12676,7 @@
                 "illuminate/console": "^8.0|^9.0|^10.0",
                 "illuminate/database": "^8.0|^9.0|^10.0",
                 "illuminate/support": "^8.0|^9.0|^10.0",
-                "php": "^8.0",
+                "php": "^8.1",
                 "phpowermove/docblock": "^4.0"
             },
             "require-dev": {
@@ -12659,7 +12721,7 @@
             ],
             "description": "Laravel Model PHPDoc Generator",
             "support": {
-                "source": "https://github.com/dmitrakovich/Laravel-Model-Doc/tree/2.3.0"
+                "source": "https://github.com/dmitrakovich/Laravel-Model-Doc/tree/3.0.1"
             },
             "funding": [
                 {
@@ -12667,7 +12729,7 @@
                     "url": "https://github.com/romanzipp"
                 }
             ],
-            "time": "2024-01-28T19:55:30+00:00"
+            "time": "2024-01-30T18:12:30+00:00"
         },
         {
             "name": "sebastian/cli-parser",

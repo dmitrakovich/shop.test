@@ -1,0 +1,8 @@
+parameters:
+  phpVersion: 80100
+  level: 0
+  paths:
+    - src/app
+    - src/tests
+  excludePaths:
+    - src/app/Admin/routes.php

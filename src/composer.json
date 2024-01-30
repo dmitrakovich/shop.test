@@ -60,8 +60,9 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "orangehill/iseed": "^3.0",
+        "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.0",
-        "romanzipp/laravel-model-doc": "^2.3",
+        "romanzipp/laravel-model-doc": "^3.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
