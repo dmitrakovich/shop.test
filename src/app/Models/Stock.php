@@ -110,8 +110,6 @@ class Stock extends Model implements HasMedia, Sortable
 
     /**
      * Photos mutator
-     *
-     * @param  array  $photos
      */
     public function setPhotosAttribute(array $photos)
     {
