@@ -3,12 +3,14 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Models\Media;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class MediaController extends AdminController
+/**
+ * @mixin Media
+ */
+class MediaController extends AbstractAdminController
 {
     /**
      * Title for current resource.
@@ -64,17 +66,6 @@ class MediaController extends AdminController
         $grid->disableCreateButton();
 
         return $grid;
-    }
-
-    /**
-     * Make a show builder.
-     *
-     * @param  mixed  $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        return back();
     }
 
     /**

@@ -18,6 +18,7 @@ use Encore\Admin\Show;
 
 /**
  * @mixin User
+ * @mixin OnlinePayment
  */
 class UserController extends AdminController
 {

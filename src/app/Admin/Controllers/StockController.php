@@ -12,6 +12,9 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
+/**
+ * @mixin Stock
+ */
 class StockController extends AdminController
 {
     /**

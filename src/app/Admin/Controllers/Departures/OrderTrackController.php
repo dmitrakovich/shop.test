@@ -9,6 +9,9 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 
+/**
+ * @mixin OrderTrack
+ */
 class OrderTrackController extends AdminController
 {
     /**
@@ -39,7 +42,7 @@ class OrderTrackController extends AdminController
         $grid->column('track_number', 'Трек номер');
         $grid->column('track_link', 'Ссылка для отслеживания трек номера');
         $grid->column('order_id', 'Номер заказа')->editable();
-        $grid->column('delivery_type_enum', 'Тип отправки')->display(fn ($delivery_type_enum) => ($this->delivery_type_enum->name()));
+        $grid->column('delivery_type_enum', 'Тип отправки')->display(fn () => ($this->delivery_type_enum->name()));
         $grid->column('created_at', 'Дата создания')->display(fn ($date) => ($date ? date('d.m.Y H:i:s', strtotime($date)) : null))->sortable();
 
         $grid->tools(function ($tools) {

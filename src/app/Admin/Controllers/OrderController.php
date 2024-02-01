@@ -33,7 +33,6 @@ use App\Models\User\User;
 use App\Services\AdministratorService;
 use App\Services\Order\OrderItemInventoryService;
 use Deliveries\DeliveryMethod;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -46,7 +45,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use Payments\PaymentMethod;
 
-class OrderController extends AdminController
+/**
+ * @mixin Order
+ */
+class OrderController extends AbstractAdminController
 {
     /**
      * Title for current resource.

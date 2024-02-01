@@ -1,24 +1,9 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Controllers\\\\Departures\\\\OrderTrackController\\:\\:\\$delivery_type_enum\\.$#"
-			count: 1
-			path: src/app/Admin/Controllers/Departures/OrderTrackController.php
-
-		-
 			message: "#^Method App\\\\Admin\\\\Controllers\\\\Forms\\\\ShortLink\\\\GenerateLink\\:\\:data\\(\\) should return array but return statement is missing\\.$#"
 			count: 1
 			path: src/app/Admin/Controllers/Forms/ShortLink/GenerateLink.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Controllers\\\\MediaController\\:\\:\\$input\\.$#"
-			count: 1
-			path: src/app/Admin/Controllers/MediaController.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Controllers\\\\MediaController\\:\\:\\$model\\.$#"
-			count: 2
-			path: src/app/Admin/Controllers/MediaController.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Admin\\\\Controllers\\\\OrderController\\:\\:\\$adminComments\\.$#"
@@ -44,21 +29,6 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Admin\\\\Controllers\\\\OrdersDistribution\\\\Form\\\\LogGrid\\:\\:\\$created_at\\.$#"
 			count: 1
 			path: src/app/Admin/Controllers/OrdersDistribution/Form/LogGrid.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Controllers\\\\StockController\\:\\:\\$type\\.$#"
-			count: 1
-			path: src/app/Admin/Controllers/StockController.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Controllers\\\\Users\\\\UserController\\:\\:\\$last_status_enum_id\\.$#"
-			count: 1
-			path: src/app/Admin/Controllers/Users/UserController.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Controllers\\\\Users\\\\UserController\\:\\:\\$method_enum_id\\.$#"
-			count: 1
-			path: src/app/Admin/Controllers/Users/UserController.php
 
 		-
 			message: "#^Class App\\\\Models\\\\Data\\\\OrderData has an uninitialized readonly property \\$user\\. Assign it in the constructor\\.$#"
