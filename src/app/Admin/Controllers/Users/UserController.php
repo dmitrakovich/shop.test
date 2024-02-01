@@ -106,7 +106,7 @@ class UserController extends AdminController
             $form->text('patronymic_name', 'Отчество');
             $form->email('email', 'Email');
             $form->phone('phone', 'Телефон')->required();
-            $form->date('birth_date', 'Дата рождения')->default(date('Y-m-d'));
+            $form->date('birth_date', 'Дата рождения')->default(now());
             $form->select('group_id', 'Группа')->options(Group::query()->pluck('name', 'id'))->required();
 
             $form->hasMany('addresses', 'Адреса', function (Form\NestedForm $form) {
