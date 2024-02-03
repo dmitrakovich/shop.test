@@ -65,7 +65,6 @@ class UserController extends AbstractAdminController
         return $grid;
     }
 
-
     /**
      * Edit interface.
      *
