@@ -4,23 +4,22 @@ namespace App\Admin\Controllers\Users;
 
 use App\Admin\Actions\Order\CancelPayment;
 use App\Admin\Actions\Order\CapturePayment;
+use App\Admin\Controllers\AbstractAdminController;
 use App\Models\Country;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\Group;
 use App\Models\User\User;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\ContextMenuActions;
 use Encore\Admin\Grid\Filter;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Show;
 
 /**
  * @mixin User
  * @mixin OnlinePayment
  */
-class UserController extends AdminController
+class UserController extends AbstractAdminController
 {
     /**
      * Title for current resource.
@@ -47,7 +46,7 @@ class UserController extends AdminController
         $grid->column('group.name', 'Группа');
         $grid->column('reviews_count', 'Кол-во отзывов');
         $grid->column('addresses', 'Адрес')->display(fn ($addresses) => $addresses[0]['address'] ?? null);
-        $grid->column('created_at', 'Дата регистрации');
+        $grid->column('created_at', 'Дата регистрации')->display(fn ($datetime) => self::formatDateTime($datetime));
 
         $grid->model()->withCount('reviews')->orderBy('id', 'desc');
         $grid->paginate(50);
@@ -66,16 +65,6 @@ class UserController extends AdminController
         return $grid;
     }
 
-    /**
-     * Make a show builder.
-     *
-     * @param  mixed  $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        return back();
-    }
 
     /**
      * Edit interface.

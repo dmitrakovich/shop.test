@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Show;
+use Illuminate\Support\Carbon;
 
 abstract class AbstractAdminController extends AdminController
 {
@@ -14,6 +15,11 @@ abstract class AbstractAdminController extends AdminController
      * @var mixed
      */
     protected $input;
+
+    public function __construct()
+    {
+        date_default_timezone_set('UTC');
+    }
 
     /**
      * Make a show builder.
@@ -34,5 +40,29 @@ abstract class AbstractAdminController extends AdminController
     protected function form()
     {
         return back();
+    }
+
+    /**
+     * Format the given date string as 'd.m.Y'.
+     */
+    protected static function formatDate(?string $date): ?string
+    {
+        if (!$date) {
+            return null;
+        }
+
+        return Carbon::parse($date)->format('d.m.Y');
+    }
+
+    /**
+     * Format the given datetime string as 'd.m.Y H:i:s'.
+     */
+    protected static function formatDateTime(?string $datetime): ?string
+    {
+        if (!$datetime) {
+            return null;
+        }
+
+        return Carbon::parse($datetime)->format('d.m.Y H:i:s');
     }
 }

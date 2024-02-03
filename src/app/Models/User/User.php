@@ -81,7 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
-        'birth_date' => 'date:Y-m-d',
+        'birth_date' => 'date',
         'phone_verified_at' => 'datetime',
         'email_verified_at' => 'datetime',
     ];
@@ -238,16 +238,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function mailings(): HasMany
     {
         return $this->hasMany(SmsLog::class);
-    }
-
-    /**
-     * Farmat date in admin panel
-     *
-     * @return string
-     */
-    protected function serializeDate(\DateTimeInterface $date)
-    {
-        return $date->format('d.m.Y H:i:s');
     }
 
     /**

@@ -31,7 +31,7 @@ class UserPassport extends Model
      * @var array
      */
     protected $casts = [
-        'issued_date' => 'date:Y-m-d',
+        'issued_date' => 'date',
     ];
 
     /**
