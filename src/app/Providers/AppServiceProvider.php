@@ -31,8 +31,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ConversionsApiService::class, function () {
             $pixelId = config('services.facebook.pixel_id');
             $api = Api::init(null, null, config('services.facebook.token'));
-            $logger = new FacebookApiLogger(fopen(config('services.facebook.log_file'), 'a'));
-            $api->setLogger($logger->setJsonPrettyPrint(true));
+            // $logger = new FacebookApiLogger(fopen(config('services.facebook.log_file'), 'a'));
+            // $api->setLogger($logger->setJsonPrettyPrint(true));
 
             return new ConversionsApiService($api, $pixelId);
         });

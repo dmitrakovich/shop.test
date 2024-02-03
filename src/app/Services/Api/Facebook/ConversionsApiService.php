@@ -15,16 +15,15 @@ class ConversionsApiService
     {
     }
 
-    public function sendEvent(Event $event): EventResponse // PromiseInterface
+    public function sendEvent(Event $event): PromiseInterface
     {
         return $this->sendEvents([$event]);
     }
 
-    public function sendEvents(array $events): EventResponse // PromiseInterface
+    public function sendEvents(array $events): PromiseInterface // EventResponse
     {
-        return (new EventRequest($this->pixelId)) // EventRequestAsync
+        return (new EventRequestAsync($this->pixelId)) // EventRequest
             ->setEvents($events)
-            // ->setTestEventCode('TEST39695') // !!!
             ->execute();
     }
 }
