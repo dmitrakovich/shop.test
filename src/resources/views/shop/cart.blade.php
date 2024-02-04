@@ -102,7 +102,8 @@
                         @foreach ($deliveryMethods as $deliveryMethod)
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="delivery_id"
-                                    id="delivery-{{ $deliveryMethod->id }}" value="{{ $deliveryMethod->id }}"
+                                    id="delivery-{{ $deliveryMethod->id }}"
+                                    value="{{ $deliveryMethod->id }}"
                                     {{ $loop->first ? 'checked' : null }} />
                                 <label class="form-check-label" for="delivery-{{ $deliveryMethod->id }}">
                                     {{ $deliveryMethod->name }}
