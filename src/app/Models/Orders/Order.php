@@ -65,6 +65,9 @@ use Payments\PaymentMethod;
  * @property string $user_full_name
  * @property ?string $installment_contract_date
  *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderItem[] $data
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderItem[] $items
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderItemExtended[] $itemsExtended
  * @property-read \App\Models\User\User|null $user
  * @property-read \App\Models\Device|null $device
  * @property-read \App\Models\Country|null $country
@@ -152,10 +155,8 @@ class Order extends Model
      * Товары заказа
      *
      * @deprecated
-     *
-     * @return Relations\HasMany
      */
-    public function data()
+    public function data(): Relations\HasMany
     {
         return $this->hasMany(OrderItem::class)
             ->with([
@@ -166,10 +167,8 @@ class Order extends Model
 
     /**
      * Order items
-     *
-     * @return Relations\HasMany
      */
-    public function items()
+    public function items(): Relations\HasMany
     {
         return $this->hasMany(OrderItem::class)
             ->with([
@@ -181,10 +180,8 @@ class Order extends Model
 
     /**
      * Order items extended
-     *
-     * @return Relations\HasMany
      */
-    public function itemsExtended()
+    public function itemsExtended(): Relations\HasMany
     {
         return $this->hasMany(OrderItemExtended::class)
             ->with([

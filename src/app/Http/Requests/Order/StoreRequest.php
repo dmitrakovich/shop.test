@@ -87,7 +87,7 @@ class StoreRequest extends FormRequest
      */
     public function isOneClick(): bool
     {
-        return $this->order_method === OrderMethod::ONECLICK->value;
+        return $this->input('order_method') === OrderMethod::ONECLICK->value;
     }
 
     /**

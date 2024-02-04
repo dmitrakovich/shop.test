@@ -6,6 +6,9 @@ use App\Admin\Controllers\AbstractAdminController;
 use App\Models\AvailableSizes;
 use Encore\Admin\Grid;
 
+/**
+ * @mixin AvailableSizes
+ */
 class InventoryController extends AbstractAdminController
 {
     /**

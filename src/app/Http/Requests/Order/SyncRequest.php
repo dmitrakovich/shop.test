@@ -19,11 +19,11 @@ class SyncRequest extends StoreRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'user_id' => $this->user_id ?? null,
-            'country_id' => empty($this->country) ? null : 1,
-            'region' => $this->state,
+            'user_id' => $this->input('user_id'),
+            'country_id' => empty($this->input('$this->country')) ? null : 1,
+            'region' => $this->input('state'),
             'order_method' => $this->getOrderMethod(),
-            'status_key' => $this->status_key ?? OrderStatus::getDefaultValue(),
+            'status_key' => $this->input('status_key', OrderStatus::getDefaultValue()),
 
             'utm_medium' => 'refferer',
             'utm_source' => 'modny.by',

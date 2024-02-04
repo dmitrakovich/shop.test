@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \App\Models\Cart getCart() Get cart model with data
  * @method static void clear($onlyAvailable = false) Clear items from the shopping cart.
  *
- * @see \App\Models\Cart
+ * @mixin \App\Models\Cart
  */
 class Cart extends Facade
 {
