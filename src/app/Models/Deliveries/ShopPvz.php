@@ -11,7 +11,7 @@ class ShopPvz extends AbstractDeliveryMethod
     /**
      * DeliveryMethod id
      */
-    public const ID = 5;
+    public const ID = 6;
 
     public function getAdditionalInfo(): View|string|null
     {
