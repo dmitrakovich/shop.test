@@ -60,6 +60,7 @@ class OrderData
         public ?string $comment = null,
         public ?int $payment_id = null,
         public ?int $delivery_id = null,
+        public ?int $stock_id = null,
         public ?int $country_id = null,
         public ?string $city = null,
         public float $total_price = 0,

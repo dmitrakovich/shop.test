@@ -15,6 +15,7 @@ use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
 use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Order\UtmEnum;
+use App\Enums\StockTypeEnum;
 use App\Events\Analytics\OfflinePurchase;
 use App\Events\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
@@ -29,6 +30,7 @@ use App\Models\Orders\OrderStatus;
 use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\User\User;
 use App\Services\AdministratorService;
 use App\Services\Order\OrderItemInventoryService;
@@ -271,6 +273,7 @@ class OrderController extends AbstractAdminController
             }
 
             $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
+            $form->select('stock_id', 'Адрес ПВЗ для выдачи')->options(Stock::query()->where('type', StockTypeEnum::SHOP)->pluck('address', 'id'));
             $form->text('track.track_number', 'Трек номер');
             $form->url('track.track_link', 'Ссылка на трек номер');
             $form->currency('weight', 'Вес заказа')->symbol('Кг');

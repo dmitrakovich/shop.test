@@ -99,27 +99,15 @@
                 <div class="row pb-3 pb-md-5 border-bottom border-secondary">
                     <div class="col-12 col-md-6 mt-3 mt-md-5">
                         <p class="font-size-18"><b>Способ доставки:</b></p>
-                        @foreach ($deliveriesList as $key => $value)
+                        @foreach ($deliveryMethods as $deliveryMethod)
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="delivery_id"
-                                    id="delivery-{{ $key }}" value="{{ $key }}"
+                                    id="delivery-{{ $deliveryMethod->id }}" value="{{ $deliveryMethod->id }}"
                                     {{ $loop->first ? 'checked' : null }} />
-                                <label class="form-check-label" for="delivery-{{ $key }}">
-                                    {{ $value }}
-                                    @if ($value == 'Курьером с примеркой')
-                                        <br>
-                                        <span class="text-muted font-size-12">
-                                            БЕСПЛАТНО*
-                                            * в случае 100% отказа от выкупа моделей, предоставленных на
-                                            примерку, клиент оплачивает курьерскую доставку в размере 19
-                                            BYN (подробную информацию менеджер сообщит Вам при
-                                            подтверждении заказа)
-                                            ** подробнее о <a href="/online-shopping/delivery"
-                                                title="условия примерки">условиях примерки</a>
-                                        </span>
-                                    @endif
+                                <label class="form-check-label" for="delivery-{{ $deliveryMethod->id }}">
+                                    {{ $deliveryMethod->name }}
                                 </label>
-
+                                {!! $deliveryMethod->instance->getAdditionalInfo() !!}
                             </div>
                         @endforeach
                     </div>
@@ -132,30 +120,29 @@
                                     {{ $loop->first ? 'checked' : null }} />
                                 <label class="form-check-label" for="payment-{{ $key }}">
                                     {{ $value }}
-                                    @if ($value == 'Оформить рассрочку')
-                                        <br>
-                                        <span class="text-muted font-size-12">
-                                            {{-- blade-formatter-disable --}}
-                                            @if ($totalPriceWithoutUserSale >= 150)
-                                                Рассрочка на 3 платежа
-                                                Первый взнос <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale - $totalPriceWithoutUserSale * 0.6 }} руб.</span>
-                                                Оставшиеся 2 платежа по <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale * 0.3 }} руб.</span> в месяц
-											@else
-                                                Рассрочка на 2 платежа
-                                                Первый взнос <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale - $totalPriceWithoutUserSale * 0.5 }} руб.</span>
-                                                Оставшийся платеж <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale * 0.5 }} руб.</span>
-											@endif
-                                            <span class="text-danger">При покупке с рассрочкой скидка клиента не действует!</span>
-                                            {{-- blade-formatter-enable --}}
-                                        </span>
-                                    @elseif (($currentCountry->id == 2 || $currentCountry->id == 3) && $value == 'При получении')
-                                        <br>
-                                        <span class="text-muted font-size-12">
-                                            Условие для РФ и Казахстана! Предоплата 10% перед отправкой,
-                                            остальное при получении наложенным платежом.
-                                        </span>
-                                    @endif
                                 </label>
+                                {{-- todo: сделать по аналогии с доставками --}}
+                                @if ($value == 'Оформить рассрочку')
+                                    <div class="additional-form-check-info text-muted font-size-12">
+                                        {{-- blade-formatter-disable --}}
+                                        @if ($totalPriceWithoutUserSale >= 150)
+                                            Рассрочка на 3 платежа
+                                            Первый взнос <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale - $totalPriceWithoutUserSale * 0.6 }} руб.</span>
+                                            Оставшиеся 2 платежа по <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale * 0.3 }} руб.</span> в месяц
+                                        @else
+                                            Рассрочка на 2 платежа
+                                            Первый взнос <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale - $totalPriceWithoutUserSale * 0.5 }} руб.</span>
+                                            Оставшийся платеж <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale * 0.5 }} руб.</span>
+                                        @endif
+                                        <span class="text-danger">При покупке с рассрочкой скидка клиента не действует!</span>
+                                        {{-- blade-formatter-enable --}}
+                                    </div>
+                                @elseif (($currentCountry->id == 2 || $currentCountry->id == 3) && $value == 'При получении')
+                                    <div class="additional-form-check-info text-muted font-size-12">
+                                        Условие для РФ и Казахстана! Предоплата 10% перед отправкой,
+                                        остальное при получении наложенным платежом.
+                                    </div>
+                                @endif
                             </div>
                         @endforeach
                     </div>

@@ -3,17 +3,17 @@
 namespace App\Models\Orders;
 
 use App\Admin\Models\Administrator;
-use App\Enums\Order\OrderMethods;
+use App\Enums\Order\OrderMethod;
 use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Country;
 use App\Models\Device;
-use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
 use App\Models\Logs\OrderDistributionLog;
 use App\Models\Logs\SmsLog;
 use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
+use App\Models\Stock;
 use App\Models\User\User;
 use Deliveries\DeliveryMethod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,10 +44,11 @@ use Payments\PaymentMethod;
  * @property int|null $payment_id
  * @property float|null $payment_cost
  * @property int|null $delivery_id
+ * @property int|null $stock_id Warehouse (Stock) from which the order will be picked up
  * @property float|null $delivery_cost
  * @property float|null $delivery_price
  * @property int|null $delivery_point_id
- * @property \App\Enums\Order\OrderMethods $order_method
+ * @property \App\Enums\Order\OrderMethod $order_method
  * @property string|null $utm_medium
  * @property string|null $utm_source
  * @property string|null $utm_campaign
@@ -66,8 +67,13 @@ use Payments\PaymentMethod;
  *
  * @property-read \App\Models\User\User|null $user
  * @property-read \App\Models\Device|null $device
+ * @property-read \App\Models\Country|null $country
+ * @property-read \Deliveries\DeliveryMethod|null $delivery
+ * @property-read \App\Models\Stock|null $stock
  * @property-read \Payments\PaymentMethod|null $payment
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePayment[] $onlinePayments
+ * @property-read \App\Models\Orders\OrderStatus|null $status
+ * @property-read \App\Admin\Models\Administrator|null $admin
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
  * @property-read \App\Models\Orders\Batch|null $batch
  * @property-read \App\Models\Orders\OrderTrack|null $track
@@ -100,6 +106,7 @@ class Order extends Model
         'payment_id',
         'payment_cost',
         'delivery_id',
+        'stock_id',
         'delivery_cost',
         'delivery_price',
         'delivery_point_id',
@@ -131,7 +138,7 @@ class Order extends Model
      * @var array
      */
     protected $casts = [
-        'order_method' => OrderMethods::class,
+        'order_method' => OrderMethod::class,
         'order_type' => OrderTypeEnum::class,
         'status_updated_at' => 'datetime',
     ];
@@ -205,22 +212,26 @@ class Order extends Model
 
     /**
      * Order country
-     *
-     * @return Relations\BelongsTo
      */
-    public function country()
+    public function country(): Relations\BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
 
     /**
      * Order delivery method
-     *
-     * @return Relations\BelongsTo
      */
-    public function delivery()
+    public function delivery(): Relations\BelongsTo
     {
         return $this->belongsTo(DeliveryMethod::class);
+    }
+
+    /**
+     * Stock from which the order will be picked up
+     */
+    public function stock(): Relations\BelongsTo
+    {
+        return $this->belongsTo(Stock::class);
     }
 
     /**
@@ -241,20 +252,16 @@ class Order extends Model
 
     /**
      * Order status
-     *
-     * @return Relations\BelongsTo
      */
-    public function status()
+    public function status(): Relations\BelongsTo
     {
         return $this->belongsTo(OrderStatus::class);
     }
 
     /**
      * Admin user
-     *
-     * @return Relations\BelongsTo
      */
-    public function admin()
+    public function admin(): Relations\BelongsTo
     {
         return $this->belongsTo(Administrator::class);
     }

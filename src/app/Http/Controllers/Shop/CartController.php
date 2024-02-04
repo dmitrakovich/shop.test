@@ -39,10 +39,10 @@ class CartController extends BaseController
         $countries = Country::getAll();
         $currentCountry = Country::getCurrent();
 
-        $deliveriesList = DeliveryMethod::active()
+        $deliveryMethods = DeliveryMethod::active()
             ->filterFitting(Sale::hasFitting())
             ->filterByCountry($countryCode)
-            ->pluck('name', 'id');
+            ->get();
 
         $paymentsList = PaymentMethod::active()
             ->filterInstallment($cart->availableInstallment() && Sale::hasInstallment())
@@ -52,7 +52,7 @@ class CartController extends BaseController
         $gtmService->setViewForCart($cart);
 
         return view('shop.cart', array_merge($prices, compact(
-            'cart', 'user', 'deliveriesList', 'paymentsList', 'countries', 'currentCountry'
+            'cart', 'user', 'deliveryMethods', 'paymentsList', 'countries', 'currentCountry'
         )));
     }
 

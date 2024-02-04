@@ -4,7 +4,7 @@ namespace App\Models\Enum;
 
 /**
  * @deprecated
- * @see \App\Enums\Order\OrderMethods
+ * @see \App\Enums\Order\OrderMethod
  */
 class OrderMethod implements Enum
 {

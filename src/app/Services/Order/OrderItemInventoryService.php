@@ -100,7 +100,7 @@ class OrderItemInventoryService
     /**
      * Update inventory based on the provided order items.
      *
-     * @param  Collection<OrderItem>  $orderItems
+     * @param  Collection|OrderItem[]  $orderItems
      */
     public function updateInventory(Collection $orderItems): void
     {
@@ -161,10 +161,15 @@ class OrderItemInventoryService
     /**
      * Set priority for stocks based on the provided order items.
      *
-     * @param  Collection<OrderItem>  $orderItems
+     * @param  Collection|OrderItem[]  $orderItems
      */
     private function setStocksPriority(Collection $orderItems): void
     {
+        $stockIdFromOrder = $orderItems->first()->order->stock_id;
+        if ($stockIdFromOrder) {
+            $this->stocksPriority[$stockIdFromOrder] = 99;
+        }
+
         if ($orderItems->count() === 1) {
             return;
         }

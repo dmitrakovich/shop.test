@@ -2,7 +2,7 @@
 
 namespace App\Events\Analytics;
 
-use App\Enums\Order\OrderMethods;
+use App\Enums\Order\OrderMethod;
 use App\Models\Data\UserData;
 use FacebookAds\Object\ServerSide\ActionSource;
 
@@ -30,15 +30,15 @@ class OfflinePurchase extends Purchase
     protected function setActionSource(): void
     {
         $this->actionSource = match ($this->order->order_method) {
-            OrderMethods::EMAIL => ActionSource::EMAIL,
-            OrderMethods::PHONE => ActionSource::PHONE_CALL,
-            OrderMethods::CHAT,
-            OrderMethods::INSTAGRAM,
-            OrderMethods::VIBER,
-            OrderMethods::TELEGRAM,
-            OrderMethods::WHATSAPP, => ActionSource::CHAT,
-            OrderMethods::DEFAULT,
-            OrderMethods::ONECLICK => ActionSource::WEBSITE,
+            OrderMethod::EMAIL => ActionSource::EMAIL,
+            OrderMethod::PHONE => ActionSource::PHONE_CALL,
+            OrderMethod::CHAT,
+            OrderMethod::INSTAGRAM,
+            OrderMethod::VIBER,
+            OrderMethod::TELEGRAM,
+            OrderMethod::WHATSAPP, => ActionSource::CHAT,
+            OrderMethod::DEFAULT,
+            OrderMethod::ONECLICK => ActionSource::WEBSITE,
             default => ActionSource::OTHER,
         };
     }

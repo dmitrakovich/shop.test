@@ -2,13 +2,12 @@
 
 namespace App\Admin\Controllers\Config;
 
+use App\Admin\Controllers\AbstractAdminController;
 use Deliveries\DeliveryMethod;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Show;
 
-class DeliveryController extends AdminController
+class DeliveryController extends AbstractAdminController
 {
     /**
      * Title for current resource.
@@ -28,34 +27,13 @@ class DeliveryController extends AdminController
 
         // $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
-        $grid->column('class', __('Class'));
+        $grid->column('instance', 'Instance');
         $grid->column('active', __('Active'))->switch();
         // $grid->column('sorting', __('Sorting'));
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
-    }
-
-    /**
-     * Make a show builder.
-     *
-     * @param  mixed  $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        $show = new Show(DeliveryMethod::findOrFail($id));
-
-        $show->field('id', __('Id'));
-        $show->field('name', __('Name'));
-        $show->field('class', __('Class'));
-        $show->field('active', __('Active'));
-        $show->field('sorting', __('Sorting'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
-
-        return $show;
     }
 
     /**
@@ -68,7 +46,7 @@ class DeliveryController extends AdminController
         $form = new Form(new DeliveryMethod());
 
         $form->text('name', __('Name'));
-        $form->text('class', __('Class'));
+        // $form->text('instance', 'Instance');
         $form->switch('active', __('Active'));
         // $form->number('sorting', __('Sorting'));
 

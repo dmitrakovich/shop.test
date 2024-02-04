@@ -2,7 +2,7 @@
 
 namespace App\Enums\Order;
 
-enum OrderMethods: string
+enum OrderMethod: string
 {
     case UNDEFINED = 'undefined';
     case DEFAULT = 'default';

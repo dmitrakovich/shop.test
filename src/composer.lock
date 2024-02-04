@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc763046efa2f5a4cd7306854189913f",
+    "content-hash": "67b9f3b10182ac9c3612eb0171f4d104",
     "packages": [
         {
             "name": "appstract/laravel-opcache",
@@ -12659,16 +12659,16 @@
         },
         {
             "name": "romanzipp/laravel-model-doc",
-            "version": "3.0.1",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmitrakovich/Laravel-Model-Doc.git",
-                "reference": "1c1cb7400c807c95523e975fe6b27349ba2ac392"
+                "reference": "6b42e88a5f5d73ef3dbb2fcaf2cd74b7c862efd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/Laravel-Model-Doc/zipball/1c1cb7400c807c95523e975fe6b27349ba2ac392",
-                "reference": "1c1cb7400c807c95523e975fe6b27349ba2ac392",
+                "url": "https://api.github.com/repos/dmitrakovich/Laravel-Model-Doc/zipball/6b42e88a5f5d73ef3dbb2fcaf2cd74b7c862efd7",
+                "reference": "6b42e88a5f5d73ef3dbb2fcaf2cd74b7c862efd7",
                 "shasum": ""
             },
             "require": {
@@ -12721,7 +12721,7 @@
             ],
             "description": "Laravel Model PHPDoc Generator",
             "support": {
-                "source": "https://github.com/dmitrakovich/Laravel-Model-Doc/tree/3.0.1"
+                "source": "https://github.com/dmitrakovich/Laravel-Model-Doc/tree/3.1.2"
             },
             "funding": [
                 {
@@ -12729,7 +12729,7 @@
                     "url": "https://github.com/romanzipp"
                 }
             ],
-            "time": "2024-01-30T18:12:30+00:00"
+            "time": "2024-02-04T12:58:57+00:00"
         },
         {
             "name": "sebastian/cli-parser",

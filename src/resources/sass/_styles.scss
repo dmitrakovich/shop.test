@@ -470,13 +470,17 @@ button.scroll-top-btn {
 }
 
 /* скрывающиеся подсказки в корзине*/
-
-label.form-check-label span {
+.additional-form-check-info {
     display: none;
 }
 
-input.form-check-input:checked~label.form-check-label span {
-    display: block;
+input.form-check-input:checked {
+    &~.additional-form-check-info {
+        display: inline-block;
+    }
+    &~div.additional-form-check-info {
+        display: block;
+    }
 }
 
 span {

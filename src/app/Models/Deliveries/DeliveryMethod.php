@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property string $name
- * @property string $instance
+ * @property \Deliveries\AbstractDeliveryMethod $instance
  * @property bool $active
  * @property int $sorting
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -24,6 +24,15 @@ use Illuminate\Database\Eloquent\Model;
 class DeliveryMethod extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'instance' => DeliveryInstanceCast::class,
+    ];
 
     /**
      * Scope a query to only include active delivery method.
@@ -49,7 +58,7 @@ class DeliveryMethod extends Model
     public function scopeFilterByCountry(Builder $query, string $countryCode): void
     {
         $query->whereIn('instance', match ($countryCode) {
-            'BY' => ['BelpostCourierFitting', 'BelpostCourier', 'Belpost', 'BelpostEMS'],
+            'BY' => ['BelpostCourierFitting', 'BelpostCourier', 'Belpost', 'BelpostEMS', 'ShopPvz'],
             'RU' => ['BelpostEMS', 'SdekPvz'],
             'KZ' => ['SdekPvz'],
             default => ['BelpostEMS'],
