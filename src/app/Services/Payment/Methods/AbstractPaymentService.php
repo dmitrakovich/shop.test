@@ -15,7 +15,7 @@ abstract class AbstractPaymentService
     /**
      * Create new payment
      */
-    abstract public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []): OnlinePayment;
+    abstract public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []): ?OnlinePayment;
 
     /**
      * Get payment by payment_id.

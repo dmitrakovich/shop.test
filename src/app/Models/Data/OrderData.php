@@ -17,7 +17,7 @@ class OrderData
      */
     public readonly User $user;
 
-    public readonly int $user_id;
+    public int $user_id;
 
     /**
      * Order payment method
