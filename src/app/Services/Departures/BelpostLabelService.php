@@ -7,6 +7,7 @@ use App\Helpers\TextHelper;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderTrack;
 use App\Models\Payments\Installment;
+use Deliveries\BelpostCourierFitting;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -96,7 +97,7 @@ class BelpostLabelService
         $drawing->setCoordinates('AM14');
         $drawing->setWorksheet($spreadsheet->getActiveSheet());
 
-        if ($order->delivery->instance === 'BelpostCourierFitting') {
+        if ($order->delivery->instance instanceof BelpostCourierFitting) {
             $sheet->setCellValue('D25', 'P');
             $sheet->setCellValue('D33', 'P');
             $sheet->getStyle('D25')->applyFromArray([
