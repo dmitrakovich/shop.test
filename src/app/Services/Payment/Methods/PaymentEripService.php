@@ -18,7 +18,7 @@ class PaymentEripService extends AbstractPaymentService
     /**
      * Create new payment
      */
-    public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []): OnlinePayment
+    public function create(Order $order, float $amount, ?string $paymentNum = null, array $data = []):? OnlinePayment
     {
         $config = config('hgrosh');
         $postData = [];
@@ -92,7 +92,7 @@ class PaymentEripService extends AbstractPaymentService
                 }
             });
         $onlinePaymentDates = DB::table(app(OnlinePayment::class)->getTable())
-            ->select(\DB::raw('MIN(created_at) AS beginDate, MAX(created_at) AS endDate'))
+            ->select(DB::raw('MIN(created_at) AS beginDate, MAX(created_at) AS endDate'))
             ->whereNotNull('payment_num')
             ->where('last_status_enum_id', OnlinePaymentStatusEnum::PENDING)
             ->first();
@@ -114,7 +114,6 @@ class PaymentEripService extends AbstractPaymentService
         if ($invoicingList->isOk()) {
             $responseInvoicingList = $invoicingList->getBodyFormat();
             $records = $responseInvoicingList['records'] ?? [];
-            \File::append(storage_path('logs/erip_statuses_' . date('Y-m-d') . '.log'), print_r($records, true) . PHP_EOL);
             if (count($records)) {
                 $paymentNums = array_map(fn ($record) => $record['number'], array_filter($records, fn ($record) => isset($record['number'])));
                 $paymentsByNum = OnlinePayment::whereIn('payment_num', $paymentNums)
