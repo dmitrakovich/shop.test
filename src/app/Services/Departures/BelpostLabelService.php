@@ -2,13 +2,12 @@
 
 namespace App\Services\Departures;
 
-use Deliveries\BelpostCourierFitting;
-
 use App\Enums\DeliveryTypeEnum;
 use App\Helpers\TextHelper;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderTrack;
 use App\Models\Payments\Installment;
+use Deliveries\BelpostCourierFitting;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
