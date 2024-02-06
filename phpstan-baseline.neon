@@ -36,11 +36,6 @@ parameters:
 			path: src/app/Models/Data/OrderData.php
 
 		-
-			message: "#^Class App\\\\Models\\\\Data\\\\OrderData has an uninitialized readonly property \\$user_id\\. Assign it in the constructor\\.$#"
-			count: 1
-			path: src/app/Models/Data/OrderData.php
-
-		-
 			message: "#^Method App\\\\Models\\\\ProductAttributes\\\\Promotion\\:\\:applyFilter\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Builder but return statement is missing\\.$#"
 			count: 1
 			path: src/app/Models/ProductAttributes/Promotion.php
@@ -54,18 +49,3 @@ parameters:
 			message: "#^Call to an undefined method App\\\\Models\\\\ProductAttributes\\\\Top\\:\\:morphOne\\(\\)\\.$#"
 			count: 1
 			path: src/app/Models/ProductAttributes/Top.php
-
-		-
-			message: "#^Access to an undefined static property App\\\\Models\\\\Orders\\\\Order\\:\\:\\$departuresStatuses\\.$#"
-			count: 1
-			path: src/app/Services/Order/BuyoutOrderService.php
-
-		-
-			message: "#^Call to static method append\\(\\) on an unknown class File\\.$#"
-			count: 1
-			path: src/app/Services/Payment/Methods/PaymentEripService.php
-
-		-
-			message: "#^Call to static method raw\\(\\) on an unknown class DB\\.$#"
-			count: 1
-			path: src/app/Services/Payment/Methods/PaymentEripService.php

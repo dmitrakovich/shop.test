@@ -3,6 +3,7 @@ name: Fix code styling
 on:
   push:
   pull_request:
+  pull_request_target:
   workflow_dispatch:
     inputs:
       php:
