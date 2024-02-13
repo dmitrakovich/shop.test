@@ -72,14 +72,15 @@ class BelpostCODService
                     $successfulPaymentsSum = $order->onlinePayments->where('last_status_enum_id', OnlinePaymentStatusEnum::SUCCEEDED)->sum('amount');
                     $itemCodSum = (float)($paymentSum + ($successfulPaymentsSum / count($order->data)));
                     $orderTotalPrice = (float)($order->getItemsPrice() - $successfulPaymentsSum);
-                    $firstPaymentsSum = $isInstallment ? $order->data->map(function ($item) use ($isInstallment, $itemCodSum, &$partialBuybackItemsCount) {
-                        $firstPaymentSum = $isInstallment ? $item->current_price - ($item->installment->monthly_fee * 2) : 0;
-                        if ($item->current_price == $itemCodSum || ($isInstallment && $firstPaymentSum == $itemCodSum)) {
+
+                    $firstPaymentsSum = 0;
+                    foreach ($order->data as $orderItem) {
+                        $firstPaymentSum = $isInstallment ? ($orderItem->current_price - ($orderItem->installment->monthly_fee * 2)) : 0;
+                        if ($orderItem->current_price == $itemCodSum || ($isInstallment && $firstPaymentSum == $itemCodSum)) {
                             $partialBuybackItemsCount++;
                         }
-
-                        return $firstPaymentSum;
-                    })->sum() : 0;
+                        $firstPaymentsSum += $firstPaymentSum;
+                    }
                     $firstPaymentsSum = $firstPaymentsSum ? ($firstPaymentsSum - $successfulPaymentsSum) : 0;
 
                     if (
@@ -91,23 +92,29 @@ class BelpostCODService
                             $orderItem->update(['status_key' => 'complete']);
                         });
                     } elseif ($partialBuybackItemsCount === 1) {
-                        $order->update(['status_key' => 'delivered']);
-                        $order->data->each(function (OrderItem $orderItem) use ($order, $itemCodSum, $isInstallment) {
+                        $isPurchasedOrder = false;
+                        $order->data->each(function (OrderItem $orderItem) use ($order, $itemCodSum, $isInstallment, &$isPurchasedOrder) {
                             $firstPaymentSum = $isInstallment ? $orderItem->current_price - ($orderItem->installment->monthly_fee * 2) : 0;
                             if (
                                 $orderItem->current_price == $itemCodSum ||
                                 $isInstallment && $firstPaymentSum == $itemCodSum
                             ) {
                                 $orderItem->update(['status_key' => 'complete']);
+                                $isPurchasedOrder = true;
                             } else {
                                 $productFullName = $orderItem->product->getFullName();
                                 $order->adminComments()->create([
                                     'comment' => "Товар {$productFullName} не выкуплен - ожидайте возврат",
                                 ]);
+                                $orderItem->update(['status_key' => 'waiting_refund']);
                             }
                         });
+                        $order->update(['status_key' => ($isPurchasedOrder ? 'complete' : 'delivered')]);
                     } else {
                         $order->update(['status_key' => 'delivered']);
+                        $order->data->each(function (OrderItem $orderItem) {
+                            $orderItem->update(['status_key' => 'waiting_refund']);
+                        });
                         $order->adminComments()->create([
                             'comment' => "Получен наложенный платеж на сумму {$paymentSum}. Распределите сумму по товарам!",
                         ]);
