@@ -15,10 +15,10 @@ class CreateBatchAction extends BatchAction
 
     public function handle(Collection $collection)
     {
-        $orderIds = $collection->pluck('id');
+        $orderIds = $collection->pluck('id')->toArray();
         if (!empty($orderIds)) {
-            $batch = Batch::create();
-            Order::whereIn('id', $orderIds)->update([
+            $batch = Batch::query()->create();
+            Order::query()->whereIn('id', $orderIds)->update([
                 'batch_id' => $batch->id,
             ]);
         }

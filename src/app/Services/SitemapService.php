@@ -194,7 +194,7 @@ class SitemapService
         $result = [];
         foreach (array_shift($models) as $attrKey => $attr) {
             if (!empty($models)) {
-                foreach ($this->getAttributeLinks($models, false) as $attributeLink) {
+                foreach ($this->getAttributeLinks($models) as $attributeLink) {
                     $result[] = implode('/', [$attr, $attributeLink]);
                 }
             } else {

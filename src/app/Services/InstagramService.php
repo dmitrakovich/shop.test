@@ -51,7 +51,7 @@ class InstagramService
      */
     protected function getAccessToken(): string
     {
-        /** @var Token $token */
+        /** @var Token|null $token */
         $token = Token::instagram()->first();
 
         if (empty($token)) {

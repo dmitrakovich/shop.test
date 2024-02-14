@@ -3,11 +3,6 @@ parameters:
 		-
 			message: "#^Variable \\$orderIds in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
-			path: src/app/Admin/Actions/Order/CreateBatchAction.php
-
-		-
-			message: "#^Variable \\$orderIds in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
 			path: src/app/Admin/Actions/Order/StatusBulkChange.php
 
 		-
@@ -296,11 +291,6 @@ parameters:
 			path: src/app/Services/GoogleTagManagerService.php
 
 		-
-			message: "#^Variable \\$token in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: src/app/Services/InstagramService.php
-
-		-
 			message: "#^Variable \\$mails in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: src/app/Services/Payment/BelpostCODService.php
@@ -364,8 +354,3 @@ parameters:
 			message: "#^Method App\\\\Services\\\\Seo\\\\ProductSeoService\\:\\:getProductTitle\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/app/Services/Seo/ProductSeoService.php
-
-		-
-			message: "#^Method App\\\\Services\\\\SitemapService\\:\\:getAttributeLinks\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/app/Services/SitemapService.php
