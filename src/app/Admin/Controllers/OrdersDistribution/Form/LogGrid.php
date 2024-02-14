@@ -5,6 +5,9 @@ namespace App\Admin\Controllers\OrdersDistribution\Form;
 use App\Models\Logs\OrderDistributionLog;
 use Encore\Admin\Grid;
 
+/**
+ * @mixin OrderDistributionLog
+ */
 class LogGrid
 {
     public $title = 'Лог';

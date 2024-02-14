@@ -5,6 +5,7 @@ namespace App\Models\Logs;
 use App\Admin\Models\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -13,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $action Действие
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @property-read \App\Admin\Models\Administrator|null $admin
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
@@ -30,7 +33,7 @@ class OrderDistributionLog extends Model
     /**
      * Get the admin associated with the action log.
      */
-    public function admin()
+    public function admin(): BelongsTo
     {
         return $this->belongsTo(Administrator::class, 'admin_user_id');
     }

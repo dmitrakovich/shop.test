@@ -16,6 +16,8 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $model
  *
+ * @property-read \App\Models\Url|null $url
+ *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class CountryOfOrigin extends Model

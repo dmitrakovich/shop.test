@@ -58,16 +58,6 @@ class GenerateLink extends StepForm
     }
 
     /**
-     * The data of the form.
-     *
-     * @return array $data
-     */
-    public function data()
-    {
-        //
-    }
-
-    /**
      * Js code
      */
     protected function getScript(): string

@@ -49,6 +49,7 @@ use Payments\PaymentMethod;
 
 /**
  * @mixin Order
+ * @mixin OnlinePayment
  */
 class OrderController extends AbstractAdminController
 {

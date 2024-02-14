@@ -77,6 +77,7 @@ use Payments\PaymentMethod;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePayment[] $onlinePayments
  * @property-read \App\Models\Orders\OrderStatus|null $status
  * @property-read \App\Admin\Models\Administrator|null $admin
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderAdminComment[] $adminComments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
  * @property-read \App\Models\Orders\Batch|null $batch
  * @property-read \App\Models\Orders\OrderTrack|null $track
@@ -290,10 +291,8 @@ class Order extends Model
 
     /**
      * Admin comments log
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function adminComments()
+    public function adminComments(): Relations\HasMany
     {
         return $this->hasMany(OrderAdminComment::class);
     }

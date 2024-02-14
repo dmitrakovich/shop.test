@@ -15,7 +15,7 @@ class OrderData
     /**
      * The user who make the order
      */
-    public readonly User $user;
+    public User $user;
 
     public int $user_id;
 

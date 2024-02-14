@@ -24,4 +24,22 @@ class Top
     {
         return true;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return null
+     */
+    public function url()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete()
+    {
+        //
+    }
 }

@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $model
  *
+ * @property-read \App\Models\Url|null $url
+ *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Style extends Model

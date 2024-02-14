@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property string $model
  *
  * @property-read \App\Models\TagGroup|null $group
+ * @property-read \App\Models\Url|null $url
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */

@@ -34,6 +34,7 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property-read \App\Models\Category|null $parentCategory
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $childrenCategories
+ * @property-read \App\Models\Url|null $url
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category d()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category ordered(string $direction = 'asc')
