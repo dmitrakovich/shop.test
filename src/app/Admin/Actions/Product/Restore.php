@@ -11,7 +11,11 @@ class Restore extends RowAction
 
     public function handle(Model $model)
     {
-        $model->restore();
+        if (!method_exists($model, 'restore')) {
+            $model->restore();
+        } else {
+            throw new \Exception('Модель не подлежит восстановлению');
+        }
 
         return $this->response()->success('Восстановлено')->refresh();
     }

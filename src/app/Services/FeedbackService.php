@@ -58,7 +58,7 @@ class FeedbackService
         foreach (($data['photos'] ?? []) as $photo) {
             $feedback->addMedia($photo)->toMediaCollection('photos');
         }
-        /** @var \Illuminate\Http\UploadedFile $photo */
+        /** @var \Illuminate\Http\UploadedFile $video */
         foreach (($data['videos'] ?? []) as $video) {
             $feedback->addMedia($video)->toMediaCollection('videos');
         }

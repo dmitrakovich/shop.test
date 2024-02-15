@@ -40,6 +40,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read \App\Models\User\Group|null $group
  * @property-read \App\Models\Cart|null $cart
  * @property-read \App\Models\User\UserPassport|null $passport
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Address[] $addresses
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feedback[] $reviews
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
@@ -132,10 +133,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * User addresses
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function addresses()
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
     }
@@ -153,7 +152,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get fisrt user address if exist
      *
-     * @return \App\Models\Address
+     * @return Address
      */
     public function getFirstAddress()
     {

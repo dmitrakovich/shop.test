@@ -10,6 +10,9 @@ use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
 use Encore\Admin\Show;
 
+/**
+ * @mixin InventoryLog
+ */
 class InventoryController extends AdminController
 {
     /**
@@ -37,7 +40,7 @@ class InventoryController extends AdminController
     {
         $grid = new Grid(new InventoryLog());
 
-        $sizeNames = Size::pluck('name', 'id');
+        $sizeNames = Size::query()->pluck('name', 'id');
         $formatSizes = fn (?array $sizes) => $this->formatSizes($sizes, $sizeNames);
         $formatProduct = function (array $product) {
             return "{$product['category']['title']} {$product['brand']['name']} {$product['id']}";

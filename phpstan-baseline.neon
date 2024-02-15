@@ -31,11 +31,6 @@ parameters:
 			path: src/app/Admin/Controllers/Forms/Sms.php
 
 		-
-			message: "#^Call to an undefined method App\\\\Admin\\\\Controllers\\\\Logs\\\\InventoryController\\:\\:formatSizes\\(\\)\\.$#"
-			count: 1
-			path: src/app/Admin/Controllers/Logs/InventoryController.php
-
-		-
 			message: "#^Class App\\\\Admin\\\\Actions\\\\Order\\\\CancelPayment constructor invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/app/Admin/Controllers/OrderController.php

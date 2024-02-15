@@ -26,14 +26,13 @@ class FavoriteController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): array
     {
         /** @var Product */
-        $product = Product::findOrFail((int)$request->input('productId'));
-        $favorite = Favorite::create([
+        $product = Product::query()->findOrFail((int)$request->input('productId'));
+        /** @var Favorite */
+        $favorite = Favorite::query()->create([
             'user_id' => Auth::id(),
             'device_id' => Device::getId(),
             'product_id' => $product->id,

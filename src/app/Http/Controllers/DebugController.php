@@ -13,9 +13,7 @@ class DebugController extends Controller
 {
     public function index()
     {
-        return 'ok';
-
-        (new OrderItemInventoryService)->outOfStock(1426);
+        // (new OrderItemInventoryService)->outOfStock(1426);
 
         return 'ok';
     }

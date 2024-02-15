@@ -60,7 +60,8 @@ class CurrencyService
         $this->allCurrencies = Cache::rememberForever('currencies', function () {
             return DB::table('currencies')
                 ->get(['code', 'country', 'rate', 'decimals', 'symbol'])
-                ->keyBy('code');
+                ->keyBy('code')
+                ->toArray();
         });
     }
 
