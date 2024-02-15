@@ -68,7 +68,7 @@ trait AttributeFilterTrait
     /**
      * Удалить отношение при удалении фильтра
      */
-    public function delete(): void
+    public function delete()
     {
         $this->url()->delete();
 
