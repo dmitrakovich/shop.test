@@ -1,5 +1,5 @@
 includes:
-    - src/vendor/larastan/larastan/extension.neon
+    # - src/vendor/larastan/larastan/extension.neon
     - phpstan-baseline.neon
 
 parameters:
