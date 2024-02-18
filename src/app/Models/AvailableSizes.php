@@ -274,18 +274,6 @@ class AvailableSizes extends Model implements HasMedia
     }
 
     /**
-     * Get formatted discount percentage for the product.
-     */
-    public function getFormatedDiscountForStock(): ?string
-    {
-        if (empty($sellPrice = (float)$this->sell_price) || empty($currentPrice = (float)$this->current_price)) {
-            return null;
-        }
-
-        return round((($sellPrice - $currentPrice) / $sellPrice) * 100, 2) . '%';
-    }
-
-    /**
      * Get the name for the stock.
      */
     public function getNameForStock(): string

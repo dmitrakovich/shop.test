@@ -41,15 +41,10 @@ class FilterService
      * Получить все фильтра
      *
      * @param  array  $filtersList  список нужных фильтров
-     * @return array
      */
-    public static function getAll(?array $filtersList = null)
+    public static function getAll(?array $filtersList = null): array
     {
-        if (Cache::has('filters')) {
-            $filters = Cache::get('filters');
-        }
-
-        if (!isset($filters)) {
+        if (!$filters = Cache::get('filters')) {
             $filtersList ??= array_keys(self::$filtersModels);
             foreach ($filtersList as $filterName) {
                 $model = self::$filtersModels[$filterName];

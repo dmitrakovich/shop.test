@@ -11,11 +11,6 @@ parameters:
 			path: src/app/Admin/Controllers/Analytics/AbstractAnalyticController.php
 
 		-
-			message: "#^Call to an undefined static method Appstract\\\\Opcache\\\\OpcacheFacade\\:\\:clear\\(\\)\\.$#"
-			count: 1
-			path: src/app/Admin/Controllers/Debug/CacheController.php
-
-		-
 			message: "#^Method App\\\\Admin\\\\Controllers\\\\Departures\\\\BatchController\\:\\:form\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/app/Admin/Controllers/Departures/BatchController.php
@@ -36,6 +31,11 @@ parameters:
 			path: src/app/Admin/Controllers/OrderController.php
 
 		-
+			message: "#^Relation 'admin' is not found in App\\\\Models\\\\Logs\\\\OrderActionLog model\\.$#"
+			count: 1
+			path: src/app/Admin/Controllers/OrderController.php
+
+		-
 			message: "#^Method App\\\\Admin\\\\Controllers\\\\StockController\\:\\:form\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/app/Admin/Controllers/StockController.php
@@ -51,109 +51,9 @@ parameters:
 			path: src/app/Admin/Models/Product.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Requests\\\\UserAddressRequest\\:\\:\\$addressApprove\\.$#"
-			count: 1
-			path: src/app/Admin/Requests/UserAddressRequest.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Requests\\\\UserAddressRequest\\:\\:\\$addressCity\\.$#"
-			count: 1
-			path: src/app/Admin/Requests/UserAddressRequest.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Requests\\\\UserAddressRequest\\:\\:\\$addressCorpus\\.$#"
-			count: 1
-			path: src/app/Admin/Requests/UserAddressRequest.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Requests\\\\UserAddressRequest\\:\\:\\$addressDistrict\\.$#"
-			count: 1
-			path: src/app/Admin/Requests/UserAddressRequest.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Requests\\\\UserAddressRequest\\:\\:\\$addressHouse\\.$#"
-			count: 1
-			path: src/app/Admin/Requests/UserAddressRequest.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Requests\\\\UserAddressRequest\\:\\:\\$addressRegion\\.$#"
-			count: 1
-			path: src/app/Admin/Requests/UserAddressRequest.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Requests\\\\UserAddressRequest\\:\\:\\$addressRoom\\.$#"
-			count: 1
-			path: src/app/Admin/Requests/UserAddressRequest.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Requests\\\\UserAddressRequest\\:\\:\\$addressStreet\\.$#"
-			count: 1
-			path: src/app/Admin/Requests/UserAddressRequest.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Admin\\\\Requests\\\\UserAddressRequest\\:\\:\\$addressZip\\.$#"
-			count: 1
-			path: src/app/Admin/Requests/UserAddressRequest.php
-
-		-
-			message: "#^Call to an undefined method App\\\\Admin\\\\Selectable\\\\Product\\:\\:getFirstMediaUrl\\(\\)\\.$#"
-			count: 1
-			path: src/app/Admin/Selectable/Product.php
-
-		-
-			message: "#^Call to an undefined static method Drandin\\\\DeclensionNouns\\\\Facades\\\\DeclensionNoun\\:\\:make\\(\\)\\.$#"
-			count: 1
-			path: src/app/Helpers/TextHelper.php
-
-		-
-			message: "#^Call to an undefined static method Drandin\\\\DeclensionNouns\\\\Facades\\\\DeclensionNoun\\:\\:makeOnlyWord\\(\\)\\.$#"
-			count: 1
-			path: src/app/Helpers/TextHelper.php
-
-		-
-			message: "#^Call to an undefined static method App\\\\Libraries\\\\Seo\\\\Facades\\\\SeoFacade\\:\\:setTitle\\(\\)\\.$#"
-			count: 1
-			path: src/app/Http/Controllers/FeedbackController.php
-
-		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:getFlashData\\(\\)\\.$#"
-			count: 1
-			path: src/app/Http/Controllers/FeedbackController.php
-
-		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:user\\(\\)\\.$#"
-			count: 1
-			path: src/app/Http/Controllers/FeedbackController.php
-
-		-
-			message: "#^Call to an undefined static method App\\\\Libraries\\\\Seo\\\\Facades\\\\SeoFacade\\:\\:setTitle\\(\\)\\.$#"
-			count: 3
-			path: src/app/Http/Controllers/InfoPageController.php
-
-		-
 			message: "#^Call to an undefined static method Scriptixru\\\\SypexGeo\\\\SypexGeoFacade\\:\\:getCountry\\(\\)\\.$#"
 			count: 1
 			path: src/app/Http/Controllers/Shop/CartController.php
-
-		-
-			message: "#^Call to an undefined static method App\\\\Libraries\\\\Seo\\\\Facades\\\\SeoFacade\\:\\:setTitle\\(\\)\\.$#"
-			count: 3
-			path: src/app/Http/Controllers/Shop/PaymentController.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Requests\\\\Auth\\\\SyncRequest\\:\\:\\$state\\.$#"
-			count: 1
-			path: src/app/Http/Requests/Auth/SyncRequest.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Http\\\\Requests\\\\FilterRequest\\:\\:\\$path\\.$#"
-			count: 1
-			path: src/app/Http/Requests/FilterRequest.php
-
-		-
-			message: "#^Call to an undefined static method Drandin\\\\DeclensionNouns\\\\Facades\\\\DeclensionNoun\\:\\:make\\(\\)\\.$#"
-			count: 1
-			path: src/app/Jobs/Payment/SendInstallmentNoticeJob.php
 
 		-
 			message: "#^Variable \\$aviable might not be defined\\.$#"
@@ -166,54 +66,14 @@ parameters:
 			path: src/app/Jobs/UpdateProductsRatingJob.php
 
 		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:flash\\(\\)\\.$#"
-			count: 1
-			path: src/app/Listeners/GoogleTag/SetUserRegistrationData.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Models\\\\AvailableSizes\\:\\:\\$current_price\\.$#"
-			count: 1
-			path: src/app/Models/AvailableSizes.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Models\\\\Category\\:\\:\\$parent\\.$#"
-			count: 1
-			path: src/app/Models/Category.php
-
-		-
 			message: "#^Call to an undefined static method Scriptixru\\\\SypexGeo\\\\SypexGeoFacade\\:\\:getCountry\\(\\)\\.$#"
 			count: 1
 			path: src/app/Models/Country.php
 
 		-
-			message: "#^Call to an undefined static method Jenssegers\\\\Agent\\\\Facades\\\\Agent\\:\\:isDesktop\\(\\)\\.$#"
-			count: 1
-			path: src/app/Models/Data/OrderData.php
-
-		-
 			message: "#^Constructor of class App\\\\Models\\\\Data\\\\OrderData has an unused parameter \\$otherData\\.$#"
 			count: 1
 			path: src/app/Models/Data/OrderData.php
-
-		-
-			message: "#^Call to an undefined static method Jenssegers\\\\Agent\\\\Facades\\\\Agent\\:\\:browser\\(\\)\\.$#"
-			count: 1
-			path: src/app/Models/Device.php
-
-		-
-			message: "#^Call to an undefined static method Jenssegers\\\\Agent\\\\Facades\\\\Agent\\:\\:isDesktop\\(\\)\\.$#"
-			count: 1
-			path: src/app/Models/Device.php
-
-		-
-			message: "#^Call to an undefined static method Jenssegers\\\\Agent\\\\Facades\\\\Agent\\:\\:platform\\(\\)\\.$#"
-			count: 1
-			path: src/app/Models/Device.php
-
-		-
-			message: "#^Call to an undefined static method Jenssegers\\\\Agent\\\\Facades\\\\Agent\\:\\:version\\(\\)\\.$#"
-			count: 2
-			path: src/app/Models/Device.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\ProductAttributes\\\\Price\\:\\:\\$slug\\.$#"
@@ -226,64 +86,9 @@ parameters:
 			path: src/app/Models/Url.php
 
 		-
-			message: "#^Call to an undefined static method Illuminate\\\\Notifications\\\\Facades\\\\SmsTraffic\\:\\:setDefaultOption\\(\\)\\.$#"
-			count: 1
-			path: src/app/Notifications/AbstractSmsTraffic.php
-
-		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:flash\\(\\)\\.$#"
-			count: 2
-			path: src/app/Providers/GoogleTagManagerProvider.php
-
-		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:macro\\(\\)\\.$#"
-			count: 4
-			path: src/app/Providers/GoogleTagManagerProvider.php
-
-		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:push\\(\\)\\.$#"
-			count: 2
-			path: src/app/Providers/GoogleTagManagerProvider.php
-
-		-
-			message: "#^Variable \\$topProducts in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: src/app/Services/CatalogService.php
-
-		-
 			message: "#^Call to an undefined static method Scriptixru\\\\SypexGeo\\\\SypexGeoFacade\\:\\:getCountry\\(\\)\\.$#"
 			count: 1
 			path: src/app/Services/CurrencyService.php
-
-		-
-			message: "#^Variable \\$filters might not be defined\\.$#"
-			count: 2
-			path: src/app/Services/FilterService.php
-
-		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:ecommerce\\(\\)\\.$#"
-			count: 2
-			path: src/app/Services/GoogleTagManagerService.php
-
-		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:ecommerceFlash\\(\\)\\.$#"
-			count: 1
-			path: src/app/Services/GoogleTagManagerService.php
-
-		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:getPushData\\(\\)\\.$#"
-			count: 1
-			path: src/app/Services/GoogleTagManagerService.php
-
-		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:push\\(\\)\\.$#"
-			count: 3
-			path: src/app/Services/GoogleTagManagerService.php
-
-		-
-			message: "#^Call to an undefined static method Spatie\\\\GoogleTagManager\\\\GoogleTagManagerFacade\\:\\:view\\(\\)\\.$#"
-			count: 6
-			path: src/app/Services/GoogleTagManagerService.php
 
 		-
 			message: "#^Variable \\$mails in empty\\(\\) always exists and is not falsy\\.$#"
@@ -321,31 +126,16 @@ parameters:
 			path: src/app/Services/Payment/Methods/PaymentYandexService.php
 
 		-
-			message: "#^Call to an undefined static method App\\\\Libraries\\\\Seo\\\\Facades\\\\SeoFacade\\:\\:setImage\\(\\)\\.$#"
-			count: 1
-			path: src/app/Services/Seo/CatalogSeoService.php
-
-		-
-			message: "#^Call to an undefined static method App\\\\Libraries\\\\Seo\\\\Facades\\\\SeoFacade\\:\\:setRobots\\(\\)\\.$#"
-			count: 3
-			path: src/app/Services/Seo/CatalogSeoService.php
-
-		-
-			message: "#^Call to an undefined static method App\\\\Libraries\\\\Seo\\\\Facades\\\\SeoFacade\\:\\:setTitle\\(\\)\\.$#"
-			count: 1
-			path: src/app/Services/Seo/CatalogSeoService.php
-
-		-
 			message: "#^Method App\\\\Services\\\\Seo\\\\CatalogSeoService\\:\\:getCatalogTitle\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/app/Services/Seo/CatalogSeoService.php
 
 		-
-			message: "#^Call to an undefined static method App\\\\Libraries\\\\Seo\\\\Facades\\\\SeoFacade\\:\\:setTitle\\(\\)\\.$#"
+			message: "#^Method App\\\\Services\\\\Seo\\\\ProductSeoService\\:\\:getProductTitle\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/app/Services/Seo/ProductSeoService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Seo\\\\ProductSeoService\\:\\:getProductTitle\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			message: "#^Variable \\$products in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
-			path: src/app/Services/Seo/ProductSeoService.php
+			path: src/app/Services/SliderService.php

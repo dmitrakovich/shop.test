@@ -116,9 +116,8 @@ class CatalogService
 
     /**
      * @param  mixed  $products
-     * @return void
      */
-    protected function addTopProducts($products, array $filters)
+    protected function addTopProducts($products, array $filters): void
     {
         if (empty($filters[Top::class])) {
             return;
@@ -126,7 +125,7 @@ class CatalogService
 
         $topProductsIds = array_column($filters[Top::class], 'model_id');
         $topProducts = $this->productService->getById($topProductsIds);
-        if (empty($topProducts)) {
+        if ($topProducts->isEmpty()) {
             return;
         }
 

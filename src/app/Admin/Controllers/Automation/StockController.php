@@ -80,7 +80,7 @@ class StockController extends AbstractAdminController
         $grid->column('sizes.name', 'размеры на сайте')->display(fn () => $this->sizes->map(fn ($size) => $size->name)->implode(', '));
         $grid->column('sell_price', 'цена в 1С');
         $grid->column('current_price', 'цена на сайте');
-        $grid->column('discount', 'скидка')->display(fn () => $this->getFormatedDiscountForStock());
+        $grid->column('discount', 'скидка')->display(fn () => self::getFormatedDiscountForStock($this));
 
         $grid->model()->selectRaw(implode(', ', $select))
             ->leftJoin('products', 'products.id', '=', 'available_sizes_full.product_id')
@@ -110,6 +110,18 @@ class StockController extends AbstractAdminController
         $grid->disableRowSelector();
 
         return $grid;
+    }
+
+    /**
+     * Get formatted discount percentage for the product.
+     */
+    private static function getFormatedDiscountForStock($stockObject): ?string
+    {
+        if (empty($sellPrice = (float)$stockObject->sell_price) || empty($currentPrice = (float)$stockObject->current_price)) {
+            return null;
+        }
+
+        return round((($sellPrice - $currentPrice) / $sellPrice) * 100, 2) . '%';
     }
 
     private function addFiltersForAvailableSizes(Filter $filter, array $stockNames, array $defaultStockList): void

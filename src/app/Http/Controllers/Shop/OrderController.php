@@ -59,7 +59,7 @@ class OrderController extends BaseController
             $cart = Cart::make();
             $items = [];
             foreach ($request->input('sizes') as $sizeId => $state) {
-                $items[] = CartData::make([
+                $items[] = new CartData([
                     'product_id' => (int)$request->input('product_id'),
                     'size_id' => $sizeId,
                     'count' => 1,
@@ -102,7 +102,7 @@ class OrderController extends BaseController
         $items = [];
         foreach ($request->input('items') as $item) {
             $item['size_id'] = $oldSizes[$item['size']] ?? 1;
-            $items[] = CartData::make($item);
+            $items[] = new CartData($item);
         }
         $cart->setRelation('items', new EloquentCollection($items));
 

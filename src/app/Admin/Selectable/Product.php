@@ -5,6 +5,9 @@ namespace App\Admin\Selectable;
 use App\Models\Product as ProductModel;
 use Encore\Admin\Grid\Selectable;
 
+/**
+ * @mixin ProductModel
+ */
 class Product extends Selectable
 {
     public $model = ProductModel::class;

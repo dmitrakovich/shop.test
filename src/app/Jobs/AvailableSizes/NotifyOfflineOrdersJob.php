@@ -150,12 +150,12 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
             return;
         }
 
-        $notification = OrderItemStatusLog::make(['stock_id' => $stockId]);
-        $orderItem = OrderItem::make([
+        $notification = new OrderItemStatusLog(['stock_id' => $stockId]);
+        $orderItem = (new OrderItem([
             'product_id' => $productId,
             'size_id' => AvailableSizes::convertFieldToSizeId($sizeField),
             'status_key' => 'complete',
-        ])->setRelation('inventoryNotification', $notification);
+        ]))->setRelation('inventoryNotification', $notification);
 
         $chat->notifyNow(new OrderItemInventoryNotification($orderItem));
     }
