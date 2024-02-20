@@ -129,8 +129,6 @@ class OrderItemExtended extends OrderItem
 
     /**
      * Get the number of payments attribute.
-     *
-     * @return int|null
      */
     public function getInstallmentNumPaymentsAttribute(): ?int
     {

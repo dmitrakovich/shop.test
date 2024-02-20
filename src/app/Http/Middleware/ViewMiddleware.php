@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Models\Category;
-use App\Models\InfoPage;
 use App\Models\Config;
+use App\Models\InfoPage;
 use App\Models\User\Group;
 use Closure;
 use Illuminate\Http\Request;
