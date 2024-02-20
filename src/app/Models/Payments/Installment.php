@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $order_item_id
  * @property string $contract_number
  * @property float $monthly_fee
+ * @property int $num_payments
  * @property bool $send_notifications
  * @property \Illuminate\Support\Carbon|null $notice_sent_at
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -55,6 +56,7 @@ class Installment extends Model
     protected $fillable = [
         'contract_number',
         'monthly_fee',
+        'num_payments',
         'send_notifications',
         'notice_sent_at',
     ];

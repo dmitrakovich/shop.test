@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Category;
 use App\Models\InfoPage;
+use App\Models\Config;
 use App\Models\User\Group;
 use Closure;
 use Illuminate\Http\Request;
@@ -38,9 +39,11 @@ class ViewMiddleware
                 'registered' => $registeredGroup,
             ];
         });
+        $installmentMinPrice3Parts = Config::findCacheable('installment')['min_price_3_parts'] ?? 150;
         View::share('g_navCategories', $navCategories);
         View::share('g_navInfoPages', $navInfoPages);
         View::share('g_userDiscounts', $userDiscounts);
+        View::share('g_installmentMinPrice3Parts', $installmentMinPrice3Parts);
 
         return $next($request);
     }

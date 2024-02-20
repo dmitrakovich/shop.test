@@ -23,6 +23,7 @@ namespace App\Models\Orders;
  * @property string $product_photo
  * @property ?string $installment_contract_number
  * @property ?float $installment_monthly_fee
+ * @property ?int $installment_num_payments
  * @property ?bool $installment_send_notifications
  * @property ?int $stock_id
  * @property ?string $dispatch_date
@@ -48,6 +49,7 @@ class OrderItemExtended extends OrderItem
         'product_photo',
         'installment_contract_number',
         'installment_monthly_fee',
+        'installment_num_payments',
         'installment_send_notifications',
         'stock_id',
         'stock_name',
@@ -123,6 +125,16 @@ class OrderItemExtended extends OrderItem
     public function getInstallmentMonthlyFeeAttribute(): ?float
     {
         return $this->installment?->monthly_fee;
+    }
+
+    /**
+     * Get the number of payments attribute.
+     *
+     * @return int|null
+     */
+    public function getInstallmentNumPaymentsAttribute(): ?int
+    {
+        return $this->installment?->num_payments;
     }
 
     /**
