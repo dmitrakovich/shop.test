@@ -6,7 +6,8 @@
             <div class="tooltip-trigger ml-2">?</div>
         </button>
         <div class="dropdown-menu p-3">
-            @if ($product->getPrice() >= 150)
+            @if ($product->getPrice() >= $g_installmentMinPrice3Parts)
+
                 <p class="font-size-15">
                     <b>РАССРОЧКА НА 3 ПЛАТЕЖА</b>
                 </p>

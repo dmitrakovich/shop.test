@@ -429,8 +429,8 @@ class Order extends Model
             $itemPrice = $item->current_price;
             $itemPrice += $deliveryPrice ? ($deliveryPrice / $uniqItemsCount) : 0;
             $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $uniqItemsCount) : 0;
-            if ($this->hasInstallment()) {
-                $itemPrice = ($itemPrice - (2 * $item->installment_monthly_fee));
+            if ($this->hasInstallment() && $item->installment_num_payments) {
+                $itemPrice = ($itemPrice - (($item->installment_num_payments - 1) * $item->installment_monthly_fee));
             }
             $resultItemPrice += $itemPrice;
         }

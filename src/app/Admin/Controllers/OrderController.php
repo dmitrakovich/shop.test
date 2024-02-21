@@ -84,7 +84,7 @@ class OrderController extends AbstractAdminController
                     'product' => "<a href='{$item->product->getUrl()}' target='_blank'>{$item->product->getFullName()}</a>",
                     'availability' => $item->product->trashed() ? '<i class="fa fa-close text-red"></i>' : '<i class="fa fa-check text-green"></i>',
                     'status' => $item->status->name_for_admin,
-                    'size' => $item->size->name,
+                    'size' => $item->size?->name,
                     'price' => "$item->current_price $model->currency",
                 ];
             })->toArray();
@@ -327,6 +327,14 @@ class OrderController extends AbstractAdminController
                 $nestedForm->currency('discount', 'Скидка')->symbol('%');
 
                 // installment
+                $nestedForm->select('installment_num_payments', 'Количество платежей')
+                    ->options([
+                        0 => 'Без рассрочки',
+                        2 => '2 платежа',
+                        3 => '3 платежа',
+                    ])
+                    ->default(3)
+                    ->addElementClass(['installment-field']);
                 $nestedForm->text('installment_contract_number', 'Номер договора рассрочки')
                     ->placeholder('Номер заказа / номер позиции заказа. При создании оставить пустым!')
                     ->addElementClass(['installment-field']);
@@ -434,11 +442,13 @@ class OrderController extends AbstractAdminController
         foreach ($form->model()->itemsExtended as $itemExtended) {
             $contractNumber = $form->input("itemsExtended.{$itemExtended->id}.installment_contract_number");
             $monthlyFee = (float)$form->input("itemsExtended.{$itemExtended->id}.installment_monthly_fee");
+            $numPayments = (int)$form->input("itemsExtended.{$itemExtended->id}.installment_num_payments");
             $sendNotifications = $form->input("itemsExtended.{$itemExtended->id}.installment_send_notifications") === 'on';
             /** @var Installment $installment */
             $installment = $itemExtended->installment()->firstOrNew();
             $installment->contract_number = $contractNumber;
             $installment->monthly_fee = $monthlyFee;
+            $installment->num_payments = $numPayments;
             $installment->send_notifications = $sendNotifications;
             $installment->contract_date = $form->input('installment_contract_date');
             $installment->save();

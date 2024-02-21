@@ -39,6 +39,9 @@ class InstallmentOrderService
         $onlinePaymentsSum = $order->getAmountPaidOrders();
         $uniqItemsCount = $order->getUniqItemsCount();
         foreach ($order->items as $itemKey => $item) {
+            if ($item->installment->num_payments === 0) {
+                continue;
+            }
             if ($itemKey > 0) {
                 $spreadsheet->addSheet($firstSheet);
                 $spreadsheet->setActiveSheetIndex($itemKey);
@@ -68,18 +71,33 @@ class InstallmentOrderService
             $sheet->setCellValue('H13', TextHelper::numberToMoneyShortString($itemPrice));
             $sheet->setCellValue('V13', TextHelper::numberToMoneyString($itemPrice));
 
+            $firstPayment = ($itemPrice - (($item->installment->monthly_fee ?? 0) * ($item->installment->num_payments - 1)));
+            $firstPaymentPercent = round((($firstPayment * 100) / $itemPrice), 0);
+            $nextPaymentPercent = (100 - $firstPaymentPercent) / ($item->installment->num_payments - 1);
+
+            $sheet->setCellValue('X16', $firstPayment);
+            $sheet->setCellValue('Q16', $firstPaymentPercent);
+            $sheet->setCellValue('AD16', $dateContractInstallment);
+
             $sheet->setCellValue('J17', $dateContractInstallment);
             $sheet->setCellValue('J18', Carbon::parse($dateContractInstallment)->addMonth()->translatedFormat('d.m.Y'));
-            $sheet->setCellValue('J19', Carbon::parse($dateContractInstallment)->addMonth()->translatedFormat('d.m.Y'));
-            $sheet->setCellValue('J20', Carbon::parse($dateContractInstallment)->addMonths(2)->translatedFormat('d.m.Y'));
-
-            $sheet->setCellValue('X16', ($itemPrice - (($item->installment->monthly_fee ?? 0) * 2)));
+            $sheet->setCellValue('Q17', $nextPaymentPercent);
             $sheet->setCellValue('X17', $item->installment->monthly_fee ?? null);
-            $sheet->setCellValue('X19', $item->installment->monthly_fee ?? null);
-
-            $sheet->setCellValue('AD16', $dateContractInstallment);
             $sheet->setCellValue('AD17', Carbon::parse($dateContractInstallment)->addMonth()->translatedFormat('d.m.Y'));
-            $sheet->setCellValue('AD19', Carbon::parse($dateContractInstallment)->addMonths(2)->translatedFormat('d.m.Y'));
+
+            if ($item->installment->num_payments > 2) {
+                $sheet->setCellValue('J19', Carbon::parse($dateContractInstallment)->addMonth()->translatedFormat('d.m.Y'));
+                $sheet->setCellValue('J20', Carbon::parse($dateContractInstallment)->addMonths(2)->translatedFormat('d.m.Y'));
+                $sheet->setCellValue('Q19', $nextPaymentPercent);
+                $sheet->setCellValue('X19', $item->installment->monthly_fee ?? null);
+                $sheet->setCellValue('AD19', Carbon::parse($dateContractInstallment)->addMonths(2)->translatedFormat('d.m.Y'));
+            } else {
+                $sheet->setCellValue('B19', null);
+                $sheet->setCellValue('Q19', null);
+                $sheet->setCellValue('AL19', null);
+                $sheet->setCellValue('H19', null);
+                $sheet->setCellValue('H20', null);
+            }
 
             $sheet->setCellValue('Z33', $lastName);
             $sheet->setCellValue('Z34', $firstName);

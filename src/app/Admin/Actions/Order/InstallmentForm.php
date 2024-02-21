@@ -42,6 +42,9 @@ class InstallmentForm extends Action
         if (!count($order->items->where('installment.contract_number'))) {
             throw new \Exception('Номер договора рассрочки не заполнен');
         }
+        if (!count($order->items->where('installment.num_payments', '>', 0))) {
+            throw new \Exception('Количество платежей выбрано некорректно');
+        }
         if (!isset($order->user)) {
             throw new \Exception('Привяжите клиента к заказу');
         }

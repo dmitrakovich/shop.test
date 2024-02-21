@@ -42,6 +42,7 @@ class InstallmentForm extends Form
     public function form()
     {
         $this->currency('min_price', 'Минимальная сумма рассрочки')->symbol('BYN');
+        $this->currency('min_price_3_parts', 'Минимальная сумма на 3 платежа')->symbol('BYN');
     }
 
     /**

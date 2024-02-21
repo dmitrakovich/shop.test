@@ -75,7 +75,7 @@ class BelpostCODService
 
                     $firstPaymentsSum = 0;
                     foreach ($order->data as $orderItem) {
-                        $firstPaymentSum = $isInstallment ? ($orderItem->current_price - ($orderItem->installment->monthly_fee * 2)) : 0;
+                        $firstPaymentSum = $isInstallment ? ($orderItem->current_price - ($orderItem->installment->monthly_fee * ($orderItem->installment->num_payments - 1))) : 0;
                         if ($orderItem->current_price == $itemCodSum || ($isInstallment && $firstPaymentSum == $itemCodSum)) {
                             $partialBuybackItemsCount++;
                         }
@@ -84,32 +84,32 @@ class BelpostCODService
                     $firstPaymentsSum = $firstPaymentsSum ? ($firstPaymentsSum - $successfulPaymentsSum) : 0;
 
                     if (
-                        $orderTotalPrice == $paymentSum ||
-                        ($isInstallment && $firstPaymentsSum == $paymentSum)
+                        ceil($orderTotalPrice) == ceil($paymentSum) ||
+                        ($isInstallment && ceil($firstPaymentsSum) == ceil($paymentSum))
                     ) {
                         $order->update(['status_key' => 'complete']);
                         $order->data->each(function (OrderItem $orderItem) {
                             $orderItem->update(['status_key' => 'complete']);
                         });
                     } elseif ($partialBuybackItemsCount === 1) {
-                        $isPurchasedOrder = false;
-                        $order->data->each(function (OrderItem $orderItem) use ($order, $itemCodSum, $isInstallment, &$isPurchasedOrder) {
-                            $firstPaymentSum = $isInstallment ? $orderItem->current_price - ($orderItem->installment->monthly_fee * 2) : 0;
+                        $isPartialComplete = false;
+                        $order->data->each(function (OrderItem $orderItem) use ($order, $itemCodSum, $isInstallment, &$isPartialComplete) {
+                            $firstPaymentSum = $isInstallment ? $orderItem->current_price - ($orderItem->installment->monthly_fee * ($orderItem->installment->num_payments - 1)) : 0;
                             if (
-                                $orderItem->current_price == $itemCodSum ||
-                                $isInstallment && $firstPaymentSum == $itemCodSum
+                                ceil($orderItem->current_price) == ceil($itemCodSum) ||
+                                $isInstallment && ceil($firstPaymentSum) == ceil($itemCodSum)
                             ) {
                                 $orderItem->update(['status_key' => 'complete']);
-                                $isPurchasedOrder = true;
                             } else {
                                 $productFullName = $orderItem->product->getFullName();
                                 $order->adminComments()->create([
                                     'comment' => "Товар {$productFullName} не выкуплен - ожидайте возврат",
                                 ]);
                                 $orderItem->update(['status_key' => 'waiting_refund']);
+                                $isPartialComplete = true;
                             }
                         });
-                        $order->update(['status_key' => ($isPurchasedOrder ? 'complete' : 'delivered')]);
+                        $order->update(['status_key' => ($isPartialComplete ? 'partial_complete' : 'complete')]);
                     } else {
                         $order->update(['status_key' => 'delivered']);
                         $order->data->each(function (OrderItem $orderItem) {
