@@ -16,6 +16,9 @@ jobs:
           php-version: 8.1
           coverage: none
 
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
       - name: Download and extract sxGeo database
         run: |
           wget https://sypexgeo.net/files/SxGeoCountry.zip
