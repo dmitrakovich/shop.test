@@ -16,6 +16,11 @@ jobs:
           php-version: 8.1
           coverage: none
 
+      - name: Download and extract sxGeo database
+        run: |
+          wget https://sypexgeo.net/files/SxGeoCountry.zip
+          unzip SxGeoCountry.zip -d src/database/sxgeo
+
       - name: Install dependencies
         working-directory: ./src
         run: composer install --no-interaction --no-scripts --no-progress --prefer-dist
