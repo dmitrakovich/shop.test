@@ -17,7 +17,7 @@ jobs:
           coverage: none
 
       - name: Copy .env
-        run: php -r "file_exists('src/.env') || copy('src/.env.example', '.env');"
+        run: php -r "file_exists('src/.env') || copy('src/.env.example', 'src/.env');"
 
       - name: Download and extract sxGeo database
         run: |
