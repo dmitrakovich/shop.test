@@ -5,9 +5,6 @@ on: [ push, pull_request_target ]
 jobs:
   phpstan:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./src
 
     steps:
       - name: Checkout code
@@ -20,15 +17,16 @@ jobs:
           coverage: none
 
       - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+        run: php -r "file_exists('src/.env') || copy('src/.env.example', '.env');"
 
       - name: Download and extract sxGeo database
         run: |
           wget https://sypexgeo.net/files/SxGeoCountry.zip
-          unzip SxGeoCountry.zip -d database/sxgeo
+          unzip SxGeoCountry.zip -d src/database/sxgeo
 
       - name: Install dependencies
+        working-directory: ./src
         run: composer install --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Execute PHPStan
-        run: vendor/bin/phpstan analyse -v
+        run: src/vendor/bin/phpstan analyse -v
