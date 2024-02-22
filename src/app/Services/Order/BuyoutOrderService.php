@@ -83,7 +83,7 @@ class BuyoutOrderService
             $itemPrice += $order->delivery_price ? ($order->delivery_price / $uniqItemsCount) : 0;
             $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $uniqItemsCount) : 0;
             if ((int)$order->payment_id === Installment::PAYMENT_METHOD_ID && $item->installment_num_payments) {
-                $itemPrice = ($itemPrice - ($item->installment_num_payments * $item->installment_monthly_fee));
+                $itemPrice = ($itemPrice - (($item->installment_num_payments - 1) * $item->installment_monthly_fee));
             }
             $totalCodSum += $itemPrice;
 
