@@ -7,6 +7,7 @@ use App\Helpers\TextHelper;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderTrack;
 use App\Models\Payments\Installment;
+use App\Models\Offline\Displacement;
 use Deliveries\BelpostCourierFitting;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -135,6 +136,68 @@ class BelpostLabelService
         $orderTrack->update([
             'order_id' => $order->id,
         ]);
+
+        return url($resultPath);
+    }
+
+
+    public function createDisplacementLabel(Displacement $displacement): string
+    {
+        $barcodePath = '/storage/departures/barcode/' . date('d-m-Y', strtotime('now')) . '/displacement-' . $displacement->id . '.jpg';
+        $resultPath = '/storage/departures/belpost_label/' . date('d-m-Y', strtotime('now')) . '/displacement-' . $displacement->id . '.xlsx';
+        File::ensureDirectoryExists(dirname(public_path($barcodePath)));
+        File::ensureDirectoryExists(dirname(public_path($resultPath)));
+        $spreadsheet = IOFactory::load(public_path('templates/belpost_label_template.xlsx'));
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('BB6', null);
+        $sheet->setCellValue('AN7', null);
+
+        $sheet->setCellValue('AS22', null);
+        $sheet->setCellValue('BF22', null);
+        $sheet->setCellValue('BS22', null);
+
+        $sheet->setCellValue('AW25', null);
+        $sheet->setCellValue('BP25', null);
+        $sheet->setCellValue('CB25', null);
+        $sheet->setCellValue('CI25', null);
+        $sheet->setCellValue('AS28', null);
+        $sheet->setCellValue('BC28', null);
+        $sheet->setCellValue('AS30', null);
+        $sheet->setCellValue('AS33', null);
+
+        $sheet->setCellValue('D20', null);
+        $sheet->setCellValue('D22', null);
+        $sheet->setCellValue('D25', null);
+        $sheet->setCellValue('D28', null);
+        $sheet->setCellValue('D31', null);
+        $sheet->setCellValue('D33', null);
+        $sheet->setCellValue('D35', null);
+        $sheet->setCellValue('D37', null);
+
+        $sheet->unmergeCells('AM14:BQ17');
+        $sheet->mergeCells('AM14:BF16');
+        $sheet->mergeCells('AM17:BF17');
+        $sheet->setCellValue('AM17', null);
+        $sheet->getStyle('AM17')->applyFromArray([
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+
+        $sheet->setCellValue('D25', 'P');
+        $sheet->getStyle('D25')->applyFromArray([
+            'font' => [
+                'name' => 'Wingdings 2',
+            ],
+        ]);
+
+        $sheet->setCellValue('BF35', null);
+        $sheet->setCellValue('BJ35', null);
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save(public_path($resultPath));
 
         return url($resultPath);
     }
