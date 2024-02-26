@@ -14,6 +14,7 @@ class DisplacementLabelAction extends RowAction
     {
         $labelService = app(BelpostLabelService::class);
         $file = $labelService->createDisplacementLabel($model);
+
         return $this->response()->success('Этикетка успешно создана')->download($file);
     }
 }

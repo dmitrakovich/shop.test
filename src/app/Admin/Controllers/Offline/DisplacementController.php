@@ -3,11 +3,9 @@
 namespace App\Admin\Controllers\Offline;
 
 use App\Admin\Actions\Offline\DisplacementLabelAction;
-
-use App\Models\Stock;
-use App\Models\Orders\OrderItem;
 use App\Models\Offline\Displacement;
-
+use App\Models\Orders\OrderItem;
+use App\Models\Stock;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -80,7 +78,7 @@ class DisplacementController extends AdminController
         $form->multipleSelect('orderItems', 'Товары')->options($orderItems);
         $form->select('direction', 'Направление')->options([
             1 => 'Брест-Минск',
-            2 => 'Минск-Брест'
+            2 => 'Минск-Брест',
         ]);
         $form->hidden('direction_from');
         $form->hidden('direction_to');
@@ -102,6 +100,7 @@ class DisplacementController extends AdminController
             $footer->disableEditingCheck();
             $footer->disableCreatingCheck();
         });
+
         return $form;
     }
 }

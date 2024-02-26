@@ -4,10 +4,10 @@ namespace App\Services\Departures;
 
 use App\Enums\DeliveryTypeEnum;
 use App\Helpers\TextHelper;
+use App\Models\Offline\Displacement;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderTrack;
 use App\Models\Payments\Installment;
-use App\Models\Offline\Displacement;
 use Deliveries\BelpostCourierFitting;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -139,7 +139,6 @@ class BelpostLabelService
 
         return url($resultPath);
     }
-
 
     public function createDisplacementLabel(Displacement $displacement): string
     {
