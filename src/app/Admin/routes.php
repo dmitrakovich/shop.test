@@ -140,6 +140,10 @@ Route::group([
         $router->get('settings', [\App\Admin\Controllers\OrdersDistribution\SettingsController::class, 'index']);
     });
 
+    $router->group(['prefix' => 'offline', 'namespace' => 'Offline', 'as' => 'offline.'], function (Router $router) {
+        $router->resource('displacement', DisplacementController::class);
+    });
+
     // logs
     $router->group(['prefix' => 'logs', 'namespace' => 'Logs', 'as' => 'logs.'], function (Router $router) {
         $router->resource('sms', SmsController::class);
