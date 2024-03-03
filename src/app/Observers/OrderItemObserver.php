@@ -59,8 +59,8 @@ class OrderItemObserver
     public function updating(OrderItem $orderItem): void
     {
         if ($orderItem->isDirty('size_id')) {
-            $oldSize = Size::find($orderItem->getOriginal('size_id'))?->name;
-            $newSize = Size::find($orderItem->size_id)?->name;
+            $oldSize = Size::query()->find($orderItem->getOriginal('size_id'))?->name;
+            $newSize = Size::query()->find($orderItem->size_id)?->name;
             $this->logService->logOrderAction(
                 $orderItem->order_id,
                 "В товаре {$orderItem->product_id} изменен размер “{$oldSize}” &rarr; “{$newSize}”"

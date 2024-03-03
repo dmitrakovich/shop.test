@@ -35,7 +35,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
      */
     public function __construct(private array $newStockItems)
     {
-        $this->oldStockItems = AvailableSizes::get([
+        $this->oldStockItems = AvailableSizes::query()->get([
             'product_id', 'stock_id', ...AvailableSizes::getSizeFields(),
         ])->toArray();
     }
@@ -131,7 +131,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
         $movedItems = $this->movedStockItems[$productId][$stockId][$sizeKey] ?? [];
         foreach ($movedItems as $id => $count) {
             $newCount += $count;
-            OrderItemStatusLog::where('id', $id)->update(['moved_at' => now()]);
+            OrderItemStatusLog::query()->where('id', $id)->update(['moved_at' => now()]);
             if ($newCount >= $oldCount) {
                 return false;
             }

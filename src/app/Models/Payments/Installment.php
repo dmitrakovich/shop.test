@@ -5,7 +5,6 @@ namespace App\Models\Payments;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $order_item_id
  * @property string $contract_number
  * @property float $monthly_fee
- * @property int $num_payments
+ * @property int $num_payments Количество платежей
  * @property bool $send_notifications
  * @property \Illuminate\Support\Carbon|null $notice_sent_at
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -28,8 +27,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Installment extends Model
 {
-    use HasFactory;
-
     const PAYMENT_METHOD_ID = 4;
 
     /**

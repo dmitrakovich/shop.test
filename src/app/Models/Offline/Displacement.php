@@ -4,14 +4,25 @@ namespace App\Models\Offline;
 
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 
+/**
+ * @property int $id
+ * @property int|null $direction_from Направление откуда
+ * @property int|null $direction_to Направление куда
+ * @property string|null $dispatch_date Дата отправки
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderItem[] $orderItems
+ * @property-read \App\Models\Stock|null $directionFromStock
+ * @property-read \App\Models\Stock|null $directionToStock
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class Displacement extends Model
 {
-    use HasFactory;
-
     protected $guarded = ['id'];
 
     /**

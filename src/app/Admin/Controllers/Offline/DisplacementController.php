@@ -5,11 +5,13 @@ namespace App\Admin\Controllers\Offline;
 use App\Admin\Actions\Offline\DisplacementLabelAction;
 use App\Models\Offline\Displacement;
 use App\Models\Orders\OrderItem;
-use App\Models\Stock;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 
+/**
+ * @mixin Displacement
+ */
 class DisplacementController extends AdminController
 {
     /**
