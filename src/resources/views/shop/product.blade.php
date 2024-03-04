@@ -232,7 +232,7 @@
                         </div>
                     @endif
                 </form>
-                @if (!empty($product->availableSizes))
+                @if ($product->availableSizes->isNotEmpty())
                     <div class="p-product__stock col-12 mt-4">
                         <h4 class="p-product__stock-title" data-toggle="collapse"
                             href="#productStockInfo" role="button" aria-expanded="false"
