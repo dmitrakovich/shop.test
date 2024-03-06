@@ -157,7 +157,9 @@ class InstagramService
     public function filterWrongData(array $data): array
     {
         return array_filter($data, function (array $post) {
-            return isset($post['caption']) && in_array($post['media_type'], self::MEDIA_TYPE_IMAGE);
+            return isset($post['caption'])
+                && in_array($post['media_type'], self::MEDIA_TYPE_IMAGE)
+                && (isset($post['thumbnail_url']) || isset($post['media_url']));
         });
     }
 }
