@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Enums\StockTypeEnum;
 use App\Events\Analytics\ProductView;
 use App\Models\Product;
 use App\Services\FeedbackService;
@@ -35,7 +36,8 @@ class ProductController extends BaseController
             'tags',
             'category',
             'countryOfOrigin',
-            'availableSizes' => fn ($q) => $q->with(['stock' => fn ($q) => $q->with('city')]),
+            'availableSizes' => fn ($q) => $q->whereHas('stock', fn ($q) => $q->where('type', StockTypeEnum::SHOP))
+                ->with(['stock' => fn ($q) => $q->with('city')]),
         ])->withTrashed()->findOrFail($id);
         $this->productService->addToRecent($product->id);
         $this->setProductUrlToFeedback();
