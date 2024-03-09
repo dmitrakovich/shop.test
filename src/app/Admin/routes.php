@@ -19,6 +19,11 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('info-pages', InfoPageController::class);
+
+    $router->group(['prefix' => 'orders', 'namespace' => 'Orders', 'as' => 'orders.'], function (Router $router) {
+        $router->resource('offline', OfflineOrderController::class);
+    });
+    //todo: move to orders
     $router->resource('orders', \OrderController::class);
     $router->resource('order-items', OrderItemController::class);
     $router->resource('order-comments', OrderCommentController::class);
