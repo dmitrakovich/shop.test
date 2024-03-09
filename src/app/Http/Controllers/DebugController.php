@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\Ssh\CreateTunnelJob;
+use App\Jobs\Ssh\DestroyTunnelJob;
+use App\Models\OneC\OfflineOrder;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Services\Order\OrderItemInventoryService;
@@ -14,6 +17,15 @@ class DebugController extends Controller
     public function index()
     {
         // (new OrderItemInventoryService)->outOfStock(1426);
+
+
+        // CreateTunnelJob::dispatchSync();
+
+        // $offlineOrders = OfflineOrder::query()->get();
+
+        // DestroyTunnelJob::dispatchSync();
+
+        // dd($offlineOrders);
 
         return 'ok';
     }
