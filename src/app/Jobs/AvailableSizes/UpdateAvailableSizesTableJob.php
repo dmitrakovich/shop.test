@@ -108,8 +108,6 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
      */
     protected function getAvailableSizesFrom1C(): array
     {
-        CreateTunnelJob::dispatchSync();
-
         $availableSizes = [];
         DB::connection('sqlsrv')
             ->table(self::ONE_C_STOCK_QUANTITY_TABLE)
@@ -119,8 +117,6 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
             ->each(function (\stdClass $stockUnit) use (&$availableSizes) {
                 $availableSizes[] = $this->prepareAvailableSizesData($stockUnit);
             });
-
-        DestroyTunnelJob::dispatchSync();
 
         if (count($availableSizes) < self::MIN_EXPECTED_RECORDS) {
             throw new \Exception('Error retrieving data from 1C, received ' . count($availableSizes) . ' records');

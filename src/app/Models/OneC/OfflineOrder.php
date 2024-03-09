@@ -14,12 +14,9 @@ class OfflineOrder extends Model
     protected $connection = 'sqlsrv';
 
     /**
-     * Perform any actions required before the model boots.
+     * The table associated with the model.
      *
-     * @return void
+     * @var string
      */
-    protected static function booting()
-    {
-        // check tunnel
-    }
+    protected $table = 'SC6104';
 }

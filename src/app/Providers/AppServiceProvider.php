@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Contracts\OrderServiceInterface;
+use App\Database\SqlServerConnection;
 use App\Logging\FacebookApiLogger;
 use App\Notifications\ChannelManagerWithLimits;
 use App\Services\Api\Facebook\ConversionsApiService;
 use App\Services\OrderService;
 use FacebookAds\Api;
+use Illuminate\Database\Connection;
 use Illuminate\Notifications\ChannelManager;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
@@ -35,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
             // $api->setLogger($logger->setJsonPrettyPrint(true));
 
             return new ConversionsApiService($api, $pixelId);
+        });
+
+        Connection::resolverFor('sqlsrv', function ($connection, $database, $prefix, $config) {
+            return (new SqlServerConnection($connection, $database, $prefix, $config))->createTunnel();
         });
     }
 

@@ -18,11 +18,7 @@ class DebugController extends Controller
     {
         // (new OrderItemInventoryService)->outOfStock(1426);
 
-        // CreateTunnelJob::dispatchSync();
-
         // $offlineOrders = OfflineOrder::query()->get();
-
-        // DestroyTunnelJob::dispatchSync();
 
         // dd($offlineOrders);
 
