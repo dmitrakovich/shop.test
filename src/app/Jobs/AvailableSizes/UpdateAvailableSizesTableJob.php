@@ -2,8 +2,6 @@
 
 namespace App\Jobs\AvailableSizes;
 
-use App\Jobs\Ssh\CreateTunnelJob;
-use App\Jobs\Ssh\DestroyTunnelJob;
 use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
