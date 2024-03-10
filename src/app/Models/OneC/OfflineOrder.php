@@ -24,6 +24,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $SP6100 Размер
  * @property string $SP6101 Сумма
  * @property string $SP6102 Телефон
+ * @property string $SP6105 ВремяПродаж
+ * @property string $SP6106 ДатаВозврата
+ * @property string $SP6107 ВремяВозврата
+ * @property string $SP6108 НомерВозврата
  */
 class OfflineOrder extends Model
 {
@@ -40,4 +44,12 @@ class OfflineOrder extends Model
      * @var string
      */
     protected $table = 'SC6104';
+
+    /**
+     * Get the latest code by receipt number from the offline orders.
+     */
+    public static function getLatestCodeByReceipNumber(string $receiptNumber): int
+    {
+        return (int)self::query()->where('SP6098', $receiptNumber)->value('CODE');
+    }
 }

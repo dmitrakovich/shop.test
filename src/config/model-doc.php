@@ -48,7 +48,9 @@ return [
     'fail_when_empty' => false,
 
     // Ignore models by FQCN
-    'ignore' => [],
+    'ignore' => [
+        \App\Models\OneC\OfflineOrder::class,
+    ],
 
     'custom_tags' => [
         // Add a "@mixin" tag value to support static method linting for IDEs.
