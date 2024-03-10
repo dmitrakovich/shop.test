@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->index();
             $table->string('user_phone', 20)->index();
             $table->timestamp('sold_at')->comment('Date and time of sale');
-            $table->timestamp('returned_at')->comment('Date and time of return');
+            $table->timestamp('returned_at')->nullable()->comment('Date and time of return');
             $table->timestamps();
         });
     }
