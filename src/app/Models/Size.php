@@ -23,6 +23,7 @@ class Size extends Model
     use AttributeFilterTrait;
 
     final const ONE_SIZE_ID = 1;
+
     final const ONE_SIZE_SLUG = 'size-none';
 
     /**
