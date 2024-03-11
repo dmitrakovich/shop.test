@@ -2,13 +2,11 @@
 
 namespace App\Admin\Controllers\OrdersDistribution;
 
+use App\Admin\Exports\AnalyticsExporter;
 use App\Enums\Order\OrderTypeEnum;
-
 use App\Models\Logs\OrderDistributionLog;
 use App\Models\Orders\Order;
-
 use Encore\Admin\Controllers\AdminController;
-use App\Admin\Exports\AnalyticsExporter;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
 
@@ -28,7 +26,7 @@ class StatisticController extends AdminController
         $orderCreatedAtEnd = request()->input('order_created_at_end');
         $filterDateValues = [
             $orderCreatedAtStart ? $orderCreatedAtStart : now()->startOfDay(),
-            $orderCreatedAtEnd ? $orderCreatedAtEnd : now()->endOfDay()
+            $orderCreatedAtEnd ? $orderCreatedAtEnd : now()->endOfDay(),
         ];
         $orderTypeManager = OrderTypeEnum::MANAGER->value;
         $totalDistribution = OrderDistributionLog::whereBetween('created_at', $filterDateValues)->count();
