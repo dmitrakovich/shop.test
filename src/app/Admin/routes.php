@@ -143,6 +143,7 @@ Route::group([
     // Orders distribution
     $router->group(['prefix' => 'orders_distribution'], function (Router $router) {
         $router->get('settings', [\App\Admin\Controllers\OrdersDistribution\SettingsController::class, 'index']);
+        $router->resource('statistic', \App\Admin\Controllers\OrdersDistribution\StatisticController::class);
     });
 
     $router->group(['prefix' => 'offline', 'namespace' => 'Offline', 'as' => 'offline.'], function (Router $router) {
