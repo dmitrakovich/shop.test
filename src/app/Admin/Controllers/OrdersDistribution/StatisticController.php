@@ -2,15 +2,18 @@
 
 namespace App\Admin\Controllers\OrdersDistribution;
 
+use App\Admin\Controllers\AbstractAdminController;
 use App\Admin\Exports\AnalyticsExporter;
 use App\Enums\Order\OrderTypeEnum;
 use App\Models\Logs\OrderDistributionLog;
 use App\Models\Orders\Order;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
 
-class StatisticController extends AdminController
+/**
+ * @mixin Order
+ */
+class StatisticController extends AbstractAdminController
 {
     protected $title = 'Статистика распределения';
 
