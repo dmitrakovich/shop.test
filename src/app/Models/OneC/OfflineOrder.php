@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Carbon;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 
 /**
  * @property string $ID
@@ -107,5 +109,27 @@ class OfflineOrder extends AbstractOneCModel
         $date = Carbon::parse($this->SP6097);
 
         return $date->setTimeFromTimeString($this->SP6107);
+    }
+
+    /**
+     * Get the formatted offline order phone number.
+     */
+    public function getFormattedPhone(): ?string
+    {
+        $phone = $this->SP6102;
+        if (!$phone || strlen($phone) < 7) {
+            return null;
+        }
+        try {
+            $phoneUtil = PhoneNumberUtil::getInstance();
+
+            $parsedPhone = $phoneUtil->parse($phone, 'BY');
+            if ($phoneUtil->isValidNumber($parsedPhone)) {
+                return $phoneUtil->format($parsedPhone, PhoneNumberFormat::E164);
+            }
+        } catch (\Throwable $th) {
+        }
+
+        return null;
     }
 }

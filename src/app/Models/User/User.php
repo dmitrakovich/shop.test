@@ -24,6 +24,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property int $id
  * @property int|null $cart_token
  * @property int $group_id
+ * @property string|null $discount_card_number relation with 1C user
  * @property string|null $email
  * @property string|null $last_name
  * @property string|null $patronymic_name
@@ -58,6 +59,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'group_id',
+        'discount_card_number',
         'first_name',
         'last_name',
         'patronymic_name',

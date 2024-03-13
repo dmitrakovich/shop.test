@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $user_id
  * @property string $user_phone
  * @property string $sold_at Date and time of sale
- * @property string $returned_at Date and time of return
+ * @property string|null $returned_at Date and time of return
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *

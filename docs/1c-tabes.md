@@ -48,7 +48,7 @@
 | ----------- |--------------------- | ---- | ------ | ---------- |
 | F=ID        | ID object            | C    | 9      | 0          |
 | F=CODE      | object code          | C    | 12     | 0          |
-| F=DESCR     | object description   | C    | 50     | 0          |
+| F=DESCR     | ФИО пользователя     | C    | 50     | 0          |
 | F=ISMARK    | Flag Object is Marke | C    | 1      | 0          |
 | F=VERSTAMP  | Version stamp        | C    | 6      | 0          |
 | F=SP6089    | (P)ДисконтнаяКарта   | C    | 9      | 0          |

@@ -6,6 +6,7 @@ use App\Jobs\AbstractJob;
 use App\Models\OneC\OfflineOrder as OfflineOrder1C;
 use App\Models\Orders\OfflineOrder;
 use App\Models\Size;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Collection;
 
 class UpdateOfflineOrdersJob extends AbstractJob
@@ -53,7 +54,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
                 'size_id' => $order->size?->id ?? Size::ONE_SIZE_ID,
                 'price' => $order->SP6101,
                 'count' => $order->SP6099,
-                // 'user_id' => $order,
+                'user_id' => $this->findOrCreateUser($order)?->id,
                 'user_phone' => $order->SP6102,
                 'sold_at' => $order->getSoldAtDateTime(),
                 // 'returned_at' => $order,
@@ -61,15 +62,11 @@ class UpdateOfflineOrdersJob extends AbstractJob
 
             $offlineOrder->save();
         }
-
-        // dd($orders);
-
-        // найти все зависимости
-        // создать пользователя
-        // создать дисконтную карту
-        //
     }
 
+    /**
+     * Get the latest code from the offline orders.
+     */
     private function getLatestCode(): int
     {
         $receiptNumber = OfflineOrder::query()->latest('id')->value('receipt_number');
@@ -78,6 +75,8 @@ class UpdateOfflineOrdersJob extends AbstractJob
     }
 
     /**
+     * Get new offline orders based on the latest code.
+     *
      * @return Collection|OfflineOrder1C[]
      */
     private function getNewOrders(int $latestCode): Collection
@@ -88,5 +87,25 @@ class UpdateOfflineOrdersJob extends AbstractJob
             ->limit(self::NEW_ORDERS_LIMIT)
             ->orderBy('CODE')
             ->get();
+    }
+
+    /**
+     * Find or create a user based on the offline order.
+     */
+    private function findOrCreateUser(OfflineOrder1C $order): ?User
+    {
+        $phone = $order->getFormattedPhone();
+        if (!$phone) {
+            return null;
+        }
+
+        return User::query()
+            ->where('discount_card_number', $order->SP6089)
+            ->orWhere('phone', $phone)
+            ->updateOrCreate([], [
+                'discount_card_number' => $order->SP6089,
+                'phone' => $phone,
+                'first_name' => $order->DESCR,
+            ]);
     }
 }
