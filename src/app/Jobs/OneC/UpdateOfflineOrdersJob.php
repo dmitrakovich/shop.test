@@ -38,6 +38,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
             if (isset($returnOrders[$order->SP6098])) {
                 $returnOrder = $returnOrders[$order->SP6098];
                 $returnOrder->update(['returned_at' => $order->getReturnedAtDateTime()]);
+
                 //! отправить сообщение с помощью бота в ТГ
                 continue;
             }
@@ -47,6 +48,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
                     "Return order without sold order in DB, receipt: {$order->SP6098}",
                     \Sentry\Severity::warning()
                 );
+
                 continue;
             }
 
@@ -95,7 +97,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
     /**
      * Get the offline orders eligible for return.
      *
-     * @param Collection|OfflineOrder1C[] $orders
+     * @param  Collection|OfflineOrder1C[]  $orders
      * @return Collection|OfflineOrder[]
      */
     private function getOrdersForReturn(Collection $orders): Collection
