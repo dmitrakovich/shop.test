@@ -67,7 +67,7 @@ class OfflineOrder extends AbstractOneCModel
     /**
      * Get the latest code by receipt number from the offline orders.
      */
-    public static function getLatestCodeByReceipNumber(?string $receiptNumber): int
+    public static function getLatestCodeByReceiptNumber(?string $receiptNumber): int
     {
         return (int)self::query()->where('SP6098', $receiptNumber)->value('CODE');
     }

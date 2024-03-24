@@ -28,7 +28,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property string|null $email
  * @property string|null $last_name
  * @property string|null $patronymic_name
- * @property string|null $phone
+ * @property string $phone
  * @property \Illuminate\Support\Carbon|null $birth_date
  * @property \Illuminate\Support\Carbon|null $phone_verified_at
  * @property \Illuminate\Support\Carbon|null $email_verified_at
@@ -152,7 +152,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get fisrt user address if exist
+     * Get first user address if exist
      *
      * @return Address
      */
@@ -162,7 +162,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get fisrt user address country id if exist
+     * Get first user address country id if exist
      */
     public function getFirstAddressCountryId(): ?int
     {
@@ -170,7 +170,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get fisrt full user address if exist
+     * Get first full user address if exist
      */
     public function getFirstFullAddress(): ?string
     {
@@ -202,7 +202,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getFullName()
     {
-        return "{$this->last_name} {$this->first_name} {$this->patronymic_name}";
+        return trim("{$this->last_name} {$this->first_name} {$this->patronymic_name}");
     }
 
     /**

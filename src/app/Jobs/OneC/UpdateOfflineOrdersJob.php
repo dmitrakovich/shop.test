@@ -43,7 +43,8 @@ class UpdateOfflineOrdersJob extends AbstractJob
 
         foreach ($orders as $order) {
             if ($order->isReturn()) {
-                // if refund, найти, отаравить сообщение с помощью бота в ТГ и обновить дату в оригинальной записи
+                // if refund, найти, отправить сообщение с помощью бота в ТГ и обновить дату в оригинальной записи
+                // 'returned_at' => $order,
                 continue;
             }
 
@@ -54,10 +55,10 @@ class UpdateOfflineOrdersJob extends AbstractJob
                 'size_id' => $order->size?->id ?? Size::ONE_SIZE_ID,
                 'price' => $order->SP6101,
                 'count' => $order->SP6099,
+                'sku' => $order->SP6093,
                 'user_id' => $this->findOrCreateUser($order)?->id,
                 'user_phone' => $order->SP6102,
                 'sold_at' => $order->getSoldAtDateTime(),
-                // 'returned_at' => $order,
             ]);
 
             $offlineOrder->save();
@@ -71,7 +72,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
     {
         $receiptNumber = OfflineOrder::query()->latest('id')->value('receipt_number');
 
-        return OfflineOrder1C::getLatestCodeByReceipNumber($receiptNumber);
+        return OfflineOrder1C::getLatestCodeByReceiptNumber($receiptNumber);
     }
 
     /**
