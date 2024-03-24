@@ -8,7 +8,6 @@ use App\Models\Size;
 use App\Models\Stock;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Carbon;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
@@ -100,16 +99,9 @@ class OfflineOrder extends AbstractOneCModel
     /**
      * Get the product associated with the offline order.
      */
-    public function product(): HasOneThrough
+    public function product(): BelongsTo
     {
-        return $this->hasOneThrough(
-            Product::class,
-            AvailableSizesFull::class,
-            'one_c_product_id',
-            'id',
-            'SP6092',
-            'product_id'
-        )->withTrashed();
+        return $this->belongsTo(Product::class, 'SP6092', 'one_c_id')->withTrashed();
     }
 
     /**
