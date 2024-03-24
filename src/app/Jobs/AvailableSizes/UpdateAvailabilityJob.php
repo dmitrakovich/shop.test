@@ -63,7 +63,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      */
     public static function updateProductsOneCIdFromAvailableSizes(): void
     {
-        DB::update(<<<SQL
+        DB::update(<<<'SQL'
             UPDATE products p
             SET p.one_c_id = (
                 SELECT asz.one_c_product_id
