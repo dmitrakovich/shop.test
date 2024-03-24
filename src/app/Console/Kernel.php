@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SendInstallmentNoticeJob)->dailyAt('09:05');
         $schedule->job(new LeaveFeedbackAfterOrderJob)->dailyAt('09:15');
         $schedule->job(new SendingTracksJob)->dailyAt('10:15');
-        $schedule->job(new UpdateOfflineOrdersJob)->withoutOverlapping()->everyTenMinutes();
+        // $schedule->job(new UpdateOfflineOrdersJob)->withoutOverlapping()->everyTenMinutes();
 
         $schedule->command('rating:update')->withoutOverlapping()->cron('15 5,11,17,23 * * *');
         $schedule->command('inventory:update')->withoutOverlapping()->everyFifteenMinutes()->sentryMonitor();
