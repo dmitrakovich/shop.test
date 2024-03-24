@@ -61,7 +61,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
     /**
      * Update one_c_id in products table from available_sizes table.
      */
-    public static function updateProductsOneCIdFromAvailableSizes(): void
+    public function updateProductsOneCIdFromAvailableSizes(): void
     {
         DB::update(<<<'SQL'
             UPDATE products p
