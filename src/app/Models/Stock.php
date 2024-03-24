@@ -57,6 +57,18 @@ class Stock extends Model implements HasMedia, Sortable
      */
     const MINKS_ID = 17;
 
+    /**
+     * The connection name for the model.
+     *
+     * @var string|null
+     */
+    protected $connection = 'mysql';
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array<string>|bool
+     */
     protected $guarded = ['id'];
 
     /**

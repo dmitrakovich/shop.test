@@ -83,6 +83,13 @@ class Product extends Model implements HasMedia
     public const DEFAULT_SORT = 'rating';
 
     /**
+     * The connection name for the model.
+     *
+     * @var string|null
+     */
+    protected $connection = 'mysql';
+
+    /**
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
@@ -394,7 +401,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Get fianl old price after apply other sales
+     * Get final old price after apply other sales
      */
     public function getFinalOldPrice(): float
     {
@@ -453,7 +460,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Check min installmnet price
+     * Check min installment price
      */
     public function availableInstallment(): bool
     {

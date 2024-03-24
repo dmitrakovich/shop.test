@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Jobs\Mailing\DiscountAfterRegisterJob;
 use App\Jobs\Mailing\LeaveFeedbackAfterOrderJob;
 use App\Jobs\Mailing\SendingTracksJob;
+use App\Jobs\OneC\UpdateOfflineOrdersJob;
 use App\Jobs\Payment\SendInstallmentNoticeJob;
 use App\Jobs\SxGeoUpdateJob;
 use Illuminate\Console\Scheduling\Schedule;
@@ -37,6 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SendInstallmentNoticeJob)->dailyAt('09:05');
         $schedule->job(new LeaveFeedbackAfterOrderJob)->dailyAt('09:15');
         $schedule->job(new SendingTracksJob)->dailyAt('10:15');
+        $schedule->job(new UpdateOfflineOrdersJob)->withoutOverlapping()->everyTenMinutes();
 
         $schedule->command('rating:update')->withoutOverlapping()->cron('15 5,11,17,23 * * *');
         $schedule->command('inventory:update')->withoutOverlapping()->everyFifteenMinutes()->sentryMonitor();
