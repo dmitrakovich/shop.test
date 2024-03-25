@@ -86,9 +86,8 @@ class UpdateProductsRatingJob extends AbstractJob
         $productsCounters = $this->getProductsCounters($productsIds);
         foreach ($productsCounters as $ph) {
             if (isset($rating[$ph->id])) {
-                if ($ph->media_count == 0) {
-                    $photo = 0;
-                } elseif ($ph->media_count == 1) {
+                $photo = 0;
+                if ($ph->media_count == 1) {
                     $photo = 10;
                 } elseif ($ph->media_count == 2) {
                     $photo = 30;
@@ -111,31 +110,30 @@ class UpdateProductsRatingJob extends AbstractJob
             }
         }
 
-        // aviable
+        // available
         foreach ($productsCounters as $av) {
             if (isset($rating[$av->id])) {
-                if ($av->sizes_count == 0) {
-                    $aviable = 0;
-                } elseif ($av->sizes_count == 1) {
-                    $aviable = 10;
+                $available = 0;
+                if ($av->sizes_count == 1) {
+                    $available = 10;
                 } elseif ($av->sizes_count == 2) {
-                    $aviable = 30;
+                    $available = 30;
                 } elseif ($av->sizes_count == 3) {
-                    $aviable = 50;
+                    $available = 50;
                 } elseif ($av->sizes_count == 4) {
-                    $aviable = 70;
+                    $available = 70;
                 } elseif ($av->sizes_count > 4) {
-                    $aviable = 100;
+                    $available = 100;
                 }
 
-                $info['aviable']['summ'] += abs($aviable);
+                $info['aviable']['summ'] += abs($available);
                 if ($info['aviable']['min'] > $av->sizes_count) {
                     $info['aviable']['min'] = $av->sizes_count;
                 }
                 if ($info['aviable']['max'] < $av->sizes_count) {
                     $info['aviable']['max'] = $av->sizes_count;
                 }
-                $rating[$av->id]['aviable'] = $aviable;
+                $rating[$av->id]['aviable'] = $available;
             }
         }
         unset($productsCounters);
