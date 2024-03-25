@@ -279,16 +279,18 @@ class User extends Authenticatable implements MustVerifyEmail
         /** @var Address $address */
         $address = $this->addresses()->firstOrNew();
 
-        $phoneUtil = PhoneNumberUtil::getInstance();
-        $parsedPhone = $phoneUtil->parse($this->phone);
-        $countryCode = $phoneUtil->getRegionCodeForNumber($parsedPhone);
-
-        $countryId = Country::query()->where('code', $countryCode)->value('id');
-
-        if ($countryId) {
-            $address->country_id = $countryId;
-            $address->save();
+        try {
+            $phoneUtil = PhoneNumberUtil::getInstance();
+            $parsedPhone = $phoneUtil->parse($this->phone);
+            $countryCode = $phoneUtil->getRegionCodeForNumber($parsedPhone);
+            $countryId = Country::query()->where('code', $countryCode)->value('id');
+            if ($countryId) {
+                $address->country_id = $countryId;
+            }
+        } catch (\Throwable $th) {
         }
+
+        $address->save();
     }
 
     /**

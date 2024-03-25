@@ -46,10 +46,10 @@ class DebugController extends Controller
     /**
      * @return void
      */
-    protected function formatPhone($model, string $phoneFileldName = 'phone', string $countryCode = 'BY')
+    protected function formatPhone($model, string $phoneFieldName = 'phone', string $countryCode = 'BY')
     {
         try {
-            $phone = $model->$phoneFileldName;
+            $phone = $model->$phoneFieldName;
             $phoneUtil = PhoneNumberUtil::getInstance();
 
             if (empty($phone) || strlen($phone) < 6) {
@@ -62,12 +62,12 @@ class DebugController extends Controller
                 return;
             }
 
-            $formatedPhone = $phoneUtil->format($parsedPhone, PhoneNumberFormat::E164);
+            $formattedPhone = $phoneUtil->format($parsedPhone, PhoneNumberFormat::E164);
 
-            $model->$phoneFileldName = $formatedPhone;
+            $model->$phoneFieldName = $formattedPhone;
 
             if ($model->isDirty()) {
-                echo "Old phone: '$phone', new phone: '$formatedPhone'<br>";
+                echo "Old phone: '$phone', new phone: '$formattedPhone'<br>";
                 $model->save();
             }
         } catch (\Throwable $th) {
