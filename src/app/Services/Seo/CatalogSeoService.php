@@ -211,7 +211,7 @@ class CatalogSeoService
         } else {
             $currentFilters = $this->currentFilters;
 
-            return $this->getCatalogTitle($currentFilters) . ' с примеркой по Беларуси';
+            return $this->getCatalogTitle($currentFilters) . ' ✔ Примерка по РБ ✔ Доставка курьером ✔ Сертификаты и гарантия ✔ Оплата 3-я платежами 📞 +375291793790';
         }
     }
 
