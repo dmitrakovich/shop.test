@@ -7,6 +7,9 @@ use Deliveries\DeliveryMethod;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 
+/**
+ * @mixin DeliveryMethod
+ */
 class DeliveryController extends AbstractAdminController
 {
     /**
@@ -26,8 +29,8 @@ class DeliveryController extends AbstractAdminController
         $grid = new Grid(new DeliveryMethod());
 
         // $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
-        $grid->column('instance', 'Instance');
+        $grid->column('name', 'Название способа доставки');
+        $grid->column('instance_class', 'Instance')->display(fn () => $this->getRawOriginal('instance'));
         $grid->column('active', __('Active'))->switch();
         // $grid->column('sorting', __('Sorting'));
         // $grid->column('created_at', __('Created at'));
