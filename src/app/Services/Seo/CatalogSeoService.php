@@ -197,11 +197,12 @@ class CatalogSeoService
                 $titleValuesOrdered[] = $this->currentCity->catalog_title;
             }
 
-            if (implode(' ', $titleValuesOrdered) = 'Женская обувь') {
-                $titleValuesOrdered[0] = 'BAROCCO ⭐ Каталог женской обуви с доставкой по Беларуси';
+            $titleStr = implode(' ', $titleValuesOrdered);
+            if ($titleStr === 'женская обувь') {
+                $titleStr = 'BAROCCO ⭐ Каталог женской обуви с доставкой по Беларуси';
             }
 
-            return Str::ucfirst((!$emptyCategory ? 'купить ' : '') . implode(' ', $titleValuesOrdered));
+            return Str::ucfirst((!$emptyCategory ? 'купить ' : '') . $titleStr);
         }
     }
 
