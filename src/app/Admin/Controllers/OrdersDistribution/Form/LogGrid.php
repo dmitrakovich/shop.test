@@ -7,6 +7,7 @@ use Encore\Admin\Grid;
 
 /**
  * @mixin OrderDistributionLog
+ * @phpstan-require-extends OrderDistributionLog
  */
 class LogGrid
 {

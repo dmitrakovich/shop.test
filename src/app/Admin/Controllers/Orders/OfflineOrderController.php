@@ -32,7 +32,8 @@ class OfflineOrderController extends AbstractAdminController
 
         $grid->column('receipt_number', 'Номер чека');
         $grid->column('product_photo', 'Превью')->display(fn () => $this->product?->getFirstMediaUrl('default', 'thumb'))->image();
-        $grid->column('sku', 'Код товара (Артикул) в 1С');
+        $grid->column('product_id', 'Код товара');
+        $grid->column('sku', 'Артикул в 1С');
         $grid->column('size.name', 'Размер');
         $grid->column('price', 'Сумма')->suffix('BYN', ' ');
         $grid->column('sold_at', 'Дата')->display(fn ($datetime) => self::formatDateTime($datetime));

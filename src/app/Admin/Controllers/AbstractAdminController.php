@@ -7,6 +7,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Show;
 use Illuminate\Support\Carbon;
 
+#[\AllowDynamicProperties]
 abstract class AbstractAdminController extends AdminController
 {
     /**

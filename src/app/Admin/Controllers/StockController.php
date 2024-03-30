@@ -14,6 +14,7 @@ use Encore\Admin\Show;
 
 /**
  * @mixin Stock
+ * @phpstan-require-extends Stock
  */
 class StockController extends AdminController
 {

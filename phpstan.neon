@@ -3,7 +3,7 @@ includes:
     - phpstan-baseline.neon
 
 parameters:
-  phpVersion: 80120
+  phpVersion: 80340
   level: 1
   paths:
     - src/app
