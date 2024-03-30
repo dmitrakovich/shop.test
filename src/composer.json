@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "repositories": [
         {
@@ -15,7 +18,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.3",
         "appstract/laravel-opcache": "^4.0",
         "calebporzio/sushi": "^2.5",
         "ddeboer/imap": "^1.18",
@@ -58,7 +61,7 @@
         "larastan/larastan": "^2.0",
         "laravel/breeze": "^1.9",
         "laravel/pint": "^1.2",
-        "laravel/sail": "^1.26",
+        "laravel/sail": "^1.29",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "orangehill/iseed": "^3.0",
