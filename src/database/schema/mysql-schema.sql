@@ -6,7 +6,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 DROP TABLE IF EXISTS `admin_menu`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin_menu` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int NOT NULL DEFAULT '0',
@@ -22,7 +22,7 @@ CREATE TABLE `admin_menu` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_operation_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin_operation_log` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE `admin_operation_log` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin_permissions` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE `admin_permissions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_role_menu`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin_role_menu` (
   `role_id` int NOT NULL,
   `menu_id` int NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `admin_role_menu` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_role_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin_role_permissions` (
   `role_id` int NOT NULL,
   `permission_id` int NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE `admin_role_permissions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_role_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin_role_users` (
   `role_id` int NOT NULL,
   `user_id` int NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE `admin_role_users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin_roles` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -101,7 +101,7 @@ CREATE TABLE `admin_roles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_user_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin_user_permissions` (
   `user_id` int NOT NULL,
   `permission_id` int NOT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE `admin_user_permissions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `admin_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin_users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -132,7 +132,7 @@ CREATE TABLE `admin_users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `api_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `api_users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -143,7 +143,7 @@ CREATE TABLE `api_users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `available_sizes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `available_sizes` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `product_id` bigint unsigned DEFAULT NULL,
@@ -176,7 +176,6 @@ CREATE TABLE `available_sizes` (
   `size_48` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `sizes_availabilities_product_id_index` (`product_id`) USING BTREE,
-  KEY `sizes_availabilities_one_c_product_id_index` (`one_c_product_id`) USING BTREE,
   KEY `available_sizes_sku_index` (`sku`) USING BTREE,
   KEY `available_sizes_category_id_index` (`category_id`) USING BTREE,
   KEY `available_sizes_brand_id_index` (`brand_id`) USING BTREE,
@@ -185,7 +184,7 @@ CREATE TABLE `available_sizes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `available_sizes_full`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `available_sizes_full` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `product_id` bigint unsigned DEFAULT NULL,
@@ -218,16 +217,16 @@ CREATE TABLE `available_sizes_full` (
   `size_48` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `sizes_availabilities_product_id_index` (`product_id`) USING BTREE,
-  KEY `sizes_availabilities_one_c_product_id_index` (`one_c_product_id`) USING BTREE,
   KEY `available_sizes_sku_index` (`sku`) USING BTREE,
   KEY `available_sizes_category_id_index` (`category_id`) USING BTREE,
   KEY `available_sizes_brand_id_index` (`brand_id`) USING BTREE,
-  KEY `available_sizes_stock_id_index` (`stock_id`) USING BTREE
+  KEY `available_sizes_stock_id_index` (`stock_id`) USING BTREE,
+  KEY `sizes_availabilities_one_c_product_id_index` (`one_c_product_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `banners`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `banners` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `position` enum('catalog_top','index_main','index_top','index_bottom','main_menu_catalog','catalog_mob','feedback','feedback_mob') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -248,7 +247,7 @@ CREATE TABLE `banners` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `batches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `batches` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `dispatch_date` datetime DEFAULT NULL COMMENT 'Дата отправки',
@@ -259,7 +258,7 @@ CREATE TABLE `batches` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `brands`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `brands` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `one_c_id` int unsigned DEFAULT NULL,
@@ -276,7 +275,7 @@ CREATE TABLE `brands` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `cart_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cart_data` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `cart_id` bigint unsigned NOT NULL,
@@ -291,7 +290,7 @@ CREATE TABLE `cart_data` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `carts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `carts` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `promocode_id` bigint unsigned DEFAULT NULL,
@@ -303,7 +302,7 @@ CREATE TABLE `carts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -317,6 +316,7 @@ CREATE TABLE `categories` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
+  `order` smallint NOT NULL DEFAULT '0' COMMENT 'Порядок сортировки',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `categories_slug_unique` (`slug`) USING BTREE,
   UNIQUE KEY `categories_path_unique` (`path`) USING BTREE,
@@ -327,7 +327,7 @@ CREATE TABLE `categories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `cities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cities` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `country_id` bigint unsigned NOT NULL COMMENT 'ID страны',
@@ -345,7 +345,7 @@ CREATE TABLE `cities` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `collections`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `collections` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -358,7 +358,7 @@ CREATE TABLE `collections` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `colors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `colors` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -372,7 +372,7 @@ CREATE TABLE `colors` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `configs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `configs` (
   `key` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `config` json NOT NULL,
@@ -383,7 +383,7 @@ CREATE TABLE `configs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `countries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `countries` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -395,12 +395,25 @@ CREATE TABLE `countries` (
   KEY `countries_code_index` (`code`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `country_of_origins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `country_of_origins` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seo` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `currencies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `currencies` (
-  `code` char(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `country` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` char(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'currency code 3 symbol (ISO 4217)',
+  `country` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'country code 2 symbol (ISO 3166-1)',
   `rate` double(8,2) NOT NULL,
   `decimals` smallint NOT NULL DEFAULT '0',
   `symbol` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -413,7 +426,7 @@ CREATE TABLE `currencies` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `delivery_methods`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `delivery_methods` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -428,7 +441,7 @@ CREATE TABLE `delivery_methods` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `devices`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `devices` (
   `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint unsigned DEFAULT NULL,
@@ -446,9 +459,42 @@ CREATE TABLE `devices` (
   KEY `devices_google_id_index` (`google_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `displacement_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `displacement_items` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `displacement_id` bigint unsigned DEFAULT NULL COMMENT 'ID перемещения',
+  `order_item_id` bigint unsigned DEFAULT NULL COMMENT 'ID товара',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `displacement_items_displacement_id_foreign` (`displacement_id`) USING BTREE,
+  KEY `displacement_items_order_item_id_foreign` (`order_item_id`) USING BTREE,
+  CONSTRAINT `displacement_items_displacement_id_foreign` FOREIGN KEY (`displacement_id`) REFERENCES `displacements` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `displacement_items_order_item_id_foreign` FOREIGN KEY (`order_item_id`) REFERENCES `order_items` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `displacements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `displacements` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `direction_from` bigint unsigned DEFAULT NULL COMMENT 'Направление откуда',
+  `direction_to` bigint unsigned DEFAULT NULL COMMENT 'Направление куда',
+  `dispatch_date` timestamp NULL DEFAULT NULL COMMENT 'Дата отправки',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `displacements_direction_from_foreign` (`direction_from`) USING BTREE,
+  KEY `displacements_direction_to_foreign` (`direction_to`) USING BTREE,
+  CONSTRAINT `displacements_direction_from_foreign` FOREIGN KEY (`direction_from`) REFERENCES `stocks` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  CONSTRAINT `displacements_direction_to_foreign` FOREIGN KEY (`direction_to`) REFERENCES `stocks` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `docs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `docs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `slug` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -461,7 +507,7 @@ CREATE TABLE `docs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `fabrics`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `fabrics` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -474,7 +520,7 @@ CREATE TABLE `fabrics` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `failed_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `failed_jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -489,7 +535,7 @@ CREATE TABLE `failed_jobs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `favorites`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `favorites` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned DEFAULT NULL,
@@ -505,7 +551,7 @@ CREATE TABLE `favorites` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback_answers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback_answers` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `feedback_id` bigint unsigned NOT NULL,
@@ -522,7 +568,7 @@ CREATE TABLE `feedback_answers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedbacks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedbacks` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned DEFAULT NULL,
@@ -550,7 +596,7 @@ CREATE TABLE `feedbacks` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `heels`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `heels` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -563,7 +609,7 @@ CREATE TABLE `heels` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `index_links`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `index_links` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -575,7 +621,7 @@ CREATE TABLE `index_links` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `info_pages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `info_pages` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -590,17 +636,19 @@ CREATE TABLE `info_pages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `installments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `installments` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `order_item_id` bigint unsigned NOT NULL,
-  `contract_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contract_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `monthly_fee` double(8,2) NOT NULL,
+  `num_payments` smallint unsigned NOT NULL DEFAULT '3' COMMENT 'Количество платежей',
   `send_notifications` tinyint(1) NOT NULL DEFAULT '0',
   `notice_sent_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `installment_form_file` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Файл бланка рассрочки',
+  `contract_date` date DEFAULT NULL COMMENT 'Дата заключения договора рассрочки',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `installments_order_item_id_unique` (`order_item_id`) USING BTREE,
   KEY `installments_contract_number_index` (`contract_number`) USING BTREE,
@@ -609,7 +657,7 @@ CREATE TABLE `installments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `queue` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -624,7 +672,7 @@ CREATE TABLE `jobs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `log_inventories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `log_inventories` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `product_id` bigint unsigned NOT NULL,
@@ -637,7 +685,7 @@ CREATE TABLE `log_inventories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `log_order_actions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `log_order_actions` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `order_id` bigint unsigned NOT NULL,
@@ -651,10 +699,27 @@ CREATE TABLE `log_order_actions` (
   CONSTRAINT `log_order_actions_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `log_order_item_inventory_notifications`;
+DROP TABLE IF EXISTS `log_order_distribution`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `log_order_item_inventory_notifications` (
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `log_order_distribution` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` bigint unsigned DEFAULT NULL COMMENT 'ID заказа',
+  `admin_user_id` int unsigned DEFAULT NULL COMMENT 'ID admin',
+  `action` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'Действие',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `log_order_distribution_admin_user_id_foreign` (`admin_user_id`) USING BTREE,
+  KEY `log_order_distribution_order_id_foreign` (`order_id`) USING BTREE,
+  CONSTRAINT `log_order_distribution_admin_user_id_foreign` FOREIGN KEY (`admin_user_id`) REFERENCES `admin_users` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  CONSTRAINT `log_order_distribution_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `log_order_item_statuses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `log_order_item_statuses` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `order_item_id` bigint unsigned NOT NULL,
   `stock_id` bigint unsigned NOT NULL,
@@ -662,17 +727,21 @@ CREATE TABLE `log_order_item_inventory_notifications` (
   `reserved_at` timestamp NULL DEFAULT NULL,
   `canceled_at` timestamp NULL DEFAULT NULL,
   `confirmed_at` timestamp NULL DEFAULT NULL,
+  `collected_at` timestamp NULL DEFAULT NULL,
+  `picked_up_at` timestamp NULL DEFAULT NULL,
+  `moved_at` timestamp NULL DEFAULT NULL,
   `sended_at` timestamp NULL DEFAULT NULL,
   `completed_at` timestamp NULL DEFAULT NULL,
   `returned_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `log_order_item_inventory_notifications_order_item_id_unique` (`order_item_id`) USING BTREE,
+  UNIQUE KEY `order_item_id_deleted_at_unique` (`order_item_id`,`deleted_at`) USING BTREE,
   KEY `log_order_item_inventory_notifications_stock_id_index` (`stock_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `log_sms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `log_sms` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `admin_id` bigint unsigned DEFAULT NULL,
@@ -693,7 +762,7 @@ CREATE TABLE `log_sms` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `mailings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mailings` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -705,7 +774,7 @@ CREATE TABLE `mailings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `manufacturers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `manufacturers` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -716,7 +785,7 @@ CREATE TABLE `manufacturers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `media`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `media` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `model_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -744,7 +813,7 @@ CREATE TABLE `media` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -752,9 +821,36 @@ CREATE TABLE `migrations` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `offline_orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `offline_orders` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `receipt_number` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Receipt number',
+  `stock_id` bigint unsigned DEFAULT NULL,
+  `product_id` bigint unsigned DEFAULT NULL,
+  `size_id` bigint unsigned DEFAULT NULL,
+  `price` double(8,2) NOT NULL COMMENT 'Цена покупки',
+  `count` tinyint unsigned NOT NULL COMMENT 'Number of items in the order',
+  `sku` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'product stock keeping unit',
+  `user_id` bigint unsigned DEFAULT NULL,
+  `user_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sold_at` timestamp NOT NULL COMMENT 'Date and time of sale',
+  `returned_at` timestamp NULL DEFAULT NULL COMMENT 'Date and time of return',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `offline_orders_receipt_number_unique` (`receipt_number`) USING BTREE,
+  KEY `offline_orders_stock_id_index` (`stock_id`) USING BTREE,
+  KEY `offline_orders_product_id_index` (`product_id`) USING BTREE,
+  KEY `offline_orders_size_id_index` (`size_id`) USING BTREE,
+  KEY `offline_orders_user_id_index` (`user_id`) USING BTREE,
+  KEY `offline_orders_user_phone_index` (`user_phone`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `online_payment_statuses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `online_payment_statuses` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `online_payment_id` bigint unsigned NOT NULL COMMENT 'ID платежа',
@@ -771,7 +867,7 @@ CREATE TABLE `online_payment_statuses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `online_payments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `online_payments` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `order_id` bigint unsigned NOT NULL COMMENT 'Номер заказа',
@@ -811,7 +907,7 @@ CREATE TABLE `online_payments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `order_admin_comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_admin_comments` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `order_id` bigint unsigned NOT NULL,
@@ -824,7 +920,7 @@ CREATE TABLE `order_admin_comments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `order_item_statuses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_item_statuses` (
   `key` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `name_for_admin` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -838,7 +934,7 @@ CREATE TABLE `order_item_statuses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `order_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_items` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `order_id` bigint unsigned NOT NULL,
@@ -863,7 +959,7 @@ CREATE TABLE `order_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `order_statuses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_statuses` (
   `key` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `name_for_admin` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -877,7 +973,7 @@ CREATE TABLE `order_statuses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `order_tracks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_tracks` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `track_number` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Трек номер заказа',
@@ -894,7 +990,7 @@ CREATE TABLE `order_tracks` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned DEFAULT NULL,
@@ -917,10 +1013,11 @@ CREATE TABLE `orders` (
   `payment_id` bigint unsigned DEFAULT NULL,
   `payment_cost` double(8,2) DEFAULT NULL,
   `delivery_id` bigint unsigned DEFAULT NULL,
+  `stock_id` bigint unsigned DEFAULT NULL COMMENT 'Warehouse (Stock) from which the order will be picked up',
   `delivery_cost` double(8,2) DEFAULT NULL,
   `delivery_price` double(8,2) DEFAULT NULL,
   `delivery_point_id` bigint unsigned DEFAULT NULL,
-  `order_method` enum('default','oneclick','chat','phone','email','viber','telegram','whatsapp','insta','other') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default',
+  `order_method` enum('undefined','default','oneclick','chat','phone','email','viber','telegram','whatsapp','insta','other') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default',
   `utm_medium` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `utm_source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `utm_campaign` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -933,6 +1030,7 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `batch_id` bigint unsigned DEFAULT NULL COMMENT 'Номер партии',
   `weight` double(10,2) DEFAULT NULL,
+  `order_type` enum('mobile','desktop','manager') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Типы заказа',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `orders_user_id_index` (`user_id`) USING BTREE,
   KEY `orders_device_id_index` (`device_id`) USING BTREE,
@@ -945,12 +1043,13 @@ CREATE TABLE `orders` (
   KEY `orders_status_key_index` (`status_key`) USING BTREE,
   KEY `orders_admin_id_index` (`admin_id`) USING BTREE,
   KEY `orders_batch_id_foreign` (`batch_id`) USING BTREE,
+  KEY `orders_stock_id_index` (`stock_id`) USING BTREE,
   CONSTRAINT `orders_batch_id_foreign` FOREIGN KEY (`batch_id`) REFERENCES `batches` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_reset_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_reset_tokens` (
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -960,7 +1059,7 @@ CREATE TABLE `password_reset_tokens` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `payment_methods`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `payment_methods` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -975,7 +1074,7 @@ CREATE TABLE `payment_methods` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `personal_access_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `personal_access_tokens` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -994,7 +1093,7 @@ CREATE TABLE `personal_access_tokens` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `product_attributes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_attributes` (
   `product_id` bigint unsigned NOT NULL,
   `attribute_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1004,7 +1103,7 @@ CREATE TABLE `product_attributes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `product_carousels`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_carousels` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1024,7 +1123,7 @@ CREATE TABLE `product_carousels` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `product_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_groups` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1034,9 +1133,10 @@ CREATE TABLE `product_groups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `one_c_id` bigint unsigned DEFAULT NULL,
   `slug` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `label_id` int unsigned NOT NULL DEFAULT '0',
@@ -1063,8 +1163,10 @@ CREATE TABLE `products` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   `product_group_id` bigint unsigned DEFAULT NULL COMMENT 'ID группы товаров',
   `key_features` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Ключевая особенность товара',
+  `country_of_origin_id` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `products_slug_unique` (`slug`) USING BTREE,
+  UNIQUE KEY `products_one_c_id_unique` (`one_c_id`) USING BTREE,
   KEY `products_price_id_index` (`price`,`id`) USING BTREE,
   KEY `products_created_at_id_index` (`created_at`,`id`) USING BTREE,
   KEY `products_rating_id_index` (`rating`,`id`) USING BTREE,
@@ -1075,12 +1177,14 @@ CREATE TABLE `products` (
   KEY `products_manufacturer_id_index` (`manufacturer_id`) USING BTREE,
   KEY `products_collection_id_index` (`collection_id`) USING BTREE,
   KEY `products_product_group_id_foreign` (`product_group_id`) USING BTREE,
+  KEY `products_country_of_origin_id_foreign` (`country_of_origin_id`) USING BTREE,
+  CONSTRAINT `products_country_of_origin_id_foreign` FOREIGN KEY (`country_of_origin_id`) REFERENCES `country_of_origins` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,
   CONSTRAINT `products_product_group_id_foreign` FOREIGN KEY (`product_group_id`) REFERENCES `product_groups` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `promotions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `promotions` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1092,7 +1196,7 @@ CREATE TABLE `promotions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sales`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sales` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1119,7 +1223,7 @@ CREATE TABLE `sales` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `seasons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seasons` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1132,7 +1236,7 @@ CREATE TABLE `seasons` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `seo_links`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seo_links` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `folder_enum_id` tinyint unsigned DEFAULT NULL COMMENT 'Enum id каталога',
@@ -1154,7 +1258,7 @@ CREATE TABLE `seo_links` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `short_links`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `short_links` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `short_link` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1167,7 +1271,7 @@ CREATE TABLE `short_links` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sizes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sizes` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1180,7 +1284,7 @@ CREATE TABLE `sizes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `statuses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `statuses` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1192,12 +1296,14 @@ CREATE TABLE `statuses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `stocks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stocks` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `one_c_id` int unsigned DEFAULT NULL,
   `city_id` bigint unsigned NOT NULL,
-  `chat_id` bigint unsigned DEFAULT NULL,
+  `private_chat_id` bigint unsigned DEFAULT NULL,
+  `group_chat_id` bigint unsigned DEFAULT NULL,
+  `offline_notifications_pause_until` timestamp NULL DEFAULT NULL,
   `type` enum('shop','stock') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'stock',
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `internal_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1210,16 +1316,18 @@ CREATE TABLE `stocks` (
   `geo_longitude` double(10,7) DEFAULT NULL,
   `check_availability` tinyint(1) NOT NULL DEFAULT '0',
   `sorting` smallint unsigned NOT NULL DEFAULT '0',
+  `site_sorting` smallint NOT NULL DEFAULT '0' COMMENT 'Сортировка на сайте',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `stocks_one_c_id_unique` (`one_c_id`) USING BTREE,
-  KEY `stocks_chat_id_index` (`chat_id`) USING BTREE
+  KEY `stocks_chat_id_index` (`group_chat_id`) USING BTREE,
+  KEY `stocks_private_chat_id_index` (`private_chat_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `styles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `styles` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1232,7 +1340,7 @@ CREATE TABLE `styles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tag_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tag_groups` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Название группы тегов',
@@ -1243,7 +1351,7 @@ CREATE TABLE `tag_groups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1261,7 +1369,7 @@ CREATE TABLE `tags` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `telegram_bots`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `telegram_bots` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1274,7 +1382,7 @@ CREATE TABLE `telegram_bots` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `telegram_chats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `telegram_chats` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `chat_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1290,7 +1398,7 @@ CREATE TABLE `telegram_chats` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tokens` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `token` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1302,7 +1410,7 @@ CREATE TABLE `tokens` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `urls`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `urls` (
   `slug` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `model_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1314,24 +1422,33 @@ CREATE TABLE `urls` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_addresses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_addresses` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned NOT NULL,
   `country_id` bigint unsigned DEFAULT NULL,
-  `region` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `city` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `zip` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `region` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Область/край',
+  `city` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Населенный пункт',
+  `zip` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Почтовый индекс',
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `street` varchar(96) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Улица',
+  `house` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Дом',
+  `corpus` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Корпус',
+  `room` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Квартира',
+  `approve` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Подтверждение о проверке',
+  `district` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Район',
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `user_addresses_user_id_index` (`user_id`) USING BTREE
+  KEY `user_addresses_user_id_index` (`user_id`) USING BTREE,
+  KEY `user_addresses_country_id_foreign` (`country_id`) USING BTREE,
+  CONSTRAINT `user_addresses_country_id_foreign` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  CONSTRAINT `user_addresses_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_groups` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1341,7 +1458,7 @@ CREATE TABLE `user_groups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_passports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_passports` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `passport_number` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Номер паспорта',
@@ -1360,16 +1477,17 @@ CREATE TABLE `user_passports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `cart_token` bigint unsigned DEFAULT NULL,
   `group_id` bigint unsigned NOT NULL DEFAULT '1',
+  `discount_card_number` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'relation with 1C user',
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `first_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `patronymic_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `birth_date` date DEFAULT NULL,
   `phone_verified_at` timestamp NULL DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
@@ -1377,8 +1495,24 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `users_phone_unique` (`phone`) USING BTREE,
   UNIQUE KEY `users_email_unique` (`email`) USING BTREE,
-  UNIQUE KEY `users_cart_token_unique` (`cart_token`) USING BTREE
+  UNIQUE KEY `users_cart_token_unique` (`cart_token`) USING BTREE,
+  UNIQUE KEY `users_discount_card_number_unique` (`discount_card_number`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `work_schedules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `work_schedules` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `admin_user_id` int unsigned DEFAULT NULL,
+  `date` date DEFAULT NULL COMMENT 'Дата',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `work_schedules_admin_user_id_foreign` (`admin_user_id`) USING BTREE,
+  CONSTRAINT `work_schedules_admin_user_id_foreign` FOREIGN KEY (`admin_user_id`) REFERENCES `admin_users` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1388,114 +1522,143 @@ CREATE TABLE `users` (
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1);
-INSERT INTO `migrations` VALUES (2,'2014_10_12_100000_create_password_resets_table',1);
-INSERT INTO `migrations` VALUES (3,'2016_01_04_173148_create_admin_tables',1);
-INSERT INTO `migrations` VALUES (4,'2019_08_19_000000_create_failed_jobs_table',1);
-INSERT INTO `migrations` VALUES (5,'2019_12_14_000001_create_personal_access_tokens_table',1);
-INSERT INTO `migrations` VALUES (6,'2020_07_21_191003_create_categories_table',1);
-INSERT INTO `migrations` VALUES (7,'2020_08_28_174916_create_jobs_table',1);
-INSERT INTO `migrations` VALUES (8,'2020_09_02_150216_create_urls_table',1);
-INSERT INTO `migrations` VALUES (9,'2020_09_04_122722_create_product_attributes_table',1);
-INSERT INTO `migrations` VALUES (10,'2020_09_08_090900_create_fabrics_table',1);
-INSERT INTO `migrations` VALUES (11,'2020_09_08_091019_create_sizes_table',1);
-INSERT INTO `migrations` VALUES (12,'2020_09_08_091030_create_colors_table',1);
-INSERT INTO `migrations` VALUES (13,'2020_09_08_091646_create_seasons_table',1);
-INSERT INTO `migrations` VALUES (14,'2020_09_08_091813_create_tags_table',1);
-INSERT INTO `migrations` VALUES (15,'2020_09_08_091832_create_brands_table',1);
-INSERT INTO `migrations` VALUES (16,'2020_09_24_110810_create_heels_table',1);
-INSERT INTO `migrations` VALUES (17,'2020_09_24_110820_create_styles_table',1);
-INSERT INTO `migrations` VALUES (18,'2020_10_16_085850_create_products_table',1);
-INSERT INTO `migrations` VALUES (19,'2020_10_19_084729_create_media_table',1);
-INSERT INTO `migrations` VALUES (20,'2020_10_28_104316_create_countries_table',1);
-INSERT INTO `migrations` VALUES (21,'2020_10_28_115506_create_feedback_table',1);
-INSERT INTO `migrations` VALUES (22,'2020_10_28_120115_create_feedback_answers_table',1);
-INSERT INTO `migrations` VALUES (23,'2020_12_03_080136_create_carts_table',1);
-INSERT INTO `migrations` VALUES (24,'2020_12_03_080200_create_cart_data_table',1);
-INSERT INTO `migrations` VALUES (25,'2020_12_15_102136_create_orders_table',1);
-INSERT INTO `migrations` VALUES (26,'2020_12_15_102242_create_order_items_table',1);
-INSERT INTO `migrations` VALUES (27,'2021_02_02_130357_create_info_pages_table',1);
-INSERT INTO `migrations` VALUES (28,'2021_02_03_110356_create_banners_table',1);
-INSERT INTO `migrations` VALUES (29,'2021_02_25_102813_create_delivery_methods_table',1);
-INSERT INTO `migrations` VALUES (30,'2021_02_25_103145_create_payment_methods_table',1);
-INSERT INTO `migrations` VALUES (31,'2021_02_28_220402_create_collections_table',1);
-INSERT INTO `migrations` VALUES (32,'2021_06_06_103038_create_sales_table',1);
-INSERT INTO `migrations` VALUES (33,'2021_06_25_131418_create_currencies_table',1);
-INSERT INTO `migrations` VALUES (34,'2021_08_25_224659_create_product_carousels_table',1);
-INSERT INTO `migrations` VALUES (35,'2021_09_09_135535_create_manufacturers_table',1);
-INSERT INTO `migrations` VALUES (36,'2021_10_21_111912_create_index_links_table',1);
-INSERT INTO `migrations` VALUES (37,'2021_11_14_163634_create_api_users_table',1);
-INSERT INTO `migrations` VALUES (38,'2021_11_19_020637_create_user_addresses_table',1);
-INSERT INTO `migrations` VALUES (39,'2021_12_08_101737_create_order_statuses_table',1);
-INSERT INTO `migrations` VALUES (40,'2021_12_08_101830_create_order_item_statuses_table',1);
-INSERT INTO `migrations` VALUES (41,'2021_12_26_180140_create_order_admin_comments_table',1);
-INSERT INTO `migrations` VALUES (42,'2022_01_26_232337_create_devices_table',1);
-INSERT INTO `migrations` VALUES (43,'2022_01_28_144022_create_favorites_table',1);
-INSERT INTO `migrations` VALUES (44,'2022_03_07_120403_create_statuses_table',1);
-INSERT INTO `migrations` VALUES (45,'2022_05_16_155735_add_generated_conversions_to_media_table',1);
-INSERT INTO `migrations` VALUES (46,'2022_06_01_230930_create_docs_table',1);
-INSERT INTO `migrations` VALUES (47,'2022_06_16_001820_create_short_links_table',1);
-INSERT INTO `migrations` VALUES (48,'2022_06_18_222313_create_installments_table',1);
-INSERT INTO `migrations` VALUES (49,'2022_09_01_092326_add_spoiler_and_timer_to_banners_table',1);
-INSERT INTO `migrations` VALUES (50,'2022_09_08_214841_remove_timer_field_to_banners_table',1);
-INSERT INTO `migrations` VALUES (51,'2022_09_12_222038_create_promotions_table',1);
-INSERT INTO `migrations` VALUES (52,'2022_09_13_001514_add_type_field_to_product_carousels_table',1);
-INSERT INTO `migrations` VALUES (53,'2022_09_21_233541_add_enum_posituions_to_banners_table',1);
-INSERT INTO `migrations` VALUES (54,'2022_09_29_013241_update_db_rows_2909',1);
-INSERT INTO `migrations` VALUES (55,'2022_10_09_140114_create_sms_logs_table',1);
-INSERT INTO `migrations` VALUES (56,'2022_10_03_214755_create_payments_table',2);
-INSERT INTO `migrations` VALUES (57,'2022_10_03_220446_create_payment_statuses_table',2);
-INSERT INTO `migrations` VALUES (58,'2022_10_26_125039_create_tokens_table',3);
-INSERT INTO `migrations` VALUES (59,'2022_10_26_160033_create_configs_table',4);
-INSERT INTO `migrations` VALUES (60,'2022_10_28_123835_add_payment_num_field_to_online_payments_table',5);
-INSERT INTO `migrations` VALUES (61,'2022_10_31_031140_add_qr_code_field_to_online_payments_table',6);
-INSERT INTO `migrations` VALUES (62,'2022_10_31_200153_change_fields_in_installments_table',7);
-INSERT INTO `migrations` VALUES (63,'2022_11_15_003955_create_seo_links_table',8);
-INSERT INTO `migrations` VALUES (64,'2022_11_25_231505_create_cities_table',8);
-INSERT INTO `migrations` VALUES (65,'2022_11_25_123211_add_phone_auth_to_users_table',9);
-INSERT INTO `migrations` VALUES (66,'2022_12_11_172146_create_mailings_table',10);
-INSERT INTO `migrations` VALUES (67,'2022_12_11_210859_create_user_groups_table',10);
-INSERT INTO `migrations` VALUES (68,'2022_12_12_230048_change_default_value_in_installments_table',11);
-INSERT INTO `migrations` VALUES (69,'2022_12_13_215311_create_product_groups_table',12);
-INSERT INTO `migrations` VALUES (70,'2022_12_13_223622_add_group_id_field_to_products_table',12);
-INSERT INTO `migrations` VALUES (71,'2022_12_23_231210_add_add_review_sale_field_to_sales_table',13);
-INSERT INTO `migrations` VALUES (72,'2022_12_26_223227_add_link_code_field_to_online_payments_table',14);
-INSERT INTO `migrations` VALUES (73,'2022_12_27_224129_add_last_status_enum_id_field_to_online_payments_table',15);
-INSERT INTO `migrations` VALUES (74,'2023_01_13_224819_rename_fields_in_payments_and_deliveries_tables',16);
-INSERT INTO `migrations` VALUES (75,'2023_01_20_174414_add_city_field_to_feedbacks_table',17);
-INSERT INTO `migrations` VALUES (76,'2023_02_04_121539_add_status_updated_at_field_to_order_items_table',18);
-INSERT INTO `migrations` VALUES (77,'2023_02_25_193804_add_status_updated_at_field_to_orders_table',19);
-INSERT INTO `migrations` VALUES (78,'2014_10_12_100000_create_password_reset_tokens_table',20);
-INSERT INTO `migrations` VALUES (79,'2023_03_14_121346_create_stocks_table',21);
-INSERT INTO `migrations` VALUES (80,'2023_02_13_221211_create_user_passports_table',22);
-INSERT INTO `migrations` VALUES (81,'2023_03_19_132916_change_worktime_size_to_stocks_table',23);
-INSERT INTO `migrations` VALUES (82,'2023_03_20_233548_add_configs',24);
-INSERT INTO `migrations` VALUES (83,'2023_02_28_231103_add_installment_form_file_field_to_installments_table',25);
-INSERT INTO `migrations` VALUES (84,'2023_03_22_212121_add_newsletter_to_configs_table',25);
-INSERT INTO `migrations` VALUES (85,'2023_03_29_115735_add_delivery_track_fields_to_orders_table',25);
-INSERT INTO `migrations` VALUES (86,'2023_03_31_170034_update_stocks_table',26);
-INSERT INTO `migrations` VALUES (88,'2023_04_01_200657_create_sizes_availabilities_table',27);
-INSERT INTO `migrations` VALUES (89,'2023_04_04_212652_rename_sizes_availabilities_table',28);
-INSERT INTO `migrations` VALUES (90,'2023_04_14_010428_add_sizes_table_data',29);
-INSERT INTO `migrations` VALUES (91,'2023_04_20_103906_create_inventory_logs_table',30);
-INSERT INTO `migrations` VALUES (92,'2023_04_10_233924_create_batches_table',31);
-INSERT INTO `migrations` VALUES (93,'2023_04_11_224700_add_batch_id_to_orders_table',31);
-INSERT INTO `migrations` VALUES (94,'2023_04_18_233508_create_order_tracks_table',31);
-INSERT INTO `migrations` VALUES (95,'2023_04_18_234320_move_and_remove_order_track_fields_to_orders_table',31);
-INSERT INTO `migrations` VALUES (96,'2023_05_04_122933_add_indexes_to_available_sizes_table',32);
-INSERT INTO `migrations` VALUES (97,'2023_05_06_142549_create_tag_groups_table',33);
-INSERT INTO `migrations` VALUES (98,'2023_05_07_223517_add_tag_group_id_field_to_tag_table',33);
-INSERT INTO `migrations` VALUES (99,'2023_05_10_015502_add_key_features_fields_to_products_table',33);
-INSERT INTO `migrations` VALUES (100,'2023_05_10_020242_add_weight_field_to_orders_table',33);
-INSERT INTO `migrations` VALUES (101,'2023_06_03_145345_add_foreign_key_to_order_items_table',34);
-INSERT INTO `migrations` VALUES (102,'2023_06_05_100546_add_category_name_field_to_available_sizes_table',35);
-INSERT INTO `migrations` VALUES (103,'2023_06_11_112411_create_log_order_actions_table',36);
-INSERT INTO `migrations` VALUES (104,'2023_06_22_000913_create_available_sizes_full_table',37);
-INSERT INTO `migrations` VALUES (105,'2023_06_29_224317_add_registration_address_field_to_user_passports_table',38);
-INSERT INTO `migrations` VALUES (106,'2023_06_30_084304_add_fields_to_admin_users_table',38);
-INSERT INTO `migrations` VALUES (107,'2023_05_24_230317_add_additional_settings_field_to_product_carousels_table',39);
-INSERT INTO `migrations` VALUES (114,'2023_07_30_141645_create_log_order_item_inventory_notifications_table',41);
-INSERT INTO `migrations` VALUES (115,'2023_08_01_231141_add_chat_id_to_stocks',41);
-INSERT INTO `migrations` VALUES (116,'2023_07_29_133700_create_telegram_bots_table',42);
-INSERT INTO `migrations` VALUES (117,'2023_07_29_133701_create_telegram_chats_table',42);
-INSERT INTO `migrations` VALUES (118,'2023_08_06_165923_add_only_discount_to_sales_table',43);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (1,'2014_10_12_000000_create_users_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (2,'2014_10_12_100000_create_password_resets_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (3,'2016_01_04_173148_create_admin_tables',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (4,'2019_08_19_000000_create_failed_jobs_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (5,'2019_12_14_000001_create_personal_access_tokens_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (6,'2020_07_21_191003_create_categories_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (7,'2020_08_28_174916_create_jobs_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (8,'2020_09_02_150216_create_urls_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (9,'2020_09_04_122722_create_product_attributes_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (10,'2020_09_08_090900_create_fabrics_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (11,'2020_09_08_091019_create_sizes_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (12,'2020_09_08_091030_create_colors_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (13,'2020_09_08_091646_create_seasons_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (14,'2020_09_08_091813_create_tags_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (15,'2020_09_08_091832_create_brands_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (16,'2020_09_24_110810_create_heels_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (17,'2020_09_24_110820_create_styles_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (18,'2020_10_16_085850_create_products_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (19,'2020_10_19_084729_create_media_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (20,'2020_10_28_104316_create_countries_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (21,'2020_10_28_115506_create_feedback_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (22,'2020_10_28_120115_create_feedback_answers_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (23,'2020_12_03_080136_create_carts_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (24,'2020_12_03_080200_create_cart_data_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (25,'2020_12_15_102136_create_orders_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (26,'2020_12_15_102242_create_order_items_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (27,'2021_02_02_130357_create_info_pages_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (28,'2021_02_03_110356_create_banners_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (29,'2021_02_25_102813_create_delivery_methods_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (30,'2021_02_25_103145_create_payment_methods_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (31,'2021_02_28_220402_create_collections_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (32,'2021_06_06_103038_create_sales_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (33,'2021_06_25_131418_create_currencies_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (34,'2021_08_25_224659_create_product_carousels_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (35,'2021_09_09_135535_create_manufacturers_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (36,'2021_10_21_111912_create_index_links_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (37,'2021_11_14_163634_create_api_users_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (38,'2021_11_19_020637_create_user_addresses_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (39,'2021_12_08_101737_create_order_statuses_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (40,'2021_12_08_101830_create_order_item_statuses_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (41,'2021_12_26_180140_create_order_admin_comments_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (42,'2022_01_26_232337_create_devices_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (43,'2022_01_28_144022_create_favorites_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (44,'2022_03_07_120403_create_statuses_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (45,'2022_05_16_155735_add_generated_conversions_to_media_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (46,'2022_06_01_230930_create_docs_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (47,'2022_06_16_001820_create_short_links_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (48,'2022_06_18_222313_create_installments_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (49,'2022_09_01_092326_add_spoiler_and_timer_to_banners_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (50,'2022_09_08_214841_remove_timer_field_to_banners_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (51,'2022_09_12_222038_create_promotions_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (52,'2022_09_13_001514_add_type_field_to_product_carousels_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (53,'2022_09_21_233541_add_enum_posituions_to_banners_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (54,'2022_09_29_013241_update_db_rows_2909',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (55,'2022_10_09_140114_create_sms_logs_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (56,'2022_10_03_214755_create_payments_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (57,'2022_10_03_220446_create_payment_statuses_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (58,'2022_10_26_125039_create_tokens_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (59,'2022_10_26_160033_create_configs_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (60,'2022_10_28_123835_add_payment_num_field_to_online_payments_table',5);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (61,'2022_10_31_031140_add_qr_code_field_to_online_payments_table',6);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (62,'2022_10_31_200153_change_fields_in_installments_table',7);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (63,'2022_11_15_003955_create_seo_links_table',8);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (64,'2022_11_25_231505_create_cities_table',8);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (65,'2022_11_25_123211_add_phone_auth_to_users_table',9);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (66,'2022_12_11_172146_create_mailings_table',10);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (67,'2022_12_11_210859_create_user_groups_table',10);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (68,'2022_12_12_230048_change_default_value_in_installments_table',11);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (69,'2022_12_13_215311_create_product_groups_table',12);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (70,'2022_12_13_223622_add_group_id_field_to_products_table',12);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (71,'2022_12_23_231210_add_add_review_sale_field_to_sales_table',13);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (72,'2022_12_26_223227_add_link_code_field_to_online_payments_table',14);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (73,'2022_12_27_224129_add_last_status_enum_id_field_to_online_payments_table',15);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (74,'2023_01_13_224819_rename_fields_in_payments_and_deliveries_tables',16);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (75,'2023_01_20_174414_add_city_field_to_feedbacks_table',17);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (76,'2023_02_04_121539_add_status_updated_at_field_to_order_items_table',18);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (77,'2023_02_25_193804_add_status_updated_at_field_to_orders_table',19);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (78,'2014_10_12_100000_create_password_reset_tokens_table',20);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (79,'2023_03_14_121346_create_stocks_table',21);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (80,'2023_02_13_221211_create_user_passports_table',22);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (81,'2023_03_19_132916_change_worktime_size_to_stocks_table',23);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (82,'2023_03_20_233548_add_configs',24);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (83,'2023_02_28_231103_add_installment_form_file_field_to_installments_table',25);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (84,'2023_03_22_212121_add_newsletter_to_configs_table',25);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (85,'2023_03_29_115735_add_delivery_track_fields_to_orders_table',25);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (86,'2023_03_31_170034_update_stocks_table',26);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (88,'2023_04_01_200657_create_sizes_availabilities_table',27);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (89,'2023_04_04_212652_rename_sizes_availabilities_table',28);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (90,'2023_04_14_010428_add_sizes_table_data',29);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (91,'2023_04_20_103906_create_inventory_logs_table',30);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (92,'2023_04_10_233924_create_batches_table',31);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (93,'2023_04_11_224700_add_batch_id_to_orders_table',31);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (94,'2023_04_18_233508_create_order_tracks_table',31);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (95,'2023_04_18_234320_move_and_remove_order_track_fields_to_orders_table',31);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (96,'2023_05_04_122933_add_indexes_to_available_sizes_table',32);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (97,'2023_05_06_142549_create_tag_groups_table',33);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (98,'2023_05_07_223517_add_tag_group_id_field_to_tag_table',33);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (99,'2023_05_10_015502_add_key_features_fields_to_products_table',33);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (100,'2023_05_10_020242_add_weight_field_to_orders_table',33);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (101,'2023_06_03_145345_add_foreign_key_to_order_items_table',34);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (102,'2023_06_05_100546_add_category_name_field_to_available_sizes_table',35);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (103,'2023_06_11_112411_create_log_order_actions_table',36);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (104,'2023_06_22_000913_create_available_sizes_full_table',37);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (105,'2023_06_29_224317_add_registration_address_field_to_user_passports_table',38);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (106,'2023_06_30_084304_add_fields_to_admin_users_table',38);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (107,'2023_05_24_230317_add_additional_settings_field_to_product_carousels_table',39);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (114,'2023_07_30_141645_create_log_order_item_inventory_notifications_table',41);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (115,'2023_08_01_231141_add_chat_id_to_stocks',41);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (116,'2023_07_29_133700_create_telegram_bots_table',42);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (117,'2023_07_29_133701_create_telegram_chats_table',42);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (118,'2023_08_06_165923_add_only_discount_to_sales_table',43);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (119,'2023_08_14_222608_add_private_chats_and_new_invertory_notifications',44);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (120,'2023_08_08_220532_add_fields_to_user_addresses_table',45);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (121,'2023_08_17_084015_add_district_field_to_user_addresses_table',46);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (122,'2023_08_19_001321_modify_log_order_item_inventory_notifications_table',47);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (123,'2023_09_06_222325_create_order_item_pickup_status_logs_table',48);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (124,'2023_09_14_121407_add_offline_notifications_pause_until_to_telegram_chats',49);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (125,'2023_09_15_145725_move_offline_notifications_pause_to_stocks',50);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (126,'2023_09_18_230718_rename_and_modify_tables',51);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (127,'2023_10_13_175853_add_order_field_to_categories_table',52);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (128,'2023_10_16_224154_add_sending_tracks_key_to_configs_table',52);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (129,'2023_10_19_234646_add_order_type_field_to_orders_table',52);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (130,'2023_11_08_223712_add_date_contract_field_to_installments_table',53);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (131,'2023_11_23_232244_create_country_of_origins_table',54);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (132,'2023_11_22_230543_add_auto_order_statuses_key_to_configs_table',55);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (133,'2023_12_02_120335_update_order_method_enum_values_in_orders_table',56);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (134,'2023_12_03_234201_add_site_sorting_field_to_stocks_table',57);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (135,'2023_12_17_135424_add_distrib_order_setup_key_to_configs_table',58);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (136,'2023_12_17_230857_create_work_schedules_table',58);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (137,'2023_12_25_145646_create_log_order_distribution_table',59);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (138,'2024_01_20_115248_change_contract_number_type_in_installments_table',60);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (139,'2024_02_04_124510_add_delivery_method',61);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (140,'2024_01_26_231406_add_num_payments_field_to_installments_table',62);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (141,'2024_01_27_232239_create_displacements_table',63);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (142,'2024_01_28_010759_create_displacement_items_table',63);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (143,'2024_03_09_143624_create_offline_orders_table',64);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (144,'2024_03_11_000430_add_discount_card_field_to_users_table',65);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (145,'2024_03_23_223637_make_phone_uniq_in_users_table',66);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (146,'2024_03_24_171559_add_sku_field_to_offline_orders_table',67);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (147,'2024_03_24_221442_add_one_c_id_field_to_products_table',68);
