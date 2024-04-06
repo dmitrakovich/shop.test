@@ -51,7 +51,7 @@ task('deploy:release:git-sha', function () {
 });
 
 task('deploy:upload', function () {
-    upload('', '{{release_path}}', ['options' => ['--ignore-missing-args', '-zz']]);
+    upload('./', '{{release_path}}');
 });
 
 task('deploy:writable', function () {
