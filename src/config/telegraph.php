@@ -56,7 +56,6 @@ return [
         'debug' => false,
     ],
 
-
     'security' => [
         /*
          * if enabled, allows callback queries from unregistered chats
