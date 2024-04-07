@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16925e70c36c32969fe8841f587b1b1b",
+    "content-hash": "5e48ec4b18cf5aa9dab3b9eac2662637",
     "packages": [
         {
             "name": "appstract/laravel-opcache",
@@ -552,64 +552,6 @@
             "time": "2023-11-20T14:41:54+00:00"
         },
         {
-            "name": "default-089/sxgeo",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dmitrakovich/sxgeo.git",
-                "reference": "2a46aa513727f24af811a46b4115c8ddc73937d4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/sxgeo/zipball/2a46aa513727f24af811a46b4115c8ddc73937d4",
-                "reference": "2a46aa513727f24af811a46b4115c8ddc73937d4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.0"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Scriptixru\\SypexGeo\\SypexGeoServiceProvider"
-                    ],
-                    "aliases": {
-                        "SxGeo": "Scriptixru\\SypexGeo\\SypexGeoFacade"
-                    }
-                },
-                "branch-alias": {
-                    "dev-master": "0.16-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Scriptixru\\SypexGeo\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Dmitrakovich Andrey",
-                    "email": "dmitrievich.a.d@gmail.com"
-                }
-            ],
-            "description": "Supports GeoIP services (sypexgeo.net).",
-            "keywords": [
-                "geoip",
-                "geolocation",
-                "laravel",
-                "laravel 7",
-                "location"
-            ],
-            "support": {
-                "issues": "https://github.com/dmitrakovich/sxgeo/issues",
-                "source": "https://github.com/dmitrakovich/sxgeo/tree/master"
-            },
-            "time": "2021-06-27T16:07:23+00:00"
-        },
-        {
             "name": "defstudio/telegraph",
             "version": "v1.42.0",
             "source": {
@@ -949,6 +891,59 @@
                 "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/0.2.0"
             },
             "time": "2024-03-31T16:26:33+00:00"
+        },
+        {
+            "name": "dmitrakovich/sxgeo",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dmitrakovich/sxgeo.git",
+                "reference": "f515b9464b77e4122eb3be63da0cdac56ef0a7f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dmitrakovich/sxgeo/zipball/f515b9464b77e4122eb3be63da0cdac56ef0a7f1",
+                "reference": "f515b9464b77e4122eb3be63da0cdac56ef0a7f1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Scriptixru\\SypexGeo\\SypexGeoServiceProvider"
+                    ],
+                    "aliases": {
+                        "SxGeo": "Scriptixru\\SypexGeo\\SypexGeoFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Scriptixru\\SypexGeo\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Dmitrakovich Andrey",
+                    "email": "dmitrievich.a.d@gmail.com"
+                }
+            ],
+            "description": "Supports GeoIP services (sypexgeo.net).",
+            "keywords": [
+                "geoip",
+                "geolocation",
+                "laravel",
+                "location"
+            ],
+            "support": {
+                "issues": "https://github.com/dmitrakovich/sxgeo/issues",
+                "source": "https://github.com/dmitrakovich/sxgeo/tree/0.2.0"
+            },
+            "time": "2024-04-07T21:01:56+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -13441,7 +13436,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "default-089/sxgeo": 20,
         "drandin/declension-nouns": 20,
         "kalnoy/nestedset": 20
     },

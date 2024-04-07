@@ -51,16 +51,6 @@ parameters:
 			path: app/Admin/Models/Product.php
 
 		-
-			message: "#^Call to an undefined static method Scriptixru\\\\SypexGeo\\\\SypexGeoFacade\\:\\:getCountry\\(\\)\\.$#"
-			count: 1
-			path: app/Http/Controllers/Shop/CartController.php
-
-		-
-			message: "#^Call to an undefined static method Scriptixru\\\\SypexGeo\\\\SypexGeoFacade\\:\\:getCountry\\(\\)\\.$#"
-			count: 1
-			path: app/Models/Country.php
-
-		-
 			message: "#^Constructor of class App\\\\Models\\\\Data\\\\OrderData has an unused parameter \\$otherData\\.$#"
 			count: 1
 			path: app/Models/Data/OrderData.php
@@ -74,11 +64,6 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Models\\\\Url\\:\\:\\$filters\\.$#"
 			count: 1
 			path: app/Models/Url.php
-
-		-
-			message: "#^Call to an undefined static method Scriptixru\\\\SypexGeo\\\\SypexGeoFacade\\:\\:getCountry\\(\\)\\.$#"
-			count: 1
-			path: app/Services/CurrencyService.php
 
 		-
 			message: "#^Variable \\$mails in empty\\(\\) always exists and is not falsy\\.$#"
