@@ -11,6 +11,7 @@ use Encore\Admin\Grid;
 
 /**
  * @mixin OrderTrack
+ * @phpstan-require-extends OrderTrack
  */
 class OrderTrackController extends AdminController
 {

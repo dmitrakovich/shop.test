@@ -3,9 +3,11 @@
 namespace App\Admin\Controllers\Orders;
 
 use App\Admin\Controllers\AbstractAdminController;
-use App\Models\OneC\OfflineOrder;
-use Encore\Admin\Form;
+use App\Enums\StockTypeEnum;
+use App\Models\Orders\OfflineOrder;
+use App\Models\Stock;
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Filter;
 
 /**
  * @mixin OfflineOrder
@@ -28,60 +30,33 @@ class OfflineOrderController extends AbstractAdminController
     {
         $grid = new Grid(new OfflineOrder());
 
-        $grid->column('ROW_ID', __('ROW ID'));
-        $grid->column('ID', __('ID'));
-        $grid->column('CODE', __('CODE'));
-        $grid->column('DESCR', __('DESCR'));
-        $grid->column('ISMARK', __('ISMARK'));
-        $grid->column('VERSTAMP', __('VERSTAMP'));
-        $grid->column('SP6089', __('SP6089'));
-        $grid->column('SP6090', __('SP6090'));
-        $grid->column('SP6091', __('SP6091'));
-        $grid->column('SP6092', __('SP6092'));
-        $grid->column('SP6093', __('SP6093'));
-        $grid->column('SP6094', __('SP6094'));
-        $grid->column('SP6095', __('SP6095'));
-        $grid->column('SP6096', __('SP6096'));
-        $grid->column('SP6097', __('SP6097'));
-        $grid->column('SP6098', __('SP6098'));
-        $grid->column('SP6099', __('SP6099'));
-        $grid->column('SP6100', __('SP6100'));
-        $grid->column('SP6101', __('SP6101'));
-        $grid->column('SP6102', __('SP6102'));
+        $grid->column('receipt_number', 'Номер чека');
+        $grid->column('product_photo', 'Превью')->display(fn () => $this->product?->getFirstMediaUrl('default', 'thumb'))->image();
+        $grid->column('product_id', 'Код товара');
+        $grid->column('sku', 'Артикул в 1С');
+        $grid->column('size.name', 'Размер');
+        $grid->column('price', 'Сумма')->suffix('BYN', ' ');
+        $grid->column('sold_at', 'Дата')->display(fn ($datetime) => self::formatDateTime($datetime));
+        $grid->column('stock.internal_name', 'Магазин');
+        $grid->column('user', 'Клиент')->display(function (?array $user) {
+            return $user ? '<a href="' . route('admin.users.edit', $user['id']) . '" target="_blank">' . $this->user->getFullName() . '</a>' : null;
+        });
+        $grid->column('user_phone', 'Телефон');
+
+        $grid->model()->with(['product.media']);
+        $grid->paginate(50);
+
+        $grid->filter(function (Filter $filter) {
+            $filter->disableIdFilter();
+            $filter->between('sold_at', 'Дата')->datetime();
+            $filter->equal('stock_id', 'Магазин')->select(Stock::query()->where('type', StockTypeEnum::SHOP)->pluck('address', 'id'));
+            $filter->like('user_phone', 'Телефон');
+            $filter->where(function ($query) {
+                $query->where('product_id', 'like', "%{$this->input}%")
+                    ->orWhere('sku', 'like', "%{$this->input}%");
+            }, 'Код товара / артикул');
+        });
 
         return $grid;
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        $form = new Form(new OfflineOrder());
-
-        $form->number('ROW_ID', __('ROW ID'));
-        $form->text('ID', __('ID'));
-        $form->text('CODE', __('CODE'));
-        $form->text('DESCR', __('DESCR'));
-        $form->switch('ISMARK', __('ISMARK'));
-        $form->number('VERSTAMP', __('VERSTAMP'));
-        $form->text('SP6089', __('SP6089'));
-        $form->text('SP6090', __('SP6090'));
-        $form->text('SP6091', __('SP6091'));
-        $form->decimal('SP6092', __('SP6092'));
-        $form->text('SP6093', __('SP6093'));
-        $form->text('SP6094', __('SP6094'));
-        $form->text('SP6095', __('SP6095'));
-        $form->decimal('SP6096', __('SP6096'));
-        $form->datetime('SP6097', __('SP6097'))->default(date('Y-m-d H:i:s'));
-        $form->text('SP6098', __('SP6098'));
-        $form->decimal('SP6099', __('SP6099'));
-        $form->decimal('SP6100', __('SP6100'));
-        $form->decimal('SP6101', __('SP6101'));
-        $form->text('SP6102', __('SP6102'));
-
-        return $form;
     }
 }

@@ -4,17 +4,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Service
-    |--------------------------------------------------------------------------
-    |
-    | Current only supports 'sypexgeo'.
-    |
-    */
-
-    'service' => 'sypexgeo',
-
-    /*
-    |--------------------------------------------------------------------------
     | Services settings
     |--------------------------------------------------------------------------
     |
@@ -23,11 +12,8 @@ return [
     */
 
     'sxgeo' => [
-        'type' => 'database', // database or web_service
-        'path' => '/database/sxgeo/', // database path (works only with 'type' => 'database')
-        'file' => 'SxGeo.dat', // SxGeo.dat or SxGeoCityMax.dat - database file (works only with 'type' => 'database')
-        'license_key' => '', //license key sypexgeo.net (works only with 'type' => 'web_service')
-        'view' => 'json', //json or xml -- json return array scalar types and string --xml return array only string types (works only with 'type' => 'web_service')
+        'path' => env('SXGEO_PATH', '/database/sxgeo/'), // database path
+        'file' => env('SXGEO_FILE', 'SxGeo.dat'), // SxGeo.dat or SxGeoCityMax.dat - database file
     ],
 
     /*

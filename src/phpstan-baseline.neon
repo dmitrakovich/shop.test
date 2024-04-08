@@ -3,139 +3,114 @@ parameters:
 		-
 			message: "#^Variable \\$orderIds in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
-			path: src/app/Admin/Actions/Order/StatusBulkChange.php
+			path: app/Admin/Actions/Order/StatusBulkChange.php
 
 		-
 			message: "#^Call to an undefined method App\\\\Admin\\\\Controllers\\\\Analytics\\\\AbstractAnalyticController\\:\\:getAttribute\\(\\)\\.$#"
 			count: 2
-			path: src/app/Admin/Controllers/Analytics/AbstractAnalyticController.php
+			path: app/Admin/Controllers/Analytics/AbstractAnalyticController.php
 
 		-
 			message: "#^Method App\\\\Admin\\\\Controllers\\\\Departures\\\\BatchController\\:\\:form\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
-			path: src/app/Admin/Controllers/Departures/BatchController.php
+			path: app/Admin/Controllers/Departures/BatchController.php
 
 		-
 			message: "#^Call to an undefined method App\\\\Admin\\\\Controllers\\\\Forms\\\\Instagram\\:\\:ckeditor\\(\\)\\.$#"
 			count: 1
-			path: src/app/Admin/Controllers/Forms/Instagram.php
+			path: app/Admin/Controllers/Forms/Instagram.php
 
 		-
 			message: "#^Call to an undefined method App\\\\Admin\\\\Controllers\\\\Forms\\\\Sms\\:\\:phone\\(\\)\\.$#"
 			count: 1
-			path: src/app/Admin/Controllers/Forms/Sms.php
+			path: app/Admin/Controllers/Forms/Sms.php
 
 		-
 			message: "#^Class App\\\\Admin\\\\Actions\\\\Order\\\\CancelPayment constructor invoked with 1 parameter, 0 required\\.$#"
 			count: 1
-			path: src/app/Admin/Controllers/OrderController.php
+			path: app/Admin/Controllers/OrderController.php
 
 		-
 			message: "#^Relation 'admin' is not found in App\\\\Models\\\\Logs\\\\OrderActionLog model\\.$#"
 			count: 1
-			path: src/app/Admin/Controllers/OrderController.php
+			path: app/Admin/Controllers/OrderController.php
 
 		-
 			message: "#^Method App\\\\Admin\\\\Controllers\\\\StockController\\:\\:form\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
-			path: src/app/Admin/Controllers/StockController.php
+			path: app/Admin/Controllers/StockController.php
 
 		-
 			message: "#^Class App\\\\Admin\\\\Actions\\\\Order\\\\CancelPayment constructor invoked with 1 parameter, 0 required\\.$#"
 			count: 1
-			path: src/app/Admin/Controllers/Users/UserController.php
+			path: app/Admin/Controllers/Users/UserController.php
 
 		-
 			message: "#^Variable \\$mediaPointer might not be defined\\.$#"
 			count: 2
-			path: src/app/Admin/Models/Product.php
-
-		-
-			message: "#^Call to an undefined static method Scriptixru\\\\SypexGeo\\\\SypexGeoFacade\\:\\:getCountry\\(\\)\\.$#"
-			count: 1
-			path: src/app/Http/Controllers/Shop/CartController.php
-
-		-
-			message: "#^Variable \\$aviable might not be defined\\.$#"
-			count: 2
-			path: src/app/Jobs/UpdateProductsRatingJob.php
-
-		-
-			message: "#^Variable \\$photo might not be defined\\.$#"
-			count: 2
-			path: src/app/Jobs/UpdateProductsRatingJob.php
-
-		-
-			message: "#^Call to an undefined static method Scriptixru\\\\SypexGeo\\\\SypexGeoFacade\\:\\:getCountry\\(\\)\\.$#"
-			count: 1
-			path: src/app/Models/Country.php
+			path: app/Admin/Models/Product.php
 
 		-
 			message: "#^Constructor of class App\\\\Models\\\\Data\\\\OrderData has an unused parameter \\$otherData\\.$#"
 			count: 1
-			path: src/app/Models/Data/OrderData.php
+			path: app/Models/Data/OrderData.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\ProductAttributes\\\\Price\\:\\:\\$slug\\.$#"
 			count: 2
-			path: src/app/Models/ProductAttributes/Price.php
+			path: app/Models/ProductAttributes/Price.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\Url\\:\\:\\$filters\\.$#"
 			count: 1
-			path: src/app/Models/Url.php
-
-		-
-			message: "#^Call to an undefined static method Scriptixru\\\\SypexGeo\\\\SypexGeoFacade\\:\\:getCountry\\(\\)\\.$#"
-			count: 1
-			path: src/app/Services/CurrencyService.php
+			path: app/Models/Url.php
 
 		-
 			message: "#^Variable \\$mails in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
-			path: src/app/Services/Payment/BelpostCODService.php
+			path: app/Services/Payment/BelpostCODService.php
 
 		-
 			message: "#^Call to an undefined static method App\\\\Libraries\\\\HGrosh\\\\Facades\\\\ApiHGroshFacade\\:\\:invoicingCreateInvoice\\(\\)\\.$#"
 			count: 1
-			path: src/app/Services/Payment/Methods/PaymentEripService.php
+			path: app/Services/Payment/Methods/PaymentEripService.php
 
 		-
 			message: "#^Call to an undefined static method App\\\\Libraries\\\\HGrosh\\\\Facades\\\\ApiHGroshFacade\\:\\:invoicingGetListInvoice\\(\\)\\.$#"
 			count: 1
-			path: src/app/Services/Payment/Methods/PaymentEripService.php
+			path: app/Services/Payment/Methods/PaymentEripService.php
 
 		-
 			message: "#^Call to an undefined static method App\\\\Libraries\\\\HGrosh\\\\Facades\\\\ApiHGroshFacade\\:\\:invoicingInvoiceQRcode\\(\\)\\.$#"
 			count: 1
-			path: src/app/Services/Payment/Methods/PaymentEripService.php
+			path: app/Services/Payment/Methods/PaymentEripService.php
 
 		-
 			message: "#^Variable \\$amount on left side of \\?\\? always exists and is not nullable\\.$#"
 			count: 1
-			path: src/app/Services/Payment/Methods/PaymentEripService.php
+			path: app/Services/Payment/Methods/PaymentEripService.php
 
 		-
 			message: "#^Variable \\$onlinePayment might not be defined\\.$#"
 			count: 1
-			path: src/app/Services/Payment/Methods/PaymentEripService.php
+			path: app/Services/Payment/Methods/PaymentEripService.php
 
 		-
 			message: "#^Variable \\$payment_info on left side of \\?\\? is never defined\\.$#"
 			count: 3
-			path: src/app/Services/Payment/Methods/PaymentYandexService.php
+			path: app/Services/Payment/Methods/PaymentYandexService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\Seo\\\\CatalogSeoService\\:\\:getCatalogTitle\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
-			path: src/app/Services/Seo/CatalogSeoService.php
+			path: app/Services/Seo/CatalogSeoService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\Seo\\\\ProductSeoService\\:\\:getProductTitle\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
-			path: src/app/Services/Seo/ProductSeoService.php
+			path: app/Services/Seo/ProductSeoService.php
 
 		-
 			message: "#^Variable \\$products in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
-			path: src/app/Services/SliderService.php
+			path: app/Services/SliderService.php

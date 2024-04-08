@@ -46,25 +46,53 @@ In nginx.conf change user to `www-root` and add site config ([example](https://g
 
 
 ## Php setup
-Install php:
+List and keep note of existing PHP packages:
 ```shell
-apt-get install php-common php-dev php-mysql php-mbstring php-xml php-zip php-gd php-cli php-fpm php-redis
-apt install ffmpeg
-pecl install redis
+dpkg -l | grep php | tee packages.txt
 ```
-In /etc/php/8.1/fpm/pool.d/www.conf change user to `www-root`
-```properties
-user = www-root
-group = www-root
 
-listen.owner = www-root
-listen.group = www-root
+## Add `ondrej/php` repository
+```shell
+sudo add-apt-repository ppa:ondrej/php # Press enter when prompted.
+sudo apt update
 ```
+
+## Install New PHP 8.3 Packages:
+```shell
+apt install php8.3-common php8.3-cli php8.3-fpm php8.3-{curl,mysql,mbstring,intl,xml,redis,opcache,imap,zip,gd}
+```
+
+## In nginx config (/etc/nginx/sites-enabled/barocco.by):
+```diff
+- fastcgi_pass unix:/run/php/php8.1-fpm.sock;
++ fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+```
+
+## Microsoft Drivers for PHP for SQL Server ([tutorial](https://learn.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac))
+
+```shell
+sudo pecl install sqlsrv
+sudo pecl install pdo_sqlsrv
+sudo su
+printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.3/mods-available/sqlsrv.ini
+printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/8.3/mods-available/pdo_sqlsrv.ini
+exit
+sudo phpenmod sqlsrv pdo_sqlsrv
+```
+
+## Migrate Configuration
+- [/etc/php/8.3/fpm/php.ini](https://github.com/dmitrakovich/shop.test/blob/master/docs/php/php.ini)
+- [/etc/php/8.3/fpm/pool.d/www.conf](https://github.com/dmitrakovich/shop.test/blob/master/docs/php/www.conf)
 
 ## Restart php-fpm & nginx
 ```shell
-service php8.1-fpm restart
-systemctl restart nginx
+sudo systemctl restart php8.3-fpm
+sudo systemctl restart nginx
+```
+
+## Remove old PHP Versions
+```shell
+sudo apt purge php8.1*
 ```
 
 ## Create DB

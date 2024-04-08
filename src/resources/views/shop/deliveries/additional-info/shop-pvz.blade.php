@@ -5,3 +5,9 @@
         @endforeach
     </select>
 </div>
+<div class="additional-form-check-info text-muted font-size-12">
+    * только при частичной предоплате ЕРИП (менеджер выставит счет после оформления заказа)
+</div>
+<div class="additional-form-check-info text-muted font-size-12">
+    ** не более 3 ед. в заказе
+</div>

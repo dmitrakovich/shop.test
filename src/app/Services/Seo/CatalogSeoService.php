@@ -197,7 +197,12 @@ class CatalogSeoService
                 $titleValuesOrdered[] = $this->currentCity->catalog_title;
             }
 
-            return Str::ucfirst((!$emptyCategory ? 'купить ' : '') . implode(' ', $titleValuesOrdered));
+            $titleStr = implode(' ', $titleValuesOrdered);
+            if ($titleStr === 'женская обувь') {
+                $titleStr = 'BAROCCO ⭐ Каталог женской обуви с доставкой по Беларуси';
+            }
+
+            return Str::ucfirst((!$emptyCategory ? 'купить ' : '') . $titleStr);
         }
     }
 
@@ -211,7 +216,7 @@ class CatalogSeoService
         } else {
             $currentFilters = $this->currentFilters;
 
-            return $this->getCatalogTitle($currentFilters) . ' с примеркой по Беларуси';
+            return $this->getCatalogTitle($currentFilters) . ' ✔ Примерка по РБ ✔ Доставка курьером ✔ Сертификаты и гарантия ✔ Оплата 3-я платежами 📞 +375291793790';
         }
     }
 

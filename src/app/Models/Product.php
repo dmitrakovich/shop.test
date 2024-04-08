@@ -18,6 +18,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
+ * @property int|null $one_c_id
  * @property string $slug
  * @property string $sku
  * @property int $label_id
@@ -81,6 +82,13 @@ class Product extends Model implements HasMedia
      * Default sorting
      */
     public const DEFAULT_SORT = 'rating';
+
+    /**
+     * The connection name for the model.
+     *
+     * @var string|null
+     */
+    protected $connection = 'mysql';
 
     /**
      * The attributes that aren't mass assignable.
@@ -394,7 +402,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Get fianl old price after apply other sales
+     * Get final old price after apply other sales
      */
     public function getFinalOldPrice(): float
     {
@@ -453,7 +461,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Check min installmnet price
+     * Check min installment price
      */
     public function availableInstallment(): bool
     {

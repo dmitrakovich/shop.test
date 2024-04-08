@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * @mixin AvailableSizesFull
+ * @phpstan-require-extends AvailableSizesFull
  */
 class StockController extends AbstractAdminController
 {

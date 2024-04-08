@@ -49,13 +49,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        /** @var \Illuminate\Foundation\Application */
+        $app = $this->app;
+
         Paginator::useBootstrap();
 
         setlocale(LC_TIME, 'ru_RU.UTF-8');
         Carbon::setLocale(config('app.locale'));
 
-        if ($this->app->environment('local')) {
-            $this->app['config']['filesystems.disks.public.url'] = 'https://barocco.by/media';
+        if ($app->isProduction()) {
+            $app['request']->server->set('HTTPS', 'on');
+        }
+
+        if ($app->isLocal()) {
+            $app['config']['filesystems.disks.public.url'] = 'https://barocco.by/media';
         }
     }
 }

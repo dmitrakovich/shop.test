@@ -39,16 +39,6 @@ class GenerateFeed extends Command
     protected $description = 'Command description';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Get all instances or instance from arguments
      */
     protected function getInstances(): array

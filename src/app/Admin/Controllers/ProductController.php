@@ -31,6 +31,7 @@ use Illuminate\Support\Str;
 
 /**
  * @mixin Product
+ * @phpstan-require-extends Product
  */
 class ProductController extends AbstractAdminController
 {

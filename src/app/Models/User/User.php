@@ -24,10 +24,11 @@ use libphonenumber\PhoneNumberUtil;
  * @property int $id
  * @property int|null $cart_token
  * @property int $group_id
+ * @property string|null $discount_card_number relation with 1C user
  * @property string|null $email
  * @property string|null $last_name
  * @property string|null $patronymic_name
- * @property string|null $phone
+ * @property string $phone
  * @property \Illuminate\Support\Carbon|null $birth_date
  * @property \Illuminate\Support\Carbon|null $phone_verified_at
  * @property \Illuminate\Support\Carbon|null $email_verified_at
@@ -58,6 +59,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'group_id',
+        'discount_card_number',
         'first_name',
         'last_name',
         'patronymic_name',
@@ -150,7 +152,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get fisrt user address if exist
+     * Get first user address if exist
      *
      * @return Address
      */
@@ -160,7 +162,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get fisrt user address country id if exist
+     * Get first user address country id if exist
      */
     public function getFirstAddressCountryId(): ?int
     {
@@ -168,7 +170,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get fisrt full user address if exist
+     * Get first full user address if exist
      */
     public function getFirstFullAddress(): ?string
     {
@@ -200,7 +202,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getFullName()
     {
-        return "{$this->last_name} {$this->first_name} {$this->patronymic_name}";
+        return trim("{$this->last_name} {$this->first_name} {$this->patronymic_name}");
     }
 
     /**
@@ -277,16 +279,18 @@ class User extends Authenticatable implements MustVerifyEmail
         /** @var Address $address */
         $address = $this->addresses()->firstOrNew();
 
-        $phoneUtil = PhoneNumberUtil::getInstance();
-        $parsedPhone = $phoneUtil->parse($this->phone);
-        $countryCode = $phoneUtil->getRegionCodeForNumber($parsedPhone);
-
-        $countryId = Country::query()->where('code', $countryCode)->value('id');
-
-        if ($countryId) {
-            $address->country_id = $countryId;
-            $address->save();
+        try {
+            $phoneUtil = PhoneNumberUtil::getInstance();
+            $parsedPhone = $phoneUtil->parse($this->phone);
+            $countryCode = $phoneUtil->getRegionCodeForNumber($parsedPhone);
+            $countryId = Country::query()->where('code', $countryCode)->value('id');
+            if ($countryId) {
+                $address->country_id = $countryId;
+            }
+        } catch (\Throwable $th) {
         }
+
+        $address->save();
     }
 
     /**

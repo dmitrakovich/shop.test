@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Cookie as CookieEnum;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,21 +30,6 @@ use Jenssegers\Agent\Facades\Agent;
 class Device extends Model
 {
     use HasFactory;
-
-    /**
-     * @var string
-     */
-    final const DEVICE_ID_COOKIE_NAME = 'device_id';
-
-    /**
-     * @var string
-     */
-    final const YANDEX_ID_COOKIE_NAME = '_ym_uid';
-
-    /**
-     * @var string
-     */
-    final const GOOGLE_ID_COOKIE_NAME = '_ga';
 
     /**
      * @var int 1 year
@@ -123,7 +109,7 @@ class Device extends Model
     public static function getId(): string
     {
         return self::$currentDeviceId
-            ?? Cookie::get(self::DEVICE_ID_COOKIE_NAME)
+            ?? Cookie::get(CookieEnum::DEVICE_ID->value)
             ?? self::getDefaultId();
     }
 
@@ -165,7 +151,7 @@ class Device extends Model
      */
     public function setYandexId(?int $yandexId = null): void
     {
-        $yandexId ??= (int)Cookie::get(self::YANDEX_ID_COOKIE_NAME);
+        $yandexId ??= (int)Cookie::get(CookieEnum::YANDEX_ID->value);
 
         $this->attributes['yandex_id'] = $yandexId;
     }
@@ -178,7 +164,7 @@ class Device extends Model
         if ($googleId) {
             $this->attributes['google_id'] = $googleId;
         } else {
-            $googleId = Cookie::get(self::GOOGLE_ID_COOKIE_NAME);
+            $googleId = Cookie::get(CookieEnum::GOOGLE_ID->value);
             $googleId = preg_replace("/^.+\.(.+?\..+?)$/", '\\1', $googleId);
 
             $this->attributes['google_id'] = $googleId;

@@ -7,7 +7,7 @@ on:
     inputs:
       php:
         description: 'Php version'
-        default: "8.1"
+        default: "8.3"
         type: string
       message:
         description: 'Commit message'
@@ -28,7 +28,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ inputs.php || 8.1 }}
+          php-version: ${{ inputs.php || 8.3 }}
           extensions: json, dom, curl, libxml, mbstring
           coverage: none
 

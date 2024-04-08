@@ -21,16 +21,6 @@ class DispatchJob extends Command
     protected $description = 'Dispatch job';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle()

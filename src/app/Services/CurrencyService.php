@@ -34,7 +34,7 @@ class CurrencyService
 
     public function __construct()
     {
-        $this->setCurrenctCountry();
+        $this->setCurrentCountry();
         $this->setAllCurrencies();
         $this->setCurrentCurrency();
     }
@@ -45,7 +45,7 @@ class CurrencyService
      * @param  string  $countryCode
      * @return void
      */
-    protected function setCurrenctCountry($countryCode = null)
+    protected function setCurrentCountry($countryCode = null)
     {
         $this->countryCode = $countryCode ?? SxGeo::getCountry();
     }

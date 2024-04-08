@@ -10,6 +10,7 @@ use Encore\Admin\Show;
 
 /**
  * @mixin CountryOfOrigin
+ * @phpstan-require-extends CountryOfOrigin
  */
 class CountryOfOriginController extends AdminController
 {

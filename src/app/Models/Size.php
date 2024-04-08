@@ -27,6 +27,13 @@ class Size extends Model
     final const ONE_SIZE_SLUG = 'size-none';
 
     /**
+     * The connection name for the model.
+     *
+     * @var string|null
+     */
+    protected $connection = 'mysql';
+
+    /**
      * Generate filter badge name
      */
     public function getBadgeName(): string

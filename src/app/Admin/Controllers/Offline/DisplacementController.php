@@ -11,6 +11,7 @@ use Encore\Admin\Grid;
 
 /**
  * @mixin Displacement
+ * @phpstan-require-extends Displacement
  */
 class DisplacementController extends AdminController
 {

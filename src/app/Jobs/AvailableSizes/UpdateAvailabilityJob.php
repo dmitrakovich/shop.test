@@ -39,6 +39,8 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
     {
         UpdateAvailableSizesTableJob::dispatchSync();
 
+        $this->updateProductsOneCIdFromAvailableSizes();
+
         $count = $this->deleteUnavailableProducts();
         $this->log("Снято с публикации $count товаров");
 
@@ -54,6 +56,23 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
 
         $this->writeLog();
         $this->log('Обновление успешно завершено!');
+    }
+
+    /**
+     * Update one_c_id in products table from available_sizes table.
+     */
+    public function updateProductsOneCIdFromAvailableSizes(): void
+    {
+        DB::update(<<<'SQL'
+            UPDATE products p
+            SET p.one_c_id = (
+                SELECT asz.one_c_product_id
+                FROM available_sizes asz
+                WHERE asz.product_id = p.id
+                LIMIT 1
+            )
+            WHERE p.one_c_id IS NULL;
+        SQL);
     }
 
     /**
