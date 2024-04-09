@@ -34,7 +34,8 @@ class OrderItemInventoryService
      * Stocks priority (stock_id => priority)
      */
     private array $stocksPriority = [
-        Stock::MINKS_ID => -1,
+        Stock::MINKS_GREEN_CITY_ID => -1,
+        Stock::MINKS_DANA_MALL_ID => -1,
     ];
 
     /**
@@ -188,15 +189,21 @@ class OrderItemInventoryService
 
         $onlyInMinsk = false;
         foreach ($inventory as $stocks) {
-            if (!isset($stocks[Stock::MINKS_ID])) {
+            $hasInGreenCity = isset($stocks[Stock::MINKS_GREEN_CITY_ID]);
+            $hasInDanaMall = isset($stocks[Stock::MINKS_DANA_MALL_ID]);
+            $hasInMinsk = $hasInGreenCity || $hasInDanaMall;
+            $hasInBothMalls = $hasInGreenCity && $hasInDanaMall;
+
+            if (!$hasInMinsk) {
                 return;
-            } elseif (count($stocks) === 1) {
+            } elseif (count($stocks) === 1 || (count($stocks) === 2 && $hasInBothMalls)) {
                 $onlyInMinsk = true;
             }
         }
 
         if ($onlyInMinsk) {
-            $this->stocksPriority[Stock::MINKS_ID] = 2;
+            $this->stocksPriority[Stock::MINKS_DANA_MALL_ID] = 2;
+            $this->stocksPriority[Stock::MINKS_GREEN_CITY_ID] = 3;
         }
     }
 
@@ -230,7 +237,7 @@ class OrderItemInventoryService
     private function removeSizeFromCatalog(int $productId, int $sizeId): void
     {
         /** @var Product $product */
-        if (empty($product = Product::find($productId, ['id']))) {
+        if (empty($product = Product::query()->find($productId, ['id']))) {
             return;
         }
         $product->sizes()->detach($sizeId);
