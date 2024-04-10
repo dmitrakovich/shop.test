@@ -53,9 +53,11 @@ class Stock extends Model implements HasMedia, Sortable
     use InteractsWithMedia, SortableTrait;
 
     /**
-     * Temp constant for Minsk stock id
+     * Temp constant for Minsk stocks id
      */
-    const MINKS_ID = 17;
+    const MINKS_GREEN_CITY_ID = 17;
+
+    const MINKS_DANA_MALL_ID = 32;
 
     /**
      * The connection name for the model.
