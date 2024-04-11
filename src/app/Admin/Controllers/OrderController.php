@@ -453,6 +453,7 @@ class OrderController extends AbstractAdminController
                 if ($installment->exists) {
                     $installment->delete();
                 }
+
                 continue;
             }
             $installment->contract_number = $contractNumber;
