@@ -144,7 +144,7 @@ class BelpostLabelService
     {
         $displacement->loadMissing([
             'directionFromStock',
-            'directionToStock'
+            'directionToStock',
         ]);
 
         $barcodePath = '/storage/departures/barcode/' . date('d-m-Y', strtotime('now')) . '/displacement-' . $displacement->id . '.jpg';
