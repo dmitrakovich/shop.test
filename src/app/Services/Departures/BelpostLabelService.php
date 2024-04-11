@@ -142,24 +142,24 @@ class BelpostLabelService
 
     public function createDisplacementLabel(Displacement $displacement): string
     {
+        $displacement->loadMissing([
+            'directionFromStock',
+            'directionToStock'
+        ]);
+
         $barcodePath = '/storage/departures/barcode/' . date('d-m-Y', strtotime('now')) . '/displacement-' . $displacement->id . '.jpg';
         $resultPath = '/storage/departures/belpost_label/' . date('d-m-Y', strtotime('now')) . '/displacement-' . $displacement->id . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($barcodePath)));
         File::ensureDirectoryExists(dirname(public_path($resultPath)));
-        $spreadsheet = IOFactory::load(public_path('templates/belpost_label_template.xlsx'));
+        $spreadsheet = IOFactory::load(public_path('templates/belpost_label_displacement_template.xlsx'));
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('BB6', null);
+        $sheet->setCellValue('BB6', 0);
         $sheet->setCellValue('AN7', null);
 
-        $sheet->setCellValue('AS22', null);
-        $sheet->setCellValue('BF22', null);
-        $sheet->setCellValue('BS22', null);
+        $sheet->mergeCells('AS25:CL24');
+        $sheet->setCellValue('AS25', $displacement->directionToStock->address);
 
-        $sheet->setCellValue('AW25', null);
-        $sheet->setCellValue('BP25', null);
-        $sheet->setCellValue('CB25', null);
-        $sheet->setCellValue('CI25', null);
         $sheet->setCellValue('AS28', null);
         $sheet->setCellValue('BC28', null);
         $sheet->setCellValue('AS30', null);
@@ -191,9 +191,6 @@ class BelpostLabelService
                 'name' => 'Wingdings 2',
             ],
         ]);
-
-        $sheet->setCellValue('BF35', null);
-        $sheet->setCellValue('BJ35', null);
 
         $writer = new Xlsx($spreadsheet);
         $writer->save(public_path($resultPath));
