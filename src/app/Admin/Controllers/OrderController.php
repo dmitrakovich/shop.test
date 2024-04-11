@@ -200,7 +200,7 @@ class OrderController extends AbstractAdminController
     protected function form(?int $id = null)
     {
         $form = new Form(new Order());
-        $order = $id ? Order::where('id', $id)->with([
+        $order = $id ? Order::query()->where('id', $id)->with([
             'country',
             'user' => fn ($query) => $query->with(['lastAddress' => fn ($q) => $q->with('country')]),
         ])->first() : null;
@@ -273,7 +273,7 @@ class OrderController extends AbstractAdminController
                 ]), 'Адреса');
             }
 
-            $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::pluck('name', 'id'));
+            $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::query()->pluck('name', 'id'));
             $form->select('stock_id', 'Адрес ПВЗ для выдачи')->options(Stock::query()->where('type', StockTypeEnum::SHOP)->pluck('address', 'id'));
             $form->text('track.track_number', 'Трек номер');
             $form->url('track.track_link', 'Ссылка на трек номер');
@@ -281,7 +281,7 @@ class OrderController extends AbstractAdminController
             $form->currency('delivery_cost', 'Стоимость доставки фактическая')->symbol('BYN');
             $form->currency('delivery_price', 'Стоимость доставки для клиента')->symbol('BYN');
             $form->select('payment_id', 'Способ оплаты')
-                ->options(PaymentMethod::pluck('name', 'id'))
+                ->options(PaymentMethod::query()->pluck('name', 'id'))
                 ->when(Installment::PAYMENT_METHOD_ID, function (Form $form) {
                     $form->date('installment_contract_date', 'Дата договора');
                 });
@@ -333,7 +333,7 @@ class OrderController extends AbstractAdminController
                         2 => '2 платежа',
                         3 => '3 платежа',
                     ])
-                    ->default(3)
+                    ->default(0)
                     ->addElementClass(['installment-field']);
                 $nestedForm->text('installment_contract_number', 'Номер договора рассрочки')
                     ->placeholder('Номер заказа / номер позиции заказа. При создании оставить пустым!')
@@ -377,7 +377,10 @@ class OrderController extends AbstractAdminController
             }
             $statusKey = request()->input('status_key');
             if ($statusKey === 'packaging') {
-                $addressApprove = Order::where('id', $form->model()->id)->whereHas('user', fn ($query) => $query->whereHas('lastAddress', fn ($q) => $q->where('approve', 1)))->exists();
+                $addressApprove = Order::query()
+                    ->where('id', $form->model()->id)
+                    ->whereHas('user', fn ($query) => $query->whereHas('lastAddress', fn ($q) => $q->where('approve', 1)))
+                    ->exists();
                 if (!$addressApprove) {
                     $error = new \Illuminate\Support\MessageBag([
                         'message' => 'Введите и подтвердите адрес доставки',
@@ -393,8 +396,8 @@ class OrderController extends AbstractAdminController
             }
             if (request()->integer('payment_id') === Installment::PAYMENT_METHOD_ID && !$form->isCreating()) {
                 foreach ($orderItems as $orderItem) {
-                    if (empty($orderItem['installment_contract_number'])) {
-                        $this->emptyContractNumberError();
+                    if (empty($orderItem['installment_contract_number']) && $orderItem['installment_num_payments']) {
+                        $this->emptyContractNumberError($orderItem['product_id']);
                     }
                 }
             }
@@ -403,7 +406,7 @@ class OrderController extends AbstractAdminController
             CurrencyFacade::setCurrentCurrency($form->input('currency'), false);
             foreach ($form->itemsExtended ?? [] as $key => $item) {
                 if (str_starts_with($key, 'new')) {
-                    $product = Product::findOrFail($item['product_id']);
+                    $product = Product::query()->findOrFail($item['product_id']);
                     $form->input("itemsExtended.$key.price", $product->getPrice());
                     $form->input("itemsExtended.$key.old_price", $product->getOldPrice());
                     $form->input("itemsExtended.$key.current_price", $product->getPrice());
@@ -446,6 +449,12 @@ class OrderController extends AbstractAdminController
             $sendNotifications = $form->input("itemsExtended.{$itemExtended->id}.installment_send_notifications") === 'on';
             /** @var Installment $installment */
             $installment = $itemExtended->installment()->firstOrNew();
+            if (!$numPayments) {
+                if ($installment->exists) {
+                    $installment->delete();
+                }
+                continue;
+            }
             $installment->contract_number = $contractNumber;
             $installment->monthly_fee = $monthlyFee;
             $installment->num_payments = $numPayments;
@@ -527,7 +536,7 @@ class OrderController extends AbstractAdminController
     }
 
     /**
-     * Render order histoty table
+     * Render order history table
      */
     private function orderHistoryTable(int $orderId): string
     {
@@ -750,32 +759,32 @@ JS;
 
     public function changeUserByPhone(ChangeUserByPhoneRequest $request)
     {
-        $user = User::where('phone', $request->input('phone'))->first();
-        Order::where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
+        $user = User::query()->where('phone', $request->input('phone'))->first();
+        Order::query()->where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
 
         return $user;
     }
 
     public function addUserByPhone(Request $request)
     {
-        $user = User::where('phone', $request->input('userCreatePhone'))->first();
+        $user = User::query()->where('phone', $request->input('userCreatePhone'))->first();
         if (!$user) {
-            $user = User::create([
+            $user = User::query()->create([
                 'phone' => $request->input('userCreatePhone'),
                 'last_name' => $request->input('userCreateLastName'),
                 'first_name' => $request->input('userCreateFirstName'),
                 'patronymic_name' => $request->input('userCreatePatronymicName'),
             ]);
         }
-        Order::where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
+        Order::query()->where('id', $request->input('orderId'))->update(['user_id' => $user->id]);
 
         return $user;
     }
 
     public function updateUserAddress(UserAddressRequest $request)
     {
-        $user = User::where('id', $request->input('userId'))->with('lastAddress')->first();
-        $order = Order::where('id', $request->input('orderId'))->first();
+        $user = User::query()->where('id', $request->input('userId'))->with('lastAddress')->first();
+        $order = Order::query()->where('id', $request->input('orderId'))->first();
         if ($user) {
             if ($user->lastAddress) {
                 $user->lastAddress->update($request->validated());
@@ -805,7 +814,7 @@ JS;
         $orderId = $request->input('orderId');
         $comment = $request->input('comment');
 
-        return ($orderId && $comment) ? OrderAdminComment::create([
+        return ($orderId && $comment) ? OrderAdminComment::query()->create([
             'comment' => $comment,
             'order_id' => $orderId,
         ]) : null;
@@ -827,11 +836,11 @@ JS;
     /**
      * Throw an error for an empty installment contract number.
      */
-    protected function emptyContractNumberError(): never
+    protected function emptyContractNumberError(int|string $productId): never
     {
         $error = new MessageBag([
             'title' => 'Номер договора рассрочки не может быть пустым!',
-            'message' => 'Заполните номер договора рассрочки.',
+            'message' => "Заполните номер договора рассрочки для товара {$productId}.",
         ]);
 
         abort(back()->with(compact('error'))->withInput());
