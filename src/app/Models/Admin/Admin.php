@@ -6,5 +6,4 @@ use App\Admin\Models\Administrator;
 
 class Admin extends Administrator
 {
-
 }

@@ -30,7 +30,6 @@ class AdminPanelProvider extends PanelProvider
         parent::register();
     }
 
-
     public function panel(Panel $panel): Panel
     {
         return $panel
