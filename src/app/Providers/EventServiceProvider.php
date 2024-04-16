@@ -7,12 +7,11 @@ use App\Events\Notifications\NotificationSkipped;
 use App\Events\OrderCreated;
 use App\Events\OrderStatusChanged;
 use App\Events\ReviewPosted;
-use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
 use App\Listeners\Cache\ResetUserCache;
-use App\Listeners\Media\ConvertVideo;
 use App\Listeners\FacebookPixel;
 use App\Listeners\GoogleTag;
 use App\Listeners\LogNotification;
+use App\Listeners\Media\ConvertVideo;
 use App\Listeners\MergeCart;
 use App\Listeners\MergeFavorites;
 use App\Listeners\Order\CreateInstallment;
@@ -27,6 +26,7 @@ use App\Observers;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Events\NotificationSent;
+use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -86,7 +86,7 @@ class EventServiceProvider extends ServiceProvider
             FacebookPixel\SendLeadEvent::class,
         ],
         MediaHasBeenAddedEvent::class => [
-            ConvertVideo::class
+            ConvertVideo::class,
         ],
     ];
 

@@ -2,14 +2,12 @@
 
 namespace App\Listeners\Media;
 
+use FFMpeg\FFMpeg;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
 
-use FFMpeg\FFMpeg;
-
 class ConvertVideo implements ShouldQueue
 {
-
     /**
      * Handle the event.
      */
