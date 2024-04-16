@@ -3,10 +3,7 @@
     "version": "1.0.0",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": [
-        "framework",
-        "laravel"
-    ],
+    "keywords": ["framework", "laravel"],
     "license": "MIT",
     "repositories": [
         {
@@ -35,6 +32,7 @@
         "drandin/declension-nouns": "dev-master",
         "encore/laravel-admin": "^1.9",
         "facebook/php-business-sdk": "^19.0",
+        "filament/filament": "^3.2",
         "giggsey/libphonenumber-for-php": "^8.13",
         "guzzlehttp/guzzle": "^7.8",
         "jenssegers/agent": "^2.6",
@@ -90,7 +88,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"

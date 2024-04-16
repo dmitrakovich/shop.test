@@ -61,6 +61,9 @@ task('deploy:writable', function () {
     });
 });
 
+desc('Caching Blade Icons');
+task('artisan:icons:cache', artisan('icons:cache'));
+
 desc('Clear OPCache');
 task('artisan:opcache:clear', artisan('opcache:clear'));
 
@@ -83,6 +86,7 @@ task('deploy', [
     'artisan:route:cache',
     'artisan:view:cache',
     'artisan:event:cache',
+    'artisan:icons:cache',
     'deploy:symlink',
     'artisan:cache:clear',
     'artisan:opcache:clear',

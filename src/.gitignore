@@ -6,8 +6,12 @@
 /public/media
 /public/temp
 /public/xml
-/public/css
-/public/js
+/public/css/*
+!/public/css/filament/
+!/public/css/filament/*
+/public/js/*
+!/public/js/filament
+!/public/js/filament/*
 /public/mix-manifest.json
 /storage/*.key
 /storage/media-library
