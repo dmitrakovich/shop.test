@@ -132,7 +132,6 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
         }
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
         if ($newCount >= $oldCount) {
             return false;
         }
