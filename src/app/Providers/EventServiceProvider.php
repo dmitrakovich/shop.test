@@ -7,7 +7,9 @@ use App\Events\Notifications\NotificationSkipped;
 use App\Events\OrderCreated;
 use App\Events\OrderStatusChanged;
 use App\Events\ReviewPosted;
+use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
 use App\Listeners\Cache\ResetUserCache;
+use App\Listeners\Media\ConvertVideo;
 use App\Listeners\FacebookPixel;
 use App\Listeners\GoogleTag;
 use App\Listeners\LogNotification;
@@ -82,6 +84,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         Analytics\SocialSubscription::class => [
             FacebookPixel\SendLeadEvent::class,
+        ],
+        MediaHasBeenAddedEvent::class => [
+            ConvertVideo::class
         ],
     ];
 
