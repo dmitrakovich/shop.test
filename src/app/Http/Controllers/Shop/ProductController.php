@@ -37,7 +37,7 @@ class ProductController extends BaseController
             'category',
             'countryOfOrigin',
             'availableSizes' => fn ($q) => $q->whereHas('stock', fn ($q) => $q->where('type', StockTypeEnum::SHOP))
-                ->with(['stock' => fn ($q) => $q->with('city')]),
+                ->with(['stock' => fn ($q) => $q->orderBy('site_sorting', 'asc')->with('city')]),
         ])->withTrashed()->findOrFail($id);
         $this->productService->addToRecent($product->id);
         $this->setProductUrlToFeedback();
@@ -68,6 +68,13 @@ class ProductController extends BaseController
      */
     public function quickView(Product $product): View
     {
+        $product->loadMissing([
+            'tags',
+            'category',
+            'countryOfOrigin',
+            'availableSizes' => fn ($q) => $q->whereHas('stock', fn ($q) => $q->where('type', StockTypeEnum::SHOP))
+                ->with(['stock' => fn ($q) => $q->orderBy('site_sorting', 'asc')->with('city')]),
+        ]);
         event(new ProductView($product, true));
 
         return view('shop.product', [
