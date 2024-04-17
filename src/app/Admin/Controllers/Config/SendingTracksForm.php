@@ -34,6 +34,7 @@ class SendingTracksForm extends Form
         }, (array)($requestData['ignore_cities'] ?? [])));
         Config::find('sending_tracks')->update(['config' => $requestData]);
         admin_success('Конфиг успешно обновлен!');
+
         return back();
     }
 
