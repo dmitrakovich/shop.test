@@ -17,7 +17,6 @@ Route::group([
     'namespace' => config('admin.route.namespace'),
     'middleware' => config('admin.route.middleware'),
 ], function (Router $router) {
-    $router->get('/', 'HomeController@index')->name('home');
     $router->resource('info-pages', InfoPageController::class);
 
     $router->group(['prefix' => 'orders', 'namespace' => 'Orders', 'as' => 'orders.'], function (Router $router) {
