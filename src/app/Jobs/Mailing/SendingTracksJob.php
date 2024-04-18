@@ -35,8 +35,12 @@ class SendingTracksJob implements ShouldQueue
                 ->whereHas('track', fn (Builder $query) => $query->whereNotNull('track_number'))
                 ->whereDoesntHave('mailings', fn (Builder $query) => $query->where('mailing_id', self::MAILING_ID))
                 ->with(['user', 'track'])
-                ->each(function (Order $order) {
-                    $order->notify(new SendingTracksSms($order));
+                ->each(function (Order $order) use ($config) {
+                    $ignoreCities = $config['ignore_cities'] ?? [];
+                    $orderCity = $order->city ? mb_strtolower($order->city) : null;
+                    if (empty($ignoreCities) || array_search($orderCity, $ignoreCities) === false) {
+                        $order->notify(new SendingTracksSms($order));
+                    }
                 }, 200);
         }
     }
