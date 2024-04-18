@@ -25,7 +25,6 @@ class BlogPostsChart extends ChartWidget
         // ->perMonth()
         // ->count();
 
-
         return [
             'datasets' => [
                 [

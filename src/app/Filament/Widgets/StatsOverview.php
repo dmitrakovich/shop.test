@@ -17,7 +17,6 @@ class StatsOverview extends BaseWidget
             // оффлайн заказы
             // заказы на сайте
 
-
             Stat::make('Revenue', '$192.10k')
                 ->description('32k increase')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
