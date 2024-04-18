@@ -21,7 +21,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\App;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -29,7 +28,8 @@ class AdminPanelProvider extends PanelProvider
     public function register(): void
     {
         $rootPath = strtok(request()->path(), '/');
-        if (App::runningInConsole() || in_array($rootPath, ['admin', 'livewire', 'filament'])) {
+        $artisanCommand = $_SERVER['argv'][1] ?? null;
+        if (in_array($rootPath, ['admin', 'livewire', 'filament']) || $artisanCommand === 'route:cache') {
             parent::register();
         }
     }
