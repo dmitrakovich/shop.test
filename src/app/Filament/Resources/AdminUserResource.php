@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class AdminUserResource extends Resource
@@ -28,24 +29,35 @@ class AdminUserResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('username')
+                    ->label('Логин')
                     ->required()
                     ->maxLength(190),
                 Forms\Components\TextInput::make('password')
+                    ->label('Пароль')
                     ->password()
-                    ->required()
+                    ->afterStateHydrated(function (Forms\Components\TextInput $component, $state) {
+                        $component->state(null);
+                    })
+                    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                    ->dehydrated(fn (?string $state): bool => filled($state))
+                    ->required(fn (string $context): bool => $context === 'create')
                     ->maxLength(60),
                 Forms\Components\TextInput::make('name')
+                    ->label('Имя')
                     ->required()
                     ->maxLength(191),
-                Forms\Components\TextInput::make('avatar')
-                    ->maxLength(191),
                 Forms\Components\TextInput::make('user_last_name')
+                    ->label('Фамилия')
                     ->maxLength(64),
                 Forms\Components\TextInput::make('user_patronymic_name')
+                    ->label('Отчество')
                     ->maxLength(32),
                 Forms\Components\TextInput::make('trust_number')
+                    ->label('Номер доверенности')
                     ->maxLength(128),
-                Forms\Components\DatePicker::make('trust_date'),
+                Forms\Components\DatePicker::make('trust_date')
+                    ->label('Дата доверенности')
+                    ->native(false),
                 Forms\Components\Select::make('roles')
                     ->label('Роли')
                     ->multiple()
@@ -61,39 +73,39 @@ class AdminUserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('username')
+                    ->label('Логин')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('full_name')
+                    ->label('ФИО')
+                    ->getStateUsing(fn (AdminUser $adminUser) => $adminUser->getFullName())
                     ->searchable(),
-                Tables\Columns\TextColumn::make('avatar')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->label('Роли')
+                    ->badge(),
+                Tables\Columns\TextColumn::make('trust_number')
+                    ->label('Номер доверенности'),
+                // Tables\Columns\TextColumn::make('trust_date')
+                //     ->date()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Дата создания')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Дата обновления')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('user_last_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('user_patronymic_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('trust_number')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('trust_date')
-                    ->date()
-                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\EditAction::make()
+                    ->hidden(fn (AdminUser $user) => $user->id === auth()->id()),
+                Tables\Actions\DeleteAction::make()
+                    ->hidden(fn (AdminUser $user) => $user->id === auth()->id()),
             ]);
     }
 
