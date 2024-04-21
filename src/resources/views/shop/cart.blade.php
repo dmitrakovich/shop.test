@@ -102,9 +102,9 @@
                         @foreach ($deliveryMethods as $deliveryMethod)
                             @php
                                 $disableInput = match (true) {
-                                    ($cart->itemsCount() > 3 && $deliveryMethod->getRawOriginal('instance') == 'BelpostCourierFitting') => true,
-                                    ($cart->itemsCount() > 3 && $deliveryMethod->getRawOriginal('instance') == 'ShopPvz') => true,
-                                    default => false
+                                    $cart->itemsCount() > 3 && $deliveryMethod->getRawOriginal('instance') == 'BelpostCourierFitting' => true,
+                                    $cart->itemsCount() > 3 && $deliveryMethod->getRawOriginal('instance') == 'ShopPvz' => true,
+                                    default => false,
                                 };
                             @endphp
                             <div class="form-check">
