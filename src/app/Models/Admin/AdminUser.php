@@ -4,17 +4,16 @@ namespace App\Models\Admin;
 
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Filament\Panel;
+use Spatie\Permission\Traits\HasRoles;
 
 class AdminUser extends Authenticatable implements FilamentUser
 {
-    use HasRoles;
     use HasPanelShield;
+    use HasRoles;
 
     /**
      * The attributes that aren't mass assignable.
@@ -28,7 +27,7 @@ class AdminUser extends Authenticatable implements FilamentUser
     /**
      * Get avatar attribute.
      *
-     * @param string $avatar
+     * @param  string  $avatar
      */
     public function getAvatarAttribute($avatar): string
     {
@@ -72,8 +71,7 @@ class AdminUser extends Authenticatable implements FilamentUser
     /**
      * Check if user has permission.
      *
-     * @param $ability
-     * @param array $arguments
+     * @param  array  $arguments
      */
     public function can($ability, $arguments = []): bool
     {
@@ -95,7 +93,7 @@ class AdminUser extends Authenticatable implements FilamentUser
     /**
      * Check if user has no permission.
      *
-     * @param $permission
+     * @param  $permission
      *
      * @return bool
      */
@@ -117,7 +115,6 @@ class AdminUser extends Authenticatable implements FilamentUser
     /**
      * Check if user is $role.
      *
-     * @param string $role
      *
      * @return mixed
      */
@@ -129,7 +126,7 @@ class AdminUser extends Authenticatable implements FilamentUser
     /**
      * Check if user in $oldRoles.
      *
-     * @param array $oldRoles
+     * @param  array  $oldRoles
      *
      * @return mixed
      */
@@ -140,10 +137,6 @@ class AdminUser extends Authenticatable implements FilamentUser
 
     /**
      * If visible for roles.
-     *
-     * @param $roles
-     *
-     * @return bool
      */
     public function visible(array $roles = []): bool
     {

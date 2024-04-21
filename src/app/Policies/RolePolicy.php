@@ -3,8 +3,8 @@
 namespace App\Policies;
 
 use App\Models\Admin\AdminUser;
-use Spatie\Permission\Models\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Spatie\Permission\Models\Role;
 
 class RolePolicy
 {

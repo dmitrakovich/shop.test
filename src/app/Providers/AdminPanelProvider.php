@@ -98,7 +98,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authGuard('admin')
             ->plugins([
-                FilamentShieldPlugin::make()
+                FilamentShieldPlugin::make(),
             ])
             ->spa(false); // !!!
     }
