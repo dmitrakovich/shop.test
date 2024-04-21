@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Filament\Pages\Auth\Login;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use Encore\Admin\Auth\Database\Menu as OldAdminMenu;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -22,17 +21,19 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Collection;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function register(): void
     {
-        // $rootPath = strtok(request()->path(), '/');
-        // $artisanCommand = $_SERVER['argv'][1] ?? null;
-        // if (in_array($rootPath, ['admin', 'livewire', 'filament']) || $artisanCommand === 'route:cache') {
+        $rootPath = strtok(request()->path(), '/');
+        if (in_array($rootPath, ['api', 'cart', 'catalog'])) {
+            return;
+        }
+
         parent::register();
-        // }
     }
 
     public function panel(Panel $panel): Panel
@@ -69,19 +70,7 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Управление')
                     ->icon('heroicon-o-cog-6-tooth'),
             ])
-            ->navigationItems(
-                OldAdminMenu::query()
-                    ->whereNotIn('parent_id', [0, 2, 44])
-                    ->orderBy('order')
-                    ->get(['id', 'title', 'uri'])
-                    ->map(
-                        fn (OldAdminMenu $menu) => NavigationItem::make($menu->id)
-                            ->label($menu->title)
-                            ->url(url('admin/' . $menu->uri), shouldOpenInNewTab: false)
-                            ->group('old-admin-panel')
-                    )
-                    ->toArray()
-            )
+            ->navigationItems($this->generateOldAdminNavItems())
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -101,5 +90,28 @@ class AdminPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make(),
             ])
             ->spa(false); // !!!
+    }
+
+    public function generateOldAdminNavItems(): array
+    {
+        return $this->getOldAdminNavItems()->map(function ($label, $uri) {
+            return NavigationItem::make()
+                ->label($label)
+                ->url(url('admin/' . $uri), shouldOpenInNewTab: false)
+                ->group('old-admin-panel');
+        })->toArray();
+    }
+
+    private function getOldAdminNavItems(): Collection
+    {
+        return collect([
+            'orders' => 'Заказы',
+            'order-items' => 'Товары в заказах',
+            'users/users' => 'Пользователи',
+            'products' => 'Товары',
+            'logs/inventory' => 'Наличие - лог',
+            'automation/stock' => 'Склад',
+            'feedbacks' => 'Отзывы',
+        ]);
     }
 }

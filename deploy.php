@@ -70,6 +70,9 @@ task('artisan:opcache:clear', artisan('opcache:clear'));
 desc('Pre-compile application code');
 task('artisan:opcache:compile', artisan('opcache:compile --force'));
 
+desc('Generate permissions/policies for all entities');
+task('artisan:shield:generate', artisan('shield:generate --all'));
+
 task('deploy', [
     'deploy:info',
     'deploy:setup',
@@ -81,6 +84,7 @@ task('deploy', [
     'deploy:writable',
     'artisan:storage:link',
     'artisan:migrate',
+    'artisan:shield:generate',
     'artisan:cache:clear',
     'artisan:config:cache',
     'artisan:route:cache',
