@@ -35,6 +35,9 @@ class AdminUserResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->label('Пароль')
                     ->password()
+                    ->afterStateHydrated(function (Forms\Components\TextInput $component, $state) {
+                        $component->state(null);
+                    })
                     ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->required(fn (string $context): bool => $context === 'create')
