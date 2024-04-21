@@ -22,6 +22,7 @@
     "require": {
         "php": "^8.3",
         "appstract/laravel-opcache": "^4.0",
+        "bezhansalleh/filament-shield": "^3.2",
         "calebporzio/sushi": "^2.5",
         "ddeboer/imap": "^1.19",
         "defstudio/telegraph": "^1.42",

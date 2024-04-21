@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Filament\Pages\Auth\Login;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Encore\Admin\Auth\Database\Menu as OldAdminMenu;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -27,11 +28,11 @@ class AdminPanelProvider extends PanelProvider
 {
     public function register(): void
     {
-        $rootPath = strtok(request()->path(), '/');
-        $artisanCommand = $_SERVER['argv'][1] ?? null;
-        if (in_array($rootPath, ['admin', 'livewire', 'filament']) || $artisanCommand === 'route:cache') {
-            parent::register();
-        }
+        // $rootPath = strtok(request()->path(), '/');
+        // $artisanCommand = $_SERVER['argv'][1] ?? null;
+        // if (in_array($rootPath, ['admin', 'livewire', 'filament']) || $artisanCommand === 'route:cache') {
+        parent::register();
+        // }
     }
 
     public function panel(Panel $panel): Panel
@@ -60,13 +61,13 @@ class AdminPanelProvider extends PanelProvider
                 // 'promo' => NavigationGroup::make()
                 //     ->label('Промо')
                 //     ->icon('heroicon-o-currency-dollar'), // !!!
-                'settings' => NavigationGroup::make()
-                    ->label('Управление')
-                    ->icon('heroicon-o-cog-6-tooth'),
                 'old-admin-panel' => NavigationGroup::make()
                     ->label('Старая админка')
                     ->icon('heroicon-o-arrow-uturn-left')
                     ->collapsed(),
+                'settings' => NavigationGroup::make()
+                    ->label('Управление')
+                    ->icon('heroicon-o-cog-6-tooth'),
             ])
             ->navigationItems(
                 OldAdminMenu::query()
@@ -96,6 +97,9 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->authGuard('admin')
+            ->plugins([
+                FilamentShieldPlugin::make()
+            ])
             ->spa(false); // !!!
     }
 }

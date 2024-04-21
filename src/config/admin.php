@@ -112,21 +112,21 @@ return [
 
         'controller' => App\Admin\Controllers\AuthController::class,
 
-        'guard' => 'admin',
+        // 'guard' => 'admin',
 
-        'guards' => [
-            'admin' => [
-                'driver' => 'session',
-                'provider' => 'admin',
-            ],
-        ],
+        // 'guards' => [
+        //     'admin' => [
+        //         'driver' => 'session',
+        //         'provider' => 'admin',
+        //     ],
+        // ],
 
-        'providers' => [
-            'admin' => [
-                'driver' => 'eloquent',
-                'model' => Encore\Admin\Auth\Database\Administrator::class,
-            ],
-        ],
+        // 'providers' => [
+        //     'admin' => [
+        //         'driver' => 'eloquent',
+        //         'model' => Encore\Admin\Auth\Database\Administrator::class,
+        //     ],
+        // ],
 
         // Add "remember me" to login form
         'remember' => true,
@@ -349,9 +349,7 @@ return [
     'minify_assets' => [
 
         // Assets will not be minified.
-        'excepts' => [
-
-        ],
+        'excepts' => [],
 
     ],
 
@@ -402,9 +400,7 @@ return [
             'enable' => true,
 
             // Editor configuration
-            'config' => [
-
-            ],
+            'config' => [],
         ],
     ],
 ];

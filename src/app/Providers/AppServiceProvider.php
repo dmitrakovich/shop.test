@@ -6,6 +6,7 @@ use App\Contracts\OrderServiceInterface;
 use App\Database\SqlServerConnection;
 use App\Logging\FacebookApiLogger;
 use App\Notifications\ChannelManagerWithLimits;
+use App\Policies\RolePolicy;
 use App\Services\Api\Facebook\ConversionsApiService;
 use App\Services\OrderService;
 use FacebookAds\Api;
@@ -14,6 +15,8 @@ use Illuminate\Notifications\ChannelManager;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -64,5 +67,7 @@ class AppServiceProvider extends ServiceProvider
         if ($app->isLocal()) {
             $app['config']['filesystems.disks.public.url'] = 'https://barocco.by/media';
         }
+
+        Gate::policy(Role::class, RolePolicy::class);
     }
 }

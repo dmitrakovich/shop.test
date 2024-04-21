@@ -1,0 +1,158 @@
+<?php
+
+namespace App\Models\Admin;
+
+use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
+use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Filament\Panel;
+
+class AdminUser extends Authenticatable implements FilamentUser
+{
+    use HasRoles;
+    use HasPanelShield;
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array<string>|bool
+     */
+    protected $guarded = [];
+
+    //!!! old admin roles & permissions
+
+    /**
+     * Get avatar attribute.
+     *
+     * @param string $avatar
+     */
+    public function getAvatarAttribute($avatar): string
+    {
+        return admin_asset('favicon-96x96.png');
+    }
+
+    /**
+     * A user has and belongs to many roles.
+     */
+    public function oldRoles(): BelongsToMany
+    {
+        $relatedModel = \Encore\Admin\Auth\Database\Role::class;
+
+        return $this->belongsToMany($relatedModel, 'admin_role_users', 'user_id', 'role_id');
+    }
+
+    /**
+     * A User has and belongs to many permissions.
+     */
+    public function oldPermissions(): BelongsToMany
+    {
+        $relatedModel = \Encore\Admin\Auth\Database\Permission::class;
+
+        return $this->belongsToMany($relatedModel, 'admin_user_permissions', 'user_id', 'permission_id');
+    }
+
+    /**
+     * Get all old permissions of user.
+     *
+     * @return mixed
+     */
+    public function allPermissions(): Collection
+    {
+        $rolesId = DB::table('admin_role_users')->where('user_id', auth()->id())->pluck('role_id');
+        $permissionsId = DB::table('admin_role_permissions')->whereIn('role_id', $rolesId)->pluck('permission_id');
+        $permissions = \Encore\Admin\Auth\Database\Permission::query()->whereIn('id', $permissionsId)->get();
+
+        return $permissions;
+    }
+
+    /**
+     * Check if user has permission.
+     *
+     * @param $ability
+     * @param array $arguments
+     */
+    public function can($ability, $arguments = []): bool
+    {
+        if (empty($ability)) {
+            return true;
+        }
+
+        if ($this->isAdministrator()) {
+            return true;
+        }
+
+        if ($this->oldPermissions->pluck('slug')->contains($ability)) {
+            return true;
+        }
+
+        return $this->oldRoles->pluck('permissions')->flatten()->pluck('slug')->contains($ability);
+    }
+
+    /**
+     * Check if user has no permission.
+     *
+     * @param $permission
+     *
+     * @return bool
+     */
+    public function cannot($abilities, $arguments = [])
+    {
+        return !$this->can($abilities);
+    }
+
+    /**
+     * Check if user is administrator.
+     *
+     * @return mixed
+     */
+    public function isAdministrator(): bool
+    {
+        return $this->isRole('super_admin');
+    }
+
+    /**
+     * Check if user is $role.
+     *
+     * @param string $role
+     *
+     * @return mixed
+     */
+    public function isRole(string $role): bool
+    {
+        return $this->oldRoles->pluck('slug')->contains($role);
+    }
+
+    /**
+     * Check if user in $oldRoles.
+     *
+     * @param array $oldRoles
+     *
+     * @return mixed
+     */
+    public function inRoles(array $roles = []): bool
+    {
+        return $this->oldRoles->pluck('slug')->intersect($roles)->isNotEmpty();
+    }
+
+    /**
+     * If visible for roles.
+     *
+     * @param $roles
+     *
+     * @return bool
+     */
+    public function visible(array $roles = []): bool
+    {
+        if (empty($roles)) {
+            return true;
+        }
+
+        $roles = array_column($roles, 'slug');
+
+        return $this->inRoles($roles) || $this->isAdministrator();
+    }
+}
