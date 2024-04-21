@@ -22,6 +22,11 @@ class AdminUser extends Authenticatable implements FilamentUser
      */
     protected $guarded = [];
 
+    public function getFullName(): string
+    {
+        return trim("{$this->user_last_name} {$this->name} {$this->user_patronymic_name}");
+    }
+
     //!!! old admin roles & permissions
 
     /**

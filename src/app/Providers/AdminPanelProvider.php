@@ -43,6 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login(Login::class)
+            // ->profile() //todo: make custom edit page
             ->colors([
                 'primary' => Color::Amber,
             ])

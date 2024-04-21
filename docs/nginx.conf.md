@@ -34,6 +34,16 @@ server {
     gzip_disable "msie6";
     gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript;
 
+    location = /livewire/livewire.js {
+        expires off;
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /livewire/livewire.min.js {
+        expires off;
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
     ## Убираю index.php / index.html
     if ($request_uri ~ "^(.*)index\.(?:php|html)") {
         return 301 $1;
