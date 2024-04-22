@@ -21,6 +21,14 @@ $(function () {
         $('.js-without-user-sale-price').hide();
       }
     });
+    $(document).find('input[name="delivery_id"]:not(:disabled)').first().prop('checked', true);
+    $(document).on('change', 'input[name="delivery_id"]', function () {
+      if (+$(this).val() === 6) {
+        $('#payment-1').prop('disabled', true);
+      } else {
+        $('#payment-1').prop('disabled', false);
+      }
+    });
   }
   // end temporary shitcode for price
 });
