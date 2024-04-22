@@ -100,18 +100,11 @@
                     <div class="col-12 col-md-6 mt-3 mt-md-5">
                         <p class="font-size-18"><b>Способ доставки:</b></p>
                         @foreach ($deliveryMethods as $deliveryMethod)
-                            @php
-                                $disableInput = match (true) {
-                                    $cart->itemsCount() > 3 && $deliveryMethod->getRawOriginal('instance') == 'BelpostCourierFitting' => true,
-                                    $cart->itemsCount() > 3 && $deliveryMethod->getRawOriginal('instance') == 'ShopPvz' => true,
-                                    default => false,
-                                };
-                            @endphp
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="delivery_id"
                                     id="delivery-{{ $deliveryMethod->id }}"
                                     value="{{ $deliveryMethod->id }}"
-                                    {{ $disableInput ? 'disabled' : null }}
+                                    {{ ($cart->itemsCount() > 3 && in_array($deliveryMethod->getRawOriginal('instance'), ['BelpostCourierFitting', 'ShopPvz'])) ? 'disabled' : null }}
                                     {{ $loop->first ? 'checked' : null }} />
                                 <label class="form-check-label" for="delivery-{{ $deliveryMethod->id }}">
                                     {{ $deliveryMethod->name }}
