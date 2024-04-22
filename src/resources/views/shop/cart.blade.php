@@ -104,7 +104,7 @@
                                 <input class="form-check-input" type="radio" name="delivery_id"
                                     id="delivery-{{ $deliveryMethod->id }}"
                                     value="{{ $deliveryMethod->id }}"
-                                    {{ ($cart->itemsCount() > 3 && in_array($deliveryMethod->getRawOriginal('instance'), ['BelpostCourierFitting', 'ShopPvz'])) ? 'disabled' : null }}
+                                    {{ $cart->itemsCount() > 3 && in_array($deliveryMethod->getRawOriginal('instance'), ['BelpostCourierFitting', 'ShopPvz']) ? 'disabled' : null }}
                                     {{ $loop->first ? 'checked' : null }} />
                                 <label class="form-check-label" for="delivery-{{ $deliveryMethod->id }}">
                                     {{ $deliveryMethod->name }}
