@@ -1,6 +1,5 @@
 <?php
 
-use App\Admin\Controllers\Auth\UserController;
 use App\Admin\Controllers\OrderController as AdminOrderController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\Shop\OrderController;
@@ -9,7 +8,6 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 
 Admin::routes();
-Route::resource('admin/auth/users', UserController::class)->middleware(config('admin.route.middleware'));
 
 Route::group([
     'prefix' => config('admin.route.prefix'),

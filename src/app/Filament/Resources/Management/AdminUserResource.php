@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Management;
 
-use App\Filament\Resources\AdminUserResource\Pages;
+use App\Filament\Resources\Management\AdminUserResource\Pages;
 use App\Models\Admin\AdminUser;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -16,7 +16,7 @@ class AdminUserResource extends Resource
 {
     protected static ?string $model = AdminUser::class;
 
-    protected static ?string $navigationGroup = 'settings';
+    protected static ?string $navigationGroup = 'management';
 
     protected static ?string $modelLabel = 'Пользователь';
 
@@ -35,7 +35,7 @@ class AdminUserResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->label('Пароль')
                     ->password()
-                    ->afterStateHydrated(function (Forms\Components\TextInput $component, $state) {
+                    ->afterStateHydrated(function (Forms\Components\TextInput $component) {
                         $component->state(null);
                     })
                     ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))

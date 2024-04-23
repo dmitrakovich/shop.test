@@ -125,13 +125,6 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
      */
     private function shouldNotify(int $newCount, int $oldCount, int $productId, int $stockId, string $sizeKey): bool
     {
-        // TODO: remove after Alexey fix
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if ($productId === 9061) {
-            return false;
-        }
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         if ($newCount >= $oldCount) {
             return false;
         }

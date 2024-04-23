@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
@@ -43,7 +44,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login(Login::class)
-            // ->profile() //todo: make custom edit page
+            ->profile(EditProfile::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -67,7 +68,7 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Старая админка')
                     ->icon('heroicon-o-arrow-uturn-left')
                     ->collapsed(),
-                'settings' => NavigationGroup::make()
+                'management' => NavigationGroup::make()
                     ->label('Управление')
                     ->icon('heroicon-o-cog-6-tooth'),
             ])
@@ -90,7 +91,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentShieldPlugin::make(),
             ])
-            ->spa(false); // !!!
+            ->spa();
     }
 
     public function generateOldAdminNavItems(): array
@@ -98,7 +99,7 @@ class AdminPanelProvider extends PanelProvider
         return $this->getOldAdminNavItems()->map(function ($label, $uri) {
             return NavigationItem::make()
                 ->label($label)
-                ->url(url('admin/' . $uri), shouldOpenInNewTab: false)
+                ->url(url('admin/' . $uri), shouldOpenInNewTab: true)
                 ->group('old-admin-panel');
         })->toArray();
     }

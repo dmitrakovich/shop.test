@@ -10,6 +10,32 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property int $id
+ * @property string $username
+ * @property string $password
+ * @property string $name
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $user_last_name Фамилия
+ * @property string|null $user_patronymic_name Отчество
+ * @property string|null $trust_number Номер доверенности
+ * @property string|null $trust_date Дата доверенности
+ * @property string $avatar
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Encore\Admin\Auth\Database\Role[] $oldRoles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Encore\Admin\Auth\Database\Permission[] $oldPermissions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Admin\AdminUser role($roles, $guard = null, $without = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Admin\AdminUser withoutRole($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Admin\AdminUser permission($permissions, $without = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Admin\AdminUser withoutPermission($permissions)
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class AdminUser extends Authenticatable implements FilamentUser
 {
     use HasPanelShield;
