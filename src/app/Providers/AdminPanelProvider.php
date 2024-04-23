@@ -61,9 +61,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->sidebarCollapsibleOnDesktop()
             ->navigationGroups([
-                // 'promo' => NavigationGroup::make()
-                //     ->label('Промо')
-                //     ->icon('heroicon-o-currency-dollar'), // !!!
+                'promo' => NavigationGroup::make()
+                    ->label('Промо')
+                    ->icon('heroicon-o-fire'),
                 'old-admin-panel' => NavigationGroup::make()
                     ->label('Старая админка')
                     ->icon('heroicon-o-arrow-uturn-left')
@@ -101,7 +101,14 @@ class AdminPanelProvider extends PanelProvider
                 ->label($label)
                 ->url(url('admin/' . $uri), shouldOpenInNewTab: true)
                 ->group('old-admin-panel');
-        })->toArray();
+        })
+            ->push(
+                NavigationItem::make()
+                    ->label('Акции')
+                    ->url(url('admin/sales'), shouldOpenInNewTab: true)
+                    ->group('promo'),
+            )
+            ->toArray();
     }
 
     private function getOldAdminNavItems(): Collection
