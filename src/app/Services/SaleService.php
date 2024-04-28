@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
+use App\Enums\Promo\SaleAlgorithm;
 use App\Facades\Currency;
 use App\Models\Cart;
 use App\Models\Config;
 use App\Models\Data\OrderData;
 use App\Models\Data\SaleData;
 use App\Models\Product;
-use App\Models\Sale;
+use App\Models\Promo\Sale;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
@@ -145,12 +146,12 @@ class SaleService
     }
 
     /**
-     * Check nedding aplly for product
+     * Check needing apply for product
      */
     protected function applyForOneProduct(): bool
     {
         return match ($this->sale->algorithm) {
-            $this->sale::ALGORITHM_FAKE, $this->sale::ALGORITHM_SIMPLE => true,
+            SaleAlgorithm::FAKE, SaleAlgorithm::SIMPLE => true,
             default => false,
         };
     }
@@ -161,7 +162,7 @@ class SaleService
     protected function checkSpecialConditions(float $price, float $oldPrice): bool
     {
         return match ($this->sale->algorithm) {
-            $this->sale::ALGORITHM_FAKE => $price < $oldPrice,
+            SaleAlgorithm::FAKE => $price < $oldPrice,
             default => true,
         };
     }
@@ -249,7 +250,7 @@ class SaleService
      */
     protected function getOverflowDiscount(): float
     {
-        if ($this->sale->algorithm == $this->sale::ALGORITHM_COUNT) {
+        if ($this->sale->algorithm->isCount()) {
             return (float)end($this->discounts);
         } else {
             return 0;
@@ -264,10 +265,10 @@ class SaleService
         $baseDiscount = ($oldPrice - $price) / $oldPrice;
 
         return match ($this->sale->algorithm) {
-            $this->sale::ALGORITHM_FAKE => $price,
-            $this->sale::ALGORITHM_SIMPLE => $this->round($oldPrice * (1 - ($this->getDiscount() + $baseDiscount))),
-            $this->sale::ALGORITHM_COUNT => $this->round($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount))),
-            $this->sale::ALGORITHM_ASCENDING => $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount))),
+            SaleAlgorithm::FAKE => $price,
+            SaleAlgorithm::SIMPLE => $this->round($oldPrice * (1 - ($this->getDiscount() + $baseDiscount))),
+            SaleAlgorithm::COUNT => $this->round($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount))),
+            SaleAlgorithm::ASCENDING => $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount))),
             default => $price,
         };
     }
@@ -304,9 +305,7 @@ class SaleService
      */
     private function getDiscountData(float $price, float $discountPrice, float $oldPrice, int $index): array
     {
-        $isFakeAlgorithm = $this->sale->algorithm === $this->sale::ALGORITHM_FAKE;
-
-        return $isFakeAlgorithm
+        return $this->sale->algorithm->isFake()
             ? [$oldPrice - $price, floor((1 - ($price / $oldPrice)) * 100)]
             : [$price - $discountPrice, $this->getDiscount($index) * 100];
     }
@@ -393,7 +392,7 @@ class SaleService
     }
 
     /**
-     * Check has delivery with fittng for sale
+     * Check has delivery with fitting for sale
      */
     public function hasFitting(): bool
     {

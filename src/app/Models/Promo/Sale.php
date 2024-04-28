@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Promo;
 
+use App\Enums\Promo\SaleAlgorithm;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,8 +14,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $label_text
  * @property \Illuminate\Support\Carbon $start_datetime
  * @property \Illuminate\Support\Carbon $end_datetime
- * @property string $algorithm
- * @property string $sale
+ * @property float|null $sale_percentage discount amount in percentage
+ * @property float|null $sale_fix fixed discount amount
+ * @property \App\Enums\Promo\SaleAlgorithm $algorithm
  * @property array|null $categories
  * @property array|null $collections
  * @property array|null $styles
@@ -29,7 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  *
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Sale actual()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promo\Sale actual()
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
@@ -38,13 +40,12 @@ class Sale extends Model
     use HasFactory;
     use SoftDeletes;
 
-    const ALGORITHM_FAKE = 'fake';
-
-    const ALGORITHM_SIMPLE = 'simple';
-
-    const ALGORITHM_COUNT = 'count';
-
-    const ALGORITHM_ASCENDING = 'ascending';
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array<string>|bool
+     */
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be cast.
@@ -52,10 +53,17 @@ class Sale extends Model
      * @var array
      */
     protected $casts = [
+        'algorithm' => SaleAlgorithm::class,
         'categories' => 'array',
         'collections' => 'array',
         'styles' => 'array',
         'seasons' => 'array',
+        'only_new' => 'boolean',
+        'only_discount' => 'boolean',
+        'add_client_sale' => 'boolean',
+        'add_review_sale' => 'boolean',
+        'has_installment' => 'boolean',
+        'has_fitting' => 'boolean',
         'start_datetime' => 'datetime',
         'end_datetime' => 'datetime',
     ];
@@ -79,12 +87,14 @@ class Sale extends Model
     }
 
     /**
-     * Farmat date
-     *
-     * @return string
+     * Encode the given value as JSON.
      */
-    protected function serializeDate(\DateTimeInterface $date)
+    protected function asJson(mixed $value): string|false|null
     {
-        return $date->format('d.m.Y H:i:s');
+        if (!$value) {
+            return null;
+        }
+
+        return json_encode(array_map('intval', $value));
     }
 }

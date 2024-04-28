@@ -103,8 +103,6 @@ Route::group([
     });
     $router->resource('cities', CityController::class);
 
-    $router->resource('sales', SaleController::class);
-
     $router->resource('feedbacks', FeedbackController::class);
     $router->resource('feedbacks.feedback-answers', FeedbackAnswerController::class);
 

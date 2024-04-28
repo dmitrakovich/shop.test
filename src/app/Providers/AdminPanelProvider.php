@@ -101,14 +101,7 @@ class AdminPanelProvider extends PanelProvider
                 ->label($label)
                 ->url(url('admin/' . $uri), shouldOpenInNewTab: true)
                 ->group('old-admin-panel');
-        })
-            ->push(
-                NavigationItem::make()
-                    ->label('Акции')
-                    ->url(url('admin/sales'), shouldOpenInNewTab: true)
-                    ->group('promo'),
-            )
-            ->toArray();
+        })->toArray();
     }
 
     private function getOldAdminNavItems(): Collection

@@ -4,7 +4,7 @@ namespace App\Models\ProductAttributes;
 
 use App\Models\Category;
 use App\Models\Collection;
-use App\Models\Sale;
+use App\Models\Promo\Sale;
 use App\Models\Season;
 use App\Models\Style;
 use Illuminate\Database\Eloquent\Builder;
@@ -56,7 +56,7 @@ class Promotion extends Model
                         $query->onlyNew();
                     }
 
-                    if ($sale->algorithm === Sale::ALGORITHM_FAKE) {
+                    if ($sale->algorithm->isFake()) {
                         $query->onlyWithDiscount();
                     }
                 });
