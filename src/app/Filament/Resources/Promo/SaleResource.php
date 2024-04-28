@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Promo;
 
 use App\Enums\Promo\SaleAlgorithm;
 use App\Filament\Resources\Promo\SaleResource\Pages;
-use App\Filament\Resources\Promo\SaleResource\RelationManagers;
 use App\Models\Category;
 use App\Models\Collection;
 use App\Models\Promo\Sale;
@@ -15,8 +14,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SaleResource extends Resource
 {
