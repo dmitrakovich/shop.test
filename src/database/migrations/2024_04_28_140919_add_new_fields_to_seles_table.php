@@ -24,7 +24,7 @@ return new class extends Migration
             $table->unsignedInteger('sale_fix')->nullable()->after('sale_percentage')->comment('fixed discount amount');
         });
 
-        DB::table('sales')->where('algorithm_old', 'simle')->update(['algorithm' => SaleAlgorithm::SIMPLE]);
+        DB::table('sales')->where('algorithm_old', 'simple')->update(['algorithm' => SaleAlgorithm::SIMPLE]);
         DB::table('sales')->where('algorithm_old', 'count')->update(['algorithm' => SaleAlgorithm::COUNT]);
         DB::table('sales')->where('algorithm_old', 'fake')->update(['algorithm' => SaleAlgorithm::FAKE]);
         DB::table('sales')->where('algorithm_old', 'ascending')->update(['algorithm' => SaleAlgorithm::ASCENDING]);

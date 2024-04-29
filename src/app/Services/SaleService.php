@@ -96,7 +96,7 @@ class SaleService
     protected function prepareDiscounts(): void
     {
         if ($this->hasSale()) {
-            $this->discounts = array_filter(array_map('trim', explode(',', $this->sale->sale)));
+            $this->discounts = array_filter(array_map('trim', explode(',', $this->sale->sale_percentage)));
         }
     }
 
