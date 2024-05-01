@@ -105,6 +105,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Models\Orders\OrderItemExtended::class => [
             Observers\OrderItemObserver::class,
         ],
+        \App\Models\Payments\OnlinePayment::class => [
+            Observers\OnlinePaymentObserver::class
+        ]
     ];
 
     /**
