@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('code', 20)->unique();
             $table->string('description')->nullable();
             $table->unsignedInteger('timer_sec')->nullable();
-            $table->unsignedTinyInteger('activations_count')->nullable();
+            $table->unsignedSmallInteger('activations_count')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

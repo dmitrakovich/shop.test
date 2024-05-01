@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $code
  * @property string|null $description
  * @property int|null $timer_sec
- * @property bool|null $activations_count
+ * @property int|null $activations_count
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

@@ -141,13 +141,11 @@
                                 <a href="{{ $item->product->getUrl() }}" target="_blank">{{ $item->product->getFullName() }}</a><br>
                                 Размер: <b>{{ $item->size->name }}</b><br>
                                 Код: <b>{{ $item->product_id }}</b>
-                                {{-- {{PROMOCODE}} --}}
                             </td>
                             <td width="150px" valign="middle" align="center" style="font-family:Roboto, Verdana; font-size:16px; color:#222222;">
                                 @if ($item->discount > 0)
                                     <span style="color: #C0976B;">{{ $item->discount }}%</span>({!! Currency::format($item->old_price - $item->current_price, $order->currency) !!})<br>
                                 @endif
-                                {{-- <span style="color: #C0976B;">{{MODEL_PROMO_PERCENT}}</span> ({{MODEL_PROMO_SUMM}}) --}}
                             </td>
                             <td width="120px" valign="middle" align="center" style="font-family:Roboto, Verdana; font-size:16px; color:#C0976B; font-weight: bold;">
                                 @if ($item->old_price > $item->current_price)
@@ -195,22 +193,6 @@
                         </td>
                         <td width="10px"></td>
                     </tr>
-
-					{{-- <tr>
-						<td width="100"></td>
-						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Скидка</td>
-						<td width="20px"></td>
-						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{ORDER_SUMM_PROMOCODE}}</td>
-						<td width="10px"></td>
-					</tr> --}}
-
-					{{-- <tr>
-						<td width="100"></td>
-						<td width="300" align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">Транспортные расходы</td>
-						<td width="20px"></td>
-						<td align="right" valign="middle" style="font-family:Roboto, Verdana; font-size:16px; color:#222222; font-weight: bold;">{{TRANSPORT_COSTS}}</td>
-						<td width="10px"></td>
-					</tr> --}}
 
 					<tr><td colspan="5" height="10"></td></tr>
 					<tr>

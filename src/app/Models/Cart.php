@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Cookie;
 /**
  * @property int $id
  * @property int|null $promocode_id
- * @property bool $cancel_promocode
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *

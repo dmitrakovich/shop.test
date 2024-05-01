@@ -58,7 +58,7 @@ class SaleResource extends Resource
                     Forms\Components\TextInput::make('sale_percentage')
                         ->label('Скидка в процентах')
                         ->numeric()
-                        ->formatStateUsing(fn ($state) => $state ? $state * 100 : null)
+                        ->formatStateUsing(fn ($state) => $state ? round($state * 100, 4) : null)
                         ->mutateDehydratedStateUsing(fn ($state) => $state ? round($state / 100, 4) : null)
                         ->suffix('%')
                         ->minValue(0.01)
@@ -67,7 +67,7 @@ class SaleResource extends Resource
                         ->requiredWithout('sale_fix'),
                     Forms\Components\TextInput::make('sale_fix')
                         ->label('Фиксированный скидка')
-                        ->helperText('В копейках')
+                        ->placeholder('В копейках')
                         ->numeric()
                         ->suffix('BYN')
                         ->prohibits('sale_percentage')
