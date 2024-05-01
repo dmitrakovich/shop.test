@@ -3,12 +3,10 @@
 namespace App\Observers;
 
 use App\Models\Payments\OnlinePayment;
-
 use App\Services\Payment\PaymentService;
 
 class OnlinePaymentObserver
 {
-
     /**
      * Handle the OnlinePayment "created" event.
      */

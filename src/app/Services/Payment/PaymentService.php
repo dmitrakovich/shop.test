@@ -6,8 +6,8 @@ use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
-use App\Models\Payments\OnlinePayment;
 use App\Models\Payments\Installment;
+use App\Models\Payments\OnlinePayment;
 use App\Notifications\PaymentSms;
 use App\Services\Payment\Methods\PaymentCODService;
 use App\Services\Payment\Methods\PaymentEripService;
@@ -130,7 +130,7 @@ class PaymentService
     /**
      * Auto sets the order status based on the online payment details.
      *
-     * @param OnlinePayment $onlinePayment The online payment object.
+     * @param  OnlinePayment  $onlinePayment  The online payment object.
      */
     public function autoSetOrderStatus(OnlinePayment $onlinePayment): void
     {
@@ -162,7 +162,7 @@ class PaymentService
                 }
                 $firstPaymentsSum = $firstPaymentsSum ? ($firstPaymentsSum - $successfulPaymentsSum) : 0;
 
-                if(ceil($paymentSum) >= floor($remainingOrderPayment)) {
+                if (ceil($paymentSum) >= floor($remainingOrderPayment)) {
                     $order->update(['status_key' => 'complete']);
                     $order->data->each(function (OrderItem $orderItem) {
                         $orderItem->update(['status_key' => 'complete']);
