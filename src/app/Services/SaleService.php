@@ -111,7 +111,7 @@ class SaleService
             $this->reviewDiscount = $this->getReviewDiscount();
         }
 
-        if (!$promocode = $user->cart->promocode) {
+        if (!$promocode = $user->cart?->promocode) {
             return;
         }
         if ($promocode->isExpiredForUser($user)) {
