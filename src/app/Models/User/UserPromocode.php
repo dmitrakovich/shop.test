@@ -29,4 +29,11 @@ class UserPromocode extends Model
         'expired_at' => 'datetime',
         'canceled_at' => 'datetime',
     ];
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array<string>|bool
+     */
+    protected $guarded = ['id'];
 }

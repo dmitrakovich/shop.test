@@ -46,13 +46,19 @@ class CartController extends BaseController
 
         $paymentsList = PaymentMethod::active()
             ->filterInstallment($cart->availableInstallment() && Sale::hasInstallment())
+            ->filterCOD(Sale::hasCOD())
             ->filterByCountry($countryCode)
             ->pluck('name', 'id');
 
         $gtmService->setViewForCart($cart);
 
         return view('shop.cart', array_merge($prices, compact(
-            'cart', 'user', 'deliveryMethods', 'paymentsList', 'countries', 'currentCountry'
+            'cart',
+            'user',
+            'deliveryMethods',
+            'paymentsList',
+            'countries',
+            'currentCountry'
         )));
     }
 

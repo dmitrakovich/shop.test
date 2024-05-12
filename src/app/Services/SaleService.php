@@ -9,9 +9,11 @@ use App\Models\Config;
 use App\Models\Data\OrderData;
 use App\Models\Data\SaleData;
 use App\Models\Product;
+use App\Models\Promo\Promocode;
 use App\Models\Promo\Sale;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Facades\Cookie;
 
 class SaleService
 {
@@ -70,6 +72,14 @@ class SaleService
      */
     public function __construct()
     {
+        $this->setUp();
+    }
+
+    /**
+     * Set up the sales and prepare discounts.
+     */
+    private function setUp(): void
+    {
         $this->setSales();
         $this->prepareDiscounts();
     }
@@ -79,14 +89,35 @@ class SaleService
      */
     private function setSales(): void
     {
-        $this->sale = Sale::actual()->orderByDesc('id')->first();
+        $this->setAuthUserSales();
 
+        if (!isset($this->sale)) {
+            $this->sale = Sale::actual()->orderByDesc('id')->first();
+        }
+    }
+
+    /**
+     * Set the sales information for the authenticated user.
+     */
+    private function setAuthUserSales(): void
+    {
         $user = auth()->user();
-        if ($user instanceof User) {
-            $this->userDiscount = $user->group->discount;
-            if ($user->hasReviewAfterOrder()) {
-                $this->reviewDiscount = $this->getReviewDiscount();
-            }
+        if (!$user instanceof User) {
+            return;
+        }
+
+        $this->userDiscount = $user->group->discount;
+        if ($user->hasReviewAfterOrder()) {
+            $this->reviewDiscount = $this->getReviewDiscount();
+        }
+
+        if (!$promocode = $user->cart->promocode) {
+            return;
+        }
+        if ($promocode->isExpiredForUser($user)) {
+            $user->cart->update(['promocode_id' => null]);
+        } else {
+            $this->sale = $promocode->sale;
         }
     }
 
@@ -392,27 +423,39 @@ class SaleService
     }
 
     /**
-     * Check has delivery with fitting for sale
+     * Check if fitting is available
      */
     public function hasFitting(): bool
     {
-        if (is_null($this->hasSaleProductsInCart)) {
-            throw new \Exception('First need apply sale for cart');
-        }
-
-        return !$this->hasSaleProductsInCart || $this->sale->has_fitting;
+        return !$this->hasSaleProductsInCart() || $this->sale->has_fitting;
     }
 
     /**
-     * Check has payment with installment for sale
+     * Check if installment is available
      */
     public function hasInstallment(): bool
+    {
+        return !$this->hasSaleProductsInCart() || $this->sale->has_installment;
+    }
+
+    /**
+     * Check if cash on delivery (COD) is available
+     */
+    public function hasCOD(): bool
+    {
+        return !$this->hasSaleProductsInCart() || $this->sale->has_cod;
+    }
+
+    /**
+     * Check if there are sale products in the cart
+     */
+    private function hasSaleProductsInCart(): bool
     {
         if (is_null($this->hasSaleProductsInCart)) {
             throw new \Exception('First need apply sale for cart');
         }
 
-        return !$this->hasSaleProductsInCart || $this->sale->has_installment;
+        return $this->hasSaleProductsInCart;
     }
 
     /**
@@ -463,5 +506,62 @@ class SaleService
         }
 
         $this->applyToCart($cart);
+    }
+
+    /**
+     * Apply a promocode to the user's cart.
+     */
+    public function applyPromocode(string $promocodeCode): void
+    {
+        /** @var Promocode */
+        $promocode = Promocode::query()->firstWhere('code', $this->preparePromocodeCode($promocodeCode));
+        if (!$promocode) {
+            return;
+        }
+
+        $user = auth()->user();
+        if (!$user instanceof User) {
+            Cookie::queue('pending_promocode', $promocode->code, 60 * 24 * 7);
+
+            return;
+        }
+
+        $this->applyPromocodeToUser($promocode, $user);
+    }
+
+    /**
+     * Prepare the promocode code.
+     */
+    private function preparePromocodeCode(string $promocodeCode): string
+    {
+        return trim($promocodeCode); // + additional logic
+    }
+
+    /**
+     * Apply the promocode to the user.
+     */
+    private function applyPromocodeToUser(Promocode $promocode, User $user): void
+    {
+        if ($user->cart->promocode_id === $promocode->id) {
+            return;
+        }
+        /** @var \App\Models\User\UserPromocode */
+        $usedPromocode = $user->usedPromocodes()->firstOrCreate(
+            ['promocode_id' => $promocode->id],
+            ['apply_count' => 1],
+        );
+        if ($promocode->activations_count && $usedPromocode->apply_count > $promocode->activations_count) {
+            return;
+        }
+        if (!$usedPromocode->wasRecentlyCreated) {
+            $usedPromocode->apply_count++;
+            $usedPromocode->canceled_at = null;
+        }
+        $usedPromocode->expired_at = $promocode->getExpiredDate();
+        $usedPromocode->save();
+
+        $user->cart->update(['promocode_id' => $promocode->id]);
+
+        $this->setUp();
     }
 }

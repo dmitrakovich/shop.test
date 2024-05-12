@@ -6,6 +6,7 @@ use App\Enums\Promo\SaleAlgorithm;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -26,10 +27,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property bool $add_client_sale
  * @property bool $add_review_sale
  * @property bool $has_installment
+ * @property bool $has_cod is available cash on delivery payment method
  * @property bool $has_fitting
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Promo\Promocode[] $promocodes
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promo\Sale actual()
  *
@@ -63,27 +67,35 @@ class Sale extends Model
         'add_client_sale' => 'boolean',
         'add_review_sale' => 'boolean',
         'has_installment' => 'boolean',
+        'has_cod' => 'boolean',
         'has_fitting' => 'boolean',
         'start_datetime' => 'datetime',
         'end_datetime' => 'datetime',
     ];
 
     /**
-     * Выбор актуальных
-     *
-     * @param  string  $search
-     * @return Builder
+     * Scope a query to only include actual sales
      */
-    public function scopeActual(Builder $query)
+    public function scopeActual(Builder $query): Builder
     {
-        return $query->where(function ($query) {
-            return $query->where('start_datetime', '<', now())
-                ->orWhereNull('start_datetime');
-        })
+        return $query
+            ->where(function ($query) {
+                return $query->where('start_datetime', '<', now())
+                    ->orWhereNull('start_datetime');
+            })
             ->where(function ($query) {
                 return $query->where('end_datetime', '>=', now())
                     ->orWhereNull('end_datetime');
-            });
+            })
+            ->whereDoesntHave('promocodes');
+    }
+
+    /**
+     * Get the promocodes associated with the sale.
+     */
+    public function promocodes(): HasMany
+    {
+        return $this->hasMany(Promocode::class);
     }
 
     /**

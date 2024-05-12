@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Facades\Sale;
 use App\Helpers\UrlHelper;
 use App\Http\Requests\FilterRequest;
 use App\Models\Category;
@@ -59,6 +60,10 @@ class CatalogController extends BaseController
      */
     public function show(FilterRequest $filterRequest)
     {
+        if ($promocode = $filterRequest->get('promocode')) {
+            Sale::applyPromocode($promocode);
+        }
+
         $sort = $filterRequest->getSorting();
         $currentFilters = $filterRequest->getFilters();
         $currentCity = $filterRequest->getCity();
@@ -95,7 +100,11 @@ class CatalogController extends BaseController
             $sliderService = new SliderService;
             $data['simpleSliders'] = $sliderService->getSimple();
         }
-        $this->seoService->setCurrentFilters($currentFilters)->setCurrentCity($currentCity)->setProducts($products)->generate();
+        $this->seoService
+            ->setCurrentFilters($currentFilters)
+            ->setCurrentCity($currentCity)
+            ->setProducts($products)
+            ->generate();
 
         return view('shop.catalog', $data);
     }

@@ -3,7 +3,6 @@
 namespace Payments;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,16 +16,15 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\Payments\PaymentMethod active()
  * @method static \Illuminate\Database\Eloquent\Builder|\Payments\PaymentMethod filterInstallment(bool $availableInstallment)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Payments\PaymentMethod filterCOD(bool $availableCOD)
  * @method static \Illuminate\Database\Eloquent\Builder|\Payments\PaymentMethod filterByCountry(string $countryCode)
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class PaymentMethod extends Model
 {
-    use HasFactory;
-
     /**
-     * Scope a query to only include active payment method.
+     * Scope a query to only include active payment methods.
      */
     public function scopeActive(Builder $query): void
     {
@@ -34,12 +32,22 @@ class PaymentMethod extends Model
     }
 
     /**
-     * Scope a query to filter payment methods with installment if needed.
+     * Scope a query to filter by installment availability.
      */
     public function scopeFilterInstallment(Builder $query, bool $availableInstallment): void
     {
         if (!$availableInstallment) {
             $query->where('instance', '!=', 'Installment');
+        }
+    }
+
+    /**
+     * Scope a query to filter by cash on delivery (COD) availability.
+     */
+    public function scopeFilterCOD(Builder $query, bool $availableCOD): void
+    {
+        if (!$availableCOD) {
+            $query->where('instance', '!=', 'COD');
         }
     }
 

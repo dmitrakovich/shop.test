@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Services\CartService;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use App\Models\Promo\Promocode;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -16,13 +17,27 @@ use Illuminate\Support\Facades\Cookie;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
+ * @property-read \App\Models\Promo\Promocode|null $promocode
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CartData[] $items
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Cart extends Model
 {
-    use HasFactory;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = ['promocode_id'];
+
+    /**
+     * Get the promocode associated with the cart.
+     */
+    public function promocode(): BelongsTo
+    {
+        return $this->belongsTo(Promocode::class);
+    }
 
     /**
      * Cart's items
@@ -41,7 +56,7 @@ class Cart extends Model
     }
 
     /**
-     * Количество товаров в корзине
+     * Get the total count of items in the cart.
      */
     public function itemsCount(): int
     {
@@ -54,7 +69,7 @@ class Cart extends Model
     }
 
     /**
-     * Получить общую стоимость товаров в корзине
+     * Get the total old price of items in the cart.
      */
     public function getTotalOldPrice(): float
     {
@@ -113,7 +128,7 @@ class Cart extends Model
     }
 
     /**
-     * Создать корзину, если она еще не создана
+     * Create a new cart if it doesn't exist.
      */
     public function createIfNotExists(): self
     {
@@ -154,7 +169,7 @@ class Cart extends Model
     }
 
     /**
-     * Check min installmnet price
+     * Check if the cart total price meets the minimum installment price.
      */
     public function availableInstallment(): bool
     {

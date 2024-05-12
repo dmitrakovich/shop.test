@@ -45,6 +45,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feedback[] $reviews
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserPromocode[] $usedPromocodes
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
@@ -239,6 +240,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function mailings(): HasMany
     {
         return $this->hasMany(SmsLog::class);
+    }
+
+    /**
+     * Get the user promocodes associated with the user.
+     */
+    public function usedPromocodes(): HasMany
+    {
+        return $this->hasMany(UserPromocode::class);
     }
 
     /**

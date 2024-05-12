@@ -118,10 +118,21 @@ class SaleResource extends Resource
                     ->label('Клиентская скидка суммируется'),
                 Forms\Components\Toggle::make('add_review_sale')
                     ->label('Суммируется со скидкой за отзывы'),
-                Forms\Components\Toggle::make('has_installment')
-                    ->label('Действует рассрочка'),
-                Forms\Components\Toggle::make('has_fitting')
-                    ->label('Действует примерка'),
+
+                Forms\Components\Fieldset::make()
+                    ->label('Способы оплаты')
+                    ->schema([
+                        Forms\Components\Toggle::make('has_installment')
+                            ->label('Возможна рассрочка'),
+                        Forms\Components\Toggle::make('has_cod')
+                            ->label('Возможна оплата при получении'),
+                    ]),
+                Forms\Components\Fieldset::make()
+                    ->label('Способы доставки')
+                    ->schema([
+                        Forms\Components\Toggle::make('has_fitting')
+                            ->label('Возможна примерка'),
+                    ]),
             ]);
     }
 
