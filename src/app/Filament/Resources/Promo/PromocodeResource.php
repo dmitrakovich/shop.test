@@ -29,6 +29,7 @@ class PromocodeResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('code')
                     ->label('Код для активации')
+                    ->alphaDash()
                     ->required()
                     ->maxLength(20),
                 Forms\Components\Select::make('sale_id')
@@ -58,7 +59,6 @@ class PromocodeResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('code')
                     ->label('Код для активации')
-                    ->alphaDash()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sale.title')
                     ->label('Связанная акция')
