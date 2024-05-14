@@ -147,7 +147,10 @@ class PaymentService
             if (in_array($order->status_key, ['fitting', 'sent', 'installment'])) {
                 $partialBuybackItemsCount = 0;
                 $isInstallment = $order->payment_id === Installment::PAYMENT_METHOD_ID;
-                $successfulPaymentsSum = $order->onlinePayments->where('last_status_enum_id', OnlinePaymentStatusEnum::SUCCEEDED)->sum('amount');
+                $successfulPaymentsSum = $order->onlinePayments
+                    ->where('last_status_enum_id', OnlinePaymentStatusEnum::SUCCEEDED)
+                    ->where('id', '!=', $onlinePayment->id)
+                    ->sum('amount');
                 $paymentSum = $onlinePayment->paid_amount;
                 $itemCodSum = (float)($paymentSum + ($successfulPaymentsSum / count($order->data)));
                 $remainingOrderPayment = (float)($order->getItemsPrice() - $successfulPaymentsSum);
