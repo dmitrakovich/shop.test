@@ -114,10 +114,10 @@ class SaleService
         if (!$promocode = $user->cart?->promocode) {
             return;
         }
-        if ($promocode->isExpiredForUser($user)) {
+        if ($promocode->isExpiredForUser()) {
             $user->cart->update(['promocode_id' => null]);
         } else {
-            $this->sale = $promocode->sale;
+            $this->sale = $promocode->getSaleForUser();
         }
     }
 
@@ -561,6 +561,7 @@ class SaleService
         $usedPromocode->save();
 
         $user->cart->update(['promocode_id' => $promocode->id]);
+        $user->cart->refresh();
 
         $this->setUp();
     }

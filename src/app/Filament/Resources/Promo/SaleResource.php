@@ -73,6 +73,37 @@ class SaleResource extends Resource
                         ->prohibits('sale_percentage')
                         ->requiredWithout('sale_percentage'),
                 ]),
+                Forms\Components\Repeater::make('promocodes')
+                    ->label('Активация по промокоду')
+                    ->helperText('Если не выбрано, активация не требуется. Может быть выбрано несколько промокодов.')
+                    ->addActionLabel('Добавить промокод')
+                    ->columnSpanFull()
+                    ->columns(12)
+                    ->relationship('promocodes')
+                    ->schema([
+                        Forms\Components\TextInput::make('code')
+                            ->label('Код для активации')
+                            ->alphaDash()
+                            ->columnSpan(3)
+                            ->required()
+                            ->maxLength(20),
+                        Forms\Components\TextInput::make('timer_sec')
+                            ->label('Время действия')
+                            ->columnSpan(2)
+                            ->placeholder('в секундах')
+                            ->helperText('* после активации')
+                            ->datalist([60, 300, 600, 1800, 3600, 86400])
+                            ->numeric(),
+                        Forms\Components\TextInput::make('activations_count')
+                            ->label('Количество активаций')
+                            ->columnSpan(2)
+                            ->helperText('Оставить пустым для ∞ кол-ва активаций')
+                            ->numeric(),
+                        Forms\Components\TextInput::make('description')
+                            ->label('Описание')
+                            ->columnSpan(5)
+                            ->maxLength(255),
+                    ]),
                 Forms\Components\Fieldset::make()
                     ->label('Фильтры (Оставить пустым, чтобы не применялся)')
                     ->schema([

@@ -29,15 +29,17 @@ class PromocodeResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('code')
                     ->label('Код для активации')
+                    ->alphaDash()
                     ->required()
                     ->maxLength(20),
                 Forms\Components\Select::make('sale_id')
                     ->relationship('sale', 'title')
                     ->label('Акция')
+                    ->required()
                     ->native(false),
                 Forms\Components\TextInput::make('timer_sec')
                     ->label('Время действия после активации (секунд)')
-                    ->placeholder('Если не заполнено, таймер не будет отображаться')
+                    ->placeholder('Если не заполнено, время будет взято с акции')
                     ->datalist([60, 300, 600, 1800, 3600, 86400])
                     ->numeric(),
                 Forms\Components\TextInput::make('activations_count')
@@ -87,12 +89,12 @@ class PromocodeResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
