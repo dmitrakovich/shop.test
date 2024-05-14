@@ -7,6 +7,7 @@ use App\Models\User\UserPromocode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
@@ -22,6 +23,7 @@ use Illuminate\Support\Carbon;
  *
  * @property-read \App\Models\Promo\Sale|null $sale
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserPromocode[] $userPromocodes
+ * @property-read \App\Models\User\UserPromocode|null $userPromocode
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
@@ -66,13 +68,31 @@ class Promocode extends Model
     }
 
     /**
+     * Get the user promocode for the current authenticated user.
+     */
+    public function userPromocode(): HasOne
+    {
+        return $this->userPromocodes()->where('user_id', auth()->id())->one();
+    }
+
+    /**
      * Check if the promocode is expired for a specific user.
      */
-    public function isExpiredForUser(User $user): bool
+    public function isExpiredForUser(): bool
     {
-        /** @var UserPromocode */
-        $promocode = $this->userPromocodes()->firstWhere('user_id', $user->id);
+        return $this->userPromocode?->expired_at->lt(now()) ?: false;
+    }
 
-        return $promocode ? $promocode->expired_at->lt(now()) : false;
+    /**
+     * Get the sale for the user with the adjusted expiration date.
+     */
+    public function getSaleForUser(): ?Sale
+    {
+        if (!$this->sale || !$this->userPromocode) {
+            return null;
+        }
+        $this->sale->end_datetime = $this->userPromocode->expired_at;
+
+        return $this->sale;
     }
 }
