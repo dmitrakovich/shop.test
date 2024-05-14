@@ -144,7 +144,7 @@ class BelpostLabelService
     /**
      * Create a displacement label for a given Displacement object.
      *
-     * @param Displacement $displacement The Displacement object for which the label is created
+     * @param  Displacement  $displacement  The Displacement object for which the label is created
      * @return string The URL of the created label
      */
     public function createDisplacementLabel(Displacement $displacement): string
