@@ -4,8 +4,6 @@ namespace App\Listeners\Promo;
 
 use App\Services\SaleService;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class ApplyPendingPromocode
 {
