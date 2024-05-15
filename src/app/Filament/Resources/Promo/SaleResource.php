@@ -66,6 +66,8 @@ class SaleResource extends Resource
                         ->prohibits('sale_fix')
                         ->requiredWithout('sale_fix'),
                     Forms\Components\TextInput::make('sale_fix')
+                        ->disabled()
+                        ->helperText('Функционал в разработке')
                         ->label('Фиксированный скидка')
                         ->placeholder('В копейках')
                         ->numeric()

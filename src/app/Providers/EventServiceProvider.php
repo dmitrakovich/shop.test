@@ -16,6 +16,7 @@ use App\Listeners\MergeCart;
 use App\Listeners\MergeFavorites;
 use App\Listeners\Order\CreateInstallment;
 use App\Listeners\Order\DistributeOrder;
+use App\Listeners\Promo\ApplyPendingPromocode;
 use App\Listeners\SaveDevice;
 use App\Listeners\SendOrderInformationNotification;
 use App\Listeners\SyncOrderHistory;
@@ -45,6 +46,7 @@ class EventServiceProvider extends ServiceProvider
             SaveDevice::class,
             MergeFavorites::class,
             SyncOrderHistory::class,
+            ApplyPendingPromocode::class,
             // MergeCart::class,
         ],
         Analytics\ProductView::class => [
