@@ -38,6 +38,11 @@ class SaleService
     const REVIEW_SALE_KEY = 'review_sale';
 
     /**
+     * The key for cookie with pending promocode.
+     */
+    const COOKIE_KEY_FOR_PENDING_PROMOCODE = 'pending_promocode';
+
+    /**
      * List of discounts
      */
     private array $discounts = [];
@@ -513,20 +518,48 @@ class SaleService
      */
     public function applyPromocode(string $promocodeCode): void
     {
-        /** @var Promocode */
-        $promocode = Promocode::query()->firstWhere('code', $this->preparePromocodeCode($promocodeCode));
-        if (!$promocode) {
+        if (!$promocode = $this->getPromocodeByCode($promocodeCode)) {
             return;
         }
 
         $user = auth()->user();
         if (!$user instanceof User) {
-            Cookie::queue('pending_promocode', $promocode->code, 60 * 24 * 7);
+            Cookie::queue(self::COOKIE_KEY_FOR_PENDING_PROMOCODE, $promocode->code, 60 * 24 * 7);
 
             return;
         }
 
         $this->applyPromocodeToUser($promocode, $user);
+    }
+
+    /**
+     * Apply a pending promocode to the user's cart.
+     */
+    public function applyPendingPromocode($user): void
+    {
+        if (!$user instanceof User) {
+            return;
+        }
+
+        $pendingPromocodeCode = Cookie::get(self::COOKIE_KEY_FOR_PENDING_PROMOCODE);
+        if (!$pendingPromocodeCode) {
+            return;
+        }
+        Cookie::queue(Cookie::forget(self::COOKIE_KEY_FOR_PENDING_PROMOCODE));
+
+        if (!$promocode = $this->getPromocodeByCode($pendingPromocodeCode)) {
+            return;
+        }
+
+        $this->applyPromocodeToUser($promocode, $user);
+    }
+
+    /**
+     * Retrieve a promocode by its code.
+     */
+    private function getPromocodeByCode(string $code): ?Promocode
+    {
+        return Promocode::query()->firstWhere('code', $this->preparePromocodeCode($code));
     }
 
     /**
