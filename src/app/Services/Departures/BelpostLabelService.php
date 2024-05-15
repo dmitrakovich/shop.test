@@ -41,7 +41,8 @@ class BelpostLabelService
 
         $orderTrack = OrderTrack::where(
             fn ($query) => $query->where('order_id', $order->id)->orWhereNull('order_id')
-        )->where('delivery_type_enum', DeliveryTypeEnum::BELPOST)
+        )->whereNull('displacement_id')
+            ->where('delivery_type_enum', DeliveryTypeEnum::BELPOST)
             ->whereNotNull('track_number')
             ->first();
         $barcodePath = '/storage/departures/barcode/' . date('d-m-Y', strtotime('now')) . '/' . $order->id . '.jpg';
@@ -140,6 +141,12 @@ class BelpostLabelService
         return url($resultPath);
     }
 
+    /**
+     * Create a displacement label for a given Displacement object.
+     *
+     * @param  Displacement  $displacement  The Displacement object for which the label is created
+     * @return string The URL of the created label
+     */
     public function createDisplacementLabel(Displacement $displacement): string
     {
         $displacement->loadMissing([
@@ -147,6 +154,12 @@ class BelpostLabelService
             'directionToStock',
         ]);
 
+        $track = OrderTrack::where(
+            fn ($query) => $query->where('displacement_id', $displacement->id)->orWhereNull('displacement_id')
+        )->whereNull('order_id')
+            ->where('delivery_type_enum', DeliveryTypeEnum::BELPOST)
+            ->whereNotNull('track_number')
+            ->first();
         $barcodePath = '/storage/departures/barcode/' . date('d-m-Y', strtotime('now')) . '/displacement-' . $displacement->id . '.jpg';
         $resultPath = '/storage/departures/belpost_label/' . date('d-m-Y', strtotime('now')) . '/displacement-' . $displacement->id . '.xlsx';
         File::ensureDirectoryExists(dirname(public_path($barcodePath)));
@@ -177,13 +190,21 @@ class BelpostLabelService
         $sheet->unmergeCells('AM14:BQ17');
         $sheet->mergeCells('AM14:BF16');
         $sheet->mergeCells('AM17:BF17');
-        $sheet->setCellValue('AM17', null);
+        $sheet->setCellValue('AM17', $track->track_number);
         $sheet->getStyle('AM17')->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
             ],
         ]);
+        $barcodeGeneratorJPG = new BarcodeGeneratorJPG();
+        File::put(public_path($barcodePath), $barcodeGeneratorJPG->getBarcode($track->track_number, $barcodeGeneratorJPG::TYPE_CODE_39, 1, 58));
+        $drawing = new Drawing();
+        $drawing->setName('Barcode');
+        $drawing->setDescription('Barcode');
+        $drawing->setPath(public_path($barcodePath));
+        $drawing->setCoordinates('AM14');
+        $drawing->setWorksheet($spreadsheet->getActiveSheet());
 
         $sheet->setCellValue('D25', 'P');
         $sheet->getStyle('D25')->applyFromArray([
