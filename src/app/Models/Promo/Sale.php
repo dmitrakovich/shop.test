@@ -2,6 +2,7 @@
 
 namespace App\Models\Promo;
 
+use App\Enums\Promo\CartSortForSale;
 use App\Enums\Promo\SaleAlgorithm;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property float|null $sale_percentage discount amount in percentage
  * @property float|null $sale_fix fixed discount amount
  * @property \App\Enums\Promo\SaleAlgorithm $algorithm
+ * @property \App\Enums\Promo\CartSortForSale $cart_sort Sorting the cart before applying the discount
  * @property array|null $categories
  * @property array|null $collections
  * @property array|null $styles
@@ -58,6 +60,7 @@ class Sale extends Model
      */
     protected $casts = [
         'algorithm' => SaleAlgorithm::class,
+        'cart_sort' => CartSortForSale::class,
         'categories' => 'array',
         'collections' => 'array',
         'styles' => 'array',
