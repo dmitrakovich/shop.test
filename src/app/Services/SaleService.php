@@ -472,10 +472,9 @@ class SaleService
         $this->hasSaleProductsInCart = false;
 
         $products = $cart->availableItems()->map(fn ($item) => $item->product);
-        $products = $this->sale->cart_sort->apply($products);
 
         if ($this->hasSale()) {
-            /** @var Product $product */
+            $products = $this->sale->cart_sort->apply($products);
             foreach ($products as $product) {
                 if ($this->checkSaleConditions($product)) {
                     $productSaleList[$product->id] = [
