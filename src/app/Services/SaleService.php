@@ -13,6 +13,7 @@ use App\Models\Promo\Promocode;
 use App\Models\Promo\Sale;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
 
 class SaleService
@@ -121,6 +122,7 @@ class SaleService
         }
         if ($promocode->isExpiredForUser()) {
             $user->cart->update(['promocode_id' => null]);
+            $user->cart->unsetRelation('promocode');
         } else {
             $this->sale = $promocode->getSaleForUser();
         }
@@ -304,7 +306,7 @@ class SaleService
             SaleAlgorithm::FAKE => $price,
             SaleAlgorithm::SIMPLE => $this->round($oldPrice * (1 - ($this->getDiscount() + $baseDiscount))),
             SaleAlgorithm::COUNT => $this->round($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount))),
-            SaleAlgorithm::ASCENDING => $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount))),
+            SaleAlgorithm::ASCENDING, SaleAlgorithm::DESCENDING => $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount))),
             default => $price,
         };
     }
@@ -474,7 +476,7 @@ class SaleService
         $products = $cart->availableItems()->map(fn ($item) => $item->product);
 
         if ($this->hasSale()) {
-            $products = $this->sale->cart_sort->apply($products);
+            $products = $this->sortCartProductsForSale($products);
             foreach ($products as $product) {
                 if ($this->checkSaleConditions($product)) {
                     $productSaleList[$product->id] = [
@@ -498,6 +500,18 @@ class SaleService
             $this->applyUserSales($item->product, $sales, $finalPrice);
             $item->product->setSales($sales, $finalPrice);
         }
+    }
+
+    /**
+     * Apply the sorting to a collection of products in cart.
+     */
+    private function sortCartProductsForSale(Collection $products): Collection
+    {
+        return match ($this) {
+            SaleAlgorithm::ASCENDING => $products->sortBy('price'),
+            SaleAlgorithm::DESCENDING => $products->sortByDesc('price'),
+            default => $products,
+        };
     }
 
     /**

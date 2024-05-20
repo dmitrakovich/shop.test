@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Promo;
 
-use App\Enums\Promo\CartSortForSale;
 use App\Enums\Promo\SaleAlgorithm;
 use App\Filament\Resources\Promo\SaleResource\Pages;
 use App\Models\Category;
@@ -49,17 +48,11 @@ class SaleResource extends Resource
                     ->default(now()->endOfDay())
                     ->native(false)
                     ->required(),
-                Forms\Components\Grid::make(4)->schema([
+                Forms\Components\Grid::make(3)->schema([
                     Forms\Components\Select::make('algorithm')
                         ->label('Алгоритм')
                         ->options(SaleAlgorithm::class)
                         ->default(SaleAlgorithm::SIMPLE)
-                        ->native(false)
-                        ->required(),
-                    Forms\Components\Select::make('cart_sort')
-                        ->label('Сортировка для акции')
-                        ->options(CartSortForSale::class)
-                        ->default(CartSortForSale::PRICE_ASC)
                         ->native(false)
                         ->required(),
                     Forms\Components\TextInput::make('sale_percentage')
