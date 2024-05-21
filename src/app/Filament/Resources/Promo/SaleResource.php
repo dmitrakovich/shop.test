@@ -57,12 +57,12 @@ class SaleResource extends Resource
                         ->required(),
                     Forms\Components\TextInput::make('sale_percentage')
                         ->label('Скидка в процентах')
-                        ->numeric()
-                        ->formatStateUsing(fn ($state) => $state ? round($state * 100, 4) : null)
-                        ->mutateDehydratedStateUsing(fn ($state) => $state ? round($state / 100, 4) : null)
-                        ->suffix('%')
-                        ->minValue(0.01)
-                        ->maxValue(100)
+                        // ->numeric()
+                        // ->formatStateUsing(fn ($state) => $state ? round($state * 100, 4) : null)
+                        // ->mutateDehydratedStateUsing(fn ($state) => $state ? round($state / 100, 4) : null)
+                        // ->suffix('%')
+                        // ->minValue(0.01)
+                        // ->maxValue(100)
                         ->prohibits('sale_fix')
                         ->requiredWithout('sale_fix'),
                     Forms\Components\TextInput::make('sale_fix')
