@@ -33,7 +33,7 @@ trait ProductSales
     }
 
     /**
-     * Get fianl price after apply other sales
+     * Get final price after apply other sales
      *
      * @return float
      */

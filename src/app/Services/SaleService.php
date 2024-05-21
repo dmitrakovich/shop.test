@@ -188,10 +188,11 @@ class SaleService
      */
     protected function applyForOneProduct(): bool
     {
-        return match ($this->sale->algorithm) {
-            SaleAlgorithm::FAKE, SaleAlgorithm::SIMPLE => true,
-            default => false,
-        };
+        return true;
+        // return match ($this->sale->algorithm) {
+        //     SaleAlgorithm::FAKE, SaleAlgorithm::SIMPLE => true,
+        //     default => false,
+        // };
     }
 
     /**

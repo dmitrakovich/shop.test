@@ -57,12 +57,6 @@ class SaleResource extends Resource
                         ->required(),
                     Forms\Components\TextInput::make('sale_percentage')
                         ->label('Скидка в процентах')
-                        // ->numeric()
-                        // ->formatStateUsing(fn ($state) => $state ? round($state * 100, 4) : null)
-                        // ->mutateDehydratedStateUsing(fn ($state) => $state ? round($state / 100, 4) : null)
-                        // ->suffix('%')
-                        // ->minValue(0.01)
-                        // ->maxValue(100)
                         ->prohibits('sale_fix')
                         ->requiredWithout('sale_fix'),
                     Forms\Components\TextInput::make('sale_fix')
@@ -190,7 +184,15 @@ class SaleResource extends Resource
                 Tables\Columns\TextColumn::make('algorithm')
                     ->label('Алгоритм'),
                 Tables\Columns\TextColumn::make('sale_percentage')
-                    // ->formatStateUsing(fn ($state) => round($state * 100, 2) . '%')
+                    ->formatStateUsing(function ($state) {
+                        $discounts = explode(',', $state);
+                        $formattedDiscounts = array_map(
+                            fn ($discount) => round(trim($discount) * 100, 2) . '%',
+                            $discounts
+                        );
+
+                        return implode(', ', $formattedDiscounts);
+                    })
                     ->label('Скидка в %'),
                 Tables\Columns\TextColumn::make('sale_fix')
                     ->label('Фиксированный скидка')
