@@ -507,7 +507,7 @@ class SaleService
      */
     private function sortCartProductsForSale(Collection $products): Collection
     {
-        return match ($this) {
+        return match ($this->sale->algorithm) {
             SaleAlgorithm::ASCENDING => $products->sortBy('price'),
             SaleAlgorithm::DESCENDING => $products->sortByDesc('price'),
             default => $products,

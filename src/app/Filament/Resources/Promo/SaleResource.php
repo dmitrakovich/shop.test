@@ -190,8 +190,8 @@ class SaleResource extends Resource
                 Tables\Columns\TextColumn::make('algorithm')
                     ->label('Алгоритм'),
                 Tables\Columns\TextColumn::make('sale_percentage')
-                    ->label('Скидка в %')
-                    ->formatStateUsing(fn ($state) => round($state * 100, 2) . '%'),
+                    // ->formatStateUsing(fn ($state) => round($state * 100, 2) . '%')
+                    ->label('Скидка в %'),
                 Tables\Columns\TextColumn::make('sale_fix')
                     ->label('Фиксированный скидка')
                     ->money('BYN', 100, 'ru'),
