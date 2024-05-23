@@ -111,4 +111,6 @@
         </svg>
     </button>
 
+    @include('includes.pending-promocode-popup')
+
 @endsection

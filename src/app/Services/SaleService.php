@@ -15,6 +15,7 @@ use App\Models\User\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\View;
 
 class SaleService
 {
@@ -538,7 +539,10 @@ class SaleService
 
         $user = auth()->user();
         if (!$user instanceof User) {
-            Cookie::queue(self::COOKIE_KEY_FOR_PENDING_PROMOCODE, $promocode->code, 60 * 24 * 7);
+            if (Cookie::get(self::COOKIE_KEY_FOR_PENDING_PROMOCODE) != $promocode->code) {
+                Cookie::queue(self::COOKIE_KEY_FOR_PENDING_PROMOCODE, $promocode->code, 60 * 24 * 7);
+                View::share('pendingPromocode', $promocode);
+            }
 
             return;
         }
