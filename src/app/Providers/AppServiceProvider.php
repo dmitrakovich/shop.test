@@ -8,6 +8,7 @@ use App\Logging\FacebookApiLogger;
 use App\Notifications\ChannelManagerWithLimits;
 use App\Policies\RolePolicy;
 use App\Services\Api\Facebook\ConversionsApiService;
+use App\Services\CartService;
 use App\Services\OrderService;
 use FacebookAds\Api;
 use Illuminate\Database\Connection;
@@ -32,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ChannelManager::class, function ($app) {
             return new ChannelManagerWithLimits($app);
         });
+
+        $this->app->singleton('cart', fn () => app(CartService::class)->initCart());
 
         $this->app->singleton(ConversionsApiService::class, function () {
             $pixelId = config('services.facebook.pixel_id');

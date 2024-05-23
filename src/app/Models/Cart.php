@@ -169,10 +169,27 @@ class Cart extends Model
     }
 
     /**
+     * Clear the applied promocode from the cart.
+     */
+    public function clearPromocode(): void
+    {
+        $this->update(['promocode_id' => null]);
+        $this->unsetRelation('promocode');
+    }
+
+    /**
      * Check if the cart total price meets the minimum installment price.
      */
     public function availableInstallment(): bool
     {
         return $this->getTotalPrice() >= Config::findCacheable('installment')['min_price'];
+    }
+
+    /**
+     * Check if the cart has an applied promocode.
+     */
+    public function hasPromocode(): bool
+    {
+        return (bool)$this->promocode;
     }
 }
