@@ -1,4 +1,4 @@
-import { isCartPage } from '../routes';
+import { CART, isCartPage } from '../routes';
 import { validatePhone } from './../components/inputs/phone';
 
 $(function () {
@@ -31,4 +31,16 @@ $(function () {
     });
   }
   // end temporary shitcode for price
+
+  document.getElementById('applyPromoCodeButton').addEventListener('click', function () {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = CART.APPLY_PROMOCODE;
+
+    form.appendChild(document.querySelector('input[name="promocode"]').cloneNode());
+    form.appendChild(document.querySelector('input[name="_token"]').cloneNode());
+
+    document.body.appendChild(form);
+    form.submit();
+  });
 });

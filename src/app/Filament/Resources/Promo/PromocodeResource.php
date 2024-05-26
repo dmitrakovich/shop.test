@@ -59,7 +59,8 @@ class PromocodeResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('code')
                     ->label('Код для активации')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable(),
                 Tables\Columns\TextColumn::make('sale.title')
                     ->label('Связанная акция')
                     ->searchable(),

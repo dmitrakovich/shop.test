@@ -17,6 +17,7 @@ use App\Services\ProductService;
 use App\Services\SliderService;
 use Deliveries\DeliveryMethod;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Payments\PaymentMethod;
@@ -93,6 +94,16 @@ class CartController extends BaseController
             'event_id' => $event->eventId,
             'total_count' => Cart::itemsCount(),
         ];
+    }
+
+    /**
+     * Apply a promocode to the cart.
+     */
+    public function applyPromoCode(Request $request): RedirectResponse
+    {
+        Sale::applyPromocode($request->input('promocode'));
+
+        return back();
     }
 
     /**

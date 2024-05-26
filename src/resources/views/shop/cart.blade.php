@@ -44,8 +44,7 @@
                                                 @if ($item->product->hasDiscount())
                                                     @foreach ($item->product->getSales() as $sale)
                                                         <p class="sale-block">
-                                                            <span
-                                                                class="product-label product-label-sale px-1">
+                                                            <span class="product-label product-label-sale px-1">
                                                                 {{ $sale->discount_percentage }}%
                                                             </span>&nbsp;
                                                             <span>{{ $sale->label }}</span>
@@ -62,8 +61,7 @@
                                                 @endif
                                             </div>
                                             <div class="col-12 col-md-2 mt-md-2 mb-4">
-                                                <span
-                                                    class="{{ $item->product->hasDiscount() ? 'new_price' : 'price' }}">
+                                                <span class="{{ $item->product->hasDiscount() ? 'new_price' : 'price' }}">
                                                     {!! $item->product->getFormattedPrice() !!}
                                                 </span>
                                             </div>
@@ -82,8 +80,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="col-auto d-none d-md-block">
-                                                    <a href=""
-                                                        class="text-muted text-decoration-underline">
+                                                    <a href="" class="text-muted text-decoration-underline">
                                                         В избранное
                                                     </a>
                                                 </div>
@@ -102,8 +99,7 @@
                         @foreach ($deliveryMethods as $deliveryMethod)
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="delivery_id"
-                                    id="delivery-{{ $deliveryMethod->id }}"
-                                    value="{{ $deliveryMethod->id }}"
+                                    id="delivery-{{ $deliveryMethod->id }}" value="{{ $deliveryMethod->id }}"
                                     {{ $cart->itemsCount() > 3 && in_array($deliveryMethod->getRawOriginal('instance'), ['BelpostCourierFitting', 'ShopPvz']) ? 'disabled' : null }}
                                     {{ $loop->first ? 'checked' : null }} />
                                 <label class="form-check-label" for="delivery-{{ $deliveryMethod->id }}">
@@ -150,18 +146,30 @@
                     </div>
                 </div>
 
-
                 <div class="row my-5">
+
                     <div class="col-12 col-md-6">
                         <div class="row">
-                            {{-- <div class="col-auto">
-                                <input type="text" class="form-control" value="#ПРОМОКОД">
+                            <div class="col-auto">
+                                <input type="text" class="form-control" value="{{ $cart->promocode?->code }}"
+                                    placeholder="#ПРОМОКОД" name="promocode" @disabled($cart->hasPromocode() || auth()->guest())>
                             </div>
                             <div class="col-auto">
-                                <button class="btn btn-secondary px-5">Применить</button>
-                            </div> --}}
+                                <button type="button" id="applyPromoCodeButton" class="btn btn-dark px-5"
+                                    @disabled(auth()->guest())>
+                                    {{ $cart->hasPromocode() ? 'Отменить' : 'Применить' }}
+                                </button>
+                            </div>
+                            @guest
+                                <div class="col-12 mt-1">
+                                    <span class="text-danger font-italic">
+                                        Для применения промокода авторизуйтесь
+                                    </span>
+                                </div>
+                            @endguest
                         </div>
                     </div>
+
                     <div class="col-12 offset-md-1 col-md-5">
                         <div class="row justify-content-between mb-2">
                             <div class="col-auto">
@@ -278,8 +286,7 @@
                     </div>
                     <div class="col-12 col-md-4 form-group">
                         <label for="last_name">Фамилия</label>
-                        <input id="last_name" type="text" name="last_name"
-                            autocomplete="additional-name"
+                        <input id="last_name" type="text" name="last_name" autocomplete="additional-name"
                             class="form-control @error('last_name') is-invalid @enderror"
                             value="{{ old('last_name', $user->last_name) }}" required>
                         @error('last_name')
@@ -290,8 +297,7 @@
                     </div>
                     <div class="col-12 col-md-4 form-group">
                         <label for="patronymic_name">Отчество</label>
-                        <input id="patronymic_name" type="text" name="patronymic_name"
-                            autocomplete="family-name"
+                        <input id="patronymic_name" type="text" name="patronymic_name" autocomplete="family-name"
                             class="form-control @error('patronymic_name') is-invalid @enderror"
                             value="{{ old('patronymic_name', $user->patronymic_name) }}" required>
                         @error('patronymic_name')
@@ -320,8 +326,7 @@
 
                     <div class="col-12 form-group">
                         <label for="comment">Комментарий к заказу</label>
-                        <textarea id="comment" rows="4" name="comment"
-                            class="form-control @error('comment') is-invalid @enderror">
+                        <textarea id="comment" rows="4" name="comment" class="form-control @error('comment') is-invalid @enderror">
                             {{ old('comment') }}
                         </textarea>
                         @error('comment')
@@ -333,8 +338,7 @@
 
                 </div>
                 <div class="row mt-3 my-md-5 justify-content-center">
-                    <button type="submit" form="cartData"
-                        class="btn btn-dark col-12 col-sm-6 col-md-4 col-lg-3 py-2">
+                    <button type="submit" form="cartData" class="btn btn-dark col-12 col-sm-6 col-md-4 col-lg-3 py-2">
                         Подтвердить заказ
                     </button>
                 </div>

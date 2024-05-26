@@ -73,6 +73,7 @@ class OrderController extends BaseController
         $user = $authService->getOrCreateUser($userRequest->input('phone'), $userRequest->validated(), $userAddressRequest->validated());
         $order = app(OrderServiceInterface::class)->store($request, $cart, $user);
         Cart::clear(true);
+        Cart::clearPromocode();
 
         event(new OrderCreated($order, $user));
 
