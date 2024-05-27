@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\Promo\SaleAlgorithm;
+use App\Facades\Cart as CartFacade;
 use App\Facades\Currency;
 use App\Models\Cart;
 use App\Models\Config;
@@ -122,8 +123,7 @@ class SaleService
             return;
         }
         if ($promocode->isExpiredForUser()) {
-            $user->cart->update(['promocode_id' => null]);
-            $user->cart->unsetRelation('promocode');
+            CartFacade::clearPromocode();
         } else {
             $this->sale = $promocode->getSaleForUser();
         }
@@ -134,6 +134,8 @@ class SaleService
      */
     protected function prepareDiscounts(): void
     {
+        // todo: use VO for 2 types of discount
+        // ? example: https://shopify.dev/docs/api/admin-rest/2024-04/resources/pricerule#get-price-rules-price-rule-id
         if ($this->hasSale()) {
             $this->discounts = array_filter(array_map('trim', explode(',', $this->sale->sale_percentage)));
         }
