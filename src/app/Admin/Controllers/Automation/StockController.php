@@ -13,7 +13,6 @@ use App\Models\Collection;
 use App\Models\Product;
 use App\Models\ProductAttributes\CountryOfOrigin;
 use App\Models\Season;
-use App\Models\Size;
 use App\Models\Stock;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
