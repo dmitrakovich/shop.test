@@ -83,10 +83,27 @@ class StockController extends AbstractAdminController
         $grid->column('current_price', 'цена на сайте');
         $grid->column('discount', 'скидка')->display(fn () => self::getFormatedDiscountForStock($this));
 
+        $maxSizesCountFilter = request()->integer('max_sizes_count');
+
         $grid->model()->selectRaw(implode(', ', $select))
             ->leftJoin('products', 'products.id', '=', 'available_sizes_full.product_id')
             ->groupBy(['sku', 'brand_id', 'category_id'])
-            ->when(request('show') !== 'only_in_stock', function ($query) use ($select) {
+            ->when($maxSizesCountFilter, fn ($query) => $query->whereRaw(<<<SQL
+                (select count(*) from product_attributes
+                    where product_attributes.product_id = products.id
+                    and product_attributes.attribute_type = 'App\\\\Models\\\\Size') <= $maxSizesCountFilter
+            SQL))
+            // todo: возможно вообще сумма всех размеров нужна
+            // todo: сейчас они выглядят одинаково и как обычные фильтры, есть смысл вынести в метод
+            // ->when($maxSizesCountFilter, function ($query) use ($maxSizesCountFilter) {
+            //     $availableSizes = array_map(
+            //         fn (string $size) => "SUM(CASE WHEN $size > 0 THEN 1 ELSE 0 END)",
+            //         AvailableSizesFull::getSizeFields()
+            //     );
+            //     $availableSizesCount = implode(' + ', $availableSizes);
+            //     $query->havingRaw("($availableSizesCount) <= $maxSizesCountFilter");
+            // })
+            ->when(request('show') !== 'only_in_stock', function ($query) use ($select, $maxSizesCountFilter) {
                 return $query->union(
                     DB::table('products')
                         ->selectRaw(implode(', ', $select))
@@ -94,6 +111,11 @@ class StockController extends AbstractAdminController
                         ->where($this->addFiltersForProducts())
                         ->whereNull('available_sizes_full.product_id')
                         ->groupBy(['sku', 'brand_id', 'category_id'])
+                        ->when($maxSizesCountFilter, fn ($query) => $query->whereRaw(<<<SQL
+                            (select count(*) from product_attributes
+                                where product_attributes.product_id = products.id
+                                and product_attributes.attribute_type = 'App\\\\Models\\\\Size') <= $maxSizesCountFilter
+                        SQL))
                 );
             })
             ->orderBy('product_id', 'desc')
@@ -137,6 +159,7 @@ class StockController extends AbstractAdminController
         $filter->where($this->getCollectionFilter(), 'Коллекция', 'collection')->multipleSelect(Collection::pluck('name', 'id'));
         $filter->where($this->getCategoryFilter(), 'Категория', 'category')->multipleSelect(Category::getFormatedTree());
         $filter->where($this->getCountryOfOriginFilter(), 'Страна производитель', 'country_of_origin')->multipleSelect(CountryOfOrigin::pluck('name', 'id'));
+        $filter->where(fn ($query) => $query, 'Макс. кол-во пар на модель', 'max_sizes_count')->placeholder('Введите кол-во ед.');
     }
 
     private function addFiltersForProducts(): \Closure
