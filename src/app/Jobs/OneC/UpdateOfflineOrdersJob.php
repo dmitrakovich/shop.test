@@ -45,7 +45,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
 
             if ($order->isReturn()) {
                 \Sentry\captureMessage(
-                    "Return order without sold order in DB, order item: {$orderItemKey}",
+                    "Return 1C order without sold order in DB, key: {$orderItemKey}",
                     \Sentry\Severity::warning()
                 );
 
