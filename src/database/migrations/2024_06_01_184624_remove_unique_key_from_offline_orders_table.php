@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('offline_orders', function (Blueprint $table) {
             $table->dropUnique(['receipt_number']);
             $table->index(['receipt_number']);
+            $table->foreignId('one_c_id')->unique()->after('id')->comment('CODE field from 1C DB');
             $table->foreignId('one_c_product_id')->index()->after('product_id')->comment('External product id from 1C');
         });
     }
@@ -26,6 +27,7 @@ return new class extends Migration
         Schema::table('offline_orders', function (Blueprint $table) {
             $table->dropIndex(['receipt_number']);
             $table->unique(['receipt_number']);
+            $table->dropColumn('one_c_id');
             $table->dropColumn('one_c_product_id');
         });
     }

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
+ * @property int $one_c_id CODE field from 1C DB
  * @property string $receipt_number Receipt number
  * @property int|null $stock_id
  * @property int|null $product_id

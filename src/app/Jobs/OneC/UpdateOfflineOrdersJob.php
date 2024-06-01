@@ -29,8 +29,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
      */
     public function handle(): void
     {
-        $latestCode = $this->getLatestCode();
-        $orders = $this->getNewOrders($latestCode);
+        $orders = $this->getNewOrders();
         $returnOrders = $this->getOrdersForReturn($orders);
 
         foreach ($orders as $order) {
@@ -75,9 +74,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
      */
     private function getLatestCode(): int
     {
-        $receiptNumber = OfflineOrder::query()->latest('id')->value('receipt_number');
-
-        return OfflineOrder1C::getLatestCodeByReceiptNumber($receiptNumber);
+        return OfflineOrder::query()->latest('id')->value('one_c_id');
     }
 
     /**
@@ -85,11 +82,11 @@ class UpdateOfflineOrdersJob extends AbstractJob
      *
      * @return Collection|OfflineOrder1C[]
      */
-    private function getNewOrders(int $latestCode): Collection
+    private function getNewOrders(): Collection
     {
         return OfflineOrder1C::query()
             ->with(['stock', 'product', 'size'])
-            ->where('CODE', '>', $latestCode)
+            ->where('CODE', '>', $this->getLatestCode())
             ->limit(self::NEW_ORDERS_LIMIT)
             ->orderBy('CODE')
             ->get();
