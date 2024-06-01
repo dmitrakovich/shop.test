@@ -7,6 +7,10 @@ use App\Models\OneC\OfflineOrder as OfflineOrder1C;
 use App\Models\Orders\OfflineOrder;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Context;
+use Sentry\Severity;
+
+use function Sentry\captureMessage;
 
 class UpdateOfflineOrdersJob extends AbstractJob
 {
@@ -33,6 +37,8 @@ class UpdateOfflineOrdersJob extends AbstractJob
         $returnOrders = $this->getOrdersForReturn($orders);
 
         foreach ($orders as $order) {
+            Context::add('1C order', $order->attributesToArray());
+
             $orderItemKey = $this->generateKeyForCompare($order);
             if (isset($returnOrders[$orderItemKey])) {
                 $returnOrder = $returnOrders[$orderItemKey];
@@ -43,15 +49,13 @@ class UpdateOfflineOrdersJob extends AbstractJob
             }
 
             if ($order->isReturn()) {
-                \Sentry\captureMessage(
-                    "Return 1C order without sold order in DB, key: {$orderItemKey}",
-                    \Sentry\Severity::warning()
-                );
+                captureMessage('Return 1C order without sold order in DB', Severity::warning());
 
                 continue;
             }
 
             $offlineOrder = new OfflineOrder([
+                'one_c_id' => $order->CODE,
                 'receipt_number' => $order->SP6098,
                 'stock_id' => $order->stock->id,
                 'product_id' => $order->product?->id,
@@ -74,7 +78,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
      */
     private function getLatestCode(): int
     {
-        return OfflineOrder::query()->latest('id')->value('one_c_id');
+        return (int)OfflineOrder::query()->latest('id')->value('one_c_id');
     }
 
     /**
