@@ -153,4 +153,12 @@ class OfflineOrder extends AbstractOneCModel
 
         return null;
     }
+
+    /**
+     * Get size id by size name
+     */
+    public function getSizeId(): int
+    {
+        return $this->size?->id ?? Size::ONE_SIZE_ID;
+    }
 }

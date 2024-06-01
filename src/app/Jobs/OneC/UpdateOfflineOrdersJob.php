@@ -5,7 +5,6 @@ namespace App\Jobs\OneC;
 use App\Jobs\AbstractJob;
 use App\Models\OneC\OfflineOrder as OfflineOrder1C;
 use App\Models\Orders\OfflineOrder;
-use App\Models\Size;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -35,8 +34,9 @@ class UpdateOfflineOrdersJob extends AbstractJob
         $returnOrders = $this->getOrdersForReturn($orders);
 
         foreach ($orders as $order) {
-            if (isset($returnOrders[$order->SP6098])) {
-                $returnOrder = $returnOrders[$order->SP6098];
+            $orderItemKey = $this->generateKeyForCompare($order);
+            if (isset($returnOrders[$orderItemKey])) {
+                $returnOrder = $returnOrders[$orderItemKey];
                 $returnOrder->update(['returned_at' => $order->getReturnedAtDateTime()]);
 
                 //! отправить сообщение с помощью бота в ТГ
@@ -45,7 +45,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
 
             if ($order->isReturn()) {
                 \Sentry\captureMessage(
-                    "Return order without sold order in DB, receipt: {$order->SP6098}",
+                    "Return order without sold order in DB, order item: {$orderItemKey}",
                     \Sentry\Severity::warning()
                 );
 
@@ -56,7 +56,8 @@ class UpdateOfflineOrdersJob extends AbstractJob
                 'receipt_number' => $order->SP6098,
                 'stock_id' => $order->stock->id,
                 'product_id' => $order->product?->id,
-                'size_id' => $order->size?->id ?? Size::ONE_SIZE_ID,
+                'one_c_product_id' => $order->SP6092,
+                'size_id' => $order->getSizeId(),
                 'price' => $order->SP6101,
                 'count' => $order->SP6099,
                 'sku' => $order->SP6093,
@@ -104,7 +105,11 @@ class UpdateOfflineOrdersJob extends AbstractJob
     {
         $receipts = $orders->filter(fn (OfflineOrder1C $order) => $order->isReturn())->pluck('SP6098')->toArray();
 
-        return OfflineOrder::query()->whereIn('receipt_number', $receipts)->get()->keyBy('receipt_number');
+        return OfflineOrder::query()
+            ->with(['product'])
+            ->whereIn('receipt_number', $receipts)
+            ->get()
+            ->keyBy(fn (OfflineOrder $offlineOrder) => $this->generateKeyForCompare($offlineOrder));
     }
 
     /**
@@ -131,5 +136,18 @@ class UpdateOfflineOrdersJob extends AbstractJob
         }
 
         return $user;
+    }
+
+    /**
+     * Generate unique key for order item id
+     */
+    private function generateKeyForCompare(OfflineOrder|OfflineOrder1C $offlineOrder): string
+    {
+        if ($offlineOrder instanceof OfflineOrder) {
+            return "{$offlineOrder->receipt_number}|{$offlineOrder->one_c_product_id}|{$offlineOrder->size_id}";
+        }
+        if ($offlineOrder instanceof OfflineOrder1C) {
+            return "{$offlineOrder->SP6098}|{$offlineOrder->SP6092}|{$offlineOrder->getSizeId()}";
+        }
     }
 }

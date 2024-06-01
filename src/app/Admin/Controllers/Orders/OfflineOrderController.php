@@ -43,7 +43,7 @@ class OfflineOrderController extends AbstractAdminController
         });
         $grid->column('user_phone', 'Телефон');
 
-        $grid->model()->with(['product.media']);
+        $grid->model()->with(['product.media'])->orderBy('id', 'desc');
         $grid->paginate(50);
 
         $grid->filter(function (Filter $filter) {
