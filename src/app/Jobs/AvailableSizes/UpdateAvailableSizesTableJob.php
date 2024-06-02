@@ -338,6 +338,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $productsInOrdersDebug = [];
         $sizesCount = OrderItem::query()
             ->whereIn('status_key', ['new', 'reserved', 'confirmed', 'collect', 'pickup'])
+            ->whereHas('statusLog')
             ->with('statusLog:order_item_id,stock_id')
             ->get(['id', 'product_id', 'size_id', 'count'])
             ->each(function (OrderItem $orderItem) use (&$productsInOrders, &$productsInOrdersDebug) {

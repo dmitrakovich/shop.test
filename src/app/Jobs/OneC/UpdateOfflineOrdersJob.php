@@ -4,10 +4,12 @@ namespace App\Jobs\OneC;
 
 use App\Jobs\AbstractJob;
 use App\Models\Bots\Telegram\TelegramChat;
+use App\Models\Brand;
 use App\Models\Logs\OrderItemStatusLog;
 use App\Models\OneC\OfflineOrder as OfflineOrder1C;
 use App\Models\Orders\OfflineOrder;
 use App\Models\Orders\OrderItem;
+use App\Models\Product;
 use App\Models\Stock;
 use App\Models\User\User;
 use App\Notifications\OrderItemInventoryNotification;
@@ -178,11 +180,9 @@ class UpdateOfflineOrdersJob extends AbstractJob
         }
 
         $notification = new OrderItemStatusLog(['stock_id' => $offlineOrder->stock_id]);
-        $orderItem = (new OrderItem([
-            'product_id' => $offlineOrder->product_id,
-            'size_id' => $offlineOrder->size_id,
-            'status_key' => 'complete',
-        ]))->setRelation('inventoryNotification', $notification);
+        $orderItem = (new OrderItem(['size_id' => $offlineOrder->size_id, 'status_key' => 'complete']))
+            ->setRelation('product', $this->getProductFromOfflineOrder($offlineOrder))
+            ->setRelation('inventoryNotification', $notification);
 
         $chat->notifyNow(new OrderItemInventoryNotification($orderItem));
     }
@@ -203,5 +203,20 @@ class UpdateOfflineOrdersJob extends AbstractJob
     private function getChatByStockId(int $stockId): ?TelegramChat
     {
         return $this->stocks[$stockId]?->groupChat;
+    }
+
+    private function getProductFromOfflineOrder(OfflineOrder $offlineOrder): Product
+    {
+        if ($offlineOrder->product) {
+            return $offlineOrder->product;
+        }
+
+        $product = new Product([
+            'id' => $offlineOrder->one_c_product_id,
+            'sku' => $offlineOrder->sku,
+        ]);
+        $product->setRelation('brand', new Brand(['name' => 'Нет на сайте -']));
+
+        return $product;
     }
 }

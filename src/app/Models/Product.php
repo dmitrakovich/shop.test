@@ -292,6 +292,18 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Get the fallback media path.
+     */
+    public function getFallbackMediaPath(string $collectionName = 'default', string $conversionName = ''): string
+    {
+        return match ($conversionName) {
+            'thumb' => public_path('/images/no-image-100.png'),
+            'catalog' => public_path('/images/no-image-300.png'),
+            default => public_path('/images/no-image.png'),
+        };
+    }
+
+    /**
      * Сортировка товаров
      *
      * @return Builder

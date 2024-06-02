@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\OneC\UpdateOfflineOrdersJob;
+use App\Models\Orders\OfflineOrder;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Services\Order\OrderItemInventoryService;
@@ -16,7 +17,7 @@ class DebugController extends Controller
     {
         // (new OrderItemInventoryService)->outOfStock(1426);
 
-        // UpdateOfflineOrdersJob::dispatchSync();
+        // (new UpdateOfflineOrdersJob)->notify(OfflineOrder::query()->find(26167));
 
         return 'ok';
     }
