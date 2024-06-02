@@ -153,43 +153,12 @@ class TelegramBotHandler extends WebhookHandler
 
     /**
      * Pause command. Initiate a pause action for offline notifications.
+     * @todo: remove after 01.09.2024
+     * @deprecated
      */
     public function pause(): void
     {
-        $minutesList = [5, 30, 60, 90];
-        $stocks = Stock::where('group_chat_id', $this->chat->id)->get(['id', 'internal_name']);
-        if ($stocks->isEmpty()) {
-            $this->reply('Не найдены магазины для данного чата.');
-
-            return;
-        }
-        $buttons = [];
-        foreach ($stocks as $stock) {
-            foreach ($minutesList as $minutes) {
-                $buttons[] = Button::make("{$stock->internal_name} - {$minutes} мин.")
-                    ->action(TelegramBotActions::PAUSE->value)
-                    ->param('stock_id', $stock->id)
-                    ->param('minutes', $minutes);
-            }
-        }
-        $this->chat->message('Выберите магазин и продолжительность:')
-            ->keyboard(Keyboard::make()->buttons($buttons))
-            ->send();
-    }
-
-    /**
-     * Pause offline notifications for a specific stock.
-     */
-    public function pauseAction(): void
-    {
-        /** @var Stock */
-        $stock = Stock::find((int)$this->data->get('stock_id'));
-        $pauseUntil = $stock->setOfflineNotificationsPause((int)$this->data->get('minutes'));
-
-        $this->chat->edit($this->messageId)
-            ->message("⏸ {$stock->internal_name} до {$pauseUntil->format('d.m H:i:s')}")
-            ->send();
-        $this->reply('Уведомления отключены');
+        $this->chat->message('Этот функционал больше не используется')->send();
     }
 
     /**

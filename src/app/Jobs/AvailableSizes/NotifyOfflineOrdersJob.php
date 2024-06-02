@@ -146,7 +146,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     private function notify(int $productId, int $stockId, string $sizeField): void
     {
         $chat = $this->getChatByStockId($stockId);
-        if (empty($chat) || $this->areStockNotificationsPaused($stockId)) {
+        if (empty($chat)) {
             return;
         }
 
@@ -167,7 +167,7 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     {
         $this->stocks = Stock::with(['groupChat'])
             ->where('check_availability', true)
-            ->get(['id', 'group_chat_id', 'offline_notifications_pause_until'])
+            ->get(['id', 'group_chat_id'])
             ->keyBy('id');
     }
 
@@ -177,13 +177,5 @@ class NotifyOfflineOrdersJob extends AbstractAvailableSizesJob
     private function getChatByStockId(int $stockId): ?TelegramChat
     {
         return $this->stocks[$stockId]->groupChat;
-    }
-
-    /**
-     * Check if offline notifications are paused for a specific stock.
-     */
-    private function areStockNotificationsPaused(int $stockId): bool
-    {
-        return $this->stocks[$stockId]->areOfflineNotificationsPaused();
     }
 }
