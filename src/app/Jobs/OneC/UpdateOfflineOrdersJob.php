@@ -33,26 +33,12 @@ class UpdateOfflineOrdersJob extends AbstractJob
      */
     public function handle(): void
     {
-        $orders = $this->getNewOrders();
-        $returnOrders = $this->getOrdersForReturn($orders);
+        [$newReturnOrders, $newSaleOrders] = $this->getNewOrders()->partition(
+            fn (OfflineOrder1C $order) => $order->isReturn()
+        );
 
-        foreach ($orders as $order) {
-            Context::add('1C order', $order->attributesToArray());
-
-            $orderItemKey = $this->generateKeyForCompare($order);
-            if (isset($returnOrders[$orderItemKey])) {
-                $returnOrder = $returnOrders[$orderItemKey];
-                $returnOrder->update(['returned_at' => $order->getReturnedAtDateTime()]);
-
-                //! отправить сообщение с помощью бота в ТГ
-                continue;
-            }
-
-            if ($order->isReturn()) {
-                captureMessage('Return 1C order without sold order in DB', Severity::warning());
-
-                continue;
-            }
+        foreach ($newSaleOrders as $order) {
+            Context::add('1C sale order', $order->attributesToArray());
 
             $offlineOrder = new OfflineOrder([
                 'one_c_id' => $order->CODE,
@@ -70,6 +56,23 @@ class UpdateOfflineOrdersJob extends AbstractJob
             ]);
 
             $offlineOrder->save();
+        }
+        Context::forget('1C sale order');
+
+        $returnOrders = $this->getOrdersForReturn($newReturnOrders);
+        foreach ($newReturnOrders as $order) {
+            Context::add('1C return order', $order->attributesToArray());
+
+            $orderItemKey = $this->generateKeyForCompare($order);
+            if (isset($returnOrders[$orderItemKey])) {
+                $returnOrder = $returnOrders[$orderItemKey];
+                $returnOrder->update(['returned_at' => $order->getReturnedAtDateTime()]);
+
+                //! отправить сообщение с помощью бота в ТГ
+                continue;
+            }
+
+            captureMessage('Return 1C order without sold order in DB', Severity::warning());
         }
     }
 
@@ -99,16 +102,14 @@ class UpdateOfflineOrdersJob extends AbstractJob
     /**
      * Get the offline orders eligible for return.
      *
-     * @param  Collection|OfflineOrder1C[]  $orders
+     * @param  Collection|OfflineOrder1C[] $newReturnOrders
      * @return Collection|OfflineOrder[]
      */
-    private function getOrdersForReturn(Collection $orders): Collection
+    private function getOrdersForReturn(Collection $newReturnOrders): Collection
     {
-        $receipts = $orders->filter(fn (OfflineOrder1C $order) => $order->isReturn())->pluck('SP6098')->toArray();
-
         return OfflineOrder::query()
             ->with(['product'])
-            ->whereIn('receipt_number', $receipts)
+            ->whereIn('receipt_number', $newReturnOrders->pluck('SP6098')->toArray())
             ->get()
             ->keyBy(fn (OfflineOrder $offlineOrder) => $this->generateKeyForCompare($offlineOrder));
     }
