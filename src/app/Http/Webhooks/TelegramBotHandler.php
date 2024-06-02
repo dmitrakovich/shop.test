@@ -153,6 +153,7 @@ class TelegramBotHandler extends WebhookHandler
 
     /**
      * Pause command. Initiate a pause action for offline notifications.
+     *
      * @todo: remove after 01.09.2024
      * @deprecated
      */

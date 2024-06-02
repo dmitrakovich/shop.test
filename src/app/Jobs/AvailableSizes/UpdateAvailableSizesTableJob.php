@@ -8,7 +8,6 @@ use App\Models\Category;
 use App\Models\Config;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 

@@ -11,10 +11,11 @@ use App\Models\Orders\OrderItem;
 use App\Models\Stock;
 use App\Models\User\User;
 use App\Notifications\OrderItemInventoryNotification;
-use function Sentry\captureMessage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Context;
 use Sentry\Severity;
+
+use function Sentry\captureMessage;
 
 class UpdateOfflineOrdersJob extends AbstractJob
 {
