@@ -339,7 +339,6 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $productsInOrdersDebug = [];
         $sizesCount = OrderItem::query()
             ->whereIn('status_key', ['new', 'reserved', 'confirmed', 'collect', 'pickup'])
-            ->whereHas('statusLog', fn (Builder $query) => $query->whereNull('moved_at'))
             ->with('statusLog:order_item_id,stock_id')
             ->get(['id', 'product_id', 'size_id', 'count'])
             ->each(function (OrderItem $orderItem) use (&$productsInOrders, &$productsInOrdersDebug) {
@@ -352,7 +351,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
             })
             ->count();
 
-        $this->debug('productsInOrdersDebug:', $productsInOrdersDebug);
+        // $this->debug('productsInOrdersDebug:', $productsInOrdersDebug);
 
         foreach ($availableSizes as &$stock) {
             if (empty($stock['product_id'])) {
@@ -364,7 +363,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
                 $sizeField = AvailableSizes::convertSizeIdToField($sizeId);
                 $stockCount = $stock[$sizeField];
 
-                $this->debug('subtract to order:', compact('stockId', 'productId', 'sizeField', 'count', 'stockCount'));
+                // $this->debug('subtract to order:', compact('stockId', 'productId', 'sizeField', 'count', 'stockCount'));
 
                 $stock[$sizeField] -= $count;
                 $count -= $stockCount;

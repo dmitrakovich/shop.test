@@ -3,14 +3,18 @@
 namespace App\Jobs\OneC;
 
 use App\Jobs\AbstractJob;
+use App\Models\Bots\Telegram\TelegramChat;
+use App\Models\Logs\OrderItemStatusLog;
 use App\Models\OneC\OfflineOrder as OfflineOrder1C;
 use App\Models\Orders\OfflineOrder;
+use App\Models\Orders\OrderItem;
+use App\Models\Stock;
 use App\Models\User\User;
+use App\Notifications\OrderItemInventoryNotification;
+use function Sentry\captureMessage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Context;
 use Sentry\Severity;
-
-use function Sentry\captureMessage;
 
 class UpdateOfflineOrdersJob extends AbstractJob
 {
@@ -29,10 +33,19 @@ class UpdateOfflineOrdersJob extends AbstractJob
     protected $contextVars = ['usedMemory'];
 
     /**
+     * Stock models collection
+     *
+     * @var Collection<Stock>
+     */
+    private Collection $stocks;
+
+    /**
      * Execute the job.
      */
     public function handle(): void
     {
+        $this->setStocks();
+
         [$newReturnOrders, $newSaleOrders] = $this->getNewOrders()->partition(
             fn (OfflineOrder1C $order) => $order->isReturn()
         );
@@ -40,7 +53,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
         foreach ($newSaleOrders as $order) {
             Context::add('1C sale order', $order->attributesToArray());
 
-            $offlineOrder = new OfflineOrder([
+            $offlineOrder = OfflineOrder::query()->create([
                 'one_c_id' => $order->CODE,
                 'receipt_number' => $order->SP6098,
                 'stock_id' => $order->stock->id,
@@ -55,7 +68,11 @@ class UpdateOfflineOrdersJob extends AbstractJob
                 'sold_at' => $order->getSoldAtDateTime(),
             ]);
 
-            $offlineOrder->save();
+            // todo: если продажа с ИМ, переводить статус соответствующего заказа
+
+            if (!$order->isOnline()) {
+                $this->notify($offlineOrder);
+            }
         }
         Context::forget('1C sale order');
 
@@ -67,12 +84,9 @@ class UpdateOfflineOrdersJob extends AbstractJob
             if (isset($returnOrders[$orderItemKey])) {
                 $returnOrder = $returnOrders[$orderItemKey];
                 $returnOrder->update(['returned_at' => $order->getReturnedAtDateTime()]);
-
-                //! отправить сообщение с помощью бота в ТГ
-                continue;
+            } else {
+                captureMessage('Return 1C order without sold order in DB', Severity::warning());
             }
-
-            captureMessage('Return 1C order without sold order in DB', Severity::warning());
         }
     }
 
@@ -151,5 +165,42 @@ class UpdateOfflineOrdersJob extends AbstractJob
         if ($offlineOrder instanceof OfflineOrder1C) {
             return "{$offlineOrder->SP6098}|{$offlineOrder->SP6092}|{$offlineOrder->getSizeId()}";
         }
+    }
+
+    /**
+     * Notify the Telegram chat about a offline order.
+     */
+    private function notify(OfflineOrder $offlineOrder): void
+    {
+        if (!$chat = $this->getChatByStockId($offlineOrder->stock_id)) {
+            return;
+        }
+
+        $notification = new OrderItemStatusLog(['stock_id' => $offlineOrder->stock_id]);
+        $orderItem = (new OrderItem([
+            'product_id' => $offlineOrder->product_id,
+            'size_id' => $offlineOrder->size_id,
+            'status_key' => 'complete',
+        ]))->setRelation('inventoryNotification', $notification);
+
+        $chat->notifyNow(new OrderItemInventoryNotification($orderItem));
+    }
+
+    /**
+     * Set the stocks for the current context.
+     */
+    private function setStocks(): void
+    {
+        $this->stocks = Stock::with(['groupChat'])
+            ->get(['id', 'group_chat_id'])
+            ->keyBy('id');
+    }
+
+    /**
+     * Get the Telegram chat model associated with the specified stock ID.
+     */
+    private function getChatByStockId(int $stockId): ?TelegramChat
+    {
+        return $this->stocks[$stockId]?->groupChat;
     }
 }

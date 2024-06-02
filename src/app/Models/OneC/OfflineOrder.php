@@ -51,6 +51,11 @@ class OfflineOrder extends AbstractOneCModel
     protected $table = 'SC6104';
 
     /**
+     * The identifier for online orders stock.
+     */
+    const ONLINE_STOCK_ID = 4;
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
@@ -152,5 +157,13 @@ class OfflineOrder extends AbstractOneCModel
     public function getSizeId(): int
     {
         return $this->size?->id ?? Size::ONE_SIZE_ID;
+    }
+
+    /**
+     * Check if the order is online.
+     */
+    public function isOnline(): bool
+    {
+        return $this->SP6096 === self::ONLINE_STOCK_ID;
     }
 }

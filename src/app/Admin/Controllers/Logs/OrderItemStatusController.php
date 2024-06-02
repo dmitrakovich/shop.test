@@ -48,7 +48,7 @@ class OrderItemStatusController extends AbstractAdminController
         $grid->column('confirmed_at', 'Подтвержден');
         $grid->column('collected_at', 'Собран');
         $grid->column('picked_up_at', 'Упаковано');
-        $grid->column('moved_at', 'Перемещено на склад ИМ');
+        // $grid->column('moved_at', 'Перемещено на склад ИМ');
         $grid->column('sended_at', 'Отправлено');
         $grid->column('completed_at', 'Выкуплен');
         $grid->column('returned_at', 'Возврат');
