@@ -102,7 +102,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
     /**
      * Get the offline orders eligible for return.
      *
-     * @param  Collection|OfflineOrder1C[] $newReturnOrders
+     * @param  Collection|OfflineOrder1C[]  $newReturnOrders
      * @return Collection|OfflineOrder[]
      */
     private function getOrdersForReturn(Collection $newReturnOrders): Collection
