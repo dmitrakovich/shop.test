@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\AttributeFilterTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -32,6 +33,14 @@ class Size extends Model
      * @var string|null
      */
     protected $connection = 'mysql';
+
+    /**
+     * Perform any actions required after the model boots.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('sort', fn (Builder $query) => $query->orderBy('value'));
+    }
 
     /**
      * Generate filter badge name
