@@ -8,7 +8,6 @@ use App\Models\Category;
 use App\Models\Config;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
@@ -83,8 +82,6 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
 
         $count = $this->updateAvailableSizesFromOrders($availableSizes);
         $this->log("Обновлено $count доступных размеров товаров на основе заказов");
-
-        $this->notifyOfflineOrders($availableSizes);
 
         $this->replaceNegativeSizesWithZero($availableSizes);
         $count = $this->removeEmptySizes($availableSizes);
@@ -341,7 +338,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $productsInOrdersDebug = [];
         $sizesCount = OrderItem::query()
             ->whereIn('status_key', ['new', 'reserved', 'confirmed', 'collect', 'pickup'])
-            ->whereHas('statusLog', fn (Builder $query) => $query->whereNull('moved_at'))
+            ->whereHas('statusLog')
             ->with('statusLog:order_item_id,stock_id')
             ->get(['id', 'product_id', 'size_id', 'count'])
             ->each(function (OrderItem $orderItem) use (&$productsInOrders, &$productsInOrdersDebug) {
@@ -354,7 +351,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
             })
             ->count();
 
-        $this->debug('productsInOrdersDebug:', $productsInOrdersDebug);
+        // $this->debug('productsInOrdersDebug:', $productsInOrdersDebug);
 
         foreach ($availableSizes as &$stock) {
             if (empty($stock['product_id'])) {
@@ -366,7 +363,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
                 $sizeField = AvailableSizes::convertSizeIdToField($sizeId);
                 $stockCount = $stock[$sizeField];
 
-                $this->debug('subtract to order:', compact('stockId', 'productId', 'sizeField', 'count', 'stockCount'));
+                // $this->debug('subtract to order:', compact('stockId', 'productId', 'sizeField', 'count', 'stockCount'));
 
                 $stock[$sizeField] -= $count;
                 $count -= $stockCount;
@@ -410,13 +407,5 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
                 }
             }
         }
-    }
-
-    /**
-     * Dispatch a job to notify offline orders based on available sizes data.
-     */
-    protected function notifyOfflineOrders(array $availableSizes): void
-    {
-        NotifyOfflineOrdersJob::dispatch($availableSizes);
     }
 }

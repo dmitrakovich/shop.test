@@ -11,9 +11,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
+ * @property int $one_c_id CODE field from 1C DB
  * @property string $receipt_number Receipt number
  * @property int|null $stock_id
  * @property int|null $product_id
+ * @property int $one_c_product_id External product id from 1C
  * @property int|null $size_id
  * @property float $price Цена покупки
  * @property bool $count Number of items in the order

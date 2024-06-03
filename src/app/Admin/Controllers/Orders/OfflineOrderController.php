@@ -42,8 +42,10 @@ class OfflineOrderController extends AbstractAdminController
             return $user ? '<a href="' . route('admin.users.edit', $user['id']) . '" target="_blank">' . $this->user->getFullName() . '</a>' : null;
         });
         $grid->column('user_phone', 'Телефон');
+        $grid->column('returned_at', 'Дата возврата')->display(fn ($datetime) => self::formatDateTime($datetime));
 
-        $grid->model()->with(['product.media']);
+        $grid->model()->with(['product.media'])->orderBy('id', 'desc');
+        $grid->disableActions();
         $grid->paginate(50);
 
         $grid->filter(function (Filter $filter) {

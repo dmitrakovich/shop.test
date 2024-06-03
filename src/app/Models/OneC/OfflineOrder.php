@@ -51,6 +51,11 @@ class OfflineOrder extends AbstractOneCModel
     protected $table = 'SC6104';
 
     /**
+     * The identifier for online orders stock.
+     */
+    const ONLINE_STOCK_ID = 4;
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
@@ -63,14 +68,6 @@ class OfflineOrder extends AbstractOneCModel
         'SP6100' => 'integer',
         'SP6101' => 'float',
     ];
-
-    /**
-     * Get the latest code by receipt number from the offline orders.
-     */
-    public static function getLatestCodeByReceiptNumber(?string $receiptNumber): int
-    {
-        return (int)self::query()->where('SP6098', $receiptNumber)->value('CODE');
-    }
 
     /**
      * Check if the order is a return.
@@ -152,5 +149,21 @@ class OfflineOrder extends AbstractOneCModel
         }
 
         return null;
+    }
+
+    /**
+     * Get size id by size name
+     */
+    public function getSizeId(): int
+    {
+        return $this->size?->id ?? Size::ONE_SIZE_ID;
+    }
+
+    /**
+     * Check if the order is online.
+     */
+    public function isOnline(): bool
+    {
+        return $this->SP6096 === self::ONLINE_STOCK_ID;
     }
 }

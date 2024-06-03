@@ -3,11 +3,21 @@
 namespace App\Jobs\OneC;
 
 use App\Jobs\AbstractJob;
+use App\Models\Bots\Telegram\TelegramChat;
+use App\Models\Brand;
+use App\Models\Logs\OrderItemStatusLog;
 use App\Models\OneC\OfflineOrder as OfflineOrder1C;
 use App\Models\Orders\OfflineOrder;
-use App\Models\Size;
+use App\Models\Orders\OrderItem;
+use App\Models\Product;
+use App\Models\Stock;
 use App\Models\User\User;
+use App\Notifications\OrderItemInventoryNotification;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Context;
+use Sentry\Severity;
+
+use function Sentry\captureMessage;
 
 class UpdateOfflineOrdersJob extends AbstractJob
 {
@@ -26,37 +36,33 @@ class UpdateOfflineOrdersJob extends AbstractJob
     protected $contextVars = ['usedMemory'];
 
     /**
+     * Stock models collection
+     *
+     * @var Collection<Stock>
+     */
+    private Collection $stocks;
+
+    /**
      * Execute the job.
      */
     public function handle(): void
     {
-        $latestCode = $this->getLatestCode();
-        $orders = $this->getNewOrders($latestCode);
-        $returnOrders = $this->getOrdersForReturn($orders);
+        $this->setStocks();
 
-        foreach ($orders as $order) {
-            if (isset($returnOrders[$order->SP6098])) {
-                $returnOrder = $returnOrders[$order->SP6098];
-                $returnOrder->update(['returned_at' => $order->getReturnedAtDateTime()]);
+        [$newReturnOrders, $newSaleOrders] = $this->getNewOrders()->partition(
+            fn (OfflineOrder1C $order) => $order->isReturn()
+        );
 
-                //! отправить сообщение с помощью бота в ТГ
-                continue;
-            }
+        foreach ($newSaleOrders as $order) {
+            Context::add('1C sale order', $order->attributesToArray());
 
-            if ($order->isReturn()) {
-                \Sentry\captureMessage(
-                    "Return order without sold order in DB, receipt: {$order->SP6098}",
-                    \Sentry\Severity::warning()
-                );
-
-                continue;
-            }
-
-            $offlineOrder = new OfflineOrder([
+            $offlineOrder = OfflineOrder::query()->create([
+                'one_c_id' => $order->CODE,
                 'receipt_number' => $order->SP6098,
                 'stock_id' => $order->stock->id,
                 'product_id' => $order->product?->id,
-                'size_id' => $order->size?->id ?? Size::ONE_SIZE_ID,
+                'one_c_product_id' => $order->SP6092,
+                'size_id' => $order->getSizeId(),
                 'price' => $order->SP6101,
                 'count' => $order->SP6099,
                 'sku' => $order->SP6093,
@@ -65,7 +71,25 @@ class UpdateOfflineOrdersJob extends AbstractJob
                 'sold_at' => $order->getSoldAtDateTime(),
             ]);
 
-            $offlineOrder->save();
+            // todo: если продажа с ИМ, переводить статус соответствующего заказа
+
+            if (!$order->isOnline()) {
+                $this->notify($offlineOrder);
+            }
+        }
+        Context::forget('1C sale order');
+
+        $returnOrders = $this->getOrdersForReturn($newReturnOrders);
+        foreach ($newReturnOrders as $order) {
+            Context::add('1C return order', $order->attributesToArray());
+
+            $orderItemKey = $this->generateKeyForCompare($order);
+            if (isset($returnOrders[$orderItemKey])) {
+                $returnOrder = $returnOrders[$orderItemKey];
+                $returnOrder->update(['returned_at' => $order->getReturnedAtDateTime()]);
+            } else {
+                captureMessage('Return 1C order without sold order in DB', Severity::warning());
+            }
         }
     }
 
@@ -74,9 +98,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
      */
     private function getLatestCode(): int
     {
-        $receiptNumber = OfflineOrder::query()->latest('id')->value('receipt_number');
-
-        return OfflineOrder1C::getLatestCodeByReceiptNumber($receiptNumber);
+        return (int)OfflineOrder::query()->latest('id')->value('one_c_id');
     }
 
     /**
@@ -84,11 +106,11 @@ class UpdateOfflineOrdersJob extends AbstractJob
      *
      * @return Collection|OfflineOrder1C[]
      */
-    private function getNewOrders(int $latestCode): Collection
+    private function getNewOrders(): Collection
     {
         return OfflineOrder1C::query()
             ->with(['stock', 'product', 'size'])
-            ->where('CODE', '>', $latestCode)
+            ->where('CODE', '>', $this->getLatestCode())
             ->limit(self::NEW_ORDERS_LIMIT)
             ->orderBy('CODE')
             ->get();
@@ -97,14 +119,16 @@ class UpdateOfflineOrdersJob extends AbstractJob
     /**
      * Get the offline orders eligible for return.
      *
-     * @param  Collection|OfflineOrder1C[]  $orders
+     * @param  Collection|OfflineOrder1C[]  $newReturnOrders
      * @return Collection|OfflineOrder[]
      */
-    private function getOrdersForReturn(Collection $orders): Collection
+    private function getOrdersForReturn(Collection $newReturnOrders): Collection
     {
-        $receipts = $orders->filter(fn (OfflineOrder1C $order) => $order->isReturn())->pluck('SP6098')->toArray();
-
-        return OfflineOrder::query()->whereIn('receipt_number', $receipts)->get()->keyBy('receipt_number');
+        return OfflineOrder::query()
+            ->with(['product'])
+            ->whereIn('receipt_number', $newReturnOrders->pluck('SP6098')->toArray())
+            ->get()
+            ->keyBy(fn (OfflineOrder $offlineOrder) => $this->generateKeyForCompare($offlineOrder));
     }
 
     /**
@@ -131,5 +155,68 @@ class UpdateOfflineOrdersJob extends AbstractJob
         }
 
         return $user;
+    }
+
+    /**
+     * Generate unique key for order item id
+     */
+    private function generateKeyForCompare(OfflineOrder|OfflineOrder1C $offlineOrder): string
+    {
+        if ($offlineOrder instanceof OfflineOrder) {
+            return "{$offlineOrder->receipt_number}|{$offlineOrder->one_c_product_id}|{$offlineOrder->size_id}";
+        }
+        if ($offlineOrder instanceof OfflineOrder1C) {
+            return "{$offlineOrder->SP6098}|{$offlineOrder->SP6092}|{$offlineOrder->getSizeId()}";
+        }
+    }
+
+    /**
+     * Notify the Telegram chat about a offline order.
+     */
+    private function notify(OfflineOrder $offlineOrder): void
+    {
+        if (!$chat = $this->getChatByStockId($offlineOrder->stock_id)) {
+            return;
+        }
+
+        $notification = new OrderItemStatusLog(['stock_id' => $offlineOrder->stock_id]);
+        $orderItem = (new OrderItem(['size_id' => $offlineOrder->size_id, 'status_key' => 'complete']))
+            ->setRelation('product', $this->getProductFromOfflineOrder($offlineOrder))
+            ->setRelation('inventoryNotification', $notification);
+
+        $chat->notifyNow(new OrderItemInventoryNotification($orderItem));
+    }
+
+    /**
+     * Set the stocks for the current context.
+     */
+    private function setStocks(): void
+    {
+        $this->stocks = Stock::with(['groupChat'])
+            ->get(['id', 'group_chat_id'])
+            ->keyBy('id');
+    }
+
+    /**
+     * Get the Telegram chat model associated with the specified stock ID.
+     */
+    private function getChatByStockId(int $stockId): ?TelegramChat
+    {
+        return $this->stocks[$stockId]?->groupChat;
+    }
+
+    private function getProductFromOfflineOrder(OfflineOrder $offlineOrder): Product
+    {
+        if ($offlineOrder->product) {
+            return $offlineOrder->product;
+        }
+
+        $product = new Product([
+            'id' => $offlineOrder->one_c_product_id,
+            'sku' => $offlineOrder->sku,
+        ]);
+        $product->setRelation('brand', new Brand(['name' => 'Нет на сайте -']));
+
+        return $product;
     }
 }

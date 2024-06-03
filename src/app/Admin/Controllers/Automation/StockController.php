@@ -37,7 +37,7 @@ class StockController extends AbstractAdminController
     /**
      * List of status filters
      */
-    const statusfilters = [
+    const statusFilters = [
         'discounts' => 'скидки',
         'new_items' => 'новинки',
         'out_of_stock' => 'продано',
@@ -81,29 +81,20 @@ class StockController extends AbstractAdminController
         $grid->column('sizes.name', 'размеры на сайте')->display(fn () => $this->sizes->map(fn ($size) => $size->name)->implode(', '));
         $grid->column('sell_price', 'цена в 1С');
         $grid->column('current_price', 'цена на сайте');
-        $grid->column('discount', 'скидка')->display(fn () => self::getFormatedDiscountForStock($this));
+        $grid->column('discount', 'скидка')->display(fn () => self::getFormattedDiscountForStock($this));
 
         $maxSizesCountFilter = request()->integer('max_sizes_count');
+        $showAll = request('show') !== 'only_in_stock' && !$maxSizesCountFilter;
 
         $grid->model()->selectRaw(implode(', ', $select))
             ->leftJoin('products', 'products.id', '=', 'available_sizes_full.product_id')
             ->groupBy(['sku', 'brand_id', 'category_id'])
-            ->when($maxSizesCountFilter, fn ($query) => $query->whereRaw(<<<SQL
-                (select count(*) from product_attributes
-                    where product_attributes.product_id = products.id
-                    and product_attributes.attribute_type = 'App\\\\Models\\\\Size') <= $maxSizesCountFilter
-            SQL))
-            // todo: возможно вообще сумма всех размеров нужна
-            // todo: сейчас они выглядят одинаково и как обычные фильтры, есть смысл вынести в метод
-            // ->when($maxSizesCountFilter, function ($query) use ($maxSizesCountFilter) {
-            //     $availableSizes = array_map(
-            //         fn (string $size) => "SUM(CASE WHEN $size > 0 THEN 1 ELSE 0 END)",
-            //         AvailableSizesFull::getSizeFields()
-            //     );
-            //     $availableSizesCount = implode(' + ', $availableSizes);
-            //     $query->havingRaw("($availableSizesCount) <= $maxSizesCountFilter");
-            // })
-            ->when(request('show') !== 'only_in_stock', function ($query) use ($select, $maxSizesCountFilter) {
+            ->when($maxSizesCountFilter, function ($query) use ($maxSizesCountFilter) {
+                $availableSizes = array_map(fn (string $size) => "SUM($size)", AvailableSizesFull::getSizeFields());
+                $availableSizesCount = implode(' + ', $availableSizes);
+                $query->havingRaw("($availableSizesCount) <= $maxSizesCountFilter");
+            })
+            ->when($showAll, function ($query) use ($select) {
                 return $query->union(
                     DB::table('products')
                         ->selectRaw(implode(', ', $select))
@@ -111,18 +102,13 @@ class StockController extends AbstractAdminController
                         ->where($this->addFiltersForProducts())
                         ->whereNull('available_sizes_full.product_id')
                         ->groupBy(['sku', 'brand_id', 'category_id'])
-                        ->when($maxSizesCountFilter, fn ($query) => $query->whereRaw(<<<SQL
-                            (select count(*) from product_attributes
-                                where product_attributes.product_id = products.id
-                                and product_attributes.attribute_type = 'App\\\\Models\\\\Size') <= $maxSizesCountFilter
-                        SQL))
                 );
             })
             ->orderBy('product_id', 'desc')
             ->with(['media', 'brand:id,name', 'sizes:id,name']);
 
         $grid->rows($this->highlightRows());
-        $grid->filter(fn (Filter $filter) => $this->addFiltersForAvailableSizes($filter, $stockNames, $defaultStockList));
+        $grid->filter(fn (Filter $filter) => $this->addFiltersForAvailableSizes($filter, $stockNames, $defaultStockList, $maxSizesCountFilter));
         $grid->tools(fn ($tools) => $tools->append(new UpdateAvailability()));
         $grid->exporter(new StockExporter());
         $grid->paginate(100);
@@ -138,7 +124,7 @@ class StockController extends AbstractAdminController
     /**
      * Get formatted discount percentage for the product.
      */
-    private static function getFormatedDiscountForStock($stockObject): ?string
+    private static function getFormattedDiscountForStock($stockObject): ?string
     {
         if (empty($sellPrice = (float)$stockObject->sell_price) || empty($currentPrice = (float)$stockObject->current_price)) {
             return null;
@@ -147,13 +133,17 @@ class StockController extends AbstractAdminController
         return round((($sellPrice - $currentPrice) / $sellPrice) * 100, 2) . '%';
     }
 
-    private function addFiltersForAvailableSizes(Filter $filter, array $stockNames, array $defaultStockList): void
+    private function addFiltersForAvailableSizes(Filter $filter, array $stockNames, array $defaultStockList, int $maxSizesCountFilter): void
     {
         $filter->disableIdFilter();
-        $filter->where(fn ($query) => $query, 'Товары, которых нет на складе', 'show')->radio(['all' => 'показывать', 'only_in_stock' => 'скрыть'])->default('all');
+        if ($maxSizesCountFilter) {
+            $filter->where(fn ($query) => $query, 'Товары, которых нет на складе', 'show_only_in_stock')->radio(['only_in_stock' => 'скрыть'])->default('only_in_stock');
+        } else {
+            $filter->where(fn ($query) => $query, 'Товары, которых нет на складе', 'show')->radio(['all' => 'показывать', 'only_in_stock' => 'скрыть'])->default('all');
+        }
         $filter->where($this->getProductFilter(), 'Код товара / артикул', 'product');
         $filter->in('stock_id', 'Склад')->checkbox($stockNames)->default($defaultStockList);
-        $filter->where($this->getStatusFilter(), 'Статус', 'status')->checkbox(self::statusfilters);
+        $filter->where($this->getStatusFilter(), 'Статус', 'status')->checkbox(self::statusFilters);
         $filter->where($this->getBrandFilter(), 'Бренд', 'brand')->multipleSelect(Brand::pluck('name', 'id'));
         $filter->where($this->getSeasonFilter(), 'Сезон', 'season')->multipleSelect(Season::pluck('name', 'id'));
         $filter->where($this->getCollectionFilter(), 'Коллекция', 'collection')->multipleSelect(Collection::pluck('name', 'id'));
