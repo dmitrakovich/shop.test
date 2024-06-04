@@ -17,7 +17,7 @@ Schedule::job(new \App\Jobs\Mailing\SendingTracksJob)->dailyAt('10:15');
 Schedule::job(new \App\Jobs\OneC\UpdateOfflineOrdersJob)->withoutOverlapping()->everyTenMinutes();
 
 Schedule::command('rating:update')->withoutOverlapping()->cron('15 5,11,17,23 * * *');
-Schedule::command('inventory:update')->withoutOverlapping()->everyFifteenMinutes()->sentryMonitor();
+Schedule::command('inventory:update')->withoutOverlapping()->everyFiveMinutes()->sentryMonitor();
 
 Schedule::command('backup:run')->dailyAt('01:00');
 Schedule::command('backup:media')->weeklyOn(Carbon::MONDAY, '03:00');

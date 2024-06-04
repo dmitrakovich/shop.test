@@ -101,7 +101,9 @@ class CartController extends BaseController
      */
     public function applyPromoCode(Request $request): RedirectResponse
     {
-        Sale::applyPromocode($request->input('promocode'));
+        if ($promocode = $request->input('promocode')) {
+            Sale::applyPromocode($promocode);
+        }
 
         return back();
     }
