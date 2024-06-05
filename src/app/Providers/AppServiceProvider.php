@@ -68,7 +68,7 @@ class AppServiceProvider extends ServiceProvider
         setlocale(LC_TIME, 'ru_RU.UTF-8');
         Carbon::setLocale(config('app.locale'));
 
-        $this->modelShouldBeStrict($app->isProduction());
+        // $this->modelShouldBeStrict($app->isProduction());
 
         if ($app->isProduction()) {
             $app['request']->server->set('HTTPS', 'on');
