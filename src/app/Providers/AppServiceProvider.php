@@ -12,12 +12,17 @@ use App\Services\CartService;
 use App\Services\OrderService;
 use FacebookAds\Api;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Application;
 use Illuminate\Notifications\ChannelManager;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Sentry\Severity;
 use Spatie\Permission\Models\Role;
+
+use function Sentry\captureMessage;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -63,6 +68,8 @@ class AppServiceProvider extends ServiceProvider
         setlocale(LC_TIME, 'ru_RU.UTF-8');
         Carbon::setLocale(config('app.locale'));
 
+        $this->modelShouldBeStrict($app->isProduction());
+
         if ($app->isProduction()) {
             $app['request']->server->set('HTTPS', 'on');
         }
@@ -72,5 +79,24 @@ class AppServiceProvider extends ServiceProvider
         }
 
         Gate::policy(Role::class, RolePolicy::class);
+    }
+
+    /**
+     * Model::shouldBeStrict()
+     */
+    private function modelShouldBeStrict(bool $isProduction): void
+    {
+        Model::preventAccessingMissingAttributes();
+        // Warn us when we try to set an unfillable property.
+        Model::preventSilentlyDiscardingAttributes();
+
+        Model::preventLazyLoading(!$isProduction);
+        // if ($isProduction) {
+        //     Model::handleLazyLoadingViolationUsing(function ($model, $relation) {
+        //         $class = get_class($model);
+
+        //         captureMessage("Attempted to lazy load [{$relation}] on model [{$class}].", Severity::warning());
+        //     });
+        // }
     }
 }

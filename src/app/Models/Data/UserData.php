@@ -22,7 +22,7 @@ class UserData extends FacebookUserData
         $gtmUserData['vid'] = $normalizedData['external_id'][0];
         $gtmUserData['uid'] = $normalizedData['external_id'][1] ?? null;
         $gtmUserData['user_id'] = $gtmUserData['uid'];
-        $gtmUserData['user_type'] = Auth::check() ? Auth::user()->usergroup_id : 'guest';
+        $gtmUserData['user_type'] = Auth::check() ? Auth::user()->group_id : 'guest';
 
         return array_filter($gtmUserData);
     }

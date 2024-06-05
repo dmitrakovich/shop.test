@@ -37,7 +37,7 @@ class GoogleTagManagerProvider extends ServiceProvider
             $userData->setExternalIds([Device::getId(), Auth::id()]);
             GoogleTagManagerFacade::push(array_filter([
                 'pageType' => $page,
-                'user_type' => Auth::check() ? Auth::user()->usergroup_id : 'guest',
+                'user_type' => Auth::check() ? Auth::user()->group_id : 'guest',
                 'user_id' => Auth::id(),
                 'user_data' => $userData->normalizeForGtm(),
                 'site_price' => [
