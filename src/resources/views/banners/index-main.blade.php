@@ -27,8 +27,8 @@
 <div class="banners_index__min mb-5">
     @foreach ($indexTopBanners as $banner)
         <a href="{{ $banner->url }}">
-            <img src="{{ $banner->getFirstMediaUrl() }}" alt="{{ $banner->title }}" title="{{ $banner->title }}"
-                class="img-fluid" />
+            <img src="{{ $banner->getFirstMediaUrl() }}" alt="{{ $banner->title }}"
+                title="{{ $banner->title }}" class="img-fluid" />
         </a>
     @endforeach
 </div>

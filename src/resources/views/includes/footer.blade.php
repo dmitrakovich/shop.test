@@ -20,7 +20,8 @@
                         <div class="row">
                             <div class="col-12 col-xl-6 mb-3">
                                 <div class="inc-footer__info-title collapsed" data-toggle="collapse"
-                                    data-target="#js-footerWorkTime" aria-controls="js-footerWorkTime">Время работы
+                                    data-target="#js-footerWorkTime" aria-controls="js-footerWorkTime">
+                                    Время работы
                                 </div>
                                 <div class="inc-footer__info-text collapse" id="js-footerWorkTime">
                                     с 08.00 до 21.00<br>
@@ -36,7 +37,8 @@
                                     <nav>
                                         <ul>
                                             <li>
-                                                <a href="{{ route('info.terms') }}" title="Публичная оферта">
+                                                <a href="{{ route('info.terms') }}"
+                                                    title="Публичная оферта">
                                                     Публичная оферта
                                                 </a>
                                             </li>
@@ -47,7 +49,8 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{ route('info', 'certificate') }}" title="Сертификаты">
+                                                <a href="{{ route('info', 'certificate') }}"
+                                                    title="Сертификаты">
                                                     Сертификаты
                                                 </a>
                                             </li>
@@ -75,8 +78,8 @@
                             data-target="#js-footerPayments" aria-controls="js-footerPayments">
                             Способы оплаты</div>
                         <div class="inc-footer__info-text collapse" id="js-footerPayments">
-                            <img src="/images/footer/payments-all.png" class="img-fluid" alt="Оплата" decoding="async"
-                                loading="lazy">
+                            <img src="/images/footer/payments-all.png" class="img-fluid" alt="Оплата"
+                                decoding="async" loading="lazy">
                         </div>
                     </div>
                 </div>
