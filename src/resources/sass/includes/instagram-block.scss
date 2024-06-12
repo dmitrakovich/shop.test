@@ -1,0 +1,69 @@
+.inc-instagram {
+    margin-bottom: 40px;
+
+    &__info {
+        padding-top: 15px;
+
+        &-title {
+            font-size: 26px;
+            font-weight: 500;
+            line-height: 120%;
+            text-transform: uppercase;
+            margin: 0 0 12px;
+        }
+    }
+
+    &__posts {
+        display: grid;
+        gap: 10px 5px;
+        grid-template-columns: 1fr 1fr 1fr;
+
+        &-item {
+            aspect-ratio: 1;
+            display: flex;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+
+    &__btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #50524F;
+        border-radius: 10px;
+        height: 48px;
+        width: 275px;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .inc-instagram {
+
+        &__info {
+            padding-right: 10px;
+
+            &-title {
+                font-size: 38px;
+                margin: 0 0 24px;
+            }
+        }
+    }
+}
+
+@include media-breakpoint-up(xl) {
+    .inc-instagram {
+
+        &__info {
+            padding-right: 85px;
+
+            &-title {
+                font-size: 50px;
+            }
+        }
+    }
+}
