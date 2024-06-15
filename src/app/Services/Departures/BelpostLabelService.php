@@ -227,7 +227,6 @@ class BelpostLabelService
             $sheet->setCellValue('BJ35', preg_replace("/^(\d{3})(\d{2})(\d{2})$/", '$1 $2 $3', substr(trim($displacement->directionToStock->phone), -7)));
         }
 
-
         $writer = new Xlsx($spreadsheet);
         $writer->save(public_path($resultPath));
 
