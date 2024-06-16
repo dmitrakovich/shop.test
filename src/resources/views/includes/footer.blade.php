@@ -1,51 +1,88 @@
-<footer class="footer pt-2 pb-5">
-    <div class="container-fluid mb-3">
-        <div class="row wrapper justify-content-center">
-            <div class="col-12 col-md-4 col-xl-3 text-center text-sm-left">
-                <div class="h2 mt-5 mb-3">BAROCCO</div>
-                ООО «БароккоСтайл», УНП 291711523,
-                РЕСПУБЛИКА БЕЛАРУСЬ, 224030, г. Брест, ул. Буденного, 17-1
-                Интернет магазин внесен в торговый реестр
-                Республики Беларусь 4 января 2022 года
-                Свидетельство о государственной регистрации № 291711523
-                выдано Администрацией Ленинского р-на г. Бреста
+<footer class="inc-footer">
+    <div class="container-fluid">
+        <div class="row wrapper">
+            <div class="inc-footer__main col-12 col-lg-4 col-xl-3">
+                <a href="{{ route('index-page') }}" class="inc-footer__logo">
+                    <img src="/images/icons/barocco.svg" alt="Barocco" loading="lazy" decoding="async">
+                </a>
+                <p>
+                    ООО «БароккоСтайл», УНП 291711523,
+                    РЕСПУБЛИКА БЕЛАРУСЬ, 224030, г. Брест, ул. Буденного, 17-1
+                    Интернет магазин внесен в торговый реестр
+                    Республики Беларусь 4 января 2022 года
+                    Свидетельство о государственной регистрации № 291711523
+                    выдано Администрацией Ленинского р-на г. Бреста
+                </p>
             </div>
-            <div class="col-12 col-sm text-center text-sm-left">
-                <div class="h5 mt-5 mb-4">Время работы</div>
-                с 08.00 до 21.00<br>
-                ежедневно
-                <div class="h5 mt-5 mb-4">Информация</div>
-                <a href="{{ route('info.terms') }}" title="Публичная оферта">
-                    Публичная оферта
-                </a><br>
-                <a href="{{ route('info.policy') }}" title="Политика конфиденциальности">
-                    Политика конфиденциальности
-                </a><br>
-                <a href="{{ route('info', 'certificate') }}" title="Сертификаты">
-                    Сертификаты
-                </a><br>
-            </div>
-            <div class="col-12 col-sm text-center text-sm-left">
-                <h5 class="mt-5 mb-4">Контакты</h5>
-                <a href="tel:+375291793790">+375&nbsp;(29)&nbsp;179-37-90</a><br>
-                <a href="tel:+375295227722">+375&nbsp;(29)&nbsp;522-77-22</a><br>
-                <a href="tel:88001007769">8-800-100-77-69&nbsp;(РФ)</a><br>
-                <a href="mailto:info@barocco.by">info@barocco.by</a>
-            </div>
-            <div class="col-7 col-sm text-center text-sm-left">
-                <div class="h5 mt-5 mb-4">Способы оплаты</div>
-                {{-- <img src="/images/footer/payments-1.png" alt="расчет">
-                <img src="/images/footer/payments-2.png" alt="assist">
-                <img src="/images/footer/payments-3.png" alt="белкарт">
-                <img src="/images/footer/payments-4.png" alt="visa">
-                <img src="/images/footer/payments-5.png" alt="maestercard">
-                <img src="/images/footer/payments-6.png" alt="белкарт">
-                <img src="/images/footer/payments-7.png" alt="maestercard">
-                <img src="/images/footer/payments-8.png" alt="visa"> --}}
-                <img src="/images/footer/payments-all.png" class="img-fluid" alt="Оплата">
-            </div>
-            <div class="col-12 col-sm text-center text-sm-left">
-                <div class="h5 mt-5 mb-4">Карта сайта</div>
+            <div class="inc-footer__info col-12 col-lg-8 col-xl-9">
+                <div class="row">
+                    <div class="col-12 col-lg-4 col-xl-6">
+                        <div class="row">
+                            <div class="col-12 col-xl-6 mb-3">
+                                <div class="inc-footer__info-title collapsed" data-toggle="collapse"
+                                    data-target="#js-footerWorkTime" aria-controls="js-footerWorkTime">
+                                    Время работы
+                                </div>
+                                <div class="inc-footer__info-text collapse" id="js-footerWorkTime">
+                                    с 08.00 до 21.00<br>
+                                    ежедневно
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-6 mb-3">
+                                <div class="inc-footer__info-title collapsed" data-toggle="collapse"
+                                    data-target="#js-footerInfo" aria-controls="js-footerInfo">
+                                    Информация
+                                </div>
+                                <div class="inc-footer__info-text collapse" id="js-footerInfo">
+                                    <nav>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('info.terms') }}"
+                                                    title="Публичная оферта">
+                                                    Публичная оферта
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('info.policy') }}"
+                                                    title="Политика конфиденциальности">
+                                                    Политика конфиденциальности
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('info', 'certificate') }}"
+                                                    title="Сертификаты">
+                                                    Сертификаты
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-xl-3 mb-3">
+                        <div class="inc-footer__info-title collapsed" data-toggle="collapse"
+                            data-target="#js-footerContacts" aria-controls="js-footerContacts">
+                            Контакты</div>
+                        <div class="inc-footer__info-text collapse" id="js-footerContacts">
+                            <ul>
+                                <li><a href="tel:+375291793790">+375 (29) 179-37-90</a></li>
+                                <li><a href="tel:+375295227722">+375 (29) 522-77-22</a></li>
+                                <li><a href="tel:88001007769">8-800-100-77-69(РФ)</a></li>
+                                <li><a href="mailto:info@barocco.by">info@barocco.by</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 col-xl-3 mb-3">
+                        <div class="inc-footer__info-title collapsed" data-toggle="collapse"
+                            data-target="#js-footerPayments" aria-controls="js-footerPayments">
+                            Способы оплаты</div>
+                        <div class="inc-footer__info-text collapse" id="js-footerPayments">
+                            <img src="/images/footer/payments-all.png" class="img-fluid" alt="Оплата"
+                                decoding="async" loading="lazy">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

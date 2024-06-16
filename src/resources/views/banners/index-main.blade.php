@@ -1,5 +1,5 @@
 @if (isset($indexMainBanner))
-    <div class="col-12">
+    <div class="banners_index">
         <a href="{{ $indexMainBanner->url }}">
             @if ($indexMainBanner->getMedia()->first()->hasCustomProperty('videos'))
                 <video id="videoblock" class="img-fluid" autoplay loop preload="metadata" muted playsinline
@@ -24,17 +24,11 @@
     </div>
 @endif
 
-<div class="col-12">
-    <hr class="d-none d-sm-block my-4">
-    @include('includes.advantages-block')
-    <hr class="d-none d-sm-block my-4">
-</div>
-
-@foreach ($indexTopBanners as $banner)
-    <div class="col-12 col-lg-4 p-main">
+<div class="banners_index__min mb-5">
+    @foreach ($indexTopBanners as $banner)
         <a href="{{ $banner->url }}">
             <img src="{{ $banner->getFirstMediaUrl() }}" alt="{{ $banner->title }}"
                 title="{{ $banner->title }}" class="img-fluid" />
         </a>
-    </div>
-@endforeach
+    @endforeach
+</div>

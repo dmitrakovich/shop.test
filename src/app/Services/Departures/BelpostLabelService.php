@@ -170,8 +170,16 @@ class BelpostLabelService
         $sheet->setCellValue('BB6', 0);
         $sheet->setCellValue('AN7', null);
 
-        $sheet->mergeCells('AS25:CL24');
-        $sheet->setCellValue('AS25', $displacement->directionToStock->address);
+        $addressCol = $displacement->directionToStock->address_zip . ', ' . $displacement->directionToStock->address;
+        $addressCol .= str_contains(mb_strtolower($displacement->directionToStock->internal_name), 'интернет магазин') ? '' : PHP_EOL . 'Салон обуви BAROCCO';
+        $sheet->mergeCells('AS25:CL27');
+        $sheet->getStyle('AS25')->applyFromArray([
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_LEFT,
+                'vertical' => Alignment::VERTICAL_TOP,
+            ],
+        ]);
+        $sheet->setCellValue('AS25', $addressCol);
 
         $sheet->setCellValue('AS28', null);
         $sheet->setCellValue('BC28', null);
@@ -180,6 +188,7 @@ class BelpostLabelService
 
         $sheet->setCellValue('D20', null);
         $sheet->setCellValue('D22', null);
+        $sheet->setCellValue('BK22', $displacement->directionToStock->contact_person);
         $sheet->setCellValue('D25', null);
         $sheet->setCellValue('D28', null);
         $sheet->setCellValue('D31', null);
@@ -212,6 +221,11 @@ class BelpostLabelService
                 'name' => 'Wingdings 2',
             ],
         ]);
+
+        if ($displacement->directionToStock->phone) {
+            $sheet->setCellValue('BF35', substr(trim($displacement->directionToStock->phone), -9, -7));
+            $sheet->setCellValue('BJ35', preg_replace("/^(\d{3})(\d{2})(\d{2})$/", '$1 $2 $3', substr(trim($displacement->directionToStock->phone), -7)));
+        }
 
         $writer = new Xlsx($spreadsheet);
         $writer->save(public_path($resultPath));

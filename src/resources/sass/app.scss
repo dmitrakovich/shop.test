@@ -61,9 +61,12 @@
 @import '_swiper';
 
 @import 'banners/banner-timer';
+@import 'banners/index-main';
 
-@import 'includes/header';
 @import 'includes/feedbacks';
+@import 'includes/footer';
+@import 'includes/header';
+@import 'includes/instagram-block';
 
 @import 'dashboard/orders';
 @import 'dashboard/order_list';
@@ -72,6 +75,7 @@
 
 // Specific page's styles
 @import 'pages/cart';
+@import 'pages/index';
 
 @import 'static/template';
 // Components

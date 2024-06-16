@@ -49,8 +49,11 @@ class StockController extends AdminController
         $grid->column('groupChat.name', 'Групповой чат для уведомлений');
         $grid->column('city.name', 'Город');
         $grid->column('address', 'Адрес');
+        $grid->column('address_zip', 'Почтовый индекс')->hide();
         $grid->column('worktime', 'Время работы');
         $grid->column('phone', 'Телефон');
+        $grid->column('contact_person', 'Контактное лицо')->hide();
+
         // $grid->column('geo_latitude', 'Координаты (широта)');
         // $grid->column('geo_longitude', 'Координаты (долгота)');
         $grid->column('check_availability', 'Сверка наличия')->switch();
@@ -109,8 +112,10 @@ class StockController extends AdminController
         $form->select('private_chat_id', 'Личный чат для отправки уведомлений')->options(TelegramChat::pluck('name', 'id'));
         $form->select('group_chat_id', 'Групповой чат для отправки уведомлений')->options(TelegramChat::pluck('name', 'id'));
         $form->text('address', 'Адрес');
+        $form->text('address_zip', 'Почтовый индекс');
         $form->text('worktime', 'Время работы');
         $form->phone('phone', 'Телефон');
+        $form->text('contact_person', 'Контактное лицо');
         $form->text('geo_latitude', 'Координаты (широта)');
         $form->text('geo_longitude', 'Координаты (долгота)');
         $form->switch('check_availability', 'Сверка наличия');

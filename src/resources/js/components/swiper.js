@@ -87,6 +87,7 @@ const simpleSlider = function () {
     new Swiper('.js-simpleSlider', {
         slidesPerView: 1,
         slidesPerGroup: 1,
+        spaceBetween: 15,
         loop: true,
         navigation: {
             nextEl: ".js-simpleSlider-next",
