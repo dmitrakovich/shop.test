@@ -142,7 +142,7 @@ class PaymentService
                     'data' => fn ($query) => $query->with('installment'),
                 ])->first();
 
-            if (in_array($order->status_key, ['fitting', 'sent', 'installment'])) {
+            if (in_array($order->status_key, ['fitting', 'sent', 'installment', 'partial_complete'])) {
                 $partialBuybackItemsCount = 0;
                 $isInstallment = $order->payment_id === Installment::PAYMENT_METHOD_ID;
                 $successfulPaymentsSum = $order->onlinePayments
@@ -196,9 +196,6 @@ class PaymentService
                     $order->update(['status_key' => ($isPartialComplete ? 'partial_complete' : 'complete')]);
                 } else {
                     $order->update(['status_key' => 'delivered']);
-                    $order->data->each(function (OrderItem $orderItem) {
-                        $orderItem->update(['status_key' => 'waiting_refund']);
-                    });
                     $order->adminComments()->create([
                         'comment' => "Получен наложенный платеж на сумму {$paymentSum}. Распределите сумму по товарам!",
                     ]);

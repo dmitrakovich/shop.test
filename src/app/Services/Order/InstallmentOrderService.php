@@ -39,7 +39,7 @@ class InstallmentOrderService
         $onlinePaymentsSum = $order->getAmountPaidOrders();
         $uniqItemsCount = $order->getUniqItemsCount();
         foreach ($order->items as $itemKey => $item) {
-            if ($item->installment->num_payments === 0) {
+            if (!$item->installment?->num_payments) {
                 continue;
             }
             if ($itemKey > 0) {
