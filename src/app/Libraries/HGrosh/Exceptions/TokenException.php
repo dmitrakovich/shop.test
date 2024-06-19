@@ -2,6 +2,4 @@
 
 namespace App\Libraries\HGrosh\Exceptions;
 
-class TokenException extends HGroshException
-{
-}
+class TokenException extends HGroshException {}

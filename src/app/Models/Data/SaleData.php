@@ -12,6 +12,5 @@ class SaleData
         public float $discount_percentage,
         public string $label,
         public ?Carbon $end_datetime = null
-    ) {
-    }
+    ) {}
 }

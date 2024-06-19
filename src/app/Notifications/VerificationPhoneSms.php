@@ -9,9 +9,7 @@ class VerificationPhoneSms extends AbstractSmsTraffic
      *
      * @return void
      */
-    public function __construct(private string $otp)
-    {
-    }
+    public function __construct(private string $otp) {}
 
     /**
      * Content for sms message

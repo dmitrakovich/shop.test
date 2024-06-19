@@ -36,8 +36,7 @@ class FeedGeneratorJob extends AbstractJob
     public function __construct(
         private AbstractFeed $feedInstance,
         private Currency $currency
-    ) {
-    }
+    ) {}
 
     /**
      * Return feed service

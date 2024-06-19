@@ -10,9 +10,7 @@ class CreateInstallment
     /**
      * Create the event listener.
      */
-    public function __construct(private InstallmentOrderService $installmentOrderService)
-    {
-    }
+    public function __construct(private InstallmentOrderService $installmentOrderService) {}
 
     /**
      * Handle the event.

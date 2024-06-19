@@ -9,7 +9,5 @@ abstract class AbstractGoogleTagListener
     /**
      * Create the event listener.
      */
-    public function __construct(protected GoogleTagManagerService $gtmService)
-    {
-    }
+    public function __construct(protected GoogleTagManagerService $gtmService) {}
 }

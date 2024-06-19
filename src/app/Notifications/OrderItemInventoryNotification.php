@@ -21,9 +21,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(private OrderItem $orderItem)
-    {
-    }
+    public function __construct(private OrderItem $orderItem) {}
 
     /**
      * Get the notification's delivery channels.

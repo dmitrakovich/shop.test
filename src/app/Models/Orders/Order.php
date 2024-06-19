@@ -365,9 +365,7 @@ class Order extends Model
         return $contractDate;
     }
 
-    public function setInstallmentContractDateAttribute($value)
-    {
-    }
+    public function setInstallmentContractDateAttribute($value) {}
 
     public function getItemsPrice(): float
     {

@@ -12,9 +12,7 @@ class FeedbackService
     /**
      * FeedbackService constructor.
      */
-    public function __construct(private Feedback $feedback)
-    {
-    }
+    public function __construct(private Feedback $feedback) {}
 
     /**
      * Get feedbacks for specific product

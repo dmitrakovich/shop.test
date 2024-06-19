@@ -20,6 +20,5 @@ class OrderCreated
         public Order $order,
         public ?User $user = null,
         public bool $shouldUpdateInventory = true
-    ) {
-    }
+    ) {}
 }

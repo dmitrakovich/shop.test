@@ -14,9 +14,7 @@ class UpdateInventory implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct(private OrderItemInventoryService $orderItemInventoryService)
-    {
-    }
+    public function __construct(private OrderItemInventoryService $orderItemInventoryService) {}
 
     /**
      * Handle the event.

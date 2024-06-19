@@ -16,9 +16,7 @@ class LogNotification
      *
      * @return void
      */
-    public function __construct(private LogService $logService)
-    {
-    }
+    public function __construct(private LogService $logService) {}
 
     /**
      * Handle the event.

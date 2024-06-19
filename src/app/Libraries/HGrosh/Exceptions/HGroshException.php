@@ -2,6 +2,4 @@
 
 namespace App\Libraries\HGrosh\Exceptions;
 
-class HGroshException extends \Exception
-{
-}
+class HGroshException extends \Exception {}

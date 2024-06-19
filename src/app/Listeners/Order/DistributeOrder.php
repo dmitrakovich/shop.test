@@ -14,9 +14,7 @@ class DistributeOrder implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct(private OrdersDistributionService $ordersDistributionService)
-    {
-    }
+    public function __construct(private OrdersDistributionService $ordersDistributionService) {}
 
     /**
      * Handle the event.
