@@ -13,8 +13,7 @@ class PaymentSms extends AbstractSmsTraffic
         private string $paymentNum,
         private string $link,
         private ?string $firstName = null
-    ) {
-    }
+    ) {}
 
     /**
      * Content for sms message

@@ -100,9 +100,7 @@ abstract class AbstractAnalyticController extends AbstractAdminController
      *
      * @param  $grid  The grid object to generate columns for.
      */
-    protected function additionalGridColumns($grid): void
-    {
-    }
+    protected function additionalGridColumns($grid): void {}
 
     /**
      * Get the name of the database table associated with the analysis instance (Abstract Method).

@@ -67,9 +67,7 @@ class PaymentService
      *
      * @param  array  $data
      */
-    public function createAfterOrder(Order $order)
-    {
-    }
+    public function createAfterOrder(Order $order) {}
 
     /**
      * Cancel payment.

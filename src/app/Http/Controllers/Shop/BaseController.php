@@ -10,7 +10,5 @@ abstract class BaseController extends Controller
     /**
      * BaseController constructor.
      */
-    public function __construct(protected Request $request)
-    {
-    }
+    public function __construct(protected Request $request) {}
 }

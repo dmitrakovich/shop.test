@@ -19,9 +19,7 @@ class CreateQrcodeJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(private OnlinePayment $onlinePayment)
-    {
-    }
+    public function __construct(private OnlinePayment $onlinePayment) {}
 
     /**
      * Execute the job.

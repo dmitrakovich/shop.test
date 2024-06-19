@@ -14,9 +14,7 @@ class SeoServiceProvider extends ServiceProvider implements DeferrableProvider
     /**
      * @return void
      */
-    public function boot()
-    {
-    }
+    public function boot() {}
 
     /**
      * Register the service provider.

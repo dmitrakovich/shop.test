@@ -26,9 +26,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      *
      * @return void
      */
-    public function __construct(private LogService $logService)
-    {
-    }
+    public function __construct(private LogService $logService) {}
 
     /**
      * Execute the job.
