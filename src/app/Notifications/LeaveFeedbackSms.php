@@ -21,9 +21,7 @@ class LeaveFeedbackSms extends AbstractSmsTraffic
      *
      * @return void
      */
-    public function __construct(private Order $order)
-    {
-    }
+    public function __construct(private Order $order) {}
 
     /**
      * Content for sms message

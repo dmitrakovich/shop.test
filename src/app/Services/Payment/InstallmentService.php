@@ -19,8 +19,7 @@ class InstallmentService
     public function __construct(
         private Installment $installment,
         private PaymentService $paymentService
-    ) {
-    }
+    ) {}
 
     /**
      * Send notifications to buyers and return their quantity

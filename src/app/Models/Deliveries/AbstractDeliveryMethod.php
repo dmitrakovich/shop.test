@@ -14,8 +14,7 @@ class AbstractDeliveryMethod
 
     public function __construct(
         private readonly Model $model
-    ) {
-    }
+    ) {}
 
     public function getAdditionalInfo(): View|string|null
     {

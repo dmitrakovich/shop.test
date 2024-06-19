@@ -13,9 +13,7 @@ class SyncOrderHistory
      *
      * @return void
      */
-    public function __construct(private Order $order)
-    {
-    }
+    public function __construct(private Order $order) {}
 
     /**
      * Handle the event.

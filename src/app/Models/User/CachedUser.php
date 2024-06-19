@@ -6,6 +6,5 @@ class CachedUser
 {
     public function __construct(
         public bool $hasReviewAfterOrder = false
-    ) {
-    }
+    ) {}
 }

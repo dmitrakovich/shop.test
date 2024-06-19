@@ -16,7 +16,5 @@ class ReviewPosted
      *
      * @return void
      */
-    public function __construct(public ?User $user = null)
-    {
-    }
+    public function __construct(public ?User $user = null) {}
 }

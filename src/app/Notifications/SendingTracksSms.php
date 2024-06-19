@@ -18,8 +18,7 @@ class SendingTracksSms extends AbstractSmsTraffic
      */
     public function __construct(
         private Order $order,
-    ) {
-    }
+    ) {}
 
     /**
      * Content for sms message

@@ -13,8 +13,7 @@ class InstallmentPaymentSms extends AbstractSmsTraffic
      */
     public function __construct(
         private Installment $installment,
-    ) {
-    }
+    ) {}
 
     /**
      * Content for sms message

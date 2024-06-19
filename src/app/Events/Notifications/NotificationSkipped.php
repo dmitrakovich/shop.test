@@ -19,6 +19,5 @@ class NotificationSkipped
     public function __construct(
         public mixed $notifiable,
         public Notification $notification
-    ) {
-    }
+    ) {}
 }

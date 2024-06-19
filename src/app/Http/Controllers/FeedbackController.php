@@ -14,9 +14,7 @@ class FeedbackController extends Controller
     /**
      * ProductController constructor.
      */
-    public function __construct(private FeedbackService $feedbackService)
-    {
-    }
+    public function __construct(private FeedbackService $feedbackService) {}
 
     /**
      * Display a listing of the resource.
