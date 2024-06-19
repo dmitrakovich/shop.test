@@ -42,7 +42,6 @@ class InstallmentOrderService
             if (!$item->installment?->num_payments) {
                 continue;
             }
-            dd($item);
             if ($itemKey > 0) {
                 $spreadsheet->addSheet($firstSheet);
                 $spreadsheet->setActiveSheetIndex($itemKey);
