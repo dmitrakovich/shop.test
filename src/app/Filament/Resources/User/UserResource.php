@@ -2,12 +2,9 @@
 
 namespace App\Filament\Resources\User;
 
+use App\Filament\Resources\User\UserResource\Pages;
 use App\Models\User\Group;
 use App\Models\User\User;
-
-use App\Filament\Resources\User\UserResource\Pages;
-
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
@@ -15,21 +12,17 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
-
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-
-use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Enums\FiltersLayout;
-use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
+use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
-
-
+use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
@@ -100,7 +93,7 @@ class UserResource extends Resource
                                                 TextInput::make('address')
                                                     ->label('Адрес'),
                                                 Toggle::make('approve')
-                                                    ->label('Подтверждение о проверке')
+                                                    ->label('Подтверждение о проверке'),
                                             ])
                                             ->columns(3),
                                     ]),
@@ -145,7 +138,7 @@ class UserResource extends Resource
                                         TextInput::make('registration_address')
                                             ->label('Адрес прописки')
                                             ->maxLength(255),
-                                    ])
+                                    ]),
                             ]),
                         Tab::make('Платежи')
                             ->schema([
@@ -160,6 +153,7 @@ class UserResource extends Resource
         $table->modifyQueryUsing(
             fn (Builder $query) => $query->with(['orders.data'])->orderBy('id', 'desc')
         );
+
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('first_name')

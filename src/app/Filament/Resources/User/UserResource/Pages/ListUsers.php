@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\User\UserResource\Pages;
 
 use App\Filament\Resources\User\UserResource;
-
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
