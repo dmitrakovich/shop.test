@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\User\UserResource\RelationManagers;
 
-use App\Models\User\UserBlacklist;
-
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -14,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 class BlacklistRelationManager extends RelationManager
 {
     protected static string $relationship = 'blacklistLogs';
+
     protected static ?string $title = 'Черный список';
 
     public function form(Form $form): Form
@@ -33,6 +32,7 @@ class BlacklistRelationManager extends RelationManager
                 ->withTrashed()
                 ->orderBy('id', 'desc')
         );
+
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('comment')

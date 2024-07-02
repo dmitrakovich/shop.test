@@ -2,15 +2,12 @@
 
 namespace App\Filament\Resources\User;
 
-use App\Models\User\Group;
-use App\Models\User\User;
-
 use App\Filament\Components\Forms\RelationManager;
 use App\Filament\Resources\User\UserResource\Pages;
 use App\Filament\Resources\User\UserResource\RelationManagers\BlacklistRelationManager;
 use App\Filament\Resources\User\UserResource\RelationManagers\PaymentsRelationManager;
-
-
+use App\Models\User\Group;
+use App\Models\User\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
@@ -148,14 +145,14 @@ class UserResource extends Resource
                             ]),
                         Tab::make('Платежи')
                             ->schema([
-                                RelationManager::make()->manager(PaymentsRelationManager::class)->lazy(true)
+                                RelationManager::make()->manager(PaymentsRelationManager::class)->lazy(true),
                             ])
                             ->columns(1),
                         Tab::make('Черный список (Лог)')
                             ->schema([
-                                RelationManager::make()->manager(BlacklistRelationManager::class)->lazy(true)
+                                RelationManager::make()->manager(BlacklistRelationManager::class)->lazy(true),
                             ])
-                            ->columns(1)
+                            ->columns(1),
                     ])->columns(2)->persistTabInQueryString(),
             ])->columns(1);
     }

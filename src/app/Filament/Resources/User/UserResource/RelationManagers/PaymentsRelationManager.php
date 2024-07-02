@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\User\UserResource\RelationManagers;
 
 use App\Models\Payments\OnlinePayment;
-
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -12,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 class PaymentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'payments';
+
     protected static ?string $title = 'Платежи';
 
     public function table(Table $table): Table
@@ -19,6 +19,7 @@ class PaymentsRelationManager extends RelationManager
         $table->modifyQueryUsing(
             fn (Builder $query) => $query->orderBy('id', 'desc')
         );
+
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('created_at')

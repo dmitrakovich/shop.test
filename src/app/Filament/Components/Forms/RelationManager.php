@@ -9,9 +9,9 @@ class RelationManager extends Component
 {
     protected string $view = 'filament.forms.relation-manager';
 
-    protected string | Closure $relationManager;
+    protected string|Closure $relationManager;
 
-    protected bool | Closure $isLazy = false;
+    protected bool|Closure $isLazy = false;
 
     /**
      * Creates a new instance of the RelationManager class using the service container.
@@ -26,10 +26,10 @@ class RelationManager extends Component
     /**
      * Sets the relation manager.
      *
-     * @param string|Closure $relationManager The relation manager to set.
+     * @param  string|Closure  $relationManager  The relation manager to set.
      * @return static The instance of the relation manager for method chaining.
      */
-    public function manager(string | Closure $relationManager): static
+    public function manager(string|Closure $relationManager): static
     {
         $this->relationManager = $relationManager;
 
@@ -49,10 +49,10 @@ class RelationManager extends Component
     /**
      * Sets the lazy flag for the relation manager.
      *
-     * @param bool|Closure $condition The condition to determine if the relation manager should be lazy. Defaults to true.
+     * @param  bool|Closure  $condition  The condition to determine if the relation manager should be lazy. Defaults to true.
      * @return static The instance of the relation manager for method chaining.
      */
-    public function lazy(bool | Closure $condition = true): static
+    public function lazy(bool|Closure $condition = true): static
     {
         $this->isLazy = $condition;
 
@@ -61,11 +61,9 @@ class RelationManager extends Component
 
     /**
      * Determine if the relation manager is lazy.
-     *
-     * @return bool
      */
     public function isLazy(): bool
     {
-        return (bool) $this->evaluate($this->isLazy);
+        return (bool)$this->evaluate($this->isLazy);
     }
 }

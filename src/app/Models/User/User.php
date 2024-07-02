@@ -7,7 +7,6 @@ use App\Models\Country;
 use App\Models\Feedback;
 use App\Models\Logs\SmsLog;
 use App\Models\Orders\Order;
-use App\Models\User\UserBlacklist;
 use App\Models\Payments\OnlinePayment;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -245,11 +244,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(SmsLog::class);
     }
 
-
     public function blacklist(): HasOne
     {
         return $this->hasOne(UserBlacklist::class)->ofMany([
-            'id' => 'max'
+            'id' => 'max',
         ]);
     }
 
