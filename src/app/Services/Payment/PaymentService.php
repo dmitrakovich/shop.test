@@ -156,7 +156,7 @@ class PaymentService
                 $firstPaymentsSum = 0;
                 foreach ($order->data as $orderItem) {
                     $firstPaymentSum = $isInstallment ? ($orderItem->current_price - ($orderItem->installment->monthly_fee * ($orderItem->installment->num_payments - 1))) : 0;
-                    if ($orderItem->current_price == $itemCodSum || ($isInstallment && $firstPaymentSum == $itemCodSum)) {
+                    if (ceil($orderItem->current_price) == ceil($itemCodSum) || ($isInstallment && ceil($firstPaymentSum) == ceil($itemCodSum))) {
                         $partialBuybackItemsCount++;
                     }
                     $firstPaymentsSum += $firstPaymentSum;

@@ -64,9 +64,16 @@ class AdminPanelProvider extends PanelProvider
                 'promo' => NavigationGroup::make()
                     ->label('Промо')
                     ->icon('heroicon-o-fire'),
+                'user' => NavigationGroup::make()
+                    ->label('Клиенты')
+                    ->icon('heroicon-o-user-group'),
                 'old-admin-panel' => NavigationGroup::make()
                     ->label('Старая админка')
                     ->icon('heroicon-o-arrow-uturn-left')
+                    ->collapsed(),
+                'automation' => NavigationGroup::make()
+                    ->label('Автоматизация')
+                    ->icon('heroicon-o-cog-8-tooth')
                     ->collapsed(),
                 'management' => NavigationGroup::make()
                     ->label('Управление')

@@ -202,7 +202,10 @@ class OrderController extends AbstractAdminController
         $form = new Form(new Order());
         $order = $id ? Order::query()->where('id', $id)->with([
             'country',
-            'user' => fn ($query) => $query->with(['lastAddress' => fn ($q) => $q->with('country')]),
+            'user' => fn ($query) => $query->with([
+                'blacklist',
+                'lastAddress.country',
+            ]),
         ])->first() : null;
 
         $administratorService = app(AdministratorService::class);
