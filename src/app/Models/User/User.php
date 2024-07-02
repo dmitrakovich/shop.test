@@ -244,11 +244,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(SmsLog::class);
     }
 
+    /**
+     * Retrieve the blacklist associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne The relationship between the user and the blacklist.
+     */
     public function blacklist(): HasOne
     {
-        return $this->hasOne(UserBlacklist::class)->ofMany([
-            'id' => 'max',
-        ]);
+        return $this->blacklistLogs()->one();
     }
 
     /**

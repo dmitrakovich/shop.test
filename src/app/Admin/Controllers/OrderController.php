@@ -204,7 +204,7 @@ class OrderController extends AbstractAdminController
             'country',
             'user' => fn ($query) => $query->with([
                 'blacklist',
-                'lastAddress' => fn ($q) => $q->with('country'),
+                'lastAddress.country',
             ]),
         ])->first() : null;
 
