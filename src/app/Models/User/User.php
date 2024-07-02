@@ -7,11 +7,14 @@ use App\Models\Country;
 use App\Models\Feedback;
 use App\Models\Logs\SmsLog;
 use App\Models\Orders\Order;
+use App\Models\User\UserBlacklist;
+use App\Models\Payments\OnlinePayment;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -240,6 +243,34 @@ class User extends Authenticatable implements MustVerifyEmail
     public function mailings(): HasMany
     {
         return $this->hasMany(SmsLog::class);
+    }
+
+
+    public function blacklist(): HasOne
+    {
+        return $this->hasOne(UserBlacklist::class)->ofMany([
+            'id' => 'max'
+        ]);
+    }
+
+    /**
+     * Retrieve the blacklistLogs associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany The relationship between the user and the blacklistLogs.
+     */
+    public function blacklistLogs(): HasMany
+    {
+        return $this->hasMany(UserBlacklist::class);
+    }
+
+    /**
+     * Define a relationship with the user's online payments.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany The relationship between the user and their online payments.
+     */
+    public function payments(): HasManyThrough
+    {
+        return $this->hasManyThrough(OnlinePayment::class, Order::class);
     }
 
     /**
