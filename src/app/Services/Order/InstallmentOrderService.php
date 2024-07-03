@@ -38,15 +38,17 @@ class InstallmentOrderService
 
         $onlinePaymentsSum = $order->getAmountPaidOrders();
         $uniqItemsCount = $order->getUniqItemsCount();
-        foreach ($order->items as $itemKey => $item) {
+        $sheetCount = 0;
+        foreach ($order->items as $item) {
             if (!$item->installment?->num_payments) {
                 continue;
             }
-            if ($itemKey > 0) {
+            if ($sheetCount > 0) {
                 $spreadsheet->addSheet($firstSheet);
-                $spreadsheet->setActiveSheetIndex($itemKey);
+                $spreadsheet->setActiveSheetIndex($sheetCount);
+                $sheetCount++;
             }
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('№' . $itemKey + 1);
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('№' . $sheetCount + 1);
 
             $sheet->setCellValue('AD1', $item->installment->contract_number ?? null);
 
