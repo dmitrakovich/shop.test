@@ -59,9 +59,7 @@ class InstallmentOrderService
             $adminTrustDate = isset($order->admin->trust_date) ? date('d.m.Y', strtotime($order?->admin?->trust_date)) : null;
             $adminTrustNumber = $order->admin->trust_number ?? null;
             $dateContractInstallment = Carbon::parse(($item->installment->contract_date ?? 'now'))->translatedFormat('d.m.Y');
-            $sheet->unmergeCells('AL3:AW3');
-            $sheet->mergeCells('AI3:AX3');
-            $sheet->setCellValue('AI3', $dateContractInstallment);
+            $sheet->setCellValue('AL3', $dateContractInstallment);
             $sheet->setCellValue('E5', 'Общество с ограниченной ответственностью "БароккоСтайл", в лице специалиста по продажам');
             $sheet->setCellValue('B6', $adminFio . ", действующий на основании Доверенности №$adminTrustNumber от $adminTrustDate, именуемый в дальнейшем");
             $sheet->setCellValue('B7', "Продавец, с одной стороны, и $lastName $firstName $patronymicName, именуемая в дальнейшем");
