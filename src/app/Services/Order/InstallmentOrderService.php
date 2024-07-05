@@ -46,9 +46,9 @@ class InstallmentOrderService
             if ($sheetCount > 0) {
                 $spreadsheet->addSheet($firstSheet);
                 $spreadsheet->setActiveSheetIndex($sheetCount);
-                $sheetCount++;
             }
-            $sheet = $spreadsheet->getActiveSheet()->setTitle('№' . $sheetCount + 1);
+            $sheetCount++;
+            $sheet = $spreadsheet->getActiveSheet()->setTitle('№' . $sheetCount);
 
             $sheet->setCellValue('AD1', $item->installment->contract_number ?? null);
 
