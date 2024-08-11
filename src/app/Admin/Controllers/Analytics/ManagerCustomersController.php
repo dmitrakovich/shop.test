@@ -35,7 +35,7 @@ class ManagerCustomersController extends AbstractCustomerAnalyticController
      */
     protected function getPreparedGrid(): Grid
     {
-        $grid = new Grid(new Order());
+        $grid = new Grid(new Order);
 
         $grid->model()->selectRaw($this->getSelectSql())
             ->withExpression('UserOrderStatusCount', $this->getUserOrderStatusCountQuery())

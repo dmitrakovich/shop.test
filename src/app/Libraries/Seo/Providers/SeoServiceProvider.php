@@ -33,7 +33,7 @@ class SeoServiceProvider extends ServiceProvider implements DeferrableProvider
             return new Twitter(config('seo.twitter', []));
         });
         $this->app->singleton('seo', function ($app) {
-            return new Seo();
+            return new Seo;
         });
     }
 

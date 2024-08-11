@@ -24,7 +24,7 @@ class FabricController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Fabric());
+        $grid = new Grid(new Fabric);
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
@@ -63,7 +63,7 @@ class FabricController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Fabric());
+        $form = new Form(new Fabric);
 
         $form->text('name', __('Name'));
         $form->text('slug', __('Slug'));

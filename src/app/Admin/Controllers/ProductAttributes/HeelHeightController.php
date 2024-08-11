@@ -24,7 +24,7 @@ class HeelHeightController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Heel());
+        $grid = new Grid(new Heel);
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
@@ -63,7 +63,7 @@ class HeelHeightController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Heel());
+        $form = new Form(new Heel);
 
         $form->text('name', __('Name'));
         $form->text('slug', __('Slug'));

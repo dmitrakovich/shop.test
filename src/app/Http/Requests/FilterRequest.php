@@ -113,7 +113,7 @@ class FilterRequest extends FormRequest
                     'model_id' => $id,
                 ]);
 
-                return $urlModel->setRelation('filters', new Top());
+                return $urlModel->setRelation('filters', new Top);
             }, $top);
         }
     }

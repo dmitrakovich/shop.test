@@ -25,7 +25,7 @@ class CurrencyController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Currency());
+        $grid = new Grid(new Currency);
 
         $grid->column('code', 'Код валюты');
         $grid->column('country', 'Код страны');
@@ -57,7 +57,7 @@ class CurrencyController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Currency());
+        $form = new Form(new Currency);
 
         $form->text('code', 'Код валюты')->required();
         $form->text('country', 'Код страны')->required();

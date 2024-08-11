@@ -29,7 +29,7 @@ class DisplacementController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Displacement());
+        $grid = new Grid(new Displacement);
         $grid->model()->with([
             'directionFromStock' => fn ($query) => $query->with('city'),
             'directionToStock' => fn ($query) => $query->with('city'),
@@ -50,7 +50,7 @@ class DisplacementController extends AdminController
         });
         $grid->actions(function ($actions) {
             $actions->disableView();
-            $actions->add(new DisplacementLabelAction());
+            $actions->add(new DisplacementLabelAction);
         });
         $grid->paginate(50);
         $grid->disableExport();
@@ -65,7 +65,7 @@ class DisplacementController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Displacement());
+        $form = new Form(new Displacement);
 
         // $stocks = Stock::with('city')
         //     ->get()

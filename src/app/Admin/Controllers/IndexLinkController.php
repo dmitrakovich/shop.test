@@ -24,7 +24,7 @@ class IndexLinkController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new IndexLink());
+        $grid = new Grid(new IndexLink);
 
         $grid->column('title', 'Заголовок');
         $grid->column('links', 'Ссылки')->table(['text' => 'Текст', 'href' => 'Ссылка']);
@@ -52,7 +52,7 @@ class IndexLinkController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new IndexLink());
+        $form = new Form(new IndexLink);
 
         $form->text('title', 'Заголовок')->required();
         $form->table('links', 'Ссылки', function ($table) {

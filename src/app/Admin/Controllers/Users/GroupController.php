@@ -24,7 +24,7 @@ class GroupController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Group());
+        $grid = new Grid(new Group);
 
         $grid->column('id', 'Идентификатор');
         $grid->column('name', 'Название');
@@ -57,7 +57,7 @@ class GroupController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Group());
+        $form = new Form(new Group);
 
         $form->text('name', 'Название')->required();
         $form->decimal('discount', 'Скидка (%)')->default(0.00)->required();

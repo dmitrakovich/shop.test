@@ -74,7 +74,7 @@ class StatisticController extends AbstractAdminController
             });
         });
 
-        $grid->exporter((new AnalyticsExporter())->setFileName($this->title));
+        $grid->exporter((new AnalyticsExporter)->setFileName($this->title));
         $grid->disablePagination();
         $grid->disableActions();
         $grid->disableCreateButton();

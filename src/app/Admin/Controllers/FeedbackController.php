@@ -40,7 +40,7 @@ class FeedbackController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Feedback());
+        $grid = new Grid(new Feedback);
 
         $grid->column('id', 'Ответить')->display(function ($feedbackId) {
             return '<a href="' . route('admin.feedbacks.feedback-answers.create', $feedbackId) . '" target="_blank">Ответить</a>';
@@ -94,7 +94,7 @@ class FeedbackController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Feedback());
+        $form = new Form(new Feedback);
 
         $form->belongsTo('user_id', User::class, 'Пользователь');
         // $form->number('yandex_id', __('Yandex id'));

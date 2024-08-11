@@ -28,7 +28,7 @@ class CountryOfOriginController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new CountryOfOrigin());
+        $grid = new Grid(new CountryOfOrigin);
 
         $grid->column('id', 'Id');
         $grid->column('name', 'Название');
@@ -72,7 +72,7 @@ class CountryOfOriginController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new CountryOfOrigin());
+        $form = new Form(new CountryOfOrigin);
 
         $form->text('name', 'Название');
         $form->text('slug', 'Slug');

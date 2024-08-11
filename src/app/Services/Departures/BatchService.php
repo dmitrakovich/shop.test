@@ -95,7 +95,7 @@ class BatchService
         }
         fclose($fp);
 
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
         $zip->open($zipStoragePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
         $zip->addFile($resultStoragePath, $resultFileName);
         $zip->close();

@@ -123,11 +123,11 @@ class AvailableSizes extends Model implements HasMedia
      */
     public function media(): MorphMany
     {
-        $mediaInstance = new Media();
+        $mediaInstance = new Media;
         $query = $mediaInstance->newQuery();
         $table = $mediaInstance->getTable();
 
-        return new MorphMany($query, new Product(), "$table.model_type", "$table.model_id", 'product_id');
+        return new MorphMany($query, new Product, "$table.model_type", "$table.model_id", 'product_id');
     }
 
     /**

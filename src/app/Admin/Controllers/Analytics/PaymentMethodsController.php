@@ -35,7 +35,7 @@ class PaymentMethodsController extends AbstractOrderItemAnalyticController
      */
     protected function getPreparedGrid(): Grid
     {
-        $grid = new Grid(new Order());
+        $grid = new Grid(new Order);
 
         $grid->model()->selectRaw($this->getSelectSql())
             ->leftJoin('payment_methods', 'orders.payment_id', '=', 'payment_methods.id')

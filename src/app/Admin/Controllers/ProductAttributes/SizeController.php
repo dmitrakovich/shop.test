@@ -24,7 +24,7 @@ class SizeController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Size());
+        $grid = new Grid(new Size);
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
@@ -63,7 +63,7 @@ class SizeController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Size());
+        $form = new Form(new Size);
 
         $form->text('name', __('Name'));
         $form->text('slug', __('Slug'));

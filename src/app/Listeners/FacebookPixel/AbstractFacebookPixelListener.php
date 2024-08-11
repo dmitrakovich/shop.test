@@ -19,7 +19,7 @@ abstract class AbstractFacebookPixelListener
      */
     protected function generateEvent(AbstractAnalyticEvent $event): Event
     {
-        return (new Event())
+        return (new Event)
             ->setEventId($event->eventId)
             ->setEventTime($event->eventTime)
             ->setEventSourceUrl($event->sourceUrl)

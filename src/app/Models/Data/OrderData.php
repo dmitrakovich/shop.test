@@ -68,8 +68,8 @@ class OrderData
         ?string $created_at = null,
         ...$otherData
     ) {
-        $this->paymentMethod = $this->findModel(new PaymentMethod(), $this->payment_id);
-        $this->deliveryMethod = $this->findModel(new DeliveryMethod(), $this->delivery_id);
+        $this->paymentMethod = $this->findModel(new PaymentMethod, $this->payment_id);
+        $this->deliveryMethod = $this->findModel(new DeliveryMethod, $this->delivery_id);
         $this->created_at = $this->createDate($created_at);
         $this->order_type = Agent::isDesktop() ? OrderTypeEnum::DESKTOP : OrderTypeEnum::MOBILE;
     }
@@ -80,7 +80,7 @@ class OrderData
      */
     private function findModel(Model $model, ?int $id): Model
     {
-        return $id ? $model->query()->findOrNew($id) : new $model();
+        return $id ? $model->query()->findOrNew($id) : new $model;
     }
 
     /**

@@ -25,7 +25,7 @@ class MediaController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Media());
+        $grid = new Grid(new Media);
 
         $grid->column('picture')->display(function () {
             return $this->getUrl();
@@ -74,7 +74,7 @@ class MediaController extends AbstractAdminController
      */
     protected function form()
     {
-        $form = new Form(new Media());
+        $form = new Form(new Media);
 
         $form->submitted(function (Form $form) {
             $videoUrl = request()->input('video_url');

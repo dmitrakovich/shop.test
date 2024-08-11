@@ -52,7 +52,7 @@ class StockController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new AvailableSizesFull());
+        $grid = new Grid(new AvailableSizesFull);
 
         $stockNames = Stock::query()->pluck('internal_name', 'id')->toArray();
         $defaultStockList = Stock::query()->where('type', 'shop')->pluck('id')->toArray();
@@ -109,8 +109,8 @@ class StockController extends AbstractAdminController
 
         $grid->rows($this->highlightRows());
         $grid->filter(fn (Filter $filter) => $this->addFiltersForAvailableSizes($filter, $stockNames, $defaultStockList, $maxSizesCountFilter));
-        $grid->tools(fn ($tools) => $tools->append(new UpdateAvailability()));
-        $grid->exporter(new StockExporter());
+        $grid->tools(fn ($tools) => $tools->append(new UpdateAvailability));
+        $grid->exporter(new StockExporter);
         $grid->paginate(100);
         $grid->perPages([50, 100, 250, 500, 1000]);
         $grid->disableActions();

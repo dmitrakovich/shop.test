@@ -31,7 +31,7 @@ class Instagram extends Form
     {
         // dd($request->all());
 
-        (new InstagramService())->setTitle($request->input('title'));
+        (new InstagramService)->setTitle($request->input('title'));
 
         admin_success('Заголовок успешно сохранен!');
 

@@ -29,7 +29,7 @@ class OrderTrackController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new OrderTrack());
+        $grid = new Grid(new OrderTrack);
         $grid->model()->with('order.delivery')->orderBy('id', 'desc');
 
         $grid->filter(function ($filter) {
@@ -47,7 +47,7 @@ class OrderTrackController extends AdminController
         $grid->column('created_at', 'Дата создания')->display(fn ($date) => ($date ? date('d.m.Y H:i:s', strtotime($date)) : null))->sortable();
 
         $grid->tools(function ($tools) {
-            $tools->append(new TrackRange());
+            $tools->append(new TrackRange);
         });
         $grid->batchActions(function ($batch) {
             $batch->disableDelete();
@@ -68,7 +68,7 @@ class OrderTrackController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new OrderTrack());
+        $form = new Form(new OrderTrack);
         $form->text('track_number', 'Трек номер');
         $form->text('track_link', 'Ссылка для отслеживания трек номера');
         $form->text('order_id', 'Номер заказа')->rules('nullable|exists:orders,id');

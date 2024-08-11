@@ -23,7 +23,7 @@ class OrderActionController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new OrderActionLog());
+        $grid = new Grid(new OrderActionLog);
 
         $grid->column('order_id', 'Id заказа');
         $grid->column('admin.name', 'Менеджер');

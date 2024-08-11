@@ -24,7 +24,7 @@ class FeedbackAnswerController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new FeedbackAnswer());
+        $grid = new Grid(new FeedbackAnswer);
 
         $grid->column('id', __('Id'));
         $grid->column('feedback_id', __('Feedback id'));
@@ -67,7 +67,7 @@ class FeedbackAnswerController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new FeedbackAnswer());
+        $form = new Form(new FeedbackAnswer);
 
         $form->id('feedback_id', 'id отзыва')->default(request('feedback'));
         $form->hidden('admin_id', 'id админа')->default(auth()->id());

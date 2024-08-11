@@ -25,7 +25,7 @@ class InventoryController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new AvailableSizes());
+        $grid = new Grid(new AvailableSizes);
 
         $select = [
             'GROUP_CONCAT(available_sizes.id SEPARATOR \',\') as stock_ids',

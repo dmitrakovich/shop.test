@@ -36,7 +36,7 @@ class DocController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Doc());
+        $grid = new Grid(new Doc);
 
         $grid->column('id', __('Id'));
         $grid->column('slug', __('Slug'));
@@ -75,7 +75,7 @@ class DocController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Doc());
+        $form = new Form(new Doc);
 
         $form->text('slug', __('Slug'));
         $form->ckeditor('html', __('Html'));

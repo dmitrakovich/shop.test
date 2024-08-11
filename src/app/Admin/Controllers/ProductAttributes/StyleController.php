@@ -24,7 +24,7 @@ class StyleController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Style());
+        $grid = new Grid(new Style);
 
         $grid->column('id', __('Id'))->sortable();
         $grid->column('name', __('Name'))->sortable();
@@ -54,7 +54,7 @@ class StyleController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Style());
+        $form = new Form(new Style);
 
         $form->text('name', __('Name'));
         $form->text('slug', __('Slug'));

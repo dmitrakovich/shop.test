@@ -20,7 +20,7 @@ class PaymentYandexService extends AbstractPaymentService
     public function __construct()
     {
         $paymentConfig = config('payment.payment_systems.yandex');
-        $this->api = new Client();
+        $this->api = new Client;
         if (isset($paymentConfig['mode']) && $paymentConfig['mode'] == 'production') {
             $account = $paymentConfig['auth']['account'] ?? null;
             $secure = $paymentConfig['auth']['secure'] ?? null;
@@ -138,7 +138,7 @@ class PaymentYandexService extends AbstractPaymentService
         array $requestData,
     ): bool {
         $requestData['object']['refundable'] = false;
-        $factory = new NotificationFactory();
+        $factory = new NotificationFactory;
         $notificationObject = $factory->factory($requestData);
         $responseObject = $notificationObject->getObject();
         $payment = $this->getOnlinePaymentByPaymentId($responseObject->getId(), OnlinePaymentMethodEnum::YANDEX);

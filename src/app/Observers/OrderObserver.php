@@ -41,7 +41,7 @@ class OrderObserver
             return;
         }
 
-        $logService = new LogService();
+        $logService = new LogService;
 
         if ($order->wasRecentlyCreated) {
             $logService->logOrderAction($order->id, empty($order->admin_id) ? 'Заказ принят' : 'Заказ создан');

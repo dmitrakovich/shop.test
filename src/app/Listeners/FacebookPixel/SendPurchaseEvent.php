@@ -17,7 +17,7 @@ class SendPurchaseEvent extends AbstractFacebookPixelListener implements ShouldQ
     {
         $events = [];
         $order = $purchaseEvent->order;
-        $customData = (new CustomData())
+        $customData = (new CustomData)
             ->setValue(Currency::convert($order->getTotalPrice(), 'USD'))
             ->setCurrency('USD')
             ->setContentIds($order->items->pluck('product_id')->toArray())

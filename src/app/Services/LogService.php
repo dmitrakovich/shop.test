@@ -90,7 +90,7 @@ class LogService
     {
         $user = Auth::user();
 
-        $log = new Logs\OrderActionLog();
+        $log = new Logs\OrderActionLog;
         $log->order_id = $orderId;
         $log->admin_id = $user instanceof Administrator ? $user->id : null;
         $log->action = $action;
