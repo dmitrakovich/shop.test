@@ -24,7 +24,7 @@ class ManufacturerController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Manufacturer);
+        $grid = new Grid(new Manufacturer());
 
         $grid->column('id', 'Id');
         $grid->column('name', 'Производитель');
@@ -52,7 +52,7 @@ class ManufacturerController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Manufacturer);
+        $form = new Form(new Manufacturer());
 
         $form->text('name', 'Производитель');
 

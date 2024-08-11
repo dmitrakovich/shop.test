@@ -48,7 +48,7 @@ class FilterService
             $filtersList ??= array_keys(self::$filtersModels);
             foreach ($filtersList as $filterName) {
                 $model = self::$filtersModels[$filterName];
-                $query = (new $model)->newQuery();
+                $query = (new $model())->newQuery();
                 if ($filterName == 'categories') {
                     $filters[$filterName] = $query->whereNull('parent_id')
                         ->with('childrenCategories')->get(); // говнокод;

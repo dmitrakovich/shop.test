@@ -51,11 +51,11 @@ class ImapParseEmailService
     public function getMessagesByDate(string $mailbox_name = 'INBOX', ?string $date = null): MessageIterator
     {
         $mailbox = $this->connection->getMailbox($mailbox_name);
-        $search = new SearchExpression;
+        $search = new SearchExpression();
         if ($date) {
             $today = new DateTimeImmutable($date);
         } else {
-            $today = new DateTimeImmutable;
+            $today = new DateTimeImmutable();
         }
         $search->addCondition(new On($today));
         $messages = $mailbox->getMessages($search, null, false, 'utf-8');

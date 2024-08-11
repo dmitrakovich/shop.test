@@ -21,7 +21,7 @@ class BelpostImportCODAction extends Action
     public function handle(
         Request $request
     ) {
-        $belpostCODService = new BelpostCODService;
+        $belpostCODService = new BelpostCODService();
         $result = $belpostCODService->importExcelCOD($request->file);
         $resultText = <<<TEXT
             Импортировано платежей: {$result['count']}

@@ -65,7 +65,7 @@ class ProductController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Product);
+        $grid = new Grid(new Product());
 
         $grid->column('id', 'Id')->sortable();
         $grid->column('media', 'Фото')->display(fn () => $this->getFirstMediaUrl('default', 'thumb'))->image();
@@ -86,10 +86,10 @@ class ProductController extends AbstractAdminController
         $grid->paginate(30);
 
         $grid->actions(function ($actions) {
-            $actions->add(new ProductActions\Restore);
+            $actions->add(new ProductActions\Restore());
         });
         $grid->batchActions(function ($batch) {
-            $batch->add(new ProductActions\BatchRestore);
+            $batch->add(new ProductActions\BatchRestore());
         });
 
         $grid->filter(function ($filter) {
@@ -176,7 +176,7 @@ class ProductController extends AbstractAdminController
      */
     protected function form()
     {
-        $form = new Form(new Product);
+        $form = new Form(new Product());
         $product = null;
         $productFromStock = $this->getStockProduct();
 
@@ -331,7 +331,7 @@ class ProductController extends AbstractAdminController
 
     private function productGroupGrid(Product $product)
     {
-        $grid = new Grid(new Product);
+        $grid = new Grid(new Product());
         $grid->model()->whereNotNull('product_group_id')->where('product_group_id', $product->product_group_id)->with(['category', 'brand'])->orderBy('id', 'desc');
 
         $grid->column('id', 'ID товара');
@@ -384,7 +384,7 @@ class ProductController extends AbstractAdminController
     protected function getStockProduct(): AvailableSizes
     {
         if (empty($stockIds = request('stock_ids'))) {
-            return new AvailableSizes;
+            return new AvailableSizes();
         }
 
         return AvailableSizes::query()

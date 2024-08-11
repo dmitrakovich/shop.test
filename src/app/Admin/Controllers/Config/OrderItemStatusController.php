@@ -24,7 +24,7 @@ class OrderItemStatusController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new OrderItemStatus);
+        $grid = new Grid(new OrderItemStatus());
 
         $grid->sortable();
 
@@ -53,7 +53,7 @@ class OrderItemStatusController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new OrderItemStatus);
+        $form = new Form(new OrderItemStatus());
 
         if ($form->isCreating()) {
             $form->text('key', 'Slug');

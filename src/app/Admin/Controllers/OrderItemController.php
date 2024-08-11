@@ -24,7 +24,7 @@ class OrderItemController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new OrderItemExtended);
+        $grid = new Grid(new OrderItemExtended());
 
         $grid->column('id', 'orderItemId');
         $grid->column('product_id', 'Код товара');
@@ -57,7 +57,7 @@ class OrderItemController extends AbstractAdminController
             $filter->equal('status_key', 'Статус товара')->select(OrderItemStatus::pluck('name_for_admin', 'key'));
         });
 
-        $grid->exporter(new OrderItemsExporter);
+        $grid->exporter(new OrderItemsExporter());
         // $grid->paginate(100);
         // $grid->perPages([50, 100, 250, 500, 1000]);
         $grid->disableActions();

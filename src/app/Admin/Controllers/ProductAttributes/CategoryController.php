@@ -24,7 +24,7 @@ class CategoryController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Category);
+        $grid = new Grid(new Category());
         $grid->sortable();
 
         $grid->column('id', 'Id');
@@ -63,7 +63,7 @@ class CategoryController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Category);
+        $form = new Form(new Category());
 
         $form->text('slug', 'Slug');
         $form->text('title', 'Название на сайте');

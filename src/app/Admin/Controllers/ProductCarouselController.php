@@ -25,7 +25,7 @@ class ProductCarouselController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new ProductCarousel);
+        $grid = new Grid(new ProductCarousel());
 
         $grid->sortable();
 
@@ -69,7 +69,7 @@ class ProductCarouselController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new ProductCarousel);
+        $form = new Form(new ProductCarousel());
 
         $form->text('title', 'Заголовок');
         $form->multipleSelect('categories_list', 'Категории')->options(Category::getFormatedTree())->required();

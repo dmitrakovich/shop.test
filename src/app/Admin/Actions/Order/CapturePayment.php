@@ -24,7 +24,7 @@ class CapturePayment extends RowAction
         OnlinePayment $payment,
         Request $request
     ) {
-        $paymentService = new PaymentService;
+        $paymentService = new PaymentService();
         $amount = (float)$request->input('amount');
         $result = $paymentService->captureOnlinePayment($payment, $amount);
         if ($result->last_status_enum_id === OnlinePaymentStatusEnum::SUCCEEDED) {

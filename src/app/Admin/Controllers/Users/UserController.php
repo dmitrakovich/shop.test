@@ -35,7 +35,7 @@ class UserController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new User);
+        $grid = new Grid(new User());
 
         $grid->column('first_name', 'Имя');
         $grid->column('last_name', 'Фамилия');
@@ -86,7 +86,7 @@ class UserController extends AbstractAdminController
      */
     protected function form(?int $id = null)
     {
-        $form = new Form(new User);
+        $form = new Form(new User());
 
         $form->tab('Основная ин-ия', function ($form) {
             $form->text('first_name', 'Имя')->required();
@@ -165,7 +165,7 @@ class UserController extends AbstractAdminController
 
     private function onlinePaymentGrid($userId)
     {
-        $grid = new Grid(new OnlinePayment);
+        $grid = new Grid(new OnlinePayment());
         $grid->model()->whereHas('order', fn ($query) => $query->where('user_id', $userId))->orderBy('id', 'desc');
 
         $grid->column('created_at', 'Дата/время создания')->display(function ($date) {

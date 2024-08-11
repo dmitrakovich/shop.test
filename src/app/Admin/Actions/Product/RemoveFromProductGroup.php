@@ -26,7 +26,7 @@ class RemoveFromProductGroup extends Action
     public function handle(
         Request $request,
     ) {
-        $service = new ProductGroupService;
+        $service = new ProductGroupService();
         $data = $request->all();
         $service->removeFromProductGroup($data['product_id'], $data['product_group_id']);
 

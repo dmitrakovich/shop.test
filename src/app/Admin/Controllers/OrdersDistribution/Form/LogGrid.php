@@ -18,7 +18,7 @@ class LogGrid
      */
     public function index()
     {
-        $grid = new Grid(new OrderDistributionLog);
+        $grid = new Grid(new OrderDistributionLog());
         $grid->model()->orderBy('id', 'desc');
 
         $grid->column('created_at', 'Дата и время')->display(fn () => date('d.m.Y H:i:s', strtotime($this->created_at)));

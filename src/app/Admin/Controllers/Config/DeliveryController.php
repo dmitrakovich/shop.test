@@ -26,7 +26,7 @@ class DeliveryController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new DeliveryMethod);
+        $grid = new Grid(new DeliveryMethod());
 
         // $grid->column('id', __('Id'));
         $grid->column('name', 'Название способа доставки');
@@ -46,7 +46,7 @@ class DeliveryController extends AbstractAdminController
      */
     protected function form()
     {
-        $form = new Form(new DeliveryMethod);
+        $form = new Form(new DeliveryMethod());
 
         $form->text('name', __('Name'));
         // $form->text('instance', 'Instance');

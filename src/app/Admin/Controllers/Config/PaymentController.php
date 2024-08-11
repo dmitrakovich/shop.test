@@ -24,7 +24,7 @@ class PaymentController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new PaymentMethod);
+        $grid = new Grid(new PaymentMethod());
 
         // $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
@@ -65,7 +65,7 @@ class PaymentController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new PaymentMethod);
+        $form = new Form(new PaymentMethod());
 
         $form->text('name', __('Name'));
         $form->text('class', __('Class'));

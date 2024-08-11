@@ -32,7 +32,7 @@ class StockController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Stock);
+        $grid = new Grid(new Stock());
         $grid->model()->with('media');
         $grid->sortable();
 
@@ -102,7 +102,7 @@ class StockController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Stock);
+        $form = new Form(new Stock());
 
         $form->number('one_c_id', 'ID в 1C')->min(1)->rules(['required', 'unique:stocks,one_c_id,{{id}}']);
         $form->select('type', 'Тип')->options(StockTypeEnum::list());

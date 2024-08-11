@@ -21,7 +21,7 @@ class OrderCommentController extends AbstractAdminController
      */
     protected function form()
     {
-        $form = new Form(new OrderAdminComment);
+        $form = new Form(new OrderAdminComment());
 
         $form->text('comment', 'Комментарий')->required();
 

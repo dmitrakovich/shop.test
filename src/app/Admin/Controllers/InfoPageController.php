@@ -25,7 +25,7 @@ class InfoPageController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new InfoPage);
+        $grid = new Grid(new InfoPage());
 
         $grid->column('id', __('Id'));
         $grid->column('slug', __('Slug'));
@@ -68,7 +68,7 @@ class InfoPageController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new InfoPage);
+        $form = new Form(new InfoPage());
 
         $form->text('slug', __('Slug'));
         $form->text('name', __('Name'));

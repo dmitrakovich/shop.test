@@ -25,7 +25,7 @@ class SmsController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new SmsLog);
+        $grid = new Grid(new SmsLog());
 
         $grid->column('id', 'id')->hide();
         $grid->column('admin.name', 'Менеджер');

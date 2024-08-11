@@ -24,7 +24,7 @@ class BrandController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Brand);
+        $grid = new Grid(new Brand());
 
         $grid->column('id', 'Id')->sortable();
         $grid->column('name', 'Name')->sortable();
@@ -54,7 +54,7 @@ class BrandController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Brand);
+        $form = new Form(new Brand());
 
         $form->number('one_c_id', 'ID в 1С')->min(1)->rules('unique:brands,one_c_id,{{id}}');
         $form->text('name', 'Name');

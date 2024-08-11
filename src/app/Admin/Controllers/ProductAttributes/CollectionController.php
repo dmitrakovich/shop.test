@@ -24,7 +24,7 @@ class CollectionController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Collection);
+        $grid = new Grid(new Collection());
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
@@ -63,7 +63,7 @@ class CollectionController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Collection);
+        $form = new Form(new Collection());
 
         $form->text('name', __('Name'));
         $form->text('slug', __('Slug'));

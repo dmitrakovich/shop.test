@@ -32,7 +32,7 @@ class OrderItemStatusController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new OrderItemStatusLog);
+        $grid = new Grid(new OrderItemStatusLog());
 
         $grid->column('created_at', 'Добавление в заказ');
         $grid->column('orderItem.product_id', 'Код товара');

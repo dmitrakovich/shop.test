@@ -13,7 +13,7 @@ class Api
 
     public function __construct()
     {
-        $this->http_client = new HttpClient;
+        $this->http_client = new HttpClient();
     }
 
     public function __call($name, $arguments)

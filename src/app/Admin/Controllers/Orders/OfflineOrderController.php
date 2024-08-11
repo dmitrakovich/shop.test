@@ -28,7 +28,7 @@ class OfflineOrderController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new OfflineOrder);
+        $grid = new Grid(new OfflineOrder());
 
         $grid->column('receipt_number', 'Номер чека');
         $grid->column('product_photo', 'Превью')->display(fn () => $this->product?->getFirstMediaUrl('default', 'thumb'))->image();

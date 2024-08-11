@@ -24,7 +24,7 @@ class SeasonController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Season);
+        $grid = new Grid(new Season());
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
@@ -63,7 +63,7 @@ class SeasonController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Season);
+        $form = new Form(new Season());
 
         $form->text('name', __('Name'));
         $form->text('slug', __('Slug'));

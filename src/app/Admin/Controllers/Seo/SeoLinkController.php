@@ -19,7 +19,7 @@ class SeoLinkController extends AdminController
 
     protected function grid()
     {
-        $grid = new Grid(new SeoLink);
+        $grid = new Grid(new SeoLink());
         $grid->model()->orderBy('id', 'desc');
 
         $grid->filter(function ($filter) {
@@ -58,7 +58,7 @@ class SeoLinkController extends AdminController
 
     protected function form()
     {
-        $form = new Form(new SeoLink);
+        $form = new Form(new SeoLink());
 
         $form->tab('Основное', function ($form) {
             $form->select('folder_enum_id', 'Папка')->options(SeoLinkFolderEnum::list());

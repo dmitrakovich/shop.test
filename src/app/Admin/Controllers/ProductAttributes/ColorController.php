@@ -24,7 +24,7 @@ class ColorController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Color);
+        $grid = new Grid(new Color());
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
@@ -67,7 +67,7 @@ class ColorController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Color);
+        $form = new Form(new Color());
 
         $form->text('name', __('Name'));
         $form->text('slug', __('Slug'));

@@ -76,7 +76,7 @@ abstract class AbstractAnalyticController extends AbstractAdminController
             $this->applyDefaultFilter($grid);
         }
 
-        $grid->exporter((new AnalyticsExporter)->setFileName($this->title));
+        $grid->exporter((new AnalyticsExporter())->setFileName($this->title));
         $grid->disablePagination();
         $grid->disableActions();
         $grid->disableCreateButton();

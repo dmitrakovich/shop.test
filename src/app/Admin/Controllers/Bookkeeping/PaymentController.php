@@ -22,9 +22,9 @@ class PaymentController extends AbstractAdminController
 
     protected function grid()
     {
-        $grid = new Grid(new OnlinePayment);
+        $grid = new Grid(new OnlinePayment());
         $grid->model()->orderBy('id', 'desc');
-        $adminUsers = (new AdministratorService)->getAdministratorList();
+        $adminUsers = (new AdministratorService())->getAdministratorList();
 
         $grid->filter(function ($filter) use ($adminUsers) {
             $filter->like('payment_num', 'Номер счета');
@@ -68,7 +68,7 @@ class PaymentController extends AbstractAdminController
         $grid->column('comment', 'Комментарий');
 
         $grid->tools(function (Grid\Tools $tools) {
-            $tools->append(new BelpostImportCODAction);
+            $tools->append(new BelpostImportCODAction());
         });
         $grid->actions(function ($actions) {
             $actions->disableDelete();
@@ -84,7 +84,7 @@ class PaymentController extends AbstractAdminController
 
     protected function form()
     {
-        $form = new Form(new OnlinePayment);
+        $form = new Form(new OnlinePayment());
         $form->select('method_enum_id', 'Тип платежа')->options(OnlinePaymentMethodEnum::list())->placeholder('Введите сумму платежа')->rules(['required'], ['required' => 'Поле обязательно для заполнения.']);
         $form->date('lastSucceededStatus.created_at', 'Дата оплаты');
         $form->hidden('lastSucceededStatus.admin_user_id')->value(Admin::user()->id ?? null);

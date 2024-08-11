@@ -35,7 +35,7 @@ class BannerController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Banner);
+        $grid = new Grid(new Banner());
 
         $grid->column('position', 'Позиция')->using($this->position);
         $grid->column('resource', 'Media')->image();
@@ -91,7 +91,7 @@ class BannerController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Banner);
+        $form = new Form(new Banner());
 
         $form->select('position', 'Позиция')->options($this->position)->when('in', ['catalog_top', 'catalog_mob', 'index_main'], function (Form $form) {
             $form->radio('spoiler.show', 'Спойлер')

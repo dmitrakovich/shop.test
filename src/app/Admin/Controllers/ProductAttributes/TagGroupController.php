@@ -25,7 +25,7 @@ class TagGroupController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new TagGroup);
+        $grid = new Grid(new TagGroup());
         $grid->model()->orderBy('id', 'desc');
 
         $grid->filter(function ($filter) {
@@ -65,7 +65,7 @@ class TagGroupController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new TagGroup);
+        $form = new Form(new TagGroup());
         $tags = Tag::whereNull('tag_group_id')->pluck('name', 'id');
 
         $form->text('name', 'Название группы');

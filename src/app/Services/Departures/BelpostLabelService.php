@@ -90,9 +90,9 @@ class BelpostLabelService
                 'vertical' => Alignment::VERTICAL_CENTER,
             ],
         ]);
-        $barcodeGeneratorJPG = new BarcodeGeneratorJPG;
+        $barcodeGeneratorJPG = new BarcodeGeneratorJPG();
         File::put(public_path($barcodePath), $barcodeGeneratorJPG->getBarcode($orderTrack->track_number, $barcodeGeneratorJPG::TYPE_CODE_39, 1, 58));
-        $drawing = new Drawing;
+        $drawing = new Drawing();
         $drawing->setName('Barcode');
         $drawing->setDescription('Barcode');
         $drawing->setPath(public_path($barcodePath));
@@ -206,9 +206,9 @@ class BelpostLabelService
                 'vertical' => Alignment::VERTICAL_CENTER,
             ],
         ]);
-        $barcodeGeneratorJPG = new BarcodeGeneratorJPG;
+        $barcodeGeneratorJPG = new BarcodeGeneratorJPG();
         File::put(public_path($barcodePath), $barcodeGeneratorJPG->getBarcode($track->track_number, $barcodeGeneratorJPG::TYPE_CODE_39, 1, 58));
-        $drawing = new Drawing;
+        $drawing = new Drawing();
         $drawing->setName('Barcode');
         $drawing->setDescription('Barcode');
         $drawing->setPath(public_path($barcodePath));

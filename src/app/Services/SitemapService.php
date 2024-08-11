@@ -82,7 +82,7 @@ class SitemapService
                         $citiesExsist = false;
 
                         $relations = [];
-                        $productModel = new Product;
+                        $productModel = new Product();
                         foreach ($optionValues as $optionValue) {
                             $relation = $this->checkProductRelation($productModel, $optionValue);
                             if ($optionValue === 'cities') {
@@ -105,7 +105,7 @@ class SitemapService
                         }
 
                         $cityList = $citiesExsist ? City::pluck('slug', 'id')->toArray() : [];
-                        $productsQuery = (new Product)->newQuery();
+                        $productsQuery = (new Product())->newQuery();
                         $productsQuery = $productsQuery->select('id', 'label_id', 'category_id', 'season_id', 'brand_id', 'manufacturer_id', 'collection_id');
                         foreach ($relations as $relation) {
                             $productsQuery = $productsQuery->whereHas($relation)->with($relation);

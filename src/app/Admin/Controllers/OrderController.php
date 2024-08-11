@@ -67,7 +67,7 @@ class OrderController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Order);
+        $grid = new Grid(new Order());
 
         $orderStatuses = OrderStatus::ordered()->pluck('name_for_admin', 'key');
         $admins = app(AdministratorService::class)->getAdministratorList();
@@ -111,13 +111,13 @@ class OrderController extends AbstractAdminController
         $grid->column('created_at', 'Создан');
 
         $grid->actions(function ($actions) {
-            $actions->add(new ProcessOrder);
-            $actions->add(new PrintOrder);
+            $actions->add(new ProcessOrder());
+            $actions->add(new PrintOrder());
         });
 
         $grid->batchActions(function ($batch) {
             $batch->disableDelete();
-            $batch->add(new DistributeOrderAction);
+            $batch->add(new DistributeOrderAction());
         });
 
         $grid->model()->orderBy('id', 'desc');
@@ -199,7 +199,7 @@ class OrderController extends AbstractAdminController
      */
     protected function form(?int $id = null)
     {
-        $form = new Form(new Order);
+        $form = new Form(new Order());
         $order = $id ? Order::query()->where('id', $id)->with([
             'country',
             'user' => fn ($query) => $query->with([
@@ -470,7 +470,7 @@ class OrderController extends AbstractAdminController
 
     private function adminCommentsGrid($orderId)
     {
-        $grid = new Grid(new OrderAdminComment);
+        $grid = new Grid(new OrderAdminComment());
         $grid->model()->where('order_id', $orderId)->orderBy('id', 'desc');
         $grid->resource('/' . config('admin.route.prefix') . '/order-comments');
 
@@ -493,7 +493,7 @@ class OrderController extends AbstractAdminController
 
     private function onlinePaymentGrid($orderId)
     {
-        $grid = new Grid(new OnlinePayment);
+        $grid = new Grid(new OnlinePayment());
         $grid->model()->where('order_id', $orderId)->orderBy('id', 'desc');
 
         $grid->column('created_at', 'Дата/время создания')->display(function ($date) {
@@ -587,7 +587,7 @@ class OrderController extends AbstractAdminController
      */
     public function process(Order $order)
     {
-        (new ProcessOrder)->process($order);
+        (new ProcessOrder())->process($order);
 
         return redirect()->route('admin.orders.edit', $order->id);
     }
@@ -602,7 +602,7 @@ class OrderController extends AbstractAdminController
         return function ($tools) use ($orderId) {
             $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
                 <a  href="' . route('admin.orders.process', $orderId) . '" class="btn btn-sm" style="color: #fff; background-color: #800080; border-color: #730d73;">
-                <i class="fa fa-archive"></i>&nbsp;&nbsp;' . (new ProcessOrder)->name . '</a></div>');
+                <i class="fa fa-archive"></i>&nbsp;&nbsp;' . (new ProcessOrder())->name . '</a></div>');
         };
     }
 

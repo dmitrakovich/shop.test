@@ -14,7 +14,7 @@ class CancelPayment extends RowAction
     public function handle(
         OnlinePayment $payment
     ) {
-        $paymentService = new PaymentService;
+        $paymentService = new PaymentService();
         $result = $paymentService->cancelOnlinePayment($payment);
         if ($result->last_status_enum_id === OnlinePaymentStatusEnum::CANCELED) {
             return $this->response()->success('Платеж отменен!')->refresh();

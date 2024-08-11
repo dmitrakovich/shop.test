@@ -46,7 +46,7 @@ class CategorySeeder extends Seeder
         ];
 
         foreach ($catData as [$parentId, $cName]) {
-            $category = new Category;
+            $category = new Category();
             $category->title = $cName;
             $category->slug = $cName == 'Каталог' ? 'catalog' : Str::slug($cName);
             $category->parent_id = $parentId;

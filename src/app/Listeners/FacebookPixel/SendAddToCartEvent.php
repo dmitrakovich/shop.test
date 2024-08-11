@@ -14,7 +14,7 @@ class SendAddToCartEvent extends AbstractFacebookPixelListener implements Should
     public function handle(AddToCart $addToCartEvent): void
     {
         $product = $addToCartEvent->product;
-        $customData = (new CustomData)
+        $customData = (new CustomData())
             ->setValue($product->getPrice('USD'))
             ->setCurrency('USD')
             ->setContentIds([$product->id])

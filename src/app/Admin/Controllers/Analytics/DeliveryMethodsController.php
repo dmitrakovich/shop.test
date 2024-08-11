@@ -35,7 +35,7 @@ class DeliveryMethodsController extends AbstractOrderItemAnalyticController
      */
     protected function getPreparedGrid(): Grid
     {
-        $grid = new Grid(new Order);
+        $grid = new Grid(new Order());
 
         $grid->model()->selectRaw($this->getSelectSql())
             ->leftJoin('delivery_methods', 'orders.delivery_id', '=', 'delivery_methods.id')

@@ -15,7 +15,7 @@ class ProductService
      */
     public function applyFilters(array $filters): Builder
     {
-        $query = (new Product)->newQuery();
+        $query = (new Product())->newQuery();
 
         foreach ($filters as $filterName => $filterValues) {
             if (class_exists($filterName) && method_exists($filterName, 'applyFilter')) {

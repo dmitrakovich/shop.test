@@ -25,7 +25,7 @@ class TagController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Tag);
+        $grid = new Grid(new Tag());
 
         $grid->model()->withCount('products');
 
@@ -76,7 +76,7 @@ class TagController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Tag);
+        $form = new Form(new Tag());
         $tagGroups = TagGroup::pluck('name', 'id');
 
         $form->text('name', __('Name'));

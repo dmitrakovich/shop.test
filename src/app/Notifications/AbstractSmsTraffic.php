@@ -38,7 +38,7 @@ abstract class AbstractSmsTraffic extends Notification
     {
         SmsTraffic::setDefaultOption('link_in_text', 1);
 
-        return (new SmsTrafficMessage)->content($this->getContent());
+        return (new SmsTrafficMessage())->content($this->getContent());
     }
 
     /**

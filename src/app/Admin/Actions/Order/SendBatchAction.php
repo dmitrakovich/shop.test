@@ -12,7 +12,7 @@ class SendBatchAction extends RowAction
 
     public function handle(Model $model)
     {
-        $batchService = new BatchService;
+        $batchService = new BatchService();
         $file = $batchService->createBatchCsv($model);
         $model->dispatch_date = now();
         $model->save();

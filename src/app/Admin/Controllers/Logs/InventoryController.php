@@ -38,7 +38,7 @@ class InventoryController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new InventoryLog);
+        $grid = new Grid(new InventoryLog());
 
         $sizeNames = Size::query()->pluck('name', 'id');
         $formatSizes = fn (?array $sizes) => $this->formatSizes($sizes, $sizeNames);

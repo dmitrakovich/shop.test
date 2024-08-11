@@ -34,7 +34,7 @@ class CartController extends BaseController
         $prices = $cartService->getCartPrices($cart);
 
         /** @var User $user */
-        $user = auth()->user() ?? new User;
+        $user = auth()->user() ?? new User();
 
         $countryCode = SxGeo::getCountry();
         $countries = Country::getAll();

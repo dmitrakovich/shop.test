@@ -27,7 +27,7 @@ class BatchController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Batch);
+        $grid = new Grid(new Batch());
         $grid->model()->with('orders');
 
         $grid->filter(function ($filter) {
@@ -44,8 +44,8 @@ class BatchController extends AdminController
             $batch->disableDelete();
         });
         $grid->actions(function ($actions) {
-            $actions->add(new DeleteBatchAction);
-            $actions->add(new SendBatchAction);
+            $actions->add(new DeleteBatchAction());
+            $actions->add(new SendBatchAction());
             $actions->disableView();
             $actions->disableDelete();
         });
@@ -77,7 +77,7 @@ class BatchController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Batch);
+        $form = new Form(new Batch());
 
         $form->belongsToMany('orders', Orders::class, 'Заказы');
 

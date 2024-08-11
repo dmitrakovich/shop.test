@@ -35,7 +35,7 @@ class ManagerOrderItemsController extends AbstractOrderItemAnalyticController
      */
     protected function getPreparedGrid(): Grid
     {
-        $grid = new Grid(new Order);
+        $grid = new Grid(new Order());
 
         $grid->model()->selectRaw($this->getSelectSql())
             ->leftJoin('admin_users', 'orders.admin_id', '=', 'admin_users.id')

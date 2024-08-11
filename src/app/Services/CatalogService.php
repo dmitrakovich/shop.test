@@ -28,7 +28,7 @@ class CatalogService
 
     public function __construct()
     {
-        $this->productService = new ProductService;
+        $this->productService = new ProductService();
     }
 
     /**

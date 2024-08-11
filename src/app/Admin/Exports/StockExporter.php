@@ -136,7 +136,7 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
                 }
             }
 
-            $drawing = new Drawing;
+            $drawing = new Drawing();
             $drawing->setPath($imagePath);
             $drawing->setOffsetX(6)->setOffsetY(5);
             $drawing->setCoordinates('A' . ($row->number + 2));
