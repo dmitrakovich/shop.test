@@ -49,7 +49,7 @@ class Url extends Model
     }
 
     /**
-     * Return ralation model
+     * Return relation model
      */
     public function getFilterModel(): Model
     {

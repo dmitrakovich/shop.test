@@ -17,6 +17,20 @@ abstract class AbstractOneCModel extends Model
     protected $connection = 'sqlsrv';
 
     /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'ROW_ID';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * Auto Trim Field From Database
      *
      * @return \Illuminate\Database\Eloquent\Collection

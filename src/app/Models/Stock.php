@@ -24,8 +24,10 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string $internal_name
  * @property string|null $description
  * @property string|null $address
+ * @property string|null $address_zip Индекс
  * @property string|null $worktime Рабочее время
  * @property string|null $phone
+ * @property string|null $contact_person Контактное лицо
  * @property bool $has_pickup
  * @property float|null $geo_latitude
  * @property float|null $geo_longitude
