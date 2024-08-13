@@ -32,13 +32,13 @@ class PaymentService
     {
         switch ($paymentMethodEnum) {
             case OnlinePaymentMethodEnum::ERIP:
-                return $this->paymentMethodService[OnlinePaymentMethodEnum::ERIP->value] = $this->paymentMethodService[OnlinePaymentMethodEnum::ERIP->value] ?? new PaymentEripService;
+                return $this->paymentMethodService[OnlinePaymentMethodEnum::ERIP->value] = $this->paymentMethodService[OnlinePaymentMethodEnum::ERIP->value] ?? new PaymentEripService();
                 break;
             case OnlinePaymentMethodEnum::YANDEX:
-                return $this->paymentMethodService[OnlinePaymentMethodEnum::YANDEX->value] = $this->paymentMethodService[OnlinePaymentMethodEnum::YANDEX->value] ?? new PaymentYandexService;
+                return $this->paymentMethodService[OnlinePaymentMethodEnum::YANDEX->value] = $this->paymentMethodService[OnlinePaymentMethodEnum::YANDEX->value] ?? new PaymentYandexService();
                 break;
             case OnlinePaymentMethodEnum::COD:
-                return $this->paymentMethodService[OnlinePaymentMethodEnum::COD->value] = $this->paymentMethodService[OnlinePaymentMethodEnum::COD->value] ?? new PaymentCODService;
+                return $this->paymentMethodService[OnlinePaymentMethodEnum::COD->value] = $this->paymentMethodService[OnlinePaymentMethodEnum::COD->value] ?? new PaymentCODService();
                 break;
         }
     }

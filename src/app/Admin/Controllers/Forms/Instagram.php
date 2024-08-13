@@ -54,7 +54,7 @@ class Instagram extends Form
     public function data()
     {
         return [
-            'title' => (new InstagramService)->getTitle(),
+            'title' => (new InstagramService())->getTitle(),
         ];
     }
 }

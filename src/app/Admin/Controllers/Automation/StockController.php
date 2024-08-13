@@ -291,7 +291,7 @@ class StockController extends AbstractAdminController
      */
     public function updateAvailability(): RedirectResponse
     {
-        dispatch_sync(new UpdateAvailableSizesFullTableJob);
+        dispatch_sync(new UpdateAvailableSizesFullTableJob());
 
         Cache::forever('available_sizes_full_last_update', now()->format('d.m H:i:s'));
 

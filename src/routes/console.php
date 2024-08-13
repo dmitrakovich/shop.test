@@ -9,12 +9,12 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-Schedule::job(new \App\Jobs\SxGeoUpdateJob)->dailyAt('03:07');
-Schedule::job(new \App\Jobs\Mailing\DiscountAfterRegisterJob)->dailyAt('09:00');
-Schedule::job(new \App\Jobs\Payment\SendInstallmentNoticeJob)->dailyAt('09:05');
-Schedule::job(new \App\Jobs\Mailing\LeaveFeedbackAfterOrderJob)->dailyAt('09:15');
-Schedule::job(new \App\Jobs\Mailing\SendingTracksJob)->dailyAt('10:15');
-Schedule::job(new \App\Jobs\OneC\UpdateOfflineOrdersJob)->withoutOverlapping()->everyTenMinutes();
+Schedule::job(new \App\Jobs\SxGeoUpdateJob())->dailyAt('03:07');
+Schedule::job(new \App\Jobs\Mailing\DiscountAfterRegisterJob())->dailyAt('09:00');
+Schedule::job(new \App\Jobs\Payment\SendInstallmentNoticeJob())->dailyAt('09:05');
+Schedule::job(new \App\Jobs\Mailing\LeaveFeedbackAfterOrderJob())->dailyAt('09:15');
+Schedule::job(new \App\Jobs\Mailing\SendingTracksJob())->dailyAt('10:15');
+Schedule::job(new \App\Jobs\OneC\UpdateOfflineOrdersJob())->withoutOverlapping()->everyTenMinutes();
 
 Schedule::command('rating:update')->withoutOverlapping()->cron('15 5,11,17,23 * * *');
 Schedule::command('inventory:update')->withoutOverlapping()->everyFiveMinutes()->sentryMonitor();

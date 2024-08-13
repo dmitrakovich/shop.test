@@ -28,7 +28,7 @@ class EnvelopeAction extends Action
      */
     public function handle(Request $request)
     {
-        $envelopeService = new EnvelopeService;
+        $envelopeService = new EnvelopeService();
         $order = Order::where('id', $request->orderId)->with([
             'user' => fn ($query) => $query->with('lastAddress'),
         ])->first();

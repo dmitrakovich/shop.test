@@ -97,7 +97,7 @@ class CatalogController extends BaseController
         ];
 
         if (!$products->isNotEmpty()) {
-            $sliderService = new SliderService;
+            $sliderService = new SliderService();
             $data['simpleSliders'] = $sliderService->getSimple();
         }
         $this->seoService

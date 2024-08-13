@@ -82,7 +82,7 @@ class SitemapService
                         $citiesExsist = false;
 
                         $relations = [];
-                        $productModel = new Product;
+                        $productModel = new Product();
                         foreach ($optionValues as $optionValue) {
                             $relation = $this->checkProductRelation($productModel, $optionValue);
                             if ($optionValue === 'cities') {

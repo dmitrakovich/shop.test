@@ -91,7 +91,7 @@ class SxGeoUpdateJob extends AbstractJob
         $this->lastModified = $response->header('Last-Modified');
         $this->log('Архив скачан с сервера. Распаковываем');
 
-        $zip = new \ZipArchive;
+        $zip = new \ZipArchive();
         if ($zip->open($zipFile) === true) {
             $zip->extractTo($this->sxGeoPath);
             $zip->close();

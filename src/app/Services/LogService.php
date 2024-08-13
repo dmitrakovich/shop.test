@@ -31,7 +31,7 @@ class LogService
         ?int $mailingId = null,
         ?string $status = null,
     ): Logs\SmsLog {
-        $log = new Logs\SmsLog;
+        $log = new Logs\SmsLog();
         $log->phone = $phone;
         $log->text = $text;
         $log->route = $route;

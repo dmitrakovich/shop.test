@@ -98,7 +98,7 @@ class OrderController extends BaseController
     public function sync(SyncRequest $request)
     {
         $oldId = (int)$request->input('id');
-        $oldSizes = (new ProductSeeder)->attributesList['sizes']['new_id'];
+        $oldSizes = (new ProductSeeder())->attributesList['sizes']['new_id'];
         $cart = Cart::make();
         $items = [];
         foreach ($request->input('items') as $item) {

@@ -12,7 +12,7 @@ class LabelAction extends RowAction
 
     public function handle(Model $model)
     {
-        $labelService = new LabelService;
+        $labelService = new LabelService();
         $file = $labelService->createLabel($model->id);
 
         return $this->response()->success('Этикетка успешно создана')->download($file);

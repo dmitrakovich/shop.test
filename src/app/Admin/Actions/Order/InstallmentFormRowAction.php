@@ -42,7 +42,7 @@ class InstallmentFormRowAction extends RowAction
         if (!isset($order->user->passport)) {
             throw new \Exception('Заполните паспортные данные клиента');
         }
-        $installmentService = new InstallmentOrderService;
+        $installmentService = new InstallmentOrderService();
         $file = $installmentService->createInstallmentForm($order);
 
         return $this->response()->success('Бланк рассрочки успешно создан')->download($file);

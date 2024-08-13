@@ -24,7 +24,7 @@ class StatisticController extends AbstractAdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Order);
+        $grid = new Grid(new Order());
         $orderCreatedAtStart = request()->input('order_created_at_start');
         $orderCreatedAtEnd = request()->input('order_created_at_end');
         $filterDateValues = [

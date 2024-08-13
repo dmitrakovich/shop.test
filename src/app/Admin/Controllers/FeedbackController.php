@@ -64,7 +64,7 @@ class FeedbackController extends AdminController
         $grid->model()->orderBy('id', 'desc');
 
         $grid->actions(function ($actions) {
-            $actions->add(new ShowAnswersAction);
+            $actions->add(new ShowAnswersAction());
         });
 
         $grid->rows(function ($row) {

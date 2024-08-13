@@ -50,7 +50,7 @@ class GoogleXml extends AbstractFeed
      */
     protected function getItems(): array
     {
-        return (new ProductService)->getForFeed(true)
+        return (new ProductService())->getForFeed(true)
             ->map(function (Product $item) {
                 $media = $this->getProductMedia($item->getMedia());
 

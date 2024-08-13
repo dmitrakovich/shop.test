@@ -34,7 +34,7 @@ class OrderToSendController extends AbstractAdminController
         $grid = new Grid(new Order());
         $grid->model()->whereIn('status_key', ['packaging', 'ready', 'sent'])->doesntHave('batch')->orderBy('id', 'desc');
 
-        $admins = (new AdministratorService)->getAdministratorList();
+        $admins = (new AdministratorService())->getAdministratorList();
         $orderStatuses = OrderStatus::ordered()->pluck('name_for_admin', 'key');
         $deliveryMethods = DeliveryMethod::pluck('name', 'id');
 
@@ -70,8 +70,8 @@ class OrderToSendController extends AbstractAdminController
             $batch->add(new StatusBulkChange());
         });
         $grid->actions(function ($actions) {
-            $actions->add(new LabelAction);
-            $actions->add(new InstallmentFormRowAction);
+            $actions->add(new LabelAction());
+            $actions->add(new InstallmentFormRowAction());
             $actions->disableView();
             $actions->disableDelete();
         });
@@ -104,7 +104,7 @@ class OrderToSendController extends AbstractAdminController
         $form->tab('Основное', function ($form) {
             $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'))
                 ->default(OrderStatus::DEFAULT_VALUE)->required();
-            $form->select('admin_id', 'Менеджер')->options((new AdministratorService)->getAdministratorList());
+            $form->select('admin_id', 'Менеджер')->options((new AdministratorService())->getAdministratorList());
         });
 
         $form->tools(function (Form\Tools $tools) {

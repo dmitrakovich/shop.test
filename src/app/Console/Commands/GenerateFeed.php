@@ -87,7 +87,7 @@ class GenerateFeed extends Command
     {
         foreach ($this->getInstances() as $instance) {
             foreach ($this->getCurrencies() as $currency) {
-                dispatch(new FeedGeneratorJob(new $instance, $currency));
+                dispatch(new FeedGeneratorJob(new $instance(), $currency));
             }
         }
 

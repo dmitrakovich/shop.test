@@ -602,7 +602,7 @@ class OrderController extends AbstractAdminController
         return function ($tools) use ($orderId) {
             $tools->append('<div class="btn-group pull-right" style="margin-right: 5px">
                 <a  href="' . route('admin.orders.process', $orderId) . '" class="btn btn-sm" style="color: #fff; background-color: #800080; border-color: #730d73;">
-                <i class="fa fa-archive"></i>&nbsp;&nbsp;' . (new ProcessOrder)->name . '</a></div>');
+                <i class="fa fa-archive"></i>&nbsp;&nbsp;' . (new ProcessOrder())->name . '</a></div>');
         };
     }
 

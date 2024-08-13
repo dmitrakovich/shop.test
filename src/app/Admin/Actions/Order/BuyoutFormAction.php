@@ -28,7 +28,7 @@ class BuyoutFormAction extends Action
      */
     public function handle(Request $request)
     {
-        $buyoutService = new BuyoutOrderService;
+        $buyoutService = new BuyoutOrderService();
         $order = Order::where('id', $request->orderId)->with([
             'itemsExtended' => fn ($query) => $query
                 ->whereIn('status_key', Order::$itemDepartureStatuses)

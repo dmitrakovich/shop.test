@@ -75,7 +75,7 @@ class RegisteredUserController extends Controller
                 }
                 $user->save();
             } else {
-                $fillable = (new User)->mergeFillable(['password', 'remember_token']);
+                $fillable = (new User())->mergeFillable(['password', 'remember_token']);
                 $user = User::forceCreate(Arr::only($userData, $fillable->getFillable()));
                 $user->addresses()->create($userData);
             }

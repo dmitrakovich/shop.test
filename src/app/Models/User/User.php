@@ -47,6 +47,9 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feedback[] $reviews
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
+ * @property-read \App\Models\User\UserBlacklist|null $blacklist
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserBlacklist[] $blacklistLogs
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePayment[] $payments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserPromocode[] $usedPromocodes
  *
  * @mixin \Illuminate\Database\Eloquent\Builder

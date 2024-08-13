@@ -26,7 +26,7 @@ class CreateOnlinePayment extends Action
     public function handle(
         Request $request
     ) {
-        $paymentService = new PaymentService;
+        $paymentService = new PaymentService();
         $data = $request->all();
         $data['amount'] = str_replace(',', '.', $data['amount']);
         $paymentService->createOnlinePayment($data);

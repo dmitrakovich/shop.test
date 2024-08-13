@@ -47,7 +47,7 @@ class OrderItemObserver
     public function saved(OrderItem $orderItem): void
     {
         if ($orderItem->isDirty('status_key')) {
-            (new OrderItemInventoryService)->handleChangeItemStatus($orderItem->refresh());
+            (new OrderItemInventoryService())->handleChangeItemStatus($orderItem->refresh());
         }
     }
 

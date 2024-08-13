@@ -14,7 +14,7 @@ class CityController extends AdminController
 
     protected function grid()
     {
-        $grid = new Grid(new City);
+        $grid = new Grid(new City());
         $grid->model()->orderBy('id', 'desc');
         $countries = Country::pluck('name', 'id');
 
@@ -44,7 +44,7 @@ class CityController extends AdminController
 
     protected function form()
     {
-        $form = new Form(new City);
+        $form = new Form(new City());
         $countries = Country::pluck('name', 'id');
 
         $form->select('country_id', 'Страна')->options($countries);

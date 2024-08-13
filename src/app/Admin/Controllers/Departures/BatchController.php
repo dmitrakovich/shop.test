@@ -44,8 +44,8 @@ class BatchController extends AdminController
             $batch->disableDelete();
         });
         $grid->actions(function ($actions) {
-            $actions->add(new DeleteBatchAction);
-            $actions->add(new SendBatchAction);
+            $actions->add(new DeleteBatchAction());
+            $actions->add(new SendBatchAction());
             $actions->disableView();
             $actions->disableDelete();
         });

@@ -19,7 +19,7 @@ class LabelService
             'delivery',
             'user' => fn ($query) => $query->with('lastAddress'),
         ])->first();
-        $labelService = new BelpostLabelService;
+        $labelService = new BelpostLabelService();
 
         return $labelService->createLabel($order);
     }

@@ -25,7 +25,7 @@ class AddToProductGroup extends Action
     public function handle(
         Request $request
     ) {
-        $service = new ProductGroupService;
+        $service = new ProductGroupService();
         $data = $request->all();
         $service->addToProductGroup($data['cur_product_id'], $data['product_id']);
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Product\ProductLabels;
 use App\Facades\Currency;
+use App\Models\OneC\Product as ProductFromOneC;
 use App\Services\SearchService;
 use App\Traits\ProductSales;
 use Illuminate\Database\Eloquent\Builder;
@@ -226,6 +227,14 @@ class Product extends Model implements HasMedia
     public function availableSizes(): Relations\HasMany
     {
         return $this->hasMany(AvailableSizes::class);
+    }
+
+    /**
+     * Get the product from 1C associated with the site product.
+     */
+    public function productFromOneC(): Relations\BelongsTo
+    {
+        return $this->belongsTo(ProductFromOneC::class, 'one_c_id', 'CODE');
     }
 
     /**
