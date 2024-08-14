@@ -58,9 +58,7 @@ class ProductController extends AbstractAdminController
     /**
      * ProductController constructor
      */
-    public function __construct(private UploadImagesService $uploadImagesService)
-    {
-    }
+    public function __construct(private UploadImagesService $uploadImagesService) {}
 
     /**
      * Make a grid builder.
