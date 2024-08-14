@@ -6,6 +6,7 @@ use App\Events\Analytics;
 use App\Events\Notifications\NotificationSkipped;
 use App\Events\OrderCreated;
 use App\Events\OrderStatusChanged;
+use App\Events\Products;
 use App\Events\ReviewPosted;
 use App\Listeners\Cache\ResetUserCache;
 use App\Listeners\FacebookPixel;
@@ -14,6 +15,7 @@ use App\Listeners\LogNotification;
 use App\Listeners\Media\ConvertVideo;
 use App\Listeners\MergeCart;
 use App\Listeners\MergeFavorites;
+use App\Listeners\OneC;
 use App\Listeners\Order\CreateInstallment;
 use App\Listeners\Order\DistributeOrder;
 use App\Listeners\Promo\ApplyPendingPromocode;
@@ -90,6 +92,12 @@ class EventServiceProvider extends ServiceProvider
         MediaHasBeenAddedEvent::class => [
             ConvertVideo::class,
         ],
+        Products\ProductCreated::class => [
+            OneC\UpdateProduct::class,
+        ],
+        // Products\ProductUpdated::class => [
+        //     OneC\UpdateProduct::class,
+        // ],
     ];
 
     /**

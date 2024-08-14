@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Listeners\OneC;
+
+use App\Events\Products\ProductCreated;
+use App\Events\Products\ProductUpdated;
+
+class UpdateProduct
+{
+    /**
+     * Create the event listener.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Handle the event.
+     */
+    public function handle(ProductCreated|ProductUpdated $event): void
+    {
+        $product = $event->product;
+        $productFromOneC = $product->productFromOneC;
+        if (!$productFromOneC) {
+            return;
+        }
+
+        $productFromOneC->update([
+            'SP6111' => url($product->getUrl()),
+            'SP6116' => $product->getFirstMediaUrl(conversionName: 'catalog'),
+        ]);
+    }
+}
