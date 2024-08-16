@@ -2,7 +2,8 @@
 
 namespace App\Console\Commands\OneRun;
 
-use App\Models\OneC\Product as ProductFromOneC;
+use App\Events\Products\ProductUpdated;
+use App\Listeners\OneC\UpdateProduct;
 use App\Models\Product;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
@@ -31,19 +32,14 @@ class FillPhotoAndUrlInOneCProducts extends Command
         $productsQuery = Product::withTrashed()->whereNotNull('one_c_id');
 
         $bar = $this->output->createProgressBar($productsQuery->count());
+        $productUpdater = new UpdateProduct();
 
         $productsQuery
             ->with(['category', 'productFromOneC', 'media'])
             ->select(['id', 'one_c_id', 'slug', 'category_id'])
-            ->chunk(200, function (Collection $chunk) use ($bar) {
-                $chunk->each(function (Product $product) use ($bar) {
-                    /** @var ProductFromOneC $productFromOneC */
-                    if ($productFromOneC = $product->productFromOneC) {
-                        $productFromOneC->update([
-                            'SP6111' => url($product->getUrl()),
-                            'SP6116' => $product->getFirstMediaUrl(conversionName: 'catalog'),
-                        ]);
-                    }
+            ->chunk(200, function (Collection $chunk) use ($bar, $productUpdater) {
+                $chunk->each(function (Product $product) use ($bar, $productUpdater) {
+                    $productUpdater->handle(new ProductUpdated($product));
                     $bar->advance();
                 });
             });

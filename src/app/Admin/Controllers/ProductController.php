@@ -7,6 +7,8 @@ use App\Admin\Models\Media;
 use App\Admin\Models\Product;
 use App\Admin\Services\UploadImagesService;
 use App\Enums\Product\ProductLabels;
+use App\Events\Products\ProductCreated;
+use App\Events\Products\ProductUpdated;
 use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
@@ -324,6 +326,13 @@ class ProductController extends AbstractAdminController
 
             $form->model()->url()->delete();
             $form->model()->url()->create(['slug' => $form->slug]);
+
+            if ($form->isCreating()) {
+                event(new ProductCreated($form->model()->refresh()));
+            }
+            if ($form->isEditing()) {
+                event(new ProductUpdated($form->model()));
+            }
         });
 
         return $form;
