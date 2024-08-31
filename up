@@ -40,6 +40,7 @@ fi
 # sail artisan sail:install
 sail up -d
 
+sail artisan key:generate
 sail artisan migrate
 sail artisan job:dispatch SxGeoUpdateJob
 sail artisan storage:link

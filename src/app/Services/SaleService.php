@@ -26,6 +26,11 @@ class SaleService
     private ?Sale $sale;
 
     /**
+     * Key for product discount as sale
+     */
+    const PRODUCT_DISCOUNT = 'product_discount';
+
+    /**
      * Key for general sale
      */
     const GENERAL_SALE_KEY = 'general_sale';
@@ -370,13 +375,29 @@ class SaleService
     /**
      * Get user's review's sale data from auth user
      */
-    private function getReviewSaleData(float $price): SaleData
+    private function getReviewSaleData(float $price, float $oldPrice): SaleData
     {
         return new SaleData(
             price: $price - $this->reviewDiscount,
             discount: $this->reviewDiscount,
-            discount_percentage: $this->round($this->reviewDiscount * 100 / $price),
+            discount_percentage: $this->round($this->reviewDiscount * 100 / $oldPrice),
             label: 'Скидка за отзыв'
+        );
+    }
+
+    /**
+     * Get user's review's sale data from auth user
+     */
+    private function getProductDiscountAsSale(Product $product): SaleData
+    {
+        $oldPrice = $product->getFixedOldPrice();
+        $discount = $oldPrice - $product->price;
+
+        return new SaleData(
+            price: $oldPrice,
+            discount: $discount,
+            discount_percentage: $this->round($discount * 100 / $oldPrice),
+            label: 'Распродажа'
         );
     }
 
@@ -404,6 +425,10 @@ class SaleService
         $sales = [];
         $finalPrice = $product->price;
 
+        if (!$this->hasFakeSale()) {
+            $sales[self::PRODUCT_DISCOUNT] = $this->getProductDiscountAsSale($product);
+        }
+
         if ($this->hasSale() && $this->applyForOneProduct() && $this->checkSaleConditions($product)) {
             $sale = $this->getSaleData($finalPrice, $product->getFixedOldPrice());
             $sales[self::GENERAL_SALE_KEY] = $sale;
@@ -427,7 +452,7 @@ class SaleService
         }
 
         if ($this->hasReviewSale($product)) {
-            $sale = $this->getReviewSaleData($finalPrice);
+            $sale = $this->getReviewSaleData($finalPrice, $product->getFixedOldPrice());
             $sales[self::REVIEW_SALE_KEY] = $sale;
             $finalPrice = $sale->price;
         }
@@ -497,8 +522,15 @@ class SaleService
         }
 
         foreach ($cart->availableItems() as $item) {
+            $sales = [];
+            if (!$this->hasFakeSale()) {
+                $sales[self::PRODUCT_DISCOUNT] = $this->getProductDiscountAsSale($item->product);
+            }
+            /** @var \App\Models\Data\SaleData|null $generalSale */
             $generalSale = $productSaleList[$item->product->id] ?? null;
-            $sales = $generalSale ? [self::GENERAL_SALE_KEY => $generalSale] : [];
+            if ($generalSale) {
+                $sales[self::GENERAL_SALE_KEY] = $generalSale;
+            }
             $finalPrice = $generalSale ? $generalSale->price : $item->product->price;
 
             $this->applyUserSales($item->product, $sales, $finalPrice);
@@ -617,5 +649,13 @@ class SaleService
         $user->cart->refresh();
 
         $this->setUp();
+    }
+
+    /**
+     * Checks if there is a general sale with a fake algorithm.
+     */
+    private function hasFakeSale(): bool
+    {
+        return $this->sale?->algorithm->isFake() ?? false;
     }
 }
