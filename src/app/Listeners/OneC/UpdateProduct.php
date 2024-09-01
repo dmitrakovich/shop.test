@@ -29,6 +29,9 @@ class UpdateProduct
         $productFromOneC->update([
             'SP6111' => url($product->getUrl()),
             'SP6116' => $product->getFirstMediaUrl(conversionName: 'catalog'),
+            'SP6122' => $product->countryOfOrigin->name,
+            'SP6123' => $product->manufacturer?->name,
+            'SP6124' => $product->category->name,
         ]);
     }
 }

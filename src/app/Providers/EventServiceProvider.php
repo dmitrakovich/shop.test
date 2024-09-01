@@ -95,9 +95,9 @@ class EventServiceProvider extends ServiceProvider
         Products\ProductCreated::class => [
             OneC\UpdateProduct::class,
         ],
-        // Products\ProductUpdated::class => [
-        //     OneC\UpdateProduct::class,
-        // ],
+        Products\ProductUpdated::class => [
+            OneC\UpdateProduct::class,
+        ],
     ];
 
     /**

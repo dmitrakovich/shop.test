@@ -35,7 +35,7 @@ class FillPhotoAndUrlInOneCProducts extends Command
         $productUpdater = new UpdateProduct();
 
         $productsQuery
-            ->with(['category', 'productFromOneC', 'media'])
+            ->with(['category', 'productFromOneC', 'media', 'countryOfOrigin', 'manufacturer'])
             ->select(['id', 'one_c_id', 'slug', 'category_id'])
             ->chunk(200, function (Collection $chunk) use ($bar, $productUpdater) {
                 $chunk->each(function (Product $product) use ($bar, $productUpdater) {

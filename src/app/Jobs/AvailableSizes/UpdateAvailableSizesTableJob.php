@@ -32,24 +32,24 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     protected string $availableSizesTable = 'available_sizes';
 
     /**
-     * Current product identificators
+     * Current product identifiers
      */
     protected array $productIds = [];
 
     /**
-     * Current brand identificators
+     * Current brand identifiers
      */
     protected array $brandIds = [];
 
     /**
-     * Current stock identificators
+     * Current stock identifiers
      */
     protected array $stockIds = [];
 
     /**
-     * Current catagory identificators
+     * Current category identifiers
      */
-    protected array $catagoryIds = [];
+    protected array $categoryIds = [];
 
     /**
      * List of english symbols for convert wrong sku
@@ -198,7 +198,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
      */
     protected function setCurrentCategoryIds(): void
     {
-        $this->catagoryIds = Category::query()
+        $this->categoryIds = Category::query()
             ->whereNotNull('one_c_name')
             ->pluck('id', 'one_c_name')
             ->toArray();
@@ -297,7 +297,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
      */
     protected function getCurrentCategoryId(string $categoryName): ?int
     {
-        return $this->catagoryIds[$categoryName] ?? null;
+        return $this->categoryIds[$categoryName] ?? null;
     }
 
     /**
