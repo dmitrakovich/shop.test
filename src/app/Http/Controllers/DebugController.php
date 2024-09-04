@@ -8,6 +8,7 @@ use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Services\Order\OrderItemInventoryService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 
@@ -15,6 +16,10 @@ class DebugController extends Controller
 {
     public function index()
     {
+        Mail::raw('test email sending', function ($message) {
+            $message->to('dmitrakovich.andrey@yandex.by');
+        });
+
         // (new OrderItemInventoryService)->outOfStock(1426);
 
         // (new UpdateOfflineOrdersJob)->notify(OfflineOrder::query()->find(26167));
