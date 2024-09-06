@@ -16,9 +16,9 @@ class DebugController extends Controller
 {
     public function index()
     {
-        Mail::raw('test email sending', function ($message) {
-            $message->to('dmitrakovich.andrey@yandex.by');
-        });
+        // Mail::raw('test email sending', function ($message) {
+        //     $message->to('dmitrakovich.andrey@yandex.by');
+        // });
 
         // (new OrderItemInventoryService)->outOfStock(1426);
 

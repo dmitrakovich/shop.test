@@ -59,7 +59,7 @@ class EventServiceProvider extends ServiceProvider
             FacebookPixel\SendAddToCartEvent::class,
         ],
         OrderCreated::class => [
-            // SendOrderInformationNotification::class,
+            SendOrderInformationNotification::class,
             SaveDevice::class,
             UpdateUserGroup::class,
             ResetUserCache::class,
