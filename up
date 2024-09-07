@@ -5,19 +5,23 @@ cd ./src/
 chmod -R 777 storage
 chmod -R 777 bootstrap/cache
 
+if ! [ -f ".env" ]; then
+    cp .env.example .env
+fi
+
 if ! [ -d "vendor" ]; then
     docker run --rm \
         -u "$(id -u):$(id -g)" \
         -v "$(pwd):/var/www/html" \
         -w /var/www/html \
-        laravelsail/php81-composer:latest \
+        laravelsail/php83-composer:latest \
         composer install --ignore-platform-reqs --no-cache
 fi
 
 # Path to the shell configuration file (replace with your path if necessary)
 CONFIG_FILE="$HOME/.bashrc"
 # Alias command to be added
-ALIAS_COMMAND="alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'"
+ALIAS_COMMAND="alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'"
 # Check if the alias already exists in the configuration file
 if ! grep -Fq "$ALIAS_COMMAND" "$CONFIG_FILE"; then
     # If not, add it to the end of the file
@@ -30,20 +34,21 @@ else
     echo "Alias already exists in $CONFIG_FILE"
 fi
 
+# ?
+# sail down -v
+# sail build --no-cache
+# sail artisan sail:install
 sail up -d
 
-if ! [ -f ".env" ]; then
-    cp .env.example .env
-fi
-
-if ! [ -d "node_modules" ]; then
-    sail npm install --no-optional
-    sail npm run dev
-fi
-
+sail artisan key:generate
 sail artisan migrate
 sail artisan job:dispatch SxGeoUpdateJob
 sail artisan storage:link
 sail artisan cache:clear
 sail artisan config:clear
 sail artisan route:clear
+
+if ! [ -d "node_modules" ]; then
+    sail npm install --no-optional
+    sail npm run dev
+fi

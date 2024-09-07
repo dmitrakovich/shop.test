@@ -2,6 +2,7 @@
 
 namespace App\Jobs\AvailableSizes;
 
+use App\Events\Products\ProductUpdated;
 use App\Models\AvailableSizes;
 use App\Models\Product;
 use App\Models\Size;
@@ -61,6 +62,8 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      */
     public function updateProductsOneCIdFromAvailableSizes(): void
     {
+        $timestamp = now()->startOfMinute();
+
         DB::update(<<<'SQL'
             UPDATE products p
             SET p.one_c_id = (
@@ -68,9 +71,15 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
                 FROM available_sizes asz
                 WHERE asz.product_id = p.id
                 LIMIT 1
-            )
-            WHERE p.one_c_id IS NULL;
-        SQL);
+            ), p.updated_at = ?
+            WHERE p.one_c_id IS NULL AND p.deleted_at IS NULL;
+        SQL, [$timestamp]);
+
+        Product::query()
+            ->with(['category', 'productFromOneC', 'media', 'countryOfOrigin', 'manufacturer'])
+            ->where('updated_at', $timestamp)
+            ->whereNotNull('one_c_id')
+            ->each(fn (Product $product) => event(new ProductUpdated($product)));
     }
 
     /**
