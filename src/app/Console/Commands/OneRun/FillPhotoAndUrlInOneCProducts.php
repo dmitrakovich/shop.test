@@ -31,20 +31,19 @@ class FillPhotoAndUrlInOneCProducts extends Command
     {
         $productsQuery = Product::withTrashed()->whereNotNull('one_c_id');
 
-        $bar = $this->output->createProgressBar($productsQuery->count());
+        $this->output->progressStart($productsQuery->count());
         $productUpdater = new UpdateProduct();
 
         $productsQuery
             ->with(['category', 'productFromOneC', 'media', 'manufacturer', 'countryOfOrigin'])
             ->select(['id', 'one_c_id', 'slug', 'category_id', 'manufacturer_id', 'country_of_origin_id'])
-            ->chunk(200, function (Collection $chunk) use ($bar, $productUpdater) {
-                $chunk->each(function (Product $product) use ($bar, $productUpdater) {
+            ->chunk(200, function (Collection $chunk) use ($productUpdater) {
+                $chunk->each(function (Product $product) use ($productUpdater) {
                     $productUpdater->handle(new ProductUpdated($product));
-                    $bar->advance();
+                    $this->output->progressAdvance();
                 });
             });
 
-        $bar->finish();
-        $this->output->newLine();
+        $productsQuery->count();
     }
 }

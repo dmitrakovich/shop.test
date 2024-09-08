@@ -24,7 +24,7 @@ use App\Listeners\SendOrderInformationNotification;
 use App\Listeners\SyncOrderHistory;
 use App\Listeners\UpdateInventory;
 use App\Listeners\UpdateOrderItemsStatus;
-use App\Listeners\User\UpdateUserGroup;
+use App\Listeners\User\UpdateUserAfterOrder;
 use App\Observers;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -61,7 +61,7 @@ class EventServiceProvider extends ServiceProvider
         OrderCreated::class => [
             SendOrderInformationNotification::class,
             SaveDevice::class,
-            UpdateUserGroup::class,
+            UpdateUserAfterOrder::class,
             ResetUserCache::class,
             CreateInstallment::class,
             DistributeOrder::class,

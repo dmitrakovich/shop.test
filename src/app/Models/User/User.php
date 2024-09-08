@@ -32,6 +32,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property string|null $patronymic_name
  * @property string $phone
  * @property \Illuminate\Support\Carbon|null $birth_date
+ * @property bool $has_online_orders
  * @property \Illuminate\Support\Carbon|null $phone_verified_at
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string|null $remember_token
@@ -72,6 +73,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'email',
         'birth_date',
+        'has_online_orders',
         'created_at',
     ];
 
