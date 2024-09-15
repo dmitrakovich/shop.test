@@ -3,9 +3,8 @@
 namespace App\Listeners\FacebookPixel;
 
 use App\Events\Analytics\Registered;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendCompleteRegistrationEvent extends AbstractFacebookPixelListener implements ShouldQueue
+class SendCompleteRegistrationEvent extends AbstractFacebookPixelListener
 {
     /**
      * Handle the event.
