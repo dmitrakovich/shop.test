@@ -151,29 +151,27 @@ class UserResource extends Resource
 
     public static function table(Table $table): Table
     {
-        $table->modifyQueryUsing(
-            fn (Builder $query) => $query->with(['orders.data'])->orderBy('id', 'desc')
-        );
-
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('first_name')
-                    ->label('Имя')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('last_name')
-                    ->label('Фамилия')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('patronymic_name')
-                    ->label('Отчество'),
+                Tables\Columns\TextColumn::make('full_name')
+                    ->label('ФИО')
+                    ->getStateUsing(fn (User $user) => $user->getFullName())
+                    ->searchable(query: function (Builder $query, $search) {
+                        $nameColumns = ['first_name', 'last_name', 'patronymic_name'];
+                        $query->whereAny($nameColumns, 'like', "%$search%");
+                    }),
+                Tables\Columns\IconColumn::make('has_online_orders')
+                    ->label('Онлайн заказы')
+                    ->boolean()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('email')
                     ->label('E-mail'),
                 Tables\Columns\TextColumn::make('phone')
                     ->label('Телефон'),
                 Tables\Columns\TextColumn::make('orders')
                     ->label('Сумма покупок')
-                    ->getStateUsing(function (User $user) {
-                        return $user->completedOrdersCost() . ' руб.';
-                    }),
+                    ->getStateUsing(fn (User $user) => $user->completedOrdersCost())
+                    ->suffix(' руб.'),
                 Tables\Columns\TextColumn::make('group.name')
                     ->label('Группа'),
                 Tables\Columns\TextColumn::make('reviews_count')
@@ -185,10 +183,19 @@ class UserResource extends Resource
                     ->label('Дата регистрации')
                     ->dateTime('d.m.Y H:i:s'),
             ])
+            ->defaultSort('id', 'desc')
+            ->modifyQueryUsing(
+                fn (Builder $query) => $query->with(['orders.data'])
+            )
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->filters([
+                Tables\Filters\TernaryFilter::make('has_online_orders')
+                    ->label('Наличие онлайн заказов')
+                    ->placeholder('Все способы заказов')
+                    ->trueLabel('Только онлайн заказы')
+                    ->falseLabel('Только оффлайн заказы'),
                 QueryBuilder::make()
                     ->constraints([
                         TextConstraint::make('first_name')->label('Имя'),
@@ -203,7 +210,7 @@ class UserResource extends Resource
                         TextConstraint::make('addresses.address')->label('Адрес'),
                     ]),
             ], layout: FiltersLayout::AboveContentCollapsible)
-            ->deferFilters()
+            // ->deferFilters()
             ->defaultPaginationPageOption(50);
     }
 
