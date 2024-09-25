@@ -16,7 +16,7 @@
         "@sentry/webpack-plugin": "^2.10.3",
         "axios": "^1.7.4",
         "blade-formatter": "^1.31.0",
-        "bootstrap": "^4.6.1",
+        "bootstrap": "^5.0.0",
         "cross-env": "^7.0",
         "eslint": "^8.46.0",
         "eslint-config-standard": "^17.1.0",
