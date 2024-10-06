@@ -49,6 +49,7 @@ return [
 
     // Ignore models by FQCN
     'ignore' => [
+        \App\Models\OneC\DiscountCard::class,
         \App\Models\OneC\OfflineOrder::class,
         \App\Models\OneC\Product::class,
     ],

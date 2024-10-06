@@ -6,6 +6,8 @@ use App\Models\Cart;
 use App\Models\Country;
 use App\Models\Feedback;
 use App\Models\Logs\SmsLog;
+use App\Models\OneC;
+use App\Models\Orders\OfflineOrder;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -46,6 +48,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read \App\Models\User\UserPassport|null $passport
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Address[] $addresses
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OfflineOrder[] $offlineOrders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feedback[] $reviews
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
  * @property-read \App\Models\User\UserBlacklist|null $blacklist
@@ -232,6 +235,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * User's offline orders
+     */
+    public function offlineOrders(): HasMany
+    {
+        return $this->hasMany(OfflineOrder::class);
+    }
+
+    /**
      * User's reviews
      */
     public function reviews(): HasMany
@@ -283,6 +294,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function usedPromocodes(): HasMany
     {
         return $this->hasMany(UserPromocode::class);
+    }
+
+    /**
+     * Get the user discount card from 1C associated with the user.
+     *
+     * Problem with excess spaces
+     */
+    public function discountCard(): BelongsTo
+    {
+        return $this->belongsTo(OneC\DiscountCard::class, 'discount_card_number', 'ID');
     }
 
     /**
