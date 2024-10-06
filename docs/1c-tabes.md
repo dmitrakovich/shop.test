@@ -22,7 +22,7 @@
 | F=ID        | ID object           | C    | 9       | 0         |
 | F=CODE      | object code         | C    | 24      | 0         |
 | F=DESCR     | object description  | C    | 100     | 0         |
-| F=ISMARK    | Flag Object is Marke| C    | 1       | 0         |
+| F=ISMARK    | Flag is Market      | C    | 1       | 0         |
 | F=VERSTAMP  | Version stamp       | C    | 6       | 0         |
 | F=SP5896    | (P)Артикул          | C    | 30      | 0         |
 | F=SP5897    | (P)Товар            | C    | 9       | 0         |
@@ -59,7 +59,7 @@
 | F=ID        | ID object            | C    | 9      | 0          |
 | F=CODE      | object code          | C    | 12     | 0          |
 | F=DESCR     | ФИО пользователя     | C    | 50     | 0          |
-| F=ISMARK    | Flag Object is Marke | C    | 1      | 0          |
+| F=ISMARK    | Flag is Market       | C    | 1      | 0          |
 | F=VERSTAMP  | Version stamp        | C    | 6      | 0          |
 | F=SP6089    | (P)ДисконтнаяКарта   | C    | 9      | 0          |
 | F=SP6090    | (P)КодДК             | C    | 13     | 0          |
@@ -79,3 +79,7 @@
 | F=SP6108    | (P)ДатаВозврата      | D    | 8      | 0          |
 | F=SP6109    | (P)ВремяВозврата     | C    | 8      | 0          |
 | F=SP6110    | (P)НомерВозврата     | C    | 10     | 0          |
+| F=SP6126    | (P)ФИО               | C    | 99     | 0          |
+| F=SP6129    | (P)Фамилия           | C    | 32     | 0          |
+| F=SP6130    | (P)Имя               | C    | 32     | 0          |
+| F=SP6131    | (P)Отчество          | C    | 32     | 0          |

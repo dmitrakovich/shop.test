@@ -36,6 +36,10 @@ use libphonenumber\PhoneNumberUtil;
  * @property string $SP6108 ДатаВозврата
  * @property string $SP6109 ВремяВозврата
  * @property string $SP6110 НомерВозврата
+ * @property string $SP6126 ФИО
+ * @property string $SP6129 Фамилия
+ * @property string $SP6130 Имя
+ * @property string $SP6131 Отчество
  *
  * @property-read Stock|null $stock
  * @property-read Product|null $product

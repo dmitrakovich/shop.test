@@ -147,7 +147,9 @@ class UpdateOfflineOrdersJob extends AbstractJob
             ->firstOrCreate([], [
                 'phone' => $phone,
                 'discount_card_number' => $order->SP6089,
-                'first_name' => $order->DESCR,
+                'first_name' => $order->SP6130,
+                'last_name' => $order->SP6129,
+                'patronymic_name' => $order->SP6131,
             ]);
 
         if (!$user->wasRecentlyCreated) {
