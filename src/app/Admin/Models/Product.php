@@ -40,6 +40,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property mixed $photos
  *
  * @property-read \App\Models\Category|null $category
+ * @property-read \App\Models\Collection|null $collection
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Size[] $sizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Color[] $colors
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Fabric[] $fabrics

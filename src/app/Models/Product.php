@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Product\ProductLabels;
 use App\Facades\Currency;
+use App\Models\Collection as ProductCollection;
 use App\Models\OneC\Product as ProductFromOneC;
 use App\Services\SearchService;
 use App\Traits\ProductSales;
@@ -49,6 +50,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int|null $country_of_origin_id
  *
  * @property-read \App\Models\Category|null $category
+ * @property-read \App\Models\Collection|null $collection
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Size[] $sizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Color[] $colors
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Fabric[] $fabrics
@@ -114,7 +116,7 @@ class Product extends Model implements HasMedia
      */
     public function collection(): Relations\BelongsTo
     {
-        return $this->belongsTo(Collection::class);
+        return $this->belongsTo(ProductCollection::class);
     }
 
     /**
