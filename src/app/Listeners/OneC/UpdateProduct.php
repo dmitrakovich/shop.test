@@ -32,6 +32,7 @@ class UpdateProduct
             'SP6122' => $product->countryOfOrigin?->name,
             'SP6123' => $product->manufacturer?->name,
             'SP6124' => $product->category->name,
+            'SP6125' => $product->collection->name,
         ], fn ($value) => !is_null($value)));
     }
 }
