@@ -27,6 +27,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class UserResource extends Resource
 {
@@ -178,7 +179,14 @@ class UserResource extends Resource
                     ->label('Кол-во отзывов')
                     ->counts('reviews'),
                 Tables\Columns\TextColumn::make('lastAddress.address')
-                    ->label('Адрес'),
+                    ->label('Адрес')
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+                Tables\Columns\TextColumn::make('birth_date')
+                    ->label('День рождения')
+                    ->dateTime('j F')
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Дата регистрации')
                     ->dateTime('d.m.Y H:i:s'),
@@ -196,6 +204,69 @@ class UserResource extends Resource
                     ->placeholder('Все способы заказов')
                     ->trueLabel('Только онлайн заказы')
                     ->falseLabel('Только оффлайн заказы'),
+                Tables\Filters\Filter::make('order_date')
+                    ->form([
+                        DatePicker::make('ordered_from')
+                            ->label('Совершали покупки с:')
+                            ->native(false)
+                            ->closeOnDateSelection(),
+                        DatePicker::make('ordered_until')
+                            ->label('Совершали покупки по:')
+                            ->native(false)
+                            ->closeOnDateSelection(),
+                    ])
+                    ->columns()
+                    ->columnSpan(2)
+                    ->query(function (Builder $query, array $data) {
+                        if (!$data['ordered_from'] && !$data['ordered_until']) {
+                            return;
+                        }
+                        $query->whereHas('orders', function (Builder $query) use ($data) {
+                            if ($data['ordered_from']) {
+                                $query->whereDate('created_at', '>=', $data['ordered_from']);
+                            }
+                            if ($data['ordered_until']) {
+                                $query->whereDate('created_at', '<=', $data['ordered_until']);
+                            }
+                        });
+                    }),
+                Tables\Filters\Filter::make('birth_date')
+                    ->form([
+                        DatePicker::make('birth_date_from')
+                            ->label('День рождения с:')
+                            ->native(false)
+                            ->closeOnDateSelection(),
+                        DatePicker::make('birth_date_until')
+                            ->label('День рождения по:')
+                            ->native(false)
+                            ->closeOnDateSelection(),
+                    ])
+                    ->columns()
+                    ->columnSpan(2)
+                    ->query(function (Builder $query, array $data) {
+                        if ($data['birth_date_from']) {
+                            $from = Carbon::parse($data['birth_date_from']);
+                            $query->where(function (Builder $query) use ($from) {
+                                $query->where(function (Builder $query) use ($from) {
+                                    $query->whereMonth('birth_date', '>=', $from->month)
+                                        ->whereDay('birth_date', '>=', $from->day);
+                                })->orWhere(function (Builder $query) use ($from) {
+                                    $query->whereMonth('birth_date', '>', $from->month);
+                                });
+                            });
+                        }
+                        if ($data['birth_date_until']) {
+                            $until = Carbon::parse($data['birth_date_until']);
+                            $query->where(function (Builder $query) use ($until) {
+                                $query->where(function (Builder $query) use ($until) {
+                                    $query->whereMonth('birth_date', '<=', $until->month)
+                                        ->whereDay('birth_date', '<=', $until->day);
+                                })->orWhere(function (Builder $query) use ($until) {
+                                    $query->whereMonth('birth_date', '<', $until->month);
+                                });
+                            });
+                        }
+                    }),
                 QueryBuilder::make()
                     ->constraints([
                         TextConstraint::make('first_name')->label('Имя'),
