@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class UsersToSmsTrafficExport implements FromQuery, WithHeadings, WithColumnFormatting, WithMapping, ShouldAutoSize, Responsable
+class UsersToSmsTrafficExport implements FromQuery, Responsable, ShouldAutoSize, WithColumnFormatting, WithHeadings, WithMapping
 {
     use Exportable;
 
@@ -44,7 +44,7 @@ class UsersToSmsTrafficExport implements FromQuery, WithHeadings, WithColumnForm
     }
 
     /**
-     * @param \App\Models\User\User $user
+     * @param  \App\Models\User\User  $user
      */
     public function map($user): array
     {
