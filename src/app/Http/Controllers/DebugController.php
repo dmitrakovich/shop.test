@@ -18,7 +18,6 @@ class DebugController extends Controller
     public function index(InstagramService $instagramService)
     {
 
-
         dd(
             $instagramService->getPosts()
         );
