@@ -4,9 +4,8 @@ namespace App\Listeners\FacebookPixel;
 
 use App\Events\Analytics\AddToCart;
 use FacebookAds\Object\ServerSide\CustomData;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendAddToCartEvent extends AbstractFacebookPixelListener implements ShouldQueue
+class SendAddToCartEvent extends AbstractFacebookPixelListener
 {
     /**
      * Handle the event.

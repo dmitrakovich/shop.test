@@ -5,6 +5,7 @@ namespace App\Listeners\FacebookPixel;
 use App\Events\Analytics\AbstractAnalyticEvent;
 use App\Services\Api\Facebook\ConversionsApiService;
 use FacebookAds\Object\ServerSide\Event;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
  * Class AbstractFacebookPixelListener
@@ -12,8 +13,15 @@ use FacebookAds\Object\ServerSide\Event;
  * This abstract class provides a foundation for Facebook Pixel listeners with common functionality,
  * such as creating the event listener and generating Facebook Pixel events.
  */
-abstract class AbstractFacebookPixelListener
+abstract class AbstractFacebookPixelListener implements ShouldQueue
 {
+    /**
+     * The name of the queue the job should be sent to.
+     *
+     * @var string|null
+     */
+    public $queue = 'pixel';
+
     /**
      * Generate a Facebook Pixel event based on the provided analytic event.
      */

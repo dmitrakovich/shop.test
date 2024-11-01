@@ -23,9 +23,9 @@ class IndexController extends Controller
 
         return view('index', [
             'imidjSlider' => $sliderService->getImidj(),
-            'instagramPosts' => array_slice($instagramService->getCachedPosts(), 0, 6),
+            'instagramPosts' => [], // array_slice($instagramService->getCachedPosts(), 0, 6),
             'instagramTitle' => $instagramService->getTitle(),
-            'linksBlocks' => IndexLink::get(['id', 'title', 'links']),
+            'linksBlocks' => IndexLink::query()->get(['id', 'title', 'links']),
             'simpleSliders' => $sliderService->getSimple(),
         ]);
     }

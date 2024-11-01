@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $label_text
  * @property \Illuminate\Support\Carbon $start_datetime
  * @property \Illuminate\Support\Carbon $end_datetime
- * @property string|null $sale_percentage discounts amount in percentage
- * @property float|null $sale_fix fixed discount amount
  * @property \App\Enums\Promo\SaleAlgorithm $algorithm
+ * @property string|null $sale_percentage discounts amount in percentage
+ * @property int|null $sale_fix fixed discount amount
  * @property array|null $categories
  * @property array|null $collections
  * @property array|null $styles

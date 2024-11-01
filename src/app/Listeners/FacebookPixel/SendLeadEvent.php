@@ -3,9 +3,8 @@
 namespace App\Listeners\FacebookPixel;
 
 use App\Events\Analytics\SocialSubscription;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendLeadEvent extends AbstractFacebookPixelListener implements ShouldQueue
+class SendLeadEvent extends AbstractFacebookPixelListener
 {
     /**
      * Handle the event.

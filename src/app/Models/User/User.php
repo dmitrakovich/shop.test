@@ -6,6 +6,8 @@ use App\Models\Cart;
 use App\Models\Country;
 use App\Models\Feedback;
 use App\Models\Logs\SmsLog;
+use App\Models\OneC;
+use App\Models\Orders\OfflineOrder;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -32,6 +34,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property string|null $patronymic_name
  * @property string $phone
  * @property \Illuminate\Support\Carbon|null $birth_date
+ * @property bool $has_online_orders
  * @property \Illuminate\Support\Carbon|null $phone_verified_at
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string|null $remember_token
@@ -45,6 +48,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read \App\Models\User\UserPassport|null $passport
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Address[] $addresses
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OfflineOrder[] $offlineOrders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feedback[] $reviews
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
  * @property-read \App\Models\User\UserBlacklist|null $blacklist
@@ -72,6 +76,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'email',
         'birth_date',
+        'has_online_orders',
         'created_at',
     ];
 
@@ -203,10 +208,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Get the user's full name.
-     *
-     * @return string
      */
-    public function getFullName()
+    public function getFullName(): string
     {
         return trim("{$this->last_name} {$this->first_name} {$this->patronymic_name}");
     }
@@ -229,6 +232,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * User's offline orders
+     */
+    public function offlineOrders(): HasMany
+    {
+        return $this->hasMany(OfflineOrder::class);
     }
 
     /**
@@ -283,6 +294,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function usedPromocodes(): HasMany
     {
         return $this->hasMany(UserPromocode::class);
+    }
+
+    /**
+     * Get the user discount card from 1C associated with the user.
+     *
+     * Problem with excess spaces
+     */
+    public function discountCard(): BelongsTo
+    {
+        return $this->belongsTo(OneC\DiscountCard::class, 'discount_card_number', 'ID');
     }
 
     /**

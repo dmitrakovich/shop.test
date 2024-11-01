@@ -4,9 +4,8 @@ namespace App\Listeners\FacebookPixel;
 
 use App\Events\Analytics\ProductView;
 use FacebookAds\Object\ServerSide\CustomData;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendProductViewEvent extends AbstractFacebookPixelListener implements ShouldQueue
+class SendProductViewEvent extends AbstractFacebookPixelListener
 {
     /**
      * Handle the event.

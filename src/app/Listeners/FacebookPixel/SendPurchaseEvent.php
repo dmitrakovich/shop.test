@@ -6,9 +6,8 @@ use App\Events\Analytics\OfflinePurchase;
 use App\Events\Analytics\Purchase;
 use App\Facades\Currency;
 use FacebookAds\Object\ServerSide\CustomData;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendPurchaseEvent extends AbstractFacebookPixelListener implements ShouldQueue
+class SendPurchaseEvent extends AbstractFacebookPixelListener
 {
     /**
      * Handle the event.

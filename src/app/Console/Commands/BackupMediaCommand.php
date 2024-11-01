@@ -85,15 +85,17 @@ class BackupMediaCommand extends BackupCommand
                 storage_path('app/media/products/3/38'),
                 storage_path('app/media/products/3/39'),
             ],
-            'products-4_0-4' => [
+            'products-4_0-2' => [
                 storage_path('app/media/products/4/40'),
                 storage_path('app/media/products/4/41'),
                 storage_path('app/media/products/4/42'),
+            ],
+            'products-4_3-5' => [
                 storage_path('app/media/products/4/43'),
                 storage_path('app/media/products/4/44'),
-            ],
-            'products-4_5-9' => [
                 storage_path('app/media/products/4/45'),
+            ],
+            'products-4_6-9' => [
                 storage_path('app/media/products/4/46'),
                 storage_path('app/media/products/4/47'),
                 storage_path('app/media/products/4/48'),

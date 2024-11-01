@@ -6,6 +6,7 @@ use App\Jobs\OneC\UpdateOfflineOrdersJob;
 use App\Models\Orders\OfflineOrder;
 use App\Models\Orders\Order;
 use App\Models\User\User;
+use App\Services\InstagramService;
 use App\Services\Order\OrderItemInventoryService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
@@ -14,8 +15,13 @@ use libphonenumber\PhoneNumberUtil;
 
 class DebugController extends Controller
 {
-    public function index()
+    public function index(InstagramService $instagramService)
     {
+
+        dd(
+            $instagramService->getPosts()
+        );
+
         // Mail::raw('test email sending', function ($message) {
         //     $message->to('dmitrakovich.andrey@yandex.by');
         // });
