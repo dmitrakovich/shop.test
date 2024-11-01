@@ -374,6 +374,12 @@ class OrderController extends AbstractAdminController
         }
 
         $form->submitted(function (Form $form) {
+            $orderTrack = request()->input('track');
+            $orderTrackNumber = $orderTrack['track_number'] ?? null;
+            $orderTrackLink = $orderTrack['track_link'] ?? null;
+            if (!$orderTrackNumber && !$orderTrackLink) {
+                $form->ignore('track');
+            }
             $orderItems = array_filter(request()->input('itemsExtended') ?? [], fn (array $item) => !$item['_remove_']);
             if (empty($orderItems) && request()->pjax()) {
                 return $this->emptyItemsError();
