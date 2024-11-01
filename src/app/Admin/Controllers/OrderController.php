@@ -377,7 +377,7 @@ class OrderController extends AbstractAdminController
             $orderTrack = request()->input('track');
             $orderTrackNumber = $orderTrack['track_number'] ?? null;
             $orderTrackLink = $orderTrack['track_link'] ?? null;
-            if(!$orderTrackNumber && !$orderTrackLink) {
+            if (!$orderTrackNumber && !$orderTrackLink) {
                 $form->ignore('track');
             }
             $orderItems = array_filter(request()->input('itemsExtended') ?? [], fn (array $item) => !$item['_remove_']);
