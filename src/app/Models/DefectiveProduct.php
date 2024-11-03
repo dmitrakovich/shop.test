@@ -37,8 +37,6 @@ class DefectiveProduct extends Model
 
     /**
      * Get the product size associated with the defective product.
-     *
-     * @return BelongsTo
      */
     public function size(): BelongsTo
     {
