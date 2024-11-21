@@ -7,6 +7,7 @@ use App\Models\Orders\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 /**
  * @property int $id
@@ -69,7 +70,7 @@ class Installment extends Model
     /**
      * Get the installment's order.
      */
-    public function order()
+    public function order(): HasOneThrough
     {
         return $this->hasOneThrough(
             Order::class,
