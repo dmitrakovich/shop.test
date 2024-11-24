@@ -17,11 +17,6 @@ abstract class AbstractAdminController extends AdminController
      */
     protected $input;
 
-    public function __construct()
-    {
-        date_default_timezone_set('UTC');
-    }
-
     /**
      * Make a show builder.
      *
@@ -52,7 +47,9 @@ abstract class AbstractAdminController extends AdminController
             return null;
         }
 
-        return Carbon::parse($date)->format('d.m.Y');
+        return Carbon::parse($date)
+            ->setTimezone(config('app.timezone'))
+            ->format('d.m.Y');
     }
 
     /**
@@ -64,6 +61,8 @@ abstract class AbstractAdminController extends AdminController
             return null;
         }
 
-        return Carbon::parse($datetime)->format('d.m.Y H:i:s');
+        return Carbon::parse($datetime)
+            ->setTimezone(config('app.timezone'))
+            ->format('d.m.Y H:i:s');
     }
 }

@@ -80,7 +80,7 @@ class LogService
             $data['created_at'] = $now;
         }
 
-        Logs\InventoryLog::insert($logData);
+        Logs\InventoryLog::query()->insert($logData);
     }
 
     /**

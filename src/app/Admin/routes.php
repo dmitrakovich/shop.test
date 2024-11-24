@@ -149,7 +149,6 @@ Route::group([
     $router->group(['prefix' => 'logs', 'namespace' => 'Logs', 'as' => 'logs.'], function (Router $router) {
         $router->resource('sms', SmsController::class);
         $router->resource('inventory', InventoryController::class);
-        $router->resource('order-actions', OrderActionController::class);
         $router->resource('order-item-statuses', OrderItemStatusController::class);
     });
 

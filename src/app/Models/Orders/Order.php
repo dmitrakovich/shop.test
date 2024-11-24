@@ -137,6 +137,17 @@ class Order extends Model
     ];
 
     /**
+     * The model's attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'delivery_cost' => 0.0,
+        'delivery_price' => 0.0,
+        'weight' => 0.0,
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
