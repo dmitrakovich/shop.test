@@ -35,7 +35,7 @@ return new class extends Migration
         DB::table('users')
             ->whereNotNull('discount_card_number')
             ->update([
-                'discount_card_number' => DB::raw("TRIM(discount_card_number)"),
+                'discount_card_number' => DB::raw('TRIM(discount_card_number)'),
             ]);
     }
 };
