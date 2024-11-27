@@ -140,20 +140,21 @@ class UpdateOfflineOrdersJob extends AbstractJob
         if (!$phone) {
             return null;
         }
+        $discountCardNumber = $order->getDiscountCardNumber();
         /** @var User $user */
         $user = User::query()
             ->where('phone', $phone)
-            ->orWhere('discount_card_number', $order->SP6089)
+            ->orWhere('discount_card_number', $discountCardNumber)
             ->firstOrCreate([], [
                 'phone' => $phone,
-                'discount_card_number' => $order->SP6089,
+                'discount_card_number' => $discountCardNumber,
                 'first_name' => $order->SP6130,
                 'last_name' => $order->SP6129,
                 'patronymic_name' => $order->SP6131,
             ]);
 
         if (!$user->wasRecentlyCreated) {
-            $user->update(['discount_card_number' => $order->SP6089]);
+            $user->update(['discount_card_number' => $discountCardNumber]);
         }
 
         return $user;

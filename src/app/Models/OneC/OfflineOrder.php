@@ -170,4 +170,12 @@ class OfflineOrder extends AbstractOneCModel
     {
         return $this->SP6096 === self::ONLINE_STOCK_ID;
     }
+
+    /**
+     * Get the discount card number, padded with spaces on the left to 9 characters.
+     */
+    public function getDiscountCardNumber() : string
+    {
+        return str_pad($this->SP6089, 9, ' ', STR_PAD_LEFT);
+    }
 }
