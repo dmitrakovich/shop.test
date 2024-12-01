@@ -53,4 +53,9 @@ class DiscountCard extends AbstractOneCModel
     protected $casts = [
         'SP3970' => 'date',
     ];
+
+    /**
+     * Array of fields that should not be trimmed during hydration
+     */
+    public array $doNotHydrate = ['ID'];
 }
