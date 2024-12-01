@@ -44,6 +44,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read Stock|null $stock
  * @property-read Product|null $product
  * @property-read Size|null $size
+ * @property-read DiscountCard|null $discountCard
  */
 class OfflineOrder extends AbstractOneCModel
 {
@@ -72,6 +73,11 @@ class OfflineOrder extends AbstractOneCModel
         'SP6100' => 'integer',
         'SP6101' => 'float',
     ];
+
+    /**
+     * Array of fields that should not be trimmed during hydration
+     */
+    public array $doNotHydrate = ['SP6089'];
 
     /**
      * Check if the order is a return.
@@ -111,6 +117,14 @@ class OfflineOrder extends AbstractOneCModel
     public function size(): BelongsTo
     {
         return $this->belongsTo(Size::class, 'SP6100', 'name');
+    }
+
+    /**
+     * Get the user discount card from 1C associated with the order.
+     */
+    public function discountCard(): BelongsTo
+    {
+        return $this->belongsTo(DiscountCard::class, 'SP6089', 'ID');
     }
 
     /**
@@ -169,13 +183,5 @@ class OfflineOrder extends AbstractOneCModel
     public function isOnline(): bool
     {
         return $this->SP6096 === self::ONLINE_STOCK_ID;
-    }
-
-    /**
-     * Get the discount card number, padded with spaces on the left to 9 characters.
-     */
-    public function getDiscountCardNumber(): string
-    {
-        return str_pad($this->SP6089, 9, ' ', STR_PAD_LEFT);
     }
 }

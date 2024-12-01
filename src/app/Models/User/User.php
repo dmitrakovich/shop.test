@@ -298,8 +298,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Get the user discount card from 1C associated with the user.
-     *
-     * Problem with excess spaces
      */
     public function discountCard(): BelongsTo
     {

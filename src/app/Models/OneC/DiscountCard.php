@@ -44,4 +44,13 @@ class DiscountCard extends AbstractOneCModel
      * @var array<int, string>
      */
     protected $fillable = [];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'SP3970' => 'date',
+    ];
 }

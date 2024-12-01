@@ -109,7 +109,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
     private function getNewOrders(): Collection
     {
         return OfflineOrder1C::query()
-            ->with(['stock', 'product', 'size'])
+            ->with(['stock', 'product', 'size', 'discountCard'])
             ->where('CODE', '>', $this->getLatestCode())
             ->limit(self::NEW_ORDERS_LIMIT)
             ->orderBy('CODE')
@@ -140,21 +140,21 @@ class UpdateOfflineOrdersJob extends AbstractJob
         if (!$phone) {
             return null;
         }
-        $discountCardNumber = $order->getDiscountCardNumber();
         /** @var User $user */
         $user = User::query()
             ->where('phone', $phone)
-            ->orWhere('discount_card_number', $discountCardNumber)
+            ->orWhere('discount_card_number', $order->SP6089)
             ->firstOrCreate([], [
                 'phone' => $phone,
-                'discount_card_number' => $discountCardNumber,
+                'discount_card_number' => $order->SP6089,
                 'first_name' => $order->SP6130,
                 'last_name' => $order->SP6129,
                 'patronymic_name' => $order->SP6131,
+                'birth_date' => $order->discountCard?->SP3970,
             ]);
 
         if (!$user->wasRecentlyCreated) {
-            $user->update(['discount_card_number' => $discountCardNumber]);
+            $user->update(['discount_card_number' => $order->SP6089]);
         }
 
         return $user;

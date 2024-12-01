@@ -31,6 +31,11 @@ abstract class AbstractOneCModel extends Model
     public $timestamps = false;
 
     /**
+     * Array of fields that should not be trimmed during hydration
+     */
+    public array $doNotHydrate = [];
+
+    /**
      * Auto Trim Field From Database
      *
      * @return \Illuminate\Database\Eloquent\Collection
@@ -40,6 +45,9 @@ abstract class AbstractOneCModel extends Model
         return parent::hydrate(
             array_map(function ($object) {
                 foreach ($object as $k => $v) {
+                    if (in_array($k, $this->doNotHydrate)) {
+                        continue;
+                    }
                     if (is_string($v)) {
                         $object->$k = trim($v);
                     }
