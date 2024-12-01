@@ -66,8 +66,8 @@ class UpdateOfflineUsersData extends Command
     /**
      * Filter out values that already exist in the user model
      *
-     * @param User $user The user model to check against
-     * @param DiscountCard $discountCard The discount card model containing new values
+     * @param  User  $user  The user model to check against
+     * @param  DiscountCard  $discountCard  The discount card model containing new values
      * @return array Array of field/value pairs that don't exist in user model
      */
     private function filterExistingValues(User $user, DiscountCard $discountCard): array
