@@ -5,6 +5,7 @@ namespace App\Console\Commands\OneRun;
 use App\Models\OneC\DiscountCard;
 use App\Models\User\User;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class UpdateOfflineUsersData extends Command
@@ -31,8 +32,11 @@ class UpdateOfflineUsersData extends Command
         /** @var Collection|User[] */
         $users = User::query()
             ->has('offlineOrders')
-            ->whereNull('last_name')
-            ->get(['id', 'discount_card_number', 'first_name', 'last_name', 'patronymic_name']);
+            ->where(function (Builder $query) {
+                $query->orWhereNull('last_name')
+                    ->orWhereNull('birth_date');
+            })
+            ->get(['id', 'discount_card_number', 'first_name', 'last_name', 'patronymic_name', 'birth_date']);
 
         $this->output->progressStart($users->count());
 
