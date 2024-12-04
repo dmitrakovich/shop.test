@@ -166,7 +166,9 @@ class UserResource extends Resource
                     ->boolean()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('email')
-                    ->label('E-mail'),
+                    ->label('E-mail')
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 Tables\Columns\TextColumn::make('phone')
                     ->label('Телефон'),
                 Tables\Columns\TextColumn::make('orders')
@@ -206,17 +208,19 @@ class UserResource extends Resource
                     ->falseLabel('Только оффлайн заказы'),
                 Tables\Filters\Filter::make('order_date')
                     ->form([
-                        DatePicker::make('ordered_from')
-                            ->label('Совершали покупки с:')
-                            ->native(false)
-                            ->closeOnDateSelection(),
-                        DatePicker::make('ordered_until')
-                            ->label('Совершали покупки по:')
-                            ->native(false)
-                            ->closeOnDateSelection(),
+                        Fieldset::make()
+                            ->label('Совершали покупки')
+                            ->schema([
+                                DatePicker::make('ordered_from')
+                                    ->label('с:')
+                                    ->native(false)
+                                    ->closeOnDateSelection(),
+                                DatePicker::make('ordered_until')
+                                    ->label('по:')
+                                    ->native(false)
+                                    ->closeOnDateSelection(),
+                            ])
                     ])
-                    ->columns()
-                    ->columnSpan(2)
                     ->query(function (Builder $query, array $data) {
                         if (!$data['ordered_from'] && !$data['ordered_until']) {
                             return;
@@ -232,17 +236,19 @@ class UserResource extends Resource
                     }),
                 Tables\Filters\Filter::make('birth_date')
                     ->form([
-                        DatePicker::make('birth_date_from')
-                            ->label('День рождения с:')
-                            ->native(false)
-                            ->closeOnDateSelection(),
-                        DatePicker::make('birth_date_until')
-                            ->label('День рождения по:')
-                            ->native(false)
-                            ->closeOnDateSelection(),
+                        Fieldset::make()
+                            ->label('День рождения')
+                            ->schema([
+                                DatePicker::make('birth_date_from')
+                                    ->label('с:')
+                                    ->native(false)
+                                    ->closeOnDateSelection(),
+                                DatePicker::make('birth_date_until')
+                                    ->label('по:')
+                                    ->native(false)
+                                    ->closeOnDateSelection(),
+                            ])
                     ])
-                    ->columns()
-                    ->columnSpan(2)
                     ->query(function (Builder $query, array $data) {
                         if ($data['birth_date_from']) {
                             $from = Carbon::parse($data['birth_date_from']);
@@ -265,6 +271,29 @@ class UserResource extends Resource
                                     $query->whereMonth('birth_date', '<', $until->month);
                                 });
                             });
+                        }
+                    }),
+                Tables\Filters\Filter::make('register_date')
+                    ->form([
+                        Fieldset::make()
+                            ->label('Дата регистрации')
+                            ->schema([
+                                DatePicker::make('registered_from')
+                                    ->label('с:')
+                                    ->native(false)
+                                    ->closeOnDateSelection(),
+                                DatePicker::make('registered_until')
+                                    ->label('по:')
+                                    ->native(false)
+                                    ->closeOnDateSelection(),
+                            ])
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        if ($data['registered_from']) {
+                            $query->where('created_at', '>=', $data['registered_from']);
+                        }
+                        if ($data['registered_until']) {
+                            $query->where('created_at', '<=', $data['registered_until']);
                         }
                     }),
                 QueryBuilder::make()
