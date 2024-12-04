@@ -219,7 +219,7 @@ class UserResource extends Resource
                                     ->label('по:')
                                     ->native(false)
                                     ->closeOnDateSelection(),
-                            ])
+                            ]),
                     ])
                     ->query(function (Builder $query, array $data) {
                         if (!$data['ordered_from'] && !$data['ordered_until']) {
@@ -247,7 +247,7 @@ class UserResource extends Resource
                                     ->label('по:')
                                     ->native(false)
                                     ->closeOnDateSelection(),
-                            ])
+                            ]),
                     ])
                     ->query(function (Builder $query, array $data) {
                         if ($data['birth_date_from']) {
@@ -286,7 +286,7 @@ class UserResource extends Resource
                                     ->label('по:')
                                     ->native(false)
                                     ->closeOnDateSelection(),
-                            ])
+                            ]),
                     ])
                     ->query(function (Builder $query, array $data) {
                         if ($data['registered_from']) {
