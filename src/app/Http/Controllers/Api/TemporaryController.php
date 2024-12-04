@@ -37,5 +37,4 @@ class TemporaryController extends Controller
             'work_time' => 'Ежедневно с 08:00 до 21:00',
         ]);
     }
-
 }
