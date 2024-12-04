@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 
 use App\Admin\Models\AvailableSizesFull;
 use App\Http\Controllers\Controller;
