@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Registries\DefectiveProductResource\Pages;
 
 use App\Filament\Resources\Registries\DefectiveProductResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateDefectiveProduct extends CreateRecord
