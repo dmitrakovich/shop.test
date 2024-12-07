@@ -34,7 +34,6 @@ use libphonenumber\PhoneNumberUtil;
  * @property string|null $patronymic_name
  * @property string $phone
  * @property \Illuminate\Support\Carbon|null $birth_date
- * @property bool $has_online_orders
  * @property \Illuminate\Support\Carbon|null $phone_verified_at
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string|null $remember_token
@@ -47,6 +46,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read \App\Models\Cart|null $cart
  * @property-read \App\Models\User\UserPassport|null $passport
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Address[] $addresses
+ * @property-read \App\Models\User\UserMetadata|null $metadata
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OfflineOrder[] $offlineOrders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feedback[] $reviews
@@ -76,7 +76,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'email',
         'birth_date',
-        'has_online_orders',
         'created_at',
     ];
 
@@ -160,6 +159,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function lastAddress()
     {
         return $this->hasOne(Address::class)->orderBy('id', 'desc');
+    }
+
+    /**
+     * Get the user metadata associated with the user.
+     */
+    public function metadata(): HasOne
+    {
+        return $this->hasOne(UserMetadata::class);
     }
 
     /**

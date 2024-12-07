@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
  * @property \Illuminate\Support\Carbon|null $contract_date Дата заключения договора рассрочки
  *
  * @property-read \App\Models\Orders\OrderItem|null $orderItem
+ * @property-read \App\Models\Orders\Order|null $order
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\User;
 
+use App\Enums\User\OrderType;
 use App\Filament\Components\Forms\RelationManager;
 use App\Filament\Resources\User\UserResource\Pages;
 use App\Filament\Resources\User\UserResource\RelationManagers\BlacklistRelationManager;
@@ -161,20 +162,26 @@ class UserResource extends Resource
                         $nameColumns = ['first_name', 'last_name', 'patronymic_name'];
                         $query->whereAny($nameColumns, 'like', "%$search%");
                     }),
-                Tables\Columns\IconColumn::make('has_online_orders')
-                    ->label('Онлайн заказы')
-                    ->boolean()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->label('E-mail')
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
                 Tables\Columns\TextColumn::make('phone')
                     ->label('Телефон'),
+                Tables\Columns\TextColumn::make('metadata.last_order_type')
+                    ->label('Тип последнего заказа')
+                    ->sortable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 Tables\Columns\TextColumn::make('orders')
                     ->label('Сумма покупок')
                     ->getStateUsing(fn (User $user) => $user->completedOrdersCost())
                     ->suffix(' руб.'),
+                Tables\Columns\TextColumn::make('metadata.last_order_date')
+                    ->label('Дата последнего заказа')
+                    ->dateTime('d.m.Y H:i:s')
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+                Tables\Columns\TextColumn::make('email')
+                    ->label('E-mail')
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 Tables\Columns\TextColumn::make('group.name')
                     ->label('Группа'),
                 Tables\Columns\TextColumn::make('reviews_count')
@@ -201,11 +208,14 @@ class UserResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->filters([
-                Tables\Filters\TernaryFilter::make('has_online_orders')
-                    ->label('Наличие онлайн заказов')
-                    ->placeholder('Все способы заказов')
-                    ->trueLabel('Только онлайн заказы')
-                    ->falseLabel('Только оффлайн заказы'),
+                Tables\Filters\SelectFilter::make('last_order_type')
+                    ->label('Тип последнего заказа')
+                    ->options(OrderType::class)
+                    ->query(function (Builder $query, array $data) {
+                        if ($data['value']) {
+                            $query->whereRelation('metadata', 'last_order_type', $data['value']);
+                        }
+                    }),
                 Tables\Filters\Filter::make('order_date')
                     ->form([
                         Fieldset::make()
