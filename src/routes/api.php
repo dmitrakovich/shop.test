@@ -31,6 +31,7 @@ Route::group([
 // Route::post('croppic/save', [CropperController::class, 'save']);
 Route::post('croppic/crop', [CropperController::class, 'crop']);
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware(['web'])->group(function () {
     Route::get('app-init', [TemporaryController::class, 'appInit']);
+    Route::get('catalog/{path?}', [TemporaryController::class, 'catalog'])->where('path', '[a-zA-Z0-9/_-]+');
 });
