@@ -17,7 +17,7 @@ class TemporaryController extends Controller
 {
     public function appInit(): JsonResponse
     {
-        $cart = Cart::getCart();
+        // $cart = Cart::getCart();
 
         return response()->json([
             'cart' => [
@@ -54,10 +54,15 @@ class TemporaryController extends Controller
         $slug = (string)Str::of($path)->explode('/')->last();
         $url = Url::search($slug);
 
-        $view = isset($url) && $url['model_type'] === Product::class
-            ? app(ProductController::class)->show($url->model_id)
-            : app(CatalogController::class)->show($request);
+        $isCatalog = !($url && $url['model_type'] === Product::class);
 
-        return response()->json($view->getData());
+        $view = $isCatalog
+            ? app(CatalogController::class)->show($request)
+            : app(ProductController::class)->show($url->model_id);
+
+        return response()->json([
+            'is_catalog' => $isCatalog,
+            'data' => $view->getData(),
+        ]);
     }
 }
