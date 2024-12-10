@@ -232,17 +232,12 @@ class UserResource extends Resource
                             ]),
                     ])
                     ->query(function (Builder $query, array $data) {
-                        if (!$data['ordered_from'] && !$data['ordered_until']) {
-                            return;
+                        if ($data['ordered_from']) {
+                            $query->whereRelation('metadata', 'last_order_date', '>=', $data['ordered_from']);
                         }
-                        $query->whereHas('orders', function (Builder $query) use ($data) {
-                            if ($data['ordered_from']) {
-                                $query->whereDate('created_at', '>=', $data['ordered_from']);
-                            }
-                            if ($data['ordered_until']) {
-                                $query->whereDate('created_at', '<=', $data['ordered_until']);
-                            }
-                        });
+                        if ($data['ordered_until']) {
+                            $query->whereRelation('metadata', 'last_order_date', '<=', $data['ordered_until']);
+                        }
                     }),
                 Tables\Filters\Filter::make('birth_date')
                     ->form([
