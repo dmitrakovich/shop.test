@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/payment/webhook/{code}', [PaymentController::class, 'webhook']);
 
+// admin api
 Route::group([
     'excluded_middleware' => 'throttle:api',
 ], function () {

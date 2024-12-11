@@ -17,10 +17,6 @@ return [
         'name' => 'info@barocco.by',
         'link' => 'info@barocco.by',
     ],
-    'telegram-old' => [
-        'name' => 'Telegram',
-        'link' => 'tg://resolve?domain=modnyby',
-    ],
     'telegram' => [
         'name' => 'Telegram',
         'link' => 'https://t.me/BaroccoBot',
