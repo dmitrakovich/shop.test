@@ -4,16 +4,12 @@ use App\Admin\Controllers\Api\ProductController;
 use App\Admin\Controllers\Api\StocksController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\TemporaryController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CropperController;
-use App\Http\Controllers\Shop\OrderController;
 use App\Http\Controllers\Shop\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('users', [RegisteredUserController::class, 'sync']);
-    Route::post('orders', [OrderController::class, 'sync']);
-    Route::get('product/{availableSizesFull:one_c_product_id}/url', [AdminProductController::class, 'getUrl']);
+    Route::get('product/{availableSizesFull:one_c_product_id}/url', [AdminProductController::class, 'getUrl']); // !! for 1C
 });
 
 Route::post('/payment/webhook/{code}', [PaymentController::class, 'webhook']);

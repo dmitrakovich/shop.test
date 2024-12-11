@@ -7,14 +7,11 @@ use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Events\OrderCreated;
 use App\Facades\Cart;
 use App\Http\Requests\Order\StoreRequest;
-use App\Http\Requests\Order\SyncRequest;
 use App\Http\Requests\Order\UserAddressRequest;
 use App\Http\Requests\Order\UserRequest;
 use App\Models\CartData;
 use App\Models\Orders\Order;
 use App\Services\AuthService;
-use App\Services\OldSiteSyncService;
-use Database\Seeders\ProductSeeder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\Auth;
 
@@ -88,33 +85,5 @@ class OrderController extends BaseController
     public function print(Order $order)
     {
         return view('admin.order-print', compact('order'));
-    }
-
-    /**
-     * Sync order with another DB
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function sync(SyncRequest $request)
-    {
-        $oldId = (int)$request->input('id');
-        $oldSizes = (new ProductSeeder())->attributesList['sizes']['new_id'];
-        $cart = Cart::make();
-        $items = [];
-        foreach ($request->input('items') as $item) {
-            $item['size_id'] = $oldSizes[$item['size']] ?? 1;
-            $items[] = new CartData($item);
-        }
-        $cart->setRelation('items', new EloquentCollection($items));
-
-        try {
-            $order = app(OrderServiceInterface::class)
-                ->store($request, $cart);
-        } catch (\Throwable $th) {
-            \Sentry\captureException($th);
-            abort(OldSiteSyncService::errorResponse($th->getMessage()));
-        }
-
-        return OldSiteSyncService::successResponse([$oldId => $order->id]);
     }
 }
