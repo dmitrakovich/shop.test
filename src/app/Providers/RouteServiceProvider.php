@@ -11,15 +11,6 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * The path to the "home" route for your application.
-     *
-     * Typically, users are redirected here after authentication.
-     *
-     * @var string
-     */
-    public const HOME = '/dashboard/profile';
-
-    /**
      * Define your route model bindings, pattern filters, and other route configuration.
      */
     public function boot(): void
@@ -32,15 +23,48 @@ class RouteServiceProvider extends ServiceProvider
         }
 
         $this->configureRateLimiting();
+    }
 
-        $this->routes(function () {
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('routes/api.php'));
+    /**
+     * Define the routes for the application.
+     */
+    public function map(): void
+    {
+        $this->mapApiRoutes();
+        $this->mapApiAdminRoutes();
+        $this->mapApiExternalRoutes();
+        $this->mapWebRoutes();
+    }
 
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
-        });
+    protected function mapApiRoutes(): void
+    {
+        Route::middleware('api')
+            ->prefix('api')
+            ->as('api.')
+            ->group(base_path('routes/api.php'));
+    }
+
+    protected function mapApiAdminRoutes(): void
+    {
+        Route::middleware(['api'])
+            ->withoutMiddleware('throttle:api')
+            ->prefix('api')
+            ->as('api.admin.')
+            ->group(base_path('routes/api.admin.php'));
+    }
+
+    protected function mapApiExternalRoutes(): void
+    {
+        Route::middleware(['api'])
+            // ->prefix('api/external')
+            ->as('api.external.')
+            ->group(base_path('routes/api.external.php'));
+    }
+
+    protected function mapWebRoutes(): void
+    {
+        Route::middleware('web')
+            ->group(base_path('routes/web.php'));
     }
 
     /**

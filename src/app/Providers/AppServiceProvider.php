@@ -70,10 +70,6 @@ class AppServiceProvider extends ServiceProvider
 
         // $this->modelShouldBeStrict($app->isProduction());
 
-        if ($app->isProduction()) {
-            $app['request']->server->set('HTTPS', 'on');
-        }
-
         if ($app->isLocal()) {
             $app['config']['filesystems.disks.public.url'] = 'https://barocco.by/media';
         }
