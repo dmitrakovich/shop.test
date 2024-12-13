@@ -5,13 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>BAROCCO - технические работы на сайте</title>
-    <meta property="og:image" content="https://modny.by/images/barocco-500/barocco_logo.svg" />
+    <meta property="og:image" content="/images/icons/barocco.svg" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://barocco.by" />
-    <meta property="og:description"
-        content="Barocco - интернет-магазин женской обуви с примеркой по Беларуси" />
-    <meta property="description"
-        content="Barocco - интернет-магазин женской обуви с примеркой по Беларуси" />
+    <meta property="og:description" content="Barocco - интернет-магазин женской обуви с примеркой по Беларуси" />
+    <meta property="description" content="Barocco - интернет-магазин женской обуви с примеркой по Беларуси" />
 
 
     <!-- Google Tag Manager -->
@@ -129,14 +127,14 @@
 
 <body>
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PPN2WH" height="0"
-            width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PPN2WH" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <div class="wrap">
 
         <div class="block logo">
-            <img src="https://modny.by/images/barocco-500/barocco_logo.svg" alt="barocco.by">
+            <img src="/images/icons/barocco.svg" alt="barocco.by">
         </div>
 
 
@@ -149,64 +147,33 @@
         <div class="block contact">
             <div class="subtitle">Служба поддержки</div>
             <div class="text">Ежедневно с 9.00 до 20.00</div>
-            <div class="phone"><a href="tel:+375291793790" title="+375291793790">+375 (29)
-                    179-37-90</a></div>
+            <div class="phone">
+                <a href="tel:+375291793790" title="+375291793790">+375 (29) 179-37-90</a>
+            </div>
             <div class="box">
-                <a class="item_link" href="viber://chat?number=375291793790" title="Viber">
-                    <img src="https://modny.by/images/barocco-500/vb.svg" alt="Viber">
-                </a>
-                <a class="item_link" href="tg://resolve?domain=modnyby" title="Telegram">
-                    <img src="https://modny.by/images/barocco-500/tg.svg" alt="Telegram">
-                </a>
-                <a class="item_link" href="https://wa.me/375291793790" title="WhatsApp">
-                    <img src="https://modny.by/images/barocco-500/wa.svg" alt="WhatsApp">
-                </a>
+                <a class="item_link" href="viber://chat?number=375291793790" title="Viber">Viber</a>
+                <a class="item_link" href="https://t.me/barocco_by" title="Telegram">Telegram</a>
+                <a class="item_link" href="https://wa.me/375291793790" title="WhatsApp">WhatsApp</a>
             </div>
         </div>
-
-
-        <div class="block oldsite">
-            <div class="subtitle">Как посмотреть каталог?</div>
-            <div class="text cta">Переходите на старую версию сайта:</div>
-            <div class="box">
-
-                <a class="item_link" href="https://modny.by/woman/zhenskaya-obuv"
-                    title="каталог modny.by"><img
-                        src="https://modny.by/templates/modnyby/images/modny_by_logo.png"
-                        alt="modny.by"></a>
-
-                <a class="item_link link_text" href="https://modny.by/woman/zhenskaya-obuv"
-                    title="каталог modny.by">В&nbsp;КАТАЛОГ</a>
-            </div>
-        </div>
-
 
         <div class="block subscribe">
             <div class="subtitle">Обзоры товаров</div>
-            <div class="text cta">Cмотрите в соцсетях и каналах:</div>
+            <div class="text cta">Смотрите в соцсетях и каналах:</div>
             <div class="box">
-                <a class="item_link" href="https://www.instagram.com/barocco.by/" title="Instagram">
-                    <img src="https://modny.by/images/barocco-500/inst.svg" alt="Instagram">
-                </a>
+                <a class="item_link" href="https://www.instagram.com/barocco.by/" title="Instagram">Instagram</a>
                 <a class="item_link"
                     href="https://invite.viber.com/?g2=AQB8PUyG5C7u507fc5vO1d9qgVguM3f2bR1PvGloHCrNNZJU4SGHHigjhYWQF5D2"
-                    title="Viber">
-                    <img src="https://modny.by/images/barocco-500/vb_channel.svg" alt="Viber">
-                </a>
-                <a class="item_link" href="https://t.me/barocco_by" title="Telegram">
-                    <img src="https://modny.by/images/barocco-500/tg_channel.svg" alt="Telegram">
-                </a>
-                <a class="item_link" href="https://vk.com/barocco_by" title="ВКонтакте">
-                    <img src="https://modny.by/images/barocco-500/vk.svg" alt="ВКонтакте">
-                </a>
+                    title="Viber">Viber</a>
+                <a class="item_link" href="https://t.me/barocco_by" title="Telegram">Telegram</a>
+                <a class="item_link" href="https://vk.com/barocco_by" title="ВКонтакте">ВКонтакте </a>
             </div>
         </div>
 
-
     </div>
     <script src="https://browser.sentry-cdn.com/6.9.0/bundle.min.js"
-        integrity="sha384-WO22OE751vRf/HrLRHFis3ipNR16hUk5Q0qW9ascPaSswHI9Q/0ZFMaMvJ0ZgmSI"
-        crossorigin="anonymous"></script>
+        integrity="sha384-WO22OE751vRf/HrLRHFis3ipNR16hUk5Q0qW9ascPaSswHI9Q/0ZFMaMvJ0ZgmSI" crossorigin="anonymous">
+    </script>
     @if (app()->bound('sentry') && app('sentry')->getLastEventId())
         <div class="subtitle">Error ID: {{ app('sentry')->getLastEventId() }}</div>
         <script>
