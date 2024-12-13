@@ -8,8 +8,10 @@
     <meta property="og:image" content="/images/icons/barocco.svg" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://barocco.by" />
-    <meta property="og:description" content="Barocco - интернет-магазин женской обуви с примеркой по Беларуси" />
-    <meta property="description" content="Barocco - интернет-магазин женской обуви с примеркой по Беларуси" />
+    <meta property="og:description"
+        content="Barocco - интернет-магазин женской обуви с примеркой по Беларуси" />
+    <meta property="description"
+        content="Barocco - интернет-магазин женской обуви с примеркой по Беларуси" />
 
 
     <!-- Google Tag Manager -->
@@ -127,8 +129,8 @@
 
 <body>
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PPN2WH" height="0" width="0"
-            style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PPN2WH" height="0"
+            width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <div class="wrap">
@@ -161,7 +163,8 @@
             <div class="subtitle">Обзоры товаров</div>
             <div class="text cta">Смотрите в соцсетях и каналах:</div>
             <div class="box">
-                <a class="item_link" href="https://www.instagram.com/barocco.by/" title="Instagram">Instagram</a>
+                <a class="item_link" href="https://www.instagram.com/barocco.by/"
+                    title="Instagram">Instagram</a>
                 <a class="item_link"
                     href="https://invite.viber.com/?g2=AQB8PUyG5C7u507fc5vO1d9qgVguM3f2bR1PvGloHCrNNZJU4SGHHigjhYWQF5D2"
                     title="Viber">Viber</a>
@@ -172,8 +175,8 @@
 
     </div>
     <script src="https://browser.sentry-cdn.com/6.9.0/bundle.min.js"
-        integrity="sha384-WO22OE751vRf/HrLRHFis3ipNR16hUk5Q0qW9ascPaSswHI9Q/0ZFMaMvJ0ZgmSI" crossorigin="anonymous">
-    </script>
+        integrity="sha384-WO22OE751vRf/HrLRHFis3ipNR16hUk5Q0qW9ascPaSswHI9Q/0ZFMaMvJ0ZgmSI"
+        crossorigin="anonymous"></script>
     @if (app()->bound('sentry') && app('sentry')->getLastEventId())
         <div class="subtitle">Error ID: {{ app('sentry')->getLastEventId() }}</div>
         <script>
