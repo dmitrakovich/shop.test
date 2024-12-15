@@ -7,6 +7,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Sentry\Laravel\Integration;
 
 return Application::configure(basePath: dirname(__DIR__))
+    ->withCommands([__DIR__ . '/../routes/console.php'])
     ->withMiddleware(function (Middleware $middleware) {
         $middleware
             ->validateSignatures(['utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term'])
