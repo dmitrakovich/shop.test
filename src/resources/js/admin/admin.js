@@ -83,7 +83,7 @@ $(function () {
 
             formData.append('croppedImage', blob); // , 'example.png'
 
-            $.ajax('/api/croppic/crop', {
+            $.ajax('/api/admin/croppic/crop', {
                 method: 'POST',
                 data: formData,
                 processData: false,

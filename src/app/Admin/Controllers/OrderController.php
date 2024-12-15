@@ -306,7 +306,7 @@ class OrderController extends AbstractAdminController
                     ->options(function ($id) {
                         return [$id => $id];
                     })
-                    ->ajax('/api/product/product');
+                    ->ajax('/api/admin/product/product');
                 $nestedForm->hidden('count')->default(1);
                 $nestedForm->hidden('buy_price')->default(0);
                 $nestedForm->hidden('price');
@@ -696,7 +696,7 @@ $(function () {
             productId: $(this).val(),
             orderItemId: itemBlock.find('.order-item-id').val()
         };
-        $.get('/api/product/data', payload, function (response) {
+        $.get('/api/admin/product/data', payload, function (response) {
             // console.log(response);
             const img = $('<img>').attr('src', response.image).height(105);
             const link = $('<a>', {
@@ -729,7 +729,7 @@ $(function () {
             sizeId: $(this).val(),
             orderItemId: itemBlock.find('.order-item-id').val()
         };
-        $.get('/api/stocks', payload, function (stocks) {
+        $.get('/api/admin/stocks', payload, function (stocks) {
             stocksSelectElement.find('option').remove();
             $(stocksSelectElement).select2({
                 placeholder: 'Выбрать',

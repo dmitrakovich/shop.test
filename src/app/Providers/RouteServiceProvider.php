@@ -48,7 +48,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware(['api'])
             ->withoutMiddleware('throttle:api')
-            ->prefix('api')
+            ->prefix('api/admin')
             ->as('api.admin.')
             ->group(base_path('routes/api.admin.php'));
     }
