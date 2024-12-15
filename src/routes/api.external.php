@@ -9,8 +9,6 @@ Route::prefix('api')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('product/{availableSizesFull:one_c_product_id}/url', [AdminProductController::class, 'getUrl']);
     });
-
-    Route::post('/payment/webhook/{code}', [PaymentController::class, 'webhook']);
 });
 
 Route::prefix('api/external')->group(function () {
