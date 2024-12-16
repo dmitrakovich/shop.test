@@ -60,7 +60,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiExternalRoutes(): void
     {
         Route::middleware(['api'])
-            // ->prefix('api/external')
+            ->prefix('api/external')
             ->as('api.external.')
             ->group(base_path('routes/api.external.php'));
     }
