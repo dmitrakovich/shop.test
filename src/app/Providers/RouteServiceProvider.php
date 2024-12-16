@@ -7,9 +7,12 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class RouteServiceProvider extends ServiceProvider
 {
+    public const string API_VERSION = 'v1';
+
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
      */
@@ -33,13 +36,14 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
         $this->mapApiAdminRoutes();
         $this->mapApiExternalRoutes();
+        $this->mapApiFallbackRoutes();
         $this->mapWebRoutes();
     }
 
     protected function mapApiRoutes(): void
     {
-        Route::middleware('api')
-            ->prefix('api')
+        Route::middleware(['api', 'web']) // todo: remove web middleware
+            ->prefix('api/' . self::API_VERSION)
             ->as('api.')
             ->group(base_path('routes/api.php'));
     }
@@ -65,6 +69,20 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware('web')
             ->group(base_path('routes/web.php'));
+    }
+
+    protected function mapApiFallbackRoutes(): void
+    {
+        Route::any('api/{version?}/{path?}', function (Request $request, ?string $version = null) {
+            if (str_contains($version, 'v') && $version !== self::API_VERSION) {
+                abort(
+                    Response::HTTP_UPGRADE_REQUIRED,
+                    'API version is outdated. Please reload the page.'
+                );
+            }
+
+            abort(404, "The route {$request->path()} could not be found.");
+        })->where('path', '.*');
     }
 
     /**

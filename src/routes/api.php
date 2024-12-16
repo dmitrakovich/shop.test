@@ -8,7 +8,5 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::prefix('v1')->middleware(['web'])->group(function () {
-    Route::get('app-init', [TemporaryController::class, 'appInit']);
-    Route::get('catalog/{path?}', [TemporaryController::class, 'catalog'])->where('path', '[a-zA-Z0-9/_-]+');
-});
+Route::get('app-init', [TemporaryController::class, 'appInit']);
+Route::get('catalog/{path?}', [TemporaryController::class, 'catalog'])->where('path', '[a-zA-Z0-9/_-]+');
