@@ -27,6 +27,11 @@ class UpdateInventory extends Command
      */
     public function handle(): void
     {
+        if ($this->input->isInteractive()) {
+            \Illuminate\Support\Facades\Log::debug('isInteractive');
+        } else {
+            \Illuminate\Support\Facades\Log::debug('not isInteractive');
+        }
         try {
             UpdateAvailabilityJob::dispatchSync(app(LogService::class));
         } catch (\Throwable $th) {
