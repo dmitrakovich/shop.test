@@ -33,6 +33,7 @@ class UpdateProduct
             'SP6123' => $product->manufacturer?->name,
             'SP6124' => $product->category->name,
             'SP6125' => $product->collection->name,
+            'SP6142' => $product->id,
         ], fn ($value) => !is_null($value)));
     }
 }
