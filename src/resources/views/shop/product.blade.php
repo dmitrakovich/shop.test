@@ -159,12 +159,12 @@
                                     <div class="col-auto">
                                         <span class="text-muted">Выберите размер:</span>
                                     </div>
-                                    <div class="col-auto">
+                                    {{-- <div class="col-auto">
                                         <a class="text-decoration-underline" data-fancybox
                                             data-src="#size-table" href="javascript:;">
                                             Таблица размеров
                                         </a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <ul class="js-sizes mt-3 p-0">
                                     @foreach ($product->sizes as $size)
