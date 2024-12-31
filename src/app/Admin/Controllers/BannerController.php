@@ -43,7 +43,7 @@ class BannerController extends AdminController
             return $title;
         });
         $grid->column('url', __('Url'));
-        $grid->column('priority', 'Приоритет')->editable(); //->orderable();
+        $grid->column('priority', 'Приоритет')->editable(); // ->orderable();
         $grid->column('active', 'Активный')->switch();
         $grid->column('start_datetime', 'Дата начала');
         $grid->column('end_datetime', 'Дата окончания');

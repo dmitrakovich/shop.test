@@ -53,7 +53,7 @@ class AdminUser extends Authenticatable implements FilamentUser
         return trim("{$this->user_last_name} {$this->name} {$this->user_patronymic_name}");
     }
 
-    //!!! old admin roles & permissions
+    // !!! old admin roles & permissions
 
     /**
      * Get avatar attribute.

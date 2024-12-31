@@ -20,7 +20,7 @@ Route::group([
     $router->group(['prefix' => 'orders', 'namespace' => 'Orders', 'as' => 'orders.'], function (Router $router) {
         $router->resource('offline', OfflineOrderController::class);
     });
-    //todo: move to orders
+    // todo: move to orders
     $router->resource('orders', \OrderController::class);
     $router->resource('order-items', OrderItemController::class);
     $router->resource('order-comments', OrderCommentController::class);

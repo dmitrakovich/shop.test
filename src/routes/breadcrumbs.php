@@ -7,7 +7,7 @@ Breadcrumbs::for('index', function ($trail) {
     $trail->push('Главная', route('index-page'));
 });
 
-//region Shop
+// region Shop
 // Index > catalog > category
 Breadcrumbs::for('category', function ($trail, $category) {
     if ($category->parentCategory) {
@@ -29,9 +29,9 @@ Breadcrumbs::for('cart', function ($trail) {
     $trail->parent('index');
     $trail->push('Корзина');
 });
-//endregion
+// endregion
 
-//region Online shoping
+// region Online shoping
 // Index > online-shopping
 Breadcrumbs::for('online-shopping', function ($trail) {
     $trail->parent('index');
@@ -59,7 +59,7 @@ Breadcrumbs::for('policy', function ($trail) {
     $trail->parent('index');
     $trail->push('Политика конфиденциальности', route('info.policy'));
 });
-//endregion
+// endregion
 
 // Index > feedbacks
 Breadcrumbs::for('feedbacks', function ($trail) {
@@ -67,7 +67,7 @@ Breadcrumbs::for('feedbacks', function ($trail) {
     $trail->push('Отзывы', route('feedbacks'));
 });
 
-//region Dashboard
+// region Dashboard
 // Index > dashboard
 Breadcrumbs::for('dashboard', function ($trail) {
     $trail->parent('index');
@@ -97,4 +97,4 @@ Breadcrumbs::for('dashboard-card', function ($trail) {
     $trail->parent('dashboard');
     $trail->push('Карта клиента', route('dashboard-card'));
 });
-//endregion
+// endregion
