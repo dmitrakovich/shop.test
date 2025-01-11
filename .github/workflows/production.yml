@@ -91,17 +91,6 @@ jobs:
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
-        format: markdown
-        message: |
-          **bold**
-          __italic__
-          ~~strikethrough~~
-          ||spoiler||
-          >> quote
-          `code`
-          >Commit: ${{ github.event.head_commit.message | truncate(50) }}
-          **>${{ github.event.commits[0].message }}
-          Success deploying ✅
 
 
   ##################################
