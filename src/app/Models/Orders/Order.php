@@ -69,7 +69,7 @@ use Payments\PaymentMethod;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderItem[] $items
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderItemExtended[] $itemsExtended
  * @property-read \App\Models\User\User|null $user
- * @property-read \App\Models\Device|null $device
+ * @property-read \App\Models\User\Device|null $device
  * @property-read \App\Models\Country|null $country
  * @property-read \Deliveries\DeliveryMethod|null $delivery
  * @property-read \App\Models\Stock|null $stock

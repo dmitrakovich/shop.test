@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\Cookie;
 use Jenssegers\Agent\Facades\Agent;
 
 /**
- * @property string $id
+ * @property int $id
+ * @property string|null $web_id
+ * @property string|null $api_id
  * @property int|null $user_id
- * @property int|null $cart_id
  * @property int|null $yandex_id
  * @property string|null $google_id
  * @property string $type
@@ -26,8 +27,9 @@ use Jenssegers\Agent\Facades\Agent;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
- * @property-read \App\Models\User\User|null $user
  * @property-read \App\Models\Cart|null $cart
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Favorite[] $favorites
+ * @property-read \App\Models\User\User|null $user
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
