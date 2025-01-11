@@ -88,11 +88,12 @@ jobs:
 
     - name: Send success status
       uses: appleboy/telegram-action@master
+      format: markdown
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         message: |
-          >> ${{ github.event.head_commit.message }}
+          **>${{ github.event.commits[0].message }}
           Success deploying ✅
 
 
