@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->web(append: [
             \App\Http\Middleware\DeviceDetect::class,
+            \App\Http\Middleware\MigrateCartToDevice::class,
             \Spatie\GoogleTagManager\GoogleTagManagerMiddleware::class,
             \App\Http\Middleware\ViewMiddleware::class,
         ]);

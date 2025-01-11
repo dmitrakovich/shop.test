@@ -1,12 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\User;
 
+use App\Contracts\ClientInterface;
 use App\Enums\Cookie as CookieEnum;
-use App\Models\User\User;
+use App\Models\Cart;
+use App\Models\Favorite;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Jenssegers\Agent\Facades\Agent;
@@ -27,7 +31,7 @@ use Jenssegers\Agent\Facades\Agent;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Device extends Model
+class Device extends Model implements ClientInterface
 {
     use HasFactory;
 
@@ -42,75 +46,18 @@ class Device extends Model
     final const TYPES = ['mobile', 'desktop'];
 
     /**
-     * Indicates if the model's ID is auto-incrementing.
+     * The attributes that aren't mass assignable.
      *
-     * @var bool
+     * @var array<string>|bool
      */
-    public $incrementing = false;
+    protected $guarded = ['id'];
 
     /**
-     * The data type of the auto-incrementing ID.
-     *
-     * @var string
+     * Generate new device web_id for new device
      */
-    protected $keyType = 'string';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'id',
-        'user_id',
-        'cart_id',
-        'yandex_id',
-        'google_id',
-        'type',
-        'agent',
-    ];
-
-    /**
-     * Stores the current device id
-     */
-    protected static ?string $currentDeviceId = null;
-
-    /**
-     * Generate new device id for new device
-     */
-    public static function generateNewId(Request $request): string
+    public static function generateNewWebId(Request $request): string
     {
-        self::$currentDeviceId = md5(
-            uniqid($request->getHost()) . $request->ip()
-        );
-
-        return self::$currentDeviceId;
-    }
-
-    /**
-     * Get exists device or make new
-     */
-    public static function getOrNew(): self
-    {
-        return self::firstOrNew(['id' => self::getId()]);
-    }
-
-    /**
-     * Generate default id for undefineds
-     */
-    protected static function getDefaultId(): string
-    {
-        return 'undefined_' . time();
-    }
-
-    /**
-     * Return device id
-     */
-    public static function getId(): string
-    {
-        return self::$currentDeviceId
-            ?? Cookie::get(CookieEnum::DEVICE_ID->value)
-            ?? self::getDefaultId();
+        return md5(uniqid($request->getHost()) . $request->ip());
     }
 
     /**
@@ -129,6 +76,22 @@ class Device extends Model
     }
 
     /**
+     * Device's cart
+     */
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
+    }
+
+    /**
+     * Device's favorites
+     */
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
      * Get the user that owns the device.
      *
      * @todo need many to many relation
@@ -136,14 +99,6 @@ class Device extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the cart that owns the device.
-     */
-    public function cart(): BelongsTo
-    {
-        return $this->belongsTo(Cart::class);
     }
 
     /**

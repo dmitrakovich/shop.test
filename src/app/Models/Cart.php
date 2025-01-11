@@ -2,21 +2,27 @@
 
 namespace App\Models;
 
+use App\Facades\Device;
 use App\Models\Promo\Promocode;
+use App\Models\User\Device as UserDevice;
+use App\Models\User\User;
 use App\Services\CartService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 
 /**
  * @property int $id
+ * @property int|null $device_id
+ * @property int|null $user_id
  * @property int|null $promocode_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
+ * @property-read \App\Models\User\Device|null $device
+ * @property-read \App\Models\User\User|null $user
  * @property-read \App\Models\Promo\Promocode|null $promocode
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CartData[] $items
  *
@@ -25,11 +31,27 @@ use Illuminate\Support\Facades\Cookie;
 class Cart extends Model
 {
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
-     * @var array<int, string>
+     * @var array<string>|bool
      */
-    protected $fillable = ['promocode_id'];
+    protected $guarded = ['id'];
+
+    /**
+     * Get the device associated with the cart.
+     */
+    public function device(): BelongsTo
+    {
+        return $this->belongsTo(UserDevice::class);
+    }
+
+    /**
+     * Get the user associated with the cart.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * Get the promocode associated with the cart.
@@ -133,15 +155,9 @@ class Cart extends Model
     public function createIfNotExists(): self
     {
         if (!$this->exists) {
+            $this->device_id = Device::id();
+            $this->user_id = Auth::id();
             $this->save();
-            if (Auth::check()) {
-                /** @var \App\Models\User $user */
-                $user = Auth::user();
-                $user->cart_token = $this->id;
-                $user->save();
-            } else {
-                Cookie::queue(cookie('cart_token', $this->id, 60 * 24 * 30, '/'));
-            }
         }
 
         return $this;

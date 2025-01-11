@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Facades\Currency;
+use App\Facades\Device;
 use App\Models\Data\UserData;
-use App\Models\Device;
 use App\Models\Guest;
 use App\View\Creators\UserDataCreator;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +34,7 @@ class GoogleTagManagerProvider extends ServiceProvider
         GoogleTagManagerFacade::macro('view', function (string $page, ?array $content = null) {
             $currency = Currency::getCurrentCurrency();
             $userData = new UserData(Auth::check() ? Auth::user()->toArray() : Guest::getData());
-            $userData->setExternalIds([Device::getId(), Auth::id()]);
+            $userData->setExternalIds([Device::id(), Auth::id()]);
             GoogleTagManagerFacade::push(array_filter([
                 'pageType' => $page,
                 'user_type' => Auth::check() ? Auth::user()->group_id : 'guest',

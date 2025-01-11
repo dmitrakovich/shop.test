@@ -8,6 +8,7 @@ use App\Events\OrderCreated;
 use App\Events\OrderStatusChanged;
 use App\Events\Products;
 use App\Events\ReviewPosted;
+use App\Events\User\UserLogin;
 use App\Listeners\Cache\ResetUserCache;
 use App\Listeners\FacebookPixel;
 use App\Listeners\GoogleTag;
@@ -24,6 +25,7 @@ use App\Listeners\SendOrderInformationNotification;
 use App\Listeners\SyncOrderHistory;
 use App\Listeners\UpdateInventory;
 use App\Listeners\UpdateOrderItemsStatus;
+use App\Listeners\User\HandleLogin;
 use App\Listeners\User\UpdateUserAfterOrder;
 use App\Observers;
 use Illuminate\Auth\Events\Login;
@@ -45,11 +47,14 @@ class EventServiceProvider extends ServiceProvider
             // SyncOrderHistory::class,
         ],
         Login::class => [
+            HandleLogin::class,
+        ],
+        UserLogin::class => [
             SaveDevice::class,
             MergeFavorites::class,
             SyncOrderHistory::class,
             ApplyPendingPromocode::class,
-            // MergeCart::class,
+            MergeCart::class,
         ],
         Analytics\ProductView::class => [
             GoogleTag\SetProductViewData::class,

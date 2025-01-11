@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Facades\Device;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -43,7 +44,7 @@ class Favorite extends Model
             if ($userId = Auth::id()) {
                 $builder->where('user_id', $userId);
             } else {
-                $builder->where('device_id', Device::getId());
+                $builder->where('device_id', Device::id());
             }
         });
     }

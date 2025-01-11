@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Models\Device;
+use App\Facades\Device;
 use App\Models\Favorite;
 
 class MergeFavorites
@@ -25,8 +25,9 @@ class MergeFavorites
      */
     public function handle($event)
     {
-        Favorite::withoutGlobalScope('for_user')
-            ->where('device_id', Device::getId())
+        Favorite::query()
+            ->withoutGlobalScope('for_user')
+            ->where('device_id', Device::id())
             ->update(['user_id' => $event->user->id]);
     }
 }

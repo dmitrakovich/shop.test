@@ -2,8 +2,10 @@
 
 namespace App\Models\User;
 
+use App\Contracts\ClientInterface;
 use App\Models\Cart;
 use App\Models\Country;
+use App\Models\Favorite;
 use App\Models\Feedback;
 use App\Models\Logs\SmsLog;
 use App\Models\OneC;
@@ -26,7 +28,6 @@ use libphonenumber\PhoneNumberUtil;
 
 /**
  * @property int $id
- * @property int|null $cart_token
  * @property int $group_id
  * @property string|null $discount_card_number relation with 1C user
  * @property string|null $email
@@ -44,6 +45,7 @@ use libphonenumber\PhoneNumberUtil;
  *
  * @property-read \App\Models\User\Group|null $group
  * @property-read \App\Models\Cart|null $cart
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Favorite[] $favorites
  * @property-read \App\Models\User\UserPassport|null $passport
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Address[] $addresses
  * @property-read \App\Models\User\UserMetadata|null $metadata
@@ -58,7 +60,7 @@ use libphonenumber\PhoneNumberUtil;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements ClientInterface, MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -130,9 +132,17 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * User's cart
      */
-    public function cart(): BelongsTo
+    public function cart(): HasOne
     {
-        return $this->belongsTo(Cart::class, 'cart_token');
+        return $this->hasOne(Cart::class);
+    }
+
+    /**
+     * User's favorites
+     */
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
     }
 
     /**

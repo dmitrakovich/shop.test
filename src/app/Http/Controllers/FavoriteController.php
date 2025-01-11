@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\Analytics\AddToCart;
-use App\Models\Device;
+use App\Facades\Device;
 use App\Models\Favorite;
 use App\Models\Product;
 use App\Services\ProductService;
@@ -34,7 +34,7 @@ class FavoriteController extends Controller
         /** @var Favorite */
         $favorite = Favorite::query()->create([
             'user_id' => Auth::id(),
-            'device_id' => Device::getId(),
+            'device_id' => Device::id(),
             'product_id' => $product->id,
         ]);
 

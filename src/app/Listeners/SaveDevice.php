@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Models\Device;
+use App\Facades\Device;
 use Illuminate\Support\Facades\Auth;
 
 class SaveDevice
@@ -24,12 +24,11 @@ class SaveDevice
      */
     public function handle($event): void
     {
-        $device = Device::getOrNew();
+        $device = Device::current();
         $user = $event->user ?? Auth::user();
 
         if (!empty($user)) {
             $device->user()->associate($user);
-            $device->cart()->associate($user->cart);
         }
 
         if (!empty($event->order)) {

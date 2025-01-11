@@ -2,8 +2,8 @@
 
 namespace App\Events\Analytics;
 
+use App\Facades\Device;
 use App\Models\Data\UserData;
-use App\Models\Device;
 use App\Models\Guest;
 use FacebookAds\Object\ServerSide\ActionSource;
 use FacebookAds\Object\ServerSide\Util;
@@ -105,7 +105,7 @@ abstract class AbstractAnalyticEvent
      */
     protected function setVisitId(): void
     {
-        $this->visitId = Device::getId();
+        $this->visitId = Device::id();
     }
 
     /**

@@ -16,7 +16,7 @@ use Illuminate\Support\Carbon;
  * @property string $code
  * @property string|null $description
  * @property int|null $timer_sec
- * @property int|null $activations_count
+ * @property bool|null $activations_count
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
