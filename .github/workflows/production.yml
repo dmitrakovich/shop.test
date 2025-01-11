@@ -93,7 +93,9 @@ jobs:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         format: markdown
         disable_web_page_preview: true
-        message: ">test\n> test\n>>test\n>> test\n**> ${{ github.event.commits[0].message }}\nSuccess deploying ✅"
+        message: |
+          Success deploying ✅
+          Commit message: ${{ github.event.commits[0].message }}
 
 
   ##################################
