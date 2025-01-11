@@ -2,8 +2,8 @@
 
 namespace App\Listeners\Promo;
 
+use App\Events\User\UserLogin;
 use App\Services\SaleService;
-use Illuminate\Auth\Events\Login;
 
 class ApplyPendingPromocode
 {
@@ -18,7 +18,7 @@ class ApplyPendingPromocode
     /**
      * Handle the event.
      */
-    public function handle(Login $event): void
+    public function handle(UserLogin $event): void
     {
         $this->saleService->applyPendingPromocode($event->user);
     }

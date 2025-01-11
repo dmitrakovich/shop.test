@@ -2,8 +2,8 @@
 
 namespace App\Listeners;
 
+use App\Events\User\UserLogin;
 use App\Models\Orders\Order;
-use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
 
 class SyncOrderHistory
@@ -20,7 +20,7 @@ class SyncOrderHistory
      *
      * @return void
      */
-    public function handle(Registered|Login $event)
+    public function handle(Registered|UserLogin $event)
     {
         if (!empty($event->user->phone)) {
             $this->order

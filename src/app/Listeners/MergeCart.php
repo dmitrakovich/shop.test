@@ -2,10 +2,10 @@
 
 namespace App\Listeners;
 
+use App\Events\User\UserLogin;
 use App\Facades\Device;
 use App\Models\Cart;
 use App\Models\CartData;
-use Illuminate\Auth\Events\Login;
 
 class MergeCart
 {
@@ -22,10 +22,9 @@ class MergeCart
     /**
      * Handle the event.
      *
-     * @param  object  $event
      * @return void
      */
-    public function handle(Login $event)
+    public function handle(UserLogin $event)
     {
         $deviceCart = Cart::query()->with('items')->firstWhere('device_id', Device::id());
         if (!$deviceCart) {
