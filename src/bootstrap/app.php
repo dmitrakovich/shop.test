@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'captcha' => \App\Http\Middleware\Captcha::class,
+            'device.auth' => \App\Http\Middleware\DeviceAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
