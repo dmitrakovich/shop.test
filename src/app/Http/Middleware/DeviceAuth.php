@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DeviceAuth
 {
-    private const DEVICE_ID_HEADER_KEY = 'device_id';
+    private const DEVICE_ID_HEADER_KEY = 'device-id';
 
     /**
      * Handle an incoming request.

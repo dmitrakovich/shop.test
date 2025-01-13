@@ -71,6 +71,8 @@ class Cart extends Model
 
     /**
      * Get the available items in the shopping cart.
+     *
+     * @return Collection|CartData[]
      */
     public function availableItems(): Collection
     {

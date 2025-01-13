@@ -4,22 +4,24 @@ namespace App\Http\Controllers\Api;
 
 use App\Facades\Cart;
 use App\Http\Controllers\Controller;
+use App\Models\Favorite;
 use Illuminate\Http\JsonResponse;
 
 class AppController extends Controller
 {
     public function init(): JsonResponse
     {
-        // $cart = Cart::getCart();
+        $cart = Cart::getCart();
+        $favorites = Favorite::query()->with('product')->get();
 
         return response()->json([
             'cart' => [
-                'total_count' => 4, // $cart->itemsCount(),
-                'total_sum' => 138, // $cart->getTotalPrice(),
+                'total_count' => $cart->itemsCount(),
+                'total_sum' => $cart->getTotalPrice(),
             ],
             'favorites' => [
-                'total_count' => 2, // Favorite::query()->count(),
-                'total_sum' => 0,
+                'total_count' => $favorites->count(),
+                'total_sum' => $favorites->sum('product.price'),
             ],
             'contacts' => [
                 'phone_main' => '+375 (29) 179-37-90',
