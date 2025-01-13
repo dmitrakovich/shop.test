@@ -42,7 +42,7 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapApiRoutes(): void
     {
-        Route::middleware(['api', /*'device.auth',*/ 'web']) //todo: remove web middleware !!!
+        Route::middleware(['api', /* 'device.auth', */ 'web']) // todo: remove web middleware !!!
             ->prefix('api/' . self::API_VERSION)
             ->as('api.')
             ->group(base_path('routes/api.php'));
