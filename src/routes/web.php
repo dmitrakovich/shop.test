@@ -58,6 +58,8 @@ Route::resource('favorites', FavoriteController::class)->only(['store', 'destroy
 
 Route::post('currency/switch', [CurrencyController::class, 'switch'])->name('currency-switcher');
 
+Route::get('product/{product:slug}', [ProductController::class, 'show'])->withTrashed()->name('product.show');
+
 Route::group([], function () {
     Route::post('/quick/{product}', [ProductController::class, 'quickView'])->withTrashed()->name('product.quick');
     Route::get('ajax-next-page', [CatalogController::class, 'ajaxNextPage']);
@@ -69,11 +71,9 @@ Route::group([], function () {
         $slug = (string)Str::of($path)->explode('/')->last();
         $url = Url::search($slug);
 
-        if (isset($url) && $url['model_type'] === Product::class) {
-            return app(ProductController::class)->show($url->model_id);
-        } else {
-            return app(CatalogController::class)->show($request);
-        }
+        return $url?->model_type === Product::class
+            ? redirect(status: 301)->route('product.show', $url->model->slug)
+            : app(CatalogController::class)->show($request);
     };
     Route::get('catalog/city-{city}/{path?}', $check_catalog)->where('path', '[a-zA-Z0-9/_-]+')->name('shop-city');
     Route::get('catalog/{path?}', $check_catalog)->where('path', '[a-zA-Z0-9/_-]+')->name('shop');

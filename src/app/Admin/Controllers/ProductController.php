@@ -178,6 +178,8 @@ class ProductController extends AbstractAdminController
      */
     protected function form()
     {
+        abort(400, 'Проводятся технические работы. Временно не доступно.');
+
         $form = new Form(new Product());
         $product = null;
         $productFromStock = $this->getStockProduct();

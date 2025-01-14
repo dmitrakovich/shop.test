@@ -30,15 +30,15 @@ class ProductController extends BaseController
     /**
      * Display the specified product.
      */
-    public function show(int $id): View
+    public function show(Product $product): View
     {
-        $product = Product::with([
+        $product->load([
             'tags',
             'category',
             'countryOfOrigin',
             'availableSizes' => fn ($q) => $q->whereHas('stock', fn ($q) => $q->where('type', StockTypeEnum::SHOP))
                 ->with(['stock' => fn ($q) => $q->orderBy('site_sorting', 'asc')->with('city')]),
-        ])->withTrashed()->findOrFail($id);
+        ]);
         $this->productService->addToRecent($product->id);
         $this->setProductUrlToFeedback();
 

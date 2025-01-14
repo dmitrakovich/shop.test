@@ -21,6 +21,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $id
  * @property int|null $one_c_id
  * @property string $slug
+ * @property string $old_slug
  * @property string $sku
  * @property int $label_id
  * @property float $buy_price
@@ -275,7 +276,7 @@ class Product extends Model implements HasMedia
      */
     public function getUrl(): string
     {
-        return $this->url ?? ($this->url = $this->category->getUrl() . '/' . $this->slug);
+        return route('product.show', $this->slug);
     }
 
     /**
