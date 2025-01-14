@@ -61,11 +61,6 @@ parameters:
 			path: app/Models/ProductAttributes/Price.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Models\\\\Url\\:\\:\\$filters\\.$#"
-			count: 1
-			path: app/Models/Url.php
-
-		-
 			message: "#^Variable \\$mails in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: app/Services/Payment/BelpostCODService.php
