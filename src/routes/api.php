@@ -12,4 +12,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('app-init', [AppController::class, 'init']);
 Route::get('catalog/{path?}', [TemporaryController::class, 'catalog'])->where('path', '[a-zA-Z0-9/_-]+');
-Route::get('product/{product:slug}', [ProductController::class, 'show'])->withTrashed()->name('product.show'); //! test
+Route::get('product/{product:slug}', [ProductController::class, 'show'])->withTrashed()->name('product.show'); // ! test
