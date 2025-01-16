@@ -178,8 +178,6 @@ class ProductController extends AbstractAdminController
      */
     protected function form()
     {
-        abort(400, 'Проводятся технические работы. Временно не доступно.');
-
         $form = new Form(new Product());
         $product = null;
         $productFromStock = $this->getStockProduct();
@@ -198,7 +196,7 @@ class ProductController extends AbstractAdminController
             });
         }
 
-        $form->column(6, function ($form) use ($productFromStock) {
+        $form->column(6, function (Form $form) use ($productFromStock) {
             $form->html(function ($form) {
                 if ($form->model()->trashed()) {
                     return '<h4 class="text-red">Товар удален</h4>';
@@ -208,19 +206,19 @@ class ProductController extends AbstractAdminController
             $uploadImagesService = $this->uploadImagesService;
             $form->html(fn ($form) => $uploadImagesService->show($form->model()->getMedia()))->setWidth(12, 0);
             $form->html($this->uploadImagesService->getImagesInput(), 'Картинки');
-
-            $defaultSlug = null;
-            if (!empty($productFromStock->brand_id) && !empty($productFromStock->sku)) {
-                $defaultSlug = $this->generateSlug($productFromStock->brand_id, $productFromStock->sku);
+            if ($form->isCreating()) {
+                $form->hidden('slug', __('Slug'))->default('temp_slug_' . time());
+                $form->hidden('old_slug', 'Old slug')->default('temp_old_slug_' . time());
+            } else {
+                $form->text('slug', __('Slug'))->disable();
             }
-            $form->text('slug', __('Slug'))->default($defaultSlug);
             $form->text('path', 'Путь')->disable();
             $form->text('sku', 'Артикул')->required()->default($productFromStock->sku);
             $form->currency('buy_price', 'Цена покупки')->symbol('BYN');
             $form->currency('price', 'Цена')->symbol('BYN')->required();
             $form->currency('old_price', 'Старая цена')->symbol('BYN');
         });
-        $form->column(6, function ($form) use ($product, $productFromStock) {
+        $form->column(6, function (Form $form) use ($product, $productFromStock) {
             $form->multipleSelect('sizes', 'Размеры')->options(Size::pluck('name', 'id'))->default($productFromStock->getAvailableSizeIds())->required();
             $form->multipleSelect('colors', 'Цвет для фильтра')->options(Color::orderBy('name')->pluck('name', 'id'));
             $form->multipleSelect('fabrics', 'Материал для фильтра')->options(Fabric::orderBy('name')->pluck('name', 'id'));
@@ -270,8 +268,8 @@ class ProductController extends AbstractAdminController
             if (!$this->checkIfMediaAdded($form)) {
                 return $this->mediaNotAddedError();
             }
-            if (empty($form->slug)) {
-                $form->slug = $this->generateSlug($form->brand_id, $form->sku);
+            if ($form->isCreating()) {
+                $form->old_slug = $this->generateOldSlug($form->brand_id, $form->sku);
             }
             if (is_null($form->manufacturer_id)) {
                 $form->manufacturer_id = 0;
@@ -325,9 +323,6 @@ class ProductController extends AbstractAdminController
                     $media->save();
                 }
             }
-
-            $form->model()->url()->delete();
-            $form->model()->url()->create(['slug' => $form->slug]);
 
             if ($form->isCreating()) {
                 event(new ProductCreated($form->model()->refresh()));
@@ -385,9 +380,9 @@ class ProductController extends AbstractAdminController
     }
 
     /**
-     * Generate a slug based on brand name and SKU.
+     * Generate a old slug based on brand name and SKU.
      */
-    private function generateSlug(int $brandId, string $sku): string
+    private function generateOldSlug(int $brandId, string $sku): string
     {
         return Str::slug(Brand::where('id', $brandId)->value('name') . '-' . $sku);
     }

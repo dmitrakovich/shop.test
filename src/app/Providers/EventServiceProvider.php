@@ -19,6 +19,7 @@ use App\Listeners\MergeFavorites;
 use App\Listeners\OneC;
 use App\Listeners\Order\CreateInstallment;
 use App\Listeners\Order\DistributeOrder;
+use App\Listeners\Product;
 use App\Listeners\Promo\ApplyPendingPromocode;
 use App\Listeners\SaveDevice;
 use App\Listeners\SendOrderInformationNotification;
@@ -98,6 +99,7 @@ class EventServiceProvider extends ServiceProvider
             ConvertVideo::class,
         ],
         Products\ProductCreated::class => [
+            Product\GenerateSlug::class,
             OneC\UpdateProduct::class,
         ],
         Products\ProductUpdated::class => [

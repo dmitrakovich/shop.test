@@ -53,6 +53,8 @@ class DeviceDetect
 
     /**
      * Check if the current request is from a robot
+     *
+     * @todo identify robots by ip
      */
     private function isRobot(Request $request): bool
     {
