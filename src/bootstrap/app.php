@@ -15,9 +15,15 @@ return Application::configure(basePath: dirname(__DIR__))
             ->encryptCookies(['utm', Cookie::YANDEX_ID->value, Cookie::GOOGLE_ID->value])
             ->throttleApi(redis: true);
 
-        $middleware->web(append: [
+        $middleware->group('web', [
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
             \App\Http\Middleware\DeviceDetect::class,
             \App\Http\Middleware\MigrateCartToDevice::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Spatie\GoogleTagManager\GoogleTagManagerMiddleware::class,
             \App\Http\Middleware\ViewMiddleware::class,
         ]);

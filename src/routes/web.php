@@ -72,7 +72,7 @@ Route::group([], function () {
         $url = Url::search($slug);
 
         return $url?->model_type === Product::class
-            ? redirect(status: 301)->route('product.show', $url->model->slug)
+            ? redirect(status: 301)->route('product.show', $url->model()->firstOrFail()->slug)
             : app(CatalogController::class)->show($request);
     };
     Route::get('catalog/city-{city}/{path?}', $check_catalog)->where('path', '[a-zA-Z0-9/_-]+')->name('shop-city');
