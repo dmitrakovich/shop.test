@@ -55,23 +55,25 @@ class CatalogService
         return $products;
     }
 
-    public function getFilterBadges(?array $currentFiltersGroups, ?string $searchQuery = null): array
+    public function getFilterBadges(array $currentFiltersGroups = [], ?string $searchQuery = null): array
     {
         $badges = [];
-        if (!empty($currentFiltersGroups)) {
-            foreach ($currentFiltersGroups as $currentFiltersGroupKey => $currentFiltersGroup) {
-                foreach ($currentFiltersGroup as $currentFilterKey => $currentFilter) {
-                    $filterModel = $currentFilter->filters;
-                    if ($filterModel->isInvisible() || $filterModel->slug === 'catalog' || ($currentFiltersGroupKey == Category::class) && ($currentFilterKey != array_key_last($currentFiltersGroup))) {
-                        continue;
-                    }
-                    $badges[] = (object)[
-                        'name' => $filterModel->getBadgeName(),
-                        'url' => UrlHelper::generate([], [$filterModel]),
-                    ];
+        foreach ($currentFiltersGroups as $filterModel => $currentFiltersGroup) {
+            if ($filterModel === Category::class) {
+                $currentFiltersGroup = [end($currentFiltersGroup)];
+            }
+            foreach ($currentFiltersGroup as $currentFilter) {
+                $filterModel = $currentFilter->filters;
+                if ($filterModel->isInvisible()) {
+                    continue;
                 }
+                $badges[] = (object)[
+                    'name' => $filterModel->getBadgeName(),
+                    'url' => UrlHelper::generate([], [$filterModel]),
+                ];
             }
         }
+
         if ($searchQuery) {
             $badges[] = (object)[
                 'name' => 'Поиск: ' . mb_strimwidth($searchQuery, 0, 12, '...'),

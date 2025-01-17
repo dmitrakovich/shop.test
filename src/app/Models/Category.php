@@ -262,4 +262,12 @@ class Category extends Model implements Sortable
 
         return $name;
     }
+
+    /**
+     * Mark filter as invisible
+     */
+    public function isInvisible(): bool
+    {
+        return $this->isRoot();
+    }
 }

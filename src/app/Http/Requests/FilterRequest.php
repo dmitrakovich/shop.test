@@ -38,13 +38,16 @@ class FilterRequest extends FormRequest
      */
     public function getSorting(): string
     {
-        $session = $this->session();
-        $sorting = $this->input('sort') ?? $session->get('sorting', Product::DEFAULT_SORT);
-        if ($sorting != $session->get('sorting')) {
-            $session->put('sorting', $sorting);
+        $sorting = $this->input('sort');
+
+        if ($this->hasSession()) {
+            $sessionSorting = $this->session()->get('sorting');
+            if ($sorting && $sorting !== $sessionSorting) {
+                $this->session()->put('sorting', $sorting);
+            }
         }
 
-        return $sorting;
+        return $sorting ?? Product::DEFAULT_SORT;
     }
 
     /**
@@ -55,7 +58,7 @@ class FilterRequest extends FormRequest
         $slugs = array_filter(explode('/', 'catalog/' . $this->path));
         $filters = $this->getStaticFilters($slugs);
 
-        Url::whereIn('slug', $slugs)
+        Url::query()->whereIn('slug', $slugs)
             ->with('filters')
             ->get(['slug', 'model_type', 'model_id'])
             ->sortBy(fn (Url $url) => array_search($url->slug, $slugs))
@@ -75,7 +78,7 @@ class FilterRequest extends FormRequest
     {
         $citySlug = $this->route('city');
 
-        return $citySlug ? City::where('slug', $citySlug)->first() : null;
+        return $citySlug ? City::query()->where('slug', $citySlug)->first() : null;
     }
 
     /**
