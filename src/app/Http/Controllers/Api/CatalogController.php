@@ -8,6 +8,7 @@ use App\Facades\Sale;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterRequest;
+use App\Http\Resources\Product\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\CatalogService;
@@ -18,6 +19,8 @@ use App\Services\ProductService;
 use App\Services\Seo\CatalogSeoService;
 use App\Services\Seo\ProductSeoService;
 use App\Services\SliderService;
+use Diglactic\Breadcrumbs\Breadcrumbs;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 
 class CatalogController extends Controller
@@ -88,11 +91,8 @@ class CatalogController extends Controller
         FeedbackService $feedbackService,
     ): array {
         $product->load([
-            'tags',
-            'category',
-            'countryOfOrigin',
-            'availableSizes' => fn ($q) => $q->whereHas('stock', fn ($q) => $q->where('type', StockTypeEnum::SHOP))
-                ->with(['stock' => fn ($q) => $q->orderBy('site_sorting', 'asc')->with('city')]),
+            'availableSizes' => fn (Builder $query) => $query->whereRelation('stock', 'type', StockTypeEnum::SHOP),
+            'availableSizes.stock.city',
         ]);
         // $productService->addToRecent($product->id);
 
@@ -101,7 +101,8 @@ class CatalogController extends Controller
         event(new ProductView($product));
 
         return [
-            'product' => $product,
+            'breadcrumbs' => Breadcrumbs::generate('product', $product),
+            'product' => new ProductResource($product),
             'feedbacks' => $feedbackService->getForProduct($product->id),
             'similarProducts' => $sliderService->getSimilarProducts($product->id),
             'productGroup' => $sliderService->getProductGroup($product->product_group_id),
