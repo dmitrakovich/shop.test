@@ -23,7 +23,7 @@ class StockResource extends JsonResource
             'id' => $stock->id,
             'name' => $stock->name,
             'address' => $stock->address,
-            'sizes' => $this->getFormattedSizes(), //todo: array
+            'sizes' => $this->getFormattedSizes(), // todo: array
         ];
     }
 }
