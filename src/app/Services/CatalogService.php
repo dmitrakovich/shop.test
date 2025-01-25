@@ -7,6 +7,7 @@ use App\Helpers\UrlHelper;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\Collection;
@@ -21,15 +22,9 @@ class CatalogService
      */
     protected const PAGE_SIZE = 12;
 
-    /**
-     * @var ProductService
-     */
-    private $productService;
-
-    public function __construct()
-    {
-        $this->productService = new ProductService();
-    }
+    public function __construct(
+        private readonly ProductService $productService
+    ) {}
 
     /**
      * @return \Illuminate\Contracts\Pagination\CursorPaginator
@@ -47,6 +42,25 @@ class CatalogService
 
         // save query in cache (1 hour)
         Cache::put($this->getQueryCacheKey(), Eloquent::serialize($productsQuery), 3600);
+
+        $this->productService->addEager($products);
+        $this->addMinMaxPrices($products, $productsQuery);
+        $this->addGtmData($products);
+
+        return $products;
+    }
+
+    public function getProductsWithPagination(array $filters, string $sort, ?string $search = null): LengthAwarePaginator
+    {
+        /** @var Builder $productsQuery */
+        $productsQuery = $this->productService
+            ->applyFilters($filters)
+            ->search($search)
+            ->sorting($sort);
+
+        $products = $productsQuery->paginate(self::PAGE_SIZE);
+        $this->addTopProducts($products, $filters);
+        $products->totalCount = $products->total() + $this->topProductsCount($products);
 
         $this->productService->addEager($products);
         $this->addMinMaxPrices($products, $productsQuery);
@@ -148,7 +162,7 @@ class CatalogService
         return $products->count() - self::PAGE_SIZE;
     }
 
-    protected function addMinMaxPrices(CursorPaginator $products, Builder $productsQuery): void
+    protected function addMinMaxPrices(CursorPaginator|LengthAwarePaginator $products, Builder $productsQuery): void
     {
         $priceQuery = clone $productsQuery;
         $query = $priceQuery->getQuery();

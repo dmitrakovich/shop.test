@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources\Product;
 
+use App\Enums\StockTypeEnum;
 use App\Facades\Currency;
 use App\Models\AvailableSizes;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,11 +21,15 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $this->load([
+            'availableSizes' => fn (Builder $query) => $query->whereRelation('stock', 'type', StockTypeEnum::SHOP),
+            'availableSizes.stock.city',
+        ]);
+
         return [
             'id' => $this->id,
             'slug' => $this->slug,
             'sku' => $this->sku,
-            'season_id' => $this->season_id,
             'color_txt' => $this->color_txt,
             'fabric_top_txt' => $this->fabric_top_txt,
             'fabric_inner_txt' => $this->fabric_inner_txt,
@@ -46,6 +52,7 @@ class ProductResource extends JsonResource
                 'currency' => Currency::getCurrentCurrency(),
             ],
 
+            'is_favorite' => $this->isFavorite(),
             'is_installment_available' => $this->availableInstallment(),
             'is_new' => $this->isNew(),
             'short_name' => $this->shortName(),

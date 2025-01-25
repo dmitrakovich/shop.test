@@ -476,6 +476,14 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Is the product in favorite list
+     */
+    public function isFavorite(): bool
+    {
+        return isset($this->favorite);
+    }
+
+    /**
      * Checks that the product has only one size
      */
     public function hasOneSize(): bool

@@ -17,7 +17,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Notifications\ChannelManager;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Sentry\Severity;
 use Spatie\Permission\Models\Role;
@@ -70,6 +72,8 @@ class AppServiceProvider extends ServiceProvider
 
         // $this->modelShouldBeStrict($app->isProduction());
 
+        // $this->logQueries();
+
         if ($app->isLocal()) {
             $app['config']['filesystems.disks.public.url'] = 'https://barocco.by/media';
         }
@@ -94,5 +98,16 @@ class AppServiceProvider extends ServiceProvider
         //         captureMessage("Attempted to lazy load [{$relation}] on model [{$class}].", Severity::warning());
         //     });
         // }
+    }
+
+    private function logQueries(): void
+    {
+        DB::listen(function ($query) {
+            $sql = $query->sql;
+            $bindings = $query->bindings;
+            $executionTime = $query->time;
+
+            Log::debug($sql, compact('bindings', 'executionTime'));
+        });
     }
 }

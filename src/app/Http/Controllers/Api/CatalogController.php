@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\StockTypeEnum;
 use App\Events\Analytics\ProductView;
 use App\Facades\Sale;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterRequest;
+use App\Http\Resources\Product\CatalogProductCollection;
 use App\Http\Resources\Product\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
@@ -20,7 +20,6 @@ use App\Services\Seo\CatalogSeoService;
 use App\Services\Seo\ProductSeoService;
 use App\Services\SliderService;
 use Diglactic\Breadcrumbs\Breadcrumbs;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 
 class CatalogController extends Controller
@@ -42,7 +41,7 @@ class CatalogController extends Controller
         UrlHelper::setCurrentFilters($currentFilters);
         UrlHelper::setCurrentCity($currentCity);
 
-        $products = $catalogService->getProducts($currentFilters, $sort, $searchQuery);
+        $products = $catalogService->getProductsWithPagination($currentFilters, $sort, $searchQuery);
 
         $sortingList = [
             'rating' => 'по популярности',
@@ -57,7 +56,7 @@ class CatalogController extends Controller
         $gtmService->setForCatalog($products, $category, $searchQuery);
 
         $data = [
-            'products' => $products,
+            'products' => new CatalogProductCollection($products),
             'category' => $category,
             'currentFilters' => $currentFilters,
             'badges' => $badges,
@@ -90,10 +89,6 @@ class CatalogController extends Controller
         // ProductSeoService $seoService,
         FeedbackService $feedbackService,
     ): array {
-        $product->load([
-            'availableSizes' => fn (Builder $query) => $query->whereRelation('stock', 'type', StockTypeEnum::SHOP),
-            'availableSizes.stock.city',
-        ]);
         // $productService->addToRecent($product->id);
 
         // $seoService->setProduct($product)->generate(); // !!!
