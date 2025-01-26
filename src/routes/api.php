@@ -2,6 +2,7 @@
 
 use App\Facades\Device;
 use App\Http\Controllers\Api\AppController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CatalogController;
 use App\Http\Controllers\Api\InfoPageController;
 use Illuminate\Http\Request;
@@ -19,3 +20,8 @@ Route::get('catalog/{path?}', [CatalogController::class, 'index'])->where('path'
 Route::get('product/{product:slug}', [CatalogController::class, 'show'])->withTrashed()->name('product.show');
 
 Route::get('info-page/{page:slug}', [InfoPageController::class, 'show']);
+
+// Route::prefix('cart')->as('cart.')->group(function () {
+//     Route::get('/', [CartController::class, 'show'])->name('show');
+//     Route::post('add', [CartController::class, 'addToCart'])->name('add');
+// });
