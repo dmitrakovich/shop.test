@@ -14,6 +14,7 @@ use FacebookAds\Api;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Notifications\ChannelManager;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
@@ -77,6 +78,8 @@ class AppServiceProvider extends ServiceProvider
         if ($app->isLocal()) {
             $app['config']['filesystems.disks.public.url'] = 'https://barocco.by/media';
         }
+
+        JsonResource::withoutWrapping();
 
         Gate::policy(Role::class, RolePolicy::class);
     }
