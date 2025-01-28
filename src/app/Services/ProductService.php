@@ -46,7 +46,7 @@ class ProductService
 
     public function getById(array $ids): EloquentCollection
     {
-        return Product::whereIn('id', $ids)->with([
+        return Product::query()->whereIn('id', $ids)->with([
             'category:id,title,path',
             'brand:id,name',
             'sizes:id,name',

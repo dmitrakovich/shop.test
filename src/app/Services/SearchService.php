@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 class SearchService
 {
     /**
-     * Searck keys list from search query
+     * Search keys list from search query
      *
      * @var array
      */
@@ -20,11 +20,8 @@ class SearchService
 
     /**
      * Generate search query
-     *
-     * @param  array  $search
-     * @return Builder
      */
-    public function generateSearchQuery(Builder $query, string $column)
+    public function generateSearchQuery(Builder $query, string $column): Builder
     {
         $value = reset($this->searchKeys);
         $query->where($column, 'like', "%$value%");
@@ -37,7 +34,7 @@ class SearchService
     }
 
     /**
-     * Prepare id list from serach query
+     * Prepare id list from search query
      */
     public function getIds(): array
     {

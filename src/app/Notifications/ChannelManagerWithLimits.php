@@ -25,10 +25,8 @@ class ChannelManagerWithLimits extends ChannelManager
 
     /**
      * Check availability and limits for channel.
-     *
-     * @param  mixed  $notificationn
      */
-    private function checkAvailability($notification): bool
+    private function checkAvailability(mixed $notification): bool
     {
         if (method_exists($notification, 'checkAvailability')) {
             return $notification->checkAvailability();

@@ -197,9 +197,7 @@ class CurrencyService
     }
 
     /**
-     * Conver & format price in current currency
-     *
-     * @param  float  $value
+     * Convert & format price in current currency
      */
     public function convertAndFormat(float $priceInByn): string
     {

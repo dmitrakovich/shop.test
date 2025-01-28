@@ -3,13 +3,12 @@
 namespace App\Admin\Controllers;
 
 use App\Models\InfoPage;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Support\Str;
 
-class InfoPageController extends AdminController
+class InfoPageController extends AbstractAdminController
 {
     /**
      * Title for current resource.
@@ -34,8 +33,8 @@ class InfoPageController extends AdminController
         $grid->column('html', __('Html'))->display(function ($text) {
             return Str::limit(strip_tags($text), 300, '...');
         });
-        $grid->created_at()->date('d.m.Y H:i:s');
-        $grid->updated_at()->date('d.m.Y H:i:s');
+        $grid->column('created_at', 'Дата создания')->display(fn ($datetime) => self::formatDateTime($datetime));
+        $grid->column('updated_at', 'Дата обновления')->display(fn ($datetime) => self::formatDateTime($datetime));
 
         return $grid;
     }
@@ -48,7 +47,7 @@ class InfoPageController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(InfoPage::findOrFail($id));
+        $show = new Show(InfoPage::query()->findOrFail($id));
 
         $show->field('id', __('Id'));
         $show->field('slug', __('Slug'));

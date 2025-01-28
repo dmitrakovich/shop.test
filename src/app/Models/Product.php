@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Spatie\GoogleTagManager\DataLayer;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -102,6 +103,13 @@ class Product extends Model implements HasMedia
      * Ссылка на товар
      */
     protected ?string $url = null;
+
+    /**
+     * DataLayer for product
+     *
+     * @todo remove from product Model
+     */
+    public DataLayer $dataLayer;
 
     /**
      * Категория товара

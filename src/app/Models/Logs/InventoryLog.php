@@ -44,7 +44,7 @@ class InventoryLog extends Model
     /**
      * The name of the "updated at" column.
      *
-     * @var string
+     * @var string|null
      */
     public const UPDATED_AT = null;
 

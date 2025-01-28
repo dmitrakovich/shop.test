@@ -233,8 +233,6 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
 
     /**
      * Interact with the user's first name.
-     *
-     * @param  string  $firstName
      */
     public function firstName(): Attribute
     {
@@ -277,8 +275,6 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
 
     /**
      * Retrieve the blacklist associated with the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne The relationship between the user and the blacklist.
      */
     public function blacklist(): HasOne
     {
@@ -287,8 +283,6 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
 
     /**
      * Retrieve the blacklistLogs associated with the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany The relationship between the user and the blacklistLogs.
      */
     public function blacklistLogs(): HasMany
     {
@@ -297,8 +291,6 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
 
     /**
      * Define a relationship with the user's online payments.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany The relationship between the user and their online payments.
      */
     public function payments(): HasManyThrough
     {
@@ -415,7 +407,6 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
      */
     private function _hasReviewAfterOrder(): bool
     {
-        /** @var Order $lastOrder */
         if ($lastOrderDate = $this->orders()->latest()->value('created_at')) {
             return $this->reviews()->where('created_at', '>', $lastOrderDate)
                 ->whereHas('media')->exists();

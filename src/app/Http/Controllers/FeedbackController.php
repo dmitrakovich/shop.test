@@ -34,11 +34,8 @@ class FeedbackController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\FeedbackRequest  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(FeedbackRequest $feedbackRequest)
+    public function store(FeedbackRequest $feedbackRequest): array
     {
         $this->feedbackService->store($feedbackRequest->validated());
 
