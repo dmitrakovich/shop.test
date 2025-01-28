@@ -4,10 +4,10 @@ namespace App\Models\Payments;
 
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -88,8 +88,10 @@ class Installment extends Model
      */
     public function getNextPaymentDate(): Carbon
     {
-        if (empty($this->nextPaymentDate)) {
-            $this->nextPaymentDate = $this->created_at->copy()->setMonth(now()->month);
+        if (!$this->nextPaymentDate) {
+            $this->nextPaymentDate = $this->created_at->copy()
+                ->setYear(now()->year)
+                ->setMonth(now()->month);
 
             if ($this->nextPaymentDate->isPast()) {
                 $this->nextPaymentDate->addMonth();
