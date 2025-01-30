@@ -7,6 +7,7 @@ use App\Facades\Device as DeviceFacade;
 use App\Models\User\Device as UserDevice;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Jenssegers\Agent\Facades\Agent;
 
@@ -30,6 +31,7 @@ class DeviceDetect
             Cookie::queue(
                 cookie(CookieEnum::DEVICE_ID->value, $webId, UserDevice::COOKIE_LIFE_TIME, '/')
             );
+            Cache::put($this->getNewDeviceCacheKey($request), $webId, now()->addHours(6));
         }
 
         DeviceFacade::setDevice(
@@ -58,6 +60,23 @@ class DeviceDetect
      */
     private function isRobot(Request $request): bool
     {
-        return Agent::isRobot(); // additional checks
+        return Agent::isRobot() || $this->isDeviceRecognizedByIpCache($request);
+    }
+
+    /**
+     * Get the cache key for the new device
+     */
+    private function getNewDeviceCacheKey(Request $request): string
+    {
+        return "newDeviceIp:{$request->ip()}";
+    }
+
+    /**
+     * Check if the device is recognized by IP cache
+     */
+    private function isDeviceRecognizedByIpCache(Request $request): bool
+    {
+        return !$request->cookie(CookieEnum::DEVICE_ID->value)
+            && Cache::has($this->getNewDeviceCacheKey($request));
     }
 }
