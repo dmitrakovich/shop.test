@@ -6,6 +6,7 @@ use App\Contracts\ClientInterface;
 use App\Enums\Cookie as CookieEnum;
 use App\Models\Cart;
 use App\Models\Favorite;
+use App\Models\Orders\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -94,6 +95,14 @@ class Device extends Model implements ClientInterface
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class)->withoutGlobalScope('for_user');
+    }
+
+    /**
+     * Device's orders
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 
     /**

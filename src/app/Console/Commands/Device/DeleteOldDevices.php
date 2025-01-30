@@ -33,6 +33,7 @@ class DeleteOldDevices extends Command
             ->where('created_at', '<', now()->subWeek())
             ->doesntHave('cart')
             ->doesntHave('favorites')
+            ->doesntHave('orders')
             ->delete();
 
         Log::channel('jobs')->info("Удалено {$count} устройств по крону.");
