@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Jenssegers\Agent\Facades\Agent;
+use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 /**
  * @property int $id
@@ -74,6 +75,8 @@ class Device extends Model implements ClientInterface
             $device->setGoogleId();
             $device->setType();
             $device->setAgent();
+            $device->setIpAddress();
+            $device->setCountryCode();
         });
     }
 
@@ -156,5 +159,21 @@ class Device extends Model implements ClientInterface
 
             $this->attributes['agent'] = "$platform $platformVersion; $browser $browserVersion";
         }
+    }
+
+    /**
+     * Set the device's ip address
+     */
+    public function setIpAddress(): void
+    {
+        $this->attributes['ip_address'] = request()->ip();
+    }
+
+    /**
+     * Set the device's country code
+     */
+    public function setCountryCode(): void
+    {
+        $this->attributes['country_code'] = SxGeo::getCountry();
     }
 }
