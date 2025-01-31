@@ -21,7 +21,9 @@ Route::get('product/{product:slug}', [CatalogController::class, 'show'])->withTr
 
 Route::get('info-page/{page:slug}', [InfoPageController::class, 'show']);
 
-// Route::prefix('cart')->as('cart.')->group(function () {
-//     Route::get('/', [CartController::class, 'show'])->name('show');
-//     Route::post('add', [CartController::class, 'addToCart'])->name('add');
-// });
+Route::prefix('cart')->as('cart.')->group(function () {
+    Route::get('/', [CartController::class, 'show'])->name('show');
+    Route::post('add', [CartController::class, 'addToCart'])->name('add');
+    Route::delete('remove/{itemId}', [CartController::class, 'removeItem'])->name('remove');
+    Route::post('clear', [CartController::class, 'clear'])->name('clear');
+});

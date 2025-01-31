@@ -55,6 +55,7 @@
         "picqer/php-barcode-generator": "^2.4",
         "sentry/sentry-laravel": "^4.4",
         "spatie/laravel-backup": "^8.6",
+        "spatie/laravel-data": "^4.13",
         "spatie/laravel-googletagmanager": "^2.7",
         "spatie/laravel-medialibrary": "^11.4",
         "staudenmeir/eloquent-json-relations": "^1.12",

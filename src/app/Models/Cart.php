@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Facades\Device;
+use App\Facades\Sale;
 use App\Models\Promo\Promocode;
 use App\Models\User\Device as UserDevice;
 use App\Models\User\User;
@@ -94,9 +95,13 @@ class Cart extends Model
 
     /**
      * Get the total old price of items in the cart.
+     *
+     * @todo refactor applying sale
      */
     public function getTotalOldPrice(): float
     {
+        Sale::applyToCart($this);
+
         $price = 0;
         foreach ($this->availableItems() as $item) {
             $price += ($item->product->getOldPrice() * $item->count);
@@ -107,13 +112,34 @@ class Cart extends Model
 
     /**
      * Get all items cart price
+     *
+     * @todo refactor applying sale
      */
     public function getTotalPrice(?string $currencyCode = null): float
     {
+        Sale::applyToCart($this);
+
         $price = 0;
         foreach ($this->availableItems() as $item) {
             $price += ($item->product->getPrice($currencyCode) * $item->count);
         }
+
+        return $price;
+    }
+
+    /**
+     * Get all items cart price without user sale
+     *
+     * @todo refactor applying sale
+     */
+    public function getTotalPriceWithoutUserSale(?string $currencyCode = null): float
+    {
+        Sale::disableUserSale();
+
+        $price = $this->getTotalPrice($currencyCode);
+
+        Sale::enableUserSale();
+        Sale::applyToCart($this);
 
         return $price;
     }
@@ -144,11 +170,21 @@ class Cart extends Model
     }
 
     /**
+     * Remove a cart item by its ID.
+     */
+    public function removeItemById(int $id): self
+    {
+        $this->items()->where('id', $id)->delete();
+
+        return $this->refreshItems();
+    }
+
+    /**
      * Refresh car items
      */
-    protected function refreshItems(): void
+    protected function refreshItems(): self
     {
-        $this->load('items');
+        return $this->load('items');
     }
 
     /**

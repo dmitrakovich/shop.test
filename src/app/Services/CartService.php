@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Facades\Sale;
 use App\Models\Cart;
 use App\Models\CartData;
 
@@ -52,18 +51,15 @@ class CartService
 
     /**
      * Calc & return cart prices
+     *
+     * @deprecated
      */
     public function getCartPrices(Cart $cart): array
     {
-        Sale::disableUserSale();
-        Sale::applyToCart($cart);
-        $totalPriceWithoutUserSale = $cart->getTotalPrice();
-
-        Sale::enableUserSale();
-        Sale::applyToCart($cart);
-        $totalPrice = $cart->getTotalPrice();
-        $totalOldPrice = $cart->getTotalOldPrice();
-
-        return compact('totalPrice', 'totalOldPrice', 'totalPriceWithoutUserSale');
+        return [
+            'totalPrice' => $cart->getTotalPrice(),
+            'totalOldPrice' => $cart->getTotalOldPrice(),
+            'totalPriceWithoutUserSale' => $cart->getTotalPriceWithoutUserSale(),
+        ];
     }
 }
