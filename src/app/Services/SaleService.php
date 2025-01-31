@@ -316,7 +316,6 @@ class SaleService
             SaleAlgorithm::SIMPLE => $this->round($oldPrice * (1 - ($this->getDiscount() + $baseDiscount))),
             SaleAlgorithm::COUNT => $this->round($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount))),
             SaleAlgorithm::ASCENDING, SaleAlgorithm::DESCENDING => $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount))),
-            default => $price,
         };
     }
 

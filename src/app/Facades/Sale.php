@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static boolean hasInstallment() Check if installment is available
  * @method static boolean hasCOD() Check if cash on delivery (COD) is available
  * @method static void applyToCart(\App\Models\Cart $cart) Apply sales to cart
- * @method static void applyToOrder(\App\Models\Cart $cart, array $orderData) Apply sales to order
+ * @method static void applyToOrder(\App\Models\Cart $cart, \App\Models\Data\OrderData $orderData) Apply sales to order
  * @method static void disableUserSale() Disable user sale for some conditions
  * @method static void enableUserSale() Enable user sale after disable
  * @method static void applyPromocode(string $promocodeCode) Apply a promocode to the user's cart.

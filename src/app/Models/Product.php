@@ -416,10 +416,8 @@ class Product extends Model implements HasMedia
 
     /**
      * get product price
-     *
-     * @return float
      */
-    public function getFormattedPrice()
+    public function getFormattedPrice(): string
     {
         return Currency::convertAndFormat($this->getFinalPrice());
     }
@@ -452,10 +450,8 @@ class Product extends Model implements HasMedia
 
     /**
      * get product old price
-     *
-     * @return float
      */
-    public function getFormattedOldPrice()
+    public function getFormattedOldPrice(): string
     {
         return Currency::convertAndFormat($this->getFinalOldPrice());
     }

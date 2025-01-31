@@ -36,7 +36,7 @@ class Url extends Model
     {
         // return Cache::tags(['catalog_slugs'])
         // ->rememberForever($slug, function () use ($slug) {
-        return self::find($slug);
+        return self::query()->find($slug);
         // }
         // );
         // if (!empty($url->redirect)) return redirect($url->redirect);

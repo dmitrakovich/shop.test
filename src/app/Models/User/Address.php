@@ -64,12 +64,12 @@ class Address extends Model
     public function getAddressRow()
     {
         $resultAddress = [];
-        $resultAddress[] = $this?->zip;
-        $resultAddress[] = $this?->district ? 'р-н ' . $this->district : null;
-        $resultAddress[] = $this?->street ? 'ул. ' . $this->street : null;
-        $resultAddress[] = $this?->house ? 'д. ' . $this->house : null;
-        $resultAddress[] = $this?->corpus;
-        $resultAddress[] = $this?->room ? 'кв. ' . $this->room : null;
+        $resultAddress[] = $this->zip;
+        $resultAddress[] = $this->district ? 'р-н ' . $this->district : null;
+        $resultAddress[] = $this->street ? 'ул. ' . $this->street : null;
+        $resultAddress[] = $this->house ? 'д. ' . $this->house : null;
+        $resultAddress[] = $this->corpus;
+        $resultAddress[] = $this->room ? 'кв. ' . $this->room : null;
 
         return implode(', ', array_filter($resultAddress, fn ($item) => $item));
     }

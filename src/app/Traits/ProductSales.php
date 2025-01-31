@@ -82,6 +82,6 @@ trait ProductSales
      */
     public function getSalePercentage(): int
     {
-        return ceil((1 - ($this->getFinalPrice() / $this->getFinalOldPrice())) * 100);
+        return (int)ceil((1 - ($this->getFinalPrice() / $this->getFinalOldPrice())) * 100);
     }
 }

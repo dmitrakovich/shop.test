@@ -109,8 +109,6 @@ class EventServiceProvider extends ServiceProvider
 
     /**
      * The model observers for your application.
-     *
-     * @var array
      */
     protected $observers = [
         \App\Models\Orders\Order::class => [

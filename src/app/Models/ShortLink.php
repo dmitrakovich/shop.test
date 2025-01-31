@@ -23,16 +23,18 @@ class ShortLink extends Model
     final const CHAR_LIST = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234567890';
 
     /**
-     * @var array
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
      */
-    protected $guarded = [];
+    protected static $unguarded = true;
 
     /**
      * Generate, save & return short link
      */
     public static function createShortLink(string $fullLink): self
     {
-        return self::firstOrCreate(
+        return self::query()->firstOrCreate(
             ['full_link' => $fullLink],
             ['short_link' => self::generateShortLink()],
         );

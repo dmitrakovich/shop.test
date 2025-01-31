@@ -72,7 +72,7 @@ class AuthService
     public function generateNewOTP(User $user): int
     {
         $otp = mt_rand(self::OTP_MIN_VALUE, self::OTP_MAX_VALUE);
-        $user->notify(new VerificationPhoneSms($otp));
+        $user->notify(new VerificationPhoneSms((string)$otp));
         Session::put(self::OTP_SESSION_KEY, $otp);
 
         return $otp;
