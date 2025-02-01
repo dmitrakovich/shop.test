@@ -29,9 +29,8 @@ class CartService
             'product.brand',
             'product.category',
             'product.media',
-            'product.styles',
-            'product.sizes',
-            'size:id,name',
+            'product.sizes:id',
+            'size',
         ]);
 
         /** @var CartData $item */
