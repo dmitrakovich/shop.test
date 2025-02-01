@@ -259,7 +259,7 @@
                         <label for="city">Город</label>
                         <input id="city" type="text" name="city"
                             class="form-control @error('city') is-invalid @enderror"
-                            value="{{ old('city', $user->getFirstAddress()->city) }}">
+                            value="{{ old('city', $user->getFirstAddress()?->city) }}">
                         @error('city')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -270,7 +270,7 @@
                         <label for="user_addr">Адрес</label>
                         <input id="user_addr" type="text" name="user_addr"
                             class="form-control @error('user_addr') is-invalid @enderror"
-                            value="{{ old('user_addr', $user->getFirstAddress()->address) }}">
+                            value="{{ old('user_addr', $user->getFirstAddress()?->address) }}">
                         @error('user_addr')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

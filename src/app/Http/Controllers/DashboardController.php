@@ -37,7 +37,7 @@ class DashboardController extends Controller
         $result = $user->update($validatedData);
 
         if ($user->hasAddresses()) {
-            $user->getFirstAddress()->update($validatedData);
+            $user->getFirstAddress()?->update($validatedData);
         } else {
             $user->addresses()->create($validatedData);
         }

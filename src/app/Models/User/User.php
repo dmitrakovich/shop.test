@@ -181,12 +181,10 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
 
     /**
      * Get first user address if exist
-     *
-     * @return Address
      */
-    public function getFirstAddress()
+    public function getFirstAddress(): ?Address
     {
-        return optional($this->addresses[0] ?? null);
+        return $this->addresses[0] ?? null;
     }
 
     /**
@@ -194,7 +192,7 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
      */
     public function getFirstAddressCountryId(): ?int
     {
-        return $this->getFirstAddress()->country_id;
+        return $this->getFirstAddress()?->country_id;
     }
 
     /**
@@ -220,7 +218,7 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
      */
     public function hasAddresses(): bool
     {
-        return !empty($this->getFirstAddress()->id);
+        return !empty($this->getFirstAddress());
     }
 
     /**
@@ -340,7 +338,7 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
     public function hasRequiredFields(): bool
     {
         return !empty($this->first_name) && !empty($this->last_name)
-            && !empty($this->getFirstAddress()->city);
+            && !empty($this->getFirstAddress()?->city);
     }
 
     /**

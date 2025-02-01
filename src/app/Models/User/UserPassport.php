@@ -27,8 +27,6 @@ class UserPassport extends Model
 
     /**
      * The attributes that should be cast.
-     *
-     * @var array
      */
     protected $casts = [
         'issued_date' => 'date',

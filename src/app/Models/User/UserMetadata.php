@@ -29,8 +29,6 @@ class UserMetadata extends Model
 
     /**
      * The attributes that should be cast.
-     *
-     * @var array
      */
     protected $casts = [
         'last_order_type' => OrderType::class,

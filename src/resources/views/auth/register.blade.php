@@ -80,7 +80,7 @@
                                     <input id="city" type="text"
                                         class="form-control @error('city') is-invalid @enderror"
                                         name="city"
-                                        value="{{ old('city', $user->getFirstAddress()->city) }}" required
+                                        value="{{ old('city', $user->getFirstAddress()?->city) }}" required
                                         autocomplete="address-level2" />
                                     @error('city')
                                         <span class="invalid-feedback" role="alert">
@@ -98,7 +98,7 @@
                                     <input id="address" type="text"
                                         class="form-control @error('address') is-invalid @enderror"
                                         name="address"
-                                        value="{{ old('address', $user->getFirstAddress()->address) }}"
+                                        value="{{ old('address', $user->getFirstAddress()?->address) }}"
                                         autocomplete="address-level3" />
                                     @error('address')
                                         <span class="invalid-feedback" role="alert">

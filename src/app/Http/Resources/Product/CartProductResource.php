@@ -8,6 +8,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin \App\Models\Product
+ *
+ * @todo merge with catalog resource
  */
 class CartProductResource extends JsonResource
 {

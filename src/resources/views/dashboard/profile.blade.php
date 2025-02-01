@@ -145,7 +145,7 @@
                 <div class="col-12 col-md-8 col-xl-6">
                     <input id="city" type="text"
                         class="form-control @error('city') is-invalid @enderror" name="city"
-                        value="{{ old('city', $user->getFirstAddress()->city) }}" required
+                        value="{{ old('city', $user->getFirstAddress()?->city) }}" required
                         autocomplete="address-level2" placeholder="Город" />
                     @error('city')
                         <span class="invalid-feedback" role="alert">
@@ -161,7 +161,7 @@
                 <div class="col-12 col-md-8 col-xl-6">
                     <input id="address" type="text" name="address"
                         class="form-control @error('address') is-invalid @enderror" placeholder="Адрес"
-                        value="{{ old('address', $user->getFirstAddress()->address) }}">
+                        value="{{ old('address', $user->getFirstAddress()?->address) }}">
                     @error('address')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
