@@ -36,6 +36,8 @@ use libphonenumber\PhoneNumberUtil;
  * @property string $phone
  * @property \Illuminate\Support\Carbon|null $birth_date
  * @property \Illuminate\Support\Carbon|null $phone_verified_at
+ * @property string|null $otp_code
+ * @property \Illuminate\Support\Carbon|null $otp_expires_at
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -78,6 +80,8 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
         'phone',
         'email',
         'birth_date',
+        'otp_code',
+        'otp_expires_at',
         'created_at',
     ];
 
@@ -99,6 +103,7 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
         'birth_date' => 'date',
         'phone_verified_at' => 'datetime',
         'email_verified_at' => 'datetime',
+        'otp_expires_at' => 'datetime',
     ];
 
     /**
@@ -426,5 +431,23 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
         });
 
         return $cost;
+    }
+
+    /**
+     * Generate a new OTP (One Time Password) code for the user
+     *
+     * Generates a random 6-digit OTP code, stores it in the database along with
+     * an expiration timestamp 10 minutes in the future, and returns the generated code
+     */
+    public function generateNewOtp(): string
+    {
+        $otp = str_pad((string)mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $this->update([
+            'otp_code' => $otp,
+            'otp_expires_at' => now()->addMinutes(10),
+        ]);
+
+        return $otp;
     }
 }

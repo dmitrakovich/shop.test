@@ -2,6 +2,7 @@
 
 use App\Facades\Device;
 use App\Http\Controllers\Api\AppController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CatalogController;
 use App\Http\Controllers\Api\InfoPageController;
@@ -14,6 +15,12 @@ Route::get('/user', function (Request $request) {
         'device' => Device::current(),
     ];
 })->middleware('auth:sanctum');
+
+Route::prefix('auth')->as('auth.')->group(function () {
+    Route::prefix('otp')->as('otp.')->group(function () {
+        Route::post('send', [AuthController::class, 'sendOtp'])->name('get');
+    });
+});
 
 Route::get('app-init', [AppController::class, 'init']);
 Route::get('catalog/{path?}', [CatalogController::class, 'index'])->where('path', '[a-zA-Z0-9/_-]+');

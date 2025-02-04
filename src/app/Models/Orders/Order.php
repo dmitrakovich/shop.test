@@ -25,7 +25,7 @@ use Payments\PaymentMethod;
 /**
  * @property int $id
  * @property int|null $user_id
- * @property string|null $device_id
+ * @property int|null $device_id
  * @property string $first_name
  * @property string|null $last_name
  * @property string|null $patronymic_name

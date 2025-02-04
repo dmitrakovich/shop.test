@@ -25,12 +25,15 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  * @property int|null $yandex_id
  * @property string|null $google_id
  * @property string $type
+ * @property string|null $ip_address
+ * @property string|null $country_code
  * @property string $agent
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
  * @property-read \App\Models\Cart|null $cart
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Favorite[] $favorites
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
  * @property-read \App\Models\User\User|null $user
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
