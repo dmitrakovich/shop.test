@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Auth;
 
 use App\Http\Requests\Traits\HasRateLimiting;
+use App\Rules\CaptchaScore;
+use App\Rules\PhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SendOtpRequest extends FormRequest
@@ -17,7 +19,8 @@ class SendOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => ['required', 'string', 'min:6'],
+            'phone' => new PhoneNumber(),
+            'captcha_score' => new CaptchaScore(),
         ];
     }
 
