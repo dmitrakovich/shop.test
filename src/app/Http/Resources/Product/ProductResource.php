@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Product;
 
 use App\Enums\StockTypeEnum;
-use App\Facades\Currency;
+use App\Http\Resources\Price\ProductPricesResource;
 use App\Models\AvailableSizes;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -41,16 +41,7 @@ class ProductResource extends JsonResource
             'rating' => $this->rating,
             'key_features' => $this->key_features,
 
-            'prices' => [
-                'price' => $this->getFinalPrice(),
-                'old_price' => $this->getFinalOldPrice(),
-                'formatted_price' => $this->getFormattedPrice(),
-                'formatted_old_price' => $this->getFormattedOldPrice(),
-                'has_discount' => $this->hasDiscount(),
-                'sale_percentage' => $this->getSalePercentage(),
-                'sales' => $this->getSales(),
-                'currency' => Currency::getCurrentCurrency(),
-            ],
+            'prices' => new ProductPricesResource($this->resource),
 
             'is_favorite' => $this->isFavorite(),
             'is_installment_available' => $this->availableInstallment(),

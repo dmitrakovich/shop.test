@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Facades\Cart;
+use App\Facades\Currency;
 use App\Http\Controllers\Controller;
 use App\Models\Favorite;
 use Illuminate\Http\JsonResponse;
@@ -14,6 +15,7 @@ class AppController extends Controller
         $cart = Cart::getCart();
         $favorites = Favorite::query()->with('product')->get();
 
+        // todo: create resource
         return response()->json([
             'cart' => [
                 'total_count' => $cart->itemsCount(),
@@ -23,6 +25,7 @@ class AppController extends Controller
                 'total_count' => $favorites->count(),
                 'total_sum' => $favorites->sum('product.price'),
             ],
+            'currency' => Currency::getCurrentCurrency(),
             'contacts' => [
                 'phone_main' => '+375 (29) 179-37-90',
                 'phone_by' => '+375 (29) 522-77-22',

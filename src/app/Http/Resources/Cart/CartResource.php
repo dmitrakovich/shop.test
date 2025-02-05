@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Cart;
 
-use App\Http\Resources\Price\PriceResource;
 use App\Models\Cart;
 use App\Services\CartService;
 use Illuminate\Http\Request;
@@ -34,9 +33,9 @@ class CartResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'total_price' => new PriceResource($this->getTotalPrice()),
-            'total_old_price' => new PriceResource($this->getTotalOldPrice()),
-            'total_price_without_user_sale' => new PriceResource($this->getTotalPriceWithoutUserSale()),
+            'total_price' => $this->getTotalPrice(),
+            'total_old_price' => $this->getTotalOldPrice(),
+            'total_price_without_user_sale' => $this->getTotalPriceWithoutUserSale(),
             'items' => CartItemResource::collection($this->items),
         ];
     }

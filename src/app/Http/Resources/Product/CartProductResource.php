@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
-use App\Http\Resources\Price\PriceResource;
+use App\Http\Resources\Price\ProductPricesResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,13 +26,7 @@ class CartProductResource extends JsonResource
             'sku' => $this->sku,
             'url' => $this->getUrl(),
             'color_txt' => $this->color_txt,
-
-            'price' => new PriceResource($this->getFinalPrice()),
-            'old_price' => new PriceResource($this->getFinalOldPrice()),
-            'has_discount' => $this->hasDiscount(),
-            'sale_percentage' => $this->getSalePercentage(),
-            'sales' => $this->getSales(),
-
+            'prices' => new ProductPricesResource($this->resource),
             'brand' => new BrandResource($this->brand),
             'category' => new CategoryResource($this->category),
             'media' => MediaResource::collection($this->getMedia()),

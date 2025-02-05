@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
-use App\Facades\Currency;
+use App\Http\Resources\Price\ProductPricesResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,16 +23,7 @@ class CatalogProductResource extends JsonResource
             'slug' => $this->slug,
             'sku' => $this->sku,
             'url' => $this->getUrl(),
-            'prices' => [
-                'price' => $this->getFinalPrice(),
-                'old_price' => $this->getFinalOldPrice(),
-                'formatted_price' => $this->getFormattedPrice(),
-                'formatted_old_price' => $this->getFormattedOldPrice(),
-                'has_discount' => $this->hasDiscount(),
-                'sale_percentage' => $this->getSalePercentage(),
-                'sales' => $this->getSales(),
-                'currency' => Currency::getCurrentCurrency(),
-            ],
+            'prices' => new ProductPricesResource($this->resource),
 
             'is_favorite' => $this->isFavorite(),
             'is_new' => $this->isNew(),
