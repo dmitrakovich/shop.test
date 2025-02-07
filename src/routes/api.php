@@ -20,6 +20,7 @@ Route::prefix('auth')->as('auth.')->middleware('captcha')->group(function () {
     Route::prefix('otp')->as('otp.')->group(function () {
         Route::post('send', [AuthController::class, 'sendOtp'])->name('send');
     });
+    Route::post('attempt', [AuthController::class, 'attempt'])->name('attempt');
 });
 
 Route::get('app-init', [AppController::class, 'init']);
