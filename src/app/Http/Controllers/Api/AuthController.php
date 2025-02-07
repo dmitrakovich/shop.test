@@ -15,7 +15,7 @@ class AuthController extends Controller
         $authService->generateNewOTP($user);
     }
 
-    public function attempt(/*ValidateOtpRequest $request,*/ AuthService $authService) // : UserResource
+    public function attempt(/* ValidateOtpRequest $request, */ AuthService $authService) // : UserResource
     {
         // * валидацию opt производить в request
 
