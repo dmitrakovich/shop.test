@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginAttemptRequest;
 use App\Http\Requests\Auth\SendOtpRequest;
 use App\Http\Resources\User\UserResource;
 use App\Services\AuthService;
+use Illuminate\Auth\Events\Login;
 
 class AuthController extends Controller
 {
@@ -21,6 +22,8 @@ class AuthController extends Controller
 
     public function attempt(LoginAttemptRequest $request): array
     {
+        event(new Login('api', $request->user(), false));
+
         return [
             'user' => new UserResource($request->user()),
             'token' => $this->authService->regenerateToken($request->user()),
