@@ -66,7 +66,7 @@ class LoginRequest extends FormRequest
             $this->returnBack();
         }
 
-        if (!$authService->validateOTP($this->input('otp'))) {
+        if (!$authService->validateOtp($user, $this->input('otp'))) {
             RateLimiter::hit($this->throttleKeyForOTP());
 
             $this->returnBack(['otp' => __('auth.otp_failed')]);

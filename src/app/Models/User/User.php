@@ -450,4 +450,12 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
 
         return $otp;
     }
+
+    /**
+     * Checks if the provided OTP matches the stored code and has not expired.
+     */
+    public function validateOtp(string $otp): bool
+    {
+        return $this->otp_code === $otp && $this->otp_expires_at?->isFuture();
+    }
 }

@@ -3,31 +3,27 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginAttemptRequest;
 use App\Http\Requests\Auth\SendOtpRequest;
+use App\Http\Resources\User\UserResource;
 use App\Services\AuthService;
 
 class AuthController extends Controller
 {
-    public function sendOtp(SendOtpRequest $request, AuthService $authService): void
-    {
-        $user = $authService->getOrCreateUser($request->input('phone'));
+    public function __construct(private readonly AuthService $authService) {}
 
-        $authService->generateNewOTP($user);
+    public function sendOtp(SendOtpRequest $request): void
+    {
+        $user = $this->authService->getOrCreateUser($request->input('phone'));
+
+        $this->authService->generateNewOTP($user);
     }
 
-    public function attempt(/* ValidateOtpRequest $request, */ AuthService $authService) // : UserResource
+    public function attempt(LoginAttemptRequest $request): array
     {
-        // * валидацию opt производить в request
-
-        // if (!$authService->validateOTP($this->input('otp'))) {
-        //     RateLimiter::hit($this->throttleKeyForOTP());
-
-        //     $this->returnBack(['otp' => __('auth.otp_failed')]);
-        // }
-
-        // $user->updatePhoneVerifiedAt();
-        // Auth::login($user, true);
-
-        // return $user;
+        return [
+            'user' => new UserResource($request->user()),
+            'token' => $this->authService->regenerateToken($request->user()),
+        ];
     }
 }

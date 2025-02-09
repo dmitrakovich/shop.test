@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Events\Analytics\Registered;
 use App\Models\User\User;
 use App\Notifications\VerificationPhoneSms;
-use Illuminate\Support\Facades\Session;
 
 /**
  * Class AuthService
@@ -63,10 +62,22 @@ class AuthService
     /**
      * Validate one-time password
      */
-    public function validateOTP(?int $enteredOtp): bool
+    public function validateOtp(User $user, ?string $enteredOtp): bool
     {
-        $otp = Session::get('otp');
+        return $user->validateOtp($enteredOtp);
+    }
 
-        return $otp === $enteredOtp;
+    /**
+     * Regenerate API token for user.
+     *
+     * Deletes all existing tokens and creates a new one.
+     */
+    public function regenerateToken(User $user): string
+    {
+        /** @var \Illuminate\Database\Eloquent\Relations\MorphMany $tokens */
+        $tokens = $user->tokens();
+        $tokens->delete();
+
+        return $user->createToken('api')->plainTextToken;
     }
 }
