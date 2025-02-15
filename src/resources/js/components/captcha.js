@@ -1,7 +1,7 @@
 import { load } from 'recaptcha-v3';
 
 export default async function сaptcha() {
-  const recaptcha = await load('6Ld3C6kcAAAAAF99FvSsKlBlMGu8uhP9TO_fBY-V', {
+  const recaptcha = await load('6LfzAtgqAAAAALpHO4t9LQ1AtkB9kkNf5s1jddz8', {
     autoHideBadge: true
   });
   const token = await recaptcha.execute('submit');
