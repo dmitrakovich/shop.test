@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CatalogController;
 use App\Http\Controllers\Api\InfoPageController;
+use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,4 +35,9 @@ Route::prefix('cart')->as('cart.')->group(function () {
     Route::post('add', [CartController::class, 'addToCart'])->name('add');
     Route::delete('remove/{itemId}', [CartController::class, 'removeItem'])->name('remove');
     Route::post('clear', [CartController::class, 'clear'])->name('clear');
+});
+
+Route::prefix('orders')->as('orders.')->group(function () {
+    Route::post('checkout', [OrderController::class, 'checkout'])->name('checkout');
+    Route::post('oneclick', [OrderController::class, 'oneclick'])->name('oneclick');
 });
