@@ -8,6 +8,7 @@ use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterRequest;
 use App\Http\Resources\Product\CatalogProductCollection;
+use App\Http\Resources\Product\CatalogProductResource;
 use App\Http\Resources\Product\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
@@ -99,7 +100,9 @@ class CatalogController extends Controller
             'breadcrumbs' => Breadcrumbs::generate('product', $product),
             'product' => new ProductResource($product),
             'feedbacks' => $feedbackService->getForProduct($product->id),
-            'similarProducts' => $sliderService->getSimilarProducts($product->id),
+            'similarProducts' => CatalogProductResource::collection(
+                $sliderService->getSimilarProducts($product->id)->load(['media', 'category', 'favorite'])
+            ),
             'productGroup' => $sliderService->getProductGroup($product->product_group_id),
             // 'recentProductsSlider' => $sliderService->getRecentProducts($productService),
         ];

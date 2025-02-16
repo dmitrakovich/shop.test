@@ -155,24 +155,25 @@ class SliderService
 
     /**
      * Get similar products slider
+     *
+     * @return Collection|Product[]
      */
-    public function getSimilarProducts(int $productId): array
+    public function getSimilarProducts(int $productId): Collection
     {
         $cacheConfig = config('cache_config.product_carousel_similar_products');
-        $slider = Cache::rememberForever($cacheConfig['key'], function () {
-            return ProductCarousel::where('enum_type_id', ProductCarouselEnum::SIMILAR_PRODUCTS)
-                ->first(['title', 'count', 'speed']);
-        });
+        $slider = Cache::rememberForever($cacheConfig['key'], fn () => ProductCarousel::query()
+            ->where('enum_type_id', ProductCarouselEnum::SIMILAR_PRODUCTS)
+            ->first(['title', 'count', 'speed'])
+        );
         if (empty($slider)) {
-            return [];
+            return new Collection([]);
         }
         $cacheConfig = config('cache_config.similar_products');
-        $products = Cache::remember($cacheConfig['key'] . $productId, $cacheConfig['ttl'], function () use ($productId, $slider) {
+        $productIds = Cache::remember($cacheConfig['key'] . $productId, $cacheConfig['ttl'], function () use ($productId, $slider) {
             $attrs = ['sizes', 'colors', 'tags'];
-            $product = Product::where('id', $productId)->withTrashed()->with($attrs)->first();
+            $product = Product::query()->where('id', $productId)->withTrashed()->with($attrs)->first();
             do {
-                $query = Product::where('id', '!=', $productId)
-                    // ->when($product->category_id, fn ($query, $id) => $query->where('category_id', $id))
+                $query = Product::query()->where('id', '!=', $productId)
                     ->with(['media', 'category', 'brand', 'styles']);
                 foreach ($attrs as $attr) {
                     $values = (!empty($product->{$attr}) && $product->{$attr} instanceof Collection) ? array_column($product->{$attr}->toArray(), 'id') : null;
@@ -183,29 +184,43 @@ class SliderService
                     }
                 }
                 $result = $query->limit($slider->count)->orderBy('rating', 'desc')->get();
-                $recomended = isset($recomended) ? $recomended->merge($result) : $result;
-                $recomended = $recomended->take($slider->count);
+                $recommended = isset($recommended) ? $recommended->merge($result) : $result;
+                $recommended = $recommended->take($slider->count);
                 array_pop($attrs);
-            } while ($slider->count > count($recomended) && count($attrs));
+            } while ($slider->count > count($recommended) && count($attrs));
 
-            return $recomended->map(function ($product) {
-                return [
-                    'id' => $product->id,
-                    'sku' => $product->sku,
-                    'full_name' => $product->shortName(),
-                    'sale_percentage' => $product->getSalePercentage(),
-                    'is_new' => $product->isNew(),
-                    'price_byn' => $product->getFinalPrice(),
-                    'old_price_byn' => $product->getFinalOldPrice(),
-                    'url' => $product->getUrl(),
-                    'image' => $product->getFirstMediaUrl('default', 'catalog'),
-                    'dataLayer' => GoogleTagManagerService::prepareProduct($product),
-                ];
-            })->toArray();
+            return $recommended->pluck('id')->toArray();
         });
+
+        return Product::withTrashed()->whereIn('id', $productIds)->get();
+    }
+
+    public function getFormattedSimilarProducts(int $productId): array
+    {
+        $products = $this->getSimilarProducts($productId)
+            ->map(fn (Product $product) => [
+                'id' => $product->id,
+                'sku' => $product->sku,
+                'full_name' => $product->shortName(),
+                'sale_percentage' => $product->getSalePercentage(),
+                'is_new' => $product->isNew(),
+                'price_byn' => $product->getFinalPrice(),
+                'old_price_byn' => $product->getFinalOldPrice(),
+                'url' => $product->getUrl(),
+                'image' => $product->getFirstMediaUrl('default', 'catalog'),
+                'dataLayer' => GoogleTagManagerService::prepareProduct($product),
+            ])
+            ->toArray();
+
         $this->setDataLayerForPage($products);
         $this->addConvertedAndFormattedPrice($products);
         $this->addFavorites($products);
+
+        $cacheConfig = config('cache_config.product_carousel_similar_products');
+        $slider = Cache::rememberForever($cacheConfig['key'], fn () => ProductCarousel::query()
+            ->where('enum_type_id', ProductCarouselEnum::SIMILAR_PRODUCTS)
+            ->first(['title', 'count', 'speed'])
+        );
 
         return [
             'title' => $slider->title,
