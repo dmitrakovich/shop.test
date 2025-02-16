@@ -26,6 +26,8 @@ class SliderService
      */
     const CACHE_TTL = 1800;
 
+    private const SIMILAR_PRODUCTS_COUNT = 12;
+
     /**
      * Get simple product slider
      */
@@ -160,16 +162,8 @@ class SliderService
      */
     public function getSimilarProducts(int $productId): Collection
     {
-        $cacheConfig = config('cache_config.product_carousel_similar_products');
-        $slider = Cache::rememberForever($cacheConfig['key'], fn () => ProductCarousel::query()
-            ->where('enum_type_id', ProductCarouselEnum::SIMILAR_PRODUCTS)
-            ->first(['title', 'count', 'speed'])
-        );
-        if (empty($slider)) {
-            return new Collection([]);
-        }
         $cacheConfig = config('cache_config.similar_products');
-        $productIds = Cache::remember($cacheConfig['key'] . $productId, $cacheConfig['ttl'], function () use ($productId, $slider) {
+        $productIds = Cache::remember($cacheConfig['key'] . $productId, $cacheConfig['ttl'], function () use ($productId) {
             $attrs = ['sizes', 'colors', 'tags'];
             $product = Product::query()->where('id', $productId)->withTrashed()->with($attrs)->first();
             do {
@@ -183,11 +177,11 @@ class SliderService
                         });
                     }
                 }
-                $result = $query->limit($slider->count)->orderBy('rating', 'desc')->get();
+                $result = $query->limit(self::SIMILAR_PRODUCTS_COUNT)->orderBy('rating', 'desc')->get();
                 $recommended = isset($recommended) ? $recommended->merge($result) : $result;
-                $recommended = $recommended->take($slider->count);
+                $recommended = $recommended->take(self::SIMILAR_PRODUCTS_COUNT);
                 array_pop($attrs);
-            } while ($slider->count > count($recommended) && count($attrs));
+            } while (count($recommended) < self::SIMILAR_PRODUCTS_COUNT && count($attrs));
 
             return $recommended->pluck('id')->toArray();
         });
@@ -216,15 +210,9 @@ class SliderService
         $this->addConvertedAndFormattedPrice($products);
         $this->addFavorites($products);
 
-        $cacheConfig = config('cache_config.product_carousel_similar_products');
-        $slider = Cache::rememberForever($cacheConfig['key'], fn () => ProductCarousel::query()
-            ->where('enum_type_id', ProductCarouselEnum::SIMILAR_PRODUCTS)
-            ->first(['title', 'count', 'speed'])
-        );
-
         return [
-            'title' => $slider->title,
-            'speed' => $slider->speed,
+            'title' => 'Похожие товары',
+            'speed' => 3000,
             'products' => $products,
         ];
     }

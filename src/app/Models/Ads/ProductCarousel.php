@@ -46,7 +46,6 @@ class ProductCarousel extends Model implements Sortable
         parent::boot();
         self::saved(function ($model) {
             $cacheConfig = config('cache_config');
-            Cache::forget($cacheConfig['product_carousel_similar_products']['key'] ?? '');
             Cache::forget($cacheConfig['product_carousel_recent_products']['key'] ?? ' ');
         });
     }

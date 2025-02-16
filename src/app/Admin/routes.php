@@ -75,7 +75,6 @@ Route::group([
         $router->resource('index-links', IndexLinkController::class);
         $router->resource('product-carousels', ProductCarouselController::class);
         $router->get('imidj', Forms\ImidjSlider::class);
-        $router->get('similar-products', Forms\SimilarProductsSlider::class);
         $router->get('upsell', Forms\UpsellSliders::class);
         $router->get('recent-products', Forms\RecentProductsSlider::class);
         $router->get('product-group', Forms\ProductGroupSlider::class);
