@@ -83,7 +83,6 @@ Route::group([], function () {
         Route::post('add', [CartController::class, 'addToCart'])->name('cart-add');
         Route::get('delete/{item}', [CartController::class, 'delete'])->name('cart-delete');
         Route::post('apply-promocode', [CartController::class, 'applyPromoCode'])->name('cart-apply-promocode');
-        Route::post('buy-one-click', [CartController::class, 'buyOneClick'])->name('cart-buy-one-click');
         Route::get('final', [CartController::class, 'final'])->name('cart-final');
     });
     Route::resource('orders', OrderController::class)->only('store');

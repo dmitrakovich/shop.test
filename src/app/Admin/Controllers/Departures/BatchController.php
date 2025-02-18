@@ -28,7 +28,7 @@ class BatchController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Batch());
-        $grid->model()->with('orders');
+        $grid->model()->with('orders')->orderBy('id', 'desc');
 
         $grid->filter(function ($filter) {
             $filter->disableIdFilter();

@@ -4,6 +4,7 @@ namespace App\Services\Departures;
 
 use App\Models\Orders\Batch;
 use App\Models\Orders\Order;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
 
@@ -18,24 +19,22 @@ class BatchService
         $resultFileName = $batch->id . '.csv';
         $resultDir = 'departures/batch_send';
         $resultPath = $resultDir . '/' . $resultFileName;
-        $resultPublicPath = public_path('storage/' . $resultPath);
         $resultStoragePath = storage_path('app/public/' . $resultPath);
         $zipPath = $resultDir . '/' . $batch->id . '.zip';
         $zipStoragePath = storage_path('app/public/' . $zipPath);
 
-        File::ensureDirectoryExists(dirname(public_path($resultPublicPath)));
-        $batch->loadMissing(
-            [
-                'orders' => fn ($query) => $query->with([
-                    'itemsExtended' => fn ($query) => $query
-                        ->whereIn('status_key', Order::$itemDepartureStatuses)
-                        ->with('installment'),
-                    'onlinePayments',
-                    'delivery',
-                    'user' => fn ($q) => $q->with('lastAddress'),
-                ]),
-            ]
-        );
+        File::ensureDirectoryExists(dirname($resultStoragePath));
+
+        $batch->loadMissing([
+            'orders' => fn (Builder $query) => $query->with([
+                'itemsExtended' => fn (Builder $query) => $query
+                    ->whereIn('status_key', Order::$itemDepartureStatuses)
+                    ->with('installment'),
+                'onlinePayments',
+                'delivery',
+                'user.lastAddress',
+            ]),
+        ]);
         $price = 11.46;
         foreach ($batch->orders as $key => $order) {
             $cod = ($order->payment_id == 1 || $order->payment_id == 4) ? $order->getTotalCODSum() : null;
