@@ -29,7 +29,8 @@ class StocksController extends Controller
             ->toArray();
 
         if ($orderItemId = $request->input('orderItemId')) {
-            $orderItem = OrderItem::find($orderItemId);
+            /** @var OrderItem|null $orderItem */
+            $orderItem = OrderItem::query()->find($orderItemId);
             if ($orderItem && $orderItem->size_id === $sizeId) {
                 if ($currentStockId = $orderItem->inventoryNotification?->stock_id) {
                     $stockIds[] = $currentStockId;
@@ -37,7 +38,8 @@ class StocksController extends Controller
             }
         }
 
-        return Stock::whereIn('id', $stockIds)
+        return Stock::query()
+            ->whereIn('id', $stockIds)
             ->get(['id', 'internal_name as text'])
             ->each(fn (Stock $stock) => $stock->setAppends([]))
             ->toArray();

@@ -36,7 +36,8 @@ class UpdateProductsRatingJob extends AbstractJob
     public function handle()
     {
         $this->log('Старт');
-        $ratingConfigModel = Config::findOrFail('rating');
+        /** @var Config $ratingConfigModel */
+        $ratingConfigModel = Config::query()->findOrFail('rating');
         $ratingConfig = $ratingConfigModel->config;
         $counterYandexId = config('services.yandex.counter_id');
 
@@ -326,13 +327,15 @@ class UpdateProductsRatingJob extends AbstractJob
 
     /**
      * Retrieves the counters for the given product IDs.
+     *
+     * @return EloquentCollection|Product[]
      */
     private function getProductsCounters(array $productsIds): EloquentCollection
     {
-        $products = Product::select(['id'])
+        $products = Product::query()
             ->whereIn('id', $productsIds)
             ->withCount('media')
-            ->get();
+            ->get(['id']);
 
         $sizeCounts = DB::table('product_attributes')
             ->where('attribute_type', Size::class)
@@ -343,7 +346,7 @@ class UpdateProductsRatingJob extends AbstractJob
             ->toArray();
 
         foreach ($products as $product) {
-            $product->sizes_count = $sizeCounts[$product->id] ?? 0;
+            $product->sizes_count = $sizeCounts[$product->id] ?? 0; // @phpstan-ignore-line
         }
 
         return $products;

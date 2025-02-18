@@ -1,9 +1,179 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Parameter \\#1 \\$displacement of method App\\\\Services\\\\Departures\\\\BelpostLabelService\\:\\:createDisplacementLabel\\(\\) expects App\\\\Models\\\\Offline\\\\Displacement, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Admin/Actions/Offline/DisplacementLabelAction.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$items\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/BuyoutFormAction.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Actions\\\\Order\\\\BuyoutFormAction\\:\\:handle\\(\\) has invalid return type App\\\\Admin\\\\Actions\\\\Order\\\\Response\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/BuyoutFormAction.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Actions\\\\Order\\\\BuyoutFormAction\\:\\:handle\\(\\) should return App\\\\Admin\\\\Actions\\\\Order\\\\Response but returns Encore\\\\Admin\\\\Actions\\\\Response\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/BuyoutFormAction.php
+
+		-
+			message: "#^Parameter \\#1 \\$order of method App\\\\Services\\\\Order\\\\BuyoutOrderService\\:\\:createBuyoutForm\\(\\) expects App\\\\Models\\\\Orders\\\\Order, Illuminate\\\\Database\\\\Eloquent\\\\Model\\|null given\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/BuyoutFormAction.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$orders\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/DeleteBatchAction.php
+
+		-
+			message: "#^Parameter \\#1 \\$order of method App\\\\Services\\\\Order\\\\OrdersDistributionService\\:\\:distributeOrder\\(\\) expects App\\\\Models\\\\Orders\\\\Order, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/DistributeOrderAction.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Actions\\\\Order\\\\EnvelopeAction\\:\\:handle\\(\\) has invalid return type App\\\\Admin\\\\Actions\\\\Order\\\\Response\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/EnvelopeAction.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Actions\\\\Order\\\\EnvelopeAction\\:\\:handle\\(\\) should return App\\\\Admin\\\\Actions\\\\Order\\\\Response but returns Encore\\\\Admin\\\\Actions\\\\Response\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/EnvelopeAction.php
+
+		-
+			message: "#^Parameter \\#1 \\$order of method App\\\\Services\\\\Order\\\\EnvelopeService\\:\\:createEnvelope\\(\\) expects App\\\\Models\\\\Orders\\\\Order, Illuminate\\\\Database\\\\Eloquent\\\\Model\\|null given\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/EnvelopeAction.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$items\\.$#"
+			count: 3
+			path: app/Admin/Actions/Order/InstallmentForm.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Actions\\\\Order\\\\InstallmentForm\\:\\:handle\\(\\) has invalid return type App\\\\Admin\\\\Actions\\\\Order\\\\Response\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/InstallmentForm.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Actions\\\\Order\\\\InstallmentForm\\:\\:handle\\(\\) should return App\\\\Admin\\\\Actions\\\\Order\\\\Response but returns Encore\\\\Admin\\\\Actions\\\\Response\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/InstallmentForm.php
+
+		-
+			message: "#^Parameter \\#1 \\$order of method App\\\\Services\\\\Order\\\\InstallmentOrderService\\:\\:createInstallmentForm\\(\\) expects App\\\\Models\\\\Orders\\\\Order, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/InstallmentForm.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/InstallmentFormRowAction.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$items\\.$#"
+			count: 3
+			path: app/Admin/Actions/Order/InstallmentFormRowAction.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Actions\\\\Order\\\\InstallmentFormRowAction\\:\\:handle\\(\\) has invalid return type App\\\\Admin\\\\Actions\\\\Order\\\\Response\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/InstallmentFormRowAction.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Actions\\\\Order\\\\InstallmentFormRowAction\\:\\:handle\\(\\) should return App\\\\Admin\\\\Actions\\\\Order\\\\Response but returns Encore\\\\Admin\\\\Actions\\\\Response\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/InstallmentFormRowAction.php
+
+		-
+			message: "#^Parameter \\#1 \\$order of method App\\\\Services\\\\Order\\\\InstallmentOrderService\\:\\:createInstallmentForm\\(\\) expects App\\\\Models\\\\Orders\\\\Order, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/InstallmentFormRowAction.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/LabelAction.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/ProcessOrder.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$admin\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/ProcessOrder.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$admin_id\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/ProcessOrder.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$status\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/ProcessOrder.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$status_key\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/ProcessOrder.php
+
+		-
 			message: "#^Variable \\$orderIds in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: app/Admin/Actions/Order/StatusBulkChange.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Actions\\\\Order\\\\TrackRange\\:\\:handle\\(\\) has invalid return type App\\\\Admin\\\\Actions\\\\Order\\\\Response\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/TrackRange.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Actions\\\\Order\\\\TrackRange\\:\\:handle\\(\\) should return App\\\\Admin\\\\Actions\\\\Order\\\\Response but returns Encore\\\\Admin\\\\Actions\\\\Response\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/TrackRange.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function str_pad expects string, int given\\.$#"
+			count: 1
+			path: app/Admin/Actions/Order/TrackRange.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Support\\\\HigherOrderCollectionProxy\\<string, Illuminate\\\\Database\\\\Eloquent\\\\Model, Illuminate\\\\Database\\\\Eloquent\\\\Collection\\>\\:\\:restore\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Actions/Product/BatchRestore.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:restore\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Actions/Product/Restore.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$rating\\.$#"
+			count: 1
+			path: app/Admin/Actions/RatingAction.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$star$#"
+			count: 1
+			path: app/Admin/Actions/RatingAction.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\AbstractAdminController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/AbstractAdminController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\AbstractAdminController\\:\\:form\\(\\) should return Encore\\\\Admin\\\\Form but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/AbstractAdminController.php
 
 		-
 			message: "#^Call to an undefined method App\\\\Admin\\\\Controllers\\\\Analytics\\\\AbstractAnalyticController\\:\\:getAttribute\\(\\)\\.$#"
@@ -11,9 +181,139 @@ parameters:
 			path: app/Admin/Controllers/Analytics/AbstractAnalyticController.php
 
 		-
+			message: "#^Parameter \\#1 \\$width of method Encore\\\\Admin\\\\Grid\\\\Filter\\:\\:column\\(\\) expects int, float given\\.$#"
+			count: 2
+			path: app/Admin/Controllers/Analytics/AbstractAnalyticController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withExpression\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Analytics/CountriesController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withExpression\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Analytics/ManagerCustomersController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withExpression\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Analytics/OrderSourceController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withExpression\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Analytics/OrderTypeController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$email\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Bookkeeping/PaymentController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$fio\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Bookkeeping/PaymentController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$link_code\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Bookkeeping/PaymentController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$order_id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Bookkeeping/PaymentController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$phone\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Bookkeeping/PaymentController.php
+
+		-
+			message: "#^Parameter \\#1 \\$tool of method Encore\\\\Admin\\\\Grid\\\\Tools\\:\\:append\\(\\) expects Encore\\\\Admin\\\\Grid\\\\Tools\\\\AbstractTool\\|string, App\\\\Admin\\\\Actions\\\\Order\\\\BelpostImportCODAction given\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Bookkeeping/PaymentController.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of method Encore\\\\Admin\\\\Form\\\\Field\\:\\:value\\(\\) expects null, int given\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Bookkeeping/PaymentController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\Config\\\\CurrencyController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Config/CurrencyController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\Config\\\\OrderItemStatusController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Config/OrderItemStatusController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\Config\\\\OrderStatusController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Config/OrderStatusController.php
+
+		-
 			message: "#^Method App\\\\Admin\\\\Controllers\\\\Departures\\\\BatchController\\:\\:form\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: app/Admin/Controllers/Departures/BatchController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\Departures\\\\OrderToSendController\\:\\:edit\\(\\) should return Encore\\\\Admin\\\\Layout\\\\Content but returns Illuminate\\\\Http\\\\RedirectResponse\\|Illuminate\\\\Routing\\\\Redirector\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Departures/OrderToSendController.php
+
+		-
+			message: "#^Method Encore\\\\Admin\\\\Grid\\\\Column\\:\\:editable\\(\\) invoked with 2 parameters, 0 required\\.$#"
+			count: 2
+			path: app/Admin/Controllers/Departures/OrderToSendController.php
+
+		-
+			message: "#^PHPDoc tag @phpstan\\-require\\-extends is only valid on trait or interface\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Departures/OrderTrackController.php
+
+		-
+			message: "#^Call to an undefined method Encore\\\\Admin\\\\Form\\:\\:ckeditor\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/DocController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\DocController\\:\\:__invoke\\(\\) should return string but returns Encore\\\\Admin\\\\Layout\\\\Content\\.$#"
+			count: 1
+			path: app/Admin/Controllers/DocController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\FeedbackController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/FeedbackController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$categories_list\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/ImidjSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$count\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/ImidjSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$is_imidj\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/ImidjSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$speed\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/ImidjSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$title\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/ImidjSlider.php
 
 		-
 			message: "#^Call to an undefined method App\\\\Admin\\\\Controllers\\\\Forms\\\\Instagram\\:\\:ckeditor\\(\\)\\.$#"
@@ -21,12 +321,267 @@ parameters:
 			path: app/Admin/Controllers/Forms/Instagram.php
 
 		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$count\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/ProductGroupSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$enum_type_id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/ProductGroupSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$speed\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/ProductGroupSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$title\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/ProductGroupSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$count\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/RecentProductsSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$enum_type_id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/RecentProductsSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$speed\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/RecentProductsSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$title\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/RecentProductsSlider.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Forms/Sms.php
+
+		-
 			message: "#^Call to an undefined method App\\\\Admin\\\\Controllers\\\\Forms\\\\Sms\\:\\:phone\\(\\)\\.$#"
 			count: 1
 			path: app/Admin/Controllers/Forms/Sms.php
 
 		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$additional_settings\\.$#"
+			count: 3
+			path: app/Admin/Controllers/Forms/UpsellSliders.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$categories_list\\.$#"
+			count: 2
+			path: app/Admin/Controllers/Forms/UpsellSliders.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$count\\.$#"
+			count: 3
+			path: app/Admin/Controllers/Forms/UpsellSliders.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$enum_type_id\\.$#"
+			count: 3
+			path: app/Admin/Controllers/Forms/UpsellSliders.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$sorting\\.$#"
+			count: 3
+			path: app/Admin/Controllers/Forms/UpsellSliders.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$speed\\.$#"
+			count: 3
+			path: app/Admin/Controllers/Forms/UpsellSliders.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$title\\.$#"
+			count: 3
+			path: app/Admin/Controllers/Forms/UpsellSliders.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\IndexLinkController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/IndexLinkController.php
+
+		-
+			message: "#^Call to an undefined method Encore\\\\Admin\\\\Form\\:\\:ckeditor\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/InfoPageController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\Logs\\\\InventoryController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Logs/InventoryController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\Logs\\\\InventoryController\\:\\:form\\(\\) should return Encore\\\\Admin\\\\Form but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Logs/InventoryController.php
+
+		-
+			message: "#^Call to an undefined method Encore\\\\Admin\\\\Grid\\\\Model\\|Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Logs/OrderItemStatusController.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$order\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Logs/SmsController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\Logs\\\\SmsController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Logs/SmsController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\Logs\\\\SmsController\\:\\:form\\(\\) should return Encore\\\\Admin\\\\Form but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Logs/SmsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:forgetCustomProperty\\(\\)\\.$#"
+			count: 2
+			path: app/Admin/Controllers/MediaController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getFullName\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/MediaController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getUrl\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/MediaController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:setCustomProperty\\(\\)\\.$#"
+			count: 2
+			path: app/Admin/Controllers/MediaController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$direction_from\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Offline/DisplacementController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$direction_to\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Offline/DisplacementController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Offline/DisplacementController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$order\\.$#"
+			count: 4
+			path: app/Admin/Controllers/Offline/DisplacementController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$product\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Offline/DisplacementController.php
+
+		-
+			message: "#^PHPDoc tag @phpstan\\-require\\-extends is only valid on trait or interface\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Offline/DisplacementController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$admin_id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$status_key\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$utm_campaign\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$utm_medium\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$utm_source\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$currency\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$itemsExtended\\.$#"
+			count: 2
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:itemsExtended\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
 			message: "#^Class App\\\\Admin\\\\Actions\\\\Order\\\\CancelPayment constructor invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Method Encore\\\\Admin\\\\Grid\\\\Column\\:\\:editable\\(\\) invoked with 2 parameters, 0 required\\.$#"
+			count: 2
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Parameter \\#1 \\$order of class App\\\\Events\\\\Analytics\\\\OfflinePurchase constructor expects App\\\\Models\\\\Orders\\\\Order, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Parameter \\#1 \\$order of class App\\\\Events\\\\OrderCreated constructor expects App\\\\Models\\\\Orders\\\\Order, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Parameter \\#1 \\$tool of method Encore\\\\Admin\\\\Grid\\\\Tools\\:\\:append\\(\\) expects Encore\\\\Admin\\\\Grid\\\\Tools\\\\AbstractTool\\|string, App\\\\Admin\\\\Actions\\\\Order\\\\CreateOnlinePayment given\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of method Encore\\\\Admin\\\\Form\\\\Field\\:\\:value\\(\\) expects null, App\\\\Enums\\\\Order\\\\OrderTypeEnum\\:\\:MANAGER given\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Encore\\\\Admin\\\\Form\\:\\:input\\(\\) expects null, float given\\.$#"
+			count: 3
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method Encore\\\\Admin\\\\Form\\:\\:input\\(\\) expects null, string given\\.$#"
 			count: 1
 			path: app/Admin/Controllers/OrderController.php
 
@@ -36,9 +591,244 @@ parameters:
 			path: app/Admin/Controllers/OrderController.php
 
 		-
+			message: "#^Using nullsafe method call on non\\-nullable type App\\\\Models\\\\Orders\\\\OrderItemExtended\\. Use \\-\\> instead\\.$#"
+			count: 2
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^Using nullsafe property access on non\\-nullable type App\\\\Models\\\\Orders\\\\OrderItemExtended\\. Use \\-\\> instead\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrderController.php
+
+		-
+			message: "#^PHPDoc tag @phpstan\\-require\\-extends is only valid on trait or interface\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrdersDistribution/Form/LogGrid.php
+
+		-
+			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: app/Admin/Controllers/OrdersDistribution/Form/WorkScheduleForm.php
+
+		-
+			message: "#^Parameter \\#1 \\$default of method Encore\\\\Admin\\\\Grid\\\\Filter\\\\AbstractFilter\\:\\:default\\(\\) expects null, Illuminate\\\\Support\\\\Carbon given\\.$#"
+			count: 2
+			path: app/Admin/Controllers/OrdersDistribution/StatisticController.php
+
+		-
+			message: "#^Parameter \\#1 \\$width of method Encore\\\\Admin\\\\Grid\\\\Filter\\:\\:column\\(\\) expects int, float given\\.$#"
+			count: 2
+			path: app/Admin/Controllers/OrdersDistribution/StatisticController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$slug\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/BrandController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:url\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/BrandController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\ProductAttributes\\\\BrandController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/BrandController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$slug\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/CategoryController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:url\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/CategoryController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\ProductAttributes\\\\CategoryController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/CategoryController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$slug\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/CollectionController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:url\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/CollectionController.php
+
+		-
+			message: "#^PHPDoc tag @phpstan\\-require\\-extends is only valid on trait or interface\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/CountryOfOriginController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\ProductAttributes\\\\ManufacturerController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/ManufacturerController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$slug\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/SeasonController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:url\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/SeasonController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\ProductAttributes\\\\StyleController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/StyleController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$slug\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/TagController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:url\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/TagController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\ProductAttributes\\\\TagGroupController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductAttributes/TagGroupController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\ProductCarouselController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductCarouselController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$brand_id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$deleted_at\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$label_id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$manufacturer_id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$old_slug\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$sku\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Encore\\\\Admin\\\\Form\\:\\:\\$slug\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined method Encore\\\\Admin\\\\Grid\\\\Model\\|Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:addMedia\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:forgetCustomProperty\\(\\)\\.$#"
+			count: 2
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getMedia\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:setCustomProperty\\(\\)\\.$#"
+			count: 2
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Match expression does not handle remaining value\\: mixed$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^PHPDoc tag @phpstan\\-require\\-extends is only valid on trait or interface\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Parameter \\#1 \\$product of class App\\\\Events\\\\Products\\\\ProductCreated constructor expects App\\\\Models\\\\Product, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Parameter \\#1 \\$product of class App\\\\Events\\\\Products\\\\ProductUpdated constructor expects App\\\\Models\\\\Product, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Parameter \\#1 \\$tool of method Encore\\\\Admin\\\\Grid\\\\Tools\\:\\:append\\(\\) expects Encore\\\\Admin\\\\Grid\\\\Tools\\\\AbstractTool\\|string, App\\\\Admin\\\\Actions\\\\Product\\\\AddToProductGroup given\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Parameter \\#1 \\$tool of method Encore\\\\Admin\\\\Grid\\\\Tools\\:\\:append\\(\\) expects Encore\\\\Admin\\\\Grid\\\\Tools\\\\AbstractTool\\|string, App\\\\Admin\\\\Actions\\\\Product\\\\RemoveFromProductGroup given\\.$#"
+			count: 1
+			path: app/Admin/Controllers/ProductController.php
+
+		-
+			message: "#^Call to an undefined method Encore\\\\Admin\\\\Form\\:\\:phone\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Controllers/StockController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\StockController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/StockController.php
+
+		-
 			message: "#^Method App\\\\Admin\\\\Controllers\\\\StockController\\:\\:form\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: app/Admin/Controllers/StockController.php
+
+		-
+			message: "#^PHPDoc tag @phpstan\\-require\\-extends is only valid on trait or interface\\.$#"
+			count: 1
+			path: app/Admin/Controllers/StockController.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Controllers\\\\Users\\\\GroupController\\:\\:detail\\(\\) should return Encore\\\\Admin\\\\Show but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Admin/Controllers/Users/GroupController.php
 
 		-
 			message: "#^Class App\\\\Admin\\\\Actions\\\\Order\\\\CancelPayment constructor invoked with 1 parameter, 0 required\\.$#"
@@ -46,9 +836,409 @@ parameters:
 			path: app/Admin/Controllers/Users/UserController.php
 
 		-
+			message: "#^Method App\\\\Admin\\\\Exports\\\\ExcelExporterFromCollection\\:\\:collection\\(\\) has invalid return type App\\\\Admin\\\\Exports\\\\Collection\\.$#"
+			count: 1
+			path: app/Admin/Exports/ExcelExporterFromCollection.php
+
+		-
+			message: "#^Binary operation \"\\+\" between non\\-falsy\\-string and 2 results in an error\\.$#"
+			count: 1
+			path: app/Admin/Exports/OrderItemsExporter.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Exports\\\\StockExporter\\:\\:drawings\\(\\) has invalid return type App\\\\Admin\\\\Exports\\\\BaseDrawing\\.$#"
+			count: 1
+			path: app/Admin/Exports/StockExporter.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Exports\\\\StockExporter\\:\\:drawings\\(\\) should return array\\<App\\\\Admin\\\\Exports\\\\BaseDrawing\\> but returns array\\<int, PhpOffice\\\\PhpSpreadsheet\\\\Worksheet\\\\Drawing\\>\\.$#"
+			count: 1
+			path: app/Admin/Exports/StockExporter.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Admin\\\\Models\\\\Administrator\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Admin/Models/Administrator.php
+
+		-
+			message: "#^Method App\\\\Admin\\\\Models\\\\Banner\\:\\:getVideosAttribute\\(\\) should return array but returns null\\.$#"
+			count: 1
+			path: app/Admin/Models/Banner.php
+
+		-
 			message: "#^Variable \\$mediaPointer might not be defined\\.$#"
 			count: 2
 			path: app/Admin/Models/Product.php
+
+		-
+			message: "#^Call to an undefined method Encore\\\\Admin\\\\Grid\\\\Model\\|Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: app/Admin/Selectable/Product.php
+
+		-
+			message: "#^Parameter \\#1 \\$keys of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<\\(int\\|string\\),App\\\\Models\\\\Currency\\>\\:\\:only\\(\\) expects array\\|null, string given\\.$#"
+			count: 1
+			path: app/Console/Commands/GenerateFeed.php
+
+		-
+			message: "#^Property App\\\\Events\\\\Analytics\\\\AbstractAnalyticEvent\\:\\:\\$visitId \\(string\\|null\\) does not accept int\\.$#"
+			count: 1
+			path: app/Events/Analytics/AbstractAnalyticEvent.php
+
+		-
+			message: "#^Parameter \\#1 \\$external_ids of method FacebookAds\\\\Object\\\\ServerSide\\\\UserData\\:\\:setExternalIds\\(\\) expects array\\<string\\>, array\\<int, int\\<min, \\-1\\>\\|int\\<1, max\\>\\> given\\.$#"
+			count: 1
+			path: app/Events/Analytics/OfflinePurchase.php
+
+		-
+			message: "#^Property App\\\\Events\\\\Analytics\\\\AbstractAnalyticEvent\\:\\:\\$eventId \\(string\\) does not accept int\\.$#"
+			count: 1
+			path: app/Events/Analytics/OfflinePurchase.php
+
+		-
+			message: "#^Property App\\\\Exports\\\\UsersToSmsTrafficExport\\:\\:\\$fileName is never read, only written\\.$#"
+			count: 1
+			path: app/Exports/UsersToSmsTrafficExport.php
+
+		-
+			message: "#^Method App\\\\Filament\\\\Pages\\\\Auth\\\\EditProfile\\:\\:getForms\\(\\) has invalid return type App\\\\Filament\\\\Pages\\\\Auth\\\\Form\\.$#"
+			count: 1
+			path: app/Filament/Pages/Auth/EditProfile.php
+
+		-
+			message: "#^Method App\\\\Filament\\\\Pages\\\\Auth\\\\EditProfile\\:\\:getForms\\(\\) should return array\\<int\\|string, App\\\\Filament\\\\Pages\\\\Auth\\\\Form\\|string\\> but returns array\\<string, Filament\\\\Forms\\\\Form\\>\\.$#"
+			count: 1
+			path: app/Filament/Pages/Auth/EditProfile.php
+
+		-
+			message: "#^Method App\\\\Filament\\\\Pages\\\\Auth\\\\Login\\:\\:getForms\\(\\) has invalid return type App\\\\Filament\\\\Pages\\\\Auth\\\\Form\\.$#"
+			count: 1
+			path: app/Filament/Pages/Auth/Login.php
+
+		-
+			message: "#^Method App\\\\Filament\\\\Pages\\\\Auth\\\\Login\\:\\:getForms\\(\\) should return array\\<int\\|string, App\\\\Filament\\\\Pages\\\\Auth\\\\Form\\|string\\> but returns array\\<string, Filament\\\\Forms\\\\Form\\>\\.$#"
+			count: 1
+			path: app/Filament/Pages/Auth/Login.php
+
+		-
+			message: "#^Parameter \\#1 \\$options of method Filament\\\\Forms\\\\Components\\\\TextInput\\:\\:datalist\\(\\) expects array\\<string\\>\\|Closure\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|null, array\\{60, 300, 600, 1800, 3600, 86400\\} given\\.$#"
+			count: 1
+			path: app/Filament/Resources/Promo/PromocodeResource.php
+
+		-
+			message: "#^Binary operation \"\\*\" between string and 100 results in an error\\.$#"
+			count: 1
+			path: app/Filament/Resources/Promo/SaleResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$options of method Filament\\\\Forms\\\\Components\\\\TextInput\\:\\:datalist\\(\\) expects array\\<string\\>\\|Closure\\|Illuminate\\\\Contracts\\\\Support\\\\Arrayable\\|null, array\\{60, 300, 600, 1800, 3600, 86400\\} given\\.$#"
+			count: 1
+			path: app/Filament/Resources/Promo/SaleResource.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: app/Filament/Resources/User/UserResource/RelationManagers/BlacklistRelationManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$num of method NumberFormatter\\:\\:format\\(\\) expects float\\|int, string given\\.$#"
+			count: 1
+			path: app/Helpers/TextHelper.php
+
+		-
+			message: "#^Parameter \\#1 \\$number of static method Drandin\\\\DeclensionNouns\\\\DeclensionNouns\\:\\:make\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: app/Helpers/TextHelper.php
+
+		-
+			message: "#^Parameter \\#1 \\$number of static method Drandin\\\\DeclensionNouns\\\\DeclensionNouns\\:\\:makeOnlyWord\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: app/Helpers/TextHelper.php
+
+		-
+			message: "#^Parameter \\#1 \\$products of method App\\\\Services\\\\GoogleTagManagerService\\:\\:setForCatalog\\(\\) expects Illuminate\\\\Support\\\\Collection, Illuminate\\\\Contracts\\\\Pagination\\\\LengthAwarePaginator given\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api/CatalogController.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: app/Http/Controllers/DebugController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\FeedbackController\\:\\:index\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/FeedbackController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CartController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$count\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CartController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$product\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CartController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\Shop\\\\CartController\\:\\:final\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\Http\\\\RedirectResponse\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CartController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\Shop\\\\CartController\\:\\:final\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CartController.php
+
+		-
+			message: "#^Parameter \\#1 \\$product of class App\\\\Events\\\\Analytics\\\\AddToCart constructor expects App\\\\Models\\\\Product, Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\|Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CartController.php
+
+		-
+			message: "#^Argument of an invalid type Illuminate\\\\Contracts\\\\Pagination\\\\CursorPaginator supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CatalogController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Pagination\\\\CursorPaginator\\:\\:hasMorePages\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CatalogController.php
+
+		-
+			message: "#^Parameter \\#1 \\$products of method App\\\\Services\\\\GoogleTagManagerService\\:\\:getForCatalogArrays\\(\\) expects Illuminate\\\\Support\\\\Collection, Illuminate\\\\Contracts\\\\Pagination\\\\CursorPaginator given\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CatalogController.php
+
+		-
+			message: "#^Parameter \\#1 \\$products of method App\\\\Services\\\\GoogleTagManagerService\\:\\:setForCatalog\\(\\) expects Illuminate\\\\Support\\\\Collection, Illuminate\\\\Contracts\\\\Pagination\\\\CursorPaginator given\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CatalogController.php
+
+		-
+			message: "#^Parameter \\#1 \\$products of method App\\\\Services\\\\Seo\\\\CatalogSeoService\\:\\:setProducts\\(\\) expects Illuminate\\\\Pagination\\\\CursorPaginator, Illuminate\\\\Contracts\\\\Pagination\\\\CursorPaginator given\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/CatalogController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\Shop\\\\OrderController\\:\\:index\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\View\\\\View\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/OrderController.php
+
+		-
+			message: "#^Parameter \\#2 \\$cart of method App\\\\Services\\\\OrderService\\:\\:store\\(\\) expects App\\\\Models\\\\Cart, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/OrderController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\Shop\\\\PaymentController\\:\\:webhook\\(\\) has invalid return type App\\\\Http\\\\Controllers\\\\Shop\\\\response\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/PaymentController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\Shop\\\\PaymentController\\:\\:webhook\\(\\) should return App\\\\Http\\\\Controllers\\\\Shop\\\\response but returns Illuminate\\\\Http\\\\Response\\.$#"
+			count: 1
+			path: app/Http/Controllers/Shop/PaymentController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\SitemapController\\:\\:renderXmlFile\\(\\) has invalid return type App\\\\Http\\\\Controllers\\\\xml\\.$#"
+			count: 1
+			path: app/Http/Controllers/SitemapController.php
+
+		-
+			message: "#^PHPDoc tag @return with type App\\\\Http\\\\Controllers\\\\xml is not subtype of native type Illuminate\\\\Http\\\\Response\\.$#"
+			count: 1
+			path: app/Http/Controllers/SitemapController.php
+
+		-
+			message: "#^Parameter \\#1 \\$boolean of function abort_unless expects bool, string\\|null given\\.$#"
+			count: 1
+			path: app/Http/Middleware/DeviceAuth.php
+
+		-
+			message: "#^Parameter \\#1 \\$cartId of method App\\\\Http\\\\Middleware\\\\MigrateCartToDevice\\:\\:attachCartToCurrentDevice\\(\\) expects int, array\\|string given\\.$#"
+			count: 1
+			path: app/Http/Middleware/MigrateCartToDevice.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(numeric\\-string\\)\\: mixed\\)\\|null, Closure\\(int\\)\\: App\\\\Models\\\\Url given\\.$#"
+			count: 1
+			path: app/Http/Requests/FilterRequest.php
+
+		-
+			message: "#^Parameter \\#1 \\$discount of class App\\\\Notifications\\\\DiscountAfterRegisterSms constructor expects string, float given\\.$#"
+			count: 1
+			path: app/Jobs/Mailing/DiscountAfterRegisterJob.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$groupChat\\.$#"
+			count: 1
+			path: app/Jobs/OneC/UpdateOfflineOrdersJob.php
+
+		-
+			message: "#^Method App\\\\Jobs\\\\OneC\\\\UpdateOfflineOrdersJob\\:\\:getOrdersForReturn\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, App\\\\Models\\\\Orders\\\\OfflineOrder\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<string, App\\\\Models\\\\Orders\\\\OfflineOrder\\>\\.$#"
+			count: 1
+			path: app/Jobs/OneC/UpdateOfflineOrdersJob.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$request with type App\\\\Libraries\\\\HGrosh\\\\Actions\\\\Api is not subtype of native type App\\\\Libraries\\\\HGrosh\\\\HttpClient\\.$#"
+			count: 1
+			path: app/Libraries/HGrosh/Actions/Action.php
+
+		-
+			message: "#^Parameter \\$request of method App\\\\Libraries\\\\HGrosh\\\\Actions\\\\Action\\:\\:__construct\\(\\) has invalid type App\\\\Libraries\\\\HGrosh\\\\Actions\\\\Api\\.$#"
+			count: 1
+			path: app/Libraries/HGrosh/Actions/Action.php
+
+		-
+			message: "#^PHPDoc tag @return with type string is incompatible with native type array\\.$#"
+			count: 1
+			path: app/Libraries/HGrosh/ApiResponse.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$http$#"
+			count: 1
+			path: app/Libraries/HGrosh/HttpClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$user_data of method FacebookAds\\\\Object\\\\ServerSide\\\\Event\\:\\:setUserData\\(\\) expects FacebookAds\\\\Object\\\\ServerSide\\\\FacebookAds\\\\Object\\\\ServerSide\\\\UserData, App\\\\Models\\\\Data\\\\UserData given\\.$#"
+			count: 1
+			path: app/Listeners/FacebookPixel/AbstractFacebookPixelListener.php
+
+		-
+			message: "#^Parameter \\#1 \\$content_ids of method FacebookAds\\\\Object\\\\ServerSide\\\\CustomData\\:\\:setContentIds\\(\\) expects array\\<string\\>, array\\<int, int\\> given\\.$#"
+			count: 1
+			path: app/Listeners/FacebookPixel/SendAddToCartEvent.php
+
+		-
+			message: "#^Parameter \\#1 \\$custom_data of method FacebookAds\\\\Object\\\\ServerSide\\\\Event\\:\\:setCustomData\\(\\) expects FacebookAds\\\\Object\\\\ServerSide\\\\FacebookAds\\\\Object\\\\ServerSide\\\\CustomData, FacebookAds\\\\Object\\\\ServerSide\\\\CustomData given\\.$#"
+			count: 1
+			path: app/Listeners/FacebookPixel/SendAddToCartEvent.php
+
+		-
+			message: "#^Parameter \\#1 \\$content_ids of method FacebookAds\\\\Object\\\\ServerSide\\\\CustomData\\:\\:setContentIds\\(\\) expects array\\<string\\>, array\\<int, int\\> given\\.$#"
+			count: 1
+			path: app/Listeners/FacebookPixel/SendProductViewEvent.php
+
+		-
+			message: "#^Parameter \\#1 \\$custom_data of method FacebookAds\\\\Object\\\\ServerSide\\\\Event\\:\\:setCustomData\\(\\) expects FacebookAds\\\\Object\\\\ServerSide\\\\FacebookAds\\\\Object\\\\ServerSide\\\\CustomData, FacebookAds\\\\Object\\\\ServerSide\\\\CustomData given\\.$#"
+			count: 1
+			path: app/Listeners/FacebookPixel/SendProductViewEvent.php
+
+		-
+			message: "#^Parameter \\#1 \\$custom_data of method FacebookAds\\\\Object\\\\ServerSide\\\\Event\\:\\:setCustomData\\(\\) expects FacebookAds\\\\Object\\\\ServerSide\\\\FacebookAds\\\\Object\\\\ServerSide\\\\CustomData, FacebookAds\\\\Object\\\\ServerSide\\\\CustomData given\\.$#"
+			count: 2
+			path: app/Listeners/FacebookPixel/SendPurchaseEvent.php
+
+		-
+			message: "#^Parameter \\#1 \\$event_id of method FacebookAds\\\\Object\\\\ServerSide\\\\Event\\:\\:setEventId\\(\\) expects string, int given\\.$#"
+			count: 1
+			path: app/Listeners/FacebookPixel/SendPurchaseEvent.php
+
+		-
+			message: "#^Match expression does not handle remaining values\\: class\\-string\\<App\\\\Events\\\\Notifications\\\\NotificationSkipped\\>\\|class\\-string\\<Illuminate\\\\Notifications\\\\Events\\\\NotificationSent\\>$#"
+			count: 1
+			path: app/Listeners/LogNotification.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Listeners/SyncOrderHistory.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$event with type object is not subtype of native type App\\\\Events\\\\OrderCreated\\.$#"
+			count: 1
+			path: app/Listeners/User/UpdateUserAfterOrder.php
+
+		-
+			message: "#^Variable \\$user in PHPDoc tag @var does not exist\\.$#"
+			count: 1
+			path: app/Listeners/User/UpdateUserAfterOrder.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$oldRoles$#"
+			count: 1
+			path: app/Models/Admin/AdminUser.php
+
+		-
+			message: "#^PHPDoc tag @return with type mixed is not subtype of native type Illuminate\\\\Support\\\\Collection\\.$#"
+			count: 1
+			path: app/Models/Admin/AdminUser.php
+
+		-
+			message: "#^PHPDoc tag @return with type mixed is not subtype of native type bool\\.$#"
+			count: 3
+			path: app/Models/Admin/AdminUser.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Ads\\\\ProductCarousel\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Ads/ProductCarousel.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Api\\\\Token\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Api/Token.php
+
+		-
+			message: "#^Parameter \\#1 \\$query of class Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany constructor expects Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\Product\\|Spatie\\\\MediaLibrary\\\\MediaCollections\\\\Models\\\\Media\\>, Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Spatie\\\\MediaLibrary\\\\MediaCollections\\\\Models\\\\Media\\> given\\.$#"
+			count: 1
+			path: app/Models/AvailableSizes.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Brand\\:\\:getDefault\\(\\) should return App\\\\Models\\\\Brand but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: app/Models/Brand.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Brand\\:\\:\\$guarded is not covariant with PHPDoc type array\\<string\\>\\|bool of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$guarded\\.$#"
+			count: 1
+			path: app/Models/Brand.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\CartData\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/CartData.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:toTree\\(\\)\\.$#"
+			count: 1
+			path: app/Models/Category.php
+
+		-
+			message: "#^Call to an undefined method Kalnoy\\\\Nestedset\\\\DescendantsRelation\\:\\:defaultOrder\\(\\)\\.$#"
+			count: 1
+			path: app/Models/Category.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Category\\:\\:getDefault\\(\\) should return App\\\\Models\\\\Category but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: app/Models/Category.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Category\\:\\:\\$guarded is not covariant with PHPDoc type array\\<string\\>\\|bool of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$guarded\\.$#"
+			count: 1
+			path: app/Models/Category.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Country\\:\\:getAll\\(\\) should return Illuminate\\\\Database\\\\Eloquent\\\\Collection&iterable\\<App\\\\Models\\\\Country\\> but returns Illuminate\\\\Database\\\\Eloquent\\\\Collection\\.$#"
+			count: 1
+			path: app/Models/Country.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Country\\:\\:getCurrent\\(\\) should return App\\\\Models\\\\Country but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: app/Models/Country.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Country\\:\\:getDefaultCountry\\(\\) should return App\\\\Models\\\\Country but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\|null\\.$#"
+			count: 1
+			path: app/Models/Country.php
 
 		-
 			message: "#^Constructor of class App\\\\Models\\\\Data\\\\OrderData has an unused parameter \\$otherData\\.$#"
@@ -56,14 +1246,399 @@ parameters:
 			path: app/Models/Data/OrderData.php
 
 		-
+			message: "#^Property App\\\\Models\\\\Data\\\\OrderData\\:\\:\\$deliveryMethod \\(Deliveries\\\\DeliveryMethod\\) does not accept Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: app/Models/Data/OrderData.php
+
+		-
+			message: "#^Property App\\\\Models\\\\Data\\\\OrderData\\:\\:\\$paymentMethod \\(Payments\\\\PaymentMethod\\) does not accept Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: app/Models/Data/OrderData.php
+
+		-
+			message: "#^Property Deliveries\\\\AbstractDeliveryMethod\\:\\:\\$model is never read, only written\\.$#"
+			count: 1
+			path: app/Models/Deliveries/AbstractDeliveryMethod.php
+
+		-
+			message: "#^PHPDoc type array of property Deliveries\\\\DeliveryMethod\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Deliveries/DeliveryMethod.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Favorite\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/Favorite.php
+
+		-
+			message: "#^Match expression does not handle remaining value\\: string$#"
+			count: 1
+			path: app/Models/Feedback.php
+
+		-
+			message: "#^Method App\\\\Models\\\\Feedback\\:\\:scopeForProduct\\(\\) with return type void returns mixed but should not return anything\\.$#"
+			count: 1
+			path: app/Models/Feedback.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\[type\\] \\$query\\)\\: Unexpected token \"\\[\", expected type at offset 67$#"
+			count: 1
+			path: app/Models/Feedback.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Feedback\\:\\:\\$appends is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$appends\\.$#"
+			count: 1
+			path: app/Models/Feedback.php
+
+		-
+			message: "#^Match expression does not handle remaining value\\: true$#"
+			count: 1
+			path: app/Models/Feeds/AbstractFeed.php
+
+		-
+			message: "#^Using nullsafe method call on non\\-nullable type Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<int, App\\\\Models\\\\Size\\>\\. Use \\-\\> instead\\.$#"
+			count: 1
+			path: app/Models/Feeds/AbstractFeed.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:map\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, int\\|string\\)\\: array\\{int, string, string, mixed, string, string, string, string\\|null\\}, Closure\\(App\\\\Models\\\\Product\\)\\: array\\{int, string, string, mixed, string, string, string, string\\|null\\} given\\.$#"
+			count: 1
+			path: app/Models/Feeds/GoogleCsv.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Models/Feeds/GoogleXml.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$title\\.$#"
+			count: 1
+			path: app/Models/Feeds/GoogleXml.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:map\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, int\\|string\\)\\: \\(object\\{id\\: int, link\\: string, size\\: string, availability\\: string, price\\: float, old_price\\: float, images\\: mixed, brand\\: string, google_product_category\\: int, product_type\\: string, description\\: string, title\\: string, material\\: string\\|null, color\\: string\\}&stdClass\\), Closure\\(App\\\\Models\\\\Product\\)\\: \\(object\\{id\\: int, link\\: string, size\\: string, availability\\: 'in stock'\\|'out of stock', price\\: float, old_price\\: float, images\\: mixed, brand\\: string, google_product_category\\: int, product_type\\: string, description\\: string, title\\: string, material\\: string\\|null, color\\: string\\}&stdClass\\) given\\.$#"
+			count: 1
+			path: app/Models/Feeds/GoogleXml.php
+
+		-
+			message: "#^Match expression does not handle remaining value\\: true$#"
+			count: 1
+			path: app/Models/Feeds/YandexXml.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:map\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, int\\|string\\)\\: \\(object\\{id\\: int, name\\: string, parent_id\\?\\: int\\|null\\}&stdClass\\), Closure\\(App\\\\Models\\\\Category\\)\\: \\(object\\{id\\: int, name\\: string, parent_id\\?\\: int\\|null\\}&stdClass\\) given\\.$#"
+			count: 1
+			path: app/Models/Feeds/YandexXml.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:map\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, int\\|string\\)\\: \\(object\\{id\\: int, url\\: string, name\\: string, price\\: float, old_price\\: float, colors\\: array, params\\: array, category_id\\: int, pictures\\: mixed, type_prefix\\: string, vendor\\: string, model\\: string, description\\: string, sales_notes\\: string, video\\: mixed\\}&stdClass\\), Closure\\(App\\\\Models\\\\Product\\)\\: \\(object\\{id\\: int, url\\: string, name\\: string, price\\: float, old_price\\: float, colors\\: array, params\\: array, category_id\\: int, pictures\\: mixed, type_prefix\\: string, vendor\\: string, model\\: string, description\\: string, sales_notes\\: string, video\\: mixed\\}&stdClass\\) given\\.$#"
+			count: 1
+			path: app/Models/Feeds/YandexXml.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:map\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, int\\|string\\)\\: string, Closure\\(App\\\\Models\\\\Color\\)\\: string given\\.$#"
+			count: 1
+			path: app/Models/Feeds/YandexXml.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Logs\\\\InventoryLog\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Logs/InventoryLog.php
+
+		-
+			message: "#^PHPDoc type array\\<string\\> of property App\\\\Models\\\\Logs\\\\InventoryLog\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/Logs/InventoryLog.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Logs\\\\OrderItemStatusLog\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Logs/OrderItemStatusLog.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Logs\\\\SmsLog\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/Logs/SmsLog.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\OneC\\\\DiscountCard\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/OneC/DiscountCard.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Orders\\\\OfflineOrder\\:\\:\\$guarded is not covariant with PHPDoc type array\\<string\\>\\|bool of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$guarded\\.$#"
+			count: 1
+			path: app/Models/Orders/OfflineOrder.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Orders\\\\Order\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Orders/Order.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Orders\\\\OrderItem\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Orders/OrderItem.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Orders\\\\OrderTrack\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Orders/OrderTrack.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Payments\\\\Installment\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Payments/Installment.php
+
+		-
+			message: "#^PHPDoc type array\\<string\\> of property App\\\\Models\\\\Payments\\\\Installment\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/Payments/Installment.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Payments\\\\OnlinePayment\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Payments/OnlinePayment.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Models\\\\ProductAttributes\\\\Price\\:\\:\\$slug\\.$#"
-			count: 2
+			count: 3
 			path: app/Models/ProductAttributes/Price.php
+
+		-
+			message: "#^Method App\\\\Models\\\\ProductAttributes\\\\Price\\:\\:getIdAttribute\\(\\) should return string but returns int\\<0, max\\>\\.$#"
+			count: 1
+			path: app/Models/ProductAttributes/Price.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\ProductAttributes\\\\Price\\:\\:\\$guarded is not covariant with PHPDoc type array\\<string\\>\\|bool of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$guarded\\.$#"
+			count: 1
+			path: app/Models/ProductAttributes/Price.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyNew\\(\\)\\.$#"
+			count: 1
+			path: app/Models/ProductAttributes/Promotion.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyWithDiscount\\(\\)\\.$#"
+			count: 1
+			path: app/Models/ProductAttributes/Promotion.php
+
+		-
+			message: "#^Match expression does not handle remaining value\\: string$#"
+			count: 1
+			path: app/Models/ProductAttributes/Status.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Promo\\\\Sale\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Promo/Sale.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\Seo\\\\SeoLink\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/Seo/SeoLink.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\WorkSchedule\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
+			count: 1
+			path: app/Models/WorkSchedule.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of static method Illuminate\\\\Notifications\\\\Client\\\\SmsTraffic\\:\\:setDefaultOption\\(\\) expects string, int given\\.$#"
+			count: 1
+			path: app/Notifications/AbstractSmsTraffic.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Notifications\\\\Notification\\:\\:toTelegram\\(\\)\\.$#"
+			count: 1
+			path: app/Notifications/TelegraphChannel.php
+
+		-
+			message: "#^Method App\\\\Providers\\\\AppServiceProvider\\:\\:logQueries\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: "#^Method App\\\\Providers\\\\AppServiceProvider\\:\\:modelShouldBeStrict\\(\\) is unused\\.$#"
+			count: 1
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$app_id of static method FacebookAds\\\\Api\\:\\:init\\(\\) expects string, null given\\.$#"
+			count: 1
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: "#^Parameter \\#2 \\$app_secret of static method FacebookAds\\\\Api\\:\\:init\\(\\) expects string, null given\\.$#"
+			count: 1
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$pixel_id of class FacebookAds\\\\Object\\\\ServerSide\\\\EventRequestAsync constructor expects string, int given\\.$#"
+			count: 1
+			path: app/Services/Api/Facebook/ConversionsApiService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\Api\\\\Facebook\\\\ConversionsApiService\\:\\:\\$api is never read, only written\\.$#"
+			count: 1
+			path: app/Services/Api/Facebook/ConversionsApiService.php
+
+		-
+			message: "#^PHPDoc tag @return with type string\\|null is not subtype of native type array\\|null\\.$#"
+			count: 1
+			path: app/Services/Api/YandexApiService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Pagination\\\\LengthAwarePaginator\\|Illuminate\\\\Pagination\\\\CursorPaginator\\:\\:\\$maxPrice\\.$#"
+			count: 1
+			path: app/Services/CatalogService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Pagination\\\\LengthAwarePaginator\\|Illuminate\\\\Pagination\\\\CursorPaginator\\:\\:\\$minPrice\\.$#"
+			count: 1
+			path: app/Services/CatalogService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Pagination\\\\LengthAwarePaginator\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:\\$totalCount\\.$#"
+			count: 1
+			path: app/Services/CatalogService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:search\\(\\)\\.$#"
+			count: 2
+			path: app/Services/CatalogService.php
+
+		-
+			message: "#^Parameter \\#1 \\$products of method App\\\\Services\\\\CatalogService\\:\\:addGtmData\\(\\) expects Illuminate\\\\Support\\\\Collection, Illuminate\\\\Pagination\\\\CursorPaginator\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\> given\\.$#"
+			count: 1
+			path: app/Services/CatalogService.php
+
+		-
+			message: "#^Parameter \\#1 \\$products of method App\\\\Services\\\\CatalogService\\:\\:addGtmData\\(\\) expects Illuminate\\\\Support\\\\Collection, Illuminate\\\\Pagination\\\\LengthAwarePaginator\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\> given\\.$#"
+			count: 1
+			path: app/Services/CatalogService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$track_number\\.$#"
+			count: 4
+			path: app/Services/Departures/BelpostLabelService.php
+
+		-
+			message: "#^Parameter \\#1 \\$order of method App\\\\Services\\\\Departures\\\\BelpostLabelService\\:\\:createLabel\\(\\) expects App\\\\Models\\\\Orders\\\\Order, Illuminate\\\\Database\\\\Eloquent\\\\Model\\|null given\\.$#"
+			count: 1
+			path: app/Services/Departures/LabelService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\Imap\\\\ImapParseEmailService\\:\\:\\$imapHost is never read, only written\\.$#"
+			count: 1
+			path: app/Services/Imap/ImapParseEmailService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\Imap\\\\ImapParseEmailService\\:\\:\\$password is never read, only written\\.$#"
+			count: 1
+			path: app/Services/Imap/ImapParseEmailService.php
+
+		-
+			message: "#^Property App\\\\Services\\\\Imap\\\\ImapParseEmailService\\:\\:\\$userName is never read, only written\\.$#"
+			count: 1
+			path: app/Services/Imap/ImapParseEmailService.php
+
+		-
+			message: "#^Instanceof between App\\\\Models\\\\Admin\\\\AdminUser\\|App\\\\Models\\\\User\\\\User\\|null and Encore\\\\Admin\\\\Auth\\\\Database\\\\Administrator will always evaluate to false\\.$#"
+			count: 1
+			path: app/Services/LogService.php
+
+		-
+			message: "#^Offset 'action' on array\\{product_id\\: mixed, action\\: 'DELETE'\\|'RESTORE', added_sizes\\?\\: non\\-empty\\-string\\|false, removed_sizes\\?\\: non\\-empty\\-string\\|false\\} on left side of \\?\\?\\= always exists and is not nullable\\.$#"
+			count: 1
+			path: app/Services/LogService.php
+
+		-
+			message: "#^Using nullsafe property access on non\\-nullable type App\\\\Models\\\\Orders\\\\Order\\. Use \\-\\> instead\\.$#"
+			count: 8
+			path: app/Services/Order/EnvelopeService.php
+
+		-
+			message: "#^Using nullsafe property access on non\\-nullable type App\\\\Admin\\\\Models\\\\Administrator\\. Use \\-\\> instead\\.$#"
+			count: 1
+			path: app/Services/Order/InstallmentOrderService.php
+
+		-
+			message: "#^Using nullsafe property access on non\\-nullable type App\\\\Models\\\\Orders\\\\Order\\. Use \\-\\> instead\\.$#"
+			count: 7
+			path: app/Services/Order/InstallmentOrderService.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\AvailableSizes\\:\\:\\$total\\.$#"
+			count: 2
+			path: app/Services/Order/OrderItemInventoryService.php
+
+		-
+			message: "#^Argument of an invalid type App\\\\Models\\\\AvailableSizes supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: app/Services/Order/OrderItemInventoryService.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: app/Services/Order/OrderItemInventoryService.php
+
+		-
+			message: "#^PHPDoc tag @var above foreach loop does not specify variable name\\.$#"
+			count: 1
+			path: app/Services/Order/OrderItemInventoryService.php
+
+		-
+			message: "#^Variable \\$product in PHPDoc tag @var does not exist\\.$#"
+			count: 1
+			path: app/Services/Order/OrderItemInventoryService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$admin_id\\.$#"
+			count: 2
+			path: app/Services/Order/OrdersDistributionService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Services/Order/OrdersDistributionService.php
 
 		-
 			message: "#^Variable \\$mails in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: app/Services/Payment/BelpostCODService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/AbstractPaymentService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Payment\\\\Methods\\\\AbstractPaymentService\\:\\:getOnlinePaymentByPaymentId\\(\\) should return App\\\\Models\\\\Payments\\\\OnlinePayment\\|null but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\|null\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/AbstractPaymentService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentCODService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Payment\\\\Methods\\\\PaymentCODService\\:\\:create\\(\\) should return App\\\\Models\\\\Payments\\\\OnlinePayment\\|null but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentCODService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentEripService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$payment_num\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentEripService.php
 
 		-
 			message: "#^Call to an undefined static method App\\\\Libraries\\\\HGrosh\\\\Facades\\\\ApiHGroshFacade\\:\\:invoicingCreateInvoice\\(\\)\\.$#"
@@ -81,6 +1656,26 @@ parameters:
 			path: app/Services/Payment/Methods/PaymentEripService.php
 
 		-
+			message: "#^Method App\\\\Services\\\\Payment\\\\Methods\\\\PaymentEripService\\:\\:create\\(\\) should return App\\\\Models\\\\Payments\\\\OnlinePayment\\|null but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentEripService.php
+
+		-
+			message: "#^Method Carbon\\\\Carbon\\:\\:subWeek\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentEripService.php
+
+		-
+			message: "#^Parameter \\#1 \\$onlinePayment of job class App\\\\Jobs\\\\Payment\\\\CreateQrcodeJob constructor expects App\\\\Models\\\\Payments\\\\OnlinePayment in App\\\\Jobs\\\\Payment\\\\CreateQrcodeJob\\:\\:dispatch\\(\\), Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentEripService.php
+
+		-
+			message: "#^Parameter \\#1 \\$payment of method App\\\\Services\\\\Payment\\\\Methods\\\\AbstractPaymentService\\:\\:setPaymentStatus\\(\\) expects App\\\\Models\\\\Payments\\\\OnlinePayment, TModel of Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentEripService.php
+
+		-
 			message: "#^Variable \\$amount on left side of \\?\\? always exists and is not nullable\\.$#"
 			count: 1
 			path: app/Services/Payment/Methods/PaymentEripService.php
@@ -91,9 +1686,109 @@ parameters:
 			path: app/Services/Payment/Methods/PaymentEripService.php
 
 		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentYandexService.php
+
+		-
+			message: "#^Access to an undefined property YooKassa\\\\Model\\\\AmountInterface\\:\\:\\$value\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentYandexService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Payment\\\\Methods\\\\PaymentYandexService\\:\\:create\\(\\) should return App\\\\Models\\\\Payments\\\\OnlinePayment\\|null but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: app/Services/Payment/Methods/PaymentYandexService.php
+
+		-
 			message: "#^Variable \\$payment_info on left side of \\?\\? is never defined\\.$#"
 			count: 3
 			path: app/Services/Payment/Methods/PaymentYandexService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$data\\.$#"
+			count: 2
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$first_name\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$onlinePayments\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$payment_id\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$status_key\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:adminComments\\(\\)\\.$#"
+			count: 2
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getItemsPrice\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:notify\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Payment\\\\PaymentService\\:\\:getOnlinePaymentByPaymentUrl\\(\\) should return App\\\\Models\\\\Payments\\\\OnlinePayment\\|null but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\|null\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Payment\\\\PaymentService\\:\\:getPaymentByLinkCode\\(\\) should return App\\\\Models\\\\Payments\\\\OnlinePayment\\|null but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\|null\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$amount with type App\\\\Services\\\\Payment\\\\nulls\\|float is not subtype of native type float\\|null\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$data$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Parameter \\$amount of method App\\\\Services\\\\Payment\\\\PaymentService\\:\\:captureOnlinePayment\\(\\) has invalid type App\\\\Services\\\\Payment\\\\nulls\\.$#"
+			count: 1
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 3
+			path: app/Services/Payment/PaymentService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Services/Product/ProductGroupService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$product_group_id\\.$#"
+			count: 1
+			path: app/Services/Product/ProductGroupService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\Seo\\\\CatalogSeoService\\:\\:getCatalogTitle\\(\\) invoked with 1 parameter, 0 required\\.$#"
@@ -104,6 +1799,136 @@ parameters:
 			message: "#^Method App\\\\Services\\\\Seo\\\\ProductSeoService\\:\\:getProductTitle\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: app/Services/Seo/ProductSeoService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Services/SitemapService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$slug\\.$#"
+			count: 1
+			path: app/Services/SitemapService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\Relation\\:\\:getModel\\(\\)\\.$#"
+			count: 1
+			path: app/Services/SitemapService.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$models$#"
+			count: 1
+			path: app/Services/SitemapService.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$relation$#"
+			count: 1
+			path: app/Services/SitemapService.php
+
+		-
+			message: "#^Parameter \\#2 \\$callback of function uksort expects callable\\(class\\-string\\|int, class\\-string\\|int\\)\\: int, Closure\\(mixed, mixed\\)\\: bool given\\.$#"
+			count: 1
+			path: app/Services/SitemapService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$categories\\.$#"
+			count: 2
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$color_txt\\.$#"
+			count: 1
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$count\\.$#"
+			count: 2
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 4
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$sku\\.$#"
+			count: 3
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$sorting\\.$#"
+			count: 1
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$speed\\.$#"
+			count: 2
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$title\\.$#"
+			count: 2
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Argument of an invalid type App\\\\Models\\\\Category supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:onlyNew\\(\\)\\.$#"
+			count: 1
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:onlyWithDiscount\\(\\)\\.$#"
+			count: 2
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:sorting\\(\\)\\.$#"
+			count: 2
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getFinalOldPrice\\(\\)\\.$#"
+			count: 2
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getFinalPrice\\(\\)\\.$#"
+			count: 2
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getFirstMediaUrl\\(\\)\\.$#"
+			count: 3
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getSalePercentage\\(\\)\\.$#"
+			count: 2
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getUrl\\(\\)\\.$#"
+			count: 3
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:isNew\\(\\)\\.$#"
+			count: 2
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:shortName\\(\\)\\.$#"
+			count: 3
+			path: app/Services/SliderService.php
+
+		-
+			message: "#^Parameter \\#1 \\$product of static method App\\\\Services\\\\GoogleTagManagerService\\:\\:prepareProduct\\(\\) expects App\\\\Models\\\\Product, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 3
+			path: app/Services/SliderService.php
 
 		-
 			message: "#^Variable \\$products in empty\\(\\) always exists and is not falsy\\.$#"

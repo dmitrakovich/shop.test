@@ -23,7 +23,6 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * @mixin AvailableSizesFull
- * @phpstan-require-extends AvailableSizesFull
  */
 class StockController extends AbstractAdminController
 {
@@ -205,6 +204,7 @@ class StockController extends AbstractAdminController
                     'out_of_stock' => $query->whereNull('available_sizes_full.product_id'),
                     'excluded' => $query->whereIn('products.label_id', Product::excludedLabels()),
                     'not_added' => $query->whereNull('products.id')->whereNull('available_sizes_full.product_id'),
+                    default => $query,
                 };
             }
         };
@@ -276,9 +276,9 @@ class StockController extends AbstractAdminController
 
             if (!$isInCatalogue) {
                 $row->style("background-color: $turquoise;");
-            } elseif ($isInCatalogue && $isExcluded) {
+            } elseif ($isExcluded) {
                 $row->style("background-color: $gray;");
-            } elseif ($isInCatalogue && !$isInStock) {
+            } elseif (!$isInStock) {
                 $row->style("background-color: $red;");
             } elseif ($oldPrice > $currentPrice) {
                 $row->style("background-color: $yellow;");
