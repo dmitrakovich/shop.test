@@ -30,6 +30,7 @@ class StoreRequest extends FormRequest
             'rate' => Currency::getCurrentCurrency()->rate,
             'order_method' => $this->getOrderMethod()->value,
             'stock_id' => $this->getStockId(),
+            'size_ids' => array_keys($this->input('sizes', [])),
 
             'utm_medium' => $utm['utm_medium'] ?? null,
             'utm_source' => $utm['utm_source'] ?? null,

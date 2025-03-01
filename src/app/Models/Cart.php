@@ -246,4 +246,12 @@ class Cart extends Model
     {
         return (bool)$this->promocode;
     }
+
+    /**
+     * Check if the cart has available items.
+     */
+    public function hasAvailableItems(): bool
+    {
+        return $this->availableItems()->isNotEmpty();
+    }
 }

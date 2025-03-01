@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\OrderCreated;
 use App\Facades\Sale;
 use App\Http\Requests\Order\StoreRequest;
 use App\Models\Cart;
@@ -53,6 +54,11 @@ class OrderService
         if (!empty($adminComment)) {
             $order->adminComments()->create(['comment' => $adminComment]);
         }
+
+        $cart->clear(onlyAvailable: true);
+        $cart->clearPromocode();
+
+        event(new OrderCreated($order, $user));
 
         return $order;
     }

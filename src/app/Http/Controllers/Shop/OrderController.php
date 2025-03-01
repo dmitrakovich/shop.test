@@ -2,27 +2,25 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Data\Order\OneClickOrderData;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
-use App\Events\OrderCreated;
 use App\Facades\Cart;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Requests\Order\UserAddressRequest;
 use App\Http\Requests\Order\UserRequest;
-use App\Models\CartData;
 use App\Models\Orders\Order;
 use App\Services\AuthService;
 use App\Services\OrderService;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends BaseController
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $orders = Order::with([
             'country',
@@ -43,8 +41,6 @@ class OrderController extends BaseController
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(
         StoreRequest $request,
@@ -52,38 +48,23 @@ class OrderController extends BaseController
         UserAddressRequest $userAddressRequest,
         AuthService $authService,
         OrderService $orderService
-    ) {
-        if ($request->isOneClick()) {
-            $cart = Cart::make();
-            $items = [];
-            foreach ($request->input('sizes') as $sizeId => $state) {
-                $items[] = new CartData([
-                    'product_id' => (int)$request->input('product_id'),
-                    'size_id' => $sizeId,
-                    'count' => 1,
-                ]);
-            }
-            $cart->setRelation('items', new EloquentCollection($items));
-        } else {
-            $cart = Cart::getCart();
-            abort_if(empty($cart['items']) || $cart->availableItems()->isEmpty(), 404);
-        }
+    ): RedirectResponse {
+        $cart = $request->isOneClick()
+            ? Cart::makeTempCart(OneClickOrderData::from($request))
+            : Cart::getCart();
+
+        abort_if(!$cart->hasAvailableItems(), 404, 'Товаров нет в наличии');
+
         $user = $authService->getOrCreateUser($userRequest->input('phone'), $userRequest->validated(), $userAddressRequest->validated());
         $order = $orderService->store($request, $cart, $user);
-        Cart::clear(true);
-        Cart::clearPromocode();
-
-        event(new OrderCreated($order, $user));
 
         return redirect()->route('cart-final')->with('order_id', $order->id);
     }
 
     /**
      * Get print view
-     *
-     * @return \Illuminate\Contracts\View\View
      */
-    public function print(Order $order)
+    public function print(Order $order): View
     {
         return view('admin.order-print', compact('order'));
     }
