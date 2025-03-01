@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Contracts\OrderServiceInterface;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Events\OrderCreated;
 use App\Facades\Cart;
@@ -12,6 +11,7 @@ use App\Http\Requests\Order\UserRequest;
 use App\Models\CartData;
 use App\Models\Orders\Order;
 use App\Services\AuthService;
+use App\Services\OrderService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,7 +50,8 @@ class OrderController extends BaseController
         StoreRequest $request,
         UserRequest $userRequest,
         UserAddressRequest $userAddressRequest,
-        AuthService $authService
+        AuthService $authService,
+        OrderService $orderService
     ) {
         if ($request->isOneClick()) {
             $cart = Cart::make();
@@ -68,7 +69,7 @@ class OrderController extends BaseController
             abort_if(empty($cart['items']) || $cart->availableItems()->isEmpty(), 404);
         }
         $user = $authService->getOrCreateUser($userRequest->input('phone'), $userRequest->validated(), $userAddressRequest->validated());
-        $order = app(OrderServiceInterface::class)->store($request, $cart, $user);
+        $order = $orderService->store($request, $cart, $user);
         Cart::clear(true);
         Cart::clearPromocode();
 

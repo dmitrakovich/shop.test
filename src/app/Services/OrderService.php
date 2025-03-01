@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Contracts\OrderServiceInterface;
 use App\Facades\Sale;
 use App\Http\Requests\Order\StoreRequest;
 use App\Models\Cart;
@@ -10,7 +9,7 @@ use App\Models\Data\SaleData;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 
-class OrderService implements OrderServiceInterface
+class OrderService
 {
     /**
      * @var int Maximum quantity of items per size
@@ -18,9 +17,9 @@ class OrderService implements OrderServiceInterface
     const MAX_PER_SIZE_LIMIT = 1;
 
     /**
-     * {@inheritdoc}
+     * Store order (create new)
      */
-    public function store(StoreRequest $request, Cart $cart, User $user)
+    public function store(StoreRequest $request, Cart $cart, User $user): Order
     {
         $orderData = $request->getValidatedData();
         $orderData->setUser($user);

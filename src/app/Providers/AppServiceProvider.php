@@ -2,14 +2,12 @@
 
 namespace App\Providers;
 
-use App\Contracts\OrderServiceInterface;
 use App\Database\SqlServerConnection;
 use App\Logging\FacebookApiLogger;
 use App\Notifications\ChannelManagerWithLimits;
 use App\Policies\RolePolicy;
 use App\Services\Api\Facebook\ConversionsApiService;
 use App\Services\CartService;
-use App\Services\OrderService;
 use FacebookAds\Api;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
@@ -29,10 +27,6 @@ use function Sentry\captureMessage;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public $bindings = [
-        OrderServiceInterface::class => OrderService::class,
-    ];
-
     /**
      * Register any application services.
      */
