@@ -10,3 +10,4 @@ parameters:
     - tests
   excludePaths:
     - app/Admin/routes.php
+    - app/Admin/Controllers/

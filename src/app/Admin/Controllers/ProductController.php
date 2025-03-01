@@ -438,7 +438,8 @@ class ProductController extends AbstractAdminController
     protected function findExistingProduct(Form $form): ?Product
     {
         return Product::withTrashed()
-            ->where('slug', $form->slug)
+            ->where('sku', $form->sku)
+            ->where('brand_id', $form->brand_id)
             ->when($form->isEditing(), function ($query) use ($form) {
                 $query->where('id', '!=', $form->model()->id);
             })
@@ -453,7 +454,7 @@ class ProductController extends AbstractAdminController
         $editLink = route('admin.products.edit', $productId);
         $error = new MessageBag([
             'title' => 'Товар с таким названием есть',
-            'message' => '<a href="' . $editLink . '">Cсылка на редактирование этого товара<a>',
+            'message' => '<a href="' . $editLink . '">Ссылка на редактирование этого товара<a>',
         ]);
 
         return back()->with(compact('error'));
