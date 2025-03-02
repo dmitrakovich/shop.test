@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Currency;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
@@ -9,28 +11,24 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 class CurrencyService
 {
-    const DEFAULT_CURRENCY = 'USD';
+    const DEFAULT_CURRENCY = 'BYN';
 
     /**
      * Current currency
-     *
-     * @var \App\Models\Currency
      */
-    protected $currency;
+    private Currency $currency;
 
     /**
      * Current country code
-     *
-     * @var string
      */
-    protected $countryCode;
+    private string $countryCode;
 
     /**
      * All currency list
      *
-     * @var array
+     * @var array<string, \stdClass>
      */
-    protected $allCurrencies = [];
+    private array $allCurrencies = [];
 
     public function __construct()
     {
@@ -41,21 +39,16 @@ class CurrencyService
 
     /**
      * Set current country
-     *
-     * @param  string  $countryCode
-     * @return void
      */
-    protected function setCurrentCountry($countryCode = null)
+    private function setCurrentCountry(?string $countryCode = null): void
     {
         $this->countryCode = $countryCode ?? SxGeo::getCountry();
     }
 
     /**
      * Установить все валюты
-     *
-     * @return void
      */
-    protected function setAllCurrencies()
+    private function setAllCurrencies(): void
     {
         $this->allCurrencies = Cache::rememberForever('currencies', function () {
             return DB::table('currencies')
@@ -68,9 +61,9 @@ class CurrencyService
     /**
      * Save current currency in storage
      *
-     * @return void
+     * @todo move from cookie to device
      */
-    protected function saveCurrentCurrency()
+    private function saveCurrentCurrency(): void
     {
         $tenYears = 10 * 365 * 24 * 60 * 60;
         Cookie::queue('current_currency', $this->currency->code, $tenYears);
@@ -78,10 +71,8 @@ class CurrencyService
 
     /**
      * Set & save current currency
-     *
-     * @param  bool  $save
      */
-    public function setCurrentCurrency(?string $currencyCode = null, $save = true): void
+    public function setCurrentCurrency(?string $currencyCode = null, bool $save = true): void
     {
         if ($currencyCode) {
             $this->setCurrencyByCode($currencyCode);
@@ -98,36 +89,34 @@ class CurrencyService
     }
 
     /**
-     * Set currency by code
-     *
-     * @return void
+     * Get Currency object by currency code
      */
-    protected function setCurrencyByCode(string $currencyCode)
+    public function getCurrencyByCode(?string $currencyCode = null): Currency
     {
+        if (is_null($currencyCode)) {
+            return $this->getCurrentCurrency();
+        }
         if (!isset($this->allCurrencies[$currencyCode])) {
             $currencyCode = $this->getCurrencyCodeByCountry();
         }
-        $this->currency = $this->allCurrencies[$currencyCode] ?? $this->getDefaultCurrency();
+
+        return (new Currency())->forceFill((array)$this->allCurrencies[$currencyCode]);
     }
 
     /**
-     * Get default currency
-     *
-     * @return \App\Models\Currency
+     * Set currency by code
      */
-    protected function getDefaultCurrency()
+    private function setCurrencyByCode(string $currencyCode): void
     {
-        return $this->allCurrencies[self::DEFAULT_CURRENCY];
+        $this->currency = $this->getCurrencyByCode($currencyCode);
     }
 
     /**
-     * Get swither view
-     *
-     * @return \Illuminate\Contracts\View\View|null
+     * Get switcher view
      */
-    public function getSwitcher()
+    public function getSwitcher(): ?View
     {
-        if ($this->countryCode == 'BY') {
+        if ($this->countryCode === 'BY') {
             return null;
         }
 
@@ -142,7 +131,7 @@ class CurrencyService
      *
      * @return string currency code 3 symbol (ISO 4217)
      */
-    protected function getCurrencyCodeByCountry()
+    private function getCurrencyCodeByCountry(): string
     {
         foreach ($this->allCurrencies as $currency) {
             if ($currency->country == $this->countryCode) {
@@ -155,10 +144,8 @@ class CurrencyService
 
     /**
      * Get current currency object
-     *
-     * @return \App\Models\Currency
      */
-    public function getCurrentCurrency()
+    public function getCurrentCurrency(): Currency
     {
         return $this->currency;
     }
@@ -168,7 +155,7 @@ class CurrencyService
      */
     public function convert(float $priceInByn, ?string $currencyCode = null): float
     {
-        $currency = $this->allCurrencies[$currencyCode] ?? $this->currency;
+        $currency = $this->getCurrencyByCode($currencyCode);
         $precision = 10 ** $currency->decimals;
         $priceInCurrency = $priceInByn * $currency->rate;
 
@@ -180,7 +167,7 @@ class CurrencyService
      */
     public function reverseConvert(float $priceInCurrency, ?string $currencyCode = null): float
     {
-        $currency = $this->allCurrencies[$currencyCode] ?? $this->currency;
+        $currency = $this->getCurrencyByCode($currencyCode);
         $priceInByn = $priceInCurrency / $currency->rate;
 
         return ceil($priceInByn);
@@ -189,9 +176,9 @@ class CurrencyService
     /**
      * Format price in current currency
      */
-    public function format(float $price, ?string $currency = null, string $space = '&nbsp;'): string
+    public function format(float $price, ?string $currencyCode = null, string $space = '&nbsp;'): string
     {
-        $currency = $this->allCurrencies[$currency] ?? $this->currency;
+        $currency = $this->getCurrencyByCode($currencyCode);
 
         return number_format($price, $currency->decimals, '.', $space) . $space . $currency->symbol;
     }
