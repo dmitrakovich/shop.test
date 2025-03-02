@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Data\Order\OneClickOrderData;
+use App\Data\Order\OrderData;
+use App\Enums\Order\OrderMethod;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Facades\Cart;
 use App\Http\Requests\Order\StoreRequest;
@@ -53,10 +55,16 @@ class OrderController extends BaseController
             ? Cart::makeTempCart(OneClickOrderData::from($request))
             : Cart::getCart();
 
+        $orderData = OrderData::from($request);
+
+        if ($request->isOneClick()) {
+            $orderData->setOrderMethod(OrderMethod::ONECLICK);
+        }
+
         abort_if(!$cart->hasAvailableItems(), 404, 'Товаров нет в наличии');
 
-        $user = $authService->getOrCreateUser($userRequest->input('phone'), $userRequest->validated(), $userAddressRequest->validated());
-        $order = $orderService->store($request, $cart, $user);
+        // $user = $authService->getOrCreateUser($userRequest->input('phone'), $userRequest->validated(), $userAddressRequest->validated());
+        $order = $orderService->store($request, $cart, $orderData);
 
         return redirect()->route('cart-final')->with('order_id', $order->id);
     }

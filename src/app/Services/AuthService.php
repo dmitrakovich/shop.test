@@ -29,6 +29,7 @@ class AuthService
             ...$userData,
         ]);
 
+        // !!!!
         if (!empty($userAddress)) {
             $user->load('lastAddress');
             if ($user->lastAddress) {

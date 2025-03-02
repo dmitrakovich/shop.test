@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Data\Order\OrderData;
 use App\Events\OrderCreated;
 use App\Facades\Sale;
 use App\Http\Requests\Order\StoreRequest;
@@ -20,19 +21,37 @@ class OrderService
     /**
      * Store order (create new)
      */
-    public function store(StoreRequest $request, Cart $cart, User $user): Order
+    public function store(StoreRequest $request, Cart $cart, OrderData $orderData/*,  User $user*/): Order
     {
-        $orderData = $request->getValidatedData();
-        $orderData->setUser($user);
+        // $orderData = $request->getValidatedData();
+        // $orderData->setUser($user);
+        // public function getValidatedData(): OrderData
+        // {
+        //     return new OrderData(...$this->validated());
+        // }
+        // public function setUser(User $user): self
+        // {
+        //     $this->user = $user;
+        //     $this->user_id = $user->id;
+
+        //     return $this;
+        // }
+
+        // public function prepareToSave(): array
+        // {
+        //     return array_filter((array)$this);
+        // }
+
+        // dd($orderData);
 
         Sale::applyToOrder($cart, $orderData);
         $orderData->total_price = $cart->getTotalPrice();
 
         $order = Order::query()->create($orderData->prepareToSave());
 
-        $adminComment = '';
+        $adminComments = [];
         foreach ($cart->availableItems() as $item) {
-            $order->data()->create([
+            $order->items()->create([
                 'product_id' => $item->product_id,
                 'size_id' => $item->size_id,
                 'count' => min($item->count, self::MAX_PER_SIZE_LIMIT),
@@ -47,12 +66,13 @@ class OrderService
                 $item->product->getSales()
             );
             if (!empty($sales)) {
-                $adminComment .= (!empty($adminComment) ? PHP_EOL . PHP_EOL : '')
-                    . $item->product->shortName() . PHP_EOL . implode(PHP_EOL, $sales);
+                $adminComments[] = $item->product->shortName() . PHP_EOL . implode(PHP_EOL, $sales);
             }
         }
-        if (!empty($adminComment)) {
-            $order->adminComments()->create(['comment' => $adminComment]);
+        if (!empty($adminComments)) {
+            $order->adminComments()->create([
+                'comment' => implode(PHP_EOL . PHP_EOL, $adminComments),
+            ]);
         }
 
         $cart->clear(onlyAvailable: true);

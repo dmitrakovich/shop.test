@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
+use App\Data\Order\OrderData;
 use App\Enums\Promo\SaleAlgorithm;
 use App\Facades\Cart as CartFacade;
 use App\Facades\Currency;
 use App\Models\Cart;
 use App\Models\Config;
-use App\Models\Data\OrderData;
 use App\Models\Data\SaleData;
 use App\Models\Product;
 use App\Models\Promo\Promocode;
