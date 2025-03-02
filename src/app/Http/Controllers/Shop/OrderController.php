@@ -8,10 +8,7 @@ use App\Enums\Order\OrderMethod;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Facades\Cart;
 use App\Http\Requests\Order\StoreRequest;
-use App\Http\Requests\Order\UserAddressRequest;
-use App\Http\Requests\Order\UserRequest;
 use App\Models\Orders\Order;
-use App\Services\AuthService;
 use App\Services\OrderService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -44,13 +41,8 @@ class OrderController extends BaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(
-        StoreRequest $request,
-        UserRequest $userRequest,
-        UserAddressRequest $userAddressRequest,
-        AuthService $authService,
-        OrderService $orderService
-    ): RedirectResponse {
+    public function store(StoreRequest $request, OrderService $orderService): RedirectResponse
+    {
         $cart = $request->isOneClick()
             ? Cart::makeTempCart(OneClickOrderData::from($request))
             : Cart::getCart();
@@ -61,10 +53,7 @@ class OrderController extends BaseController
             $orderData->setOrderMethod(OrderMethod::ONECLICK);
         }
 
-        abort_if(!$cart->hasAvailableItems(), 404, 'Товаров нет в наличии');
-
-        // $user = $authService->getOrCreateUser($userRequest->input('phone'), $userRequest->validated(), $userAddressRequest->validated());
-        $order = $orderService->store($request, $cart, $orderData);
+        $order = $orderService->store($cart, $orderData);
 
         return redirect()->route('cart-final')->with('order_id', $order->id);
     }

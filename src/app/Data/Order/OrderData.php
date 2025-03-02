@@ -100,4 +100,37 @@ class OrderData extends Data
     {
         $this->orderMethod = $orderMethod;
     }
+
+    public function prepareToSave(): array
+    {
+        return [
+            'first_name' => $this->firstName,
+            'last_name' => $this->lastName,
+            'patronymic_name' => $this->patronymicName,
+            // 'promocode_id' => $this->promocode_id,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'comment' => $this->comment,
+            'currency' => $this->currency->code,
+            'rate' => $this->currency->rate,
+            'country_id' => $this->country?->id,
+            'region' => $this->region,
+            'city' => $this->city,
+            'zip' => $this->zip,
+            'user_addr' => $this->userAddr,
+            'payment_id' => $this->paymentMethod?->id,
+            // 'payment_cost' => $this->payment_cost,
+            'delivery_id' => $this->deliveryMethod?->id,
+            'stock_id' => $this->stock?->id,
+            // 'delivery_cost' => $this->delivery_cost,
+            // 'delivery_price' => $this->delivery_price,
+            'order_method' => $this->orderMethod,
+            'order_type' => $this->orderType,
+            'utm_medium' => $this->utmMedium,
+            'utm_source' => $this->utmSource,
+            'utm_campaign' => $this->utmCampaign,
+            'utm_content' => $this->utmContent,
+            'utm_term' => $this->utmTerm,
+        ];
+    }
 }

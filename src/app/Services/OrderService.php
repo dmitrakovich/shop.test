@@ -5,11 +5,9 @@ namespace App\Services;
 use App\Data\Order\OrderData;
 use App\Events\OrderCreated;
 use App\Facades\Sale;
-use App\Http\Requests\Order\StoreRequest;
 use App\Models\Cart;
 use App\Models\Data\SaleData;
 use App\Models\Orders\Order;
-use App\Models\User\User;
 
 class OrderService
 {
@@ -18,36 +16,23 @@ class OrderService
      */
     const MAX_PER_SIZE_LIMIT = 1;
 
+    public function __construct(private readonly UserService $userService) {}
+
     /**
      * Store order (create new)
      */
-    public function store(StoreRequest $request, Cart $cart, OrderData $orderData/*,  User $user*/): Order
+    public function store(Cart $cart, OrderData $orderData): Order
     {
-        // $orderData = $request->getValidatedData();
-        // $orderData->setUser($user);
-        // public function getValidatedData(): OrderData
-        // {
-        //     return new OrderData(...$this->validated());
-        // }
-        // public function setUser(User $user): self
-        // {
-        //     $this->user = $user;
-        //     $this->user_id = $user->id;
-
-        //     return $this;
-        // }
-
-        // public function prepareToSave(): array
-        // {
-        //     return array_filter((array)$this);
-        // }
-
-        // dd($orderData);
+        abort_if(!$cart->hasAvailableItems(), 404, 'Товаров нет в наличии');
 
         Sale::applyToOrder($cart, $orderData);
-        $orderData->total_price = $cart->getTotalPrice();
 
-        $order = Order::query()->create($orderData->prepareToSave());
+        $user = $this->userService->getOrCreateByOrderData($orderData);
+        $order = Order::query()->create([
+            ...$orderData->prepareToSave(),
+            'total_price' => $cart->getTotalPrice(),
+            'user_id' => $user->id,
+        ]);
 
         $adminComments = [];
         foreach ($cart->availableItems() as $item) {

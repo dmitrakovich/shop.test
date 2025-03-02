@@ -18,22 +18,24 @@ class UserService
      */
     public function getOrCreateByOrderData(OrderData $orderData): User
     {
-        $user = $this->user->getByPhone($phone) ?? $this->user->query()->create([
-            'phone' => $phone,
-            ...$userData,
+        $user = $this->user->getByPhone($orderData->phone) ?? $this->user->query()->create([
+            'phone' => $orderData->phone,
+            'first_name' => $orderData->firstName,
+            'last_name' => $orderData->lastName,
+            'patronymic_name' => $orderData->patronymicName,
+            'email' => $orderData->email,
         ]);
 
-        if (!empty($userAddress)) {
-            $user->load('lastAddress');
-            if ($user->lastAddress) {
-                $user->lastAddress->fill($userAddress);
-                if ($user->lastAddress->isDirty()) {
-                    $user->lastAddress->approve = false;
-                    $user->lastAddress->save();
-                }
-            } else {
-                $user->addresses()->create($userAddress);
-            }
+        if ($orderData->userAddr) {
+            /** @var \App\Models\User\Address $address */
+            $address = $user->lastAddress()->firstOrNew();
+            $address->fill([
+                'country_id' => $orderData->country?->id,
+                'city' => $orderData->city,
+                'address' => $orderData->userAddr,
+                'approve' => $address->approve && $orderData->userAddr === $address->address,
+            ]);
+            $address->save();
         }
 
         if ($user->wasRecentlyCreated) {

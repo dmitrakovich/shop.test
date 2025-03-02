@@ -554,7 +554,7 @@ class SaleService
      */
     public function applyToOrder(Cart $cart, OrderData $orderData)
     {
-        if ($orderData->paymentMethod->instance === 'Installment') {
+        if ($orderData->paymentMethod?->instance === 'Installment') {
             $this->disableUserSale();
         }
 

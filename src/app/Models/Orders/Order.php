@@ -47,7 +47,6 @@ use Payments\PaymentMethod;
  * @property int|null $stock_id Warehouse (Stock) from which the order will be picked up
  * @property float|null $delivery_cost
  * @property float|null $delivery_price
- * @property int|null $delivery_point_id
  * @property \App\Enums\Order\OrderMethod $order_method
  * @property string|null $utm_medium
  * @property string|null $utm_source
