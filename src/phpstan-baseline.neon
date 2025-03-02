@@ -356,16 +356,6 @@ parameters:
 			path: app/Http/Controllers/Shop/CatalogController.php
 
 		-
-			message: "#^Method App\\\\Http\\\\Controllers\\\\Shop\\\\OrderController\\:\\:index\\(\\) should return Illuminate\\\\Http\\\\Response but returns Illuminate\\\\View\\\\View\\.$#"
-			count: 1
-			path: app/Http/Controllers/Shop/OrderController.php
-
-		-
-			message: "#^Parameter \\#2 \\$cart of method App\\\\Services\\\\OrderService\\:\\:store\\(\\) expects App\\\\Models\\\\Cart, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
-			count: 1
-			path: app/Http/Controllers/Shop/OrderController.php
-
-		-
 			message: "#^Method App\\\\Http\\\\Controllers\\\\Shop\\\\PaymentController\\:\\:webhook\\(\\) has invalid return type App\\\\Http\\\\Controllers\\\\Shop\\\\response\\.$#"
 			count: 1
 			path: app/Http/Controllers/Shop/PaymentController.php
@@ -569,31 +559,6 @@ parameters:
 			message: "#^Method App\\\\Models\\\\Country\\:\\:getDefaultCountry\\(\\) should return App\\\\Models\\\\Country but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\|null\\.$#"
 			count: 1
 			path: app/Models/Country.php
-
-		-
-			message: "#^Constructor of class App\\\\Models\\\\Data\\\\OrderData has an unused parameter \\$otherData\\.$#"
-			count: 1
-			path: app/Models/Data/OrderData.php
-
-		-
-			message: "#^Property App\\\\Models\\\\Data\\\\OrderData\\:\\:\\$deliveryMethod \\(Deliveries\\\\DeliveryMethod\\) does not accept Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
-			count: 1
-			path: app/Models/Data/OrderData.php
-
-		-
-			message: "#^Property App\\\\Models\\\\Data\\\\OrderData\\:\\:\\$paymentMethod \\(Payments\\\\PaymentMethod\\) does not accept Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
-			count: 1
-			path: app/Models/Data/OrderData.php
-
-		-
-			message: "#^Property Deliveries\\\\AbstractDeliveryMethod\\:\\:\\$model is never read, only written\\.$#"
-			count: 1
-			path: app/Models/Deliveries/AbstractDeliveryMethod.php
-
-		-
-			message: "#^PHPDoc type array of property Deliveries\\\\DeliveryMethod\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
-			count: 1
-			path: app/Models/Deliveries/DeliveryMethod.php
 
 		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\Favorite\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"

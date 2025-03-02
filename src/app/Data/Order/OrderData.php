@@ -74,7 +74,7 @@ class OrderData extends Data
 
     #[MapInputName('stock_id')]
     #[WithCast(ModelCast::class, modelClass: Stock::class)]
-    #[RequiredIf('delivery_id', ShopPvz::ID), ProhibitedUnless('delivery_id', ShopPvz::ID)]
+    #[RequiredIf('delivery_id', [ShopPvz::ID]), ProhibitedUnless('delivery_id', [ShopPvz::ID])]
     public ?Stock $stock;
 
     #[Computed]

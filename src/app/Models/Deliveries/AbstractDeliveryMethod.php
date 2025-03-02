@@ -13,6 +13,7 @@ class AbstractDeliveryMethod
     public const ID = 0;
 
     public function __construct(
+        // @phpstan-ignore-next-line
         private readonly Model $model
     ) {}
 
