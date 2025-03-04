@@ -496,11 +496,6 @@ parameters:
 			path: app/Models/Admin/AdminUser.php
 
 		-
-			message: "#^PHPDoc type array of property App\\\\Models\\\\Ads\\\\ProductCarousel\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\Api\\\\Token\\:\\:\\$casts is not covariant with PHPDoc type array\\<string, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$casts\\.$#"
 			count: 1
 			path: app/Models/Api/Token.php
@@ -1126,103 +1121,58 @@ parameters:
 			path: app/Services/SitemapService.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$categories\\.$#"
-			count: 2
-			path: app/Services/SliderService.php
-
-		-
 			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$color_txt\\.$#"
 			count: 1
 			path: app/Services/SliderService.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$count\\.$#"
-			count: 2
-			path: app/Services/SliderService.php
-
-		-
 			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
-			count: 4
+			count: 2
 			path: app/Services/SliderService.php
 
 		-
 			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$sku\\.$#"
-			count: 3
-			path: app/Services/SliderService.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$sorting\\.$#"
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$speed\\.$#"
-			count: 2
-			path: app/Services/SliderService.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$title\\.$#"
-			count: 2
-			path: app/Services/SliderService.php
-
-		-
-			message: "#^Argument of an invalid type App\\\\Models\\\\Category supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:onlyNew\\(\\)\\.$#"
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:onlyWithDiscount\\(\\)\\.$#"
-			count: 2
-			path: app/Services/SliderService.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:sorting\\(\\)\\.$#"
 			count: 2
 			path: app/Services/SliderService.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getFinalOldPrice\\(\\)\\.$#"
-			count: 2
+			count: 1
 			path: app/Services/SliderService.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getFinalPrice\\(\\)\\.$#"
-			count: 2
+			count: 1
 			path: app/Services/SliderService.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getFirstMediaUrl\\(\\)\\.$#"
-			count: 3
+			count: 2
 			path: app/Services/SliderService.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getSalePercentage\\(\\)\\.$#"
-			count: 2
+			count: 1
 			path: app/Services/SliderService.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getUrl\\(\\)\\.$#"
-			count: 3
-			path: app/Services/SliderService.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:isNew\\(\\)\\.$#"
 			count: 2
 			path: app/Services/SliderService.php
 
 		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:isNew\\(\\)\\.$#"
+			count: 1
+			path: app/Services/SliderService.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:shortName\\(\\)\\.$#"
-			count: 3
+			count: 2
 			path: app/Services/SliderService.php
 
 		-
 			message: "#^Parameter \\#1 \\$product of static method App\\\\Services\\\\GoogleTagManagerService\\:\\:prepareProduct\\(\\) expects App\\\\Models\\\\Product, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
-			count: 3
+			count: 2
 			path: app/Services/SliderService.php
 
 		-

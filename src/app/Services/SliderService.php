@@ -318,8 +318,10 @@ class SliderService
         Cache::forget($cacheConfig['key']);
         $slider = Cache::remember($cacheConfig['key'], ($cacheConfig['ttl'] ?? 1800), function () {
             $result = [];
-            $carousel = ProductCarousel::where('enum_type_id', ProductCarouselEnum::FINAL_SALE)
-                ->first(['title', 'categories', 'count', 'speed', 'sorting', 'additional_settings']);
+            $carousel = ProductCarousel::getFinalSaleCarousel();
+            if (!$carousel) {
+                return [];
+            }
 
             $products = Product::query()
                 ->whereIn('category_id', $carousel->getCategoryIds())
@@ -366,19 +368,14 @@ class SliderService
      */
     public function getRecentProducts(ProductService $productService): array
     {
-        $cacheConfig = config('cache_config.product_carousel_recent_products');
-        $slider = Cache::rememberForever($cacheConfig['key'], function () {
-            return ProductCarousel::where('enum_type_id', ProductCarouselEnum::RECENT_PRODUCTS)
-                ->first(['title', 'count', 'speed']);
-        });
-        if (empty($slider)) {
-            return [];
-        }
         $ids = $productService->getRecent();
-        $products = Product::whereIn('id', $ids)->with(['media', 'category', 'brand'])->get();
+        $products = Product::query()
+            ->with(['media', 'category', 'brand'])
+            ->whereIn('id', $ids)
+            ->get();
         $flipIds = array_flip($ids);
         $resultProducts = [];
-        if (empty($products)) {
+        if ($products->isEmpty()) {
             return [];
         }
         foreach ($products as $product) {
@@ -404,8 +401,8 @@ class SliderService
         $this->addFavorites($resultProducts);
 
         return [
-            'title' => $slider->title,
-            'speed' => $slider->speed,
+            'title' => 'Недавно просмотренные товары',
+            'speed' => 3000,
             'products' => $resultProducts,
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models\Ads;
 
+use App\Enums\ProductCarouselEnum;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -104,7 +105,7 @@ class ProductCarousel extends Model implements Sortable
     public function getCategoryIds(): array
     {
         $categories = [];
-        foreach ($this->categories as $category_id) {
+        foreach ((array)$this->categories as $category_id) {
             $categories = array_merge(
                 $categories,
                 Category::getChildrenCategoriesIdsList($category_id)
@@ -133,5 +134,13 @@ class ProductCarousel extends Model implements Sortable
     public static function getImidjCarousel(): ?self
     {
         return self::query()->where('is_imidj', true)->first();
+    }
+
+    /**
+     * Get final sale carousel
+     */
+    public static function getFinalSaleCarousel(): ?self
+    {
+        return self::query()->where('enum_type_id', ProductCarouselEnum::FINAL_SALE)->first();
     }
 }
