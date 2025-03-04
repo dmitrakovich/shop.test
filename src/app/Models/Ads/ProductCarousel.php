@@ -3,6 +3,7 @@
 namespace App\Models\Ads;
 
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -57,7 +58,7 @@ class ProductCarousel extends Model implements Sortable
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'additional_settings' => 'array',
@@ -95,5 +96,42 @@ class ProductCarousel extends Model implements Sortable
     public function categoriesList(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    /**
+     * Get category ids
+     */
+    public function getCategoryIds(): array
+    {
+        $categories = [];
+        foreach ($this->categories as $category_id) {
+            $categories = array_merge(
+                $categories,
+                Category::getChildrenCategoriesIdsList($category_id)
+            );
+        }
+
+        return array_unique($categories);
+    }
+
+    /**
+     * Get simple carousels
+     *
+     * @return Collection|ProductCarousel[]
+     */
+    public static function getSimpleCarousels(): Collection
+    {
+        return self::ordered()
+            ->where('is_imidj', false)
+            ->whereNull('enum_type_id')
+            ->get();
+    }
+
+    /**
+     * Get imidj carousel
+     */
+    public static function getImidjCarousel(): ?self
+    {
+        return self::query()->where('is_imidj', true)->first();
     }
 }

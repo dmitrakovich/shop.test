@@ -6,7 +6,6 @@ use App\Enums\ProductCarouselEnum;
 use App\Facades\Currency;
 use App\Models\Ads\ProductCarousel;
 use App\Models\CartData;
-use App\Models\Category;
 use App\Models\Favorite;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
@@ -35,21 +34,11 @@ class SliderService
     {
         $sliders = Cache::remember('simple_slider', self::CACHE_TTL, function () {
             $productCarousels = [];
-            $carousels = ProductCarousel::ordered()
-                ->where('is_imidj', false)
-                ->whereNull('enum_type_id')
-                ->get(['title', 'categories', 'only_sale', 'only_new', 'count', 'speed']);
+            $carousels = ProductCarousel::getSimpleCarousels();
 
             foreach ($carousels as $key => $carousel) {
-                $categories = [];
-                foreach ($carousel->categories as $category_id) {
-                    $categories = array_merge(
-                        $categories,
-                        Category::getChildrenCategoriesIdsList($category_id)
-                    );
-                }
-
-                $products = Product::whereIn('category_id', $categories)
+                $products = Product::query()
+                    ->whereIn('category_id', $carousel->getCategoryIds())
                     ->when($carousel->only_sale, function ($query) {
                         $query->onlyWithDiscount();
                     })
@@ -101,22 +90,13 @@ class SliderService
     public function getImidj(): array
     {
         $slider = Cache::remember('imidj_slider', self::CACHE_TTL, function () {
-            $slider = ProductCarousel::where('is_imidj', true)
-                ->first(['title', 'categories', 'count', 'speed']);
-
-            if (empty($slider)) {
+            $slider = ProductCarousel::getImidjCarousel();
+            if (!$slider) {
                 return [];
             }
 
-            $categories = [];
-            foreach ($slider->categories as $category_id) {
-                $categories = array_merge(
-                    $categories,
-                    Category::getChildrenCategoriesIdsList($category_id)
-                );
-            }
-
-            $products = Product::whereIn('category_id', $categories)
+            $products = Product::query()
+                ->whereIn('category_id', $slider->getCategoryIds())
                 ->whereRelation('media', 'custom_properties', 'like', '%is_imidj%')
                 ->sorting('rating')
                 ->limit($slider->count)
@@ -341,15 +321,8 @@ class SliderService
             $carousel = ProductCarousel::where('enum_type_id', ProductCarouselEnum::FINAL_SALE)
                 ->first(['title', 'categories', 'count', 'speed', 'sorting', 'additional_settings']);
 
-            $categories = [];
-            foreach ($carousel->categories as $category_id) {
-                $categories = array_merge(
-                    $categories,
-                    Category::getChildrenCategoriesIdsList($category_id)
-                );
-            }
-
-            $products = Product::whereIn('category_id', $categories)
+            $products = Product::query()
+                ->whereIn('category_id', $carousel->getCategoryIds())
                 ->onlyWithDiscount(0.03)
                 ->sorting('rating')
                 ->limit($carousel->count)

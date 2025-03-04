@@ -6,19 +6,18 @@ use App\Models\Ads\IndexLink;
 use App\Services\GoogleTagManagerService;
 use App\Services\InstagramService;
 use App\Services\SliderService;
+use Illuminate\Contracts\View\View;
 
 class IndexController extends Controller
 {
     /**
      * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(
         InstagramService $instagramService,
         SliderService $sliderService,
         GoogleTagManagerService $gtmService
-    ) {
+    ): View {
         $gtmService->setViewForIndex();
 
         return view('index', [

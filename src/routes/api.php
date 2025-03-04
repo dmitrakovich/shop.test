@@ -28,6 +28,7 @@ Route::get('app-init', [AppController::class, 'init']);
 Route::get('catalog/{path?}', [CatalogController::class, 'index'])->where('path', '[a-zA-Z0-9/_-]+');
 Route::get('product/{product:slug}', [CatalogController::class, 'show'])->withTrashed()->name('product.show');
 
+Route::get('main-page', [InfoPageController::class, 'main']);
 Route::get('info-page/{page:slug}', [InfoPageController::class, 'show']);
 
 Route::prefix('cart')->as('cart.')->group(function () {
