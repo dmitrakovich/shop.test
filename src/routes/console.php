@@ -1,13 +1,15 @@
 <?php
 
+use Illuminate\Foundation\Console\ClosureCommand;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
+    /** @var ClosureCommand $this */
     $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+})->purpose('Display an inspiring quote');
 
 Schedule::job(new \App\Jobs\SxGeoUpdateJob())->dailyAt('03:07');
 Schedule::job(new \App\Jobs\Mailing\DiscountAfterRegisterJob())->dailyAt('09:00');
