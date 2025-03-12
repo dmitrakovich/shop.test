@@ -9,12 +9,12 @@ class SimpleFormatter
     /**
      * Формат сообщения
      */
-    protected $format = "[%datetime%] %channel%.%level_name%: %message% %context%\n"; //  %extra%
+    private string $format = "[%datetime%] %channel%.%level_name%: %message% %context%\n"; //  %extra%
 
     /**
      * Формат даты
      */
-    protected $dateFormat = 'Y-m-d H:i:s.u';
+    private string $dateFormat = 'Y-m-d H:i:s'; // .u
 
     public function __invoke($logger)
     {
