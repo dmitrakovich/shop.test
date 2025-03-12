@@ -71,7 +71,7 @@ desc('Pre-compile application code');
 task('artisan:opcache:compile', artisan('opcache:compile --force'));
 
 desc('Generate permissions/policies for all entities');
-task('artisan:shield:generate', artisan('shield:generate --all'));
+task('artisan:shield:generate', artisan('shield:generate --panel=admin --all'));
 
 task('deploy', [
     'deploy:info',
