@@ -12,19 +12,19 @@
 
         <div class="p-index__slider">
             @includeWhen(isset($simpleSliders[0]), 'partials.index.simple-slider', [
-                'simpleSlider' => $simpleSliders[0],
+                'simpleSlider' => $simpleSliders[0] ?? null,
             ])
         </div>
 
         <div class="p-index__slider">
             @includeWhen(isset($simpleSliders[1]), 'partials.index.simple-slider', [
-                'simpleSlider' => $simpleSliders[1],
+                'simpleSlider' => $simpleSliders[1] ?? null,
             ])
         </div>
 
         <div class="p-index__slider">
             @includeWhen(isset($simpleSliders[2]), 'partials.index.simple-slider', [
-                'simpleSlider' => $simpleSliders[2],
+                'simpleSlider' => $simpleSliders[2] ?? null,
             ])
         </div>
 
