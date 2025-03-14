@@ -96,9 +96,8 @@ class CatalogController extends BaseController
             'searchQuery' => $searchQuery,
         ];
 
-        if (!$products->isNotEmpty()) {
-            $sliderService = new SliderService();
-            $data['simpleSliders'] = $sliderService->getSimple();
+        if ($products->isEmpty()) {
+            $data['simpleSliders'] = app(SliderService::class)->getFormattedSimple();
         }
         $this->seoService
             ->setCurrentFilters($currentFilters)

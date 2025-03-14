@@ -11,21 +11,11 @@
         {{ Banner::getIndexMain() }}
 
         <div class="p-index__slider">
-            @includeWhen(isset($simpleSliders[0]), 'partials.index.simple-slider', [
-                'simpleSlider' => $simpleSliders[0] ?? null,
-            ])
+            @include('partials.index.simple-slider', ['simpleSlider' => $simpleSliders[0]])
         </div>
 
         <div class="p-index__slider">
-            @includeWhen(isset($simpleSliders[1]), 'partials.index.simple-slider', [
-                'simpleSlider' => $simpleSliders[1] ?? null,
-            ])
-        </div>
-
-        <div class="p-index__slider">
-            @includeWhen(isset($simpleSliders[2]), 'partials.index.simple-slider', [
-                'simpleSlider' => $simpleSliders[2] ?? null,
-            ])
+            @include('partials.index.simple-slider', ['simpleSlider' => $simpleSliders[1]])
         </div>
 
         <div class="col-md-12 my-4">

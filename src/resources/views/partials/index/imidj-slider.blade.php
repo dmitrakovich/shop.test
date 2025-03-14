@@ -4,7 +4,7 @@
 
 <div class="js-product-carousel row" data-slick='{
     "autoplay": true,
-    "autoplaySpeed": {{ $imidjSlider['speed'] }},
+    "autoplaySpeed": 3000,
     "arrows": false,
     "rows": 2,
     "slidesPerRow": 4,

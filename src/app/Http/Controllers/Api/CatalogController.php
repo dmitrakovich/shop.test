@@ -67,10 +67,9 @@ class CatalogController extends Controller
             'searchQuery' => $searchQuery,
         ];
 
-        if (!$products->isNotEmpty()) {
-            $sliderService = new SliderService();
-            $data['simpleSliders'] = $sliderService->getSimple();
-        }
+        // if ($products->isEmpty()) {
+        //     $data['simpleSliders'] = app(SliderService::class)->getFormattedSimple();
+        // }
         // $seoService
         //     ->setCurrentFilters($currentFilters)
         //     ->setCurrentCity($currentCity)

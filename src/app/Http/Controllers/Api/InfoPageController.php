@@ -11,6 +11,7 @@ use App\Models\InfoPage;
 use App\Services\GoogleTagManagerService;
 use App\Services\InstagramService;
 use App\Services\SliderService;
+use Illuminate\Database\Eloquent\Collection;
 
 class InfoPageController extends Controller
 {
@@ -29,7 +30,10 @@ class InfoPageController extends Controller
             'instagramPosts' => [], // array_slice($instagramService->getCachedPosts(), 0, 6),
             'instagramTitle' => $instagramService->getTitle(),
             'linksBlocks' => IndexLink::query()->get(['id', 'title', 'links']),
-            'simpleSliders' => $sliderService->getSimple(),
+            'simpleSliders' => array_map(
+                fn (Collection $slider) => CatalogProductResource::collection($slider),
+                $sliderService->getSimpleProducts()
+            ),
         ];
     }
 

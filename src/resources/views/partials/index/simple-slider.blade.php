@@ -1,5 +1,5 @@
 <h4 class="text-center">{{ $simpleSlider['title'] }}</h4>
-<div class="swiper js-simpleSlider" data-autoplay="{{ $simpleSlider['speed'] }}">
+<div class="swiper js-simpleSlider" data-autoplay="3000">
   <div class="swiper-wrapper">
     @foreach ($simpleSlider['products'] as $product)
     <div class="swiper-slide">

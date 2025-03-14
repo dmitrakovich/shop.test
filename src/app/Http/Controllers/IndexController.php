@@ -25,7 +25,7 @@ class IndexController extends Controller
             'instagramPosts' => [], // array_slice($instagramService->getCachedPosts(), 0, 6),
             'instagramTitle' => $instagramService->getTitle(),
             'linksBlocks' => IndexLink::query()->get(['id', 'title', 'links']),
-            'simpleSliders' => $sliderService->getSimple(),
+            'simpleSliders' => $sliderService->getFormattedSimple(),
         ]);
     }
 }

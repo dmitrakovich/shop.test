@@ -10,6 +10,7 @@ use App\Models\Favorite;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderItem;
 use App\Models\Product;
+use App\Repositories\ProductRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,17 +28,16 @@ class SliderService
 
     private const SIMILAR_PRODUCTS_COUNT = 12;
 
-    /**
-     * Get simple product slider
-     */
-    public function getSimple(): array
-    {
-        $sliders = Cache::remember('simple_slider', self::CACHE_TTL, function () {
-            $productCarousels = [];
-            $carousels = ProductCarousel::getSimpleCarousels();
+    public function __construct(private readonly ProductRepository $productRepository) {}
 
-            foreach ($carousels as $key => $carousel) {
-                $products = Product::query()
+    /**
+     * Get simple products for sliders
+     */
+    public function getSimpleProducts(): array
+    {
+        $slidersProducts = Cache::remember('simple_slider', self::CACHE_TTL, function () {
+            return ProductCarousel::getSimpleCarousels()->map(
+                fn (ProductCarousel $carousel) => Product::query()
                     ->whereIn('category_id', $carousel->getCategoryIds())
                     ->when($carousel->only_sale, function ($query) {
                         $query->onlyWithDiscount();
@@ -47,41 +47,35 @@ class SliderService
                     })
                     ->sorting('rating')
                     ->limit($carousel->count)
-                    ->with(['media', 'category', 'brand'])
-                    ->get();
-
-                if (count($products)) {
-                    $productCarousels[$key] = [
-                        'title' => $carousel->title,
-                        'speed' => $carousel->speed,
-                        'products' => $products->map(function ($product) {
-                            return [
-                                'id' => $product->id,
-                                'sku' => $product->sku,
-                                'full_name' => "{$product->category->name} {$product->brand->name}",
-                                'sale_percentage' => $product->getSalePercentage(),
-                                'is_new' => $product->isNew(),
-                                'price_byn' => $product->getFinalPrice(),
-                                'old_price_byn' => $product->getFinalOldPrice(),
-                                'url' => $product->getUrl(),
-                                'image' => $product->getFirstMediaUrl('default', 'catalog'),
-                                'dataLayer' => GoogleTagManagerService::prepareProduct($product),
-                            ];
-                        })->toArray(),
-                    ];
-                }
-            }
-
-            return $productCarousels;
+                    ->pluck('id')
+            )->toArray();
         });
 
-        foreach ($sliders as &$slider) {
-            $this->setDataLayerForPage($slider['products']);
-            $this->addConvertedAndFormattedPrice($slider['products']);
-            $this->addFavorites($slider['products']);
+        $sliders = [];
+        foreach (array_filter($slidersProducts) as $productIds) {
+            $sliders[] = $this->productRepository->getForSliderByIds($productIds);
         }
 
         return $sliders;
+    }
+
+    /**
+     * Get formatted simple product sliders
+     */
+    public function getFormattedSimple(): array
+    {
+        $sliders = $this->getSimpleProducts();
+
+        return [
+            [
+                'title' => 'ХИТЫ ПРОДАЖ',
+                'products' => $this->formatProducts($sliders[0]),
+            ],
+            [
+                'title' => 'Вечерняя обувь',
+                'products' => $this->formatProducts($sliders[1]),
+            ],
+        ];
     }
 
     /**
@@ -106,17 +100,13 @@ class SliderService
                 ->toArray();
         });
 
-        return Product::withTrashed()
-            ->with(['media', 'category', 'brand', 'styles', 'favorite'])
-            ->whereIn('id', $productIds)
-            ->get();
+        return $this->productRepository->getForSliderByIds($productIds);
     }
 
     public function getFormattedImidj(): array
     {
         return [
             'title' => 'Популярное',
-            'speed' => 3000,
             'products' => $this->formatProducts($this->getImidjProducts(), isImidj: true),
         ];
     }
@@ -152,10 +142,7 @@ class SliderService
             return $recommended->pluck('id')->toArray();
         });
 
-        return Product::withTrashed()
-            ->with(['media', 'category', 'brand', 'styles', 'favorite'])
-            ->whereIn('id', $productIds)
-            ->get();
+        return $this->productRepository->getForSliderByIds($productIds);
     }
 
     public function getFormattedSimilarProducts(int $productId): array
