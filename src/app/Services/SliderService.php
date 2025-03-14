@@ -168,7 +168,7 @@ class SliderService
     }
 
     /**
-     * @param  Collection|Product[]  $products
+     * @param  Collection|Product[]  $productsCollection
      */
     private function formatProducts(Collection $productsCollection, bool $isImidj = false): array
     {
