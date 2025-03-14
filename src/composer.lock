@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f9d8a82af18c1bde363eac26989d344",
+    "content-hash": "837878e40332e581e85553ba4f8ce3a1",
     "packages": [
         {
             "name": "amphp/amp",
@@ -4826,58 +4826,6 @@
                 "source": "https://github.com/laravel-admin-extensions/grid-sortable/tree/master"
             },
             "time": "2020-02-18T03:06:20+00:00"
-        },
-        {
-            "name": "laravel-admin-ext/log-viewer",
-            "version": "1.0.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dmitrakovich/log-viewer.git",
-                "reference": "6676d8a0f05e383713e6566bbca98dea1824156d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/log-viewer/zipball/6676d8a0f05e383713e6566bbca98dea1824156d",
-                "reference": "6676d8a0f05e383713e6566bbca98dea1824156d",
-                "shasum": ""
-            },
-            "require": {
-                "encore/laravel-admin": "^1.6",
-                "php": ">=7.0.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Encore\\Admin\\LogViewer\\LogViewerServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Encore\\Admin\\LogViewer\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "z-song",
-                    "email": "zosong@126.com"
-                }
-            ],
-            "description": "Log viewer for laravel",
-            "homepage": "https://github.com/laravel-admin-extensions/log-viewer",
-            "keywords": [
-                "laravel-admin",
-                "log",
-                "viewer"
-            ],
-            "support": {
-                "source": "https://github.com/dmitrakovich/log-viewer/tree/1.0.7"
-            },
-            "time": "2024-03-30T17:18:28+00:00"
         },
         {
             "name": "laravel/framework",
