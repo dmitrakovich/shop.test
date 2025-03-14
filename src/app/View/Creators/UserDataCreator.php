@@ -17,7 +17,7 @@ class UserDataCreator extends ScriptViewCreator
     /**
      * Bind user data to the view.
      */
-    public function create(View $view)
+    public function create(View $view): void
     {
         $view->with('userData', $this->getUserData());
     }
