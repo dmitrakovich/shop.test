@@ -10,6 +10,10 @@
 
         {{ Banner::getIndexMain() }}
 
+        <div class="col-md-12 my-4">
+            @include('partials.index.imidj-slider')
+        </div>
+
         <div class="p-index__slider">
             @includeWhen(isset($simpleSliders[0]), 'partials.index.simple-slider', [
                 'simpleSlider' => $simpleSliders[0] ?? null,

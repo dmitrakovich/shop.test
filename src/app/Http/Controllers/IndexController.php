@@ -21,7 +21,7 @@ class IndexController extends Controller
         $gtmService->setViewForIndex();
 
         return view('index', [
-            'imidjSlider' => $sliderService->getImidj(),
+            'imidjSlider' => $sliderService->getFormattedImidj(),
             'instagramPosts' => [], // array_slice($instagramService->getCachedPosts(), 0, 6),
             'instagramTitle' => $instagramService->getTitle(),
             'linksBlocks' => IndexLink::query()->get(['id', 'title', 'links']),

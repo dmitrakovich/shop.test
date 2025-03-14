@@ -100,9 +100,7 @@ class CatalogController extends Controller
             'breadcrumbs' => Breadcrumbs::generate('product', $product),
             'product' => new ProductResource($product),
             'feedbacks' => $feedbackService->getForProduct($product->id),
-            'similarProducts' => CatalogProductResource::collection(
-                $sliderService->getSimilarProducts($product->id)->load(['media', 'category', 'favorite'])
-            ),
+            'similarProducts' => CatalogProductResource::collection($sliderService->getSimilarProducts($product->id)),
             'productGroup' => $sliderService->getProductGroup($product->product_group_id),
             // 'recentProductsSlider' => $sliderService->getRecentProducts($productService),
         ];

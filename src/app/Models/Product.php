@@ -323,6 +323,22 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Get the first catalog media URL.
+     */
+    public function getFirstCatalogMediaUrl(): string
+    {
+        return $this->getFirstMediaUrl('default', 'catalog');
+    }
+
+    /**
+     * Get the first imidj media URL.
+     */
+    public function getFirstImidjMediaUrl(): string
+    {
+        return $this->getMedia('default', ['is_imidj' => true])->first()->getUrl('normal');
+    }
+
+    /**
      * Сортировка товаров
      *
      * @return Builder

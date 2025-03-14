@@ -85,54 +85,40 @@ class SliderService
     }
 
     /**
-     * Get imidj product slider
+     * Get imidj products
+     *
+     * @return Collection|Product[]
      */
-    public function getImidj(): array
+    public function getImidjProducts(): Collection
     {
-        $slider = Cache::remember('imidj_slider', self::CACHE_TTL, function () {
+        $productIds = Cache::remember('imidj_slider', self::CACHE_TTL, function () {
             $slider = ProductCarousel::getImidjCarousel();
             if (!$slider) {
                 return [];
             }
 
-            $products = Product::query()
+            return Product::query()
                 ->whereIn('category_id', $slider->getCategoryIds())
                 ->whereRelation('media', 'custom_properties', 'like', '%is_imidj%')
                 ->sorting('rating')
                 ->limit($slider->count)
-                ->with(['media', 'category', 'brand', 'styles'])
-                ->get();
-
-            if (empty($products)) {
-                return [];
-            }
-
-            return [
-                'title' => $slider->title,
-                'speed' => $slider->speed,
-                'products' => $products->map(function ($product) {
-                    return [
-                        'id' => $product->id,
-                        'sku' => $product->sku,
-                        'full_name' => "{$product->category->name} {$product->brand->name}",
-                        'sale_percentage' => $product->getSalePercentage(),
-                        'is_new' => $product->isNew(),
-                        'price_byn' => $product->getFinalPrice(),
-                        'old_price_byn' => $product->getFinalOldPrice(),
-                        'url' => $product->getUrl(),
-                        'image' => $product->getMedia('default', ['is_imidj' => true])
-                            ->first()->getUrl('normal'),
-                        'dataLayer' => GoogleTagManagerService::prepareProduct($product),
-                    ];
-                })->toArray(),
-            ];
+                ->pluck('id')
+                ->toArray();
         });
 
-        $this->setDataLayerForPage($slider['products']);
-        $this->addConvertedAndFormattedPrice($slider['products']);
-        $this->addFavorites($slider['products']);
+        return Product::withTrashed()
+            ->with(['media', 'category', 'brand', 'styles', 'favorite'])
+            ->whereIn('id', $productIds)
+            ->get();
+    }
 
-        return $slider;
+    public function getFormattedImidj(): array
+    {
+        return [
+            'title' => 'Популярное',
+            'speed' => 3000,
+            'products' => $this->formatProducts($this->getImidjProducts(), isImidj: true),
+        ];
     }
 
     /**
@@ -166,35 +152,45 @@ class SliderService
             return $recommended->pluck('id')->toArray();
         });
 
-        return Product::withTrashed()->whereIn('id', $productIds)->get();
+        return Product::withTrashed()
+            ->with(['media', 'category', 'brand', 'styles', 'favorite'])
+            ->whereIn('id', $productIds)
+            ->get();
     }
 
     public function getFormattedSimilarProducts(int $productId): array
     {
-        $products = $this->getSimilarProducts($productId)
-            ->map(fn (Product $product) => [
-                'id' => $product->id,
-                'sku' => $product->sku,
-                'full_name' => $product->shortName(),
-                'sale_percentage' => $product->getSalePercentage(),
-                'is_new' => $product->isNew(),
-                'price_byn' => $product->getFinalPrice(),
-                'old_price_byn' => $product->getFinalOldPrice(),
-                'url' => $product->getUrl(),
-                'image' => $product->getFirstMediaUrl('default', 'catalog'),
-                'dataLayer' => GoogleTagManagerService::prepareProduct($product),
-            ])
-            ->toArray();
-
-        $this->setDataLayerForPage($products);
-        $this->addConvertedAndFormattedPrice($products);
-        $this->addFavorites($products);
-
         return [
             'title' => 'Похожие товары',
             'speed' => 3000,
-            'products' => $products,
+            'products' => $this->formatProducts($this->getSimilarProducts($productId)),
         ];
+    }
+
+    /**
+     * @param  Collection|Product[]  $products
+     */
+    private function formatProducts(Collection $productsCollection, bool $isImidj = false): array
+    {
+        $products = $productsCollection->map(fn (Product $product) => [
+            'id' => $product->id,
+            'sku' => $product->sku,
+            'full_name' => $product->extendedName(),
+            'sale_percentage' => $product->getSalePercentage(),
+            'is_new' => $product->isNew(),
+            'favorite' => $product->isFavorite(),
+            'price_byn' => $product->getFinalPrice(),
+            'old_price_byn' => $product->getFinalOldPrice(),
+            'formatted_price' => $product->getFormattedPrice(),
+            'formatted_old_price' => $product->getFormattedOldPrice(),
+            'url' => $product->getUrl(),
+            'image' => $isImidj ? $product->getFirstImidjMediaUrl() : $product->getFirstCatalogMediaUrl(),
+            'dataLayer' => GoogleTagManagerService::prepareProduct($product),
+        ])->toArray();
+
+        $this->setDataLayerForPage($products);
+
+        return $products;
     }
 
     /**

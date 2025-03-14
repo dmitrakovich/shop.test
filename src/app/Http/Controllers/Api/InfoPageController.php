@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Info\PageResource;
+use App\Http\Resources\Product\CatalogProductResource;
 use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\Ads\IndexLink;
 use App\Models\InfoPage;
@@ -24,7 +25,7 @@ class InfoPageController extends Controller
         // $gtmService->setViewForIndex();
 
         return [
-            'imidjSlider' => $sliderService->getImidj(),
+            'imidjSlider' => CatalogProductResource::collection($sliderService->getImidjProducts()),
             'instagramPosts' => [], // array_slice($instagramService->getCachedPosts(), 0, 6),
             'instagramTitle' => $instagramService->getTitle(),
             'linksBlocks' => IndexLink::query()->get(['id', 'title', 'links']),
