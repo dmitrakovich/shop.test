@@ -100,6 +100,15 @@ class Product extends Model implements HasMedia
     protected $guarded = [];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'action' => 'boolean',
+    ];
+
+    /**
      * Ссылка на товар
      */
     protected ?string $url = null;

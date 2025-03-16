@@ -2,7 +2,6 @@
 
 namespace App\Models\ProductAttributes;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -13,7 +12,4 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Manufacturer extends Model
-{
-    use HasFactory;
-}
+class Manufacturer extends Model {}

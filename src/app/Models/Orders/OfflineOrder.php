@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $one_c_product_id External product id from 1C
  * @property int|null $size_id
  * @property float $price Цена покупки
- * @property bool $count Number of items in the order
+ * @property int $count Number of items in the order
  * @property string $sku product stock keeping unit
  * @property int|null $user_id
  * @property string $user_phone

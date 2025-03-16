@@ -3,12 +3,11 @@
 namespace App\Models\Seo;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property bool|null $folder_enum_id Enum id каталога
+ * @property int|null $folder_enum_id Enum id каталога
  * @property string|null $seo_url Seo ссылка
  * @property string|null $destination Куда приведет seo ссылка
  * @property string|null $tag Тег
@@ -26,14 +25,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SeoLink extends Model
 {
-    use HasFactory;
-
     protected $guarded = ['id'];
 
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'frequency_updated_at' => 'datetime',

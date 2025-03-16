@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
@@ -19,8 +18,6 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  */
 class Country extends Model
 {
-    use HasFactory;
-
     final const DEFAULT_COUNTRY_CODE = 'BY';
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -16,8 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ShortLink extends Model
 {
-    use HasFactory;
-
     final const SHORT_LINK_LENGTH = 7;
 
     final const CHAR_LIST = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234567890';

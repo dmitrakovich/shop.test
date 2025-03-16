@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,10 +20,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int|null $user_phone
  * @property string|null $user_city
  * @property string $text
- * @property bool $rating
+ * @property int $rating
  * @property int $product_id
- * @property bool $type_id
- * @property bool $captcha_score
+ * @property int $type_id
+ * @property int $captcha_score
  * @property bool $view_only_posted
  * @property bool $publish
  * @property string $ip
@@ -45,11 +44,20 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Feedback extends Model implements HasMedia
 {
-    use HasFactory;
     use InteractsWithMedia;
     use SoftDeletes;
 
     protected $table = 'feedbacks';
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'view_only_posted' => 'boolean',
+        'publish' => 'boolean',
+    ];
 
     protected $fillable = [
         'user_id',

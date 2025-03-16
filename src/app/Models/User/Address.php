@@ -3,7 +3,6 @@
 namespace App\Models\User;
 
 use App\Models\Country;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 
@@ -31,8 +30,6 @@ use Illuminate\Database\Eloquent\Relations;
  */
 class Address extends Model
 {
-    use HasFactory;
-
     protected $guarded = ['id'];
 
     /**
@@ -41,6 +38,15 @@ class Address extends Model
      * @var string
      */
     protected $table = 'user_addresses';
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'approve' => 'boolean',
+    ];
 
     /**
      * Address country

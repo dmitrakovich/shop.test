@@ -5,7 +5,6 @@ namespace App\Models\Ads;
 use App\Enums\ProductCarouselEnum;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Cache;
@@ -23,10 +22,10 @@ use Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson;
  * @property bool $only_new
  * @property int $speed
  * @property int $count
- * @property bool $sorting
+ * @property int $sorting
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property bool|null $enum_type_id
+ * @property int|null $enum_type_id
  * @property array|null $additional_settings Дополнительные настройки
  * @property mixed $categories_list
  *
@@ -39,7 +38,6 @@ use Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson;
  */
 class ProductCarousel extends Model implements Sortable
 {
-    use HasFactory;
     use HasJsonRelationships;
     use SortableTrait;
 
@@ -62,10 +60,11 @@ class ProductCarousel extends Model implements Sortable
      * @var array<string, string>
      */
     protected $casts = [
+        'is_imidj' => 'boolean',
         'additional_settings' => 'array',
         'categories' => 'json',
-        'only_sale' => 'bool',
-        'only_new' => 'bool',
+        'only_sale' => 'boolean',
+        'only_new' => 'boolean',
     ];
 
     public $sortable = [

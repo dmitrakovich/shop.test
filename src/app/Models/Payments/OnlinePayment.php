@@ -7,7 +7,6 @@ use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
 use Encore\Admin\Facades\Admin;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 
@@ -23,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property string|null $payment_id ID платежа в платежной системе
  * @property string|null $payment_num Номер платежа
  * @property string|null $payment_url Ссылка на платеж
- * @property bool|null $card_last4 Последние 4 цифры карты
+ * @property int|null $card_last4 Последние 4 цифры карты
  * @property string|null $card_type Тип карты
  * @property string|null $email Email плательщика
  * @property string|null $phone Телефон плательщика
@@ -52,8 +51,6 @@ use Illuminate\Database\Eloquent\Relations;
  */
 class OnlinePayment extends Model
 {
-    use HasFactory;
-
     protected $guarded = ['id'];
 
     protected $appends = [
@@ -63,10 +60,11 @@ class OnlinePayment extends Model
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'method_enum_id' => OnlinePaymentMethodEnum::class,
+        'is_test' => 'boolean',
         'last_status_enum_id' => OnlinePaymentStatusEnum::class,
         'request_data' => 'json',
     ];

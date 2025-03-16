@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\StockTypeEnum;
 use App\Models\Bots\Telegram\TelegramChat;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Spatie\EloquentSortable\Sortable;
@@ -49,7 +48,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class Stock extends Model implements HasMedia, Sortable
 {
-    use HasFactory;
     use InteractsWithMedia, SortableTrait;
 
     /**
@@ -78,6 +76,8 @@ class Stock extends Model implements HasMedia, Sortable
      */
     protected $casts = [
         'type' => StockTypeEnum::class,
+        'has_pickup' => 'boolean',
+        'check_availability' => 'boolean',
     ];
 
     public $sortable = [

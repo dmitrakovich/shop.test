@@ -3,7 +3,6 @@
 namespace App\Models\Logs;
 
 use App\Admin\Models\Administrator;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -21,8 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class OrderDistributionLog extends Model
 {
-    use HasFactory;
-
     protected $guarded = ['id'];
 
     /**

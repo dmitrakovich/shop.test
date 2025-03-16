@@ -3,7 +3,6 @@
 namespace App\Models\ProductAttributes;
 
 use App\Traits\AttributeFilterTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -22,7 +21,7 @@ use Illuminate\Support\Str;
  */
 class CountryOfOrigin extends Model
 {
-    use AttributeFilterTrait, HasFactory;
+    use AttributeFilterTrait;
 
     protected $guarded = ['id'];
 

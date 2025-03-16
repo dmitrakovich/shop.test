@@ -7,7 +7,6 @@ use App\Enums\Cookie as CookieEnum;
 use App\Models\Cart;
 use App\Models\Favorite;
 use App\Models\Orders\Order;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,8 +39,6 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  */
 class Device extends Model implements ClientInterface
 {
-    use HasFactory;
-
     /**
      * @var int 1 year
      */

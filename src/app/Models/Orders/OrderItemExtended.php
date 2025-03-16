@@ -17,7 +17,7 @@ namespace App\Models\Orders;
  * @property string $status_key
  * @property \Illuminate\Support\Carbon $status_updated_at
  * @property \Illuminate\Support\Carbon|null $release_date
- * @property bool|null $pred_period
+ * @property int|null $pred_period
  * @property string $product_name
  * @property string $product_link
  * @property string $product_photo

@@ -24,6 +24,15 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentMethod extends Model
 {
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+
+    /**
      * Scope a query to only include active payment methods.
      */
     public function scopeActive(Builder $query): void

@@ -16,7 +16,6 @@ use App\Models\Stock;
 use App\Models\User\Device;
 use App\Models\User\User;
 use Deliveries\DeliveryMethod;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Notifications\Notifiable;
@@ -87,7 +86,7 @@ use Payments\PaymentMethod;
  */
 class Order extends Model
 {
-    use HasFactory, Notifiable;
+    use Notifiable;
 
     protected $fillable = [
         'user_id',
@@ -149,7 +148,7 @@ class Order extends Model
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'order_method' => OrderMethod::class,

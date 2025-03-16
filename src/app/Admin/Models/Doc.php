@@ -2,7 +2,6 @@
 
 namespace App\Admin\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -16,14 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Doc extends Model
 {
-    use HasFactory;
-
     /**
-     * Farmat date in admin panel
-     *
-     * @return string
+     * Format date in admin panel
      */
-    protected function serializeDate(\DateTimeInterface $date)
+    protected function serializeDate(\DateTimeInterface $date): string
     {
         return $date->format('d.m.Y H:i:s');
     }

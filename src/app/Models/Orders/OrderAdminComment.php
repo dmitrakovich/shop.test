@@ -2,7 +2,6 @@
 
 namespace App\Models\Orders;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -16,8 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class OrderAdminComment extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'comment',
         'order_id',

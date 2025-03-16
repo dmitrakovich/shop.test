@@ -6,7 +6,6 @@ use App\Models\Logs\OrderItemStatusLog;
 use App\Models\Payments\Installment;
 use App\Models\Product;
 use App\Models\Size;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 
@@ -25,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property string $status_key
  * @property \Illuminate\Support\Carbon $status_updated_at
  * @property \Illuminate\Support\Carbon|null $release_date
- * @property bool|null $pred_period
+ * @property int|null $pred_period
  *
  * @property-read \App\Models\Orders\Order|null $order
  * @property-read \App\Models\Product|null $product
@@ -39,8 +38,6 @@ use Illuminate\Database\Eloquent\Relations;
  */
 class OrderItem extends Model
 {
-    use HasFactory;
-
     public $timestamps = false;
 
     protected $fillable = [
@@ -60,9 +57,10 @@ class OrderItem extends Model
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
+        'promocode_applied' => 'boolean',
         'status_updated_at' => 'datetime',
         'release_date' => 'datetime',
     ];

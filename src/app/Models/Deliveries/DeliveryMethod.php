@@ -3,7 +3,6 @@
 namespace Deliveries;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -23,8 +22,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DeliveryMethod extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that should be cast.
      *
@@ -32,6 +29,7 @@ class DeliveryMethod extends Model
      */
     protected $casts = [
         'instance' => DeliveryInstanceCast::class,
+        'active' => 'boolean',
     ];
 
     /**
