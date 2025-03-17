@@ -673,12 +673,6 @@ parameters:
 			path: app/Models/Brand.php
 
 		-
-			message: '#^PHPDoc type array of property App\\Models\\CartData\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/CartData.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$path\.$#'
 			identifier: property.notFound
 			count: 1
@@ -835,31 +829,13 @@ parameters:
 			path: app/Models/Logs/InventoryLog.php
 
 		-
-			message: '#^PHPDoc type array\<string\> of property App\\Models\\Logs\\InventoryLog\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Logs/InventoryLog.php
-
-		-
 			message: '#^PHPDoc type array of property App\\Models\\Logs\\OrderItemStatusLog\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
 			identifier: property.phpDocType
 			count: 1
 			path: app/Models/Logs/OrderItemStatusLog.php
 
 		-
-			message: '#^PHPDoc type array of property App\\Models\\Logs\\SmsLog\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Logs/SmsLog.php
-
-		-
 			message: '#^PHPDoc type array of property App\\Models\\OneC\\DiscountCard\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/OneC/DiscountCard.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\OneC\\DiscountCard\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
 			identifier: property.phpDocType
 			count: 1
 			path: app/Models/OneC/DiscountCard.php
@@ -869,12 +845,6 @@ parameters:
 			identifier: nullsafe.neverNull
 			count: 1
 			path: app/Models/OneC/OfflineOrder.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\OneC\\Product\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/OneC/Product.php
 
 		-
 			message: '#^PHPDoc type array of property App\\Models\\Orders\\OfflineOrder\:\:\$guarded is not covariant with PHPDoc type array\<string\>\|bool of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$guarded\.$#'
@@ -890,12 +860,6 @@ parameters:
 
 		-
 			message: '#^PHPDoc type array of property App\\Models\\Payments\\Installment\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Payments/Installment.php
-
-		-
-			message: '#^PHPDoc type array\<string\> of property App\\Models\\Payments\\Installment\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
 			identifier: property.phpDocType
 			count: 1
 			path: app/Models/Payments/Installment.php
@@ -971,18 +935,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: app/Models/User/Address.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\User\\Group\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/User/Group.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\User\\User\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/User/User.php
 
 		-
 			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\User\\User\:\:\$hidden is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$hidden\.$#'

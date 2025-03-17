@@ -49,8 +49,6 @@ class Installment extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var string[]
      */
     protected $fillable = [
         'contract_number',

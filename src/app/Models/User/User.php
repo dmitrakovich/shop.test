@@ -68,8 +68,6 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
      */
     protected $fillable = [
         'group_id',

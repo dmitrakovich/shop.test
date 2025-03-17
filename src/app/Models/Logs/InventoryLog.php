@@ -30,8 +30,6 @@ class InventoryLog extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<string>
      */
     protected $fillable = [
         'product_id',
