@@ -94,7 +94,7 @@ class Device extends Model implements ClientInterface
      */
     public function favorites(): HasMany
     {
-        return $this->hasMany(Favorite::class)->withoutGlobalScope('for_user');
+        return $this->hasMany(Favorite::class);
     }
 
     /**

@@ -257,8 +257,8 @@ class SliderService
             $period = $slider->additional_settings['period'] ?? 90;
             $cartIds = CartData::select('cart_id')->whereIn('product_id', $orderProductIds)->where('created_at', '>=', Carbon::now()->subDays($period))->groupBy('cart_id')->pluck('cart_id')->toArray();
             $cartProductIds = CartData::select('product_id')->whereIn('cart_id', $cartIds)->groupBy('product_id')->pluck('product_id')->toArray();
-            $favoriteIds = Favorite::withoutGlobalScopes()->select('device_id')->whereIn('product_id', $orderProductIds)->where('created_at', '>=', Carbon::now()->subDays($period))->groupBy('device_id')->pluck('device_id')->toArray();
-            $favoriteProductIds = Favorite::select('product_id')->whereIn('device_id', $favoriteIds)->groupBy('product_id')->pluck('product_id')->toArray();
+            $favoriteIds = Favorite::query()->select('device_id')->whereIn('product_id', $orderProductIds)->where('created_at', '>=', Carbon::now()->subDays($period))->groupBy('device_id')->pluck('device_id')->toArray();
+            $favoriteProductIds = Favorite::query()->select('product_id')->whereIn('device_id', $favoriteIds)->groupBy('product_id')->pluck('product_id')->toArray();
             $orderIds = OrderItem::select('order_id')->whereIn('product_id', $orderProductIds)->whereHas('order', fn ($query) => $query->where('created_at', '>=', Carbon::now()->subDays($period)))->groupBy('order_id')->pluck('order_id')->toArray();
             $orderProductIds = OrderItem::select('product_id')->whereIn('order_id', $orderIds)->groupBy('product_id')->pluck('product_id')->toArray();
             $productIds = array_slice(array_unique(array_merge($cartProductIds, $favoriteProductIds, $orderProductIds)), 0, 500);
@@ -406,8 +406,10 @@ class SliderService
      */
     protected function addFavorites(array &$products): void
     {
-        $favorites = Favorite::whereIn('product_id', array_column($products, 'id'))
-            ->pluck('product_id')->toArray();
+        $favorites = Favorite::forUser()
+            ->whereIn('product_id', array_column($products, 'id'))
+            ->pluck('product_id')
+            ->toArray();
 
         foreach ($products as &$product) {
             $product['favorite'] = in_array($product['id'], $favorites);

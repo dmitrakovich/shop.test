@@ -739,12 +739,6 @@ parameters:
 			path: app/Models/Fabric.php
 
 		-
-			message: '#^PHPDoc type array of property App\\Models\\Favorite\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Favorite.php
-
-		-
 			message: '#^Match expression does not handle remaining value\: string$#'
 			identifier: match.unhandled
 			count: 1
@@ -895,24 +889,6 @@ parameters:
 			path: app/Models/Orders/Order.php
 
 		-
-			message: '#^PHPDoc type array of property App\\Models\\Orders\\Order\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^PHPDoc type array of property App\\Models\\Orders\\OrderItem\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Orders/OrderItem.php
-
-		-
-			message: '#^PHPDoc type array of property App\\Models\\Orders\\OrderTrack\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Orders/OrderTrack.php
-
-		-
 			message: '#^PHPDoc type array of property App\\Models\\Payments\\Installment\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
 			identifier: property.phpDocType
 			count: 1
@@ -923,12 +899,6 @@ parameters:
 			identifier: property.phpDocType
 			count: 1
 			path: app/Models/Payments/Installment.php
-
-		-
-			message: '#^PHPDoc type array of property App\\Models\\Payments\\OnlinePayment\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Payments/OnlinePayment.php
 
 		-
 			message: '#^Strict comparison using \=\=\= between array and false will always evaluate to false\.$#'
@@ -973,22 +943,10 @@ parameters:
 			path: app/Models/ProductAttributes/Status.php
 
 		-
-			message: '#^PHPDoc type array of property App\\Models\\Promo\\Sale\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Promo/Sale.php
-
-		-
 			message: '#^Strict comparison using \=\=\= between array and false will always evaluate to false\.$#'
 			identifier: identical.alwaysFalse
 			count: 1
 			path: app/Models/Season.php
-
-		-
-			message: '#^PHPDoc type array of property App\\Models\\Seo\\SeoLink\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Seo/SeoLink.php
 
 		-
 			message: '#^Strict comparison using \=\=\= between array and false will always evaluate to false\.$#'

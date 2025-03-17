@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CatalogController;
+use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\InfoPageController;
 use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
@@ -36,6 +37,12 @@ Route::prefix('cart')->as('cart.')->group(function () {
     Route::post('add', [CartController::class, 'addToCart'])->name('add');
     Route::delete('remove/{itemId}', [CartController::class, 'removeItem'])->name('remove');
     Route::post('clear', [CartController::class, 'clear'])->name('clear');
+});
+
+Route::prefix('favorites')->as('favorites.')->group(function () {
+    Route::get('/', [FavoriteController::class, 'index'])->name('index');
+    Route::post('{product}', [FavoriteController::class, 'add'])->name('add');
+    Route::delete('{product}', [FavoriteController::class, 'remove'])->name('remove');
 });
 
 Route::prefix('orders')->as('orders.')->group(function () {

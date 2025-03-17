@@ -13,7 +13,7 @@ class AppController extends Controller
     public function init(): JsonResponse
     {
         $cart = Cart::getCart();
-        $favorites = Favorite::query()->with('product')->get();
+        $favorites = Favorite::forUser()->with('product')->get();
 
         // todo: create resource
         return response()->json([

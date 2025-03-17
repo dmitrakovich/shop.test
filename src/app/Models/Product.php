@@ -229,7 +229,7 @@ class Product extends Model implements HasMedia
      */
     public function favorite(): Relations\HasOne
     {
-        return $this->hasOne(Favorite::class);
+        return $this->hasOne(Favorite::class)->forUser();
     }
 
     /**

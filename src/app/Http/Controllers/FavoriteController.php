@@ -3,25 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Events\Analytics\AddToCart;
-use App\Facades\Device;
-use App\Models\Favorite;
 use App\Models\Product;
-use App\Services\ProductService;
+use App\Services\FavoriteService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
+    public function __construct(private readonly FavoriteService $favoriteService) {}
+
     /**
      * Display a listing of the favorites.
      */
-    public function index(ProductService $productService): View
+    public function index(): View
     {
-        $favorites = Favorite::limit(100)->pluck('product_id')->toArray();
-        $products = $productService->getById($favorites);
-
-        return view('dashboard.favorites', compact('products'));
+        return view('dashboard.favorites', [
+            'products' => $this->favoriteService->getProducts(),
+        ]);
     }
 
     /**
@@ -30,13 +28,8 @@ class FavoriteController extends Controller
     public function store(Request $request): array
     {
         /** @var Product */
-        $product = Product::query()->findOrFail((int)$request->input('productId'));
-        /** @var Favorite */
-        $favorite = Favorite::query()->create([
-            'user_id' => Auth::id(),
-            'device_id' => Device::id(),
-            'product_id' => $product->id,
-        ]);
+        $product = Product::query()->findOrFail($request->integer('productId'));
+        $favorite = $this->favoriteService->addProduct($product);
 
         event($event = new AddToCart($product));
 
@@ -49,13 +42,9 @@ class FavoriteController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Product $favorite): void
     {
-        $productId = (int)$request->route('favorite');
-
-        return Favorite::where('product_id', $productId)->delete();
+        $this->favoriteService->removeProduct($favorite);
     }
 }

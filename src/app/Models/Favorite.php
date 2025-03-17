@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Facades\Device;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
@@ -19,16 +18,14 @@ use Illuminate\Support\Facades\Auth;
  *
  * @property-read \App\Models\Product|null $product
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Favorite forUser()
+ *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Favorite extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array
      */
     protected $fillable = [
         'user_id',
@@ -37,18 +34,16 @@ class Favorite extends Model
     ];
 
     /**
-     * The "booted" method of the model.
-     *
-     * @return void
+     * Scope query to get favorites for the current user
+     * If user is authenticated, filter by user_id
+     * If user is not authenticated, filter by device_id
      */
-    protected static function booted()
+    public function scopeForUser(Builder $query): void
     {
-        static::addGlobalScope('for_user', function (Builder $builder) {
-            if ($userId = Auth::id()) {
-                $builder->where('user_id', $userId);
-            } else {
-                $builder->where('device_id', Device::id());
-            }
+        $query->when(Auth::id(), function (Builder $query, int $userId) {
+            $query->where('user_id', $userId);
+        }, function (Builder $query) {
+            $query->where('device_id', Device::id());
         });
     }
 
