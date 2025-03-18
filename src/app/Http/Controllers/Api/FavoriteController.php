@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\Analytics\AddToCart;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Product\CatalogProductResource;
 use App\Models\Product;
@@ -21,24 +20,9 @@ class FavoriteController extends Controller
         return CatalogProductResource::collection($this->favoriteService->getProducts());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function add(Product $product): AnonymousResourceCollection
+    public function toggle(Product $product): AnonymousResourceCollection
     {
-        $this->favoriteService->addProduct($product);
-
-        // event($event = new AddToCart($product));
-
-        return $this->index();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function remove(Product $product): AnonymousResourceCollection
-    {
-        $this->favoriteService->removeProduct($product);
+        $this->favoriteService->toggleProduct($product);
 
         return $this->index();
     }

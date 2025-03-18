@@ -41,8 +41,7 @@ Route::prefix('cart')->as('cart.')->group(function () {
 
 Route::prefix('favorites')->as('favorites.')->group(function () {
     Route::get('/', [FavoriteController::class, 'index'])->name('index');
-    Route::post('{product}', [FavoriteController::class, 'add'])->name('add');
-    Route::delete('{product}', [FavoriteController::class, 'remove'])->name('remove');
+    Route::post('toggle/{product}', [FavoriteController::class, 'toggle'])->name('toggle');
 });
 
 Route::prefix('orders')->as('orders.')->group(function () {

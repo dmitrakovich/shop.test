@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\Analytics\AddToCart;
 use App\Facades\Device;
 use App\Models\Favorite;
 use App\Models\Product;
@@ -41,5 +42,20 @@ class FavoriteService
     public function removeProduct(Product $product): void
     {
         $this->favorite->forUser()->where('product_id', $product->id)->delete();
+    }
+
+    public function toggleProduct(Product $product): void
+    {
+        $favorite = $this->favorite->newQuery()->updateOrCreate([
+            'user_id' => Auth::id(),
+            'device_id' => Device::id(),
+            'product_id' => $product->id,
+        ]);
+
+        if ($favorite->wasRecentlyCreated) {
+            event(new AddToCart($product));
+        } else {
+            $favorite->delete();
+        }
     }
 }
