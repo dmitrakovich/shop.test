@@ -5,6 +5,7 @@ namespace App\Facades;
 use App\Models\Favorite as FavoriteModel;
 use App\Models\Product;
 use App\Services\FavoriteService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Facade;
 
 /**

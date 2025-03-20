@@ -84,7 +84,7 @@ task('deploy', [
     'deploy:writable',
     'artisan:storage:link',
     'artisan:migrate',
-    'artisan:shield:generate',
+    // 'artisan:shield:generate', // temp disable, see AdminUser
     'artisan:cache:clear',
     'artisan:config:cache',
     'artisan:route:cache',

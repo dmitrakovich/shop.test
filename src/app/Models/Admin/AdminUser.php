@@ -54,6 +54,8 @@ class AdminUser extends Authenticatable implements FilamentUser
     }
 
     // !!! old admin roles & permissions
+    // *** роли для старой админки используются, они мешают работать новой админке
+    // *** пока старая админка не будет полностью выпилена, права корректно работать не будут
 
     /**
      * Get avatar attribute.
