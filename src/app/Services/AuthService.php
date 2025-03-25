@@ -52,15 +52,17 @@ class AuthService
 
     /**
      * Regenerate API token for user.
-     *
-     * Deletes all existing tokens and creates a new one.
      */
     public function regenerateToken(User $user): string
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphMany $tokens */
-        $tokens = $user->tokens();
-        $tokens->delete();
+        return $user->createToken('api', expiresAt: now()->addYear())->plainTextToken;
+    }
 
-        return $user->createToken('api')->plainTextToken;
+    /**
+     * Revoke current API token for user
+     */
+    public function revokeToken(User $user): void
+    {
+        $user->currentAccessToken()->delete();
     }
 }
