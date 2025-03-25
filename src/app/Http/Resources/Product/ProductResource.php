@@ -39,7 +39,7 @@ class ProductResource extends JsonResource
             'bootleg_height_txt' => $this->bootleg_height_txt,
             'description' => $this->description,
             'rating' => $this->rating,
-            'key_features' => $this->key_features,
+            'product_features' => $this->product_features,
 
             'prices' => new ProductPricesResource($this->resource),
 

@@ -213,6 +213,13 @@ class ProductController extends AbstractAdminController
                 $form->text('slug', __('Slug'))->disable();
             }
             $form->text('path', 'Путь')->disable();
+
+            $form->html(function (Form $form) {
+                $link = route('product.show', $form->model()->slug);
+
+                return "<a href='{$link}' target='_blank' class='btn btn-primary'>Открыть страницу товара</a>";
+            }, 'Ссылка');
+
             $form->text('sku', 'Артикул')->required()->default($productFromStock->sku);
             $form->currency('buy_price', 'Цена покупки')->symbol('BYN');
             $form->currency('price', 'Цена')->symbol('BYN')->required();
@@ -237,7 +244,8 @@ class ProductController extends AbstractAdminController
             $form->text('fabric_outsole_txt', 'Материал подошвы');
             $form->text('bootleg_height_txt', 'Высота голенища');
             $form->text('heel_txt', 'Высота каблука/подошвы');
-            $form->text('key_features', 'Ключевая особенность');
+            $form->text('product_features', 'Ключевая особенность');
+            $form->text('key_features', 'Ключевая особенность модели (для промта)');
 
             $form->divider();
             $form->select('label_id', 'Метка')->options(ProductLabels::list());

@@ -35,6 +35,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property int|null $product_group_id ID группы товаров
+ * @property string|null $product_features Особенность модели
  * @property string|null $key_features Ключевая особенность товара
  * @property int|null $country_of_origin_id
  * @property string $path

@@ -323,6 +323,10 @@
                     Материал стельки - {{ $product->fabric_insole_txt }} <br>
                 @endif
 
+                @if (!empty($product->product_features))
+                    Ключевая особенность - {{ $product->product_features }} <br>
+                @endif
+
                 @if (!empty($product->fabric_outsole_txt))
                     Материал подошвы - {{ $product->fabric_outsole_txt }} <br>
                 @endif
