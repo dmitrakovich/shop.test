@@ -30,6 +30,7 @@ class CatalogProductResource extends JsonResource
             'short_name' => $this->shortName(),
 
             'media' => MediaResource::collection($this->getMedia()),
+            'sizes' => SizeResource::collection($this->sizes),
         ];
     }
 }

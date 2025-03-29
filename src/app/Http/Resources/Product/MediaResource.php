@@ -24,6 +24,7 @@ class MediaResource extends JsonResource
             'normal_url' => $this->getUrl('normal'),
             'full_url' => $this->getUrl('full'),
             'original_url' => $this->getFullUrl(),
+            'video_url' => $this->getCustomProperty('video'),
         ];
     }
 }

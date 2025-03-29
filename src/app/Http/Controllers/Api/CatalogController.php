@@ -7,6 +7,7 @@ use App\Facades\Sale;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterRequest;
+use App\Http\Resources\Info\InstallmentResource;
 use App\Http\Resources\Product\CatalogProductCollection;
 use App\Http\Resources\Product\CatalogProductResource;
 use App\Http\Resources\Product\ProductResource;
@@ -102,6 +103,7 @@ class CatalogController extends Controller
             'similarProducts' => CatalogProductResource::collection($sliderService->getSimilarProducts($product->id)),
             'productGroup' => $sliderService->getProductGroup($product->product_group_id),
             // 'recentProductsSlider' => $sliderService->getRecentProducts($productService),
+            'installment' => new InstallmentResource($product),
         ];
     }
 }
