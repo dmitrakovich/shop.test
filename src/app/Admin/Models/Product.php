@@ -55,6 +55,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \App\Models\ProductAttributes\CountryOfOrigin|null $countryOfOrigin
  * @property-read \App\Models\Url|null $url
  * @property-read \App\Models\Favorite|null $favorite
+ * @property-read \App\Models\ProductGroup|null $productGroup
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $productsFromGroup
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AvailableSizes[] $availableSizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *

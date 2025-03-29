@@ -101,7 +101,7 @@ class CatalogController extends Controller
             'product' => new ProductResource($product),
             'feedbacks' => $feedbackService->getForProduct($product->id),
             'similarProducts' => CatalogProductResource::collection($sliderService->getSimilarProducts($product->id)),
-            'productGroup' => $sliderService->getProductGroup($product->product_group_id),
+            'productGroup' => CatalogProductResource::collection($product->productsFromGroup),
             // 'recentProductsSlider' => $sliderService->getRecentProducts($productService),
             'installment' => new InstallmentResource($product),
         ];

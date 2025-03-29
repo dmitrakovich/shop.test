@@ -65,6 +65,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \App\Models\ProductAttributes\CountryOfOrigin|null $countryOfOrigin
  * @property-read \App\Models\Url|null $url
  * @property-read \App\Models\Favorite|null $favorite
+ * @property-read \App\Models\ProductGroup|null $productGroup
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $productsFromGroup
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AvailableSizes[] $availableSizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
@@ -236,9 +238,17 @@ class Product extends Model implements HasMedia
     /**
      * Product group relation.
      */
-    public function productGroup()
+    public function productGroup(): Relations\BelongsTo
     {
         return $this->belongsTo(ProductGroup::class);
+    }
+
+    /**
+     * Get the products from group associated with the product.
+     */
+    public function productsFromGroup(): Relations\HasMany
+    {
+        return $this->hasMany(self::class, 'product_group_id', 'product_group_id');
     }
 
     /**

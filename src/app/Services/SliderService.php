@@ -181,44 +181,14 @@ class SliderService
     }
 
     /**
-     * Get product group
+     * Get formatted group products
      */
-    public function getProductGroup(?int $productGroupId): array
+    public function getFormattedProductGroup(Product $product): array
     {
-        if (!$productGroupId) {
-            return [];
-        }
-        $cacheConfig = config('cache_config.product_carousel_product_group');
-        $slider = Cache::rememberForever($cacheConfig['key'], function () {
-            return ProductCarousel::where('enum_type_id', ProductCarouselEnum::PRODUCT_GROUP)
-                ->first(['title', 'count', 'speed']);
-        });
-        if (empty($slider)) {
-            return [];
-        }
-        $cacheConfig = config('cache_config.product_group');
-        $products = Cache::remember($cacheConfig['key'] . $productGroupId, $cacheConfig['ttl'], function () use ($productGroupId, $slider) {
-            $products = Product::where('product_group_id', $productGroupId)
-                ->with(['media', 'category', 'brand', 'styles'])->limit($slider->count ?? 12)->get();
-
-            return $products->map(function ($product) {
-                return [
-                    'id' => $product->id,
-                    'sku' => $product->sku,
-                    'full_name' => $product->shortName(),
-                    'color_txt' => $product->color_txt,
-                    'url' => $product->getUrl(),
-                    'image' => $product->getFirstMediaUrl('default', 'catalog'),
-                    'dataLayer' => GoogleTagManagerService::prepareProduct($product),
-                ];
-            })->toArray();
-        });
-        $this->setDataLayerForPage($products);
-
         return [
-            'title' => $slider->title,
-            'speed' => $slider->speed,
-            'products' => $products,
+            'title' => 'Похожие товары',
+            'speed' => 3000,
+            'products' => $this->formatProducts($product->productsFromGroup),
         ];
     }
 

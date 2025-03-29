@@ -50,7 +50,7 @@ class ProductController extends BaseController
             'product' => $product,
             'feedbacks' => $this->feedbackService->getForProduct($product->id),
             'similarProducts' => $this->sliderService->getFormattedSimilarProducts($product->id),
-            'productGroup' => $this->sliderService->getProductGroup($product->product_group_id),
+            'productGroup' => $this->sliderService->getFormattedProductGroup($product),
             'recentProductsSlider' => $this->sliderService->getRecentProducts($this->productService),
         ]);
     }
@@ -81,7 +81,7 @@ class ProductController extends BaseController
             'quickView' => true,
             'product' => $product,
             'feedbacks' => $this->feedbackService->getForProduct($product->id),
-            'productGroup' => $this->sliderService->getProductGroup($product->product_group_id),
+            'productGroup' => $this->sliderService->getFormattedProductGroup($product),
         ]);
     }
 }
