@@ -137,7 +137,7 @@ class Order extends Model
     /**
      * The model's attributes.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'delivery_cost' => 0.0,

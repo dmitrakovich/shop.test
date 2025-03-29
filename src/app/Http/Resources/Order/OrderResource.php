@@ -30,7 +30,7 @@ class OrderResource extends JsonResource
                 'key' => $this->status->key,
                 'name_for_user' => $this->status->name_for_user,
             ],
-            'track' => $this->when($this->track, fn () => [
+            'track' => $this->when((bool)$this->track, fn () => [
                 'number' => $this->track->track_number,
                 'link' => $this->track->track_link,
             ], []),

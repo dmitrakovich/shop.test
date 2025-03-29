@@ -12,7 +12,7 @@ enum OnlinePaymentStatusEnum: int
     /**
      * Получить название
      */
-    public function name(): ?string
+    public function name(): string
     {
         return match ($this) {
             self::PENDING => 'В обработке',
@@ -34,17 +34,5 @@ enum OnlinePaymentStatusEnum: int
         }
 
         return $result;
-    }
-
-    /**
-     * Получить enum по value
-     *
-     * @param  ?int  $value  - значение
-     */
-    public static function enumByValue(?int $value): self
-    {
-        $enum = self::tryFrom($value);
-
-        return $enum ? $enum : self::PENDING;
     }
 }

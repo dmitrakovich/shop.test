@@ -11,7 +11,7 @@ enum OnlinePaymentMethodEnum: int
     /**
      * Получить название
      */
-    public function name(): ?string
+    public function name(): string
     {
         return match ($this) {
             self::ERIP => 'ЕРИП',
@@ -32,17 +32,5 @@ enum OnlinePaymentMethodEnum: int
         }
 
         return $result;
-    }
-
-    /**
-     * Получить enum по value
-     *
-     * @param  ?int  $value  - значение
-     */
-    public static function enumByValue(?int $value): ?self
-    {
-        $enum = self::tryFrom($value);
-
-        return $enum ? $enum : null;
     }
 }

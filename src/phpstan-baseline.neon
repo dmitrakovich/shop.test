@@ -241,18 +241,6 @@ parameters:
 			path: app/Enums/Order/UtmEnum.php
 
 		-
-			message: '#^Method App\\Enums\\Payment\\OnlinePaymentMethodEnum\:\:name\(\) never returns null so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: app/Enums/Payment/OnlinePaymentMethodEnum.php
-
-		-
-			message: '#^Method App\\Enums\\Payment\\OnlinePaymentStatusEnum\:\:name\(\) never returns null so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: app/Enums/Payment/OnlinePaymentStatusEnum.php
-
-		-
 			message: '#^Method App\\Enums\\Promo\\SaleAlgorithm\:\:getLabel\(\) never returns null so it can be removed from the return type\.$#'
 			identifier: return.unusedType
 			count: 1
@@ -393,18 +381,6 @@ parameters:
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$product\.$#'
 			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Shop/CartController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\Shop\\CartController\:\:final\(\) should return Illuminate\\Http\\Response but returns Illuminate\\Http\\RedirectResponse\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Http/Controllers/Shop/CartController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\Shop\\CartController\:\:final\(\) should return Illuminate\\Http\\Response but returns Illuminate\\View\\View\.$#'
-			identifier: return.type
 			count: 1
 			path: app/Http/Controllers/Shop/CartController.php
 
@@ -851,12 +827,6 @@ parameters:
 			identifier: property.phpDocType
 			count: 1
 			path: app/Models/Orders/OfflineOrder.php
-
-		-
-			message: '#^PHPDoc type array of property App\\Models\\Orders\\Order\:\:\$attributes is not covariant with PHPDoc type array\<string, mixed\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$attributes\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Orders/Order.php
 
 		-
 			message: '#^PHPDoc type array of property App\\Models\\Payments\\Installment\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'

@@ -110,13 +110,11 @@ class CartController extends BaseController
 
     /**
      * Final cart page (order info)
-     *
-     * @return \Illuminate\Http\Response
      */
     public function final(
         ProductService $productService,
         SliderService $sliderService
-    ) {
+    ): RedirectResponse|View {
         if (!Session::has('order_id')) {
             return redirect()->route('orders.index');
         }
