@@ -46,6 +46,7 @@ Route::prefix('favorites')->as('favorites.')->group(function () {
 });
 
 Route::prefix('orders')->as('orders.')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->middleware('auth:sanctum')->name('index');
     Route::post('checkout', [OrderController::class, 'checkout'])->name('checkout');
     Route::post('oneclick', [OrderController::class, 'oneclick'])->name('oneclick');
 });

@@ -11,6 +11,7 @@ use App\Services\CartService;
 use FacebookAds\Api;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Notifications\ChannelManager;
@@ -99,12 +100,11 @@ class AppServiceProvider extends ServiceProvider
 
     private function logQueries(): void
     {
-        DB::listen(function ($query) {
-            $sql = $query->sql;
-            $bindings = $query->bindings;
-            $executionTime = $query->time;
+        DB::listen(function (QueryExecuted $query) {
+            $sql = $query->connection->getQueryGrammar()
+                ->substituteBindingsIntoRawSql($query->sql, $query->bindings);
 
-            Log::debug($sql, compact('bindings', 'executionTime'));
+            Log::debug($sql, ['time' => "{$query->time}ms"]);
         });
     }
 }
