@@ -48,7 +48,7 @@ class FeedbackRequest extends FormRequest
         $captchaScore = $this->captcha_score ?? 0;
 
         $this->merge([
-            'type_id' => $captchaScore > 4 ? Feedback::TYPE_REVIEW : Feedback::TYPE_SPAM,
+            'type' => $captchaScore > 4 ? Feedback::TYPE_REVIEW : Feedback::TYPE_SPAM,
             'captcha_score' => intval($captchaScore),
             'rating' => intval($this->rating ?? 5),
         ]);
@@ -63,7 +63,6 @@ class FeedbackRequest extends FormRequest
     {
         return array_merge($this->validator->validated(), [
             'user_id' => Auth::id(),
-            'yandex_id' => $this->cookie('_ym_uid'),
             'ip' => $this->ip(),
         ]);
     }
@@ -77,12 +76,11 @@ class FeedbackRequest extends FormRequest
     {
         return [
             'user_name' => ['required', 'max:255'],
-            'user_email' => ['email', 'max:255', 'nullable'],
             'user_city' => ['required', 'max:255'],
             'text' => ['required'],
             'rating' => ['integer', 'between:0,5'],
             'product_id' => ['integer', 'min:0'],
-            'type_id' => [],
+            'type' => [],
             'captcha_score' => ['integer', 'between:0,10'],
             'photos' => ['array', 'max:10'],
             'photos.*' => ['image', 'max:' . self::MAX_PHOTO_SIZE],
@@ -103,7 +101,6 @@ class FeedbackRequest extends FormRequest
     {
         return [
             'user_name' => '"имя"',
-            'user_email' => '"email"',
             'user_city' => '"город"',
             'text' => '"комментарий"',
             'photos' => '"фотографии"',

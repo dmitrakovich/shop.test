@@ -14,17 +14,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * @property int $id
  * @property int|null $user_id
- * @property int|null $yandex_id
+ * @property int|null $device_id
  * @property string $user_name
- * @property string|null $user_email
- * @property int|null $user_phone
  * @property string|null $user_city
  * @property string $text
  * @property int $rating
  * @property int $product_id
- * @property int $type_id
+ * @property int $type
  * @property int $captcha_score
- * @property bool $view_only_posted
  * @property bool $publish
  * @property string $ip
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -55,20 +52,17 @@ class Feedback extends Model implements HasMedia
      * @var array<string, string>
      */
     protected $casts = [
-        'view_only_posted' => 'boolean',
         'publish' => 'boolean',
     ];
 
     protected $fillable = [
         'user_id',
         'user_name',
-        'user_email',
         'user_city',
         'text',
         'rating',
         'product_id',
-        'type_id',
-        'view_only_posted',
+        'type',
         'publish',
         'ip',
     ];
@@ -136,9 +130,9 @@ class Feedback extends Model implements HasMedia
     public function scopeType($query, $type)
     {
         return match (self::getType($type)) {
-            'reviews' => $query->where('type_id', 1),
+            'reviews' => $query->where('type', 1),
             'models' => $query->where('product_id', '>', 0),
-            'questions' => $query->where('type_id', 2),
+            'questions' => $query->where('type', 2),
         };
     }
 
@@ -170,16 +164,6 @@ class Feedback extends Model implements HasMedia
             ->performOnCollections('videos')
             ->extractVideoFrameAtSecond(2)
             ->width(150)->height(150);
-    }
-
-    /**
-     * Farmat date in admin panel
-     *
-     * @return string
-     */
-    protected function serializeDate(\DateTimeInterface $date)
-    {
-        return $date->format('d.m.Y H:i:s');
     }
 
     /**

@@ -121,11 +121,10 @@ class AdminPanelProvider extends PanelProvider
         return collect([
             'orders' => 'Заказы',
             'order-items' => 'Товары в заказах',
-            'users/users' => 'Пользователи',
             'products' => 'Товары',
             'logs/inventory' => 'Наличие - лог',
+            'automation/inventory' => 'Наличие - добавить',
             'automation/stock' => 'Склад',
-            'feedbacks' => 'Отзывы',
         ]);
     }
 }

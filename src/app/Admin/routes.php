@@ -98,9 +98,6 @@ Route::group([
     });
     $router->resource('cities', CityController::class);
 
-    $router->resource('feedbacks', FeedbackController::class);
-    $router->resource('feedbacks.feedback-answers', FeedbackAnswerController::class);
-
     $router->resource('media', MediaController::class);
 
     $router->get('send-sms', Forms\Sms::class);

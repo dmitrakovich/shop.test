@@ -11,7 +11,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * @property int $id
  * @property int $feedback_id
- * @property int|null $admin_id
+ * @property string $user_type
+ * @property int $user_id
  * @property string $text
  * @property bool $publish
  * @property \Illuminate\Support\Carbon|null $created_at
