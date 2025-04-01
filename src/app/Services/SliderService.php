@@ -163,6 +163,7 @@ class SliderService
             'id' => $product->id,
             'sku' => $product->sku,
             'full_name' => $product->extendedName(),
+            'color_txt' => $product->color_txt,
             'sale_percentage' => $product->getSalePercentage(),
             'is_new' => $product->isNew(),
             'favorite' => $product->isFavorite(),
