@@ -367,12 +367,6 @@ parameters:
 			path: app/Http/Controllers/DebugController.php
 
 		-
-			message: '#^Method App\\Http\\Controllers\\FeedbackController\:\:index\(\) should return Illuminate\\Http\\Response but returns Illuminate\\View\\View\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Http/Controllers/FeedbackController.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$count\.$#'
 			identifier: property.notFound
 			count: 1
@@ -707,24 +701,6 @@ parameters:
 			identifier: identical.alwaysFalse
 			count: 1
 			path: app/Models/Fabric.php
-
-		-
-			message: '#^Match expression does not handle remaining value\: string$#'
-			identifier: match.unhandled
-			count: 1
-			path: app/Models/Feedback.php
-
-		-
-			message: '#^Method App\\Models\\Feedback\:\:scopeForProduct\(\) with return type void returns mixed but should not return anything\.$#'
-			identifier: return.void
-			count: 1
-			path: app/Models/Feedback.php
-
-		-
-			message: '#^PHPDoc tag @param has invalid value \(\[type\] \$query\)\: Unexpected token "\[", expected type at offset 67 on line 4$#'
-			identifier: phpDoc.parseError
-			count: 1
-			path: app/Models/Feedback.php
 
 		-
 			message: '#^PHPDoc type array of property App\\Models\\Feedback\:\:\$appends is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$appends\.$#'

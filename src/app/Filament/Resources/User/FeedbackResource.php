@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\User;
 
+use App\Enums\Feedback\FeedbackType;
 use App\Filament\Resources\User\FeedbackResource\Pages;
 use App\Models\Feedback;
 use Filament\Forms;
@@ -10,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Mokhosh\FilamentRating\Columns\RatingColumn;
+use Mokhosh\FilamentRating\Components\Rating;
 
 class FeedbackResource extends Resource
 {
@@ -17,7 +19,7 @@ class FeedbackResource extends Resource
 
     protected static ?string $navigationGroup = 'user';
 
-    protected static ?string $modelLabel = 'Отзывы';
+    protected static ?string $modelLabel = 'Отзыв';
 
     protected static ?string $pluralModelLabel = 'Отзывы';
 
@@ -27,37 +29,37 @@ class FeedbackResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
-                    ->numeric(),
                 Forms\Components\TextInput::make('user_name')
+                    ->label('Имя')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('user_city')
+                    ->label('Город')
                     ->maxLength(255),
+                Forms\Components\TextInput::make('user_id')
+                    ->disabled()
+                    ->numeric(),
+                Rating::make('rating')
+                    ->label('Оценка')
+                    ->required()
+                    ->default(5),
                 Forms\Components\Textarea::make('text')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('rating')
-                    ->required()
-                    ->numeric()
-                    ->default(5),
                 Forms\Components\Select::make('product_id')
                     ->relationship('product', 'id')
+                    ->label('Товар'),
+                Forms\Components\Select::make('type')
+                    ->options(FeedbackType::class)
                     ->required()
-                    ->default(0),
-                Forms\Components\TextInput::make('type')
-                    ->required()
-                    ->numeric()
-                    ->default(1),
-                Forms\Components\TextInput::make('captcha_score')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
+                    ->default(FeedbackType::REVIEW),
                 Forms\Components\Toggle::make('publish')
-                    ->required(),
-                Forms\Components\TextInput::make('ip')
-                    ->required()
-                    ->maxLength(45),
+                    ->label('Публиковать')
+                    ->default(true),
+                Forms\Components\Hidden::make('captcha_score')
+                    ->default(10),
+                Forms\Components\Hidden::make('ip')
+                    ->default(request()->ip()),
             ]);
     }
 
@@ -85,10 +87,11 @@ class FeedbackResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
-                    ->numeric()
+                    ->label('Тип')
                     ->sortable(),
                 Tables\Columns\ToggleColumn::make('publish')
-                    ->label('Публиковать'),
+                    ->label('Публиковать')
+                    ->alignCenter(),
                 Tables\Columns\TextColumn::make('ip')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
@@ -107,12 +110,15 @@ class FeedbackResource extends Resource
             ])
             ->defaultSort('id', 'desc')
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make()->hiddenLabel(),
+                // Tables\Actions\DeleteAction::make()->hiddenLabel(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
@@ -127,8 +133,8 @@ class FeedbackResource extends Resource
     {
         return [
             'index' => Pages\ListFeedback::route('/'),
-            // 'create' => Pages\CreateFeedback::route('/create'),
-            // 'edit' => Pages\EditFeedback::route('/{record}/edit'),
+            'create' => Pages\CreateFeedback::route('/create'),
+            'edit' => Pages\EditFeedback::route('/{record}/edit'),
         ];
     }
 }
