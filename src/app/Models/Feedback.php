@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Feedback\FeedbackType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,8 +21,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string|null $user_city
  * @property string $text
  * @property int $rating
- * @property int $product_id
- * @property int $type
+ * @property int|null $product_id
+ * @property \App\Enums\Feedback\FeedbackType $type
  * @property int $captcha_score
  * @property bool $publish
  * @property string $ip
@@ -53,45 +55,21 @@ class Feedback extends Model implements HasMedia
      */
     protected $casts = [
         'publish' => 'boolean',
+        'type' => FeedbackType::class,
     ];
 
     protected $fillable = [
         'user_id',
+        'device_id',
         'user_name',
         'user_city',
         'text',
         'rating',
         'product_id',
         'type',
+        'captcha_score',
         'publish',
         'ip',
-    ];
-
-    /**
-     * Feedbacks types by ids
-     */
-    final const TYPE_SPAM = 0;
-
-    final const TYPE_REVIEW = 1;
-
-    final const TYPE_QUESTION = 2;
-
-    /**
-     * Тип по умолчанию
-     *
-     * @var string
-     */
-    protected const DEFAULT_TYPE = 'reviews';
-
-    /**
-     * Доступные типы обратной связи
-     *
-     * @var array
-     */
-    protected static $availableTypes = [
-        'reviews',
-        'models',
-        'questions',
     ];
 
     /**
@@ -118,32 +96,9 @@ class Feedback extends Model implements HasMedia
     }
 
     /**
-     * Check & return feedback type
-     *
-     * @param  mixed  $type
-     */
-    public static function getType($type): string
-    {
-        return in_array($type, self::$availableTypes) ? $type : self::DEFAULT_TYPE;
-    }
-
-    public function scopeType($query, $type)
-    {
-        return match (self::getType($type)) {
-            'reviews' => $query->where('type', 1),
-            'models' => $query->where('product_id', '>', 0),
-            'questions' => $query->where('type', 2),
-        };
-    }
-
-    /**
      * Отзывы для товаров
-     *
-     * @param [type] $query
-     * @param  int  $productId  идентификатор товара
-     * @return void
      */
-    public function scopeForProduct($query, int $productId)
+    public function scopeForProduct(Builder $query, int $productId): Builder
     {
         return $query->where('product_id', $productId);
     }

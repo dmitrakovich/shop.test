@@ -41,7 +41,7 @@ Route::group(['prefix' => 'channel', 'as' => 'channel.'], function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('feedbacks/{type?}', [FeedbackController::class, 'index'])->name('feedbacks');
+Route::get('feedbacks', [FeedbackController::class, 'index'])->name('feedbacks');
 Route::middleware('captcha')->post('feedbacks', [FeedbackController::class, 'store'])->name('feedbacks.store');
 
 // dashboard

@@ -90,7 +90,7 @@
                 <label for="1">@include('svg.star')</label>
             </div>
         </div>
-        <input type="hidden" name="product_id" value="{{ $product->id ?? 0 }}">
+        <input type="hidden" name="product_id" value="{{ $product->id ?? null }}">
         <div class="row form-group">
             <label for="textareaText" class="col-12 col-md-4 col-form-label">
                 <b>Оставьте комментарий</b>&nbsp;<font color="red">*</font>

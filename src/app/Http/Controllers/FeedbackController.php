@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FeedbackRequest;
+use App\Data\Feedback\FeedbackData;
+use App\Enums\Feedback\FeedbackType;
 use App\Libraries\Seo\Facades\SeoFacade;
-use App\Models\Feedback;
 use App\Services\FeedbackService;
 use App\Services\GoogleTagManagerService;
+use Illuminate\Contracts\View\View;
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
 class FeedbackController extends Controller
@@ -18,26 +19,23 @@ class FeedbackController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index(GoogleTagManagerService $gtmService, ?string $type = null)
+    public function index(GoogleTagManagerService $gtmService): View
     {
-        $type = Feedback::getType($type);
-        $feedbacks = $this->feedbackService->getByType($type);
+        $feedbacks = $this->feedbackService->getByType(FeedbackType::REVIEW);
 
         $gtmService->setViewForOther();
         SeoFacade::setTitle('Отзывы');
 
-        return view('feedbacks-page', compact('type', 'feedbacks'));
+        return view('feedbacks-page', compact('feedbacks'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(FeedbackRequest $feedbackRequest): array
+    public function store(FeedbackData $feedbackData): array
     {
-        $this->feedbackService->store($feedbackRequest->validated());
+        $this->feedbackService->store($feedbackData);
 
         GoogleTagManagerFacade::user('userReview');
 
