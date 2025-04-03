@@ -10,6 +10,8 @@ class EditFeedback extends EditRecord
 {
     protected static string $resource = FeedbackResource::class;
 
+    protected ?string $maxContentWidth = '5xl';
+
     protected function getHeaderActions(): array
     {
         return [

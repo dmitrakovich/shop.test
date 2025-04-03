@@ -8,4 +8,6 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateFeedback extends CreateRecord
 {
     protected static string $resource = FeedbackResource::class;
+
+    protected ?string $maxContentWidth = '5xl';
 }

@@ -5,11 +5,15 @@ namespace App\Filament\Resources\User;
 use App\Enums\Feedback\FeedbackType;
 use App\Filament\Resources\User\FeedbackResource\Pages;
 use App\Models\Feedback;
+use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Mokhosh\FilamentRating\Columns\RatingColumn;
 use Mokhosh\FilamentRating\Components\Rating;
 
@@ -36,23 +40,36 @@ class FeedbackResource extends Resource
                 Forms\Components\TextInput::make('user_city')
                     ->label('Город')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('user_id')
-                    ->disabled()
-                    ->numeric(),
+                Forms\Components\Select::make('type')
+                    ->options(FeedbackType::class)
+                    ->label('Тип')
+                    ->required()
+                    ->default(FeedbackType::REVIEW),
                 Rating::make('rating')
                     ->label('Оценка')
                     ->required()
                     ->default(5),
                 Forms\Components\Textarea::make('text')
+                    ->label('Текст')
+                    ->rows(4)
                     ->required()
                     ->columnSpanFull(),
+                SpatieMediaLibraryFileUpload::make('photos')
+                    ->collection('photos')
+                    ->multiple()
+                    ->maxFiles(10)
+                    ->label('Фото'),
+                SpatieMediaLibraryFileUpload::make('video')
+                    ->collection('video')
+                    ->multiple()
+                    ->maxFiles(5)
+                    ->label('Видео'),
+                Forms\Components\TextInput::make('user_id')
+                    ->disabled()
+                    ->numeric(),
                 Forms\Components\Select::make('product_id')
                     ->relationship('product', 'id')
                     ->label('Товар'),
-                Forms\Components\Select::make('type')
-                    ->options(FeedbackType::class)
-                    ->required()
-                    ->default(FeedbackType::REVIEW),
                 Forms\Components\Toggle::make('publish')
                     ->label('Публиковать')
                     ->default(true),
@@ -67,14 +84,12 @@ class FeedbackResource extends Resource
     {
         return $table
             ->columns([
-                // Tables\Columns\TextColumn::make('user_id')
-                //     ->numeric()
-                //     ->sortable(),
                 Tables\Columns\TextColumn::make('user_name')
                     ->label('Имя')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('user_city')
-                    ->label('Город'),
+                    ->label('Город')
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('text')
                     ->label('Текст')
                     ->searchable()
@@ -83,11 +98,23 @@ class FeedbackResource extends Resource
                     ->label('Оценка')
                     ->sortable()
                     ->size('sm'),
-                Tables\Columns\TextColumn::make('product.id')
-                    ->numeric()
-                    ->sortable(),
+                SpatieMediaLibraryImageColumn::make('photos')
+                    ->collection('photos')
+                    ->conversion('thumb')
+                    ->label('Фото'),
+                Tables\Columns\TextColumn::make('product')
+                    ->formatStateUsing(fn (Product $state) => $state->extendedName())
+                    ->label('Товар')
+                    ->wrap(),
+                Tables\Columns\TextColumn::make('answers_count')
+                    ->counts('answers')
+                    ->label('Кол-во ответов')
+                    ->alignCenter()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('type')
                     ->label('Тип')
+                    ->badge()
                     ->sortable(),
                 Tables\Columns\ToggleColumn::make('publish')
                     ->label('Публиковать')
@@ -108,13 +135,10 @@ class FeedbackResource extends Resource
             ->filters([
                 //
             ])
+            ->modifyQueryUsing(function (Builder $query) {
+                $query->with(['product.brand', 'product.category']);
+            })
             ->defaultSort('id', 'desc')
-            ->actions([
-                // Tables\Actions\EditAction::make()->hiddenLabel(),
-                // Tables\Actions\DeleteAction::make()->hiddenLabel(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

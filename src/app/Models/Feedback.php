@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -73,13 +72,6 @@ class Feedback extends Model implements HasMedia
     ];
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['photos', 'videos'];
-
-    /**
      * Feedback related answers
      */
     public function answers(): HasMany
@@ -119,21 +111,5 @@ class Feedback extends Model implements HasMedia
             ->performOnCollections('videos')
             ->extractVideoFrameAtSecond(2)
             ->width(150)->height(150);
-    }
-
-    /**
-     * Photos accessor
-     */
-    public function getPhotosAttribute(): Collection
-    {
-        return $this->getMedia('photos')->map(fn (Media $media) => $media->getUrl());
-    }
-
-    /**
-     * Videos accessor
-     */
-    public function getVideosAttribute(): Collection
-    {
-        return $this->getMedia('videos')->map(fn (Media $media) => $media->getUrl());
     }
 }
