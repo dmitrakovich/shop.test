@@ -47,7 +47,7 @@ class CropperController extends Controller
     public function crop(Request $request)
     {
         $files = $request->allFiles();
-        is_array($files) or abort(403, 'Файлы не переданы');
+        abort_if(empty($files), 403, 'Файлы не переданы');
 
         foreach ($files as $file) {
             $timestamp = time();
