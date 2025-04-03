@@ -33,51 +33,83 @@ class FeedbackResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_name')
-                    ->label('Имя')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('user_city')
-                    ->label('Город')
-                    ->maxLength(255),
-                Forms\Components\Select::make('type')
-                    ->options(FeedbackType::class)
-                    ->label('Тип')
-                    ->required()
-                    ->default(FeedbackType::REVIEW),
-                Rating::make('rating')
-                    ->label('Оценка')
-                    ->required()
-                    ->default(5),
-                Forms\Components\Textarea::make('text')
-                    ->label('Текст')
-                    ->rows(4)
-                    ->required()
-                    ->columnSpanFull(),
-                SpatieMediaLibraryFileUpload::make('photos')
-                    ->collection('photos')
-                    ->multiple()
-                    ->maxFiles(10)
-                    ->label('Фото'),
-                SpatieMediaLibraryFileUpload::make('video')
-                    ->collection('video')
-                    ->multiple()
-                    ->maxFiles(5)
-                    ->label('Видео'),
-                Forms\Components\TextInput::make('user_id')
-                    ->disabled()
-                    ->numeric(),
-                Forms\Components\Select::make('product_id')
-                    ->relationship('product', 'id')
-                    ->label('Товар'),
-                Forms\Components\Toggle::make('publish')
-                    ->label('Публиковать')
-                    ->default(true),
+                Forms\Components\Group::make()
+                    ->schema([
+                        Forms\Components\Section::make()
+                            ->schema([
+                                Forms\Components\TextInput::make('user_name')
+                                    ->label('Имя')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('user_city')
+                                    ->label('Город')
+                                    ->maxLength(255),
+                                Forms\Components\Textarea::make('text')
+                                    ->label('Текст')
+                                    ->rows(4)
+                                    ->required()
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(2),
+
+                        Forms\Components\Section::make('Фото')
+                            ->schema([
+                                SpatieMediaLibraryFileUpload::make('photos')
+                                    ->image()
+                                    ->collection('photos')
+                                    ->multiple()
+                                    ->maxFiles(10)
+                                    ->reorderable()
+                                    ->hiddenLabel(),
+                            ])
+                            ->collapsible(),
+                        Forms\Components\Section::make('Видео')
+                            ->schema([
+                                SpatieMediaLibraryFileUpload::make('video')
+                                    ->collection('video')
+                                    ->multiple()
+                                    ->maxFiles(5)
+                                    ->reorderable()
+                                    ->hiddenLabel(),
+                            ])
+                            ->collapsible(),
+                    ])
+                    ->columnSpan(['lg' => 2]),
+
+                Forms\Components\Group::make()
+                    ->schema([
+                        Forms\Components\Section::make()
+                            ->schema([
+                                Rating::make('rating')
+                                    ->label('Оценка')
+                                    ->required()
+                                    ->default(5),
+                                Forms\Components\Select::make('type')
+                                    ->options(FeedbackType::class)
+                                    ->label('Тип')
+                                    ->required()
+                                    ->default(FeedbackType::REVIEW),
+                                Forms\Components\Toggle::make('publish')
+                                    ->label('Публиковать')
+                                    ->default(true),
+                            ]),
+                        Forms\Components\Section::make('Связи')
+                            ->schema([
+                                Forms\Components\TextInput::make('user_id')
+                                    ->disabled()
+                                    ->numeric(),
+                                Forms\Components\Select::make('product_id')
+                                    ->relationship('product', 'id')
+                                    ->label('Товар'),
+                            ]),
+                    ])
+                    ->columnSpan(['lg' => 1]),
+
                 Forms\Components\Hidden::make('captcha_score')
                     ->default(10),
                 Forms\Components\Hidden::make('ip')
                     ->default(request()->ip()),
-            ]);
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
