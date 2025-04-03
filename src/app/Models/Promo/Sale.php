@@ -98,8 +98,10 @@ class Sale extends Model
 
     /**
      * Encode the given value as JSON.
+     *
+     * @param  int  $flags
      */
-    protected function asJson(mixed $value): string|false|null
+    protected function asJson(mixed $value, $flags = 0): string|false|null
     {
         if (!$value) {
             return null;
