@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3d3206500fd7469a3c9da7550fc44083",
+    "content-hash": "1180449cc4cfe5fbbd1c0382db22778c",
     "packages": [
         {
             "name": "amphp/amp",
@@ -2193,16 +2193,16 @@
         },
         {
             "name": "dmitrakovich/smstraffic-for-laravel",
-            "version": "0.3.0",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmitrakovich/smstraffic-for-laravel.git",
-                "reference": "2f420a4e05e285f6743bc4700af2a6fe80711a6b"
+                "reference": "93a381a60ac8f6d97b3c632666815d59ca825cd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/2f420a4e05e285f6743bc4700af2a6fe80711a6b",
-                "reference": "2f420a4e05e285f6743bc4700af2a6fe80711a6b",
+                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/93a381a60ac8f6d97b3c632666815d59ca825cd2",
+                "reference": "93a381a60ac8f6d97b3c632666815d59ca825cd2",
                 "shasum": ""
             },
             "require": {
@@ -2244,9 +2244,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dmitrakovich/smstraffic-for-laravel/issues",
-                "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/0.3.0"
+                "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/0.4.0"
             },
-            "time": "2025-03-12T19:26:21+00:00"
+            "time": "2025-04-04T21:57:34+00:00"
         },
         {
             "name": "dmitrakovich/sxgeo",

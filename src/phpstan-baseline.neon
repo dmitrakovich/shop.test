@@ -205,12 +205,6 @@ parameters:
 			path: app/Admin/Requests/UserAddressRequest.php
 
 		-
-			message: '#^Call to an undefined method Encore\\Admin\\Grid\\Model\|Illuminate\\Database\\Eloquent\\Builder\:\:withTrashed\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Admin/Selectable/Product.php
-
-		-
 			message: '#^Parameter \#1 \$keys of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),App\\Models\\Currency\>\:\:only\(\) expects array\<mixed\>\|null, string given\.$#'
 			identifier: argument.type
 			count: 1
@@ -695,12 +689,6 @@ parameters:
 			identifier: identical.alwaysFalse
 			count: 1
 			path: app/Models/Fabric.php
-
-		-
-			message: '#^PHPDoc type array of property App\\Models\\Feedback\:\:\$appends is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$appends\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Feedback.php
 
 		-
 			message: '#^Match expression does not handle remaining value\: true$#'
