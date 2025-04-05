@@ -10,4 +10,9 @@ class CreateFeedback extends CreateRecord
     protected static string $resource = FeedbackResource::class;
 
     protected ?string $maxContentWidth = '7xl';
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

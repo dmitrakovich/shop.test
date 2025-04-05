@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Feedback\FeedbackType;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,14 +29,12 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property \Illuminate\Support\Collection $photos
- * @property \Illuminate\Support\Collection $videos
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FeedbackAnswer[] $answers
  * @property-read \App\Models\Product|null $product
+ * @property-read \App\Models\User\User|null $user
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feedback type($type)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feedback forProduct(int $productId)
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -85,6 +84,14 @@ class Feedback extends Model implements HasMedia
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class)->withTrashed();
+    }
+
+    /**
+     * User related feedback.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**

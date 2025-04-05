@@ -6,6 +6,7 @@ use App\Enums\Feedback\FeedbackType;
 use App\Filament\Resources\User\FeedbackResource\Pages;
 use App\Models\Feedback;
 use App\Models\Product;
+use App\Models\User\User;
 use Filament\Forms;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
@@ -60,6 +61,7 @@ class FeedbackResource extends Resource
                                     ->multiple()
                                     ->maxFiles(10)
                                     ->reorderable()
+                                    ->downloadable()
                                     ->hiddenLabel(),
                             ])
                             ->collapsible(),
@@ -70,6 +72,7 @@ class FeedbackResource extends Resource
                                     ->multiple()
                                     ->maxFiles(5)
                                     ->reorderable()
+                                    ->downloadable()
                                     ->hiddenLabel(),
                             ])
                             ->collapsible(),
@@ -95,12 +98,16 @@ class FeedbackResource extends Resource
                             ]),
                         Forms\Components\Section::make('Связи')
                             ->schema([
-                                Forms\Components\TextInput::make('user_id')
-                                    ->disabled()
-                                    ->numeric(),
+                                Forms\Components\Select::make('user_id')
+                                    ->label('Пользователь')
+                                    ->relationship('user')
+                                    ->getOptionLabelFromRecordUsing(fn (User $record) => $record->getFullName())
+                                    ->searchable(['first_name', 'last_name', 'patronymic_name']),
                                 Forms\Components\Select::make('product_id')
-                                    ->relationship('product', 'id')
-                                    ->label('Товар'),
+                                    ->label('Товар')
+                                    ->relationship('product')
+                                    ->getOptionLabelFromRecordUsing(fn (Product $record) => $record->nameForAdmin())
+                                    ->searchable(['id', 'sku']),
                             ]),
                     ])
                     ->columnSpan(['lg' => 1]),
@@ -135,7 +142,7 @@ class FeedbackResource extends Resource
                     ->conversion('thumb')
                     ->label('Фото'),
                 Tables\Columns\TextColumn::make('product')
-                    ->formatStateUsing(fn (Product $state) => $state->extendedName())
+                    ->formatStateUsing(fn (Product $state) => $state->nameForAdmin())
                     ->label('Товар')
                     ->wrap(),
                 Tables\Columns\TextColumn::make('answers_count')

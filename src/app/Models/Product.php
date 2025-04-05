@@ -300,6 +300,14 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Получить название продукта для админки
+     */
+    public function nameForAdmin(): string
+    {
+        return "{$this->brand->name} {$this->id} ({$this->sku})";
+    }
+
+    /**
      * Получить ссылку на товар
      */
     public function getUrl(): string
