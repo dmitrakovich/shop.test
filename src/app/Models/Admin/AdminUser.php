@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Contracts\AuthorInterface;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -36,17 +37,17 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class AdminUser extends Authenticatable implements FilamentUser
+class AdminUser extends Authenticatable implements AuthorInterface, FilamentUser
 {
     use HasPanelShield;
     use HasRoles;
 
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if all mass assignment is enabled.
      *
-     * @var array<string>|bool
+     * @var bool
      */
-    protected $guarded = [];
+    protected static $unguarded = true;
 
     public function getFullName(): string
     {
@@ -180,5 +181,10 @@ class AdminUser extends Authenticatable implements FilamentUser
         $roles = array_column($roles, 'slug');
 
         return $this->inRoles($roles) || $this->isAdministrator();
+    }
+
+    public static function getTypeName(): string
+    {
+        return 'Админ';
     }
 }

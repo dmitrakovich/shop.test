@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -19,6 +20,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  *
+ * @property-read \App\Contracts\AuthorInterface|null $user
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -29,6 +31,13 @@ class FeedbackAnswer extends Model implements HasMedia
     use SoftDeletes;
 
     /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
@@ -36,6 +45,14 @@ class FeedbackAnswer extends Model implements HasMedia
     protected $casts = [
         'publish' => 'boolean',
     ];
+
+    /**
+     * Get the user that owns the feedback answer.
+     */
+    public function user(): Relations\MorphTo
+    {
+        return $this->morphTo();
+    }
 
     /**
      * Размеры изображений

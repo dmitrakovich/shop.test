@@ -4,6 +4,7 @@ namespace App\Filament\Resources\User;
 
 use App\Enums\Feedback\FeedbackType;
 use App\Filament\Resources\User\FeedbackResource\Pages;
+use App\Filament\Resources\User\FeedbackResource\RelationManagers;
 use App\Models\Feedback;
 use App\Models\Product;
 use App\Models\User\User;
@@ -91,7 +92,10 @@ class FeedbackResource extends Resource
                                     ->options(FeedbackType::class)
                                     ->label('Тип')
                                     ->required()
-                                    ->default(FeedbackType::REVIEW),
+                                    ->default(FeedbackType::REVIEW)
+                                    ->disableOptionWhen(
+                                        fn (int $value): bool => FeedbackType::from($value)->isDisabled()
+                                    ),
                                 Forms\Components\Toggle::make('publish')
                                     ->label('Публиковать')
                                     ->default(true),
@@ -132,6 +136,7 @@ class FeedbackResource extends Resource
                 Tables\Columns\TextColumn::make('text')
                     ->label('Текст')
                     ->searchable()
+                    ->limit(500)
                     ->wrap(),
                 RatingColumn::make('rating')
                     ->label('Оценка')
@@ -150,7 +155,8 @@ class FeedbackResource extends Resource
                     ->label('Кол-во ответов')
                     ->alignCenter()
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->color(fn (int $state) => $state > 0 ? 'success' : 'danger'),
                 Tables\Columns\TextColumn::make('type')
                     ->label('Тип')
                     ->badge()
@@ -188,7 +194,7 @@ class FeedbackResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\AnswersRelationManager::class,
         ];
     }
 

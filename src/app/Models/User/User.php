@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Contracts\AuthorInterface;
 use App\Contracts\ClientInterface;
 use App\Models\Cart;
 use App\Models\Country;
@@ -62,7 +63,7 @@ use libphonenumber\PhoneNumberUtil;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class User extends Authenticatable implements ClientInterface, MustVerifyEmail
+class User extends Authenticatable implements AuthorInterface, ClientInterface, MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -240,6 +241,11 @@ class User extends Authenticatable implements ClientInterface, MustVerifyEmail
         return Attribute::make(
             get: fn ($firstName): string => Str::ucfirst($firstName)
         );
+    }
+
+    public static function getTypeName(): string
+    {
+        return 'Клиент';
     }
 
     /**

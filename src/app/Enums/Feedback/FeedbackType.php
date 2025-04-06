@@ -9,18 +9,18 @@ enum FeedbackType: int implements HasColor, HasLabel
 {
     case SPAM = 0;
     case REVIEW = 1;
-    // case QUESTION = 2;
-    // case SUGGESTION = 3;
-    // case BUG = 4;
+    case QUESTION = 2;
+    case SUGGESTION = 3;
+    case BUG = 4;
 
     public function getLabel(): string
     {
         return match ($this) {
             self::SPAM => 'Спам',
             self::REVIEW => 'Отзыв',
-            // self::QUESTION => 'Вопрос',
-            // self::SUGGESTION => 'Предложение',
-            // self::BUG => 'Баг',
+            self::QUESTION => 'Вопрос',
+            self::SUGGESTION => 'Предложение',
+            self::BUG => 'Баг',
         };
     }
 
@@ -29,6 +29,21 @@ enum FeedbackType: int implements HasColor, HasLabel
         return match ($this) {
             self::SPAM => 'danger',
             self::REVIEW => 'success',
+            self::QUESTION => 'primary',
+            self::SUGGESTION => 'info',
+            self::BUG => 'warning',
         };
+    }
+
+    /**
+     * Not yet implemented
+     */
+    public function isDisabled(): bool
+    {
+        return in_array($this, [
+            self::QUESTION,
+            self::SUGGESTION,
+            self::BUG,
+        ]);
     }
 }
