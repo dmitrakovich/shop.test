@@ -69,6 +69,12 @@ class FeedbackResource extends Resource
                         Forms\Components\Section::make('Видео')
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('video')
+                                    ->acceptedFileTypes([
+                                        'video/mp4',
+                                        'video/avi',
+                                        'video/mpeg',
+                                        'video/quicktime',
+                                    ])
                                     ->collection('video')
                                     ->multiple()
                                     ->maxFiles(5)
