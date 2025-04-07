@@ -15,6 +15,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Tables\Table;
 use Filament\Widgets;
 use FilipFonal\FilamentLogManager\FilamentLogManager;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -103,6 +104,11 @@ class AdminPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make(),
                 FilamentLogManager::make(),
             ])
+            ->bootUsing(function (Panel $panel) {
+                Table::configureUsing(function (Table $table) {
+                    $table->paginated([10, 25, 50, 100, 200]);
+                });
+            })
             ->spa();
     }
 
