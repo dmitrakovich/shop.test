@@ -206,19 +206,18 @@ class ProductController extends AbstractAdminController
             $uploadImagesService = $this->uploadImagesService;
             $form->html(fn ($form) => $uploadImagesService->show($form->model()->getMedia()))->setWidth(12, 0);
             $form->html($this->uploadImagesService->getImagesInput(), 'Картинки');
+            $form->text('path', 'Путь')->disable();
             if ($form->isCreating()) {
-                $form->hidden('slug', __('Slug'))->default('temp_slug_' . time());
+                $form->hidden('slug', 'Slug')->default('temp_slug_' . time());
                 $form->hidden('old_slug', 'Old slug')->default('temp_old_slug_' . time());
             } else {
-                $form->text('slug', __('Slug'))->disable();
+                $form->text('slug', 'Slug')->disable();
+                $form->html(function (Form $form) {
+                    $link = route('product.show', $form->model()->slug);
+
+                    return "<a href='{$link}' target='_blank' class='btn btn-primary'>Открыть страницу товара</a>";
+                }, 'Ссылка');
             }
-            $form->text('path', 'Путь')->disable();
-
-            $form->html(function (Form $form) {
-                $link = route('product.show', $form->model()->slug);
-
-                return "<a href='{$link}' target='_blank' class='btn btn-primary'>Открыть страницу товара</a>";
-            }, 'Ссылка');
 
             $form->text('sku', 'Артикул')->required()->default($productFromStock->sku);
             $form->currency('buy_price', 'Цена покупки')->symbol('BYN');
