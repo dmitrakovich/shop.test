@@ -75,7 +75,7 @@ class Feedback extends Model implements HasMedia
      */
     public function answers(): HasMany
     {
-        return $this->hasMany(FeedbackAnswer::class)->with('media');
+        return $this->hasMany(FeedbackAnswer::class);
     }
 
     /**

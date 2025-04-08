@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CatalogController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\InfoPageController;
 use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
@@ -49,4 +50,12 @@ Route::prefix('orders')->as('orders.')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->middleware('auth:sanctum')->name('index');
     Route::post('checkout', [OrderController::class, 'checkout'])->name('checkout');
     Route::post('oneclick', [OrderController::class, 'oneclick'])->name('oneclick');
+});
+
+Route::prefix('feedbacks')->as('feedbacks.')->group(function () {
+    Route::get('/', [FeedbackController::class, 'index'])->name('index');
+    Route::middleware('captcha')->group(function () {
+        Route::post('/', [FeedbackController::class, 'store'])->name('store');
+        Route::post('{feedback}/answers', [FeedbackController::class, 'storeAnswer'])->name('answers.store');
+    });
 });
