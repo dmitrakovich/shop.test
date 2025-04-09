@@ -19,7 +19,7 @@ concurrency:
 jobs:
   laravel-tests-and-deploy:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: production
     defaults:
       run:
@@ -95,7 +95,7 @@ jobs:
         disable_web_page_preview: true
         message: |
           <b>Success deploying ✅</b>
-          
+
           <blockquote expandable>${{ github.event.commits[0].message }}</blockquote>
 
 
