@@ -36,8 +36,6 @@ jobs:
           path: ~/.symfony/cache
           key: db
     - uses: symfonycorp/security-checker-action@v5
-      with:
-        lock: src/composer.lock
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install composer dependencies
