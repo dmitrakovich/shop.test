@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Admin\Models\Product;
 use App\Jobs\OneC\UpdateOfflineOrdersJob;
 use App\Models\Orders\OfflineOrder;
 use App\Models\Orders\Order;
@@ -19,8 +18,6 @@ class DebugController extends Controller
     public function index(InstagramService $instagramService)
     {
         throw new \Exception('test sentry action');
-
-
         dd(
             $instagramService->getPosts()
         );
