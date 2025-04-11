@@ -30,12 +30,15 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.3'
+    - uses: actions/checkout@v4
     - uses: actions/cache@v4
       id: cache-db
       with:
           path: ~/.symfony/cache
           key: db
     - uses: symfonycorp/security-checker-action@v5
+      with:
+        lock: src/composer.lock
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install composer dependencies
