@@ -20,7 +20,7 @@ jobs:
       with:
         php-version: '8.3'
     - name: Install composer dependencies
-      run: composer install --optimize-autoloader --no-dev --quiet
+      run: composer install --optimize-autoloader --no-dev --no-scripts --quiet
 
     - name: Rollback
       env:

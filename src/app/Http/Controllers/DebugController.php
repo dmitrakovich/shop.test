@@ -17,7 +17,6 @@ class DebugController extends Controller
 {
     public function index(InstagramService $instagramService)
     {
-        throw new \Exception('test sentry action');
         dd(
             $instagramService->getPosts()
         );
