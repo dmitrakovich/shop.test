@@ -4,8 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Data\Cart\AddToCartData;
 use App\Facades\Cart as CartFacade;
+use App\Facades\Sale;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Cart\CartResource;
+use App\Http\Resources\Cart\DeliveryMethodResource;
+use App\Http\Resources\Cart\PaymentMethodResource;
+use Deliveries\DeliveryMethod;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Payments\PaymentMethod;
+use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 class CartController extends Controller
 {
@@ -46,5 +53,37 @@ class CartController extends Controller
     public function clear(): void
     {
         CartFacade::getCart()->clear();
+    }
+
+    /**
+     * Get available delivery methods for the current cart and location.
+     */
+    public function getDeliveries(): AnonymousResourceCollection
+    {
+        Sale::applyToCart(CartFacade::getCart());
+
+        $deliveryMethods = DeliveryMethod::active()
+            ->filterFitting(Sale::hasFitting())
+            ->filterByCountry(SxGeo::getCountry())
+            ->get();
+
+        return DeliveryMethodResource::collection($deliveryMethods);
+    }
+
+    /**
+     * Get available payment methods for the current cart and location.
+     */
+    public function getPayments(): AnonymousResourceCollection
+    {
+        $cart = CartFacade::getCart();
+        Sale::applyToCart($cart);
+
+        $paymentsMethods = PaymentMethod::active()
+            ->filterInstallment($cart->availableInstallment() && Sale::hasInstallment())
+            ->filterCOD(Sale::hasCOD())
+            ->filterByCountry(SxGeo::getCountry())
+            ->get();
+
+        return PaymentMethodResource::collection($paymentsMethods);
     }
 }

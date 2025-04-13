@@ -39,6 +39,9 @@ Route::prefix('cart')->as('cart.')->group(function () {
     Route::post('add', [CartController::class, 'addToCart'])->name('add');
     Route::delete('remove/{itemId}', [CartController::class, 'removeItem'])->name('remove');
     Route::post('clear', [CartController::class, 'clear'])->name('clear');
+
+    Route::get('deliveries', [CartController::class, 'getDeliveries'])->name('deliveries');
+    Route::get('payments', [CartController::class, 'getPayments'])->name('payments');
 });
 
 Route::prefix('favorites')->as('favorites.')->group(function () {
