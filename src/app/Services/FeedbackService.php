@@ -40,7 +40,7 @@ class FeedbackService
     /**
      * Get feedbacks by type
      *
-     * @return LengthAwarePaginator|Feedback[]
+     * @return LengthAwarePaginator<Feedback>
      */
     public function getByType(FeedbackType $type): LengthAwarePaginator
     {
