@@ -6,8 +6,9 @@ use App\Data\Feedback\FeedbackData;
 use App\Enums\Feedback\FeedbackType;
 use App\Events\ReviewPosted;
 use App\Models\Feedback;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
 class FeedbackService
@@ -25,7 +26,11 @@ class FeedbackService
     public function getForProduct(int $productId): Collection
     {
         return $this->feedback->newQuery()
-            ->with(['answers', 'media', 'product'])
+            ->with([
+                'answers' => fn (Builder $query) => $query->where('publish', true),
+                'media',
+                'product',
+            ])
             ->where('publish', true)
             ->where('product_id', $productId)
             ->latest()
@@ -35,16 +40,21 @@ class FeedbackService
     /**
      * Get feedbacks by type
      *
-     * @return Paginator|Feedback[]
+     * @return LengthAwarePaginator|Feedback[]
      */
-    public function getByType(FeedbackType $type): Paginator
+    public function getByType(FeedbackType $type): LengthAwarePaginator
     {
         return $this->feedback->newQuery()
-            ->with(['answers', 'media', 'product'])
+            ->with([
+                'answers' => fn (Builder $query) => $query->where('publish', true),
+                'media',
+                'product',
+            ])
             ->where('publish', true)
             ->latest()
             ->where('type', $type)
-            ->simplePaginate(50);
+            ->paginate(50)
+            ->onEachSide(1);
     }
 
     /**

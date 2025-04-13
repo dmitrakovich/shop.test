@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Data\Feedback\FeedbackData;
 use App\Enums\Feedback\FeedbackType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Feedback\FeedbackResource;
@@ -24,9 +25,9 @@ class FeedbackController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(): void
+    public function store(FeedbackData $feedbackData): void
     {
-        // code...
+        $this->feedbackService->store($feedbackData);
     }
 
     public function storeAnswer(Feedback $feedback): void

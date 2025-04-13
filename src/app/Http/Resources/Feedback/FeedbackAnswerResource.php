@@ -23,7 +23,7 @@ class FeedbackAnswerResource extends JsonResource
             'user_type' => $this->user_type,
             'user_id' => $this->user_id,
             'text' => $this->text,
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->format('d.m.Y'),
         ];
     }
 }

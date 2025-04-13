@@ -6,6 +6,7 @@ use App\Http\Resources\Product\CatalogProductResource;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @mixin Feedback
@@ -25,11 +26,20 @@ class FeedbackResource extends JsonResource
             'user_city' => $this->user_city,
             'text' => $this->text,
             'rating' => $this->rating,
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->format('d.m.Y'),
 
             'answers' => FeedbackAnswerResource::collection($this->answers),
             'product' => new CatalogProductResource($this->product),
-            // 'media' => $this->media,
+            'photos' => $this->getMedia('photos')->map(fn (Media $photo) => [
+                'id' => $photo->id,
+                'thumb' => $photo->getUrl('thumb'),
+                'full' => $photo->getUrl('full'),
+            ]),
+            'videos' => $this->getMedia('videos')->map(fn (Media $video) => [
+                'id' => $video->id,
+                'preview' => $video->getUrl('thumb'),
+                'link' => $video->getUrl(),
+            ]),
         ];
     }
 }

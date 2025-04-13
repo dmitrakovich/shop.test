@@ -7,6 +7,7 @@ use App\Facades\Sale;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterRequest;
+use App\Http\Resources\Feedback\FeedbackResource;
 use App\Http\Resources\Info\InstallmentResource;
 use App\Http\Resources\Product\CatalogProductCollection;
 use App\Http\Resources\Product\CatalogProductResource;
@@ -99,7 +100,7 @@ class CatalogController extends Controller
         return [
             'breadcrumbs' => Breadcrumbs::generate('product', $product),
             'product' => new ProductResource($product),
-            'feedbacks' => $feedbackService->getForProduct($product->id),
+            'feedbacks' => FeedbackResource::collection($feedbackService->getForProduct($product->id)),
             'similarProducts' => CatalogProductResource::collection($sliderService->getSimilarProducts($product->id)),
             'productGroup' => CatalogProductResource::collection($product->productsFromGroup),
             // 'recentProductsSlider' => $sliderService->getRecentProducts($productService),
