@@ -34,9 +34,9 @@ class UpdateProduct
             'SP6124' => $product->category->name,
             'SP6125' => $product->collection->name,
             'SP6142' => $product->id,
-            'SP6156' => $product->price,
-            'SP6157' => $product->getFixedOldPrice(),
-            'SP6158' => $product->getDiscountPercentage(),
+            'SP6155' => $product->price,
+            'SP6156' => $product->getFixedOldPrice(),
+            'SP6157' => $product->getDiscountPercentage(),
         ], fn ($value) => !is_null($value)));
     }
 }
