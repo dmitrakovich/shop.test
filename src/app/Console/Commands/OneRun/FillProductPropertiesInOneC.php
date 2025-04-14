@@ -36,7 +36,6 @@ class FillProductPropertiesInOneC extends Command
 
         $productsQuery
             ->with(['category', 'productFromOneC', 'media', 'manufacturer', 'collection', 'countryOfOrigin'])
-            ->select(['id', 'one_c_id', 'slug', 'category_id', 'manufacturer_id', 'collection_id', 'country_of_origin_id'])
             ->chunk(200, function (Collection $chunk) use ($productUpdater) {
                 $chunk->each(function (Product $product) use ($productUpdater) {
                     $productUpdater->handle(new ProductUpdated($product));
