@@ -451,6 +451,14 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Get product discount percentage
+     */
+    public function getDiscountPercentage(): int
+    {
+        return (int)ceil((1 - ($this->price / $this->getFixedOldPrice())) * 100);
+    }
+
+    /**
      * Get product price
      */
     public function getPrice(?string $currencyCode = null): float

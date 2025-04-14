@@ -12,6 +12,9 @@ namespace App\Models\OneC;
  * @property string $SP6124 Тип (категория)
  * @property string $SP6125 СезонСайт (коллекция)
  * @property int $SP6142 id товара с сайта
+ * @property float $SP6156 ЦенаНовая
+ * @property float $SP6157 ЦенаСтарая
+ * @property float $SP6158 Скидка
  */
 class Product extends AbstractOneCModel
 {
@@ -33,6 +36,9 @@ class Product extends AbstractOneCModel
         'SP6124',
         'SP6125',
         'SP6142',
+        'SP6156',
+        'SP6157',
+        'SP6158',
     ];
 
     /**
