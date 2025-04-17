@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
 
+// todo: интерфейс под этот трейт и имплементировать всеми классами
+
+/**
+ * @mixin \Illuminate\Database\Eloquent\Model
+ */
 trait AttributeFilterTrait
 {
     /**
@@ -110,5 +115,10 @@ trait AttributeFilterTrait
     public function getBadgeName(): string
     {
         return $this->name ?? '';
+    }
+
+    public static function getFilters(): array
+    {
+        return (new self())->newQuery()->get()->keyBy('slug')->toArray();
     }
 }
