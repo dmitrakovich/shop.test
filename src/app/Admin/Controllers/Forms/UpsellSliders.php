@@ -89,7 +89,7 @@ class UpsellSliders extends Form
         $this->number('final_accessories.speed', 'Скорость (мс)')->default(3000);
         $this->number('final_accessories.count', 'Количество выводимых товаров')->default(12);
         $this->number('final_accessories.sorting', 'Порядок сортировки')->default(2);
-        $this->multipleSelect('final_accessories.categories_list', 'Категории')->options(Category::getFormatedTree());
+        $this->multipleSelect('final_accessories.categories_list', 'Категории')->options(Category::getFormattedTree());
         $this->number('final_accessories.additional_settings.additional_discount', 'Доп. скидка')->default(90);
         $this->number('final_accessories.additional_settings.discount_period', 'Период действия бонуса (часов)')->default(1);
 
@@ -98,7 +98,7 @@ class UpsellSliders extends Form
         $this->number('final_sale.speed', 'Скорость (мс)')->default(3000);
         $this->number('final_sale.count', 'Количество выводимых товаров')->default(12);
         $this->number('final_sale.sorting', 'Порядок сортировки')->default(3);
-        $this->multipleSelect('final_sale.categories_list', 'Категории')->options(Category::getFormatedTree());
+        $this->multipleSelect('final_sale.categories_list', 'Категории')->options(Category::getFormattedTree());
         $this->number('final_sale.additional_settings.min_discount', 'Минимальная скидка')->default(5);
     }
 

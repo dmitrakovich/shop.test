@@ -2,6 +2,7 @@
 
 namespace App\Models\ProductAttributes;
 
+use App\Contracts\Filterable;
 use App\Facades\Currency;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,16 +18,16 @@ use Illuminate\Support\Str;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Price extends Model
+class Price extends Model implements Filterable
 {
     use AttributeFilterTrait;
 
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if all mass assignment is enabled.
      *
-     * @var array
+     * @var bool
      */
-    protected $guarded = [];
+    protected static $unguarded = true;
 
     /**
      * Return random id attribute
@@ -45,11 +46,10 @@ class Price extends Model
     }
 
     /**
-     * @return Builder
+     * @param  \App\Models\Url[]  $values
      */
-    public static function applyFilter(Builder $builder, array $values)
+    public static function applyFilter(Builder $builder, array $values): Builder
     {
-        /** @var \App\Models\Url $url */
         foreach ($values as $url) {
             /** @var self $self */
             $self = $url->filters;

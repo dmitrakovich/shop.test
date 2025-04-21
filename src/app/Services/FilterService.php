@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\Filterable;
 use App\Facades\Currency;
 use App\Models\Brand;
 use App\Models\Category;
@@ -16,14 +17,17 @@ use App\Models\Size;
 use App\Models\Style;
 use App\Models\Tag;
 use App\Models\Url;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
 class FilterService
 {
     /**
      * Filter-related classes
+     *
+     * @var class-string<Model&Filterable>[]
      */
-    protected static array $filtersModels = [
+    private const array FILTERS_MODELS = [
         'categories' => Category::class,
         'statuses' => Status::class,
         'fabrics' => Fabric::class,
@@ -39,30 +43,16 @@ class FilterService
 
     /**
      * Получить все фильтра
-     *
-     * @param  array  $filtersList  список нужных фильтров
      */
-    public static function getAll(?array $filtersList = null): array
+    public function getAll(): array
     {
-        if (!$filters = Cache::get('filters')) {
-            $filtersList ??= array_keys(self::$filtersModels);
-            foreach ($filtersList as $filterName) {
-                $model = self::$filtersModels[$filterName];
-                $query = (new $model())->newQuery();
-                if ($filterName == 'categories') {
-                    $filters[$filterName] = $query->whereNull('parent_id')
-                        ->with('childrenCategories')->get(); // говнокод;
-                } else {
-                    $filters[$filterName] = $query->get()->keyBy('slug')->toArray();
-                }
-                foreach ($filters[$filterName] as &$value) {
-                    $value['model'] = $model;
-                }
+        return Cache::remember('filters', now()->addDay(), function () {
+            foreach (self::FILTERS_MODELS as $filterName => $model) {
+                $filters[$filterName] = $model::getFilters();
             }
-            Cache::put('filters', $filters, 86400); // day
-        }
 
-        return $filters;
+            return array_filter($filters);
+        });
     }
 
     /**

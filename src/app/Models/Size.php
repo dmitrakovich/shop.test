@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Size extends Model
+class Size extends Model implements Filterable
 {
     use AttributeFilterTrait;
 
@@ -48,5 +49,15 @@ class Size extends Model
     public function getBadgeName(): string
     {
         return 'Размер: ' . $this->name;
+    }
+
+    public static function getFilters(): array
+    {
+        return (new self())->newQuery()
+            ->whereIn('id', [1, 4, 5, 6, 7, 8, 9, 10]) // todo: add column active
+            ->get(['id', 'name', 'slug', 'value'])
+            ->keyBy('slug')
+            ->append(['model'])
+            ->toArray();
     }
 }

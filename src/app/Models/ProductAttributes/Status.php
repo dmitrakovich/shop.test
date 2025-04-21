@@ -2,6 +2,7 @@
 
 namespace App\Models\ProductAttributes;
 
+use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -18,16 +19,18 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Status extends Model
+class Status extends Model implements Filterable
 {
     use AttributeFilterTrait;
 
-    protected $guarded = ['id'];
-
     /**
-     * @return Builder
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
      */
-    public static function applyFilter(Builder $builder, array $values)
+    protected static $unguarded = true;
+
+    public static function applyFilter(Builder $builder, array $values): Builder
     {
         foreach ($values as $slug => $urlModel) {
             switch ($slug) {

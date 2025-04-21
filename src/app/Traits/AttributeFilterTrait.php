@@ -7,14 +7,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Model
+ */
 trait AttributeFilterTrait
 {
     /**
      * Применить фильтр
-     *
-     * @return Builder
      */
-    public static function applyFilter(Builder $builder, array $values)
+    public static function applyFilter(Builder $builder, array $values): Builder
     {
         self::beforeApplyFilter($builder, $values);
 
@@ -76,12 +77,10 @@ trait AttributeFilterTrait
     }
 
     /**
-     * Если перед применением фильтра необходимо произветсти
-     * преобразолвание над данными или запросом
-     *
-     * @return void
+     * Если перед применением фильтра необходимо произвести
+     * преобразование над данными или запросом
      */
-    public static function beforeApplyFilter(Builder &$builder, array &$values)
+    public static function beforeApplyFilter(Builder &$builder, array &$values): void
     {
         if (!array_is_list($values)) {
             $values = array_column($values, 'model_id');
@@ -110,5 +109,15 @@ trait AttributeFilterTrait
     public function getBadgeName(): string
     {
         return $this->name ?? '';
+    }
+
+    public static function getFilters(): array
+    {
+        return (new self())->newQuery()
+            ->get()
+            ->makeHidden(['created_at', 'updated_at'])
+            ->keyBy('slug')
+            ->append(['model'])
+            ->toArray();
     }
 }

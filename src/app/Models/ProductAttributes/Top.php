@@ -2,17 +2,15 @@
 
 namespace App\Models\ProductAttributes;
 
+use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Builder;
 
-class Top
+class Top implements Filterable
 {
     use AttributeFilterTrait;
 
-    /**
-     * @return Builder
-     */
-    public static function applyFilter(Builder $builder, array $values)
+    public static function applyFilter(Builder $builder, array $values): Builder
     {
         return $builder->whereNotIn('id', array_column($values, 'model_id'));
     }
@@ -25,21 +23,10 @@ class Top
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return null
-     */
-    public function url()
+    public function url(): null
     {
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function delete()
-    {
-        //
-    }
+    public function delete() {}
 }

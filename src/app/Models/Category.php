@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -41,7 +42,7 @@ use Spatie\EloquentSortable\SortableTrait;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Category extends Model implements Sortable
+class Category extends Model implements Filterable, Sortable
 {
     use AttributeFilterTrait, NodeTrait, SoftDeletes, SortableTrait;
 
@@ -83,15 +84,13 @@ class Category extends Model implements Sortable
 
     /**
      * Get the route key for the model.
-     *
-     * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }
 
-    protected static function getRelationColumn()
+    protected static function getRelationColumn(): string
     {
         return 'category_id';
     }
@@ -99,7 +98,7 @@ class Category extends Model implements Sortable
     /**
      * Generate path mutator
      */
-    public function setPathAttribute($path)
+    public function setPathAttribute($path): void
     {
         $this->generatePath();
     }
@@ -119,7 +118,7 @@ class Category extends Model implements Sortable
         return $this->hasMany(Category::class, 'parent_id')->with('childrenCategories');
     }
 
-    public static function beforeApplyFilter(&$builder, &$values)
+    public static function beforeApplyFilter(&$builder, &$values): void
     {
         $currentCategoryId = end($values)['model_id'];
         if ($currentCategoryId === self::ROOT_CATEGORY_ID) {
@@ -134,17 +133,15 @@ class Category extends Model implements Sortable
      */
     public static function getChildrenCategoriesIdsList(int $categoryId): array
     {
-        return Cache::rememberForever("categoryChilds.$categoryId", fn () => self::traverseTree(
+        return Cache::rememberForever("categoryChildren.$categoryId", fn () => self::traverseTree(
             self::with('childrenCategories')->find($categoryId)->toArray()
         ));
     }
 
     /**
      * Сделать одноуровневый массив из дерева
-     *
-     * @return array
      */
-    protected static function traverseTree(array $subtree)
+    protected static function traverseTree(array $subtree): array
     {
         $descendants = [$subtree['id']];
         foreach ($subtree['children_categories'] as $child) {
@@ -162,7 +159,7 @@ class Category extends Model implements Sortable
         return '/' . $this->path;
     }
 
-    public function generatePath()
+    public function generatePath(): self
     {
         $slug = $this->slug;
         $this->attributes['path'] = $this->isRoot() ? $slug : $this->parent->path . '/' . $slug;
@@ -185,10 +182,8 @@ class Category extends Model implements Sortable
 
     /**
      * Получить форматированное дерево категорий
-     *
-     * @return array
      */
-    public static function getFormatedTree()
+    public static function getFormattedTree(): array
     {
         $nodes = self::whereNotNull('parent_id')->get()->toTree();
 
@@ -206,11 +201,9 @@ class Category extends Model implements Sortable
     }
 
     /**
-     * Make dafault category
-     *
-     * @return self
+     * Make default category
      */
-    public static function getDefault()
+    public static function getDefault(): self
     {
         return self::make([
             'id' => 1,
@@ -269,5 +262,23 @@ class Category extends Model implements Sortable
     public function isInvisible(): bool
     {
         return $this->isRoot();
+    }
+
+    public static function getFilters(): array
+    {
+        return (new self())->newQuery()
+            ->whereNull('parent_id')
+            ->with('childrenCategories:id,slug,path,title,parent_id')
+            ->get(['id', 'slug', 'path', 'title', 'parent_id'])
+            ->each(fn (self $category) => $category->appendModelAttribute())
+            ->toArray();
+    }
+
+    private function appendModelAttribute(): void
+    {
+        $this->append(['model']);
+        foreach ($this->childrenCategories as $category) {
+            $category->appendModelAttribute();
+        }
     }
 }

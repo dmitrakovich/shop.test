@@ -2,6 +2,7 @@
 
 namespace App\Models\ProductAttributes;
 
+use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -19,11 +20,16 @@ use Illuminate\Support\Str;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class CountryOfOrigin extends Model
+class CountryOfOrigin extends Model implements Filterable
 {
     use AttributeFilterTrait;
 
-    protected $guarded = ['id'];
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
 
     protected static function boot(): void
     {
