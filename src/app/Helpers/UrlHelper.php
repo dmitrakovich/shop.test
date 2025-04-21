@@ -94,7 +94,11 @@ class UrlHelper
             if (isset($filters[$model])) {
                 if ($model == Category::class) {
                     $filter = end($filters[$model]);
-                    $sorted[] = $filter instanceof Url ? $filter->filters->path : $filter['path'];
+                    if ($filter instanceof Url) {
+                        /** @var Category $filter */
+                        $filter = $filter->filters;
+                    }
+                    $sorted[] = $filter['path'];
                 } else {
                     sort($filters[$model]);
                     foreach ($filters[$model] as $filter) {

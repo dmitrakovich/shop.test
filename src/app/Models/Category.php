@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -41,7 +42,7 @@ use Spatie\EloquentSortable\SortableTrait;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Category extends Model implements Sortable
+class Category extends Model implements Filterable, Sortable
 {
     use AttributeFilterTrait, NodeTrait, SoftDeletes, SortableTrait;
 
