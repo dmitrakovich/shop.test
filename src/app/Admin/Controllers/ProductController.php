@@ -102,7 +102,7 @@ class ProductController extends AbstractAdminController
             }, 'Код товара / артикул');
             $filter->where($this->getStatusFilter(), 'Статус', 'status')->checkbox(self::statusfilters);
             $filter->in('brand_id', 'Бренд')->multipleSelect(Brand::pluck('name', 'id'));
-            $filter->where($this->getCategoryFilter(), 'Категория', 'category')->multipleSelect(Category::getFormatedTree());
+            $filter->where($this->getCategoryFilter(), 'Категория', 'category')->multipleSelect(Category::getFormattedTree());
             $filter->where($this->getSizeCountFilter(), 'Количество размеров', 'size_count')->checkbox([5 => '5 и более размеров']);
         });
 
@@ -230,7 +230,7 @@ class ProductController extends AbstractAdminController
             $form->multipleSelect('fabrics', 'Материал для фильтра')->options(Fabric::orderBy('name')->pluck('name', 'id'));
             $form->multipleSelect('styles', 'Стиль')->options(Style::orderBy('name')->pluck('name', 'id'));
             $form->multipleSelect('heels', 'Тип каблука/подошвы')->options(Heel::pluck('name', 'id'));
-            $form->select('category_id', 'Категория')->options(Category::getFormatedTree())->default($productFromStock->category_id)->required();
+            $form->select('category_id', 'Категория')->options(Category::getFormattedTree())->default($productFromStock->category_id)->required();
             $form->select('season_id', 'Сезон')->options(Season::pluck('name', 'id'))->required();
             $form->select('brand_id', 'Бренд')->options(Brand::orderBy('name')->pluck('name', 'id'))->required()->default($productFromStock->brand_id);
             $form->select('collection_id', 'Коллекция')->options(Collection::pluck('name', 'id'))->required();

@@ -117,7 +117,7 @@ class Category extends Model implements Sortable
         return $this->hasMany(Category::class, 'parent_id')->with('childrenCategories');
     }
 
-    public static function beforeApplyFilter(&$builder, &$values)
+    public static function beforeApplyFilter(&$builder, &$values): void
     {
         $currentCategoryId = end($values)['model_id'];
         if ($currentCategoryId === self::ROOT_CATEGORY_ID) {
@@ -139,10 +139,8 @@ class Category extends Model implements Sortable
 
     /**
      * Сделать одноуровневый массив из дерева
-     *
-     * @return array
      */
-    protected static function traverseTree(array $subtree)
+    protected static function traverseTree(array $subtree): array
     {
         $descendants = [$subtree['id']];
         foreach ($subtree['children_categories'] as $child) {
@@ -160,7 +158,7 @@ class Category extends Model implements Sortable
         return '/' . $this->path;
     }
 
-    public function generatePath()
+    public function generatePath(): self
     {
         $slug = $this->slug;
         $this->attributes['path'] = $this->isRoot() ? $slug : $this->parent->path . '/' . $slug;
@@ -183,10 +181,8 @@ class Category extends Model implements Sortable
 
     /**
      * Получить форматированное дерево категорий
-     *
-     * @return array
      */
-    public static function getFormatedTree()
+    public static function getFormattedTree(): array
     {
         $nodes = self::whereNotNull('parent_id')->get()->toTree();
 

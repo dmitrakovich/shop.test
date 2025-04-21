@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
 
-// todo: интерфейс под этот трейт и имплементировать всеми классами
-
 /**
  * @mixin \Illuminate\Database\Eloquent\Model
  */
@@ -16,10 +14,8 @@ trait AttributeFilterTrait
 {
     /**
      * Применить фильтр
-     *
-     * @return Builder
      */
-    public static function applyFilter(Builder $builder, array $values)
+    public static function applyFilter(Builder $builder, array $values): Builder
     {
         self::beforeApplyFilter($builder, $values);
 
@@ -81,12 +77,10 @@ trait AttributeFilterTrait
     }
 
     /**
-     * Если перед применением фильтра необходимо произветсти
-     * преобразолвание над данными или запросом
-     *
-     * @return void
+     * Если перед применением фильтра необходимо произвести
+     * преобразование над данными или запросом
      */
-    public static function beforeApplyFilter(Builder &$builder, array &$values)
+    public static function beforeApplyFilter(Builder &$builder, array &$values): void
     {
         if (!array_is_list($values)) {
             $values = array_column($values, 'model_id');

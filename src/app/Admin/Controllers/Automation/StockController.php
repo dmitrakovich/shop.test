@@ -146,7 +146,7 @@ class StockController extends AbstractAdminController
         $filter->where($this->getBrandFilter(), 'Бренд', 'brand')->multipleSelect(Brand::pluck('name', 'id'));
         $filter->where($this->getSeasonFilter(), 'Сезон', 'season')->multipleSelect(Season::pluck('name', 'id'));
         $filter->where($this->getCollectionFilter(), 'Коллекция', 'collection')->multipleSelect(Collection::pluck('name', 'id'));
-        $filter->where($this->getCategoryFilter(), 'Категория', 'category')->multipleSelect(Category::getFormatedTree());
+        $filter->where($this->getCategoryFilter(), 'Категория', 'category')->multipleSelect(Category::getFormattedTree());
         $filter->where($this->getCountryOfOriginFilter(), 'Страна производитель', 'country_of_origin')->multipleSelect(CountryOfOrigin::pluck('name', 'id'));
         $filter->where(fn ($query) => $query, 'Макс. кол-во пар на модель', 'max_sizes_count')->placeholder('Введите кол-во ед.');
     }

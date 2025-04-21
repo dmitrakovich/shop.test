@@ -50,4 +50,14 @@ class Size extends Model implements Filterable
     {
         return 'Размер: ' . $this->name;
     }
+
+    public static function getFilters(): array
+    {
+        return (new self())->newQuery()
+            ->whereIn('id', [1, 4, 5, 6, 7, 8, 9, 10]) // todo: add column active
+            ->get(['id', 'name', 'slug', 'value'])
+            ->keyBy('slug')
+            ->append(['model'])
+            ->toArray();
+    }
 }
