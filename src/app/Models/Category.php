@@ -83,15 +83,13 @@ class Category extends Model implements Sortable
 
     /**
      * Get the route key for the model.
-     *
-     * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }
 
-    protected static function getRelationColumn()
+    protected static function getRelationColumn(): string
     {
         return 'category_id';
     }
@@ -99,7 +97,7 @@ class Category extends Model implements Sortable
     /**
      * Generate path mutator
      */
-    public function setPathAttribute($path)
+    public function setPathAttribute($path): void
     {
         $this->generatePath();
     }
@@ -134,7 +132,7 @@ class Category extends Model implements Sortable
      */
     public static function getChildrenCategoriesIdsList(int $categoryId): array
     {
-        return Cache::rememberForever("categoryChilds.$categoryId", fn () => self::traverseTree(
+        return Cache::rememberForever("categoryChildren.$categoryId", fn () => self::traverseTree(
             self::with('childrenCategories')->find($categoryId)->toArray()
         ));
     }
@@ -206,11 +204,9 @@ class Category extends Model implements Sortable
     }
 
     /**
-     * Make dafault category
-     *
-     * @return self
+     * Make default category
      */
-    public static function getDefault()
+    public static function getDefault(): self
     {
         return self::make([
             'id' => 1,
@@ -269,5 +265,23 @@ class Category extends Model implements Sortable
     public function isInvisible(): bool
     {
         return $this->isRoot();
+    }
+
+    public static function getFilters(): array
+    {
+        return (new self())->newQuery()
+            ->whereNull('parent_id')
+            ->with('childrenCategories:id,slug,path,title,parent_id')
+            ->get(['id', 'slug', 'path', 'title', 'parent_id'])
+            ->each(fn (self $category) => $category->appendModelAttribute())
+            ->toArray();
+    }
+
+    private function appendModelAttribute(): void
+    {
+        $this->append(['model']);
+        foreach ($this->childrenCategories as $category) {
+            $category->appendModelAttribute();
+        }
     }
 }

@@ -46,28 +46,13 @@ class FilterService
      */
     public function getAll(): array
     {
-        // if (!$filters = Cache::get('filters')) {
-        foreach (self::FILTERS_MODELS as $filterName => $model) {
-
-            $filters[$filterName] = $model::getFilters();
-
-            $query = (new $model())->newQuery();
-            if ($filterName == 'categories') {
-                $filters[$filterName] = $query->whereNull('parent_id')
-                    ->with('childrenCategories')->get(); // говнокод;
-            } else {
-                $filters[$filterName] = $query->get()->keyBy('slug')->toArray();
+        return Cache::remember('filters', now()->addDay(), function () {
+            foreach (self::FILTERS_MODELS as $filterName => $model) {
+                $filters[$filterName] = $model::getFilters();
             }
-            foreach ($filters[$filterName] as &$value) {
-                $value['model'] = $model;
-            }
-        }
-        // Cache::put('filters', $filters, 86400); // day
-        // }
 
-        dd(array_filter($filters));
-
-        return array_filter($filters);
+            return array_filter($filters);
+        });
     }
 
     /**

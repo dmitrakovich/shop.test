@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -21,14 +22,14 @@ use Illuminate\Database\Eloquent\Relations;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Tag extends Model
+class Tag extends Model implements Filterable
 {
     use AttributeFilterTrait;
 
     /**
      * Теги
      */
-    public function products()
+    public function products(): Relations\MorphToMany
     {
         return $this->morphToMany(Product::class, 'attribute', 'product_attributes');
     }

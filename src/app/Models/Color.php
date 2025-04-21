@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Color extends Model
+class Color extends Model implements Filterable
 {
     use AttributeFilterTrait;
 }

@@ -15,6 +15,7 @@ use App\Models\Season;
 use App\Models\Size;
 use App\Models\Style;
 use App\Models\Tag;
+use App\Models\Url;
 use Illuminate\Support\Facades\Request;
 
 class UrlHelper
@@ -93,7 +94,7 @@ class UrlHelper
             if (isset($filters[$model])) {
                 if ($model == Category::class) {
                     $filter = end($filters[$model]);
-                    $sorted[] = ($filter instanceof Category) ? ($filter->path ?? '') : ($filter['filters']['path'] ?? '');
+                    $sorted[] = $filter instanceof Url ? $filter->filters->path : $filter['path'];
                 } else {
                     sort($filters[$model]);
                     foreach ($filters[$model] as $filter) {

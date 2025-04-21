@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,11 +19,11 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Season extends Model
+class Season extends Model implements Filterable
 {
     use AttributeFilterTrait;
 
-    protected static function getRelationColumn()
+    protected static function getRelationColumn(): string
     {
         return 'season_id';
     }

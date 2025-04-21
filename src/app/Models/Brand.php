@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,28 +20,26 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class Brand extends Model
+class Brand extends Model implements Filterable
 {
     use AttributeFilterTrait;
 
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if all mass assignment is enabled.
      *
-     * @var array
+     * @var bool
      */
-    protected $guarded = [];
+    protected static $unguarded = true;
 
-    protected static function getRelationColumn()
+    protected static function getRelationColumn(): string
     {
         return 'brand_id';
     }
 
     /**
-     * Make dafault brand
-     *
-     * @return self
+     * Make default brand
      */
-    public static function getDefault()
+    public static function getDefault(): self
     {
         return self::make([
             'id' => 57,

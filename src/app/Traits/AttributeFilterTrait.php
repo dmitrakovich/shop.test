@@ -119,6 +119,11 @@ trait AttributeFilterTrait
 
     public static function getFilters(): array
     {
-        return (new self())->newQuery()->get()->keyBy('slug')->toArray();
+        return (new self())->newQuery()
+            ->get()
+            ->makeHidden(['created_at', 'updated_at'])
+            ->keyBy('slug')
+            ->append(['model'])
+            ->toArray();
     }
 }
