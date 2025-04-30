@@ -25,7 +25,7 @@ class OrderController extends Controller
     {
         $order = $this->orderService->store(Cart::getCart(), $orderData);
 
-        return new OrderResource($order);
+        return new OrderResource($order->refresh());
     }
 
     public function oneclick(OneClickOrderData $oneClickOrderData, OrderData $orderData): OrderResource
@@ -34,6 +34,6 @@ class OrderController extends Controller
 
         $order = $this->orderService->store(Cart::makeTempCart($oneClickOrderData), $orderData);
 
-        return new OrderResource($order);
+        return new OrderResource($order->refresh());
     }
 }
