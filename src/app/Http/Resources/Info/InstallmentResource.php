@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Info;
 
+use App\Facades\Currency;
 use App\Models\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -35,17 +36,17 @@ class InstallmentResource extends JsonResource
     private function get2Parts(float $price): array
     {
         return [
-            $price - ($price * 0.5),
-            $price * 0.5,
+            Currency::round($price - ($price * 0.5)),
+            Currency::round($price * 0.5),
         ];
     }
 
     private function get3Parts(float $price): array
     {
         return [
-            $price - ($price * 0.6),
-            $price * 0.3,
-            $price * 0.3,
+            Currency::round($price - ($price * 0.6)),
+            Currency::round($price * 0.3),
+            Currency::round($price * 0.3),
         ];
     }
 

@@ -190,4 +190,12 @@ class CurrencyService
     {
         return $this->format($this->convert($priceInByn));
     }
+
+    /**
+     * Round price
+     */
+    public function round(float $price): float
+    {
+        return round($price, $this->currency->decimals);
+    }
 }
