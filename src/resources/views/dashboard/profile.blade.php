@@ -122,7 +122,7 @@
                 <label for="country_id"
                     class="d-none d-md-block col-md-4 col-xl-3 col-form-label">Страна</label>
                 <div class="col-12 col-md-8 col-lg-4 col-xl-3">
-                    <select id="country_id" name="country_id"
+                    <select id="country_id" name="address[country_id]"
                         class="form-control @error('country_id') is-invalid @enderror">
                         @foreach ($countries as $country)
                             <option value="{{ $country->id }}" @selected($country->id == $currentCountry->id)>
@@ -144,8 +144,8 @@
                 </label>
                 <div class="col-12 col-md-8 col-xl-6">
                     <input id="city" type="text"
-                        class="form-control @error('city') is-invalid @enderror" name="city"
-                        value="{{ old('city', $user->getFirstAddress()?->city) }}" required
+                        class="form-control @error('city') is-invalid @enderror" name="address[city]"
+                        value="{{ old('address[city]', $user->getFirstAddress()?->city) }}" required
                         autocomplete="address-level2" placeholder="Город" />
                     @error('city')
                         <span class="invalid-feedback" role="alert">
@@ -159,9 +159,9 @@
                 <label for="address"
                     class="d-none d-md-block col-md-4 col-xl-3 col-form-label">Адрес</label>
                 <div class="col-12 col-md-8 col-xl-6">
-                    <input id="address" type="text" name="address"
+                    <input id="address" type="text" name="address[address]"
                         class="form-control @error('address') is-invalid @enderror" placeholder="Адрес"
-                        value="{{ old('address', $user->getFirstAddress()?->address) }}">
+                        value="{{ old('address[address]', $user->getFirstAddress()?->address) }}">
                     @error('address')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

@@ -24,3 +24,11 @@ function client(): ClientInterface
 
     return Device::current();
 }
+
+/**
+ * Get the currently authenticated user.
+ */
+function user(): User
+{
+    return Auth::user();
+}

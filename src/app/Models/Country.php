@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
@@ -23,24 +23,22 @@ class Country extends Model
     /**
      * Countries cache list
      */
-    public static ?EloquentCollection $countries = null;
+    public static ?Collection $countries = null;
 
     /**
      * Get countries collection
      *
-     * @return EloquentCollection<self>
+     * @return Collection<self>
      */
-    public static function getAll()
+    public static function getAll(): Collection
     {
         return self::$countries ?? (self::$countries = self::all());
     }
 
     /**
      * Return default country
-     *
-     * @return self
      */
-    public static function getDefaultCountry()
+    public static function getDefaultCountry(): self
     {
         return self::getAll()->where('code', self::DEFAULT_COUNTRY_CODE)->first();
     }

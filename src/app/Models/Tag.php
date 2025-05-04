@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property int|null $tag_group_id Номер группы
  * @property string $model
  *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
  * @property-read \App\Models\TagGroup|null $group
  * @property-read \App\Models\Url|null $url
  *

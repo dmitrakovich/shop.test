@@ -30,7 +30,12 @@ use Illuminate\Database\Eloquent\Relations;
  */
 class Address extends Model
 {
-    protected $guarded = ['id'];
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
 
     /**
      * The table associated with the model.
@@ -62,6 +67,14 @@ class Address extends Model
     public function user(): Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Return current user country
+     */
+    public function getCountry(): Country
+    {
+        return $this->country ?? Country::getCurrent();
     }
 
     /**

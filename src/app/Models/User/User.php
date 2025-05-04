@@ -51,6 +51,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Favorite[] $favorites
  * @property-read \App\Models\User\UserPassport|null $passport
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Address[] $addresses
+ * @property-read \App\Models\User\Address|null $lastAddress
  * @property-read \App\Models\User\UserMetadata|null $metadata
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OfflineOrder[] $offlineOrders
@@ -167,10 +168,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * User last address
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function lastAddress()
+    public function lastAddress(): HasOne
     {
         return $this->hasOne(Address::class)->orderBy('id', 'desc');
     }

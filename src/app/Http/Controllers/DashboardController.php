@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Auth\UpdateRequest;
+use App\Data\User\UserData;
 use App\Models\Country;
 use App\Models\User\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -28,19 +29,11 @@ class DashboardController extends Controller
 
     /**
      * Получить данные профиля
-     *
-     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function update(User $user, UpdateRequest $request)
+    public function update(User $user, UserData $userData): RedirectResponse
     {
-        $validatedData = $request->validated();
-        $result = $user->update($validatedData);
-
-        if ($user->hasAddresses()) {
-            $user->getFirstAddress()?->update($validatedData);
-        } else {
-            $user->addresses()->create($validatedData);
-        }
+        $result = $user->update($userData->toArray());
+        $user->lastAddress()->updateOrCreate([], $userData->address->toArray());
 
         // if ($request->filled('password')) {
         //     $request->validate(['password' => ['required', 'string', 'min:8']]);

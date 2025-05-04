@@ -1,6 +1,7 @@
 <?php
 
 use App\Facades\Device;
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\InfoPageController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,13 @@ Route::prefix('auth')->as('auth.')->middleware('captcha')->group(function () {
     });
     Route::post('attempt', [AuthController::class, 'attempt'])->name('attempt');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
+});
+
+Route::middleware('auth:sanctum')->prefix('account')->as('account.')->group(function () {
+    Route::prefix('profile')->as('profile.')->group(function () {
+        Route::get('/', [UserController::class, 'show'])->name('show');
+        Route::put('/', [UserController::class, 'update'])->name('update');
+    });
 });
 
 Route::get('app-init', [AppController::class, 'init']);
@@ -61,4 +70,8 @@ Route::prefix('feedbacks')->as('feedbacks.')->group(function () {
         Route::post('/', [FeedbackController::class, 'store'])->name('store');
         Route::post('{feedback}/answers', [FeedbackController::class, 'storeAnswer'])->name('answers.store');
     });
+});
+
+Route::prefix('address')->as('address.')->group(function () {
+    Route::get('countries', [AddressController::class, 'getCountries']);
 });

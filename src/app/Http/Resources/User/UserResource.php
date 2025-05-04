@@ -26,7 +26,8 @@ class UserResource extends JsonResource
             'last_name' => $this->last_name,
             'patronymic_name' => $this->patronymic_name,
             'phone' => $this->phone,
-            'birth_date' => $this->birth_date,
+            'birth_date' => $this->birth_date->format('Y-m-d'),
+            'address' => new UserAddressResource($this->lastAddress),
         ];
     }
 }
