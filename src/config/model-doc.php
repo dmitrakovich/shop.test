@@ -52,6 +52,8 @@ return [
         \App\Models\OneC\DiscountCard::class,
         \App\Models\OneC\OfflineOrder::class,
         \App\Models\OneC\Product::class,
+
+        \App\Models\FeedbackAnswer::class,
     ],
 
     'custom_tags' => [

@@ -997,54 +997,6 @@ parameters:
 			path: app/Services/LogService.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$city\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/Order/EnvelopeService.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$corpus\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/Order/EnvelopeService.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$district\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/Order/EnvelopeService.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$house\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/Order/EnvelopeService.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$region\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/Order/EnvelopeService.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$room\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/Order/EnvelopeService.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$street\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/Order/EnvelopeService.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$zip\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/Order/EnvelopeService.php
-
-		-
 			message: '#^Using nullsafe property access on non\-nullable type App\\Models\\Orders\\Order\. Use \-\> instead\.$#'
 			identifier: nullsafe.neverNull
 			count: 8

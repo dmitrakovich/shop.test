@@ -229,6 +229,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Get the favorite associated with the product.
+     *
+     * @return Relations\HasOne<Favorite, $this>
      */
     public function favorite(): Relations\HasOne
     {
