@@ -108,7 +108,7 @@
                     рождения</label>
                 <div class="col-12 col-md-8 col-lg-4 col-xl-3">
                     <input id="birth_date" type="date" name="birth_date" min="1900-01-01"
-                        max="{{ date('Y-m-d') }}"
+                        max="{{ date('Y-m-d') }}" value="{{ old('birth_date', $user->birth_date->format('Y-m-d')) }}"
                         class="form-control @error('birth_date') is-invalid @enderror">
                     @error('birth_date')
                         <span class="invalid-feedback" role="alert">
