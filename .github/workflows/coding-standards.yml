@@ -35,24 +35,19 @@ jobs:
       - name: Install Pint
         run: composer global require laravel/pint
 
-      - name: Run Pint
-        run: pint --config ./formaters/pint.json
+      - name: Run Pint in test mode (no changes)
+        run: pint --test --config ./.formatters/pint.json
 
       - name: Install NPM dependencies
         run: npm ci -C ./src
 
       - name: Copy blade-formatter config to root dir
         run: |
-          cp formaters/.bladeformatterrc.json ./
-          cp formaters/.bladeignore ./
+          cp .formatters/.bladeformatterrc.json ./
+          cp .formatters/.bladeignore ./
 
-      - name: Run Blade Formatter
+      - name: Run Blade Formatter in check mode
         run: |
-          src/node_modules/.bin/blade-formatter --write \
+          src/node_modules/.bin/blade-formatter --check-formatted \
             src/resources/views/*.blade.php \
             src/resources/views/**/*.blade.php
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: ${{ inputs.message }} Format ${{ github.actor }} code

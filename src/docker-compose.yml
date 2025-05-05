@@ -20,6 +20,7 @@ services:
         volumes:
             - '.:/var/www/html'
             - '../.dep:/var/www/.dep:ro'
+            - '../.formatters:/var/www/.formatters:ro'
         networks:
             - sail
         depends_on:
