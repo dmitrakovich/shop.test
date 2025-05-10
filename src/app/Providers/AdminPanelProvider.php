@@ -69,6 +69,9 @@ class AdminPanelProvider extends PanelProvider
                 'user' => NavigationGroup::make()
                     ->label('Клиенты')
                     ->icon('heroicon-o-user-group'),
+                'products' => NavigationGroup::make()
+                    ->label('Товары')
+                    ->icon('heroicon-o-squares-2x2'),
                 'registries' => NavigationGroup::make()
                     ->label('Реестры')
                     ->icon('heroicon-o-folder'),

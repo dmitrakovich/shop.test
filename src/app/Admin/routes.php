@@ -42,7 +42,6 @@ Route::group([
     $router->group(['prefix' => 'product-attributes', 'namespace' => 'ProductAttributes'], function (Router $router) {
         $router->resource('categories', CategoryController::class);
         $router->resource('fabrics', FabricController::class);
-        $router->resource('sizes', SizeController::class);
         $router->resource('colors', ColorController::class);
         $router->resource('heel-heights', HeelHeightController::class);
         $router->resource('seasons', SeasonController::class);
