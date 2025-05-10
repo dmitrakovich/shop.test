@@ -4,11 +4,13 @@ namespace App\Filament\Resources\Registries;
 
 use App\Filament\Resources\Registries\DefectiveProductResource\Pages;
 use App\Models\DefectiveProduct;
+use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class DefectiveProductResource extends Resource
 {
@@ -25,12 +27,34 @@ class DefectiveProductResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('product_id')
-                    ->relationship('product', 'id')
-                    ->required(),
+                    ->label('Товар')
+                    ->relationship('product', 'id', function (Builder $query) {
+                        $query->whereHas('sizes')->with('brand');
+                    })
+                    ->getOptionLabelFromRecordUsing(fn (Product $record) => $record->nameForAdmin())
+                    ->searchable()
+                    ->required()
+                    ->live(),
                 Forms\Components\Select::make('size_id')
-                    ->relationship('size', 'name')
+                    ->label('Размер')
+                    ->native(false)
+                    ->placeholder('Выберите размер')
+                    ->disabled(fn (Forms\Get $get) => !$get('product_id'))
+                    ->options(function (Forms\Get $get) {
+                        if (!($productId = (int)$get('product_id'))) {
+                            return [];
+                        }
+                        /** @var \App\Models\Product|null $product */
+                        if (!($product = Product::withTrashed()->find($productId))) {
+                            return [];
+                        }
+
+                        return $product->sizes->pluck('name', 'id')->toArray();
+                    })
                     ->required(),
-                Forms\Components\TextInput::make('reason')
+                Forms\Components\Textarea::make('reason')
+                    ->label('Причина')
+                    ->columnSpanFull()
                     ->maxLength(255),
             ]);
     }
@@ -40,28 +64,26 @@ class DefectiveProductResource extends Resource
         return $table
             ->emptyStateHeading('Бракованные товары отсутствуют')
             ->columns([
-                Tables\Columns\TextColumn::make('product.id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('product')
+                    ->label('Товар')
+                    ->formatStateUsing(fn (Product $state) => $state->nameForAdmin())
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->where('product_id', 'like', "%{$search}%");
+                    }),
                 Tables\Columns\TextColumn::make('size.name')
+                    ->label('Размер')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('reason')
-                    ->searchable(),
+                    ->label('Причина добавления'),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Дата добавления')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
-            ->filters([
-                //
-            ])
+            ->searchPlaceholder('Поиск по коду товара')
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -70,19 +92,10 @@ class DefectiveProductResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListDefectiveProducts::route('/'),
-            'create' => Pages\CreateDefectiveProduct::route('/create'),
-            'edit' => Pages\EditDefectiveProduct::route('/{record}/edit'),
         ];
     }
 }
