@@ -45,11 +45,9 @@ class DefectiveProductResource extends Resource
                             return [];
                         }
                         /** @var \App\Models\Product|null $product */
-                        if (!($product = Product::withTrashed()->find($productId))) {
-                            return [];
-                        }
+                        $product = Product::withTrashed()->find($productId);
 
-                        return $product->sizes->pluck('name', 'id')->toArray();
+                        return $product?->sizes->pluck('name', 'id')->toArray() ?? [];
                     })
                     ->required(),
                 Forms\Components\Textarea::make('reason')
