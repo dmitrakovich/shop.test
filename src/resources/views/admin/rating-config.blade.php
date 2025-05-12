@@ -168,8 +168,7 @@ if (request()->input(['act'])) {
 
             <div class="adminka_field">
                 <label>Текущий сезон (id)
-                    <input type="text" name="cur_season" id="cur_season"
-                        value="{{ $ratingConfig['cur_season'] }}">
+                    <input type="text" name="cur_season" id="cur_season" value="{{ $ratingConfig['cur_season'] }}">
                 </label>
             </div>
 
@@ -213,9 +212,8 @@ if (request()->input(['act'])) {
                                 <td>{{ $ratingConfig['parametr_name'][$key] }}</td>
                                 <td>{{ round($value['segment'] * 100, 2) }}%</td>
                                 <td>
-                                    <input class="ratingAlgoritmInp" type="text"
-                                        id="{{ $key }}ItogField" name="{{ $key }}"
-                                        onBlur="ratingSumm()" value="{{ $Koef[$key] }}">
+                                    <input class="ratingAlgoritmInp" type="text" id="{{ $key }}ItogField"
+                                        name="{{ $key }}" onBlur="ratingSumm()" value="{{ $Koef[$key] }}">
                                 </td>
                                 <td id="{{ $key }}Itog" summ="{{ $value['summ'] }}"
                                     class="ratingAlgoritmItog"></td>

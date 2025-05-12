@@ -8,8 +8,8 @@
         @if (isset($badgeCountdown) && $badgeCountdown)
             <div style="font-size: 20px;">
                 @if (!empty($diff->d))
-                    <span class="bg-white rounded text-center d-inline-block py-2 px-2"
-                        style="min-width: 40px;"><span class="days">{{ $diff->d }}</span>
+                    <span class="bg-white rounded text-center d-inline-block py-2 px-2" style="min-width: 40px;"><span
+                            class="days">{{ $diff->d }}</span>
                         д.</span>
                     <span class="text-white">&nbsp;</span>
                 @endif

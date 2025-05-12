@@ -1,10 +1,9 @@
 <?php /** @var \App\Models\Product $product */ ?>
 
-<div class="col-3 js-product-item product-item text-lg-left mb-3 text-center"
-    data-gtm-product='{!! $product->dataLayer->toJson() !!}'>
+<div class="col-3 js-product-item product-item text-lg-left mb-3 text-center" data-gtm-product='{!! $product->dataLayer->toJson() !!}'>
     <div class="image position-relative">
-        <a class="position-relative product-item-link js-productItemImages mb-3"
-            href="{{ $product->getUrl() }}" data-gtm-click="productClick">
+        <a class="position-relative product-item-link js-productItemImages mb-3" href="{{ $product->getUrl() }}"
+            data-gtm-click="productClick">
             <div class="product-item-link-container">
                 @include('partials.buttons.favorite', [
                     'favoriteProductId' => $product->id,

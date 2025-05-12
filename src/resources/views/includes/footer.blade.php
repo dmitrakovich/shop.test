@@ -37,8 +37,7 @@
                                     <nav>
                                         <ul>
                                             <li>
-                                                <a href="{{ route('info.terms') }}"
-                                                    title="Публичная оферта">
+                                                <a href="{{ route('info.terms') }}" title="Публичная оферта">
                                                     Публичная оферта
                                                 </a>
                                             </li>
@@ -49,8 +48,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{ route('info', 'certificate') }}"
-                                                    title="Сертификаты">
+                                                <a href="{{ route('info', 'certificate') }}" title="Сертификаты">
                                                     Сертификаты
                                                 </a>
                                             </li>
@@ -78,8 +76,8 @@
                             data-target="#js-footerPayments" aria-controls="js-footerPayments">
                             Способы оплаты</div>
                         <div class="inc-footer__info-text collapse" id="js-footerPayments">
-                            <img src="/images/footer/payments-all.png" class="img-fluid" alt="Оплата"
-                                decoding="async" loading="lazy">
+                            <img src="/images/footer/payments-all.png" class="img-fluid" alt="Оплата" decoding="async"
+                                loading="lazy">
                         </div>
                     </div>
                 </div>

@@ -22,8 +22,7 @@
                         @endif
                     @elseif (in_array($order->status->key, ['sent', 'fitting']) && $order->track->track_number)
                         <br>
-                        <a
-                            @if ($order->track->track_link) href="{{ $order->track->track_link }}" @endif>
+                        <a @if ($order->track->track_link) href="{{ $order->track->track_link }}" @endif>
                             Трек№ {{ $order->track->track_number }}
                         </a>
                     @endif

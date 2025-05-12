@@ -23,12 +23,10 @@
                         <a href="{{ config('contacts.viber.link') }}" data-gtm-user-event="callViber">
                             {{ config('contacts.viber.name') }}
                         </a> /
-                        <a href="{{ config('contacts.telegram.link') }}"
-                            data-gtm-user-event="callTelegram">
+                        <a href="{{ config('contacts.telegram.link') }}" data-gtm-user-event="callTelegram">
                             {{ config('contacts.telegram.name') }}
                         </a> /
-                        <a href="{{ config('contacts.whats-app.link') }}"
-                            data-gtm-user-event="callWhatsApp">
+                        <a href="{{ config('contacts.whats-app.link') }}" data-gtm-user-event="callWhatsApp">
                             {{ config('contacts.whats-app.name') }}
                         </a>
                     </p>
@@ -107,17 +105,14 @@
                                     </div>
                                 </li>
                                 <li class="d-block d-md-none">
-                                    <a data-toggle="collapse" href="#mainMenuCategoryCollapse"
-                                        role="button" aria-expanded="false"
-                                        aria-controls="mainMenuCategoryCollapse"
+                                    <a data-toggle="collapse" href="#mainMenuCategoryCollapse" role="button"
+                                        aria-expanded="false" aria-controls="mainMenuCategoryCollapse"
                                         class="inc-header__menu-nav_collapse-btn collapsed">
                                         Категории
                                     </a>
-                                    <div class="inc-header__menu-nav_collapse collapse"
-                                        id="mainMenuCategoryCollapse">
+                                    <div class="inc-header__menu-nav_collapse collapse" id="mainMenuCategoryCollapse">
                                         @foreach ($g_navCategories as $category)
-                                            <a
-                                                href="{{ route('shop', $category) }}">{{ $category->title }}</a>
+                                            <a href="{{ route('shop', $category) }}">{{ $category->title }}</a>
                                         @endforeach
                                     </div>
                                 </li>
@@ -135,8 +130,7 @@
                                     Условия
                                 </a>
                                 @if (!empty($g_navInfoPages))
-                                    <div class="inc-header__menu-nav_collapse collapse"
-                                        id="mainMenuInfoCollapse">
+                                    <div class="inc-header__menu-nav_collapse collapse" id="mainMenuInfoCollapse">
                                         <div class="inc-header__menu-info">
                                             @foreach ($g_navInfoPages as $item)
                                                 <a href="{{ route('info', $item['slug']) }}">
@@ -151,8 +145,7 @@
                             <li><a href="{{ route('feedbacks') }}">Отзывы</a></li>
                             <li class="d-none d-lg-block"><a href="{{ route('dashboard-card') }}">Карта
                                     клиента</a></li>
-                            <li class="inc-header__menu-nav_sale"><a
-                                    href="{{ route('shop', ['st-sale']) }}">Sale</a>
+                            <li class="inc-header__menu-nav_sale"><a href="{{ route('shop', ['st-sale']) }}">Sale</a>
                             </li>
                             <li class="inc-header__menu-nav_backdrop"></li>
                         </ul>
@@ -171,8 +164,7 @@
             </div>
             <form class="inc-header__search collapse" action="{{ route('shop') }}" method="get"
                 id="js-headerSearchInput">
-                <input type="text" name="search" value="{{ request()->get('search') }}"
-                    placeholder="Поиск">
+                <input type="text" name="search" value="{{ request()->get('search') }}" placeholder="Поиск">
                 <button type="submit" class="btn p-0">
                     @include('svg.search')
                 </button>
