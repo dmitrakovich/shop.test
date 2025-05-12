@@ -9,10 +9,10 @@
     <div class="col-12 col-lg-7">
         <div class="inc-instagram__posts">
             @foreach ($instagramPosts as $key => $post)
-                <a class="inc-instagram__posts-item" href="{{ $post['permalink'] }}"
-                    id="{{ $post['id'] }}" rel="noopener" target="_blank">
-                    <img src="{{ $post['thumbnail_url'] ?? $post['media_url'] }}"
-                        title="{{ $post['caption'] }}" class="img-fluid" />
+                <a class="inc-instagram__posts-item" href="{{ $post['permalink'] }}" id="{{ $post['id'] }}"
+                    rel="noopener" target="_blank">
+                    <img src="{{ $post['thumbnail_url'] ?? $post['media_url'] }}" title="{{ $post['caption'] }}"
+                        class="img-fluid" />
                 </a>
             @endforeach
         </div>

@@ -26,8 +26,7 @@
 
                         <form method="POST" action="{{ route('verification.send') }}">
                             @csrf
-                            <button type="submit"
-                                class="btn btn-link p-0 text-muted text-decoration-underline">
+                            <button type="submit" class="btn btn-link p-0 text-muted text-decoration-underline">
                                 Выслать повторно письмо для подтверждения
                             </button>
                         </form>

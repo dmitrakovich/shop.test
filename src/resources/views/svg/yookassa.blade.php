@@ -21,13 +21,13 @@
         <path d="M13.6229 4.8418V29.5886H7.66287L0 4.8418H13.6229Z" fill="url(#paint1_linear_203_10)" />
     </g>
     <defs>
-        <linearGradient id="paint0_linear_203_10" x1="30.5456" y1="0" x2="30.5456"
-            y2="34" gradientUnits="userSpaceOnUse">
+        <linearGradient id="paint0_linear_203_10" x1="30.5456" y1="0" x2="30.5456" y2="34"
+            gradientUnits="userSpaceOnUse">
             <stop stop-color="#0160D1" />
             <stop offset="1" stop-color="#00479C" />
         </linearGradient>
-        <linearGradient id="paint1_linear_203_10" x1="6.81146" y1="4.8418" x2="6.81146"
-            y2="29.5886" gradientUnits="userSpaceOnUse">
+        <linearGradient id="paint1_linear_203_10" x1="6.81146" y1="4.8418" x2="6.81146" y2="29.5886"
+            gradientUnits="userSpaceOnUse">
             <stop stop-color="#0160D1" />
             <stop offset="1" stop-color="#00479C" />
         </linearGradient>

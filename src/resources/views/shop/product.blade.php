@@ -49,8 +49,7 @@
                                         </div>
                                     @else
                                         <div class="swiper-slide">
-                                            <a href="{{ $image->getUrl('full') }}"
-                                                data-fancybox="images">
+                                            <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
                                                 <img src="{{ $image->getUrl('normal') }}"
                                                     alt="{{ $product->shortName() }}" class="img-fluid"
                                                     onerror="imageOnError(this)">
@@ -85,8 +84,7 @@
                     </div>
                 </div>
 
-                <form class="col-12 col-xl-10" id="product-info" action=" {{ route('cart-add') }}"
-                    method="post">
+                <form class="col-12 col-xl-10" id="product-info" action=" {{ route('cart-add') }}" method="post">
                     <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                     <div class="row mt-4">
                         {{-- blade-formatter-disable-next-line --}}
@@ -107,8 +105,7 @@
                                     <div class="price price-new font-weight-bold col-auto">
                                         <b>-{{ $product->getSalePercentage() }}%</b>
                                     </div>
-                                    <button type="button" class="btn sale-help-trigger px-1"
-                                        data-toggle="dropdown">
+                                    <button type="button" class="btn sale-help-trigger px-1" data-toggle="dropdown">
                                         <div class="tooltip-trigger">?</div>
                                     </button>
                                     <div class="dropdown-menu font-size-12 sale-help-block px-3 py-2">
@@ -173,8 +170,7 @@
                                                 <span class="checkmark">{{ $size->name }}</span>
                                             </label>
                                             <input type="checkbox" id="input-size-{{ $size->id }}"
-                                                class="visually-hidden"
-                                                name="sizes[{{ $size->id }}]" />
+                                                class="visually-hidden" name="sizes[{{ $size->id }}]" />
                                         </li>
                                     @endforeach
                                 </ul>
@@ -183,8 +179,7 @@
 
                         <div class="row justify-content-center">
                             <div class="col-12">
-                                <button type="button"
-                                    class="btn btn-dark btn-lg btn-block js-add-to-cart py-3">
+                                <button type="button" class="btn btn-dark btn-lg btn-block js-add-to-cart py-3">
                                     В КОРЗИНУ
                                 </button>
                                 <button type="button"
@@ -234,9 +229,8 @@
                 </form>
                 @if ($product->availableSizes->isNotEmpty())
                     <div class="p-product__stock col-12 mt-4">
-                        <h4 class="p-product__stock-title" data-toggle="collapse"
-                            href="#productStockInfo" role="button" aria-expanded="false"
-                            aria-controls="productStockInfo">
+                        <h4 class="p-product__stock-title" data-toggle="collapse" href="#productStockInfo"
+                            role="button" aria-expanded="false" aria-controls="productStockInfo">
                             Наличие в магазинах
                             <span class="p-product__stock-title_icon"></span>
                         </h4>
@@ -388,23 +382,20 @@
     {{-- modals --}}
     <div style="display: none;" id="buy-one-click" class="row">
 
-        <form action="{{ route('orders.store') }}" method="post" class="col-12 text-center"
-            id="oneclick-form">
+        <form action="{{ route('orders.store') }}" method="post" class="col-12 text-center" id="oneclick-form">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
             <h3 class="mx-5 mb-4">Купить в один клик</h3>
             <div class="form-group">
                 <input type="text" class="form-control" name="first_name" placeholder="Имя"
-                    value="{{ optional(auth()->user())->first_name }}" autocomplete="given-name"
-                    required>
+                    value="{{ optional(auth()->user())->first_name }}" autocomplete="given-name" required>
             </div>
             <div class="form-group">
                 @include('partials.inputs.phone')
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" name="user_addr"
-                    placeholder="Населенный пункт" autocomplete="address" required
-                    value="{{ optional(auth()->user())->getFirstFullAddress() }}">
+                <input type="text" class="form-control" name="user_addr" placeholder="Населенный пункт"
+                    autocomplete="address" required value="{{ optional(auth()->user())->getFirstFullAddress() }}">
             </div>
             <button type="button" class="btn btn-dark my-3 px-5" id="buy-one-click-submit">
                 Купить

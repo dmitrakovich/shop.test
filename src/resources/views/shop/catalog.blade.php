@@ -48,8 +48,7 @@
                     Сортировка:
                 </label>
                 <div class="m-0 col-md-4 col-lg-3 col-xl-2">
-                    <select onchange="window.location.href = this.value" id="select-sorting"
-                        class="form-control">
+                    <select onchange="window.location.href = this.value" id="select-sorting" class="form-control">
                         @foreach ($sortingList as $key => $value)
                             <option value="{{ URL::current() . "?sort=$key" }}" @selected($sort == $key)>
                                 {{ $value }}
@@ -85,8 +84,7 @@
                             style="min-width: 134px;">
                             Назад
                         </a>
-                        <a href="{{ route('shop') }}" class="btn btn-dark mx-2 mb-2 py-1 px-3"
-                            style="min-width: 134px;">
+                        <a href="{{ route('shop') }}" class="btn btn-dark mx-2 mb-2 py-1 px-3" style="min-width: 134px;">
                             В каталог
                         </a>
                     </div>
@@ -103,8 +101,7 @@
     </div>
 
     <button type="button" class="btn btn-secondary scroll-top-btn" aria-label="Back to top">
-        <svg width="21" height="12" viewBox="0 0 21 12" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
+        <svg width="21" height="12" viewBox="0 0 21 12" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M17.4065 11.7137L10.2637 4.57087L3.12081 11.7137L0.263672 10.2852L10.2637 0.285156L20.2637 10.2852L17.4065 11.7137Z"
                 fill="white" />

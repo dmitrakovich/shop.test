@@ -1,6 +1,5 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-    x="0px" y="0px" viewBox="0 0 38.646 38.646" class="{{ $class ?? '' }}"
-    style="{{ $style ?? '' }}" xml:space="preserve">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+    y="0px" viewBox="0 0 38.646 38.646" class="{{ $class ?? '' }}" style="{{ $style ?? '' }}" xml:space="preserve">
     <g>
         <path
             d="M7.714,0.21C7.437,0.071,6.882,0,6.573,0C3.39,0,0.451,2.586,0.451,5.646v27.352c0,3.062,2.939,5.648,6.122,5.648

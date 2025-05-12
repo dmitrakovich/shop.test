@@ -66,8 +66,7 @@
                             </a>
                         </p>
                     </div>
-                    <div style="display: none;" id="js-shopPhotos-{{ $shop->id }}"
-                        style="max-width: 400px">
+                    <div style="display: none;" id="js-shopPhotos-{{ $shop->id }}" style="max-width: 400px">
                         @foreach ($shop->photos as $photo)
                             <img src="{{ $photo }}" alt="{{ $shop->name }}" class="img-fluid mb-2">
                         @endforeach
