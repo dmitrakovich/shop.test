@@ -8,6 +8,7 @@ export const FAVORITE = {
 export const POPUP = {
   OFFER: {
     REGISTER: '/popup/offer/register',
+    NEW_SITE: '/popup/new-site',
   }
 }
 
