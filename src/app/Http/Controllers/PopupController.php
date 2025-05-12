@@ -13,4 +13,12 @@ class PopupController extends Controller
     {
         return view('popups.offers.register');
     }
+
+    /**
+     * Popup new site
+     */
+    public function newSite(): View
+    {
+        return view('popups.new-site');
+    }
 }

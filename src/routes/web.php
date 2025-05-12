@@ -93,6 +93,7 @@ Route::prefix('popup')->controller(PopupController::class)->middleware(OnlyAjax:
     Route::prefix('offer')->group(function () {
         Route::get('register', 'offerToRegister');
     });
+    Route::get('new-site', 'newSite');
 });
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
