@@ -1,7 +1,7 @@
 @php
-use App\Facades\Device;
+    use App\Facades\Device;
 
-$deviceId = Device::current()?->web_id;
+    $deviceId = Device::current()?->web_id;
 @endphp
 
 <div class="col-12 offer-to-register-popup pt-0 pb-3" style="width: 640px; max-width: 90%;">
@@ -16,9 +16,11 @@ $deviceId = Device::current()?->web_id;
         <a href="https://new.barocco.by?old-device-id={{ $deviceId }}" class="d-block col-12 mb-3">
             <img src="{{ asset('/images/offers/new-site.jpg') }}" alt="New site" class="img-fluid">
         </a>
-        <div class="col-12" style="font-size: 25px; font-weight: 300; display: flex; justify-content: center; margin-bottom: 50px;">
+        <div class="col-12"
+            style="font-size: 25px; font-weight: 300; display: flex; justify-content: center; margin-bottom: 50px;">
             <div style="max-width: 380px; text-align: center; line-height: 1.5;">
-                Переходите на наш <a href="https://new.barocco.by?old-device-id={{ $deviceId }}" style="text-decoration: underline;"> новый сайт </a>
+                Переходите на наш <a href="https://new.barocco.by?old-device-id={{ $deviceId }}"
+                    style="text-decoration: underline;"> новый сайт </a>
                 и делайте покупки ещё удобнее
             </div>
         </div>
