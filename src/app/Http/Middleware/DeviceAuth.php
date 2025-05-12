@@ -19,6 +19,17 @@ class DeviceAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // ! hotfix start
+        // todo: remove after migrate to new site
+        if ($oldDeviceId = $request->header('old-device-id')) {
+            if ($device = UserDevice::query()->first(['web_id' => $oldDeviceId])) {
+                DeviceFacade::setDevice($device);
+
+                return $next($request);
+            }
+        }
+        // ! hotfix end
+
         $deviceId = $request->header(self::DEVICE_ID_HEADER_KEY);
 
         abort_unless($deviceId, Response::HTTP_UNAUTHORIZED, 'Device ID is missing');
