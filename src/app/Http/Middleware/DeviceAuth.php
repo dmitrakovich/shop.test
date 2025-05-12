@@ -22,7 +22,7 @@ class DeviceAuth
         // ! hotfix start
         // todo: remove after migrate to new site
         if ($oldDeviceId = $request->header('old-device-id')) {
-            if ($device = UserDevice::query()->first(['web_id' => $oldDeviceId])) {
+            if ($device = UserDevice::query()->firstWhere('web_id', $oldDeviceId)) {
                 DeviceFacade::setDevice($device);
 
                 return $next($request);
