@@ -1,4 +1,4 @@
-name: Fix code styling
+name: Check code styling
 
 on:
   push:
