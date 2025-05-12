@@ -146,8 +146,8 @@
 
 <body>
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PPN2WH" height="0"
-            width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PPN2WH" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
 
@@ -160,11 +160,13 @@
 
         <div class="box">
             <a class="button button_tg" href="{{ route('channel.subscribe', ['telegram', $eventId]) }}"
-                title="канал Telegram" onClick="leadComplete('telegram_subscribe');"><img
-                    src="{{ url('/uploads/channel/tg_white.png') }}" alt="канал Telegram">Telegram</a>
-            <a class="button button_vb" href="{{ route('channel.subscribe', ['viber', $eventId]) }}"
-                title="канал Viber" onClick="leadComplete('viber_subscribe');"><img
-                    src="{{ url('/uploads/channel/vb_white.png') }}" alt="канал Viber">Viber</a>
+                title="канал Telegram" onClick="leadComplete('telegram_subscribe');">
+                <img src="{{ url('/uploads/channel/tg_white.png') }}" alt="канал Telegram">Telegram
+            </a>
+            <a class="button button_vb" href="{{ route('channel.subscribe', ['viber', $eventId]) }}" title="канал Viber"
+                onClick="leadComplete('viber_subscribe');">
+                <img src="{{ url('/uploads/channel/vb_white.png') }}" alt="канал Viber">Viber
+            </a>
         </div>
     </div>
 </body>

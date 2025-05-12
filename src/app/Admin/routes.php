@@ -147,7 +147,6 @@ Route::group([
     $router->group(['prefix' => 'debug', 'namespace' => 'Debug'], function (Router $router) {
         $router->any('clear-cache', CacheController::class);
     });
-    Route::view('/test', 'test');
     Route::get('debug', [DebugController::class, 'index']);
     Route::get('phpinfo', [DebugController::class, 'phpinfo']);
     Route::get('debug-sentry', function (): never {
