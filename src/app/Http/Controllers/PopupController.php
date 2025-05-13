@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Device;
 use Illuminate\Contracts\View\View;
 
 class PopupController extends Controller
@@ -19,6 +20,8 @@ class PopupController extends Controller
      */
     public function newSite(): View
     {
-        return view('popups.new-site');
+        return view('popups.new-site', [
+            'deviceId' => Device::current()->web_id,
+        ]);
     }
 }

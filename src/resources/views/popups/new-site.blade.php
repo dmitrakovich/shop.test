@@ -1,9 +1,3 @@
-@php
-    use App\Facades\Device;
-
-    $deviceId = Device::current()?->web_id;
-@endphp
-
 <div class="col-12 offer-to-register-popup pt-0 pb-3" style="width: 640px; max-width: 90%;">
     <button data-fancybox-close type="button" title="Close"
         class="fancybox-button fancybox-close-small bg-danger rounded-circle m-2">
