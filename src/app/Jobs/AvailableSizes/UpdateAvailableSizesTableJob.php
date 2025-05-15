@@ -6,8 +6,10 @@ use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Config;
+use App\Models\DefectiveProduct;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
@@ -82,6 +84,9 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
 
         $count = $this->updateAvailableSizesFromOrders($availableSizes);
         $this->log("Обновлено $count доступных размеров товаров на основе заказов");
+
+        $count = $this->updateAvailableSizesByDefectiveProducts($availableSizes);
+        $this->log("Убрано $count доступных размеров товаров на основе реестра брака");
 
         $this->replaceNegativeSizesWithZero($availableSizes);
         $count = $this->removeEmptySizes($availableSizes);
@@ -374,6 +379,32 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         }
 
         return $sizesCount;
+    }
+
+    /**
+     * Update available sizes of products based on defective products.
+     */
+    protected function updateAvailableSizesByDefectiveProducts(array &$availableSizes): int
+    {
+        $count = 0;
+        /** @var Collection<int, DefectiveProduct> $defectiveProducts */
+        $defectiveProducts = DefectiveProduct::query()
+            ->get(['product_id', 'size_id', 'stock_id'])
+            ->keyBy(fn (DefectiveProduct $product) => "{$product->stock_id}_{$product->product_id}");
+
+        foreach ($availableSizes as &$stock) {
+            if (!$productId = $stock['product_id']) {
+                continue;
+            }
+            if (!$defectiveProduct = $defectiveProducts["{$stock['stock_id']}_{$productId}"] ?? null) {
+                continue;
+            }
+            // todo: не учитывается кол-во, при необходимости добавить
+            $stock[AvailableSizes::convertSizeIdToField($defectiveProduct->size_id)] = 0;
+            $count++;
+        }
+
+        return $count;
     }
 
     /**

@@ -31,6 +31,14 @@ class UpdateAvailableSizesFullTableJob extends UpdateAvailableSizesTableJob
     }
 
     /**
+     * Update available sizes of products based on defective products.
+     */
+    protected function updateAvailableSizesByDefectiveProducts(array &$availableSizes): int
+    {
+        return 0;
+    }
+
+    /**
      * Write message in logs
      */
     protected function log(string $message, string $level = '', string $channel = ''): void
