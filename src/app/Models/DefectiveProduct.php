@@ -35,6 +35,8 @@ class DefectiveProduct extends Model
 
     /**
      * Get the product associated with the defective product.
+     *
+     * @return BelongsTo<Stock, $this>
      */
     public function product(): BelongsTo
     {
@@ -43,6 +45,8 @@ class DefectiveProduct extends Model
 
     /**
      * Get the product size associated with the defective product.
+     *
+     * @return BelongsTo<Stock, $this>
      */
     public function size(): BelongsTo
     {
@@ -51,6 +55,8 @@ class DefectiveProduct extends Model
 
     /**
      * Get the stock associated with the defective product.
+     *
+     * @return BelongsTo<Stock, $this>
      */
     public function stock(): BelongsTo
     {
