@@ -80,7 +80,7 @@ class DefectiveProductResource extends Resource
                             ->get();
 
                         return $availableSizes->mapWithKeys(
-                            fn (AvailableSizes $availableSizes, int $key) => [$key => $availableSizes->stock->internal_name]
+                            fn (AvailableSizes $availableSizes) => [$availableSizes->stock_id => $availableSizes->stock->internal_name]
                         );
                     })
                     ->required(),
