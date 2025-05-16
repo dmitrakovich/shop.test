@@ -387,7 +387,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     protected function updateAvailableSizesByDefectiveProducts(array &$availableSizes): int
     {
         $count = 0;
-        /** @var Collection<int, DefectiveProduct> $defectiveProducts */
+        /** @var \Illuminate\Support\Collection<string, Collection<int, DefectiveProduct>> $defectiveProducts */
         $defectiveProducts = DefectiveProduct::query()
             ->get(['id', 'product_id', 'size_id', 'stock_id'])
             ->groupBy(fn (DefectiveProduct $product) => "{$product->stock_id}_{$product->product_id}")
