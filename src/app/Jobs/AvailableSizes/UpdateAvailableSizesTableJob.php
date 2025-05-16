@@ -389,20 +389,40 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $count = 0;
         /** @var Collection<int, DefectiveProduct> $defectiveProducts */
         $defectiveProducts = DefectiveProduct::query()
-            ->get(['product_id', 'size_id', 'stock_id'])
-            ->keyBy(fn (DefectiveProduct $product) => "{$product->stock_id}_{$product->product_id}");
+            ->get(['id', 'product_id', 'size_id', 'stock_id'])
+            ->groupBy(fn (DefectiveProduct $product) => "{$product->stock_id}_{$product->product_id}")
+            ->keyBy(function (Collection $products): string {
+                return "{$products->first()->stock_id}_{$products->first()->product_id}";
+            });
+        /** @var Collection<int, DefectiveProduct> $soldDefectiveProducts */
+        $soldDefectiveProducts = new Collection();
 
         foreach ($availableSizes as &$stock) {
             if (!$productId = $stock['product_id']) {
                 continue;
             }
-            if (!$defectiveProduct = $defectiveProducts["{$stock['stock_id']}_{$productId}"] ?? null) {
+            $defectiveProductSizes = $defectiveProducts->pull("{$stock['stock_id']}_{$productId}");
+            if (!$defectiveProductSizes) {
                 continue;
             }
-            // todo: не учитывается кол-во, при необходимости добавить
-            $stock[AvailableSizes::convertSizeIdToField($defectiveProduct->size_id)] = 0;
-            $count++;
+            foreach ($defectiveProductSizes as $defectiveProduct) {
+                $sizeField = AvailableSizes::convertSizeIdToField($defectiveProduct->size_id);
+                // todo: не учитывается кол-во, при необходимости добавить
+                if ($stock[$sizeField] > 0) {
+                    $stock[$sizeField] = 0;
+                    $count++;
+                } else {
+                    $soldDefectiveProducts->push($defectiveProduct);
+                }
+            }
         }
+
+        $soldDefectiveProducts->each(
+            fn (DefectiveProduct $defectiveProduct) => $defectiveProduct->delete()
+        );
+        $defectiveProducts->flatten()->each(
+            fn (DefectiveProduct $defectiveProduct) => $defectiveProduct->delete()
+        );
 
         return $count;
     }
