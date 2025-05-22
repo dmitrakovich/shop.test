@@ -32,6 +32,7 @@ class CountryOfOriginController extends AdminController
 
         $grid->column('id', 'Id');
         $grid->column('name', 'Название');
+        $grid->column('address', 'Адрес');
         $grid->column('slug', 'Slug');
         $grid->column('seo', 'Seo');
         $grid->column('created_at', 'Дата создания')->display(fn () => date('d.m.Y H:i:s', strtotime($this->created_at)));
@@ -57,6 +58,7 @@ class CountryOfOriginController extends AdminController
 
         $show->field('id', 'Id');
         $show->field('name', 'Название');
+        $show->field('address', 'Адрес');
         $show->field('slug', 'Slug');
         $show->field('seo', 'Seo');
         $show->field('created_at', 'Дата создания');
@@ -75,6 +77,7 @@ class CountryOfOriginController extends AdminController
         $form = new Form(new CountryOfOrigin());
 
         $form->text('name', 'Название');
+        $form->text('address', 'Адрес');
         $form->text('slug', 'Slug');
         $form->textarea('seo', 'Seo');
 

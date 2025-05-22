@@ -20,6 +20,7 @@ class CountryOfOriginResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'address' => $this->address,
             'slug' => $this->slug,
             'seo' => $this->seo,
         ];
