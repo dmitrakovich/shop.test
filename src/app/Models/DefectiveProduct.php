@@ -27,22 +27,26 @@ class DefectiveProduct extends Model
     use SoftDeletes;
 
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if all mass assignment is enabled.
      *
-     * @var array<string>|bool
+     * @var bool
      */
-    protected $guarded = ['id'];
+    protected static $unguarded = true;
 
     /**
      * Get the product associated with the defective product.
+     *
+     * @return BelongsTo<Product, $this>
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class)->withTrashed();
+        return $this->belongsTo(Product::class);
     }
 
     /**
      * Get the product size associated with the defective product.
+     *
+     * @return BelongsTo<Size, $this>
      */
     public function size(): BelongsTo
     {
@@ -51,6 +55,8 @@ class DefectiveProduct extends Model
 
     /**
      * Get the stock associated with the defective product.
+     *
+     * @return BelongsTo<Stock, $this>
      */
     public function stock(): BelongsTo
     {

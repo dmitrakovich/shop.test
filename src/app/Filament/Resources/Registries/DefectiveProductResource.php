@@ -3,14 +3,18 @@
 namespace App\Filament\Resources\Registries;
 
 use App\Filament\Resources\Registries\DefectiveProductResource\Pages;
+use App\Models\AvailableSizes;
 use App\Models\DefectiveProduct;
 use App\Models\Product;
+use App\Models\Size;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class DefectiveProductResource extends Resource
 {
@@ -29,12 +33,16 @@ class DefectiveProductResource extends Resource
                 Forms\Components\Select::make('product_id')
                     ->label('Товар')
                     ->relationship('product', 'id', function (Builder $query) {
-                        $query->whereHas('sizes')->with('brand');
+                        $query->whereHas('availableSizes')->with('brand');
                     })
                     ->getOptionLabelFromRecordUsing(fn (Product $record) => $record->nameForAdmin())
                     ->searchable()
                     ->required()
-                    ->live(),
+                    ->live()
+                    ->afterStateUpdated(function (Forms\Set $set) {
+                        $set('size_id', null);
+                        $set('stock_id', null);
+                    }),
                 Forms\Components\Select::make('size_id')
                     ->label('Размер')
                     ->native(false)
@@ -44,10 +52,36 @@ class DefectiveProductResource extends Resource
                         if (!($productId = (int)$get('product_id'))) {
                             return [];
                         }
-                        /** @var \App\Models\Product|null $product */
-                        $product = Product::withTrashed()->find($productId);
 
-                        return $product?->sizes->pluck('name', 'id')->toArray() ?? [];
+                        return DB::table('product_attributes')
+                            ->join('sizes', 'product_attributes.attribute_id', '=', 'sizes.id')
+                            ->where('product_attributes.product_id', $productId)
+                            ->where('product_attributes.attribute_type', (new Size())->getMorphClass())
+                            ->pluck('sizes.name', 'sizes.id')
+                            ->toArray();
+                    })
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(fn (Forms\Set $set) => $set('stock_id', null)),
+                Forms\Components\Select::make('stock_id')
+                    ->label('Склад')
+                    ->native(false)
+                    ->columnSpanFull()
+                    ->placeholder('Выберите склад')
+                    ->disabled(fn (Forms\Get $get) => !$get('size_id'))
+                    ->options(function (Forms\Get $get) {
+                        if (!($productId = (int)$get('product_id')) || !($sizeId = (int)$get('size_id'))) {
+                            return [];
+                        }
+                        /** @var Collection<int, AvailableSizes> $availableSizes */
+                        $availableSizes = AvailableSizes::query()
+                            ->where('product_id', $productId)
+                            ->where(AvailableSizes::convertSizeIdToField($sizeId), '>', 0)
+                            ->get();
+
+                        return $availableSizes->mapWithKeys(
+                            fn (AvailableSizes $availableSizes) => [$availableSizes->stock_id => $availableSizes->stock->internal_name]
+                        );
                     })
                     ->required(),
                 Forms\Components\Textarea::make('reason')
@@ -72,6 +106,9 @@ class DefectiveProductResource extends Resource
                     ->label('Размер')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('stock.internal_name')
+                    ->label('Склад')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('reason')
                     ->label('Причина добавления'),
                 Tables\Columns\TextColumn::make('created_at')
@@ -79,7 +116,9 @@ class DefectiveProductResource extends Resource
                     ->dateTime()
                     ->sortable(),
             ])
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['product.brand']))
             ->searchPlaceholder('Поиск по коду товара')
+            ->defaultSort('id', 'desc')
             ->actions([
                 Tables\Actions\DeleteAction::make(),
             ])

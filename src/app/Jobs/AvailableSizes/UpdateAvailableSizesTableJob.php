@@ -6,8 +6,10 @@ use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Config;
+use App\Models\DefectiveProduct;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
@@ -82,6 +84,9 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
 
         $count = $this->updateAvailableSizesFromOrders($availableSizes);
         $this->log("Обновлено $count доступных размеров товаров на основе заказов");
+
+        $count = $this->updateAvailableSizesByDefectiveProducts($availableSizes);
+        $this->log("Убрано $count доступных размеров товаров на основе реестра брака");
 
         $this->replaceNegativeSizesWithZero($availableSizes);
         $count = $this->removeEmptySizes($availableSizes);
@@ -374,6 +379,52 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         }
 
         return $sizesCount;
+    }
+
+    /**
+     * Update available sizes of products based on defective products.
+     */
+    protected function updateAvailableSizesByDefectiveProducts(array &$availableSizes): int
+    {
+        $count = 0;
+        /** @var \Illuminate\Support\Collection<string, Collection<int, DefectiveProduct>> $defectiveProducts */
+        $defectiveProducts = DefectiveProduct::query()
+            ->get(['id', 'product_id', 'size_id', 'stock_id'])
+            ->groupBy(fn (DefectiveProduct $product) => "{$product->stock_id}_{$product->product_id}")
+            ->keyBy(function (Collection $products): string {
+                return "{$products->first()->stock_id}_{$products->first()->product_id}";
+            });
+        /** @var Collection<int, DefectiveProduct> $soldDefectiveProducts */
+        $soldDefectiveProducts = new Collection();
+
+        foreach ($availableSizes as &$stock) {
+            if (!$productId = $stock['product_id']) {
+                continue;
+            }
+            $defectiveProductSizes = $defectiveProducts->pull("{$stock['stock_id']}_{$productId}");
+            if (!$defectiveProductSizes) {
+                continue;
+            }
+            foreach ($defectiveProductSizes as $defectiveProduct) {
+                $sizeField = AvailableSizes::convertSizeIdToField($defectiveProduct->size_id);
+                // todo: не учитывается кол-во, при необходимости добавить
+                if ($stock[$sizeField] > 0) {
+                    $stock[$sizeField] = 0;
+                    $count++;
+                } else {
+                    $soldDefectiveProducts->push($defectiveProduct);
+                }
+            }
+        }
+
+        $soldDefectiveProducts->each(
+            fn (DefectiveProduct $defectiveProduct) => $defectiveProduct->delete()
+        );
+        $defectiveProducts->flatten()->each(
+            fn (DefectiveProduct $defectiveProduct) => $defectiveProduct->delete()
+        );
+
+        return $count;
     }
 
     /**
