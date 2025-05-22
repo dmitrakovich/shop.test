@@ -333,12 +333,22 @@
                     Высота каблука - {{ $product->heel_txt }} <br>
                 @endif
 
+                @if (!empty($product->product_features))
+                Ключевая особенность - {{ $product->product_features }} <br>
+                @endif
+
                 Гарантийный срок - 30 дней <br>
 
                 @if (!empty($product->countryOfOrigin->name))
-                    Страна производитель - {{ $product->countryOfOrigin->name }} <br>
+                    @if ($product->countryOfOrigin->name == 'Китай')
+                        Страна производитель - {{ $product->countryOfOrigin->name }} (Chaoyang District Industrial Park, Gaomi City, Shandong Province, China) <br>
+                    @elseif ($product->countryOfOrigin->name == 'Турция')
+                        Страна производитель - {{ $product->countryOfOrigin->name }} (RECEP GULDUR, FETHIBEY CD. No:29 LALELI EMININU/ISTANBUL. Turkey)<br>
+                    @else
+                        Страна производитель - {{ $product->countryOfOrigin->name }} <br>
+                    @endif
                 @endif
-
+                Импортер в РБ - ООО "БароккоСтайл", г.Брест, ул.Буденного, 17-1<br>
                 Потребительские свойства - товар для повседневного использования <br>
             </div>
         </div>
