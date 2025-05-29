@@ -128,7 +128,7 @@ class Product extends Model implements HasMedia
      */
     public function category(): Relations\BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class)->withTrashed();
     }
 
     /**

@@ -334,13 +334,14 @@
                 @endif
 
                 @if (!empty($product->product_features))
-                Ключевая особенность - {{ $product->product_features }} <br>
+                    Ключевая особенность - {{ $product->product_features }} <br>
                 @endif
 
                 Гарантийный срок - 30 дней <br>
 
                 @if (!empty($product->countryOfOrigin->name))
-                    Производитель - {{ $product->countryOfOrigin->address }} ({{ $product->countryOfOrigin->name }})<br>
+                    Производитель - {{ $product->countryOfOrigin->address }}
+                    ({{ $product->countryOfOrigin->name }})<br>
                 @endif
                 Импортер в РБ - ООО "БароккоСтайл", г.Брест, ул.Буденного, 17-1<br>
                 Потребительские свойства - товар для повседневного использования <br>
