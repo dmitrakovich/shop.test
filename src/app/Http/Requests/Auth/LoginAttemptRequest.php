@@ -3,10 +3,10 @@
 namespace App\Http\Requests\Auth;
 
 use App\Http\Requests\Traits\HasRateLimiting;
-use App\Models\User\User;
 use App\Rules\CaptchaScore;
 use App\Rules\Otp;
 use App\Rules\PhoneNumber;
+use App\Services\UserService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
 
@@ -41,7 +41,7 @@ class LoginAttemptRequest extends FormRequest
      */
     protected function passedValidation(): void
     {
-        $user = User::query()->where('phone', $this->input('phone'))->firstOrFail();
+        $user = app(UserService::class)->findOrFailByPhone($this->input('phone'));
 
         if (!$user->validateOtp($this->input('otp'))) {
             throw ValidationException::withMessages(['otp' => Otp::ERROR_MSG]);

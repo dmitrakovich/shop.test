@@ -56,7 +56,7 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
         /** @var AuthService $authService */
         $authService = app(AuthService::class);
-        $user = $authService->getOrCreateUser($this->input('phone'));
+        $user = $authService->findOrCreateUser($this->input('phone'));
 
         if (!$this->has('otp')) {
             $this->ensureIsSmsNotRateLimited();

@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Data\Order\OrderData;
 use App\Events\Analytics\Registered;
 use App\Models\User\User;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 
 class UserService
 {
@@ -12,6 +14,24 @@ class UserService
      * AuthService constructor.
      */
     public function __construct(private User $user) {}
+
+    public function findOrCreateByPhone(string $phone): User
+    {
+        $phone = $this->unifyPhoneNumber($phone);
+
+        return $this->user->getByPhone($phone) ?? $this->user->query()->create([
+            'phone' => $phone,
+        ]);
+    }
+
+    /**
+     * @throws \libphonenumber\NumberParseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function findOrFailByPhone(string $phone): User
+    {
+        return $this->user->getByPhone($this->unifyPhoneNumber($phone));
+    }
 
     /**
      * Find user or create new by phone number
@@ -43,5 +63,18 @@ class UserService
         }
 
         return $user;
+    }
+
+    /**
+     * @todo move to helpers
+     */
+    private function unifyPhoneNumber(string $phone): string
+    {
+        $phoneUtil = PhoneNumberUtil::getInstance();
+
+        return $phoneUtil->format(
+            $phoneUtil->parse($phone, 'BY'),
+            PhoneNumberFormat::E164
+        );
     }
 }

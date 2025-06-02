@@ -19,7 +19,7 @@ class AuthController extends Controller
      */
     public function sendOtp(SendOtpRequest $request): void
     {
-        $user = $this->authService->getOrCreateUser($request->input('phone'));
+        $user = $this->authService->findOrCreateUser($request->input('phone'));
 
         $this->authService->generateNewOTP($user);
     }

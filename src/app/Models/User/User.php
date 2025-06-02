@@ -25,6 +25,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\PersonalAccessToken;
 use libphonenumber\PhoneNumberUtil;
 
 /**
@@ -66,7 +67,13 @@ use libphonenumber\PhoneNumberUtil;
  */
 class User extends Authenticatable implements AuthorInterface, ClientInterface, MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    /** @use HasApiTokens<PersonalAccessToken> */
+    use HasApiTokens;
+
+    /** @use HasFactory<UserFactory> */
+    use HasFactory;
+
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -123,7 +130,7 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
      */
     public static function getByPhone(string $phone): ?self
     {
-        return self::query()->where('phone', $phone)->first();
+        return self::query()->firstWhere('phone', $phone);
     }
 
     /**

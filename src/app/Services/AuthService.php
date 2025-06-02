@@ -19,11 +19,9 @@ class AuthService
     /**
      * Find user or create new by phone number
      */
-    public function getOrCreateUser(string $phone): User
+    public function findOrCreateUser(string $phone): User
     {
-        $user = $this->user->getByPhone($phone) ?? $this->user->query()->create([
-            'phone' => $phone,
-        ]);
+        $user = app(UserService::class)->findOrCreateByPhone($phone);
 
         if ($user->wasRecentlyCreated) {
             event(new Registered($user));
