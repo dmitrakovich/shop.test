@@ -7,14 +7,14 @@
                         <div class="swiper js-productSliderThumb">
                             <div class="swiper-wrapper">
                                 @foreach ($product->getMedia() as $key => $image)
-                                    <div class="swiper-slide">
-                                        <img src="{{ $image->getUrl('thumb') }}"
-                                            alt="{{ $product->shortName() }} миниатюра {{ ++$key }}"
-                                            class="img-fluid" onerror="imageOnError(this)">
-                                        @if ($image->hasCustomProperty('video'))
-                                            <span class="p-product__slider-youtubeIcon"></span>
-                                        @endif
-                                    </div>
+                                <div class="swiper-slide">
+                                    <img src="{{ $image->getUrl('thumb') }}"
+                                        alt="{{ $product->shortName() }} миниатюра {{ ++$key }}"
+                                        class="img-fluid" onerror="imageOnError(this)">
+                                    @if ($image->hasCustomProperty('video'))
+                                    <span class="p-product__slider-youtubeIcon"></span>
+                                    @endif
+                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -23,42 +23,42 @@
                     </div>
                     <div class="p-product__slider-main">
                         @include('partials.buttons.favorite', [
-                            'favoriteProductId' => $product->id,
-                            'favoriteState' => isset($product->favorite),
+                        'favoriteProductId' => $product->id,
+                        'favoriteState' => isset($product->favorite),
                         ])
 
                         <div class="product-labels">
                             @if ($product->isNew())
-                                <div class="product-label product-label-new">
-                                    new
-                                </div>
+                            <div class="product-label product-label-new">
+                                new
+                            </div>
                             @endif
                             @if ($product->getSalePercentage())
-                                <div class="product-label product-label-sale">
-                                    -{{ $product->getSalePercentage() }}%
-                                </div>
+                            <div class="product-label product-label-sale">
+                                -{{ $product->getSalePercentage() }}%
+                            </div>
                             @endif
                         </div>
 
                         <div class="swiper js-productSlider">
                             <div class="swiper-wrapper">
                                 @forelse ($product->getMedia() as $image)
-                                    @if ($image->hasCustomProperty('video'))
-                                        <div class="swiper-slide js-swiperIrame"
-                                            data-id="{{ UrlHelper::getYouTubeVideoId($image->getCustomProperty('video')) }}">
-                                        </div>
-                                    @else
-                                        <div class="swiper-slide">
-                                            <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
-                                                <img src="{{ $image->getUrl('normal') }}"
-                                                    alt="{{ $product->shortName() }}" class="img-fluid"
-                                                    onerror="imageOnError(this)">
-                                            </a>
-                                        </div>
-                                    @endif
+                                @if ($image->hasCustomProperty('video'))
+                                <div class="swiper-slide js-swiperIrame"
+                                    data-id="{{ UrlHelper::getYouTubeVideoId($image->getCustomProperty('video')) }}">
+                                </div>
+                                @else
+                                <div class="swiper-slide">
+                                    <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
+                                        <img src="{{ $image->getUrl('normal') }}"
+                                            alt="{{ $product->shortName() }}" class="img-fluid"
+                                            onerror="imageOnError(this)">
+                                    </a>
+                                </div>
+                                @endif
                                 @empty
-                                    <img src="{{ $product->getFallbackMediaUrl() }}" class="img-fluid"
-                                        onerror="imageOnError(this)" alt="{{ $product->shortName() }}" />
+                                <img src="{{ $product->getFallbackMediaUrl() }}" class="img-fluid"
+                                    onerror="imageOnError(this)" alt="{{ $product->shortName() }}" />
                                 @endforelse
                             </div>
                             <div class="js-productSlider-next swiper-button-next"></div>
@@ -76,10 +76,10 @@
                         <div class="col-6 p-product__rating js-ratingBtn">
                             @for ($i = 1; $i <= 5; $i++)
                                 <span
-                                    @if ($feedbacks->avg('rating') >= $i) class="active" @endif>@include('svg.star')</span>
-                            @endfor
+                                @if ($feedbacks->avg('rating') >= $i) class="active" @endif>@include('svg.star')</span>
+                                @endfor
 
-                            <span class="ml-2 align-text-bottom">({{ count($feedbacks) }})</span>
+                                <span class="ml-2 align-text-bottom">({{ count($feedbacks) }})</span>
                         </div>
                     </div>
                 </div>
@@ -96,29 +96,29 @@
                                     {!! $product->getFormattedPrice() !!}
                                 </div>
                                 @if ($product->hasDiscount())
-                                    <div class="price price-old col-auto">
-                                        {!! $product->getFormattedOldPrice() !!}
-                                    </div>
+                                <div class="price price-old col-auto">
+                                    {!! $product->getFormattedOldPrice() !!}
+                                </div>
                                 @endif
 
                                 @if ($product->hasDiscount())
-                                    <div class="price price-new font-weight-bold col-auto">
-                                        <b>-{{ $product->getSalePercentage() }}%</b>
-                                    </div>
-                                    <button type="button" class="btn sale-help-trigger px-1" data-toggle="dropdown">
-                                        <div class="tooltip-trigger">?</div>
-                                    </button>
-                                    <div class="dropdown-menu font-size-12 sale-help-block px-3 py-2">
-                                        @foreach ($product->getSales() as $sale)
-                                            <p>
-                                                <span>{{ $sale->label }}&nbsp;</span>
-                                                <b class="text-danger">
-                                                    {{ $sale->discount_percentage }}%
-                                                </b><br />
-                                                <span>-{{ Currency::convertAndFormat($sale->discount) }}</span>
-                                            </p>
-                                        @endforeach
-                                    </div>
+                                <div class="price price-new font-weight-bold col-auto">
+                                    <b>-{{ $product->getSalePercentage() }}%</b>
+                                </div>
+                                <button type="button" class="btn sale-help-trigger px-1" data-toggle="dropdown">
+                                    <div class="tooltip-trigger">?</div>
+                                </button>
+                                <div class="dropdown-menu font-size-12 sale-help-block px-3 py-2">
+                                    @foreach ($product->getSales() as $sale)
+                                    <p>
+                                        <span>{{ $sale->label }}&nbsp;</span>
+                                        <b class="text-danger">
+                                            {{ $sale->discount_percentage }}%
+                                        </b><br />
+                                        <span>-{{ Currency::convertAndFormat($sale->discount) }}</span>
+                                    </p>
+                                    @endforeach
+                                </div>
                                 @endif
                             </div>
                         </div>
@@ -127,67 +127,67 @@
 
                     <div class="row my-3">
                         @if (!empty(($generalSale = $product->getSale('general_sale'))))
-                            <div class="col-12 py-xl-4 py-3 text-center">
-                                <div class="row align-items-center bg-danger py-3">
-                                    <div class="col-12 mb-2">
-                                        <div class="flex-fill font-weight-bold text-uppercase">
-                                            {{ $generalSale->label }}
-                                        </div>
+                        <div class="col-12 py-xl-4 py-3 text-center">
+                            <div class="row align-items-center bg-danger py-3">
+                                <div class="col-12 mb-2">
+                                    <div class="flex-fill font-weight-bold text-uppercase">
+                                        {{ $generalSale->label }}
                                     </div>
-                                    @if (!empty($generalSale->end_datetime))
-                                        <div class="col-12 text-danger">
-                                            @include('includes.timer', [
-                                                'end_time' => $generalSale->end_datetime,
-                                                'badgeCountdown' => true,
-                                            ])
-                                        </div>
-                                    @endif
                                 </div>
+                                @if (!empty($generalSale->end_datetime))
+                                <div class="col-12 text-danger">
+                                    @include('includes.timer', [
+                                    'end_time' => $generalSale->end_datetime,
+                                    'badgeCountdown' => true,
+                                    ])
+                                </div>
+                                @endif
                             </div>
+                        </div>
                         @endif
                     </div>
 
                     @if ($product->trashed())
-                        <h4 class="h4 mb-5">Нет в наличии</h4>
+                    <h4 class="h4 mb-5">Нет в наличии</h4>
                     @else
-                        <div class="row mb-4">
-                            <div class="col-12 px-md-2 product-size px-0">
-                                <div class="row justify-content-between">
-                                    <div class="col-auto">
-                                        <span class="text-muted">Выберите размер:</span>
-                                    </div>
-                                    {{-- <div class="col-auto">
+                    <div class="row mb-4">
+                        <div class="col-12 px-md-2 product-size px-0">
+                            <div class="row justify-content-between">
+                                <div class="col-auto">
+                                    <span class="text-muted">Выберите размер:</span>
+                                </div>
+                                {{-- <div class="col-auto">
                                         <a class="text-decoration-underline" data-fancybox
                                             data-src="#size-table" href="javascript:;">
                                             Таблица размеров
                                         </a>
                                     </div> --}}
-                                </div>
-                                <ul class="js-sizes mt-3 p-0">
-                                    @foreach ($product->sizes as $size)
-                                        <li class="d-inline-block pr-2">
-                                            <label for="input-size-{{ $size->id }}" class="check">
-                                                <span class="checkmark">{{ $size->name }}</span>
-                                            </label>
-                                            <input type="checkbox" id="input-size-{{ $size->id }}"
-                                                class="visually-hidden" name="sizes[{{ $size->id }}]" />
-                                        </li>
-                                    @endforeach
-                                </ul>
                             </div>
+                            <ul class="js-sizes mt-3 p-0">
+                                @foreach ($product->sizes as $size)
+                                <li class="d-inline-block pr-2">
+                                    <label for="input-size-{{ $size->id }}" class="check">
+                                        <span class="checkmark">{{ $size->name }}</span>
+                                    </label>
+                                    <input type="checkbox" id="input-size-{{ $size->id }}"
+                                        class="visually-hidden" name="sizes[{{ $size->id }}]" />
+                                </li>
+                                @endforeach
+                            </ul>
                         </div>
+                    </div>
 
-                        <div class="row justify-content-center">
-                            <div class="col-12">
-                                <button type="button" class="btn btn-dark btn-lg btn-block js-add-to-cart py-3">
-                                    В КОРЗИНУ
-                                </button>
-                                <button type="button"
-                                    class="btn btn-outline-dark btn-lg btn-block js-buy-one-click py-3">
-                                    КУПИТЬ В ОДИН КЛИК
-                                </button>
-                            </div>
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-dark btn-lg btn-block js-add-to-cart py-3">
+                                В КОРЗИНУ
+                            </button>
+                            <button type="button"
+                                class="btn btn-outline-dark btn-lg btn-block js-buy-one-click py-3">
+                                КУПИТЬ В ОДИН КЛИК
+                            </button>
                         </div>
+                    </div>
                     @endif
 
                     <div class="col-12 text-muted mt-5 text-left">
@@ -205,69 +205,69 @@
                         </p>
                     </div>
                     @if (!empty($productGroup))
-                        <div class="p-product__prGroup">
-                            <h3 class="p-product__prGroup-title">{{ $productGroup['title'] }}</h3>
-                            <div class="swiper js-productGroup">
-                                <div class="swiper-wrapper">
-                                    @foreach ($productGroup['products'] as $key => $productGroupItem)
-                                        <a href="{{ $productGroupItem['url'] }}"
-                                            @if (isset($quickView) && $quickView == true) aria-label="быстрый просмотр"
-                                            data-src="/quick/{{ $productGroupItem['id'] }}" @endif
-                                            class="@if (isset($quickView) && $quickView == true) quick-link @endif p-product__prGroup-item swiper-slide @if ($productGroupItem['id'] == $product->id) active @endif">
-                                            <img src="{{ $productGroupItem['image'] }}"
-                                                alt="{{ $productGroupItem['full_name'] }}"
-                                                onerror="imageOnError(this)">
-                                            {{ $productGroupItem['color_txt'] ?? $productGroupItem['full_name'] }}
-                                        </a>
-                                    @endforeach
-                                </div>
-                                <div class="js-productGroup-next swiper-button-next"></div>
-                                <div class="js-productGroup-prev swiper-button-prev"></div>
+                    <div class="p-product__prGroup">
+                        <h3 class="p-product__prGroup-title">{{ $productGroup['title'] }}</h3>
+                        <div class="swiper js-productGroup">
+                            <div class="swiper-wrapper">
+                                @foreach ($productGroup['products'] as $key => $productGroupItem)
+                                <a href="{{ $productGroupItem['url'] }}"
+                                    @if (isset($quickView) && $quickView==true) aria-label="быстрый просмотр"
+                                    data-src="/quick/{{ $productGroupItem['id'] }}" @endif
+                                    class="@if (isset($quickView) && $quickView == true) quick-link @endif p-product__prGroup-item swiper-slide @if ($productGroupItem['id'] == $product->id) active @endif">
+                                    <img src="{{ $productGroupItem['image'] }}"
+                                        alt="{{ $productGroupItem['full_name'] }}"
+                                        onerror="imageOnError(this)">
+                                    {{ $productGroupItem['color_txt'] ?? $productGroupItem['full_name'] }}
+                                </a>
+                                @endforeach
                             </div>
+                            <div class="js-productGroup-next swiper-button-next"></div>
+                            <div class="js-productGroup-prev swiper-button-prev"></div>
                         </div>
+                    </div>
                     @endif
                 </form>
                 @if ($product->availableSizes->isNotEmpty())
-                    <div class="p-product__stock col-12 mt-4">
-                        <h4 class="p-product__stock-title" data-toggle="collapse" href="#productStockInfo"
-                            role="button" aria-expanded="false" aria-controls="productStockInfo">
-                            Наличие в магазинах
-                            <span class="p-product__stock-title_icon"></span>
-                        </h4>
-                        <div class="show collapse" id="productStockInfo">
-                            <div class="p-product__stock-list">
-                                @foreach ($product->availableSizes->sortBy(function ($item, $key) {
-        return $item?->stock?->site_sorting;
-    }) as $availableSize)
-                                    <div class="p-product__stock-item">
-                                        <div class="p-product__stock-name">
-                                            <div>{{ $availableSize?->stock?->name }}</div>
-                                            <span class="p-product__stock-name_address">
-                                                {{ $availableSize?->stock?->address }}</span>
-                                        </div>
-                                        <div class="p-product__stock-values">
-                                            {{ $availableSize->getFormattedSizes() }}
-                                        </div>
-                                    </div>
-                                @endforeach
+                <div class="p-product__stock col-12 mt-4">
+                    <h4 class="p-product__stock-title" data-toggle="collapse" href="#productStockInfo"
+                        role="button" aria-expanded="false" aria-controls="productStockInfo">
+                        Наличие в магазинах
+                        <span class="p-product__stock-title_icon"></span>
+                    </h4>
+                    <div class="show collapse" id="productStockInfo">
+                        <div class="p-product__stock-list">
+                            @foreach ($product->availableSizes->sortBy(function ($item, $key) {
+                            return $item?->stock?->site_sorting;
+                            }) as $availableSize)
+                            <div class="p-product__stock-item">
+                                <div class="p-product__stock-name">
+                                    <div>{{ $availableSize?->stock?->name }}</div>
+                                    <span class="p-product__stock-name_address">
+                                        {{ $availableSize?->stock?->address }}</span>
+                                </div>
+                                <div class="p-product__stock-values">
+                                    {{ $availableSize->getFormattedSizes() }}
+                                </div>
                             </div>
-                            <p class="p-product__stock-text">Контакты магазинов можно посмотреть по <a
-                                    href="{{ route('static-shops') }}">ссылке</a>.</p>
+                            @endforeach
                         </div>
+                        <p class="p-product__stock-text">Контакты магазинов можно посмотреть по <a
+                                href="{{ route('static-shops') }}">ссылке</a>.</p>
                     </div>
+                </div>
                 @endif
 
             </div>
         </div>
 
         @if ($product->trashed() && !empty($similarProducts) && count($similarProducts))
-            <div class="row">
-                <div class="col-md-12 mb-5 mt-3">
-                    @include('partials.index.simple-slider', [
-                        'simpleSlider' => $similarProducts,
-                    ])
-                </div>
+        <div class="row">
+            <div class="col-md-12 mb-5 mt-3">
+                @include('partials.index.simple-slider', [
+                'simpleSlider' => $similarProducts,
+                ])
             </div>
+        </div>
         @endif
 
         <div class="row product-description my-5">
@@ -277,16 +277,16 @@
             <div class="col-12 col-lg-7">
                 {!! $product->description !!}
                 @if (isset($product->tags) && count($product->tags))
-                    <div class="font-size-15 mb-1">
-                        ТЕГИ
-                    </div>
-                    <div>
-                        @foreach ($product->tags as $tag)
-                            <a href="{{ (isset($product->category->path) ? '/' . $product->category->path : route('shop')) . '/' . $tag->slug }}"
-                                class="bg-dark d-inline-flex alight-items-center m-1 px-2 py-0 text-white"
-                                title="{{ ($product->category->name ?? '') . ' ' . ($tag->seo ?? $tag->name) }}">{{ $tag->name }}</a>
-                        @endforeach
-                    </div>
+                <div class="font-size-15 mb-1">
+                    ТЕГИ
+                </div>
+                <div>
+                    @foreach ($product->tags as $tag)
+                    <a href="{{ (isset($product->category->path) ? '/' . $product->category->path : route('shop')) . '/' . $tag->slug }}"
+                        class="bg-dark d-inline-flex alight-items-center m-1 px-2 py-0 text-white"
+                        title="{{ ($product->category->name ?? '') . ' ' . ($tag->seo ?? $tag->name) }}">{{ $tag->name }}</a>
+                    @endforeach
+                </div>
                 @endif
             </div>
             <div class="col-12 col-lg-4 offset-lg-1 product-characteristics">
@@ -294,43 +294,43 @@
                     ХАРАКТЕРИСТИКИ
                 </div>
                 @if (!empty($product->brand->name))
-                    Бренд - {{ $product->brand->name }} <br>
+                Бренд - {{ $product->brand->name }} <br>
                 @endif
 
                 @if (!empty($product->color_txt))
-                    Цвет - {{ $product->color_txt }} <br>
+                Цвет - {{ $product->color_txt }} <br>
                 @endif
 
                 @if (!empty($product->season))
-                    Сезон - {{ $product->season->name }} <br>
+                Сезон - {{ $product->season->name }} <br>
                 @endif
 
                 @if (!empty($product->fabric_top_txt))
-                    Материал верха - {{ $product->fabric_top_txt }} <br>
+                Материал верха - {{ $product->fabric_top_txt }} <br>
                 @endif
 
                 @if (!empty($product->fabric_inner_txt))
-                    Внутренний материал - {{ $product->fabric_inner_txt }} <br>
+                Внутренний материал - {{ $product->fabric_inner_txt }} <br>
                 @endif
 
                 @if (!empty($product->fabric_insole_txt))
-                    Материал стельки - {{ $product->fabric_insole_txt }} <br>
+                Материал стельки - {{ $product->fabric_insole_txt }} <br>
                 @endif
 
                 @if (!empty($product->product_features))
-                    Ключевая особенность - {{ $product->product_features }} <br>
+                Ключевая особенность - {{ $product->product_features }} <br>
                 @endif
 
                 @if (!empty($product->fabric_outsole_txt))
-                    Материал подошвы - {{ $product->fabric_outsole_txt }} <br>
+                Материал подошвы - {{ $product->fabric_outsole_txt }} <br>
                 @endif
 
                 @if (!empty($product->bootleg_height_txt))
-                    Высота голенища - {{ $product->bootleg_height_txt }} <br>
+                Высота голенища - {{ $product->bootleg_height_txt }} <br>
                 @endif
 
                 @if (!empty($product->heel_txt))
-                    Высота каблука - {{ $product->heel_txt }} <br>
+                Высота каблука - {{ $product->heel_txt }} <br>
                 @endif
 
                 @if (!empty($product->product_features))
@@ -340,7 +340,7 @@
                 Гарантийный срок - 30 дней <br>
 
                 @if (!empty($product->countryOfOrigin->name))
-                    Изготовитель - {{ $product->countryOfOrigin->address }} ({{ $product->countryOfOrigin->name }})<br>
+                Изготовитель - {{ $product->countryOfOrigin->address }} ({{ $product->countryOfOrigin->name }})<br>
                 @endif
                 Поставщик - ООО "БароккоСтайл", г.Брест, ул.Буденного, 17-1<br>
                 Потребительские свойства - товар для повседневного использования <br>
@@ -368,18 +368,18 @@
         </div>
 
         @if (!$product->trashed() && !empty($similarProducts) && count($similarProducts))
-            <div class="col-md-12 mb-5 mt-3">
-                @include('partials.index.simple-slider', [
-                    'simpleSlider' => $similarProducts,
-                ])
-            </div>
+        <div class="col-md-12 mb-5 mt-3">
+            @include('partials.index.simple-slider', [
+            'simpleSlider' => $similarProducts,
+            ])
+        </div>
         @endif
         @if (!empty($recentProductsSlider['products']) && count($recentProductsSlider['products']))
-            <div class="col-md-12 my-3">
-                @include('partials.index.simple-slider', [
-                    'simpleSlider' => $recentProductsSlider,
-                ])
-            </div>
+        <div class="col-md-12 my-3">
+            @include('partials.index.simple-slider', [
+            'simpleSlider' => $recentProductsSlider,
+            ])
+        </div>
         @endif
     </div>
 
@@ -471,5 +471,7 @@
     </div>
 </div>
 <script>
-    var productDetail = {!! $dataLayer->toJson() !!};
+    var productDetail = {
+        !!$dataLayer - > toJson() !!
+    };
 </script>
