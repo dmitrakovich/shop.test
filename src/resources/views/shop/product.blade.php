@@ -340,10 +340,10 @@
                 Гарантийный срок - 30 дней <br>
 
                 @if (!empty($product->countryOfOrigin->name))
-                    Производитель - {{ $product->countryOfOrigin->address }}
+                    Изготовитель - {{ $product->countryOfOrigin->address }}
                     ({{ $product->countryOfOrigin->name }})<br>
                 @endif
-                Импортер в РБ - ООО "БароккоСтайл", г.Брест, ул.Буденного, 17-1<br>
+                Поставщик - ООО "БароккоСтайл", г.Брест, ул.Буденного, 17-1<br>
                 Потребительские свойства - товар для повседневного использования <br>
             </div>
         </div>
