@@ -38,8 +38,10 @@ class UserService
      */
     public function getOrCreateByOrderData(OrderData $orderData): User
     {
-        $user = $this->user->getByPhone($orderData->phone) ?? $this->user->query()->create([
-            'phone' => $orderData->phone,
+        $phone = $this->unifyPhoneNumber($orderData->phone);
+
+        $user = $this->user->getByPhone($phone) ?? $this->user->query()->create([
+            'phone' => $phone,
             'first_name' => $orderData->firstName,
             'last_name' => $orderData->lastName,
             'patronymic_name' => $orderData->patronymicName,
