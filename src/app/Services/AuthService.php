@@ -14,7 +14,7 @@ class AuthService
     /**
      * AuthService constructor.
      */
-    public function __construct(private User $user) {}
+    public function __construct() {}
 
     /**
      * Find user or create new by phone number

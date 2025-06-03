@@ -13,6 +13,7 @@ use App\Models\OneC;
 use App\Models\Orders\OfflineOrder;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
