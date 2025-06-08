@@ -74,7 +74,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
 
             // todo: если продажа с ИМ, переводить статус соответствующего заказа
 
-            if (!$order->isOnline()) {
+            if (!$order->isOnline() && $order->validToNotify()) {
                 $this->notify($offlineOrder);
             }
         }

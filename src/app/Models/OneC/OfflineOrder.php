@@ -184,4 +184,9 @@ class OfflineOrder extends AbstractOneCModel
     {
         return $this->SP6096 === self::ONLINE_STOCK_ID;
     }
+
+    public function validToNotify(): bool
+    {
+        return true;
+    }
 }
