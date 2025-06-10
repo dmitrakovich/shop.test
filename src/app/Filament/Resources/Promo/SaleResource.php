@@ -37,16 +37,19 @@ class SaleResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('label_text')
                     ->label('Текст на шильде')
+                    ->required()
                     ->maxLength(255),
                 Forms\Components\DateTimePicker::make('start_datetime')
                     ->label('Дата начала')
                     ->default(now())
                     ->native(false)
+                    ->closeOnDateSelection()
                     ->required(),
                 Forms\Components\DateTimePicker::make('end_datetime')
                     ->label('Дата завершения')
                     ->default(now()->endOfDay())
                     ->native(false)
+                    ->closeOnDateSelection()
                     ->required(),
                 Forms\Components\Grid::make(3)->schema([
                     Forms\Components\Select::make('algorithm')
@@ -194,9 +197,9 @@ class SaleResource extends Resource
                         return implode(', ', $formattedDiscounts);
                     })
                     ->label('Скидка в %'),
-                Tables\Columns\TextColumn::make('sale_fix')
-                    ->label('Фиксированный скидка')
-                    ->money('BYN', 100, 'ru'),
+                // Tables\Columns\TextColumn::make('sale_fix')
+                //     ->label('Фиксированный скидка')
+                //     ->money('BYN', 100, 'ru'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Дата создания')
                     ->dateTime()
@@ -208,6 +211,7 @@ class SaleResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('id', 'desc')
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
