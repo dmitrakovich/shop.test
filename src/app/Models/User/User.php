@@ -36,7 +36,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property string|null $email
  * @property string|null $last_name
  * @property string|null $patronymic_name
- * @property string $phone
+ * @property int $phone
  * @property \Illuminate\Support\Carbon|null $birth_date
  * @property \Illuminate\Support\Carbon|null $phone_verified_at
  * @property string|null $otp_code

@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 /**
  * @property int $id
  * @property string $name
+ * @property string|null $address
  * @property string $slug
  * @property string|null $seo
  * @property \Illuminate\Support\Carbon|null $created_at
