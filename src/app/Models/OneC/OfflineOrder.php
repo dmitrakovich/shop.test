@@ -3,14 +3,13 @@
 namespace App\Models\OneC;
 
 use App\Admin\Models\AvailableSizesFull;
+use App\Helpers\PhoneHelper;
 use App\Models\Product;
 use App\Models\Size;
 use App\Models\Stock;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
 
 /**
  * @property string $ID
@@ -157,12 +156,7 @@ class OfflineOrder extends AbstractOneCModel
             return null;
         }
         try {
-            $phoneUtil = PhoneNumberUtil::getInstance();
-
-            $parsedPhone = $phoneUtil->parse($phone, 'BY');
-            if ($phoneUtil->isValidNumber($parsedPhone)) {
-                return $phoneUtil->format($parsedPhone, PhoneNumberFormat::E164);
-            }
+            return PhoneHelper::unify($phone);
         } catch (\Throwable $th) {
         }
 

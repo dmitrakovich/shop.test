@@ -47,6 +47,8 @@ class LoginAttemptRequest extends FormRequest
             throw ValidationException::withMessages(['otp' => Otp::ERROR_MSG]);
         }
 
+        $user->updatePhoneVerifiedAt();
+
         $this->setUserResolver(fn () => $user);
     }
 }

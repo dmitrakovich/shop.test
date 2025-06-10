@@ -4,9 +4,8 @@ namespace App\Services;
 
 use App\Data\Order\OrderData;
 use App\Events\Analytics\Registered;
+use App\Helpers\PhoneHelper;
 use App\Models\User\User;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
 
 class UserService
 {
@@ -17,7 +16,7 @@ class UserService
 
     public function findOrCreateByPhone(string $phone): User
     {
-        $phone = $this->unifyPhoneNumber($phone);
+        $phone = PhoneHelper::unify($phone);
 
         return $this->user->getByPhone($phone) ?? $this->user->query()->create([
             'phone' => $phone,
@@ -30,7 +29,7 @@ class UserService
      */
     public function findOrFailByPhone(string $phone): User
     {
-        return $this->user->getByPhone($this->unifyPhoneNumber($phone));
+        return $this->user->getByPhone(PhoneHelper::unify($phone));
     }
 
     /**
@@ -38,7 +37,7 @@ class UserService
      */
     public function getOrCreateByOrderData(OrderData $orderData): User
     {
-        $phone = $this->unifyPhoneNumber($orderData->phone);
+        $phone = PhoneHelper::unify($orderData->phone);
 
         $user = $this->user->getByPhone($phone) ?? $this->user->query()->create([
             'phone' => $phone,
@@ -65,18 +64,5 @@ class UserService
         }
 
         return $user;
-    }
-
-    /**
-     * @todo move to helpers
-     */
-    private function unifyPhoneNumber(string $phone): string
-    {
-        $phoneUtil = PhoneNumberUtil::getInstance();
-
-        return $phoneUtil->format(
-            $phoneUtil->parse($phone, 'BY'),
-            PhoneNumberFormat::E164
-        );
     }
 }
