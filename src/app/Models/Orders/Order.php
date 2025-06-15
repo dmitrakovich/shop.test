@@ -15,6 +15,7 @@ use App\Models\Payments\OnlinePayment;
 use App\Models\Stock;
 use App\Models\User\Device;
 use App\Models\User\User;
+use App\ValueObjects\Phone;
 use Deliveries\DeliveryMethod;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -515,11 +516,11 @@ class Order extends Model
      * Route notifications for the SmsTraffic channel.
      *
      * @param  \Illuminate\Notifications\Notification  $notification
-     * @return string
+     * @return int
      */
     public function routeNotificationForSmsTraffic($notification)
     {
-        return $this->phone;
+        return Phone::fromRawString($this->phone)->forSms();
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Casts\AsPhone;
 use App\Contracts\AuthorInterface;
 use App\Contracts\ClientInterface;
 use App\Models\Cart;
@@ -13,6 +14,7 @@ use App\Models\OneC;
 use App\Models\Orders\OfflineOrder;
 use App\Models\Orders\Order;
 use App\Models\Payments\OnlinePayment;
+use App\ValueObjects\Phone;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -36,7 +38,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property string|null $email
  * @property string|null $last_name
  * @property string|null $patronymic_name
- * @property int $phone
+ * @property Phone $phone
  * @property \Illuminate\Support\Carbon|null $birth_date
  * @property \Illuminate\Support\Carbon|null $phone_verified_at
  * @property string|null $otp_code
@@ -103,18 +105,6 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'birth_date' => 'date',
-        'phone_verified_at' => 'datetime',
-        'email_verified_at' => 'datetime',
-        'otp_expires_at' => 'datetime',
-    ];
-
-    /**
      * Bootstrap the model and its traits.
      */
     public static function boot(): void
@@ -127,11 +117,27 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
     }
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'birth_date' => 'date',
+            'phone' => AsPhone::class,
+            'phone_verified_at' => 'datetime',
+            'email_verified_at' => 'datetime',
+            'otp_expires_at' => 'datetime',
+        ];
+    }
+
+    /**
      * Find user by phone number
      */
-    public static function getByPhone(string $phone): ?self
+    public static function getByPhone(Phone $phone): ?self
     {
-        return self::query()->firstWhere('phone', $phone);
+        return self::query()->firstWhere('phone', $phone->toInt());
     }
 
     /**
@@ -341,11 +347,11 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
      * Route notifications for the SmsTraffic channel.
      *
      * @param  \Illuminate\Notifications\Notification  $notification
-     * @return string
+     * @return int
      */
     public function routeNotificationForSmsTraffic($notification)
     {
-        return $this->phone;
+        return $this->phone->forSms();
     }
 
     /**

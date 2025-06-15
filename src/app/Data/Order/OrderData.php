@@ -35,7 +35,7 @@ class OrderData extends Data
     #[Max(50)]
     public ?string $lastName;
 
-    #[Max(50)]
+    #[Max(20)]
     public string $phone; // todo: Phone VO
 
     #[Max(50)]

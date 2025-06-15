@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Data\Order\OrderData;
 use App\Events\Analytics\Registered;
-use App\Helpers\PhoneHelper;
 use App\Models\User\User;
+use App\ValueObjects\Phone;
 
 class UserService
 {
@@ -14,12 +14,10 @@ class UserService
      */
     public function __construct(private User $user) {}
 
-    public function findOrCreateByPhone(string $phone): User
+    public function findOrCreateByPhone(Phone $phone): User
     {
-        $phone = PhoneHelper::unify($phone);
-
         return $this->user->getByPhone($phone) ?? $this->user->query()->create([
-            'phone' => $phone,
+            'phone' => $phone->forSave(),
         ]);
     }
 
@@ -29,7 +27,7 @@ class UserService
      */
     public function findOrFailByPhone(string $phone): User
     {
-        return $this->user->getByPhone(PhoneHelper::unify($phone));
+        return $this->user->getByPhone(Phone::fromRawString($phone));
     }
 
     /**
@@ -37,10 +35,10 @@ class UserService
      */
     public function getOrCreateByOrderData(OrderData $orderData): User
     {
-        $phone = PhoneHelper::unify($orderData->phone);
+        $phone = Phone::fromRawString($orderData->phone);
 
         $user = $this->user->getByPhone($phone) ?? $this->user->query()->create([
-            'phone' => $phone,
+            'phone' => $phone->forSave(),
             'first_name' => $orderData->firstName,
             'last_name' => $orderData->lastName,
             'patronymic_name' => $orderData->patronymicName,

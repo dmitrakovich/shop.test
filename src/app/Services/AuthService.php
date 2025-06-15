@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Events\Analytics\Registered;
 use App\Models\User\User;
 use App\Notifications\VerificationPhoneSms;
+use App\ValueObjects\Phone;
 
 /**
  * Class AuthService
@@ -21,7 +22,7 @@ class AuthService
      */
     public function findOrCreateUser(string $phone): User
     {
-        $user = app(UserService::class)->findOrCreateByPhone($phone);
+        $user = app(UserService::class)->findOrCreateByPhone(Phone::fromRawString($phone));
 
         if ($user->wasRecentlyCreated) {
             event(new Registered($user));
