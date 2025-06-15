@@ -9,6 +9,7 @@ use App\Filament\Resources\User\UserResource\RelationManagers\BlacklistRelationM
 use App\Filament\Resources\User\UserResource\RelationManagers\PaymentsRelationManager;
 use App\Models\User\Group;
 use App\Models\User\User;
+use App\ValueObjects\Phone;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
@@ -64,6 +65,7 @@ class UserResource extends Resource
                             ->maxLength(255),
                         TextInput::make('phone')
                             ->label('Телефон')
+                            ->formatStateUsing(fn (?Phone $state): string => $state?->toE164())
                             ->tel()
                             ->maxLength(255),
                         DatePicker::make('birth_date')
