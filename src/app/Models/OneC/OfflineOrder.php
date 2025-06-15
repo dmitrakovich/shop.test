@@ -3,10 +3,10 @@
 namespace App\Models\OneC;
 
 use App\Admin\Models\AvailableSizesFull;
-use App\Helpers\PhoneHelper;
 use App\Models\Product;
 use App\Models\Size;
 use App\Models\Stock;
+use App\ValueObjects\Phone;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -149,14 +149,14 @@ class OfflineOrder extends AbstractOneCModel
     /**
      * Get the formatted offline order phone number.
      */
-    public function getFormattedPhone(): ?string
+    public function getFormattedPhone(): ?Phone
     {
         $phone = $this->SP6102;
         if (!$phone || strlen($phone) < 7) {
             return null;
         }
         try {
-            return PhoneHelper::unify($phone);
+            return Phone::fromRawString($phone);
         } catch (\Throwable $th) {
         }
 

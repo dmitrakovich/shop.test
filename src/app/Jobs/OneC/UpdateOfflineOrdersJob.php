@@ -143,7 +143,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
         }
         /** @var User $user */
         $user = User::query()
-            ->where('phone', $phone)
+            ->where('phone', $phone->forSave())
             ->orWhere('discount_card_number', $order->SP6089)
             ->firstOrCreate([], [
                 'phone' => $phone,
