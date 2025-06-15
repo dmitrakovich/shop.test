@@ -3,11 +3,16 @@
 namespace App\ValueObjects;
 
 use App\Helpers\PhoneHelper;
+use Spatie\LaravelData\Casts\Cast;
+use Spatie\LaravelData\Casts\Castable;
+use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Support\Creation\CreationContext;
+use Spatie\LaravelData\Support\DataProperty;
 
 /**
  * Phone value object class for handling phone number operations
  */
-class Phone
+class Phone implements Castable
 {
     /**
      * @param  int  $value  The phone number as an integer
@@ -30,6 +35,24 @@ class Phone
     public static function fromRawString(string $value): self
     {
         return new self(PhoneHelper::unify($value));
+    }
+
+    /**
+     * @param  array<int, mixed>  $arguments
+     */
+    public static function dataCastUsing(...$arguments): Cast
+    {
+        return new class implements Cast
+        {
+            /**
+             * @param  array<string, mixed>  $properties
+             * @param  CreationContext<Data>  $context
+             */
+            public function cast(DataProperty $property, mixed $value, array $properties, CreationContext $context): Phone
+            {
+                return Phone::fromRawString($value);
+            }
+        };
     }
 
     /**

@@ -4,6 +4,8 @@ use App\Enums\Cookie;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Validation\ValidationException;
+use libphonenumber\NumberParseException;
 use Sentry\Laravel\Integration;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -34,6 +36,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->report(function (NumberParseException $e) {
+            throw ValidationException::withMessages(['phone' => 'Номер телефона имеет неверный формат.']);
+        });
+
         Integration::handles($exceptions);
     })
     ->withEvents(discover: false)

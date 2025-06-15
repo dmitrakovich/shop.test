@@ -9,6 +9,7 @@ use App\Facades\Currency as CurrencyFacade;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Stock;
+use App\ValueObjects\Phone;
 use Deliveries\DeliveryMethod;
 use Deliveries\ShopPvz;
 use Jenssegers\Agent\Facades\Agent;
@@ -20,6 +21,7 @@ use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Attributes\Validation\ProhibitedUnless;
 use Spatie\LaravelData\Attributes\Validation\RequiredIf;
 use Spatie\LaravelData\Attributes\WithCast;
+use Spatie\LaravelData\Attributes\WithCastable;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 
@@ -35,8 +37,8 @@ class OrderData extends Data
     #[Max(50)]
     public ?string $lastName;
 
-    #[Max(20)]
-    public string $phone; // todo: Phone VO
+    #[WithCastable(Phone::class)]
+    public Phone $phone;
 
     #[Max(50)]
     public ?string $email;
@@ -109,7 +111,7 @@ class OrderData extends Data
             'patronymic_name' => $this->patronymicName,
             // 'promocode_id' => $this->promocode_id,
             'email' => $this->email,
-            'phone' => $this->phone,
+            'phone' => $this->phone->forSave(),
             'comment' => $this->comment,
             'currency' => $this->currency->code,
             'rate' => $this->currency->rate,

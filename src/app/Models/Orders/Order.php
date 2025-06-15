@@ -3,6 +3,7 @@
 namespace App\Models\Orders;
 
 use App\Admin\Models\Administrator;
+use App\Casts\AsPhone;
 use App\Enums\Order\OrderMethod;
 use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
@@ -15,7 +16,6 @@ use App\Models\Payments\OnlinePayment;
 use App\Models\Stock;
 use App\Models\User\Device;
 use App\Models\User\User;
-use App\ValueObjects\Phone;
 use Deliveries\DeliveryMethod;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -31,7 +31,7 @@ use Payments\PaymentMethod;
  * @property string|null $patronymic_name
  * @property int|null $promocode_id
  * @property string|null $email
- * @property string $phone
+ * @property \App\ValueObjects\Phone $phone
  * @property string|null $comment
  * @property float $total_price
  * @property string $currency
@@ -147,20 +147,24 @@ class Order extends Model
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'order_method' => OrderMethod::class,
-        'order_type' => OrderTypeEnum::class,
-        'status_updated_at' => 'datetime',
-    ];
-
-    /**
      * Fix for duplicate logging
      */
     public bool $isLoggingDone = false;
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'order_method' => OrderMethod::class,
+            'order_type' => OrderTypeEnum::class,
+            'status_updated_at' => 'datetime',
+            'phone' => AsPhone::class,
+        ];
+    }
 
     /**
      * Товары заказа
@@ -520,7 +524,7 @@ class Order extends Model
      */
     public function routeNotificationForSmsTraffic($notification)
     {
-        return Phone::fromRawString($this->phone)->forSms();
+        return $this->phone->forSms();
     }
 
     /**

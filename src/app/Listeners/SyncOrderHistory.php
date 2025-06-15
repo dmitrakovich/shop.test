@@ -24,7 +24,7 @@ class SyncOrderHistory
     {
         if (!empty($event->user->phone)) {
             $this->order
-                ->where('phone', (string)$event->user->phone)
+                ->where('phone', $event->user->phone->forSave())
                 ->update(['user_id' => $event->user->id]);
         }
     }
