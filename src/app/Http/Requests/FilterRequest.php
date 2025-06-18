@@ -38,16 +38,20 @@ class FilterRequest extends FormRequest
      */
     public function getSorting(): string
     {
-        $sorting = $this->input('sort');
+        try {
+            $sorting = (string)$this->input('sort');
 
-        if ($this->hasSession()) {
-            $sessionSorting = $this->session()->get('sorting');
-            if ($sorting && $sorting !== $sessionSorting) {
-                $this->session()->put('sorting', $sorting);
+            if ($this->hasSession()) {
+                $sessionSorting = $this->session()->get('sorting');
+                if ($sorting && $sorting !== $sessionSorting) {
+                    $this->session()->put('sorting', $sorting);
+                }
             }
-        }
 
-        return $sorting ?? Product::DEFAULT_SORT;
+            return $sorting ?? Product::DEFAULT_SORT;
+        } catch (\Throwable $th) {
+            return Product::DEFAULT_SORT;
+        }
     }
 
     /**

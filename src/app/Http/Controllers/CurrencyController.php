@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Money\CurrencyData;
 use App\Facades\Currency;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class CurrencyController extends Controller
 {
     /**
      * Переключить валюту
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function switch(Request $request)
+    public function switch(CurrencyData $currencyData): RedirectResponse
     {
-        Currency::setCurrentCurrency((string)$request->input('currency'));
+        Currency::setCurrentCurrency($currencyData->currency->value);
 
         return back();
     }

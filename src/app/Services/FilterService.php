@@ -88,11 +88,11 @@ class FilterService
     {
         $filters = [];
         if ($data['price_from'] > $data['price_min']) {
-            $slug = 'price-from-' . Currency::reverseConvert($data['price_from']);
+            $slug = 'price-from-' . Currency::reverseConvert((float)$data['price_from']);
             $filters[] = new Price(['slug' => $slug]);
         }
         if ($data['price_to'] < $data['price_max']) {
-            $slug = 'price-to-' . Currency::reverseConvert($data['price_to']);
+            $slug = 'price-to-' . Currency::reverseConvert((float)$data['price_to']);
             $filters[] = new Price(['slug' => $slug]);
         }
 
