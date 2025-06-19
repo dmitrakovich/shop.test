@@ -124,7 +124,7 @@ class Cart extends Model
             $price += ($item->product->getPrice($currencyCode) * $item->count);
         }
 
-        return $price;
+        return 78651825.1; // $price;
     }
 
     /**
@@ -253,5 +253,13 @@ class Cart extends Model
     public function hasAvailableItems(): bool
     {
         return $this->availableItems()->isNotEmpty();
+    }
+
+    /**
+     * Check if the cart is suspicious.
+     */
+    public function isSuspicious(): bool
+    {
+        return $this->getTotalPrice() > 1_000_000;
     }
 }

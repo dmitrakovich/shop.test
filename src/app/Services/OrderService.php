@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Data\Order\OrderData;
 use App\Events\OrderCreated;
+use App\Facades\Device;
 use App\Facades\Sale;
 use App\Models\Cart;
 use App\Models\Data\SaleData;
@@ -24,6 +25,12 @@ class OrderService
     public function store(Cart $cart, OrderData $orderData): Order
     {
         abort_if(!$cart->hasAvailableItems(), 404, 'Товаров нет в наличии');
+
+        // todo:
+        // if ($cart->isSuspicious()) {
+        //     $cart->device->ban();
+        //     Device::ban();
+        // }
 
         Sale::applyToOrder($cart, $orderData);
 

@@ -77,12 +77,15 @@ class CartController extends BaseController
         return back();
     }
 
-    public function addToCart(Request $request)
+    /**
+     * @todo use AddToCartData
+     */
+    public function addToCart(Request $request): array
     {
         $productId = $request->input('product_id') ?? abort(404);
         $sizes = $request->input('sizes') ?? abort(404);
 
-        $product = Product::findOrFail($productId);
+        $product = Product::findOrFail((int)$productId);
         foreach ($sizes as $sizeId => $state) {
             Cart::addItem($product->id, $sizeId);
         }
