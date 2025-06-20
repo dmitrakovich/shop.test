@@ -124,7 +124,7 @@ class Cart extends Model
             $price += ($item->product->getPrice($currencyCode) * $item->count);
         }
 
-        return 78651825.1; // $price;
+        return $price;
     }
 
     /**
