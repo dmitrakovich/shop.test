@@ -39,12 +39,12 @@ class FilterRequest extends FormRequest
     public function getSorting(): string
     {
         try {
-            $sorting = (string)$this->input('sort');
+            $sorting = $this->input('sort');
 
             if ($this->hasSession()) {
                 $sessionSorting = $this->session()->get('sorting');
                 if ($sorting && $sorting !== $sessionSorting) {
-                    $this->session()->put('sorting', $sorting);
+                    $this->session()->put('sorting', (string)$sorting);
                 }
             }
 
