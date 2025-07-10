@@ -26,8 +26,6 @@ use Illuminate\Support\Facades\Auth;
  * @property-read \App\Models\User\User|null $user
  * @property-read \App\Models\Promo\Promocode|null $promocode
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CartData[] $items
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Cart extends Model
 {

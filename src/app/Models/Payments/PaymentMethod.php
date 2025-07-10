@@ -18,8 +18,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Payments\PaymentMethod filterInstallment(bool $availableInstallment)
  * @method static \Illuminate\Database\Eloquent\Builder|\Payments\PaymentMethod filterCOD(bool $availableCOD)
  * @method static \Illuminate\Database\Eloquent\Builder|\Payments\PaymentMethod filterByCountry(string $countryCode)
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class PaymentMethod extends Model
 {

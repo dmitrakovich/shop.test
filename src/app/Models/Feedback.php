@@ -36,8 +36,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feedback forProduct(int $productId)
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Feedback extends Model implements HasMedia
 {

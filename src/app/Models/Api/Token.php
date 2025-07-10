@@ -15,8 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Api\Token updateToken(string $newToken, ?\Carbon\Carbon $expireDate = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Api\Token instagram()
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Token extends Model
 {

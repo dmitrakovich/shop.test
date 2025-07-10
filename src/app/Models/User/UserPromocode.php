@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $expired_at
  * @property \Illuminate\Support\Carbon|null $canceled_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class UserPromocode extends Model
 {

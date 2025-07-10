@@ -9,11 +9,15 @@ trait ProductSales
 {
     /**
      * Sales that apply to the product
+     *
+     * @var array{list: array<string, SaleData>, final_price: float}|null
      */
     private ?array $sales = null;
 
     /**
      * Get current sales
+     *
+     * @return array{list: array<string, SaleData>, final_price: float}
      */
     private function sales(): array
     {
@@ -44,6 +48,8 @@ trait ProductSales
 
     /**
      * Set product sales
+     *
+     * @param  array<string, SaleData>  $sales
      */
     public function setSales(array $sales, float $finalPrice): void
     {
@@ -63,6 +69,8 @@ trait ProductSales
 
     /**
      * Get current product's sales
+     *
+     * @return array<string, SaleData>
      */
     public function getSales(): array
     {

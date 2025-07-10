@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Cache;
  * @property int $id
  * @property string $name
  * @property float $discount
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Group extends Model
 {

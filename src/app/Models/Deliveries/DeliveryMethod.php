@@ -17,8 +17,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Deliveries\DeliveryMethod active()
  * @method static \Illuminate\Database\Eloquent\Builder|\Deliveries\DeliveryMethod filterFitting(bool $availableFitting)
  * @method static \Illuminate\Database\Eloquent\Builder|\Deliveries\DeliveryMethod filterByCountry(string $countryCode)
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class DeliveryMethod extends Model
 {

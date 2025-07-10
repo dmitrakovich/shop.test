@@ -15,8 +15,6 @@ use Illuminate\Notifications\Notifiable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
  * @property-read \App\Models\Bots\Telegram\TelegramBot|null $bot
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class TelegramChat extends TelegraphChat
 {

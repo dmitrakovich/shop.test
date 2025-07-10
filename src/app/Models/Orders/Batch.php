@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Relations;
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Batch extends Model
 {

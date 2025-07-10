@@ -24,8 +24,6 @@ use Illuminate\Support\Carbon;
  * @property-read \App\Models\Promo\Sale|null $sale
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserPromocode[] $userPromocodes
  * @property-read \App\Models\User\UserPromocode|null $userPromocode
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Promocode extends Model
 {

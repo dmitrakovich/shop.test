@@ -60,7 +60,7 @@ return [
         // Add a "@mixin" tag value to support static method linting for IDEs.
         'mixins' => [
             // \Illuminate\Database\Eloquent\Model::class,
-            \Illuminate\Database\Eloquent\Builder::class,
+            // \Illuminate\Database\Eloquent\Builder::class,
         ],
     ],
 

@@ -38,8 +38,6 @@ namespace App\Models\Orders;
  * @property-read \App\Models\Payments\Installment|null $installment
  * @property-read \App\Models\Logs\OrderItemStatusLog|null $inventoryNotification
  * @property-read \App\Models\Logs\OrderItemStatusLog|null $statusLog
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderItemExtended extends OrderItem
 {

@@ -24,8 +24,6 @@ use Illuminate\Support\Carbon;
  *
  * @property-read \App\Models\Orders\OrderItem|null $orderItem
  * @property-read \App\Models\Orders\Order|null $order
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Installment extends Model
 {

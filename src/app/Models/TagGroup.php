@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Relations;
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class TagGroup extends Model
 {

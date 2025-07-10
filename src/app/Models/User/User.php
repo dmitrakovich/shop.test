@@ -65,8 +65,6 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserBlacklist[] $blacklistLogs
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePayment[] $payments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserPromocode[] $usedPromocodes
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class User extends Authenticatable implements AuthorInterface, ClientInterface, MustVerifyEmail
 {

@@ -24,17 +24,21 @@ class UserDataCreator extends ScriptViewCreator
 
     /**
      * Get user data from the Google Tag Manager data layer or push data.
+     *
+     * @return Collection<string, mixed>
      */
     private function getUserData(): Collection
     {
         $dataLayer = $this->googleTagManager->getDataLayer()->toArray();
 
         if (isset($dataLayer['user_data'])) {
+            /** @var array{user_data: array<string, mixed>} $dataLayer */
             return collect($dataLayer['user_data']);
         }
 
         /** @var DataLayer $item */
         foreach ($this->googleTagManager->getPushData() as $item) {
+            /** @var array{user_data?: array<string, mixed>} $dataLayer */
             $dataLayer = $item->toArray();
             if (isset($dataLayer['user_data'])) {
                 return collect($dataLayer['user_data']);

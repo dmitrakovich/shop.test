@@ -28,8 +28,6 @@ use Illuminate\Support\Facades\File;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Banner active()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Banner bannerFields()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Banner orderByPriority()
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Banner extends BannerModel
 {

@@ -46,8 +46,6 @@ use Illuminate\Database\Eloquent\Relations;
  * @property-read \App\Models\Payments\OnlinePaymentStatus|null $lastSucceededStatus
  * @property-read \App\Models\Orders\Order|null $order
  * @property-read \App\Admin\Models\Administrator|null $admin
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OnlinePayment extends Model
 {

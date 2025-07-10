@@ -45,8 +45,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Stock ordered(string $direction = 'asc')
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Stock extends Model implements HasMedia, Sortable
 {

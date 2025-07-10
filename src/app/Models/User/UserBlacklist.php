@@ -15,8 +15,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  *
  * @property-read \App\Models\User\User|null $user
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class UserBlacklist extends Model
 {

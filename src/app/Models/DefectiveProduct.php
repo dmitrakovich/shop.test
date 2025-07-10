@@ -19,8 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Models\Product|null $product
  * @property-read \App\Models\Size|null $size
  * @property-read \App\Models\Stock|null $stock
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class DefectiveProduct extends Model
 {

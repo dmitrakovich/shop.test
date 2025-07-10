@@ -4,22 +4,27 @@ namespace App\Traits;
 
 use App\Models\Url;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
 
 /**
- * @mixin \Illuminate\Database\Eloquent\Model
+ * @mixin Model
  */
 trait AttributeFilterTrait
 {
     /**
      * Применить фильтр
+     *
+     * @param  Builder<Model>  $builder
+     * @param  array<array-key, mixed>  $values
+     * @return Builder<Model>
      */
     public static function applyFilter(Builder $builder, array $values): Builder
     {
         self::beforeApplyFilter($builder, $values);
 
-        if ($values === false) {
+        if (!$values) {
             return $builder;
         }
 
@@ -60,6 +65,8 @@ trait AttributeFilterTrait
 
     /**
      * Slug для фильтра
+     *
+     * @return MorphOne<Url, $this>
      */
     public function url(): MorphOne
     {
@@ -79,6 +86,9 @@ trait AttributeFilterTrait
     /**
      * Если перед применением фильтра необходимо произвести
      * преобразование над данными или запросом
+     *
+     * @param  Builder<Model>  $builder
+     * @param  array<array-key, mixed>  $values
      */
     public static function beforeApplyFilter(Builder &$builder, array &$values): void
     {
@@ -111,6 +121,9 @@ trait AttributeFilterTrait
         return $this->name ?? '';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public static function getFilters(): array
     {
         return (new self())->newQuery()

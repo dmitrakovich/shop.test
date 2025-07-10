@@ -16,8 +16,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property-read \App\Models\Product|null $product
  * @property-read \App\Models\Size|null $size
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class CartData extends Model
 {

@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $admin_id
  * @property string $action
  * @property \Illuminate\Support\Carbon $created_at
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderActionLog extends Model
 {

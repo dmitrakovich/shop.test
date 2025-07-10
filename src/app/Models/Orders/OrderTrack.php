@@ -17,8 +17,6 @@ use Illuminate\Database\Eloquent\Relations;
  * @property int|null $displacement_id ID перемещения
  *
  * @property-read \App\Models\Orders\Order|null $order
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderTrack extends Model
 {

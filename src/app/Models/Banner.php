@@ -27,8 +27,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Banner active()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Banner bannerFields()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Banner orderByPriority()
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Banner extends Model implements HasMedia
 {

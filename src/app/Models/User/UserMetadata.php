@@ -15,8 +15,6 @@ use Illuminate\Database\Eloquent\Relations;
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
  * @property-read \App\Models\User\User|null $user
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class UserMetadata extends Model
 {

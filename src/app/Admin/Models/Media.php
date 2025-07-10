@@ -36,8 +36,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media as MediaModel;
  * @property-read \Illuminate\Database\Eloquent\Model|null $model
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Media ordered()
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Media extends MediaModel
 {

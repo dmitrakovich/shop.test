@@ -47,8 +47,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \App\Models\Stock|null $stock
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Size[] $sizes
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class AvailableSizes extends Model implements HasMedia
 {

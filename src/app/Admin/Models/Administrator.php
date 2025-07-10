@@ -21,8 +21,6 @@ use Encore\Admin\Auth\Database\Administrator as AdministratorBase;
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\Encore\Admin\Auth\Database\Role[] $roles
  * @property-read \Illuminate\Database\Eloquent\Collection|\Encore\Admin\Auth\Database\Permission[] $permissions
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Administrator extends AdministratorBase
 {

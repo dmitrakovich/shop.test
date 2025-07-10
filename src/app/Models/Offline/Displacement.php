@@ -18,8 +18,6 @@ use Illuminate\Database\Eloquent\Relations;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderItem[] $orderItems
  * @property-read \App\Models\Stock|null $directionFromStock
  * @property-read \App\Models\Stock|null $directionToStock
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Displacement extends Model
 {

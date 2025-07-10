@@ -41,8 +41,6 @@ use App\Models\AvailableSizes;
  * @property-read \App\Models\Stock|null $stock
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Size[] $sizes
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class AvailableSizesFull extends AvailableSizes
 {

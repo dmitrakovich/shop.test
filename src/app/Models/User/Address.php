@@ -25,8 +25,6 @@ use Illuminate\Database\Eloquent\Relations;
  *
  * @property-read \App\Models\Country|null $country
  * @property-read \App\Models\User\User|null $user
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Address extends Model
 {

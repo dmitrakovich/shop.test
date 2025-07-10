@@ -21,6 +21,8 @@ class StockService
 
     /**
      * Get cities where there are shops
+     *
+     * @return Collection<int, City>
      */
     public function getCitiesWithShops(): Collection
     {

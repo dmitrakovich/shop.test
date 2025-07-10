@@ -34,8 +34,6 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Favorite[] $favorites
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
  * @property-read \App\Models\User\User|null $user
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Device extends Model implements ClientInterface
 {

@@ -10,8 +10,6 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class ApiUser extends Authenticatable
 {

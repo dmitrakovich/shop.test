@@ -13,8 +13,6 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  * @property string $mask
  * @property string $img
  * @property string $prefix
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Country extends Model
 {

@@ -82,8 +82,6 @@ use Payments\PaymentMethod;
  * @property-read \App\Models\Orders\OrderTrack|null $track
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\OrderActionLog[] $logs
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\OrderDistributionLog[] $distributionLogs
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Order extends Model
 {

@@ -16,8 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $model
  *
  * @property-read \App\Models\Url|null $url
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Season extends Model implements Filterable
 {

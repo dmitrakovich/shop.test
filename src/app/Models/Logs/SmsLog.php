@@ -25,8 +25,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\User\User|null $user
  * @property-read \App\Models\Orders\Order|null $order
  * @property-read \App\Models\Ads\Mailing|null $mailing
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class SmsLog extends Model
 {

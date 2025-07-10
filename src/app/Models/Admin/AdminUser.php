@@ -34,8 +34,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Admin\AdminUser withoutRole($roles, $guard = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Admin\AdminUser permission($permissions, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Admin\AdminUser withoutPermission($permissions)
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class AdminUser extends Authenticatable implements AuthorInterface, FilamentUser
 {

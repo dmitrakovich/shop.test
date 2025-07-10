@@ -35,8 +35,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Promo\Promocode[] $promocodes
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promo\Sale actual()
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Sale extends Model
 {

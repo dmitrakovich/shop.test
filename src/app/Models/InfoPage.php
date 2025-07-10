@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Cache;
  * @property string|null $html
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class InfoPage extends Model
 {

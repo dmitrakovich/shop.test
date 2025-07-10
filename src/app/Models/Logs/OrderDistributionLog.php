@@ -15,8 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
  * @property-read \App\Admin\Models\Administrator|null $admin
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderDistributionLog extends Model
 {

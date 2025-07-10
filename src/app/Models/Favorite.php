@@ -19,8 +19,6 @@ use Illuminate\Support\Facades\Auth;
  * @property-read \App\Models\Product|null $product
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Favorite forUser()
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Favorite extends Model
 {

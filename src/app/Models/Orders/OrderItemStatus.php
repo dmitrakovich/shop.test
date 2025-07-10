@@ -18,8 +18,6 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Orders\OrderItemStatus ordered(string $direction = 'asc')
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderItemStatus extends Model implements Enum, Sortable
 {

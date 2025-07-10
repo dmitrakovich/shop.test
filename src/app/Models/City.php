@@ -17,8 +17,6 @@ use Illuminate\Support\Str;
  *
  * @property-read \App\Models\Country|null $country
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Stock[] $stocks
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class City extends Model
 {

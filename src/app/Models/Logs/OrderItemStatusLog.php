@@ -27,8 +27,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property-read \App\Models\Orders\OrderItem|null $orderItem
  * @property-read \App\Models\Stock|null $stock
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OrderItemStatusLog extends Model
 {

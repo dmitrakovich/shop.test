@@ -33,8 +33,6 @@ use Staudenmeir\EloquentJsonRelations\Relations\BelongsToJson;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categoriesList
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ads\ProductCarousel ordered(string $direction = 'asc')
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class ProductCarousel extends Model implements Sortable
 {

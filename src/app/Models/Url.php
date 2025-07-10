@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Cache;
  *
  * @property-read \Illuminate\Database\Eloquent\Model|null $model
  * @property-read \Illuminate\Database\Eloquent\Model|null $filters
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Url extends Model
 {

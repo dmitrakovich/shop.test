@@ -31,8 +31,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\Size|null $size
  * @property-read \App\Models\Stock|null $stock
  * @property-read \App\Models\User\User|null $user
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class OfflineOrder extends Model
 {

@@ -74,8 +74,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product search(?string $search = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyWithDiscount(float $amount = 0.01)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyNew(int $days = 10)
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Product extends Model implements HasMedia
 {

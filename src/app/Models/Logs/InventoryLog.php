@@ -16,8 +16,6 @@ use Illuminate\Support\Collection;
  * @property \Illuminate\Support\Carbon|null $created_at
  *
  * @property-read \App\Models\Product|null $product
- *
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class InventoryLog extends Model
 {
