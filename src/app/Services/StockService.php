@@ -11,6 +11,8 @@ class StockService
 {
     /**
      * Shop collection
+     *
+     * @return Collection<int, Stock>
      */
     public function getShops(): Collection
     {

@@ -7,10 +7,12 @@ use App\Models\Bots\Telegram\TelegramChat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use Illuminate\Support\Collection;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -35,7 +37,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property int $site_sorting Сортировка на сайте
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property mixed $photos
+ * @property \Illuminate\Support\Collection $photos
  *
  * @property-read \App\Models\City|null $city
  * @property-read \App\Models\Bots\Telegram\TelegramChat|null $privateChat
@@ -151,10 +153,18 @@ class Stock extends Model implements HasMedia, Sortable
     /**
      * Photos accessor
      *
-     * @return string
+     * @return Collection<int, string>
      */
-    public function getPhotosAttribute()
+    public function getPhotosAttribute(): Collection
     {
-        return $this->getMedia()->map(fn ($media) => $media->getUrl());
+        return $this->getPhotos();
+    }
+
+    /**
+     * @return Collection<int, string>
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->getMedia()->map(fn (Media $media) => $media->getUrl());
     }
 }

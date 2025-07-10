@@ -42,6 +42,7 @@ Route::get('product/{product:slug}', [CatalogController::class, 'show'])->withTr
 
 Route::get('main-page', [InfoPageController::class, 'main']);
 Route::get('info-page/{page:slug}', [InfoPageController::class, 'show']);
+Route::get('shops', [InfoPageController::class, 'shops']);
 
 Route::prefix('cart')->as('cart.')->group(function () {
     Route::get('/', [CartController::class, 'show'])->name('show');
