@@ -13,7 +13,7 @@
                         </button>
                     </div>
                     <p class="inc-header__top-info d-none d-md-block">
-                        Ежедневно с 08:00 до 21:00<br>
+                        Ежедневно с 08:30 до 20:30<br>
                         <a href="{{ config('contacts.phone.link') }}" data-gtm-user-event="callPhone">
                             {{ config('contacts.phone.name') }}
                         </a>
