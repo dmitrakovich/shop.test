@@ -40,7 +40,7 @@ class AppResource extends JsonResource
                 'whats_app' => config('contacts.whats-app.link'),
                 'instagram' => config('contacts.instagram.link'),
             ],
-            'work_time' => 'Ежедневно с 08:00 до 21:00',
+            'work_time' => config('shop.work_time'),
         ];
     }
 }
