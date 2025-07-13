@@ -49,7 +49,7 @@ class ProductService
         return Product::query()->whereIn('id', $ids)->with([
             'category:id,title,path',
             'brand:id,name',
-            'sizes:id,name,slug,value',
+            'sizes:id,name,slug',
             'media',
             'styles:id,name',
             'favorite:product_id',
