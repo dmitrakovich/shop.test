@@ -165,7 +165,8 @@
                                 </div>
                                 <ul class="js-sizes mt-3 p-0">
                                     @foreach ($product->sizes as $size)
-                                        <li class="d-inline-block pr-2">
+                                        <li class="d-inline-block pr-2" data-toggle="tooltip" data-placement="bottom"
+                                            @if ($size->insole) title="Длина стельки: {{ $size->insole }}" @endif>
                                             <label for="input-size-{{ $size->id }}" class="check">
                                                 <span class="checkmark">{{ $size->name }}</span>
                                             </label>

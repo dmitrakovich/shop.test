@@ -27,15 +27,15 @@ class SizeResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label('Название')
+                    ->label('Размер')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(36)
                     ->default('slug-'),
-                Forms\Components\TextInput::make('value')
-                    ->label('Значение')
+                Forms\Components\TextInput::make('insole')
+                    ->label('Длина стельки')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Toggle::make('is_active')
@@ -49,12 +49,12 @@ class SizeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Название')
+                    ->label('Размер')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('value')
-                    ->label('Значение')
+                Tables\Columns\TextColumn::make('insole')
+                    ->label('Длина стельки')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Активный')

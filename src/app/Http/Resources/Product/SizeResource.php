@@ -21,7 +21,8 @@ class SizeResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
-            'value' => $this->value,
+            'value' => $this->insole, // deprecated
+            'insole' => $this->insole,
         ];
     }
 }

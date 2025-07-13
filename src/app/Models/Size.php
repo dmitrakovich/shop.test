@@ -55,7 +55,7 @@ class Size extends Model implements Filterable
      */
     protected static function booted(): void
     {
-        static::addGlobalScope('sort', fn (Builder $query) => $query->orderBy('value'));
+        static::addGlobalScope('sort', fn (Builder $query) => $query->orderBy('insole'));
 
         static::saved(function (self $size): void {
             $size->url()->updateOrCreate([], ['slug' => $size->slug]);
