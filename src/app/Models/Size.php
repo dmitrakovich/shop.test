@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property string $value
+ * @property string $insole
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -74,7 +74,7 @@ class Size extends Model implements Filterable
     {
         return (new self())->newQuery()
             ->where('is_active', true)
-            ->get(['id', 'name', 'slug', 'value'])
+            ->get(['id', 'name', 'slug', 'insole'])
             ->keyBy('slug')
             ->append(['model'])
             ->toArray();
