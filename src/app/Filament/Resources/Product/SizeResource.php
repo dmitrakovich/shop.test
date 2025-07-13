@@ -32,6 +32,7 @@ class SizeResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('slug')
                     ->required()
+                    ->readOnlyOn('edit')
                     ->maxLength(36)
                     ->default('slug-'),
                 Forms\Components\TextInput::make('insole')
