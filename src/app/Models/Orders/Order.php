@@ -187,7 +187,7 @@ class Order extends Model
             ->with([
                 'product' => fn ($query) => $query->withTrashed(),
                 'status:key,name_for_admin,name_for_user',
-                'size:id,name,slug,value',
+                'size:id,name,slug',
             ]);
     }
 
