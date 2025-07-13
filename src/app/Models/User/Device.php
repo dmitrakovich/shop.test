@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Contracts\ClientInterface;
 use App\Enums\Cookie as CookieEnum;
+use App\Enums\User\BanReason;
 use App\Models\Cart;
 use App\Models\Favorite;
 use App\Models\Orders\Order;
@@ -26,6 +27,8 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  * @property string $type
  * @property string|null $ip_address
  * @property string|null $country_code
+ * @property \Illuminate\Support\Carbon|null $banned_at
+ * @property \App\Enums\User\BanReason|null $ban_reason
  * @property string $agent
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -48,11 +51,21 @@ class Device extends Model implements ClientInterface
     final const TYPES = ['mobile', 'desktop'];
 
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if all mass assignment is enabled.
      *
-     * @var array<string>|bool
+     * @var bool
      */
-    protected $guarded = ['id'];
+    protected static $unguarded = true;
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'banned_at' => 'datetime',
+        'ban_reason' => BanReason::class,
+    ];
 
     /**
      * Generate new device web_id for new device
@@ -182,5 +195,23 @@ class Device extends Model implements ClientInterface
     public function setCountryCode(): void
     {
         $this->attributes['country_code'] = SxGeo::getCountry();
+    }
+
+    public function ban(BanReason $reason): void
+    {
+        $this->update([
+            'banned_at' => now(),
+            'ban_reason' => $reason,
+        ]);
+    }
+
+    public function unban(): void
+    {
+        $this->update(['banned_at' => null]);
+    }
+
+    public function isBanned(): bool
+    {
+        return !is_null($this->banned_at);
     }
 }
