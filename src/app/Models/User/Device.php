@@ -51,11 +51,21 @@ class Device extends Model implements ClientInterface
     final const TYPES = ['mobile', 'desktop'];
 
     /**
-     * Indicates if all mass assignment is enabled.
+     * The attributes that are mass assignable.
      *
-     * @var bool
+     * @var array<int, string>
      */
-    protected static $unguarded = true;
+    protected $fillable = [
+        'web_id',
+        'api_id',
+        'user_id',
+        'yandex_id',
+        'google_id',
+        'type',
+        'ip_address',
+        'country_code',
+        'agent',
+    ];
 
     /**
      * The attributes that should be cast.

@@ -13,6 +13,7 @@ use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Table;
@@ -112,6 +113,9 @@ class AdminPanelProvider extends PanelProvider
                     $table->paginated([10, 25, 50, 100, 200]);
                 });
             })
+            ->assets([
+                Css::make('custom', resource_path('css/custom-filament.css')),
+            ], 'filament')
             ->spa();
     }
 
