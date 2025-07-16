@@ -52,8 +52,6 @@ class Device extends Model implements ClientInterface
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
      */
     protected $fillable = [
         'web_id',
@@ -209,6 +207,8 @@ class Device extends Model implements ClientInterface
 
     public function ban(BanReason $reason): void
     {
+        // todo: tg log, в нем ссылка на страницу админки для разбана, при необходимости
+
         $this->update([
             'banned_at' => now(),
             'ban_reason' => $reason,
