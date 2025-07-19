@@ -96,8 +96,7 @@ jobs:
       run: |
         echo "escaped_message<<EOF" >> "$GITHUB_OUTPUT"
         echo "${{ github.event.head_commit.message }}" \
-          | sed -E 's/<[^>]+>//g' \
-          | sed -e 's/&/\&amp;/g' -e 's/"/\&quot;/g' >> "$GITHUB_OUTPUT"
+          | sed -E 's/<[^>]+>//g' >> "$GITHUB_OUTPUT"
         echo "EOF" >> "$GITHUB_OUTPUT"
 
     - name: Send success status
