@@ -101,7 +101,7 @@ jobs:
         message: |
           <b>Success deploying ✅</b>
 
-          <blockquote expandable>${{ github.event.commits[0].message | escape }}</blockquote>
+          <blockquote expandable>${{ github.event.commits.message }}</blockquote>
 
 
   ##################################
