@@ -91,12 +91,12 @@ jobs:
       with:
         environment: production
 
-    - name: Escape commit message (remove HTML-like tags)
+    - name: Escape commit message (remove < and > only)
       id: escape
       run: |
         echo "escaped_message<<EOF" >> "$GITHUB_OUTPUT"
         echo "${{ github.event.head_commit.message }}" \
-          | sed -E 's/<[^>]+>//g' >> "$GITHUB_OUTPUT"
+          | sed -e 's/</\[/g' -e 's/>/\]/g' >> "$GITHUB_OUTPUT"
         echo "EOF" >> "$GITHUB_OUTPUT"
 
     - name: Send success status
