@@ -91,19 +91,26 @@ jobs:
       with:
         environment: production
 
+    - name: Escape commit message (remove HTML-like tags)
+      id: escape
+      run: |
+        echo "escaped_message<<EOF" >> "$GITHUB_OUTPUT"
+        echo "${{ github.event.head_commit.message }}" \
+          | sed -E 's/<[^>]+>//g' \
+          | sed -e 's/&/\&amp;/g' -e 's/"/\&quot;/g' >> "$GITHUB_OUTPUT"
+        echo "EOF" >> "$GITHUB_OUTPUT"
+
     - name: Send success status
       uses: appleboy/telegram-action@master
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
-        format: markdown
+        format: html
         disable_web_page_preview: true
         message: |
-          *Success deploying ✅*
+          <b>Success deploying ✅</b>
 
-          ```
-          ${{ github.event.head_commit.message }}
-          ```
+          <blockquote expandable>${{ steps.escape.outputs.escaped_message }}</blockquote>
 
 
   ##################################
