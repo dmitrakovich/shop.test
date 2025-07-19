@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\User;
 
+use App\Enums\User\BanReason;
 use App\Filament\Resources\User\DeviceResource\Pages;
 use App\Models\User\Device;
 use Filament\Forms;
@@ -14,7 +15,13 @@ class DeviceResource extends Resource
 {
     protected static ?string $model = Device::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'user';
+
+    protected static ?string $modelLabel = 'Устройство';
+
+    protected static ?string $pluralModelLabel = 'Устройства';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -55,7 +62,7 @@ class DeviceResource extends Resource
                     ->alignCenter()
                     ->boolean(),
                 Tables\Columns\TextColumn::make('web_id')
-                    ->searchable(isIndividual: true)
+                    ->searchable(isIndividual: true, isGlobal: false)
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('is_api')
                     ->getStateUsing(fn (Device $record) => isset($record->api_id))
@@ -63,29 +70,50 @@ class DeviceResource extends Resource
                     ->alignCenter()
                     ->boolean(),
                 Tables\Columns\TextColumn::make('api_id')
-                    ->searchable(isIndividual: true)
+                    ->searchable(isIndividual: true, isGlobal: false)
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('user.id')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Пользователь')
+                    ->url(fn (?int $state) => $state
+                        ? UserResource::getUrl('edit', ['record' => $state])
+                        : null
+                    )
+                    ->openUrlInNewTab()
+                    ->formatStateUsing(fn ($state) => "ID: $state")
+                    ->icon('heroicon-o-user')
+                    ->color('primary'),
                 Tables\Columns\TextColumn::make('yandex_id')
-                    ->numeric()
-                    ->sortable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('google_id')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('type'),
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\IconColumn::make('type')
+                    ->label('Устройство')
+                    ->tooltip(fn (string $state): string => $state === 'mobile'
+                    ? 'Мобильное устройство'
+                    : 'Настольный компьютер')
+                    ->icon(fn (string $state): string => match ($state) {
+                        'mobile' => 'heroicon-o-device-phone-mobile',
+                        'desktop' => 'heroicon-o-computer-desktop',
+                    })
+                    ->color(fn (string $state): string => match ($state) {
+                        'mobile' => 'info',
+                        'desktop' => 'primary',
+                    })
+                    ->alignCenter(),
                 Tables\Columns\TextColumn::make('ip_address')
-                    ->searchable(),
+                    ->label('IP'),
                 Tables\Columns\TextColumn::make('country_code')
-                    ->searchable(),
+                    ->label('Страна')
+                    ->alignCenter(),
                 Tables\Columns\TextColumn::make('banned_at')
+                    ->label('Дата блокировки')
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ban_reason')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('agent')
-                    ->searchable(),
+                    ->label('Причина блокировки')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('agent'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -101,22 +129,18 @@ class DeviceResource extends Resource
             ->defaultSort('id', 'desc')
             ->actions([
                 // Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\Action::make('toggleBan')
+                    ->label(fn (Device $record) => $record->isBanned() ? 'Разбанить' : 'Забанить')
+                    ->icon(fn (Device $record) => $record->isBanned() ? 'heroicon-o-lock-open' : 'heroicon-o-lock-closed')
+                    ->color(fn (Device $record) => $record->isBanned() ? 'success' : 'danger')
+                    ->requiresConfirmation()
+                    ->action(function (Device $record) {
+                        $record->isBanned() ? $record->unban() : $record->ban(BanReason::BY_ADMIN);
+                    }),
             ])
             ->recordClasses(
                 fn (Device $record) => $record->isBanned() ? 'bg-danger/10' : null
             );
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array

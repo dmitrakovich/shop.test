@@ -34,9 +34,11 @@ class DeviceAuth
 
         abort_unless($deviceId, Response::HTTP_UNAUTHORIZED, 'Device ID is missing');
 
-        DeviceFacade::setDevice(
-            UserDevice::query()->firstOrCreate(['api_id' => $deviceId])
-        );
+        $device = UserDevice::query()->firstOrCreate(['api_id' => $deviceId]);
+
+        abort_if($device->isBanned(), Response::HTTP_FORBIDDEN, 'Device blocked');
+
+        DeviceFacade::setDevice($device);
 
         return $next($request);
     }

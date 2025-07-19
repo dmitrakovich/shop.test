@@ -209,15 +209,15 @@ class Device extends Model implements ClientInterface
     {
         // todo: tg log, в нем ссылка на страницу админки для разбана, при необходимости
 
-        $this->update([
+        $this->forceFill([
             'banned_at' => now(),
             'ban_reason' => $reason,
-        ]);
+        ])->save();
     }
 
     public function unban(): void
     {
-        $this->update(['banned_at' => null]);
+        $this->forceFill(['banned_at' => null])->save();
     }
 
     public function isBanned(): bool

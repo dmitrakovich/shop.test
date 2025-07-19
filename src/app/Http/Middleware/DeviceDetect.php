@@ -7,6 +7,7 @@ use App\Facades\Device as DeviceFacade;
 use App\Models\User\Device as UserDevice;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Jenssegers\Agent\Facades\Agent;
@@ -34,9 +35,11 @@ class DeviceDetect
             Cache::put($this->getNewDeviceCacheKey($request), $webId, now()->addHours(6));
         }
 
-        DeviceFacade::setDevice(
-            UserDevice::query()->firstOrCreate(['web_id' => $webId])
-        );
+        $device = UserDevice::query()->firstOrCreate(['web_id' => $webId]);
+
+        abort_if($device->isBanned(), Response::HTTP_FORBIDDEN, 'Device blocked');
+
+        DeviceFacade::setDevice($device);
 
         return $next($request);
     }
