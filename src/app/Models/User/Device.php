@@ -244,11 +244,11 @@ class Device extends Model implements ClientInterface
         $this->isBanned() ? $this->unban() : $this->ban($banReason);
     }
 
-    public function registerError(\Exception $e): void
+    public function registerError(\Throwable $th): void
     {
         $this->errors()->create([
-            'code' => (int)$e->getCode(),
-            'message' => Str::limit($e->getMessage(), 250),
+            'code' => (int)$th->getCode(),
+            'message' => Str::limit($th->getMessage(), 250),
         ]);
 
         if ($this->errors()->count() > DeviceError::BEFORE_BAN_COUNT) {

@@ -41,8 +41,8 @@ return Application::configure(basePath: dirname(__DIR__))
             throw ValidationException::withMessages(['phone' => 'Номер телефона имеет неверный формат.']);
         });
 
-        $exceptions->report(function (\Exception $e) {
-            Device::current()->registerError($e);
+        $exceptions->report(function (\Throwable $th) {
+            Device::current()->registerError($th);
         });
 
         Integration::handles($exceptions);
