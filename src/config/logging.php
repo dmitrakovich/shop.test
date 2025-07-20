@@ -89,7 +89,6 @@ return [
             'handler' => Monolog\Handler\TelegramBotHandler::class,
             'tap' => [TelegramFormatter::class],
             'with' => [
-                // 'parseMode' => 'HTML',
                 'parseMode' => 'MarkdownV2',
                 'apiKey' => env('TELEGRAM_DEV_BOT_TOKEN'),
                 'channel' => env('TELEGRAM_DEV_BOT_CHAT_ID'),

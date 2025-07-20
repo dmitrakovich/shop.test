@@ -5,6 +5,7 @@ namespace App\Models\User;
 use App\Contracts\ClientInterface;
 use App\Enums\Cookie as CookieEnum;
 use App\Enums\User\BanReason;
+use App\Helpers\UrlHelper;
 use App\Models\Cart;
 use App\Models\Favorite;
 use App\Models\Orders\Order;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
 use Jenssegers\Agent\Facades\Agent;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
@@ -207,7 +209,9 @@ class Device extends Model implements ClientInterface
 
     public function ban(BanReason $reason): void
     {
-        // todo: tg log, в нем ссылка на страницу админки для разбана, при необходимости
+        $link = UrlHelper::getBanDevicesAdminUrl();
+        Log::channel('telegram-dev')
+            ->info("Забанено устройство [{$this->id}]($link). Причина: {$reason->getLabel()}");
 
         $this->forceFill([
             'banned_at' => now(),
@@ -223,5 +227,10 @@ class Device extends Model implements ClientInterface
     public function isBanned(): bool
     {
         return !is_null($this->banned_at);
+    }
+
+    public function toggleBan(BanReason $banReason): void
+    {
+        $this->isBanned() ? $this->unban() : $this->ban($banReason);
     }
 }

@@ -179,4 +179,13 @@ class UrlHelper
 
         return $params['v'] ?? 'hrwJvG8kALA';
     }
+
+    public static function getBanDevicesAdminUrl(): string
+    {
+        return route(
+            'filament.admin.resources.user.devices.index',
+            ['tableSortColumn' => 'banned_at', 'tableSortDirection' => 'desc'],
+            true
+        );
+    }
 }
