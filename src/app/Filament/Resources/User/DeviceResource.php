@@ -90,16 +90,14 @@ class DeviceResource extends Resource
                 Tables\Columns\IconColumn::make('type')
                     ->label('Устройство')
                     ->tooltip(fn (string $state): string => $state === 'mobile'
-                    ? 'Мобильное устройство'
-                    : 'Настольный компьютер')
-                    ->icon(fn (string $state): string => match ($state) {
-                        'mobile' => 'heroicon-o-device-phone-mobile',
-                        'desktop' => 'heroicon-o-computer-desktop',
-                    })
-                    ->color(fn (string $state): string => match ($state) {
-                        'mobile' => 'info',
-                        'desktop' => 'primary',
-                    })
+                        ? 'Мобильное устройство'
+                        : 'Настольный компьютер'
+                    )
+                    ->icon(fn (string $state): string => $state === 'mobile'
+                        ? 'heroicon-o-device-phone-mobile'
+                        : 'heroicon-o-computer-desktop'
+                    )
+                    ->color(fn (string $state): string => $state === 'mobile' ? 'info' : 'primary')
                     ->alignCenter(),
                 Tables\Columns\TextColumn::make('ip_address')
                     ->label('IP'),

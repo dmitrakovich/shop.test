@@ -10,7 +10,7 @@ enum BanReason: int implements HasLabel
     case BY_ADMIN = 2;
     case BY_ERRORS = 3;
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return match ($this) {
             self::SUSPICIOUS_ORDER => 'Suspicious order',

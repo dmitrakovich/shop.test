@@ -25,11 +25,7 @@ class ToggleDeviceBanAction
             return $record->isBanned();
         }
 
-        if ($record instanceof User) {
-            return $record->isSomeDevicesBanned();
-        }
-
-        return false;
+        return $record->isSomeDevicesBanned();
     }
 
     private static function getLabel(Device|User $record): string

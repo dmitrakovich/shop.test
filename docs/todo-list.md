@@ -11,3 +11,7 @@
 ## переход на отдельный фронт
 * почистить ничейный корзины (пустой device и cart id)
 * найти и объединить дубликаты devices
+
+## Model-doc
+* use generics phpdoc 
+* fix relations detect
