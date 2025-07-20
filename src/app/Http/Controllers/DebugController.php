@@ -17,9 +17,16 @@ class DebugController extends Controller
 {
     public function index(InstagramService $instagramService)
     {
-        dd(
-            $instagramService->getPosts()
+
+        $link = route('filament.admin.resources.user.devices.index', [], true);
+
+        \Illuminate\Support\Facades\Log::channel('telegram-dev')->info(
+            'test <b>354</b> <a href="http://www.example.com/">inline URL</a> telegram log 2' . "\n567 [liiink]($link) <a href=\"$link\">Example Link</a>"
         );
+
+        // dd(
+        //     $instagramService->getPosts()
+        // );
 
         // Mail::raw('test email sending', function ($message) {
         //     $message->to('dmitrakovich.andrey@yandex.by');
