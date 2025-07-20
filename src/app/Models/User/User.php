@@ -65,6 +65,7 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserBlacklist[] $blacklistLogs
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePayment[] $payments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserPromocode[] $usedPromocodes
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Device[] $devices
  */
 class User extends Authenticatable implements AuthorInterface, ClientInterface, MustVerifyEmail
 {
@@ -332,6 +333,14 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
     }
 
     /**
+     * @return HasMany<Device, $this>
+     */
+    public function devices(): HasMany
+    {
+        return $this->hasMany(Device::class);
+    }
+
+    /**
      * Update datetime in phone_verified_at field
      */
     public function updatePhoneVerifiedAt(): bool
@@ -472,5 +481,10 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
     public function validateOtp(string $otp): bool
     {
         return $this->otp_code === $otp && $this->otp_expires_at?->isFuture();
+    }
+
+    public function isSomeDevicesBanned(): bool
+    {
+        return $this->devices->some(fn (Device $device) => $device->isBanned());
     }
 }

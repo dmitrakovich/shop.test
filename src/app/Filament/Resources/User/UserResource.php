@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\User;
 
 use App\Enums\User\OrderType;
+use App\Filament\Actions\ToggleDeviceBanAction;
 use App\Filament\Components\Forms\RelationManager;
 use App\Filament\Resources\User\UserResource\Pages;
 use App\Filament\Resources\User\UserResource\RelationManagers\BlacklistRelationManager;
@@ -204,10 +205,11 @@ class UserResource extends Resource
             ])
             ->defaultSort('id', 'desc')
             ->modifyQueryUsing(
-                fn (Builder $query) => $query->with(['orders.data'])
+                fn (Builder $query) => $query->with(['orders.data', 'devices'])
             )
             ->actions([
                 Tables\Actions\EditAction::make(),
+                ToggleDeviceBanAction::make(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('last_order_type')

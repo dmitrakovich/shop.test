@@ -209,14 +209,14 @@ class Device extends Model implements ClientInterface
 
     public function ban(BanReason $reason): void
     {
-        $link = UrlHelper::getBanDevicesAdminUrl();
-        Log::channel('telegram-dev')
-            ->info("Забанено устройство [{$this->id}]($link). Причина: {$reason->getLabel()}");
-
         $this->forceFill([
             'banned_at' => now(),
             'ban_reason' => $reason,
         ])->save();
+
+        $link = UrlHelper::getBanDevicesAdminUrl();
+        Log::channel('telegram-dev')
+            ->info("Забанено устройство [{$this->id}]($link)\. Причина: {$reason->getLabel()}");
     }
 
     public function unban(): void

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\User;
 
-use App\Enums\User\BanReason;
+use App\Filament\Actions\ToggleDeviceBanAction;
 use App\Filament\Resources\User\DeviceResource\Pages;
 use App\Models\User\Device;
 use Filament\Forms;
@@ -129,14 +129,7 @@ class DeviceResource extends Resource
             ->defaultSort('id', 'desc')
             ->actions([
                 // Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('toggleBan')
-                    ->label(fn (Device $record) => $record->isBanned() ? 'Разбанить' : 'Забанить')
-                    ->icon(fn (Device $record) => $record->isBanned() ? 'heroicon-o-lock-open' : 'heroicon-o-lock-closed')
-                    ->color(fn (Device $record) => $record->isBanned() ? 'success' : 'danger')
-                    ->requiresConfirmation()
-                    ->action(function (Device $record) {
-                        $record->isBanned() ? $record->unban() : $record->ban(BanReason::BY_ADMIN);
-                    }),
+                ToggleDeviceBanAction::make(),
             ])
             ->recordClasses(
                 fn (Device $record) => $record->isBanned() ? 'bg-danger/10' : null
