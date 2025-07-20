@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Order\BanDeviceAction;
 use App\Admin\Actions\Order\BuyoutFormAction;
 use App\Admin\Actions\Order\CancelPayment;
 use App\Admin\Actions\Order\CapturePayment;
@@ -113,6 +114,7 @@ class OrderController extends AbstractAdminController
         $grid->actions(function ($actions) {
             $actions->add(new ProcessOrder());
             $actions->add(new PrintOrder());
+            $actions->add(new BanDeviceAction());
         });
 
         $grid->batchActions(function ($batch) {
