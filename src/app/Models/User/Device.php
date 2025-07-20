@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Jenssegers\Agent\Facades\Agent;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
@@ -39,6 +40,7 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Favorite[] $favorites
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
  * @property-read \App\Models\User\User|null $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\DeviceError[] $errors
  */
 class Device extends Model implements ClientInterface
 {
@@ -137,6 +139,14 @@ class Device extends Model implements ClientInterface
     }
 
     /**
+     * @return HasMany<DeviceError, $this>
+     */
+    public function errors(): HasMany
+    {
+        return $this->hasMany(DeviceError::class);
+    }
+
+    /**
      * Set the device's yandex id
      */
     public function setYandexId(?int $yandexId = null): void
@@ -232,5 +242,17 @@ class Device extends Model implements ClientInterface
     public function toggleBan(BanReason $banReason): void
     {
         $this->isBanned() ? $this->unban() : $this->ban($banReason);
+    }
+
+    public function registerError(\Exception $e): void
+    {
+        $this->errors()->create([
+            'code' => (int)$e->getCode(),
+            'message' => Str::limit($e->getMessage(), 250),
+        ]);
+
+        if ($this->errors()->count() > DeviceError::BEFORE_BAN_COUNT) {
+            $this->ban(BanReason::BY_ERRORS);
+        }
     }
 }
