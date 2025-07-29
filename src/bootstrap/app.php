@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\Cookie;
-use App\Facades\Device;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,8 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware
             ->validateSignatures(['utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term'])
             ->preventRequestsDuringMaintenance(['/opcache-api/*'])
-            ->encryptCookies(['utm', Cookie::YANDEX_ID->value, Cookie::GOOGLE_ID->value])
-            ->throttleApi(redis: true);
+            ->encryptCookies(['utm', Cookie::YANDEX_ID->value, Cookie::GOOGLE_ID->value]);
 
         $middleware->group('web', [
             \Illuminate\Cookie\Middleware\EncryptCookies::class,
@@ -39,10 +37,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->report(function (NumberParseException $e) {
             throw ValidationException::withMessages(['phone' => 'Номер телефона имеет неверный формат.']);
-        });
-
-        $exceptions->report(function (\Throwable $th) {
-            Device::current()->registerError($th);
         });
 
         Integration::handles($exceptions);
