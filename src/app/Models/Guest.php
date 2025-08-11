@@ -39,7 +39,7 @@ class Guest
      */
     public static function getData(): array
     {
-        return json_decode(Cookie::get(self::COOKIE_NAME, '[]'), true);
+        return json_decode(Cookie::get(self::COOKIE_NAME, '[]'), true) ?? [];
     }
 
     /**
