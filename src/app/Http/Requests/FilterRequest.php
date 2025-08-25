@@ -56,6 +56,8 @@ class FilterRequest extends FormRequest
 
     /**
      * Get filters
+     *
+     * @return array<string, array<string, Url>>
      */
     public function getFilters(): array
     {

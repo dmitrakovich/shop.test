@@ -7,6 +7,7 @@ use App\Helpers\UrlHelper;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
+use App\Models\Url;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\CursorPaginator;
@@ -50,6 +51,9 @@ class CatalogService
         return $products;
     }
 
+    /**
+     * @param  array<string, array<string, Url>>  $filters
+     */
     public function getProductsWithPagination(array $filters, string $sort, ?string $search = null): LengthAwarePaginator
     {
         /** @var Builder $productsQuery */

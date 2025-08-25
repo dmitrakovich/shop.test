@@ -50,8 +50,9 @@ class ToggleDeviceBanAction
         }
 
         if ($record instanceof User) {
-            $action = self::isBanned($record) ? 'unban' : 'ban';
-            $record->devices->each(fn (Device $device) => $device->$action(BanReason::BY_ADMIN));
+            $record->devices->each(
+                fn (Device $device) => self::isBanned($record) ? $device->unban() : $device->ban(BanReason::BY_ADMIN)
+            );
         }
     }
 }

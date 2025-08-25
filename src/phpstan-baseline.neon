@@ -1255,12 +1255,6 @@ parameters:
 			path: app/Http/Requests/FilterRequest.php
 
 		-
-			message: '#^Method App\\Http\\Requests\\FilterRequest\:\:getFilters\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Http/Requests/FilterRequest.php
-
-		-
 			message: '#^Method App\\Http\\Requests\\FilterRequest\:\:getStaticFilters\(\) has parameter \$slugs with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -2035,13 +2029,13 @@ parameters:
 			path: app/Models/Admin/AdminUser.php
 
 		-
-			message: '#^Method App\\Models\\Admin\\AdminUser\:\:oldPermissions\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			message: '#^Method App\\Models\\Admin\\AdminUser\:\:oldPermissions\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Models/Admin/AdminUser.php
 
 		-
-			message: '#^Method App\\Models\\Admin\\AdminUser\:\:oldRoles\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			message: '#^Method App\\Models\\Admin\\AdminUser\:\:oldRoles\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Models/Admin/AdminUser.php
@@ -2101,7 +2095,7 @@ parameters:
 			path: app/Models/Ads/ProductCarousel.php
 
 		-
-			message: '#^Method App\\Models\\Ads\\ProductCarousel\:\:categoriesList\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			message: '#^Method App\\Models\\Ads\\ProductCarousel\:\:categoriesList\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Models/Ads/ProductCarousel.php
@@ -2737,12 +2731,6 @@ parameters:
 			path: app/Models/Feeds/GoogleCsv.php
 
 		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: array\{int, string, string, mixed, string, string, string, string\|null\}, Closure\(App\\Models\\Product\)\: array\{int, string, string, mixed, string, string, string, string\|null\} given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Models/Feeds/GoogleCsv.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
 			identifier: property.notFound
 			count: 1
@@ -2763,12 +2751,6 @@ parameters:
 		-
 			message: '#^Method App\\Models\\Feeds\\GoogleXml\:\:getItems\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Feeds/GoogleXml.php
-
-		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: \(object\{id\: int, link\: string, size\: string, availability\: ''in stock''\|''out of stock'', price\: float, old_price\: float, images\: mixed, brand\: string, google_product_category\: int, product_type\: string, description\: string, title\: string, material\: string\|null, color\: string\}&stdClass\), Closure\(App\\Models\\Product\)\: \(object\{id\: int, link\: string, size\: string, availability\: ''in stock''\|''out of stock'', price\: float, old_price\: float, images\: mixed, brand\: string, google_product_category\: int, product_type\: string, description\: string, title\: string, material\: string\|null, color\: string\}&stdClass\) given\.$#'
-			identifier: argument.type
 			count: 1
 			path: app/Models/Feeds/GoogleXml.php
 
@@ -2816,12 +2798,6 @@ parameters:
 
 		-
 			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: \(object\{id\: int, name\: string, parent_id\?\: int\|null\}&stdClass\), Closure\(App\\Models\\Category\)\: \(object\{id\: int, name\: string, parent_id\?\: int\|null\}&stdClass\) given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Models/Feeds/YandexXml.php
-
-		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: \(object\{id\: int, url\: string, name\: string, price\: float, old_price\: float, colors\: array, params\: array, category_id\: int, pictures\: mixed, type_prefix\: string, vendor\: string, model\: string, description\: string, sales_notes\: string, video\: mixed\}&stdClass\), Closure\(App\\Models\\Product\)\: \(object\{id\: int, url\: string, name\: string, price\: float, old_price\: float, colors\: array, params\: array, category_id\: int, pictures\: mixed, type_prefix\: string, vendor\: string, model\: string, description\: string, sales_notes\: string, video\: mixed\}&stdClass\) given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Models/Feeds/YandexXml.php
@@ -2977,7 +2953,7 @@ parameters:
 			path: app/Models/Offline/Displacement.php
 
 		-
-			message: '#^Method App\\Models\\Offline\\Displacement\:\:orderItems\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			message: '#^Method App\\Models\\Offline\\Displacement\:\:orderItems\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Models/Offline/Displacement.php
@@ -4183,15 +4159,15 @@ parameters:
 			path: app/Services/CatalogService.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Pagination\\LengthAwarePaginator\<Illuminate\\Database\\Eloquent\\Model\>\:\:\$totalCount\.$#'
+			message: '#^Access to an undefined property Illuminate\\Pagination\\CursorPaginator\<int, App\\Models\\Product\>\:\:\$totalCount\.$#'
 			identifier: property.notFound
 			count: 1
 			path: app/Services/CatalogService.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:search\(\)\.$#'
-			identifier: method.notFound
-			count: 2
+			message: '#^Access to an undefined property Illuminate\\Pagination\\LengthAwarePaginator\<int, Illuminate\\Database\\Eloquent\\Model\>\:\:\$totalCount\.$#'
+			identifier: property.notFound
+			count: 1
 			path: app/Services/CatalogService.php
 
 		-
@@ -4201,13 +4177,13 @@ parameters:
 			path: app/Services/CatalogService.php
 
 		-
-			message: '#^Method App\\Services\\CatalogService\:\:addMinMaxPrices\(\) has parameter \$products with generic class Illuminate\\Pagination\\CursorPaginator but does not specify its types\: TValue$#'
+			message: '#^Method App\\Services\\CatalogService\:\:addMinMaxPrices\(\) has parameter \$products with generic class Illuminate\\Pagination\\CursorPaginator but does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Services/CatalogService.php
 
 		-
-			message: '#^Method App\\Services\\CatalogService\:\:addMinMaxPrices\(\) has parameter \$products with generic interface Illuminate\\Contracts\\Pagination\\LengthAwarePaginator but does not specify its types\: TItem$#'
+			message: '#^Method App\\Services\\CatalogService\:\:addMinMaxPrices\(\) has parameter \$products with generic interface Illuminate\\Contracts\\Pagination\\LengthAwarePaginator but does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Services/CatalogService.php
@@ -4237,7 +4213,7 @@ parameters:
 			path: app/Services/CatalogService.php
 
 		-
-			message: '#^Method App\\Services\\CatalogService\:\:getNextProducts\(\) return type with generic interface Illuminate\\Contracts\\Pagination\\CursorPaginator does not specify its types\: TItem$#'
+			message: '#^Method App\\Services\\CatalogService\:\:getNextProducts\(\) return type with generic interface Illuminate\\Contracts\\Pagination\\CursorPaginator does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Services/CatalogService.php
@@ -4249,19 +4225,13 @@ parameters:
 			path: app/Services/CatalogService.php
 
 		-
-			message: '#^Method App\\Services\\CatalogService\:\:getProducts\(\) return type with generic interface Illuminate\\Contracts\\Pagination\\CursorPaginator does not specify its types\: TItem$#'
+			message: '#^Method App\\Services\\CatalogService\:\:getProducts\(\) return type with generic interface Illuminate\\Contracts\\Pagination\\CursorPaginator does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Services/CatalogService.php
 
 		-
-			message: '#^Method App\\Services\\CatalogService\:\:getProductsWithPagination\(\) has parameter \$filters with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/CatalogService.php
-
-		-
-			message: '#^Method App\\Services\\CatalogService\:\:getProductsWithPagination\(\) return type with generic interface Illuminate\\Contracts\\Pagination\\LengthAwarePaginator does not specify its types\: TItem$#'
+			message: '#^Method App\\Services\\CatalogService\:\:getProductsWithPagination\(\) return type with generic interface Illuminate\\Contracts\\Pagination\\LengthAwarePaginator does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Services/CatalogService.php
@@ -4273,13 +4243,19 @@ parameters:
 			path: app/Services/CatalogService.php
 
 		-
-			message: '#^Parameter \#1 \$products of method App\\Services\\CatalogService\:\:addGtmData\(\) expects Illuminate\\Support\\Collection, Illuminate\\Pagination\\CursorPaginator\<Illuminate\\Database\\Eloquent\\Model\> given\.$#'
+			message: '#^Parameter \#1 \$products of method App\\Services\\CatalogService\:\:addGtmData\(\) expects Illuminate\\Support\\Collection, Illuminate\\Pagination\\CursorPaginator\<int, App\\Models\\Product\> given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Services/CatalogService.php
 
 		-
-			message: '#^Parameter \#1 \$products of method App\\Services\\CatalogService\:\:addGtmData\(\) expects Illuminate\\Support\\Collection, Illuminate\\Pagination\\LengthAwarePaginator\<Illuminate\\Database\\Eloquent\\Model\> given\.$#'
+			message: '#^Parameter \#1 \$products of method App\\Services\\CatalogService\:\:addGtmData\(\) expects Illuminate\\Support\\Collection, Illuminate\\Pagination\\CursorPaginator\<int, Illuminate\\Database\\Eloquent\\Model\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/CatalogService.php
+
+		-
+			message: '#^Parameter \#1 \$products of method App\\Services\\CatalogService\:\:addGtmData\(\) expects Illuminate\\Support\\Collection, Illuminate\\Pagination\\LengthAwarePaginator\<int, Illuminate\\Database\\Eloquent\\Model\> given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Services/CatalogService.php
@@ -4555,18 +4531,6 @@ parameters:
 			path: app/Services/Order/OrderItemInventoryService.php
 
 		-
-			message: '#^Loose comparison using \=\= between \(int\|false\) and \(int\|false\) will always evaluate to true\.$#'
-			identifier: equal.alwaysTrue
-			count: 1
-			path: app/Services/Order/OrdersDistributionService.php
-
-		-
-			message: '#^Unreachable statement \- code above always terminates\.$#'
-			identifier: deadCode.unreachable
-			count: 1
-			path: app/Services/Order/OrdersDistributionService.php
-
-		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:statuses\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -4741,66 +4705,6 @@ parameters:
 			path: app/Services/Payment/PaymentService.php
 
 		-
-			message: '#^Method App\\Services\\ProductService\:\:addEager\(\) has parameter \$products with generic class Illuminate\\Database\\Eloquent\\Collection but does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
-			message: '#^Method App\\Services\\ProductService\:\:addEager\(\) has parameter \$products with generic interface Illuminate\\Contracts\\Pagination\\CursorPaginator but does not specify its types\: TItem$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
-			message: '#^Method App\\Services\\ProductService\:\:addEager\(\) has parameter \$products with generic interface Illuminate\\Contracts\\Pagination\\LengthAwarePaginator but does not specify its types\: TItem$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
-			message: '#^Method App\\Services\\ProductService\:\:applyFilters\(\) has parameter \$filters with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
-			message: '#^Method App\\Services\\ProductService\:\:applyFilters\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
-			message: '#^Method App\\Services\\ProductService\:\:getById\(\) has parameter \$ids with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
-			message: '#^Method App\\Services\\ProductService\:\:getById\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
-			message: '#^Method App\\Services\\ProductService\:\:getForFeed\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
-			message: '#^Method App\\Services\\ProductService\:\:getRecent\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
-			message: '#^Method App\\Services\\ProductService\:\:getRecommended\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
 			message: '#^Method App\\Services\\SaleService\:\:applyPendingPromocode\(\) has parameter \$user with no type specified\.$#'
 			identifier: missingType.parameter
 			count: 1
@@ -4915,13 +4819,13 @@ parameters:
 			path: app/Services/Seo/CatalogSeoService.php
 
 		-
-			message: '#^Method App\\Services\\Seo\\CatalogSeoService\:\:setProducts\(\) has parameter \$products with generic class Illuminate\\Pagination\\CursorPaginator but does not specify its types\: TValue$#'
+			message: '#^Method App\\Services\\Seo\\CatalogSeoService\:\:setProducts\(\) has parameter \$products with generic class Illuminate\\Pagination\\CursorPaginator but does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Services/Seo/CatalogSeoService.php
 
 		-
-			message: '#^Property App\\Services\\Seo\\CatalogSeoService\:\:\$catalogProducts with generic class Illuminate\\Pagination\\CursorPaginator does not specify its types\: TValue$#'
+			message: '#^Property App\\Services\\Seo\\CatalogSeoService\:\:\$catalogProducts with generic class Illuminate\\Pagination\\CursorPaginator does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Services/Seo/CatalogSeoService.php

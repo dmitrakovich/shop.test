@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\Url;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,6 +14,9 @@ class ProductService
 {
     /**
      * Применить фильтры к выборке
+     *
+     * @param  array<string, array<string, Url>>  $filters
+     * @return Builder<Product>
      */
     public function applyFilters(array $filters): Builder
     {
@@ -31,6 +35,8 @@ class ProductService
 
     /**
      * Load the relationships that should be eager loaded.
+     *
+     * @param  CursorPaginator<array-key, Product>|LengthAwarePaginator<array-key, Product>|EloquentCollection<array-key, Product>  $products
      */
     public function addEager(CursorPaginator|LengthAwarePaginator|EloquentCollection $products): void
     {
@@ -44,6 +50,13 @@ class ProductService
         ]);
     }
 
+    /**
+     * Get products collection by ids
+     *
+     * @param  array<int>  $ids
+     *
+     * @return EloquentCollection<array-key, Product>
+     */
     public function getById(array $ids): EloquentCollection
     {
         return Product::query()->whereIn('id', $ids)->with([
@@ -63,9 +76,9 @@ class ProductService
     /**
      * Get products collection for feed
      *
-     * @param  bool  $withTrashed
+     * @return EloquentCollection<array-key, Product>
      */
-    public function getForFeed($withTrashed = false): EloquentCollection
+    public function getForFeed(bool $withTrashed = false): EloquentCollection
     {
         return Product::with([
             'category',
@@ -85,6 +98,8 @@ class ProductService
 
     /**
      * Return recommended products
+     *
+     * @return EloquentCollection<array-key, Product>
      */
     public function getRecommended(): EloquentCollection
     {
@@ -112,6 +127,8 @@ class ProductService
 
     /**
      * Get product to recent
+     *
+     * @return array<int>
      */
     public function getRecent(): array
     {
