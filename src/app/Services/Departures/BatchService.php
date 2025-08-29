@@ -16,12 +16,12 @@ class BatchService
     public function createBatchCsv(Batch $batch)
     {
         $result = [];
-        $resultFileName = $batch->id.'.csv';
+        $resultFileName = $batch->id . '.csv';
         $resultDir = 'departures/batch_send';
-        $resultPath = $resultDir.'/'.$resultFileName;
-        $resultStoragePath = storage_path('app/public/'.$resultPath);
-        $zipPath = $resultDir.'/'.$batch->id.'.zip';
-        $zipStoragePath = storage_path('app/public/'.$zipPath);
+        $resultPath = $resultDir . '/' . $resultFileName;
+        $resultStoragePath = storage_path('app/public/' . $resultPath);
+        $zipPath = $resultDir . '/' . $batch->id . '.zip';
+        $zipStoragePath = storage_path('app/public/' . $zipPath);
 
         File::ensureDirectoryExists(dirname($resultStoragePath));
 
@@ -94,11 +94,11 @@ class BatchService
         }
         fclose($fp);
 
-        $zip = new ZipArchive;
+        $zip = new ZipArchive();
         $zip->open($zipStoragePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
         $zip->addFile($resultStoragePath, $resultFileName);
         $zip->close();
 
-        return url('storage/'.$zipPath);
+        return url('storage/' . $zipPath);
     }
 }
