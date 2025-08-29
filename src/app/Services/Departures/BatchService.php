@@ -26,8 +26,8 @@ class BatchService
         File::ensureDirectoryExists(dirname($resultStoragePath));
 
         $batch->loadMissing([
-            'orders' => fn (Builder $query) => $query->with([
-                'itemsExtended' => fn (Builder $query) => $query
+            'orders' => fn(Builder $query) => $query->with([
+                'itemsExtended' => fn(Builder $query) => $query
                     ->whereIn('status_key', Order::$itemDepartureStatuses)
                     ->with('installment'),
                 'onlinePayments',
@@ -60,7 +60,7 @@ class BatchService
                 2, // * Отправитель ПО (S) (1 – население; 2 – организация;)
                 0, // * Категория ПО (T) (0 – отправление по РБ 1 – неприритетное 2 – приоритетное)
                 0, // * "Уведомить о вручении VIP (U) (0 – не уведомлять; 1 – уведомление; VIP)
-                ($order->weight ?? 1200), // * Вес ПО (V)
+                ($order->weight > 0 ? $order->weight : 1), // * Вес ПО (V)
                 0, // * Объявленная ценность (W) (0 – без объявленной ценности)
                 $price, // * Стоимость ПО (X)
                 0, // * Особые отметки – «Осторожно»(Y) (0 – отсутствие отметки  1 – наличие отметки)
@@ -90,7 +90,7 @@ class BatchService
         ]);
         $fp = fopen($resultStoragePath, 'w');
         foreach ($result as $fields) {
-            fputcsv($fp, array_map(fn ($value) => iconv('UTF-8', 'Windows-1251//IGNORE', $value), $fields), ';');
+            fputcsv($fp, array_map(fn($value) => iconv('UTF-8', 'Windows-1251//IGNORE', $value), $fields), ';');
         }
         fclose($fp);
 
