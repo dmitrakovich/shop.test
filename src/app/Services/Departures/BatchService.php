@@ -16,18 +16,18 @@ class BatchService
     public function createBatchCsv(Batch $batch)
     {
         $result = [];
-        $resultFileName = $batch->id . '.csv';
+        $resultFileName = $batch->id.'.csv';
         $resultDir = 'departures/batch_send';
-        $resultPath = $resultDir . '/' . $resultFileName;
-        $resultStoragePath = storage_path('app/public/' . $resultPath);
-        $zipPath = $resultDir . '/' . $batch->id . '.zip';
-        $zipStoragePath = storage_path('app/public/' . $zipPath);
+        $resultPath = $resultDir.'/'.$resultFileName;
+        $resultStoragePath = storage_path('app/public/'.$resultPath);
+        $zipPath = $resultDir.'/'.$batch->id.'.zip';
+        $zipStoragePath = storage_path('app/public/'.$zipPath);
 
         File::ensureDirectoryExists(dirname($resultStoragePath));
 
         $batch->loadMissing([
-            'orders' => fn(Builder $query) => $query->with([
-                'itemsExtended' => fn(Builder $query) => $query
+            'orders' => fn (Builder $query) => $query->with([
+                'itemsExtended' => fn (Builder $query) => $query
                     ->whereIn('status_key', Order::$itemDepartureStatuses)
                     ->with('installment'),
                 'onlinePayments',
@@ -90,15 +90,15 @@ class BatchService
         ]);
         $fp = fopen($resultStoragePath, 'w');
         foreach ($result as $fields) {
-            fputcsv($fp, array_map(fn($value) => iconv('UTF-8', 'Windows-1251//IGNORE', $value), $fields), ';');
+            fputcsv($fp, array_map(fn ($value) => iconv('UTF-8', 'Windows-1251//IGNORE', $value), $fields), ';');
         }
         fclose($fp);
 
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
         $zip->open($zipStoragePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
         $zip->addFile($resultStoragePath, $resultFileName);
         $zip->close();
 
-        return url('storage/' . $zipPath);
+        return url('storage/'.$zipPath);
     }
 }
