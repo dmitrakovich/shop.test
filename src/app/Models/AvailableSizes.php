@@ -266,6 +266,8 @@ class AvailableSizes extends Model implements HasMedia
         }
 
         return implode(', ', $sizes);
+
+        // new r
     }
 
     /**
