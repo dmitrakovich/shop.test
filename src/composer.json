@@ -51,6 +51,7 @@
         "maatwebsite/excel": "^3.1",
         "mokhosh/filament-rating": "^1.4",
         "php-ffmpeg/php-ffmpeg": "^1.3",
+        "phpoffice/phpspreadsheet": "^1.30",
         "picqer/php-barcode-generator": "^2.4",
         "sentry/sentry-laravel": "^4.13",
         "spatie/laravel-backup": "^9.2",
