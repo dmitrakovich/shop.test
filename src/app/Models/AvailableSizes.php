@@ -84,6 +84,8 @@ class AvailableSizes extends Model implements HasMedia
 
     /**
      * Get the product that owns the available size.
+     *
+     * @return BelongsTo<Product, $this>
      */
     public function product(): BelongsTo
     {
@@ -92,6 +94,8 @@ class AvailableSizes extends Model implements HasMedia
 
     /**
      * Get the category that owns the available product size.
+     *
+     * @return BelongsTo<Category, $this>
      */
     public function category(): BelongsTo
     {
@@ -100,6 +104,8 @@ class AvailableSizes extends Model implements HasMedia
 
     /**
      * Get the brand that owns the available product size.
+     *
+     * @return BelongsTo<Brand, $this>
      */
     public function brand(): BelongsTo
     {
@@ -108,6 +114,8 @@ class AvailableSizes extends Model implements HasMedia
 
     /**
      * Get the stock that owns the available size.
+     *
+     * @return BelongsTo<Stock, $this>
      */
     public function stock(): BelongsTo
     {
@@ -116,6 +124,8 @@ class AvailableSizes extends Model implements HasMedia
 
     /**
      * Get all of the media for the product.
+     *
+     * @return MorphMany<Media, Product>
      */
     public function media(): MorphMany
     {
@@ -128,6 +138,8 @@ class AvailableSizes extends Model implements HasMedia
 
     /**
      * Get all sizes associated with the product.
+     *
+     * @return MorphToMany<Size, $this>
      */
     public function sizes(): MorphToMany
     {
@@ -155,6 +167,8 @@ class AvailableSizes extends Model implements HasMedia
     /**
      * Returns an array of size fields.
      * The array includes the "size_none" field and all size fields from "size_31" to "size_48".
+     *
+     * @return array<int, string>
      */
     public static function getSizeFields(): array
     {
@@ -171,6 +185,8 @@ class AvailableSizes extends Model implements HasMedia
      *
      * The array includes the "size_none" field and all size fields, with each field name
      * preceded by the SUM function and followed by the original field name as an alias.
+     *
+     * @return array<int, string>
      */
     public static function getSumWrappedSizeFields(): array
     {
@@ -182,6 +198,8 @@ class AvailableSizes extends Model implements HasMedia
      *
      * The array includes the "size_none" field and all size fields, with each field name
      * preceded by the GROUP_CONCAT function and followed by the original field name as an alias.
+     *
+     * @return array<int, string>
      */
     public static function getGroupConcatWrappedSizeFields(): array
     {
@@ -206,6 +224,8 @@ class AvailableSizes extends Model implements HasMedia
 
     /**
      * Get the size attributes for this model instance.
+     *
+     * @return array<string, int>
      */
     protected function getSizeAttributes(): array
     {
@@ -214,6 +234,8 @@ class AvailableSizes extends Model implements HasMedia
 
     /**
      * Get the available size attributes for this model instance.
+     *
+     * @return array<string, int>
      */
     protected function getAvailableSizeAttributes(): array
     {
@@ -222,6 +244,8 @@ class AvailableSizes extends Model implements HasMedia
 
     /**
      * Get the available size IDs for this model instance.
+     *
+     * @return list<int>
      */
     public function getAvailableSizeIds(): array
     {
@@ -276,6 +300,6 @@ class AvailableSizes extends Model implements HasMedia
     {
         $brandName = $this->brand->name ?? null;
 
-        return "$brandName {$this->product_id} ({$this->sku})";
+        return "$brandName {$this->product_id}";
     }
 }

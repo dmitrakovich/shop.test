@@ -88,8 +88,9 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
                 }
 
                 $sheet->getColumnDimension('A')->setWidth(16); // фото
-                $sheet->getColumnDimension('B')->setWidth(45); // название
-                for ($i = 3; $i < $columnCount - 3; $i++) {
+                $sheet->getColumnDimension('B')->setWidth(22); // название
+                $sheet->getColumnDimension('C')->setWidth(27); // артикул
+                for ($i = 4; $i < $columnCount - 4; $i++) {
                     $sheet->getColumnDimensionByColumn($i)->setWidth(20); // склады
                 }
                 $sheet->getColumnDimensionByColumn($columnCount - 3)->setWidth(25); // размеры на сайте

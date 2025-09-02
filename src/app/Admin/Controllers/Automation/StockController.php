@@ -70,6 +70,7 @@ class StockController extends AbstractAdminController
 
         $grid->column('media', 'Фото')->display(fn () => $this->getFirstMediaUrl('default', 'thumb'))->image();
         $grid->column('product_name', 'Название')->display(fn () => $this->getNameForStock());
+        $grid->column('sku', 'Артикул');
 
         $stockIds = request()->input('stock_id') ?? $defaultStockList;
         foreach ($stockIds as $stockId) {
