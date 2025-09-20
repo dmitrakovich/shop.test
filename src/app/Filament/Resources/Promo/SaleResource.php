@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Promo;
 
+use App\Enums\Filament\NavGroup;
 use App\Enums\Promo\SaleAlgorithm;
 use App\Filament\Resources\Promo\SaleResource\Pages;
 use App\Models\Category;
@@ -19,7 +20,7 @@ class SaleResource extends Resource
 {
     protected static ?string $model = Sale::class;
 
-    protected static ?string $navigationGroup = 'promo';
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::PROMO;
 
     protected static ?string $modelLabel = 'Акция';
 

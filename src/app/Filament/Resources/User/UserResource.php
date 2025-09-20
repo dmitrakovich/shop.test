@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\User;
 
+use App\Enums\Filament\NavGroup;
 use App\Enums\User\OrderType;
 use App\Filament\Actions\ToggleDeviceBanAction;
 use App\Filament\Components\Forms\RelationManager;
@@ -36,7 +37,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationGroup = 'user';
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::USER;
 
     protected static ?string $modelLabel = 'Пользователи';
 

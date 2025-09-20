@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\User;
 
 use App\Enums\Feedback\FeedbackType;
+use App\Enums\Filament\NavGroup;
 use App\Filament\Resources\User\FeedbackResource\Pages;
 use App\Filament\Resources\User\FeedbackResource\RelationManagers;
 use App\Models\Feedback;
@@ -23,7 +24,7 @@ class FeedbackResource extends Resource
 {
     protected static ?string $model = Feedback::class;
 
-    protected static ?string $navigationGroup = 'user';
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::USER;
 
     protected static ?string $modelLabel = 'Отзыв';
 

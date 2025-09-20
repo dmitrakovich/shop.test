@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Product;
 
+use App\Enums\Filament\NavGroup;
 use App\Filament\Resources\Product\SizeResource\Pages;
 use App\Models\Size;
 use Filament\Forms;
@@ -16,7 +17,7 @@ class SizeResource extends Resource
 {
     protected static ?string $model = Size::class;
 
-    protected static ?string $navigationGroup = 'products';
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::PRODUCTS;
 
     protected static ?string $modelLabel = 'Размеры';
 

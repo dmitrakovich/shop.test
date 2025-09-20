@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Management;
 
+use App\Enums\Filament\NavGroup;
 use App\Filament\Resources\Management\AdminUserResource\Pages;
 use App\Models\Admin\AdminUser;
 use Filament\Forms;
@@ -16,7 +17,7 @@ class AdminUserResource extends Resource
 {
     protected static ?string $model = AdminUser::class;
 
-    protected static ?string $navigationGroup = 'management';
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::MANAGEMENT;
 
     protected static ?string $modelLabel = 'Пользователь';
 

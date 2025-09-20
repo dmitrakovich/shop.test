@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Product\SizeResource\Pages;
 use App\Filament\Resources\Product\SizeResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Support\Enums\MaxWidth;
+use Filament\Support\Enums\Width;
 
 class ListSizes extends ListRecords
 {
@@ -18,8 +18,8 @@ class ListSizes extends ListRecords
         ];
     }
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width
     {
-        return MaxWidth::FiveExtraLarge;
+        return Width::FiveExtraLarge;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Registries;
 
+use App\Enums\Filament\NavGroup;
 use App\Filament\Resources\Registries\DefectiveProductResource\Pages;
 use App\Models\AvailableSizes;
 use App\Models\DefectiveProduct;
@@ -20,7 +21,7 @@ class DefectiveProductResource extends Resource
 {
     protected static ?string $model = DefectiveProduct::class;
 
-    protected static ?string $navigationGroup = 'registries';
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::REGISTRIES;
 
     protected static ?string $modelLabel = 'Реестр брака';
 

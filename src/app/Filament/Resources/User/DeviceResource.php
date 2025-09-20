@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\User;
 
+use App\Enums\Filament\NavGroup;
 use App\Filament\Actions\ToggleDeviceBanAction;
 use App\Filament\Resources\User\DeviceResource\Pages;
 use App\Models\User\Device;
@@ -15,7 +16,7 @@ class DeviceResource extends Resource
 {
     protected static ?string $model = Device::class;
 
-    protected static ?string $navigationGroup = 'user';
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::USER;
 
     protected static ?string $modelLabel = 'Устройство';
 
