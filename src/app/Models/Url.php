@@ -63,4 +63,12 @@ class Url extends Model
     {
         return $this->filters;
     }
+
+    /**
+     * Return true if model is product
+     */
+    public function isProduct(): bool
+    {
+        return $this->model_type === Product::class;
+    }
 }

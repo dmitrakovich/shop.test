@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\InfoPageController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Middleware\RedirectOldProductUrls;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,7 +38,7 @@ Route::middleware('auth:sanctum')->prefix('account')->as('account.')->group(func
 });
 
 Route::get('app-init', [AppController::class, 'init']);
-Route::get('catalog/{path?}', [CatalogController::class, 'index'])->where('path', '[a-zA-Z0-9/_-]+');
+Route::get('catalog/{path?}', [CatalogController::class, 'index'])->where('path', '[a-zA-Z0-9/_-]+')->middleware(RedirectOldProductUrls::class);
 Route::get('product/{product:slug}', [CatalogController::class, 'show'])->withTrashed()->name('product.show');
 
 Route::get('main-page', [InfoPageController::class, 'main']);
