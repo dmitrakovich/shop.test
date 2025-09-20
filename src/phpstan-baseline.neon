@@ -3733,12 +3733,6 @@ parameters:
 			path: app/Models/Url.php
 
 		-
-			message: '#^Method App\\Models\\Url\:\:model\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Url.php
-
-		-
 			message: '#^Method App\\Models\\User\\Address\:\:country\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
 			count: 1

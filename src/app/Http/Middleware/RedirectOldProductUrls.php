@@ -22,11 +22,10 @@ class RedirectOldProductUrls
         $url = Url::query()->firstWhere('slug', $lastSlug);
 
         if ($url?->isProduct()) {
-            return redirect()->route(
-                'api.product.show',
-                $url->model->slug,
-                HttpResponse::HTTP_MOVED_PERMANENTLY
-            );
+            /** @var \App\Models\Product $product */
+            $product = $url->model;
+
+            return redirect()->route('api.product.show', $product->slug, HttpResponse::HTTP_MOVED_PERMANENTLY);
         }
 
         return $next($request);

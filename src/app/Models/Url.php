@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Cache;
  * @property int $model_id
  * @property string|null $redirect
  *
- * @property-read \Illuminate\Database\Eloquent\Model|null $model
+ * @property-read Model|Product|null $model
  * @property-read \Illuminate\Database\Eloquent\Model|null $filters
  */
 class Url extends Model
@@ -42,6 +42,8 @@ class Url extends Model
 
     /**
      * Get the related model
+     *
+     * @return MorphTo<Model|Product, $this>
      */
     public function model(): MorphTo
     {
