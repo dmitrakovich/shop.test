@@ -6,7 +6,7 @@ import axios from 'axios';
 
 window.adminAxios = axios.create({});
 adminAxios.interceptors.request.use((config) => {
-    config.url = '/admin/' + config.url;
+    config.url = '/old-admin/' + config.url;
     return config;
 });
 
