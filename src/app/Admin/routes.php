@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Route;
 Admin::routes();
 
 Route::group([
-    'prefix' => config('admin.route.prefix'),
-    'as' => config('admin.route.prefix') . '.',
+    'prefix' => 'old-admin',
+    'as' => 'admin.',
     'namespace' => config('admin.route.namespace'),
     'middleware' => config('admin.route.middleware'),
 ], function (Router $router) {
