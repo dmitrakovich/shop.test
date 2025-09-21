@@ -44,6 +44,8 @@ class AdminPanelProvider extends PanelProvider
 
     public function panel(Panel $panel): Panel
     {
+        ini_set('memory_limit', '1G');
+
         return $panel
             ->default()
             ->id('admin')
@@ -103,7 +105,7 @@ class AdminPanelProvider extends PanelProvider
         return $this->getOldAdminNavItems()->map(function ($label, $uri) {
             return NavigationItem::make()
                 ->label($label)
-                ->url(url('admin/' . $uri), shouldOpenInNewTab: true)
+                ->url(url('old-admin/' . $uri), shouldOpenInNewTab: true)
                 ->group(NavGroup::OldAdminPanel);
         })->toArray();
     }
