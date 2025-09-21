@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\User;
+namespace App\Filament\Resources\User\Users;
 
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Tabs;
@@ -11,16 +11,16 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\EditAction;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
-use App\Filament\Resources\User\UserResource\Pages\ListUsers;
-use App\Filament\Resources\User\UserResource\Pages\CreateUser;
-use App\Filament\Resources\User\UserResource\Pages\EditUser;
+use App\Filament\Resources\User\Users\Pages\ListUsers;
+use App\Filament\Resources\User\Users\Pages\CreateUser;
+use App\Filament\Resources\User\Users\Pages\EditUser;
 use App\Enums\Filament\NavGroup;
 use App\Enums\User\OrderType;
 use App\Filament\Actions\ToggleDeviceBanAction;
 use App\Filament\Components\Forms\RelationManager;
 use App\Filament\Resources\User\UserResource\Pages;
-use App\Filament\Resources\User\UserResource\RelationManagers\BlacklistRelationManager;
-use App\Filament\Resources\User\UserResource\RelationManagers\PaymentsRelationManager;
+use App\Filament\Resources\User\Users\RelationManagers\BlacklistRelationManager;
+use App\Filament\Resources\User\Users\RelationManagers\PaymentsRelationManager;
 use App\Models\User\Group;
 use App\Models\User\User;
 use App\ValueObjects\Phone;
