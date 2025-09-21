@@ -49,7 +49,12 @@ use Illuminate\Database\Eloquent\Relations;
  */
 class OnlinePayment extends Model
 {
-    protected $guarded = ['id'];
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
 
     protected $appends = [
         'link',

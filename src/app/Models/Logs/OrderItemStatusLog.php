@@ -38,9 +38,11 @@ class OrderItemStatusLog extends Model
     protected $table = 'log_order_item_statuses';
 
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
      */
-    protected $guarded = ['id'];
+    protected static $unguarded = true;
 
     /**
      * The attributes that should be cast.

@@ -96,9 +96,11 @@ class Product extends Model implements HasMedia
     protected $connection = 'mysql';
 
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
      */
-    protected $guarded = [];
+    protected static $unguarded = true;
 
     /**
      * The attributes that should be cast.

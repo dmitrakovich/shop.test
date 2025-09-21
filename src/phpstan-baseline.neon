@@ -895,52 +895,28 @@ parameters:
 			path: app/Exports/UsersToSmsTrafficExport.php
 
 		-
-			message: '#^Method App\\Filament\\Pages\\Auth\\EditProfile\:\:getForms\(\) has invalid return type App\\Filament\\Pages\\Auth\\Form\.$#'
-			identifier: class.notFound
-			count: 1
-			path: app/Filament/Pages/Auth/EditProfile.php
-
-		-
-			message: '#^Method App\\Filament\\Pages\\Auth\\EditProfile\:\:getForms\(\) should return array\<int\|string, App\\Filament\\Pages\\Auth\\Form\|string\> but returns array\<string, Filament\\Forms\\Form\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Filament/Pages/Auth/EditProfile.php
-
-		-
-			message: '#^Method App\\Filament\\Pages\\Auth\\Login\:\:getForms\(\) has invalid return type App\\Filament\\Pages\\Auth\\Form\.$#'
-			identifier: class.notFound
-			count: 1
-			path: app/Filament/Pages/Auth/Login.php
-
-		-
-			message: '#^Method App\\Filament\\Pages\\Auth\\Login\:\:getForms\(\) should return array\<int\|string, App\\Filament\\Pages\\Auth\\Form\|string\> but returns array\<string, Filament\\Forms\\Form\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Filament/Pages/Auth/Login.php
-
-		-
 			message: '#^Parameter \#1 \$options of method Filament\\Forms\\Components\\TextInput\:\:datalist\(\) expects array\<string\>\|Closure\|Illuminate\\Contracts\\Support\\Arrayable\|null, array\{60, 300, 600, 1800, 3600, 86400\} given\.$#'
 			identifier: argument.type
 			count: 1
-			path: app/Filament/Resources/Promo/PromocodeResource.php
+			path: app/Filament/Resources/Promo/Promocodes/PromocodeResource.php
 
 		-
 			message: '#^Binary operation "\*" between string and 100 results in an error\.$#'
 			identifier: binaryOp.invalid
 			count: 1
-			path: app/Filament/Resources/Promo/SaleResource.php
+			path: app/Filament/Resources/Promo/Sales/SaleResource.php
 
 		-
 			message: '#^Parameter \#1 \$options of method Filament\\Forms\\Components\\TextInput\:\:datalist\(\) expects array\<string\>\|Closure\|Illuminate\\Contracts\\Support\\Arrayable\|null, array\{60, 300, 600, 1800, 3600, 86400\} given\.$#'
 			identifier: argument.type
 			count: 1
-			path: app/Filament/Resources/Promo/SaleResource.php
+			path: app/Filament/Resources/Promo/Sales/SaleResource.php
 
 		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:withTrashed\(\)\.$#'
 			identifier: method.notFound
 			count: 1
-			path: app/Filament/Resources/User/UserResource/RelationManagers/BlacklistRelationManager.php
+			path: app/Filament/Resources/Users/Users/RelationManagers/BlacklistRelationManager.php
 
 		-
 			message: '#^Method App\\Filament\\Widgets\\BlogPostsChart\:\:getOptions\(\) return type has no value type specified in iterable type array\.$#'
@@ -2419,18 +2395,6 @@ parameters:
 			path: app/Models/Category.php
 
 		-
-			message: '#^PHPDoc type array of property App\\Models\\Category\:\:\$guarded is not covariant with PHPDoc type array\<string\>\|bool of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$guarded\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Category.php
-
-		-
-			message: '#^Property App\\Models\\Category\:\:\$guarded type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Category.php
-
-		-
 			message: '#^Property App\\Models\\Category\:\:\$sortable has no type specified\.$#'
 			identifier: missingType.property
 			count: 1
@@ -2997,18 +2961,6 @@ parameters:
 		-
 			message: '#^Method App\\Models\\Orders\\OfflineOrder\:\:user\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/OfflineOrder.php
-
-		-
-			message: '#^PHPDoc type array of property App\\Models\\Orders\\OfflineOrder\:\:\$guarded is not covariant with PHPDoc type array\<string\>\|bool of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$guarded\.$#'
-			identifier: property.phpDocType
-			count: 1
-			path: app/Models/Orders/OfflineOrder.php
-
-		-
-			message: '#^Property App\\Models\\Orders\\OfflineOrder\:\:\$guarded type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
 			count: 1
 			path: app/Models/Orders/OfflineOrder.php
 
@@ -4431,12 +4383,6 @@ parameters:
 		-
 			message: '#^PHPDoc tag @var above foreach loop does not specify variable name\.$#'
 			identifier: varTag.noVariable
-			count: 1
-			path: app/Services/Order/OrderItemInventoryService.php
-
-		-
-			message: '#^Parameter \#1 \$columns of method Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\AvailableSizes\>\:\:get\(\) expects array\<int, string\>\|string, array\<int, Illuminate\\Contracts\\Database\\Query\\Expression\|string\> given\.$#'
-			identifier: argument.type
 			count: 1
 			path: app/Services/Order/OrderItemInventoryService.php
 

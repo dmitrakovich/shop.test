@@ -23,7 +23,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SeoLink extends Model
 {
-    protected $guarded = ['id'];
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
 
     /**
      * The attributes that should be cast.

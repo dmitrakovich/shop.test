@@ -20,7 +20,12 @@ class UserBlacklist extends Model
 {
     use SoftDeletes;
 
-    protected $guarded = ['id'];
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
 
     /**
      * Define a relationship with the User model.

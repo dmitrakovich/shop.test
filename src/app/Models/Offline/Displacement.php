@@ -21,7 +21,12 @@ use Illuminate\Database\Eloquent\Relations;
  */
 class Displacement extends Model
 {
-    protected $guarded = ['id'];
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
 
     /**
      * Retrieve the items associated with the order.

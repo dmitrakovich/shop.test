@@ -13,5 +13,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DisplacementItem extends Model
 {
-    protected $guarded = ['id'];
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
 }

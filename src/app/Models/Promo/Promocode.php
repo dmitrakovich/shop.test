@@ -28,11 +28,11 @@ use Illuminate\Support\Carbon;
 class Promocode extends Model
 {
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if all mass assignment is enabled.
      *
-     * @var array<string>|bool
+     * @var bool
      */
-    protected $guarded = ['id'];
+    protected static $unguarded = true;
 
     /**
      * Get the sale that owns the promocode.

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Users\Devices;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Actions\ToggleDeviceBanAction;
 use App\Filament\Resources\Users\Devices\Pages\ListDevices;
+use App\Filament\Resources\Users\Users\UserResource;
 use App\Models\User\Device;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;

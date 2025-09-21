@@ -20,7 +20,12 @@ use Illuminate\Support\Str;
  */
 class City extends Model
 {
-    protected $guarded = ['id'];
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
 
     /**
      * коллекция

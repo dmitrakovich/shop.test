@@ -65,11 +65,11 @@ class Stock extends Model implements HasMedia, Sortable
     protected $connection = 'mysql';
 
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if all mass assignment is enabled.
      *
-     * @var array<string>|bool
+     * @var bool
      */
-    protected $guarded = ['id'];
+    protected static $unguarded = true;
 
     /**
      * The attributes that should be cast.

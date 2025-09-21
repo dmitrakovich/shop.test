@@ -19,11 +19,11 @@ use Illuminate\Database\Eloquent\Relations;
 class UserMetadata extends Model
 {
     /**
-     * The attributes that aren't mass assignable.
+     * Indicates if all mass assignment is enabled.
      *
-     * @var array<string>|bool
+     * @var bool
      */
-    protected $guarded = ['id'];
+    protected static $unguarded = true;
 
     /**
      * The attributes that should be cast.

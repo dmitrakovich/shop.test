@@ -11,7 +11,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProductGroup extends Model
 {
-    protected $guarded = ['id'];
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
 
     /**
      * Product relation.

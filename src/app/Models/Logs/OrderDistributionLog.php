@@ -18,7 +18,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class OrderDistributionLog extends Model
 {
-    protected $guarded = ['id'];
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
 
     /**
      * The table associated with the model.
