@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
@@ -20,7 +21,6 @@ use Filament\Tables\Table;
 use Filament\Widgets;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
-use FilipFonal\FilamentLogManager\FilamentLogManager;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -85,7 +85,7 @@ class AdminPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make()
                     ->navigationGroup(NavGroup::Management) // doesn't work: lib bug
                     ->registerNavigation(true),
-                // FilamentLogManager::make(),
+                FilamentLogViewer::make(),
             ])
             ->bootUsing(function (Panel $panel) {
                 Table::configureUsing(function (Table $table) {
