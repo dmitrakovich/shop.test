@@ -2,10 +2,10 @@
 
 namespace App\Filament\Actions;
 
-use Filament\Actions\Action;
 use App\Enums\User\BanReason;
 use App\Models\User\Device;
 use App\Models\User\User;
+use Filament\Actions\Action;
 
 class ToggleDeviceBanAction
 {

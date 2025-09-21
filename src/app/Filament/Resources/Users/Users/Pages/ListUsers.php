@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Filament\Resources\User\Users\Pages;
+namespace App\Filament\Resources\Users\Users\Pages;
 
+use App\Exports\UsersToSmsTrafficExport;
+use App\Filament\Resources\Users\Users\UserResource;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
-use App\Exports\UsersToSmsTrafficExport;
-use App\Filament\Resources\User\Users\UserResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListUsers extends ListRecords

@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\Registries\DefectiveProducts\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\Registries\DefectiveProducts\DefectiveProductResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditDefectiveProduct extends EditRecord

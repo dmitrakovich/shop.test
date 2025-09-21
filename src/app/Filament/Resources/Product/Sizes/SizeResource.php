@@ -2,21 +2,17 @@
 
 namespace App\Filament\Resources\Product\Sizes;
 
-use Filament\Schemas\Schema;
+use App\Enums\Filament\NavGroup;
+use App\Filament\Resources\Product\Sizes\Pages\ListSizes;
+use App\Models\Size;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Filters\Filter;
-use Filament\Actions\EditAction;
-use App\Filament\Resources\Product\Sizes\Pages\ListSizes;
-use App\Enums\Filament\NavGroup;
-use App\Filament\Resources\Product\SizeResource\Pages;
-use App\Models\Size;
-use Filament\Forms;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Filters;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
@@ -24,7 +20,7 @@ class SizeResource extends Resource
 {
     protected static ?string $model = Size::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = NavGroup::PRODUCTS;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::PRODUCTS;
 
     protected static ?string $modelLabel = 'Размеры';
 

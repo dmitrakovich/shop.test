@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\User\Users\RelationManagers;
+namespace App\Filament\Resources\Users\Users\RelationManagers;
 
-use Filament\Tables\Columns\TextColumn;
 use App\Models\Payments\OnlinePayment;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 

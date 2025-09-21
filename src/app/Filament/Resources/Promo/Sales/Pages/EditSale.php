@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\Promo\Sales\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\Promo\Sales\SaleResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditSale extends EditRecord

@@ -2,8 +2,8 @@
 
 namespace App\Filament\Components\Forms;
 
-use Filament\Schemas\Components\Component;
 use Closure;
+use Filament\Schemas\Components\Component;
 
 class RelationManager extends Component
 {

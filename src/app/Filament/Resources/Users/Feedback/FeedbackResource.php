@@ -1,35 +1,31 @@
 <?php
 
-namespace App\Filament\Resources\User\Feedback;
+namespace App\Filament\Resources\Users\Feedback;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Group;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Hidden;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use App\Filament\Resources\User\Feedback\RelationManagers\AnswersRelationManager;
-use App\Filament\Resources\User\Feedback\Pages\ListFeedback;
-use App\Filament\Resources\User\Feedback\Pages\CreateFeedback;
-use App\Filament\Resources\User\Feedback\Pages\EditFeedback;
 use App\Enums\Feedback\FeedbackType;
 use App\Enums\Filament\NavGroup;
-use App\Filament\Resources\User\FeedbackResource\Pages;
-use App\Filament\Resources\User\FeedbackResource\RelationManagers;
+use App\Filament\Resources\Users\Feedback\Pages\CreateFeedback;
+use App\Filament\Resources\Users\Feedback\Pages\EditFeedback;
+use App\Filament\Resources\Users\Feedback\Pages\ListFeedback;
+use App\Filament\Resources\Users\Feedback\RelationManagers\AnswersRelationManager;
 use App\Models\Feedback;
 use App\Models\Product;
 use App\Models\User\User;
-use Filament\Forms;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Mokhosh\FilamentRating\Columns\RatingColumn;
@@ -39,7 +35,7 @@ class FeedbackResource extends Resource
 {
     protected static ?string $model = Feedback::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = NavGroup::USER;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::USERS;
 
     protected static ?string $modelLabel = 'Отзыв';
 

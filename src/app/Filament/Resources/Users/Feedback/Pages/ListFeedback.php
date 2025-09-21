@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\User\Feedback\Pages;
+namespace App\Filament\Resources\Users\Feedback\Pages;
 
+use App\Filament\Resources\Users\Feedback\FeedbackResource;
 use Filament\Actions\CreateAction;
-use App\Filament\Resources\User\Feedback\FeedbackResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListFeedback extends ListRecords

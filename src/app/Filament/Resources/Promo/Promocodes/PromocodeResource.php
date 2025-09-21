@@ -2,27 +2,25 @@
 
 namespace App\Filament\Resources\Promo\Promocodes;
 
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\EditAction;
-use App\Filament\Resources\Promo\Promocodes\Pages\ManagePromocodes;
 use App\Enums\Filament\NavGroup;
-use App\Filament\Resources\Promo\PromocodeResource\Pages;
+use App\Filament\Resources\Promo\Promocodes\Pages\ManagePromocodes;
 use App\Models\Promo\Promocode;
 use Carbon\CarbonInterval;
-use Filament\Forms;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class PromocodeResource extends Resource
 {
     protected static ?string $model = Promocode::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = NavGroup::PROMO;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::PROMO;
 
     protected static ?string $modelLabel = 'Промокод';
 

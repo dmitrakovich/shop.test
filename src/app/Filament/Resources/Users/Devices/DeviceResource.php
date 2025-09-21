@@ -1,28 +1,26 @@
 <?php
 
-namespace App\Filament\Resources\User\Devices;
+namespace App\Filament\Resources\Users\Devices;
 
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\TextColumn;
-use App\Filament\Resources\User\Devices\Pages\ListDevices;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Actions\ToggleDeviceBanAction;
-use App\Filament\Resources\User\DeviceResource\Pages;
+use App\Filament\Resources\Users\Devices\Pages\ListDevices;
 use App\Models\User\Device;
-use Filament\Forms;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class DeviceResource extends Resource
 {
     protected static ?string $model = Device::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = NavGroup::USER;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::USERS;
 
     protected static ?string $modelLabel = 'Устройство';
 

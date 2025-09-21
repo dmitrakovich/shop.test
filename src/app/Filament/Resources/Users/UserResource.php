@@ -1,29 +1,20 @@
 <?php
 
-namespace App\Filament\Resources\User\Users;
+namespace App\Filament\Resources\Users\Users;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Tabs\Tab;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Fieldset;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\EditAction;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\Filter;
-use App\Filament\Resources\User\Users\Pages\ListUsers;
-use App\Filament\Resources\User\Users\Pages\CreateUser;
-use App\Filament\Resources\User\Users\Pages\EditUser;
 use App\Enums\Filament\NavGroup;
 use App\Enums\User\OrderType;
 use App\Filament\Actions\ToggleDeviceBanAction;
 use App\Filament\Components\Forms\RelationManager;
-use App\Filament\Resources\User\UserResource\Pages;
-use App\Filament\Resources\User\Users\RelationManagers\BlacklistRelationManager;
-use App\Filament\Resources\User\Users\RelationManagers\PaymentsRelationManager;
+use App\Filament\Resources\Users\Users\Pages\CreateUser;
+use App\Filament\Resources\Users\Users\Pages\EditUser;
+use App\Filament\Resources\Users\Users\Pages\ListUsers;
+use App\Filament\Resources\Users\Users\RelationManagers\BlacklistRelationManager;
+use App\Filament\Resources\Users\Users\RelationManagers\PaymentsRelationManager;
 use App\Models\User\Group;
 use App\Models\User\User;
 use App\ValueObjects\Phone;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -31,11 +22,18 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -44,7 +42,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = NavGroup::USER;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::USERS;
 
     protected static ?string $modelLabel = 'Пользователи';
 

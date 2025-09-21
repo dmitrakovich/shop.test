@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\Registries\DefectiveProducts\Pages;
 
-use Filament\Actions\CreateAction;
 use App\Filament\Resources\Registries\DefectiveProducts\DefectiveProductResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListDefectiveProducts extends ListRecords

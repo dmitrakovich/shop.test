@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources\Management\AdminUsers\Pages;
 
-use Filament\Actions\CreateAction;
 use App\Filament\Resources\Management\AdminUsers\AdminUserResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListAdminUsers extends ListRecords

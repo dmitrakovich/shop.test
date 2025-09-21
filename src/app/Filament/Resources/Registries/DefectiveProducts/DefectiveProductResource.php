@@ -2,25 +2,22 @@
 
 namespace App\Filament\Resources\Registries\DefectiveProducts;
 
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Utilities\Set;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Forms\Components\Textarea;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use App\Filament\Resources\Registries\DefectiveProducts\Pages\ListDefectiveProducts;
 use App\Enums\Filament\NavGroup;
-use App\Filament\Resources\Registries\DefectiveProductResource\Pages;
+use App\Filament\Resources\Registries\DefectiveProducts\Pages\ListDefectiveProducts;
 use App\Models\AvailableSizes;
 use App\Models\DefectiveProduct;
 use App\Models\Product;
 use App\Models\Size;
-use Filament\Forms;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -30,7 +27,7 @@ class DefectiveProductResource extends Resource
 {
     protected static ?string $model = DefectiveProduct::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = NavGroup::REGISTRIES;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::REGISTRIES;
 
     protected static ?string $modelLabel = 'Реестр брака';
 

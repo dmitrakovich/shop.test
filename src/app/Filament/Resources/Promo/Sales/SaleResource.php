@@ -2,41 +2,39 @@
 
 namespace App\Filament\Resources\Promo\Sales;
 
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Schemas\Components\Grid;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Repeater;
-use Filament\Schemas\Components\Fieldset;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\EditAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use App\Filament\Resources\Promo\Sales\Pages\ListSales;
-use App\Filament\Resources\Promo\Sales\Pages\CreateSale;
-use App\Filament\Resources\Promo\Sales\Pages\EditSale;
 use App\Enums\Filament\NavGroup;
 use App\Enums\Promo\SaleAlgorithm;
-use App\Filament\Resources\Promo\SaleResource\Pages;
+use App\Filament\Resources\Promo\Sales\Pages\CreateSale;
+use App\Filament\Resources\Promo\Sales\Pages\EditSale;
+use App\Filament\Resources\Promo\Sales\Pages\ListSales;
 use App\Models\Category;
 use App\Models\Collection;
 use App\Models\Promo\Sale;
 use App\Models\Season;
 use App\Models\Style;
-use Filament\Forms;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class SaleResource extends Resource
 {
     protected static ?string $model = Sale::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = NavGroup::PROMO;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::PROMO;
 
     protected static ?string $modelLabel = 'Акция';
 

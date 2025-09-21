@@ -2,22 +2,20 @@
 
 namespace App\Filament\Resources\Management\AdminUsers;
 
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
-use App\Filament\Resources\Management\AdminUsers\Pages\ListAdminUsers;
+use App\Enums\Filament\NavGroup;
 use App\Filament\Resources\Management\AdminUsers\Pages\CreateAdminUser;
 use App\Filament\Resources\Management\AdminUsers\Pages\EditAdminUser;
-use App\Enums\Filament\NavGroup;
-use App\Filament\Resources\Management\AdminUserResource\Pages;
+use App\Filament\Resources\Management\AdminUsers\Pages\ListAdminUsers;
 use App\Models\Admin\AdminUser;
-use Filament\Forms;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -26,7 +24,7 @@ class AdminUserResource extends Resource
 {
     protected static ?string $model = AdminUser::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = NavGroup::MANAGEMENT;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::MANAGEMENT;
 
     protected static ?string $modelLabel = 'Пользователь';
 

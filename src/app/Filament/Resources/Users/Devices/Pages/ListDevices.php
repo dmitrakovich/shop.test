@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\User\Devices\Pages;
+namespace App\Filament\Resources\Users\Devices\Pages;
 
-use App\Filament\Resources\User\Devices\DeviceResource;
+use App\Filament\Resources\Users\Devices\DeviceResource;
 use Filament\Resources\Pages\ListRecords;
 
 class ListDevices extends ListRecords
