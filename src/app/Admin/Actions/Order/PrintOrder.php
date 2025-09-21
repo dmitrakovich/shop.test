@@ -29,7 +29,7 @@ class PrintOrder extends RowAction
                 let winWidth = 900;
                 let winHeight = 800;
                 let printWindow = window.open(
-                    '/admin/orders/{$orderId}/print',
+                    '/old-admin/orders/{$orderId}/print',
                     '_blank',
                     'width=' + winWidth
                     + ',height=' + winHeight
