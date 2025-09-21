@@ -40,7 +40,7 @@ class OrderItemStatusController extends AbstractAdminController
         $grid->column('_sku', 'Артикул')->display(fn () => $this->orderItem?->product->sku);
         $grid->column('_size', 'Размер')->display(fn () => $this->orderItem?->size->name);
         $grid->column('orderItem.order_id', 'Заказ')->display(function (?int $orderId) {
-            return $orderId ? "<a href='/admin/orders/$orderId/edit' target='_blank'>$orderId</a>" : null;
+            return $orderId ? "<a href='/old-admin/orders/$orderId/edit' target='_blank'>$orderId</a>" : null;
         });
         $grid->column('stock.internal_name', 'Склад');
         // $grid->column('reserved_at', __('Reserved at'));
