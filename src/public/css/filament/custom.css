@@ -1,4 +1,7 @@
 .bg-danger\/10 {
     background-color: rgba(239, 68, 68, 0.1);
 }
-
+/* fix for rating */
+.text-primary-500 {
+    color: oklch(0.666 0.179 58.318);
+}
