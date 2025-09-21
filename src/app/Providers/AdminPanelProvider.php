@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
+use App\Enums\Filament\NavGroup;
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
@@ -65,31 +65,6 @@ class AdminPanelProvider extends PanelProvider
                 FilamentInfoWidget::class,
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->navigationGroups([
-                'promo' => NavigationGroup::make()
-                    ->label('Промо')
-                    ->icon('heroicon-o-fire'),
-                'user' => NavigationGroup::make()
-                    ->label('Клиенты')
-                    ->icon('heroicon-o-user-group'),
-                'products' => NavigationGroup::make()
-                    ->label('Товары')
-                    ->icon('heroicon-o-squares-2x2'),
-                'registries' => NavigationGroup::make()
-                    ->label('Реестры')
-                    ->icon('heroicon-o-folder'),
-                'old-admin-panel' => NavigationGroup::make()
-                    ->label('Старая админка')
-                    ->icon('heroicon-o-arrow-uturn-left')
-                    ->collapsed(),
-                'automation' => NavigationGroup::make()
-                    ->label('Автоматизация')
-                    ->icon('heroicon-o-cog-8-tooth')
-                    ->collapsed(),
-                'management' => NavigationGroup::make()
-                    ->label('Управление')
-                    ->icon('heroicon-o-cog-6-tooth'),
-            ])
             ->navigationItems($this->generateOldAdminNavItems())
             ->middleware([
                 EncryptCookies::class,
@@ -107,7 +82,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authGuard('admin')
             ->plugins([
-                FilamentShieldPlugin::make(),
+                FilamentShieldPlugin::make()
+                    ->navigationGroup(NavGroup::Management) // doesn't work: lib bug
+                    ->registerNavigation(true),
                 // FilamentLogManager::make(),
             ])
             ->bootUsing(function (Panel $panel) {
@@ -127,7 +104,7 @@ class AdminPanelProvider extends PanelProvider
             return NavigationItem::make()
                 ->label($label)
                 ->url(url('admin/' . $uri), shouldOpenInNewTab: true)
-                ->group('old-admin-panel');
+                ->group(NavGroup::OldAdminPanel);
         })->toArray();
     }
 

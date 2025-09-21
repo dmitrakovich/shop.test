@@ -20,7 +20,7 @@ class SizeResource extends Resource
 {
     protected static ?string $model = Size::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::PRODUCTS;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Products;
 
     protected static ?string $modelLabel = 'Размеры';
 

@@ -27,7 +27,7 @@ class DefectiveProductResource extends Resource
 {
     protected static ?string $model = DefectiveProduct::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::REGISTRIES;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Registers;
 
     protected static ?string $modelLabel = 'Реестр брака';
 

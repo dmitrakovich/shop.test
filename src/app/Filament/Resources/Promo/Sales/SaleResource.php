@@ -34,7 +34,7 @@ class SaleResource extends Resource
 {
     protected static ?string $model = Sale::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::PROMO;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Promo;
 
     protected static ?string $modelLabel = 'Акция';
 

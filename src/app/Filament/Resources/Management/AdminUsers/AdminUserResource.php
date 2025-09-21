@@ -24,7 +24,7 @@ class AdminUserResource extends Resource
 {
     protected static ?string $model = AdminUser::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::MANAGEMENT;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Management;
 
     protected static ?string $modelLabel = 'Пользователь';
 

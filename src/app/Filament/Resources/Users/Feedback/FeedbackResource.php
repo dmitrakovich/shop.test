@@ -35,7 +35,7 @@ class FeedbackResource extends Resource
 {
     protected static ?string $model = Feedback::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::USERS;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Users;
 
     protected static ?string $modelLabel = 'Отзыв';
 
