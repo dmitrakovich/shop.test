@@ -480,7 +480,7 @@ class OrderController extends AbstractAdminController
     {
         $grid = new Grid(new OrderAdminComment());
         $grid->model()->where('order_id', $orderId)->orderBy('id', 'desc');
-        $grid->resource('/' . config('admin.route.prefix') . '/order-comments');
+        $grid->resource('/old-admin/order-comments');
 
         $grid->column('created_at', 'Дата/время создания')->display(fn ($date) => ($date ? date('d.m.Y H:i:s', strtotime($date)) : null))->width(100);
         $grid->column('comment', 'Комментарий')->editable();

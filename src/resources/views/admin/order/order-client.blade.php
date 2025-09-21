@@ -7,7 +7,7 @@
                 <p class="bg-danger"><b>В черном списке:</b> {{ $order->user->blacklist->comment }}</p>
             @endif
             <b>ФИО:</b>
-            <a href="{{ route(config('admin.route.prefix') . '.users.edit', $order->user->id) }}" target="_blank">
+            <a href="{{ route('admin.users.edit', $order->user->id) }}" target="_blank">
                 {{ $order->user?->last_name }}
                 {{ $order->user?->first_name }}
                 {{ $order->user?->patronymic_name }}

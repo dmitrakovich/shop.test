@@ -50,7 +50,7 @@ class PaymentController extends AbstractAdminController
         $grid->column('payment_num', 'Номер счета');
         $grid->column('payment_id', 'Billnumber');
         $grid->column('order_id', 'Номер заказа')->display(function ($order_id) {
-            return '<a href="' . route(config('admin.route.prefix') . '.orders.edit', $order_id) . '" target="_blank" > ' . $order_id . '</a>';
+            return '<a href="' . route('admin.orders.edit', $order_id) . '" target="_blank" > ' . $order_id . '</a>';
         });
         $grid->column('method_enum_id', 'Тип платежа')->display(fn ($method_enum_id) => OnlinePaymentMethodEnum::tryFrom($method_enum_id)->name());
         $grid->column('admin.name', 'Менеджер')->display(fn () => $this->admin?->short_name);
