@@ -2,6 +2,18 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use App\Filament\Resources\User\UserResource\Pages\ListUsers;
+use App\Filament\Resources\User\UserResource\Pages\CreateUser;
+use App\Filament\Resources\User\UserResource\Pages\EditUser;
 use App\Enums\Filament\NavGroup;
 use App\Enums\User\OrderType;
 use App\Filament\Actions\ToggleDeviceBanAction;
@@ -13,16 +25,11 @@ use App\Models\User\Group;
 use App\Models\User\User;
 use App\ValueObjects\Phone;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
@@ -37,7 +44,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::USER;
+    protected static string | \UnitEnum | null $navigationGroup = NavGroup::USER;
 
     protected static ?string $modelLabel = 'Пользователи';
 
@@ -45,10 +52,10 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Tabs::make('Tabs')->tabs([
                     Tab::make('Основная информация')->schema([
                         TextInput::make('first_name')
@@ -159,48 +166,48 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('full_name')
+                TextColumn::make('full_name')
                     ->label('ФИО')
                     ->getStateUsing(fn (User $user) => $user->getFullName())
                     ->searchable(query: function (Builder $query, $search) {
                         $nameColumns = ['first_name', 'last_name', 'patronymic_name'];
                         $query->whereAny($nameColumns, 'like', "%$search%");
                     }),
-                Tables\Columns\TextColumn::make('phone')
+                TextColumn::make('phone')
                     ->label('Телефон'),
-                Tables\Columns\TextColumn::make('metadata.last_order_type')
+                TextColumn::make('metadata.last_order_type')
                     ->label('Тип последнего заказа')
                     ->sortable()
                     ->toggleable()
                     ->toggledHiddenByDefault(),
-                Tables\Columns\TextColumn::make('orders')
+                TextColumn::make('orders')
                     ->label('Сумма покупок')
                     ->getStateUsing(fn (User $user) => $user->completedOrdersCost())
                     ->suffix(' руб.'),
-                Tables\Columns\TextColumn::make('metadata.last_order_date')
+                TextColumn::make('metadata.last_order_date')
                     ->label('Дата последнего заказа')
                     ->dateTime('d.m.Y H:i:s')
                     ->toggleable()
                     ->toggledHiddenByDefault(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->label('E-mail')
                     ->toggleable()
                     ->toggledHiddenByDefault(),
-                Tables\Columns\TextColumn::make('group.name')
+                TextColumn::make('group.name')
                     ->label('Группа'),
-                Tables\Columns\TextColumn::make('reviews_count')
+                TextColumn::make('reviews_count')
                     ->label('Кол-во отзывов')
                     ->counts('reviews'),
-                Tables\Columns\TextColumn::make('lastAddress.address')
+                TextColumn::make('lastAddress.address')
                     ->label('Адрес')
                     ->toggleable()
                     ->toggledHiddenByDefault(),
-                Tables\Columns\TextColumn::make('birth_date')
+                TextColumn::make('birth_date')
                     ->label('День рождения')
                     ->dateTime('j F')
                     ->toggleable()
                     ->toggledHiddenByDefault(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Дата регистрации')
                     ->dateTime('d.m.Y H:i:s'),
             ])
@@ -208,12 +215,12 @@ class UserResource extends Resource
             ->modifyQueryUsing(
                 fn (Builder $query) => $query->with(['orders.data', 'devices'])
             )
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
                 ToggleDeviceBanAction::make(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('last_order_type')
+                SelectFilter::make('last_order_type')
                     ->label('Тип последнего заказа')
                     ->options(OrderType::class)
                     ->query(function (Builder $query, array $data) {
@@ -221,8 +228,8 @@ class UserResource extends Resource
                             $query->whereRelation('metadata', 'last_order_type', $data['value']);
                         }
                     }),
-                Tables\Filters\Filter::make('order_date')
-                    ->form([
+                Filter::make('order_date')
+                    ->schema([
                         Fieldset::make()
                             ->label('Совершали покупки')
                             ->schema([
@@ -244,8 +251,8 @@ class UserResource extends Resource
                             $query->whereRelation('metadata', 'last_order_date', '<=', $data['ordered_until']);
                         }
                     }),
-                Tables\Filters\Filter::make('birth_date')
-                    ->form([
+                Filter::make('birth_date')
+                    ->schema([
                         Fieldset::make()
                             ->label('День рождения')
                             ->schema([
@@ -283,8 +290,8 @@ class UserResource extends Resource
                             });
                         }
                     }),
-                Tables\Filters\Filter::make('register_date')
-                    ->form([
+                Filter::make('register_date')
+                    ->schema([
                         Fieldset::make()
                             ->label('Дата регистрации')
                             ->schema([
@@ -327,9 +334,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 }

@@ -2,12 +2,18 @@
 
 namespace App\Filament\Resources\Promo;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use App\Filament\Resources\Promo\PromocodeResource\Pages\ManagePromocodes;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Resources\Promo\PromocodeResource\Pages;
 use App\Models\Promo\Promocode;
 use Carbon\CarbonInterval;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -16,7 +22,7 @@ class PromocodeResource extends Resource
 {
     protected static ?string $model = Promocode::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::PROMO;
+    protected static string | \UnitEnum | null $navigationGroup = NavGroup::PROMO;
 
     protected static ?string $modelLabel = 'Промокод';
 
@@ -24,30 +30,30 @@ class PromocodeResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('code')
+        return $schema
+            ->components([
+                TextInput::make('code')
                     ->label('Код для активации')
                     ->alphaDash()
                     ->required()
                     ->maxLength(20),
-                Forms\Components\Select::make('sale_id')
+                Select::make('sale_id')
                     ->relationship('sale', 'title')
                     ->label('Акция')
                     ->required()
                     ->native(false),
-                Forms\Components\TextInput::make('timer_sec')
+                TextInput::make('timer_sec')
                     ->label('Время действия после активации (секунд)')
                     ->placeholder('Если не заполнено, время будет взято с акции')
                     ->datalist([60, 300, 600, 1800, 3600, 86400])
                     ->numeric(),
-                Forms\Components\TextInput::make('activations_count')
+                TextInput::make('activations_count')
                     ->label('Количество активаций')
                     ->placeholder('Оставить пустым для бесконечного количества активаций')
                     ->numeric(),
-                Forms\Components\Textarea::make('description')
+                Textarea::make('description')
                     ->label('Описание')
                     ->columnSpanFull()
                     ->maxLength(255),
@@ -58,42 +64,42 @@ class PromocodeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('code')
+                TextColumn::make('code')
                     ->label('Код для активации')
                     ->searchable()
                     ->copyable(),
-                Tables\Columns\TextColumn::make('sale.title')
+                TextColumn::make('sale.title')
                     ->label('Связанная акция')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
                     ->label('Описание')
                     ->wrap(),
-                Tables\Columns\TextColumn::make('timer_sec')
+                TextColumn::make('timer_sec')
                     ->label('Время действия')
                     ->formatStateUsing(
                         fn ($state) => CarbonInterval::seconds($state)->cascade()->forHumans(short: true)
                     ),
-                Tables\Columns\TextColumn::make('activations_count')
+                TextColumn::make('activations_count')
                     ->label('Количество активаций')
                     ->getStateUsing(function (Promocode $promocode) {
                         return is_null($promocode->activations_count) ? '∞' : $promocode->activations_count;
                     }),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Дата создания')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label('Дата обновления')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
@@ -103,7 +109,7 @@ class PromocodeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManagePromocodes::route('/'),
+            'index' => ManagePromocodes::route('/'),
         ];
     }
 }

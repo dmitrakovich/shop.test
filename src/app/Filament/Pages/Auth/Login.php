@@ -2,29 +2,21 @@
 
 namespace App\Filament\Pages\Auth;
 
-use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
-use Filament\Pages\Auth\Login as BaseAuth;
+use Filament\Schemas\Components\Component;
+use Filament\Schemas\Schema;
 use Illuminate\Validation\ValidationException;
 
-class Login extends BaseAuth
+class Login extends \Filament\Auth\Pages\Login
 {
-    /**
-     * @return array<int | string, string | Form>
-     */
-    protected function getForms(): array
+    public function form(Schema $schema): Schema
     {
-        return [
-            'form' => $this->form(
-                $this->makeForm()
-                    ->schema([
-                        $this->getLoginFormComponent(),
-                        $this->getPasswordFormComponent(),
-                        $this->getRememberFormComponent(),
-                    ])
-                    ->statePath('data'),
-            ),
-        ];
+        return $schema
+            ->components([
+                $this->getLoginFormComponent(),
+                $this->getPasswordFormComponent(),
+                $this->getRememberFormComponent(),
+            ]);
     }
 
     protected function getLoginFormComponent(): Component

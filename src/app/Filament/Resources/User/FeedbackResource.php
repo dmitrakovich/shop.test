@@ -2,6 +2,22 @@
 
 namespace App\Filament\Resources\User;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Hidden;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\User\FeedbackResource\RelationManagers\AnswersRelationManager;
+use App\Filament\Resources\User\FeedbackResource\Pages\ListFeedback;
+use App\Filament\Resources\User\FeedbackResource\Pages\CreateFeedback;
+use App\Filament\Resources\User\FeedbackResource\Pages\EditFeedback;
 use App\Enums\Feedback\FeedbackType;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Resources\User\FeedbackResource\Pages;
@@ -11,7 +27,6 @@ use App\Models\Product;
 use App\Models\User\User;
 use Filament\Forms;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
@@ -24,7 +39,7 @@ class FeedbackResource extends Resource
 {
     protected static ?string $model = Feedback::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::USER;
+    protected static string | \UnitEnum | null $navigationGroup = NavGroup::USER;
 
     protected static ?string $modelLabel = 'Отзыв';
 
@@ -32,22 +47,22 @@ class FeedbackResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Group::make()
+        return $schema
+            ->components([
+                Group::make()
                     ->schema([
-                        Forms\Components\Section::make()
+                        Section::make()
                             ->schema([
-                                Forms\Components\TextInput::make('user_name')
+                                TextInput::make('user_name')
                                     ->label('Имя')
                                     ->required()
                                     ->maxLength(255),
-                                Forms\Components\TextInput::make('user_city')
+                                TextInput::make('user_city')
                                     ->label('Город')
                                     ->maxLength(255),
-                                Forms\Components\Textarea::make('text')
+                                Textarea::make('text')
                                     ->label('Текст')
                                     ->rows(4)
                                     ->required()
@@ -55,7 +70,7 @@ class FeedbackResource extends Resource
                             ])
                             ->columns(2),
 
-                        Forms\Components\Section::make('Фото')
+                        Section::make('Фото')
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('photos')
                                     ->image()
@@ -67,7 +82,7 @@ class FeedbackResource extends Resource
                                     ->hiddenLabel(),
                             ])
                             ->collapsible(),
-                        Forms\Components\Section::make('Видео')
+                        Section::make('Видео')
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('video')
                                     ->acceptedFileTypes([
@@ -87,15 +102,15 @@ class FeedbackResource extends Resource
                     ])
                     ->columnSpan(['lg' => 2]),
 
-                Forms\Components\Group::make()
+                Group::make()
                     ->schema([
-                        Forms\Components\Section::make()
+                        Section::make()
                             ->schema([
                                 Rating::make('rating')
                                     ->label('Оценка')
                                     ->required()
                                     ->default(5),
-                                Forms\Components\Select::make('type')
+                                Select::make('type')
                                     ->options(FeedbackType::class)
                                     ->label('Тип')
                                     ->required()
@@ -103,18 +118,18 @@ class FeedbackResource extends Resource
                                     ->disableOptionWhen(
                                         fn (int $value): bool => FeedbackType::from($value)->isDisabled()
                                     ),
-                                Forms\Components\Toggle::make('publish')
+                                Toggle::make('publish')
                                     ->label('Публиковать')
                                     ->default(true),
                             ]),
-                        Forms\Components\Section::make('Связи')
+                        Section::make('Связи')
                             ->schema([
-                                Forms\Components\Select::make('user_id')
+                                Select::make('user_id')
                                     ->label('Пользователь')
                                     ->relationship('user')
                                     ->getOptionLabelFromRecordUsing(fn (User $record) => $record->getFullName())
                                     ->searchable(['first_name', 'last_name', 'patronymic_name']),
-                                Forms\Components\Select::make('product_id')
+                                Select::make('product_id')
                                     ->label('Товар')
                                     ->relationship('product')
                                     ->getOptionLabelFromRecordUsing(fn (Product $record) => $record->nameForAdmin())
@@ -123,9 +138,9 @@ class FeedbackResource extends Resource
                     ])
                     ->columnSpan(['lg' => 1]),
 
-                Forms\Components\Hidden::make('captcha_score')
+                Hidden::make('captcha_score')
                     ->default(10),
-                Forms\Components\Hidden::make('ip')
+                Hidden::make('ip')
                     ->default(request()->ip()),
             ])->columns(3);
     }
@@ -134,13 +149,13 @@ class FeedbackResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_name')
+                TextColumn::make('user_name')
                     ->label('Имя')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user_city')
+                TextColumn::make('user_city')
                     ->label('Город')
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('text')
+                TextColumn::make('text')
                     ->label('Текст')
                     ->searchable()
                     ->limit(500)
@@ -153,32 +168,32 @@ class FeedbackResource extends Resource
                     ->collection('photos')
                     ->conversion('thumb')
                     ->label('Фото'),
-                Tables\Columns\TextColumn::make('product')
+                TextColumn::make('product')
                     ->formatStateUsing(fn (Product $state) => $state->nameForAdmin())
                     ->label('Товар')
                     ->wrap(),
-                Tables\Columns\TextColumn::make('answers_count')
+                TextColumn::make('answers_count')
                     ->counts('answers')
                     ->label('Кол-во ответов')
                     ->alignCenter()
                     ->sortable()
                     ->toggleable()
                     ->color(fn (int $state) => $state > 0 ? 'success' : 'danger'),
-                Tables\Columns\TextColumn::make('type')
+                TextColumn::make('type')
                     ->label('Тип')
                     ->badge()
                     ->sortable(),
-                Tables\Columns\ToggleColumn::make('publish')
+                ToggleColumn::make('publish')
                     ->label('Публиковать')
                     ->alignCenter(),
-                Tables\Columns\TextColumn::make('ip')
+                TextColumn::make('ip')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Дата создания')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label('Дата обновления')
                     ->dateTime()
                     ->sortable()
@@ -191,9 +206,9 @@ class FeedbackResource extends Resource
                 $query->with(['product.brand', 'product.category']);
             })
             ->defaultSort('id', 'desc')
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -201,16 +216,16 @@ class FeedbackResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\AnswersRelationManager::class,
+            AnswersRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListFeedback::route('/'),
-            'create' => Pages\CreateFeedback::route('/create'),
-            'edit' => Pages\EditFeedback::route('/{record}/edit'),
+            'index' => ListFeedback::route('/'),
+            'create' => CreateFeedback::route('/create'),
+            'edit' => EditFeedback::route('/{record}/edit'),
         ];
     }
 }

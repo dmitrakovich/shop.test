@@ -2,8 +2,11 @@
 
 namespace App\Filament\Resources\User\UserResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -15,10 +18,10 @@ class BlacklistRelationManager extends RelationManager
 
     protected static ?string $title = 'Черный список';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Textarea::make('comment')
                     ->label('Комментарий')
                     ->rows(2),
@@ -35,20 +38,20 @@ class BlacklistRelationManager extends RelationManager
 
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('comment')
+                TextColumn::make('comment')
                     ->label('Комментарий'),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Дата добавления')
                     ->dateTime('d.m.Y H:i:s'),
-                Tables\Columns\TextColumn::make('deleted_at')
+                TextColumn::make('deleted_at')
                     ->label('Дата удаления')
                     ->dateTime('d.m.Y H:i:s'),
             ])->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->label('Добавить в черный список'),
             ])
-            ->actions([
-                Tables\Actions\DeleteAction::make()
+            ->recordActions([
+                DeleteAction::make()
                     ->label('Удалить из черного списка'),
             ]);
     }

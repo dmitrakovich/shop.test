@@ -2,31 +2,21 @@
 
 namespace App\Filament\Pages\Auth;
 
-use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
-use Filament\Pages\Auth\EditProfile as BaseEditProfile;
+use Filament\Schemas\Components\Component;
+use Filament\Schemas\Schema;
 
-class EditProfile extends BaseEditProfile
+class EditProfile extends \Filament\Auth\Pages\EditProfile
 {
-    /**
-     * @return array<int | string, string | Form>
-     */
-    protected function getForms(): array
+    public function form(Schema $schema): Schema
     {
-        return [
-            'form' => $this->form(
-                $this->makeForm()
-                    ->schema([
-                        $this->getNameFormComponent(),
-                        $this->getPasswordFormComponent(),
-                        $this->getPasswordConfirmationFormComponent(),
-                    ])
-                    ->operation('edit')
-                    ->model($this->getUser())
-                    ->statePath('data')
-                    ->inlineLabel(!static::isSimple()),
-            ),
-        ];
+        return $schema
+            ->components([
+                $this->getNameFormComponent(),
+                $this->getPasswordFormComponent(),
+                $this->getPasswordConfirmationFormComponent(),
+                $this->getCurrentPasswordFormComponent(),
+            ]);
     }
 
     protected function getPasswordFormComponent(): Component

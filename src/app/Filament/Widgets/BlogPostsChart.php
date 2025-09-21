@@ -8,11 +8,11 @@ class BlogPostsChart extends ChartWidget
 {
     protected static ?int $sort = 2;
 
-    protected static ?string $heading = 'Chart';
+    protected ?string $heading = 'Chart';
 
     // protected static string $color = 'info';
 
-    protected static ?string $pollingInterval = '15s';
+    protected ?string $pollingInterval = '15s';
 
     protected function getData(): array
     {
