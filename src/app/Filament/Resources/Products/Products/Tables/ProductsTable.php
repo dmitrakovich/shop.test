@@ -2,12 +2,16 @@
 
 namespace App\Filament\Resources\Products\Products\Tables;
 
+use App\Enums\CurrencyCode;
+use App\Models\Product;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -21,54 +25,40 @@ class ProductsTable
                 TextColumn::make('id')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('slug')
-                    ->searchable(),
-                TextColumn::make('old_slug')
-                    ->searchable(),
+                SpatieMediaLibraryImageColumn::make('image')
+                    ->label('Фото')
+                    ->conversion('thumb')
+                    ->imageHeight(75)
+                    ->limit(1),
+                IconColumn::make('deleted_at')
+                    ->label('Опубликован')
+                    ->getStateUsing(fn (Product $record) => !$record->trashed())
+                    ->boolean()
+                    ->alignCenter(),
                 TextColumn::make('sku')
-                    ->label('SKU')
+                    ->label('Артикул')
                     ->searchable(),
-                TextColumn::make('label_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('buy_price')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('price')
-                    ->money()
+                    ->label('Цена')
+                    ->money(CurrencyCode::BYN)
                     ->sortable(),
                 TextColumn::make('old_price')
+                    ->label('Старая цена')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('category.title')
-                    ->searchable(),
-                TextColumn::make('season.name')
+                    ->label('Категория')
                     ->searchable(),
                 TextColumn::make('brand.name')
-                    ->searchable(),
-                TextColumn::make('manufacturer.name')
-                    ->searchable(),
-                TextColumn::make('collection.name')
+                    ->label('Бренд')
                     ->searchable(),
                 TextColumn::make('color_txt')
+                    ->label('Цвет')
                     ->searchable(),
-                TextColumn::make('fabric_top_txt')
-                    ->searchable(),
-                TextColumn::make('fabric_inner_txt')
-                    ->searchable(),
-                TextColumn::make('fabric_insole_txt')
-                    ->searchable(),
-                TextColumn::make('fabric_outsole_txt')
-                    ->searchable(),
-                TextColumn::make('heel_txt')
-                    ->searchable(),
-                TextColumn::make('bootleg_height_txt')
-                    ->searchable(),
-                IconColumn::make('action')
-                    ->boolean(),
                 TextColumn::make('rating')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -77,29 +67,18 @@ class ProductsTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('productGroup.id')
-                    ->searchable(),
-                TextColumn::make('product_features')
-                    ->searchable(),
-                TextColumn::make('key_features')
-                    ->searchable(),
-                TextColumn::make('countryOfOrigin.name')
-                    ->searchable(),
             ])
             ->filters([
-                TrashedFilter::make(),
+                TrashedFilter::make()->default(true),
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
+                RestoreAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
             ])
