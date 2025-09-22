@@ -142,7 +142,7 @@ class StockController extends AbstractAdminController
             $filter->where(fn ($query) => $query, 'Товары, которых нет на складе', 'show')->radio(['all' => 'показывать', 'only_in_stock' => 'скрыть'])->default('all');
         }
         $filter->where($this->getProductFilter(), 'Код товара / артикул', 'product');
-        $filter->in('stock_id', 'Склад')->checkbox($stockNames)->default($defaultStockList);
+        $filter->in('stock_id', 'Склад')->checkbox($stockNames)->stacked()->default($defaultStockList);
         $filter->where($this->getStatusFilter(), 'Статус', 'status')->checkbox(self::statusFilters);
         $filter->where($this->getBrandFilter(), 'Бренд', 'brand')->multipleSelect(Brand::pluck('name', 'id'));
         $filter->where($this->getSeasonFilter(), 'Сезон', 'season')->multipleSelect(Season::pluck('name', 'id'));
