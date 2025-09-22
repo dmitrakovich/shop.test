@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\Products;
+namespace App\Filament\Resources\Products\Products;
 
 use App\Enums\Filament\NavGroup;
-use App\Filament\Resources\Products\Pages\CreateProduct;
-use App\Filament\Resources\Products\Pages\EditProduct;
-use App\Filament\Resources\Products\Pages\ListProducts;
-use App\Filament\Resources\Products\Schemas\ProductForm;
-use App\Filament\Resources\Products\Tables\ProductsTable;
+use App\Filament\Resources\Products\Products\Pages\CreateProduct;
+use App\Filament\Resources\Products\Products\Pages\EditProduct;
+use App\Filament\Resources\Products\Products\Pages\ListProducts;
+use App\Filament\Resources\Products\Products\Schemas\ProductForm;
+use App\Filament\Resources\Products\Products\Tables\ProductsTable;
 use App\Models\Product;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
