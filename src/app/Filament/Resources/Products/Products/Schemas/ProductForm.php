@@ -6,6 +6,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class ProductForm
@@ -14,15 +16,33 @@ class ProductForm
     {
         return $schema
             ->components([
-                TextInput::make('one_c_id')
-                    ->numeric(),
-                TextInput::make('slug')
-                    ->required(),
-                TextInput::make('old_slug')
-                    ->required(),
-                TextInput::make('sku')
-                    ->label('SKU')
-                    ->required(),
+                Group::make()
+                    ->schema([
+                        Section::make()
+                            ->schema([
+                                TextInput::make('sku')
+                                    ->label('Артикул')
+                                    ->required(),
+                                TextInput::make('slug')
+                                    ->default('temp_slug_' . time())
+                                    ->disabled(),
+                            ])
+                            ->columns(2),
+
+                    ])
+                    ->columnSpan(['lg' => 2]),
+                Group::make()
+                    ->schema([
+                        Section::make()
+                            ->schema([
+                                TextInput::make('one_c_id')
+                                    ->numeric(),
+                            ])
+                            ->columns(2),
+
+                    ])
+                    ->columnSpan(['lg' => 1]),
+
                 TextInput::make('label_id')
                     ->required()
                     ->numeric()
@@ -81,6 +101,7 @@ class ProductForm
                 TextInput::make('key_features'),
                 Select::make('country_of_origin_id')
                     ->relationship('countryOfOrigin', 'name'),
-            ]);
+            ])
+            ->columns(3);
     }
 }

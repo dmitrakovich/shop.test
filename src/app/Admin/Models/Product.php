@@ -10,7 +10,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $id
  * @property int|null $one_c_id
  * @property string $slug
- * @property string $old_slug
  * @property string $sku
  * @property int $label_id
  * @property float $buy_price

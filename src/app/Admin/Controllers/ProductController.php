@@ -29,7 +29,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
-use Illuminate\Support\Str;
 
 /**
  * @mixin Product
@@ -209,7 +208,6 @@ class ProductController extends AbstractAdminController
             $form->text('path', 'Путь')->disable();
             if ($form->isCreating()) {
                 $form->hidden('slug', 'Slug')->default('temp_slug_' . time());
-                $form->hidden('old_slug', 'Old slug')->default('temp_old_slug_' . time());
             } else {
                 $form->text('slug', 'Slug')->disable();
                 $form->html(function (Form $form) {
@@ -274,9 +272,6 @@ class ProductController extends AbstractAdminController
         $form->saving(function (Form $form) {
             if (!$this->checkIfMediaAdded($form)) {
                 return $this->mediaNotAddedError();
-            }
-            if ($form->isCreating()) {
-                $form->old_slug = $this->generateOldSlug($form->brand_id, $form->sku);
             }
             if (is_null($form->manufacturer_id)) {
                 $form->manufacturer_id = 0;
@@ -384,14 +379,6 @@ class ProductController extends AbstractAdminController
         $grid->disableRowSelector();
 
         return $grid->render();
-    }
-
-    /**
-     * Generate a old slug based on brand name and SKU.
-     */
-    private function generateOldSlug(int $brandId, string $sku): string
-    {
-        return Str::slug(Brand::where('id', $brandId)->value('name') . '-' . $sku);
     }
 
     protected function getStockProduct(): AvailableSizes
