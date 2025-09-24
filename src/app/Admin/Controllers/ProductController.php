@@ -6,7 +6,7 @@ use App\Admin\Actions\Product as ProductActions;
 use App\Admin\Models\Media;
 use App\Admin\Models\Product;
 use App\Admin\Services\UploadImagesService;
-use App\Enums\Product\ProductLabels;
+use App\Enums\Product\ProductLabel;
 use App\Events\Products\ProductCreated;
 use App\Events\Products\ProductUpdated;
 use App\Models\AvailableSizes;
@@ -117,10 +117,10 @@ class ProductController extends AbstractAdminController
             foreach ($this->input as $status) {
                 match ($status) {
                     'not_in_stock' => $query->onlyTrashed(),
-                    'do_not_publish' => $query->where('label_id', ProductLabels::DO_NOT_PUBLISH->value),
-                    'do_not_update' => $query->where('label_id', ProductLabels::DO_NOT_UPDATE->value),
-                    'liquidation' => $query->where('label_id', ProductLabels::LIQUIDATION->value),
-                    'hit' => $query->where('label_id', ProductLabels::HIT->value),
+                    'do_not_publish' => $query->where('label_id', ProductLabel::DO_NOT_PUBLISH->value),
+                    'do_not_update' => $query->where('label_id', ProductLabel::DO_NOT_UPDATE->value),
+                    'liquidation' => $query->where('label_id', ProductLabel::LIQUIDATION->value),
+                    'hit' => $query->where('label_id', ProductLabel::HIT->value),
                 };
             }
         };
@@ -245,7 +245,7 @@ class ProductController extends AbstractAdminController
             $form->text('key_features', 'Ключевая особенность модели (для промта)');
 
             $form->divider();
-            $form->select('label_id', 'Метка')->options(ProductLabels::list());
+            $form->select('label_id', 'Метка')->options(ProductLabel::list());
             $form->text('rating', 'Рейтинг')->disable();
 
             $form->checkbox('tags', 'Теги');
@@ -276,7 +276,7 @@ class ProductController extends AbstractAdminController
             if (is_null($form->manufacturer_id)) {
                 $form->manufacturer_id = 0;
             }
-            if (ProductLabels::DO_NOT_PUBLISH->value === (int)$form->label_id) {
+            if (ProductLabel::DO_NOT_PUBLISH->value === (int)$form->label_id) {
                 $form->deleted_at = now();
             }
 

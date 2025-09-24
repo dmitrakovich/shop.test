@@ -2,12 +2,13 @@
 
 namespace App\Enums\Product;
 
+use Filament\Support\Contracts\HasLabel;
+
 /**
  * Enum for product labels.
  */
-enum ProductLabels: int
+enum ProductLabel: int implements HasLabel
 {
-    case NONE = 0;
     case HIT = 1;
     case LIQUIDATION = 2;
     case DO_NOT_PUBLISH = 3;
@@ -16,10 +17,9 @@ enum ProductLabels: int
     /**
      * Returns the name of the label.
      */
-    public function name(): string
+    public function getLabel(): string
     {
         return match ($this) {
-            self::NONE => 'Нет',
             self::HIT => 'Хит',
             self::LIQUIDATION => 'Ликвидация',
             self::DO_NOT_PUBLISH => 'Не публиковать',
@@ -34,9 +34,14 @@ enum ProductLabels: int
     {
         $result = [];
         foreach (self::cases() as $case) {
-            $result[$case->value] = $case->name();
+            $result[$case->value] = $case->getLabel();
         }
 
         return $result;
+    }
+
+    public function isNotPublished(): bool
+    {
+        return $this === self::DO_NOT_PUBLISH;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\Product\ProductLabels;
+use App\Enums\Product\ProductLabel;
 use App\Facades\Currency;
 use App\Models\Collection as ProductCollection;
 use App\Models\OneC\Product as ProductFromOneC;
@@ -23,7 +23,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int|null $one_c_id
  * @property string $slug
  * @property string $sku
- * @property int $label_id
+ * @property ProductLabel $label_id
  * @property float $buy_price
  * @property float $price
  * @property float $old_price
@@ -107,6 +107,7 @@ class Product extends Model implements HasMedia
      * @var array<string, string>
      */
     protected $casts = [
+        'label_id' => ProductLabel::class,
         'action' => 'boolean',
     ];
 
@@ -562,8 +563,8 @@ class Product extends Model implements HasMedia
     public static function excludedLabels(): array
     {
         return [
-            ProductLabels::DO_NOT_PUBLISH->value,
-            ProductLabels::DO_NOT_UPDATE->value,
+            ProductLabel::DO_NOT_PUBLISH->value,
+            ProductLabel::DO_NOT_UPDATE->value,
         ];
     }
 
@@ -572,8 +573,8 @@ class Product extends Model implements HasMedia
      */
     public function restore(): bool
     {
-        if ($this->label_id === ProductLabels::DO_NOT_PUBLISH->value) {
-            $this->label_id = ProductLabels::NONE->value;
+        if ($this->label_id->isNotPublished()) {
+            $this->label_id = null;
             $this->save();
         }
 
