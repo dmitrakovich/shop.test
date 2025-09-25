@@ -2,10 +2,14 @@
 
 namespace App\Filament\Resources\Products\Products\Pages;
 
+use App\Filament\Actions\ProductPromtAction;
 use App\Filament\Resources\Products\Products\ProductResource;
+use App\Models\Product;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Support\Icons\Heroicon;
 
 class EditProduct extends EditRecord
 {
@@ -14,6 +18,12 @@ class EditProduct extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            ProductPromtAction::make(),
+            Action::make('open')
+                ->label('Открыть страницу товара')
+                ->icon(Heroicon::ArrowTopRightOnSquare)
+                ->url(fn (Product $record) => route('product.show', $record->slug))
+                ->openUrlInNewTab(),
             DeleteAction::make(),
             RestoreAction::make(),
         ];

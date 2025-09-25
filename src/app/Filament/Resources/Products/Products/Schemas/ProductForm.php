@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Products\Products\Schemas;
 
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Group;
@@ -26,9 +26,27 @@ class ProductForm
                                 TextInput::make('slug')
                                     ->default('temp_slug_' . time())
                                     ->disabled(),
+                                RichEditor::make('description')
+                                    ->label('Описание')
+                                    ->columnSpanFull(),
                             ])
                             ->columns(2),
-
+                        Section::make('Цены')
+                            ->schema([
+                                TextInput::make('price')
+                                    ->required()
+                                    ->label('Цена')
+                                    ->numeric()
+                                    ->default(0.0)
+                                    ->prefix('BYN'),
+                                TextInput::make('old_price')
+                                    ->label('Старая цена')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0.0)
+                                    ->prefix('BYN'),
+                            ])
+                            ->columns(2),
                     ])
                     ->columnSpan(['lg' => 2]),
                 Group::make()
@@ -45,21 +63,7 @@ class ProductForm
 
                 TextInput::make('label_id')
                     ->required()
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('buy_price')
-                    ->required()
-                    ->numeric()
-                    ->default(0.0),
-                TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->default(0.0)
-                    ->prefix('$'),
-                TextInput::make('old_price')
-                    ->required()
-                    ->numeric()
-                    ->default(0.0),
+                    ->numeric(),
                 Select::make('category_id')
                     ->relationship('category', 'title')
                     ->required()
@@ -87,8 +91,6 @@ class ProductForm
                 TextInput::make('fabric_outsole_txt'),
                 TextInput::make('heel_txt'),
                 TextInput::make('bootleg_height_txt'),
-                Textarea::make('description')
-                    ->columnSpanFull(),
                 Toggle::make('action')
                     ->required(),
                 TextInput::make('rating')
