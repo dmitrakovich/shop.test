@@ -29,6 +29,8 @@ enum ProductLabel: int implements HasLabel
 
     /**
      * Returns an array with the names of all labels.
+     *
+     * @return array<int, string>
      */
     public static function list(): array
     {

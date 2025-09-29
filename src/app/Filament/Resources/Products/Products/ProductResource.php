@@ -55,6 +55,9 @@ class ProductResource extends Resource
         ];
     }
 
+    /**
+     * @return Builder<Product>
+     */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

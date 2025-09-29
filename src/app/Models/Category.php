@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,6 +34,7 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property string $name
  *
  * @property-read \App\Models\Category|null $parentCategory
+ * @property-read \App\Models\Category|null $parent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $childrenCategories
  * @property-read \App\Models\Url|null $url
@@ -44,6 +46,9 @@ class Category extends Model implements Filterable, Sortable
 {
     use AttributeFilterTrait, NodeTrait, SoftDeletes, SortableTrait;
 
+    /**
+     * @var array{order_column_name: 'order', sort_when_creating: bool}
+     */
     public $sortable = [
         'order_column_name' => 'order',
         'sort_when_creating' => true,
@@ -63,15 +68,11 @@ class Category extends Model implements Filterable, Sortable
         });
     }
 
-    /**
-     * @var int
-     */
-    final const ROOT_CATEGORY_ID = 1;
+    final const int ROOT_CATEGORY_ID = 1;
 
-    /**
-     * @var int
-     */
-    final const ACCESSORIES_PARENT_ID = 25;
+    final const int SHOES_PARENT_ID = 35;
+
+    final const int ACCESSORIES_PARENT_ID = 25;
 
     /**
      * Indicates if all mass assignment is enabled.
@@ -96,27 +97,40 @@ class Category extends Model implements Filterable, Sortable
     /**
      * Generate path mutator
      */
-    public function setPathAttribute($path): void
+    public function setPathAttribute(mixed $path): void
     {
         $this->generatePath();
     }
 
+    /**
+     * @return BelongsTo<self, $this>
+     */
     public function parentCategory(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
     }
 
+    /**
+     * @return HasMany<Category, $this>
+     */
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
 
+    /**
+     * @return HasMany<Category, $this>
+     */
     public function childrenCategories(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id')->with('childrenCategories');
     }
 
-    public static function beforeApplyFilter(&$builder, &$values): void
+    /**
+     * @param  Builder<Model>  $builder
+     * @param  array<array-key, mixed>|false  $values
+     */
+    public static function beforeApplyFilter(Builder &$builder, array|false &$values): void
     {
         $currentCategoryId = end($values)['model_id'];
         if ($currentCategoryId === self::ROOT_CATEGORY_ID) {
@@ -128,6 +142,8 @@ class Category extends Model implements Filterable, Sortable
 
     /**
      * Получить список идентификаторов дочерних категорий
+     *
+     * @return array<int, int>
      */
     public static function getChildrenCategoriesIdsList(int $categoryId): array
     {
@@ -138,6 +154,9 @@ class Category extends Model implements Filterable, Sortable
 
     /**
      * Сделать одноуровневый массив из дерева
+     *
+     * @param  array<string, mixed>  $subtree
+     * @return array<int, int>
      */
     protected static function traverseTree(array $subtree): array
     {
@@ -159,13 +178,12 @@ class Category extends Model implements Filterable, Sortable
 
     public function generatePath(): self
     {
-        $slug = $this->slug;
-        $this->attributes['path'] = $this->isRoot() ? $slug : $this->parent->path . '/' . $slug;
+        $this->attributes['path'] = $this->isRoot() ? $this->slug : $this->parent->path . '/' . $this->slug;
 
         return $this;
     }
 
-    public function updateDescendantsPaths()
+    public function updateDescendantsPaths(): void
     {
         // Получаем всех потомков в древовидном порядке
         $descendants = $this->descendants()->defaultOrder()->get();
@@ -227,6 +245,16 @@ class Category extends Model implements Filterable, Sortable
     public function isRoot(): bool
     {
         return $this->id === self::ROOT_CATEGORY_ID;
+    }
+
+    public function isShoesRoot(): bool
+    {
+        return $this->id === self::SHOES_PARENT_ID;
+    }
+
+    public function isAccessoriesRoot(): bool
+    {
+        return $this->id === self::ACCESSORIES_PARENT_ID;
     }
 
     /**

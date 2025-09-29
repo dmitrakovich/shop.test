@@ -3,8 +3,6 @@
 namespace App\Filament\Actions;
 
 use App\Models\Product;
-use App\Models\User\Device;
-use App\Models\User\User;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\EditRecord;
@@ -48,8 +46,8 @@ class ProductPromtAction extends Action
                     5. С какой одеждой сочетается. Объем 2-4 предложения.
                     Исходные данные о товаре:
                     1. Наименование - {$product->category?->title}
-                    2. Материал - {$product->fabrics?->implode('name', ', ')}
-                    3. Цвет - {$product->colors?->implode('name', ', ')}
+                    2. Материал - {$product->fabrics->implode('name', ', ')}
+                    3. Цвет - {$product->colors->implode('name', ', ')}
                     4. Ключевая особенность - {$product->key_features}
                     5. Список характеристик: {$properties->implode(', ')};
                     TEXT
@@ -58,13 +56,6 @@ class ProductPromtAction extends Action
             ->extraAttributes([
                 'x-on:copy-product-promt.window' => self::getLivewareJs(),
             ]);
-
-        return Action::make('toggleBan')
-            ->label(fn (Device|User $record) => self::getLabel($record))
-            ->icon(fn (Device|User $record) => self::getIcon($record))
-            ->color(fn (Device|User $record) => self::getColor($record))
-            ->requiresConfirmation()
-            ->action(fn (Device|User $record) => self::toggleRecordBan($record));
     }
 
     private static function getLivewareJs(): string

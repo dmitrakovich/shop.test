@@ -23,7 +23,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int|null $one_c_id
  * @property string $slug
  * @property string $sku
- * @property ProductLabel $label_id
+ * @property ProductLabel|null $label_id
  * @property float $buy_price
  * @property float $price
  * @property float $old_price

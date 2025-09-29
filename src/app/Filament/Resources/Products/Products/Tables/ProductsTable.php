@@ -85,7 +85,9 @@ class ProductsTable
                         foreach ($state['values'] ?? [] as $categoryId) {
                             $categories = array_merge($categories, Category::getChildrenCategoriesIdsList($categoryId));
                         }
-                        $query->when($categories)->whereIn('category_id', $categories);
+                        $query->when($categories, function (Builder $query, $categories) {
+                            $query->whereIn('category_id', $categories);
+                        });
                     })
                     ->multiple(),
                 SelectFilter::make('manufacturer')

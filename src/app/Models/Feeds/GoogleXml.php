@@ -99,7 +99,7 @@ class GoogleXml extends AbstractFeed
             $type[] = 'Женские аксессуары';
         } else {
             $type[] = 'Женская обувь';
-            if (!in_array($category->parent_id, [null, Category::ROOT_CATEGORY_ID])) {
+            if (!in_array($category->parent_id, [null, Category::ROOT_CATEGORY_ID, Category::SHOES_PARENT_ID])) {
                 $type[] = $this->getCategoriesList()[$category->parent_id]->title;
             }
         }
