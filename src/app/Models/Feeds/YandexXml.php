@@ -59,7 +59,7 @@ class YandexXml extends AbstractFeed
     }
 
     /**
-     * Return catagoies id, name & parent id
+     * Return categories id, name & parent id
      */
     protected function getCategories(): Collection
     {
