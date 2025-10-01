@@ -9,7 +9,7 @@ class VideoFile extends File
     /**
      * The MIME types that the given file should match. This array may also contain file extensions.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $allowedMimetypes = [
         'video/mp4',
