@@ -559,6 +559,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Returns an array of product labels that should be excluded during processing.
+     *
+     * @todo move to ProductLabel enum
      */
     public static function excludedLabels(): array
     {

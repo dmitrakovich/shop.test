@@ -46,4 +46,15 @@ enum ProductLabel: int implements HasLabel
     {
         return $this === self::DO_NOT_PUBLISH;
     }
+
+    /**
+     * @return array<int, self>
+     */
+    public static function getNotUpdateLabels(): array
+    {
+        return [
+            self::DO_NOT_PUBLISH,
+            self::DO_NOT_UPDATE,
+        ];
+    }
 }

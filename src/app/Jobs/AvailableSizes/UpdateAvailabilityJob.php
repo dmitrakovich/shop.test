@@ -2,12 +2,13 @@
 
 namespace App\Jobs\AvailableSizes;
 
+use App\Enums\Product\ProductLabel;
 use App\Events\Products\ProductUpdated;
 use App\Models\AvailableSizes;
 use App\Models\Product;
 use App\Models\Size;
 use App\Services\LogService;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class UpdateAvailabilityJob extends AbstractAvailableSizesJob
@@ -92,7 +93,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         $query = DB::table('products')
             ->leftJoin('available_sizes', 'products.id', '=', 'available_sizes.product_id')
             ->whereNull('products.deleted_at')
-            ->whereNotIn('products.label_id', Product::excludedLabels())
+            ->where(fn (Builder $query) => $this->filterExcludedLabels($query))
             ->whereNull('available_sizes.product_id');
 
         $this->logData['deleteProducts'] = $query->pluck('products.id')->toArray();
@@ -124,7 +125,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
     {
         $query = Product::onlyTrashed()
             ->whereHas('availableSizes')
-            ->whereNotIn('label_id', Product::excludedLabels());
+            ->where(fn (Builder $query) => $this->filterExcludedLabels($query));
 
         $this->logData['restoreProducts'] = $query->pluck('id')->toArray();
 
@@ -137,7 +138,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         DB::table('product_attributes')
             ->join('products', 'products.id', '=', 'product_attributes.product_id')
             ->where('attribute_type', Size::class)
-            ->whereNotIn('products.label_id', Product::excludedLabels())
+            ->where(fn (Builder $query) => $this->filterExcludedLabels($query))
             ->get(['product_id', 'attribute_id'])
             ->each(function (\stdClass $attribute) use (&$existingSizes) {
                 $existingSizes[$attribute->product_id][] = $attribute->attribute_id;
@@ -146,7 +147,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         $availableSizes = DB::table('available_sizes')
             ->join('products', 'products.id', '=', 'available_sizes.product_id')
             ->whereNotNull('product_id')
-            ->whereNotIn('products.label_id', Product::excludedLabels())
+            ->where(fn (Builder $query) => $this->filterExcludedLabels($query))
             ->selectRaw('product_id, ' . implode(', ', AvailableSizes::getSumWrappedSizeFields()))
             ->groupBy('product_id')
             ->get()
@@ -230,5 +231,11 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
             $this->logData['addSizes'],
             $this->logData['deleteSizes'],
         );
+    }
+
+    private function filterExcludedLabels(Builder $query): Builder
+    {
+        return $query->whereNotIn('products.label_id', ProductLabel::getNotUpdateLabels())
+            ->orWhereNull('products.label_id');
     }
 }
