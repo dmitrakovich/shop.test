@@ -20,6 +20,7 @@ class CreateProduct extends CreateRecord
 
     protected function afterCreate(): void
     {
+        /** @var \App\Models\Product $product */
         $product = $this->getRecord();
 
         event(new ProductCreated($product));

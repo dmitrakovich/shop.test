@@ -32,6 +32,9 @@ class EditProduct extends EditRecord
 
     protected function afterSave(): void
     {
-        event(new ProductUpdated($this->getRecord()));
+        /** @var \App\Models\Product $product */
+        $product = $this->getRecord();
+
+        event(new ProductUpdated($product));
     }
 }
