@@ -20,6 +20,8 @@ class CreateProduct extends CreateRecord
 
     protected function afterCreate(): void
     {
-        event(new ProductCreated($this->getRecord()));
+        $product = $this->getRecord();
+
+        event(new ProductCreated($product));
     }
 }
