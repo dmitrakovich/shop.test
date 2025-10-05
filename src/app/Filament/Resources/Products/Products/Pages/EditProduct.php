@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Products\Products\Pages;
 
-use App\Filament\Actions\ProductPromtAction;
+use App\Filament\Actions\Product\PromtAction;
 use App\Filament\Resources\Products\Products\ProductResource;
 use App\Models\Product;
 use Filament\Actions\Action;
@@ -18,7 +18,7 @@ class EditProduct extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            ProductPromtAction::make(),
+            PromtAction::make(),
             Action::make('open')
                 ->label('Открыть страницу товара')
                 ->icon(Heroicon::ArrowTopRightOnSquare)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Actions;
+namespace App\Filament\Actions\Product;
 
 use App\Models\Product;
 use Filament\Actions\Action;
@@ -8,7 +8,7 @@ use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Icons\Heroicon;
 
-class ProductPromtAction extends Action
+class PromtAction extends Action
 {
     public static function make(?string $name = 'productPromt'): static
     {

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Products\Schemas;
 
+use App\Enums\Product\ProductLabel;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -141,18 +142,20 @@ class ProductForm
                                 TextInput::make('heel_txt')->label('Высота каблука/подошвы'),
                             ]),
 
+                        Section::make()
+                            ->schema([
+                                Select::make('label_id')
+                                    ->label('Метка')
+                                    ->options(ProductLabel::class)
+                                    ->required(),
+                                TextInput::make('product_features')
+                                    ->label('Ключевая особенность'),
+                                TextInput::make('key_features')
+                                    ->label('Ключевая особенность модели (для промта)'),
+                            ]),
+
                     ])
                     ->columnSpan(['lg' => 1]),
-
-                // todo:
-                TextInput::make('label_id')
-                    ->required()
-                    ->numeric(),
-                Select::make('product_group_id')
-                    ->relationship('productGroup', 'id'),
-                TextInput::make('product_features'),
-                TextInput::make('key_features'),
-
             ])
             ->columns(3);
     }

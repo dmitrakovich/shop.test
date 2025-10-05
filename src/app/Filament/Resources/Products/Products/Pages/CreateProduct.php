@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Products\Products\Pages;
 
-use App\Filament\Actions\ProductPromtAction;
+use App\Filament\Actions\Product\PromtAction;
 use App\Filament\Resources\Products\Products\ProductResource;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -13,7 +13,7 @@ class CreateProduct extends CreateRecord
     protected function getHeaderActions(): array
     {
         return [
-            ProductPromtAction::make(),
+            PromtAction::make(),
         ];
     }
 }
