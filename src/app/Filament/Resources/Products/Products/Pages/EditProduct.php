@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Products\Pages;
 
+use App\Events\Products\ProductUpdated;
 use App\Filament\Actions\Product\PromtAction;
 use App\Filament\Resources\Products\Products\ProductResource;
 use App\Models\Product;
@@ -27,5 +28,10 @@ class EditProduct extends EditRecord
             DeleteAction::make(),
             RestoreAction::make(),
         ];
+    }
+
+    protected function afterSave(): void
+    {
+        event(new ProductUpdated($this->getRecord()));
     }
 }

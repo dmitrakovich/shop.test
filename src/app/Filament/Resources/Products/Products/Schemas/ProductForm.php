@@ -54,6 +54,7 @@ class ProductForm
                                 SpatieMediaLibraryFileUpload::make('media')
                                     ->image()
                                     ->multiple()
+                                    ->conversion('normal')
                                     ->panelLayout('grid')
                                     ->reorderable()
                                     ->downloadable()
@@ -147,7 +148,7 @@ class ProductForm
                                 Select::make('label_id')
                                     ->label('Метка')
                                     ->options(ProductLabel::class)
-                                    ->required(),
+                                    ->native(false),
                                 TextInput::make('product_features')
                                     ->label('Ключевая особенность'),
                                 TextInput::make('key_features')

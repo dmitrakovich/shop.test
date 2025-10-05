@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Products\Pages;
 
+use App\Events\Products\ProductCreated;
 use App\Filament\Actions\Product\PromtAction;
 use App\Filament\Resources\Products\Products\ProductResource;
 use Filament\Resources\Pages\CreateRecord;
@@ -15,5 +16,10 @@ class CreateProduct extends CreateRecord
         return [
             PromtAction::make(),
         ];
+    }
+
+    protected function afterCreate(): void
+    {
+        event(new ProductCreated($this->getRecord()));
     }
 }
