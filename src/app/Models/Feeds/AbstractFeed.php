@@ -68,7 +68,7 @@ abstract class AbstractFeed
             if ($image->hasCustomProperty('video')) {
                 $videos[] = $image->getCustomProperty('video');
             } else {
-                $images[] = $image->getUrl('full');
+                $images[] = $image->getFullUrl();
             }
         }
 

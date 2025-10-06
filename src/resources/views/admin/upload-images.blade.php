@@ -15,7 +15,7 @@
                             class="kv-file-remove btn btn-sm btn-kv btn-default btn-outline-secondary">
                             <i class="glyphicon glyphicon-trash"></i>
                         </button>
-                        <a data-fancybox="single" data-src="{{ $image->getUrl('full') }}"
+                        <a data-fancybox="single" data-src="{{ $image->getFullUrl() }}"
                             class="kv-file-zoom btn btn-sm btn-kv btn-default btn-outline-secondary">
                             <i class="glyphicon glyphicon-zoom-in"></i>
                         </a>

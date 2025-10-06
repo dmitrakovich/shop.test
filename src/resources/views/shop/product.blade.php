@@ -49,7 +49,7 @@
                                         </div>
                                     @else
                                         <div class="swiper-slide">
-                                            <a href="{{ $image->getUrl('full') }}" data-fancybox="images">
+                                            <a href="{{ $image->getFullUrl() }}" data-fancybox="images">
                                                 <img src="{{ $image->getUrl('normal') }}"
                                                     alt="{{ $product->shortName() }}" class="img-fluid"
                                                     onerror="imageOnError(this)">

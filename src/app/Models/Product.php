@@ -325,7 +325,6 @@ class Product extends Model implements HasMedia
         $this->addMediaConversion('thumb')->width(100);
         $this->addMediaConversion('catalog')->width(300);
         $this->addMediaConversion('normal')->width(700);
-        $this->addMediaConversion('full')->width(1200);
     }
 
     /**
@@ -575,7 +574,7 @@ class Product extends Model implements HasMedia
      */
     public function restore(): bool
     {
-        if ($this->label_id->isNotPublished()) {
+        if ($this->label_id?->isNotPublished()) {
             $this->label_id = null;
             $this->save();
         }
