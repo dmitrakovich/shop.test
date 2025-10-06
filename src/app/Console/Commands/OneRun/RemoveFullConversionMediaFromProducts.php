@@ -21,7 +21,7 @@ class RemoveFullConversionMediaFromProducts extends Command
      *
      * @var string
      */
-    protected $description = ''; // !!!
+    protected $description = 'Removes full conversion media files from products and updates their generated conversions';
 
     /**
      * Execute the console command.
