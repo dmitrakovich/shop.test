@@ -61,9 +61,6 @@ task('deploy:writable', function () {
     });
 });
 
-desc('Caching Blade Icons');
-task('artisan:icons:cache', artisan('icons:cache'));
-
 desc('Clear OPCache');
 task('artisan:opcache:clear', artisan('opcache:clear'));
 
@@ -83,24 +80,16 @@ task('deploy', [
     'deploy:shared',
     'deploy:writable',
     'artisan:storage:link',
+    'artisan:optimize:clear',
     'artisan:migrate',
     // 'artisan:shield:generate', // temp disable, see AdminUser
-    'artisan:cache:clear',
-    'artisan:config:cache',
-    'artisan:route:cache',
-    'artisan:view:cache',
-    'artisan:event:cache',
-    'artisan:icons:cache',
-    'deploy:symlink',
-    'artisan:cache:clear',
-    'artisan:opcache:clear',
-    'artisan:queue:restart',
-    'deploy:unlock',
-    'deploy:cleanup',
-    'deploy:success',
+    'artisan:optimize',
+    'deploy:publish',
 ]);
 
-// [Optional] if deploy fails automatically unlock.
+after('deploy:symlink', 'artisan:opcache:clear');
+after('deploy:symlink', 'artisan:queue:restart');
+
 after('deploy:failed', 'deploy:unlock');
 
 // Rollback settings
