@@ -3,6 +3,9 @@
 namespace App\Filament\Resources\Products\Products\Schemas;
 
 use App\Enums\Product\ProductLabel;
+use App\Models\Tag;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -16,6 +19,9 @@ class ProductForm
 {
     public static function configure(Schema $schema): Schema
     {
+
+        // todo: $productFromStock
+
         return $schema
             ->components([
                 Group::make()
@@ -52,15 +58,32 @@ class ProductForm
                         Section::make('Фото')
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('media')
+                                    ->panelLayout('grid')
                                     ->image()
                                     ->multiple()
+                                    ->openable()
                                     ->conversion('normal')
-                                    ->panelLayout('grid')
                                     ->reorderable()
                                     ->downloadable()
                                     ->hiddenLabel(),
-                            ])
-                            ->collapsible(),
+                            ]),
+
+                        // todo: для видео репитер
+                        // todo: для имеджевых отдельную коллекцию как вариант через отдельную связь
+                        // Repeater::make('video')
+                        //     ->schema([
+                        //         FileUpload::make('preview')
+                        //             ->label('Превью')
+                        //             ->image()
+                        //             ->required(),
+
+                        //         TextInput::make('url')
+                        //             ->label('Ссылка на видео')
+                        //             ->nullable(),
+                        //     ])
+                        //     ->columns(2)
+                        //     ->addActionLabel('Add image')
+                        //     ->collapsible(),
                     ])
                     ->columnSpan(['lg' => 2]),
                 Group::make()
@@ -153,6 +176,17 @@ class ProductForm
                                     ->label('Ключевая особенность'),
                                 TextInput::make('key_features')
                                     ->label('Ключевая особенность модели (для промта)'),
+                                Select::make('tags')
+                                    ->relationship('tags', 'name')
+                                    ->label('Теги')
+                                    ->multiple()
+                                    ->options(
+                                        Tag::with('group')
+                                            ->get()
+                                            ->groupBy(fn (Tag $tag) => $tag->group->name)
+                                            ->map(fn ($tags) => $tags->pluck('name', 'id'))
+                                            ->toArray()
+                                    ),
                             ]),
 
                     ])
