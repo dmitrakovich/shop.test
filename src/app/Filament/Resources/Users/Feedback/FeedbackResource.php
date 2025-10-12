@@ -19,6 +19,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
@@ -130,6 +131,11 @@ class FeedbackResource extends Resource
                                     ->relationship('product')
                                     ->getOptionLabelFromRecordUsing(fn (Product $record) => $record->nameForAdmin())
                                     ->searchable(['id', 'sku']),
+                                SpatieMediaLibraryImageEntry::make('product.media')
+                                    ->label('Фото товара')
+                                    ->conversion('normal')
+                                    ->imageSize('100%')
+                                    ->limit(1),
                             ]),
                     ])
                     ->columnSpan(['lg' => 1]),
