@@ -23,7 +23,7 @@ class InfoPageController extends Controller
     ): array {
         return [
             'hitSlider' => CatalogProductResource::collection($sliderService->getImidjProducts()),
-            'trendSlider' => CatalogProductResource::collection($sliderService->getImidjProducts()),
+            'trendSlider' => CatalogProductResource::collection($sliderService->getTrendProducts()),
         ];
     }
 
