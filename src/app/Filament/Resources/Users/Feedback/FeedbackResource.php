@@ -24,6 +24,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\Operation;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -133,6 +134,7 @@ class FeedbackResource extends Resource
                                     ->searchable(['id', 'sku']),
                                 SpatieMediaLibraryImageEntry::make('product.media')
                                     ->label('Фото товара')
+                                    ->hiddenOn(Operation::Create)
                                     ->conversion('normal')
                                     ->imageSize('100%')
                                     ->limit(1),
