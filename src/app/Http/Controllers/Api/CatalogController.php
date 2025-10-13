@@ -38,13 +38,14 @@ class CatalogController extends Controller
         }
 
         $sort = $filterRequest->getSorting();
+        $perPage = (int)$filterRequest->input('per_page');
         $currentFilters = $filterRequest->getFilters();
         $currentCity = $filterRequest->getCity();
         $searchQuery = $filterRequest->input('search');
         UrlHelper::setCurrentFilters($currentFilters);
         UrlHelper::setCurrentCity($currentCity);
 
-        $products = $catalogService->getProductsWithPagination($currentFilters, $sort, $searchQuery);
+        $products = $catalogService->getProductsWithPagination($currentFilters, $sort, $searchQuery, $perPage);
 
         $sortingList = [
             'rating' => 'по популярности',

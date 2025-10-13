@@ -54,7 +54,7 @@ class CatalogService
     /**
      * @param  array<string, array<string, Url>>  $filters
      */
-    public function getProductsWithPagination(array $filters, string $sort, ?string $search = null): LengthAwarePaginator
+    public function getProductsWithPagination(array $filters, string $sort, ?string $search = null, ?int $perPage = 12): LengthAwarePaginator
     {
         /** @var Builder $productsQuery */
         $productsQuery = $this->productService
@@ -62,7 +62,8 @@ class CatalogService
             ->search($search)
             ->sorting($sort);
 
-        $products = $productsQuery->paginate(self::PAGE_SIZE);
+        $perPage = min(max($perPage, 12), 100);
+        $products = $productsQuery->paginate($perPage);
         $this->addTopProducts($products, $filters);
         $products->totalCount = $products->total() + $this->topProductsCount($products);
 
