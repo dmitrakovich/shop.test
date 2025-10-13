@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Product\ProductLabel;
 use App\Enums\ProductCarouselEnum;
 use App\Facades\Currency;
 use App\Models\Ads\ProductCarousel;
@@ -86,16 +87,30 @@ class SliderService
     public function getImidjProducts(): Collection
     {
         $productIds = Cache::remember('imidj_slider', self::CACHE_TTL, function () {
-            $slider = ProductCarousel::getImidjCarousel();
-            if (!$slider) {
-                return [];
-            }
-
             return Product::query()
-                ->whereIn('category_id', $slider->getCategoryIds())
-                ->whereRelation('media', 'custom_properties', 'like', '%is_imidj%')
-                ->sorting('rating')
-                ->limit($slider->count)
+                ->orderBy('collection_id', 'desc')
+                ->orderBy('rating', 'desc')
+                ->limit(20)
+                ->pluck('id')
+                ->toArray();
+        });
+
+        return $this->productRepository->getForSliderByIds($productIds);
+    }
+
+    /**
+     * Get trend products
+     *
+     * @return Collection|Product[]
+     */
+    public function getTrendProducts(): Collection
+    {
+        $productIds = Cache::remember('trend_slider', self::CACHE_TTL, function () {
+            return Product::query()
+                ->where('label_id', ProductLabel::HIT)
+                ->orderBy('collection_id', 'desc')
+                ->orderBy('rating', 'desc')
+                ->limit(20)
                 ->pluck('id')
                 ->toArray();
         });
