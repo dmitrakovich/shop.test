@@ -37,4 +37,28 @@ class EditProduct extends EditRecord
 
         event(new ProductUpdated($product));
     }
+
+    /**
+     * @return array<Action | ActionGroup>
+     */
+    protected function getFormActions(): array
+    {
+        return [
+            Action::make('saveAndRedirect')
+                ->label('Сохранить')
+                ->action('saveAndRedirect')
+                ->keyBindings(['mod+s']),
+            Action::make('saveAndContinue')
+                ->label('Сохранить и Продолжить')
+                ->action('save')
+                ->color('gray'),
+            $this->getCancelFormAction(),
+        ];
+    }
+
+    public function saveAndRedirect(): void
+    {
+        $this->save(false);
+        $this->redirect($this->getResource()::getUrl('index'));
+    }
 }

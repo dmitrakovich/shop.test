@@ -45,7 +45,8 @@ class ProductForm
                                     ->required()
                                     ->label('Цена')
                                     ->numeric()
-                                    ->default(0.0)
+                                    ->default(1)
+                                    ->minValue(0.1)
                                     ->prefix('BYN'),
                                 TextInput::make('old_price')
                                     ->label('Старая цена')
