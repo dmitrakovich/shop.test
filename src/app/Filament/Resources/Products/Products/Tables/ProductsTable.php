@@ -16,6 +16,7 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
@@ -46,16 +47,16 @@ class ProductsTable
                 TextColumn::make('sku')
                     ->label('Артикул')
                     ->searchable(),
-                TextColumn::make('price')
+                TextInputColumn::make('price')
                     ->label('Цена')
-                    ->money(CurrencyCode::BYN)
-                    ->sortable(),
-                TextColumn::make('old_price')
+                    ->suffix(CurrencyCode::BYN->value),
+                TextInputColumn::make('old_price')
                     ->label('Старая цена')
-                    ->money(CurrencyCode::BYN)
-                    ->sortable(),
+                    ->suffix(CurrencyCode::BYN->value),
                 TextColumn::make('category.title')
                     ->label('Категория'),
+                TextColumn::make('brand.name')
+                    ->label('Бренд'),
                 TextColumn::make('manufacturer.name')
                     ->label('Фабрика'),
                 TextColumn::make('color_txt')
