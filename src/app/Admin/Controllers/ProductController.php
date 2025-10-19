@@ -273,9 +273,6 @@ class ProductController extends AbstractAdminController
             if (!$this->checkIfMediaAdded($form)) {
                 return $this->mediaNotAddedError();
             }
-            if (is_null($form->manufacturer_id)) {
-                $form->manufacturer_id = 0;
-            }
             if (ProductLabel::DO_NOT_PUBLISH->value === (int)$form->label_id) {
                 $form->deleted_at = now();
             }

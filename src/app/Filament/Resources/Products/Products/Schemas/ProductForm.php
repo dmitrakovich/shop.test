@@ -109,8 +109,7 @@ class ProductForm
                                     ->label('Производитель')
                                     ->relationship('manufacturer', 'name')
                                     ->searchable()
-                                    ->preload()
-                                    ->required(),
+                                    ->preload(),
                                 Select::make('sizes')
                                     ->label('Размеры')
                                     ->multiple()
