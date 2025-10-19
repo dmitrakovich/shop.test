@@ -31,6 +31,15 @@ class EditProduct extends EditRecord
         ];
     }
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if ($data['label_id']?->isNotPublished()) {
+            $data['deleted_at'] = now();
+        }
+
+        return $data;
+    }
+
     protected function afterSave(): void
     {
         /** @var \App\Models\Product $product */

@@ -20,6 +20,15 @@ class CreateProduct extends CreateRecord
         ];
     }
 
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        if ($data['label_id']?->isNotPublished()) {
+            $data['deleted_at'] = now();
+        }
+
+        return $data;
+    }
+
     protected function afterCreate(): void
     {
         /** @var \App\Models\Product $product */
