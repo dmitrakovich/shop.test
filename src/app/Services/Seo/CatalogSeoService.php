@@ -32,6 +32,9 @@ class CatalogSeoService
 
     private ?SeoLink $seoLink = null;
 
+    /**
+     * @var CursorPaginator|LengthAwarePaginator<int, \App\Models\Product>
+     */
     private CursorPaginator|LengthAwarePaginator $catalogProducts;
 
     const MAX_FILTERS_COUNT = 3;
@@ -98,6 +101,8 @@ class CatalogSeoService
 
     /**
      * Set catalog products
+     *
+     * @param  CursorPaginator|LengthAwarePaginator<int, \App\Models\Product>  $products
      */
     public function setProducts(CursorPaginator|LengthAwarePaginator $products): self
     {
