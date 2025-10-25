@@ -18,7 +18,6 @@ use App\Models\Seo\SeoLink;
 use App\Models\Size;
 use App\Models\Style;
 use App\Models\Tag;
-use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
@@ -33,9 +32,9 @@ class CatalogSeoService
     private ?SeoLink $seoLink = null;
 
     /**
-     * @var CursorPaginator|LengthAwarePaginator<int, \App\Models\Product>
+     * @var LengthAwarePaginator<int, \App\Models\Product>
      */
-    private CursorPaginator|LengthAwarePaginator $catalogProducts;
+    private LengthAwarePaginator $catalogProducts;
 
     const MAX_FILTERS_COUNT = 3;
 
@@ -102,9 +101,9 @@ class CatalogSeoService
     /**
      * Set catalog products
      *
-     * @param  CursorPaginator|LengthAwarePaginator<int, \App\Models\Product>  $products
+     * @param  LengthAwarePaginator<int, \App\Models\Product> $products
      */
-    public function setProducts(CursorPaginator|LengthAwarePaginator $products): self
+    public function setProducts(LengthAwarePaginator $products): self
     {
         $this->catalogProducts = $products;
 
