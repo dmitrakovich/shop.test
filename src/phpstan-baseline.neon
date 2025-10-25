@@ -889,6 +889,12 @@ parameters:
 			path: app/Exports/UsersToSmsTrafficExport.php
 
 		-
+			message: '#^Call to an undefined method Filament\\Tables\\Columns\\TextInputColumn\:\:suffix\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Filament/Resources/Products/Products/Tables/ProductsTable.php
+
+		-
 			message: '#^Parameter \#1 \$options of method Filament\\Forms\\Components\\TextInput\:\:datalist\(\) expects array\<string\>\|Closure\|Illuminate\\Contracts\\Support\\Arrayable\|null, array\{60, 300, 600, 1800, 3600, 86400\} given\.$#'
 			identifier: argument.type
 			count: 1
@@ -1136,12 +1142,6 @@ parameters:
 
 		-
 			message: '#^Parameter \#1 \$products of method App\\Services\\GoogleTagManagerService\:\:setForCatalog\(\) expects Illuminate\\Support\\Collection, Illuminate\\Contracts\\Pagination\\CursorPaginator given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Shop/CatalogController.php
-
-		-
-			message: '#^Parameter \#1 \$products of method App\\Services\\Seo\\CatalogSeoService\:\:setProducts\(\) expects Illuminate\\Pagination\\CursorPaginator, Illuminate\\Contracts\\Pagination\\CursorPaginator given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Http/Controllers/Shop/CatalogController.php
@@ -4599,18 +4599,6 @@ parameters:
 		-
 			message: '#^Method App\\Services\\Seo\\CatalogSeoService\:\:setCurrentFilters\(\) has parameter \$currentFilters with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/Seo/CatalogSeoService.php
-
-		-
-			message: '#^Method App\\Services\\Seo\\CatalogSeoService\:\:setProducts\(\) has parameter \$products with generic class Illuminate\\Pagination\\CursorPaginator but does not specify its types\: TKey, TValue$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/Seo/CatalogSeoService.php
-
-		-
-			message: '#^Property App\\Services\\Seo\\CatalogSeoService\:\:\$catalogProducts with generic class Illuminate\\Pagination\\CursorPaginator does not specify its types\: TKey, TValue$#'
-			identifier: missingType.generics
 			count: 1
 			path: app/Services/Seo/CatalogSeoService.php
 

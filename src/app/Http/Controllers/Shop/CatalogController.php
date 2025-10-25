@@ -10,7 +10,6 @@ use App\Models\ProductAttributes\Price;
 use App\Services\CatalogService;
 use App\Services\FilterService;
 use App\Services\GoogleTagManagerService;
-use App\Services\Seo\CatalogSeoService;
 use App\Services\SliderService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +23,6 @@ class CatalogController extends BaseController
         Request $request,
         private GoogleTagManagerService $gtmService,
         private CatalogService $catalogService,
-        private CatalogSeoService $seoService,
     ) {
         parent::__construct($request);
     }
@@ -99,11 +97,6 @@ class CatalogController extends BaseController
         if ($products->isEmpty()) {
             $data['simpleSliders'] = app(SliderService::class)->getFormattedSimple();
         }
-        $this->seoService
-            ->setCurrentFilters($currentFilters)
-            ->setCurrentCity($currentCity)
-            ->setProducts($products)
-            ->generate();
 
         return view('shop.catalog', $data);
     }
