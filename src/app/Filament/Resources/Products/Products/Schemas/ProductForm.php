@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\Products\Products\Schemas;
 
 use App\Enums\Product\ProductLabel;
-use App\Models\Tag;
+use App\Models\TagGroup;
+use Filament\Actions\Action;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
@@ -12,6 +14,8 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -180,13 +184,40 @@ class ProductForm
                                     ->relationship('tags', 'name')
                                     ->label('Теги')
                                     ->multiple()
-                                    ->options(
-                                        Tag::with('group')
-                                            ->get()
-                                            ->groupBy(fn (Tag $tag) => $tag->group->name)
-                                            ->map(fn ($tags) => $tags->pluck('name', 'id'))
-                                            ->toArray()
-                                    ),
+                                    ->searchable(false)
+                                    ->options([])
+                                    ->suffixAction(
+                                        Action::make('selectTags')
+                                            ->icon('heroicon-m-tag')
+                                            ->label('Выбрать')
+                                            ->modalHeading('Выбор тегов')
+                                            ->modalSubmitActionLabel('Сохранить')
+                                            ->schema(function (Get $get) {
+                                                $components = [];
+                                                $selectedTags = $get('tags');
+                                                foreach (TagGroup::with('tags')->get() as $group) {
+                                                    if (!$options = $group->tags->pluck('name', 'id')->toArray()) {
+                                                        continue;
+                                                    }
+
+                                                    $components[] = CheckboxList::make("group_{$group->id}_tags")
+                                                        ->label($group->name)
+                                                        ->options($options)
+                                                        ->columns(4)
+                                                        ->default(array_intersect($selectedTags, array_keys($options)));
+                                                }
+
+                                                return $components;
+                                            })
+                                            ->action(function (array $data, Set $set): void {
+                                                $set('tags', collect($data)
+                                                    ->filter()
+                                                    ->flatMap(fn ($value) => is_array($value) ? $value : [])
+                                                    ->map('intval')
+                                                    ->unique()
+                                                    ->values()
+                                                    ->toArray());
+                                            })),
                             ]),
 
                     ])

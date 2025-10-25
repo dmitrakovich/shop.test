@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Products\Products\Tables;
 
 use App\Enums\CurrencyCode;
 use App\Enums\Product\ProductLabel;
+use App\Events\Products\ProductUpdated;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Size;
@@ -49,10 +50,14 @@ class ProductsTable
                     ->searchable(),
                 TextInputColumn::make('price')
                     ->label('Цена')
-                    ->suffix(CurrencyCode::BYN->value),
+                    ->suffix(CurrencyCode::BYN->value)
+                    ->rules(['required'])
+                    ->afterStateUpdated(fn (Product $product) => event(new ProductUpdated($product))),
                 TextInputColumn::make('old_price')
                     ->label('Старая цена')
-                    ->suffix(CurrencyCode::BYN->value),
+                    ->suffix(CurrencyCode::BYN->value)
+                    ->rules(['required'])
+                    ->afterStateUpdated(fn (Product $product) => event(new ProductUpdated($product))),
                 TextColumn::make('category.title')
                     ->label('Категория'),
                 TextColumn::make('brand.name')

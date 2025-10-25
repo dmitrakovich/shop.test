@@ -4,6 +4,7 @@ namespace App\Listeners\OneC;
 
 use App\Events\Products\ProductCreated;
 use App\Events\Products\ProductUpdated;
+use Illuminate\Support\Facades\App;
 
 class UpdateProduct
 {
@@ -20,6 +21,9 @@ class UpdateProduct
      */
     public function handle(ProductCreated|ProductUpdated $event): void
     {
+        if (!App::isProduction()) {
+            return;
+        }
         $product = $event->product;
         $productFromOneC = $product->productFromOneC;
         if (!$productFromOneC) {
