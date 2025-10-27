@@ -10,6 +10,14 @@ class Seo implements SeoContract
 
     protected ?string $title = null;
 
+    protected ?string $description = null;
+
+    protected ?string $url = null;
+
+    protected ?string $image = null;
+
+    protected ?string $robots = null;
+
     public function meta()
     {
         return app('seo.meta');
@@ -44,6 +52,26 @@ class Seo implements SeoContract
     public function getTitle(): ?string
     {
         return $this->title;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function getRobots(): ?string
+    {
+        return $this->robots;
     }
 
     public function setH1(string $h1 = ''): self
@@ -81,6 +109,7 @@ class Seo implements SeoContract
      */
     public function setDescription(?string $description): self
     {
+        $this->description = $description;
         $this->meta()->setDescription($description);
         $this->opengraph()->setDescription($description);
         $this->twitter()->setDescription($description);
@@ -93,6 +122,7 @@ class Seo implements SeoContract
      */
     public function setImage(null|string|array $image): self
     {
+        $this->image = $image;
         $this->meta()->setImage($image);
         $this->opengraph()->setImage($image);
         $this->twitter()->setImage($image);
@@ -105,6 +135,7 @@ class Seo implements SeoContract
      */
     public function setUrl(?string $url): self
     {
+        $this->url = $url;
         $this->meta()->setUrl($url);
         $this->opengraph()->setUrl($url);
         $this->twitter()->setUrl($url);
@@ -120,6 +151,7 @@ class Seo implements SeoContract
      */
     public function setRobots($robots)
     {
+        $this->robots = $robots;
         $this->meta()->setRobots($robots);
 
         return $this;
