@@ -889,12 +889,6 @@ parameters:
 			path: app/Exports/UsersToSmsTrafficExport.php
 
 		-
-			message: '#^Call to an undefined method Filament\\Tables\\Columns\\TextInputColumn\:\:suffix\(\)\.$#'
-			identifier: method.notFound
-			count: 2
-			path: app/Filament/Resources/Products/Products/Tables/ProductsTable.php
-
-		-
 			message: '#^Parameter \#1 \$options of method Filament\\Forms\\Components\\TextInput\:\:datalist\(\) expects array\<string\>\|Closure\|Illuminate\\Contracts\\Support\\Arrayable\|null, array\{60, 300, 600, 1800, 3600, 86400\} given\.$#'
 			identifier: argument.type
 			count: 1
