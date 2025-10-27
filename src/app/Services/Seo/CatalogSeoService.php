@@ -101,7 +101,7 @@ class CatalogSeoService
     /**
      * Set catalog products
      *
-     * @param  LengthAwarePaginator<int, \App\Models\Product> $products
+     * @param  LengthAwarePaginator<int, \App\Models\Product>  $products
      */
     public function setProducts(LengthAwarePaginator $products): self
     {
