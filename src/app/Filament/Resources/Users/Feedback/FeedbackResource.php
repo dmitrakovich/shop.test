@@ -82,14 +82,14 @@ class FeedbackResource extends Resource
                             ->collapsible(),
                         Section::make('Видео')
                             ->schema([
-                                SpatieMediaLibraryFileUpload::make('video')
+                                SpatieMediaLibraryFileUpload::make('videos')
                                     ->acceptedFileTypes([
                                         'video/mp4',
                                         'video/avi',
                                         'video/mpeg',
                                         'video/quicktime',
                                     ])
-                                    ->collection('video')
+                                    ->collection('videos')
                                     ->multiple()
                                     ->maxFiles(5)
                                     ->reorderable()
