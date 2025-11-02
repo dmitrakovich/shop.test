@@ -27,6 +27,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\Operation;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
@@ -72,7 +73,7 @@ class UserResource extends Resource
                             ->maxLength(255),
                         TextInput::make('phone')
                             ->label('Телефон')
-                            ->formatStateUsing(fn (?Phone $state): string => $state?->toE164())
+                            ->formatStateUsing(fn (?Phone $state): ?string => $state?->toE164())
                             ->tel()
                             ->maxLength(255),
                         DatePicker::make('birth_date')
@@ -149,11 +150,11 @@ class UserResource extends Resource
                                     ->maxLength(255),
                             ]),
                     ]),
-                    Tab::make('Платежи')->schema([
+                    Tab::make('Платежи')->hiddenOn(Operation::Create)->schema([
                         RelationManager::make()->manager(PaymentsRelationManager::class)->lazy(true),
                     ])
                         ->columns(1),
-                    Tab::make('Черный список (Лог)')->schema([
+                    Tab::make('Черный список (Лог)')->hiddenOn(Operation::Create)->schema([
                         RelationManager::make()->manager(BlacklistRelationManager::class)->lazy(true),
                     ])->columns(1),
                 ])->columns(2)->persistTabInQueryString(),
