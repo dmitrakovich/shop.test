@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\View;
+use RuntimeException;
 
 class SaleService
 {
@@ -316,6 +317,7 @@ class SaleService
             SaleAlgorithm::SIMPLE => $this->round($oldPrice * (1 - ($this->getDiscount() + $baseDiscount))),
             SaleAlgorithm::COUNT => $this->round($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount))),
             SaleAlgorithm::ASCENDING, SaleAlgorithm::DESCENDING => $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount))),
+            SaleAlgorithm::CUSTOM => throw new RuntimeException('in development'),
         };
     }
 

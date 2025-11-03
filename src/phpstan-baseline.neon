@@ -811,12 +811,6 @@ parameters:
 			path: app/Enums/Payment/OnlinePaymentStatusEnum.php
 
 		-
-			message: '#^Method App\\Enums\\Promo\\SaleAlgorithm\:\:getLabel\(\) never returns null so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: app/Enums/Promo/SaleAlgorithm.php
-
-		-
 			message: '#^Method App\\Enums\\Seo\\SeoLinkFolderEnum\:\:list\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -3483,12 +3477,6 @@ parameters:
 		-
 			message: '#^Class App\\Models\\Promo\\Sale has PHPDoc tag @property for property \$styles with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Promo/Sale.php
-
-		-
-			message: '#^Method App\\Models\\Promo\\Sale\:\:promocodes\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
 			count: 1
 			path: app/Models/Promo/Sale.php
 

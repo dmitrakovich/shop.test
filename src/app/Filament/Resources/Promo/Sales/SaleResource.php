@@ -4,11 +4,14 @@ namespace App\Filament\Resources\Promo\Sales;
 
 use App\Enums\Filament\NavGroup;
 use App\Enums\Promo\SaleAlgorithm;
+use App\Enums\Promo\SettingType;
 use App\Filament\Resources\Promo\Sales\Pages\CreateSale;
 use App\Filament\Resources\Promo\Sales\Pages\EditSale;
 use App\Filament\Resources\Promo\Sales\Pages\ListSales;
 use App\Models\Category;
 use App\Models\Collection;
+use App\Models\Product;
+use App\Models\ProductAttributes\Manufacturer;
 use App\Models\Promo\Sale;
 use App\Models\Season;
 use App\Models\Style;
@@ -24,7 +27,9 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -46,137 +51,205 @@ class SaleResource extends Resource
     {
         return $schema
             ->components([
-                TextInput::make('title')
-                    ->label('Название')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('label_text')
-                    ->label('Текст на шильде')
-                    ->required()
-                    ->maxLength(255),
-                DateTimePicker::make('start_datetime')
-                    ->label('Дата начала')
-                    ->default(now())
-                    ->native(false)
-                    ->closeOnDateSelection()
-                    ->required(),
-                DateTimePicker::make('end_datetime')
-                    ->label('Дата завершения')
-                    ->default(now()->endOfDay())
-                    ->native(false)
-                    ->closeOnDateSelection()
-                    ->required(),
-                Grid::make(3)->schema([
-                    Select::make('algorithm')
-                        ->label('Алгоритм')
-                        ->options(SaleAlgorithm::class)
-                        ->default(SaleAlgorithm::SIMPLE)
-                        ->native(false)
-                        ->required(),
-                    TextInput::make('sale_percentage')
-                        ->label('Скидка в процентах')
-                        ->prohibits('sale_fix')
-                        ->requiredWithout('sale_fix'),
-                    TextInput::make('sale_fix')
-                        ->disabled()
-                        ->helperText('Функционал в разработке')
-                        ->label('Фиксированный скидка')
-                        ->placeholder('В копейках')
-                        ->numeric()
-                        ->suffix('BYN')
-                        ->prohibits('sale_percentage')
-                        ->requiredWithout('sale_percentage'),
-                ]),
-                Repeater::make('promocodes')
-                    ->label('Активация по промокоду')
-                    ->helperText('Если не выбрано, активация не требуется. Может быть выбрано несколько промокодов.')
-                    ->addActionLabel('Добавить промокод')
+                Section::make()
+                    ->columns(2)
                     ->columnSpanFull()
-                    ->columns(12)
-                    ->relationship('promocodes')
                     ->schema([
-                        TextInput::make('code')
-                            ->label('Код для активации')
-                            ->alphaDash()
-                            ->columnSpan(3)
+                        TextInput::make('title')
+                            ->label('Название')
                             ->required()
-                            ->maxLength(20),
-                        TextInput::make('timer_sec')
-                            ->label('Время действия')
-                            ->columnSpan(2)
-                            ->placeholder('в секундах')
-                            ->helperText('* после активации')
-                            ->datalist([60, 300, 600, 1800, 3600, 86400])
-                            ->numeric(),
-                        TextInput::make('activations_count')
-                            ->label('Количество активаций')
-                            ->columnSpan(2)
-                            ->helperText('Оставить пустым для ∞ кол-ва активаций')
-                            ->numeric(),
-                        TextInput::make('description')
-                            ->label('Описание')
-                            ->columnSpan(5)
                             ->maxLength(255),
+                        TextInput::make('label_text')
+                            ->label('Текст на шильде')
+                            ->required()
+                            ->maxLength(255),
+                        DateTimePicker::make('start_datetime')
+                            ->label('Дата начала')
+                            ->default(now())
+                            ->native(false)
+                            ->closeOnDateSelection()
+                            ->required(),
+                        DateTimePicker::make('end_datetime')
+                            ->label('Дата завершения')
+                            ->default(now()->endOfDay())
+                            ->native(false)
+                            ->closeOnDateSelection()
+                            ->required(),
+                    ]),
+                Section::make('Скидка')
+                    ->columnSpanFull()
+                    ->schema([
+                        Grid::make(3)->schema([
+                            Select::make('algorithm')
+                                ->label('Алгоритм')
+                                ->options(SaleAlgorithm::class)
+                                ->default(SaleAlgorithm::SIMPLE)
+                                ->native(false)
+                                ->required()
+                                ->live(),
+                            TextInput::make('sale_percentage')
+                                ->label('Скидка в процентах')
+                                ->prohibits('sale_fix')
+                                ->visible(fn (Get $get) => !$get('algorithm')->isCustom())
+                                ->requiredWithout('sale_fix'),
+                            TextInput::make('sale_fix')
+                                ->disabled()
+                                ->helperText('Функционал в разработке')
+                                ->label('Фиксированный скидка')
+                                ->placeholder('В копейках')
+                                ->numeric()
+                                ->suffix('BYN')
+                                ->prohibits('sale_percentage')
+                                ->visible(fn (Get $get) => !$get('algorithm')->isCustom())
+                                ->requiredWithout('sale_percentage'),
+                        ]),
+                        Repeater::make('settings')
+                            ->label('Настройки скидок')
+                            ->relationship('settings')
+                            ->visible(fn (Get $get) => $get('algorithm')->isCustom())
+                            ->columns(4)
+                            ->columnSpanFull()
+                            ->required()
+                            ->schema([
+                                Select::make('type')
+                                    ->label('Применяется к')
+                                    ->options(SettingType::class)
+                                    ->default(SettingType::CATEGORY)
+                                    ->required()
+                                    ->native(false)
+                                    ->live()
+                                    ->afterStateUpdated(fn (Set $set) => $set('ids', [])),
+                                Select::make('ids')
+                                    ->label('Выбор значений')
+                                    ->columnSpan(2)
+                                    ->multiple()
+                                    ->required()
+                                    ->searchable()
+                                    ->getSearchResultsUsing(fn (?string $search, Get $get) => match ($get('type')) {
+                                        SettingType::CATEGORY => Category::query()
+                                            ->when($search, fn ($q) => $q->where('title', 'like', "%{$search}%"))
+                                            ->whereNotIn('id', [1, 2, 25, 35])
+                                            ->limit(50)
+                                            ->pluck('title', 'id'),
+                                        SettingType::MANUFACTURER => Manufacturer::query()
+                                            ->when($search, fn ($q) => $q->where('name', 'like', "%{$search}%"))
+                                            ->limit(50)
+                                            ->pluck('name', 'id'),
+                                        SettingType::PRODUCT => Product::query()
+                                            ->when($search, fn ($q) => $q->where('id', 'like', "{$search}%"))
+                                            ->limit(50)
+                                            ->pluck('id', 'id'),
+                                        default => [],
+                                    })
+                                    ->options(fn (Get $get) => match ($get('type')) {
+                                        SettingType::CATEGORY => Category::query()->whereNotIn('id', [1, 2, 25, 35])->pluck('title', 'id'),
+                                        SettingType::MANUFACTURER => Manufacturer::query()->pluck('name', 'id'),
+                                        SettingType::PRODUCT => Product::query()->orderByDesc('id')->limit(50)->pluck('id', 'id'),
+                                        default => [],
+                                    }),
+                                TextInput::make('percentage')
+                                    ->numeric()
+                                    ->suffix('%')
+                                    ->label('Скидка')
+                                    ->required(),
+                            ]),
+                    ]),
+                Section::make('Активация по промокоду')
+                    ->columnSpanFull()
+                    ->description('Если не выбрано, активация не требуется. Может быть выбрано несколько промокодов.')
+                    ->schema([
+                        Repeater::make('promocodes')
+                            ->hiddenLabel()
+                            ->addActionLabel('Добавить промокод')
+                            ->columnSpanFull()
+                            ->columns(12)
+                            ->relationship('promocodes')
+                            ->defaultItems(0)
+                            ->schema([
+                                TextInput::make('code')
+                                    ->label('Код для активации')
+                                    ->alphaDash()
+                                    ->columnSpan(3)
+                                    ->required()
+                                    ->maxLength(20),
+                                TextInput::make('timer_sec')
+                                    ->label('Время действия')
+                                    ->columnSpan(2)
+                                    ->placeholder('в секундах')
+                                    ->helperText('* после активации')
+                                    ->datalist([60, 300, 600, 1800, 3600, 86400])
+                                    ->numeric(),
+                                TextInput::make('activations_count')
+                                    ->label('Количество активаций')
+                                    ->columnSpan(2)
+                                    ->helperText('Оставить пустым для ∞ кол-ва активаций')
+                                    ->numeric(),
+                                TextInput::make('description')
+                                    ->label('Описание')
+                                    ->columnSpan(5)
+                                    ->maxLength(255),
+                            ]),
                     ]),
                 Fieldset::make()
                     ->label('Фильтры (Оставить пустым, чтобы не применялся)')
                     ->schema([
                         CheckboxList::make('categories')
                             ->label('Категории')
-                            ->options(Category::query()->whereNotIn('id', [1, 2, 25])->pluck('title', 'id'))
-                            ->bulkToggleable()
+                            ->options(Category::query()->whereNotIn('id', [1, 2, 25, 35])->pluck('title', 'id'))
                             ->columns(5)
                             ->columnSpanFull(),
                         CheckboxList::make('collections')
                             ->label('Коллекции')
-                            ->options(Collection::query()->pluck('name', 'id'))
-                            ->bulkToggleable()
+                            ->options(Collection::query()->where('id', '>', 90)->pluck('name', 'id'))
                             ->columns(5)
                             ->columnSpanFull(),
                         CheckboxList::make('styles')
                             ->label('Стиль')
                             ->options(Style::query()->pluck('name', 'id'))
-                            ->bulkToggleable()
                             ->columns(5)
                             ->columnSpanFull(),
                         CheckboxList::make('seasons')
                             ->label('Сезон')
                             ->options(Season::query()->pluck('name', 'id'))
-                            ->bulkToggleable()
                             ->columns(5)
                             ->gridDirection('row')
                             ->columnSpanFull(),
                     ]),
-                Toggle::make('only_new')
-                    ->label('Участвуют только новинки')
-                    ->declined(fn (Get $get) => $get('only_discount'))
-                    ->validationMessages([
-                        'declined' => 'Не может быть одновременно выбрано с "Участвуют только скидки"',
-                    ]),
-                Toggle::make('only_discount')
-                    ->label('Участвуют только скидки')
-                    ->declined(fn (Get $get) => $get('only_new'))
-                    ->validationMessages([
-                        'declined' => 'Не может быть одновременно выбрано с "Участвуют только новинки"',
-                    ]),
-                Toggle::make('add_client_sale')
-                    ->label('Клиентская скидка суммируется'),
-                Toggle::make('add_review_sale')
-                    ->label('Суммируется со скидкой за отзывы'),
+                Fieldset::make()
+                    ->label('Условия')
+                    ->columns(1)
+                    ->schema([
+                        Toggle::make('only_new')
+                            ->label('Участвуют только новинки')
+                            ->declined(fn (Get $get) => $get('only_discount'))
+                            ->validationMessages([
+                                'declined' => 'Не может быть одновременно выбрано с "Участвуют только скидки"',
+                            ]),
+                        Toggle::make('only_discount')
+                            ->label('Участвуют только скидки')
+                            ->declined(fn (Get $get) => $get('only_new'))
+                            ->validationMessages([
+                                'declined' => 'Не может быть одновременно выбрано с "Участвуют только новинки"',
+                            ]),
+                        Toggle::make('add_client_sale')
+                            ->label('Клиентская скидка суммируется'),
+                        Toggle::make('add_review_sale')
+                            ->label('Суммируется со скидкой за отзывы'),
 
-                Fieldset::make()
-                    ->label('Способы оплаты')
-                    ->schema([
-                        Toggle::make('has_installment')
-                            ->label('Возможна рассрочка'),
-                        Toggle::make('has_cod')
-                            ->label('Возможна оплата при получении'),
-                    ]),
-                Fieldset::make()
-                    ->label('Способы доставки')
-                    ->schema([
-                        Toggle::make('has_fitting')
-                            ->label('Возможна примерка'),
+                        Fieldset::make()
+                            ->label('Способы оплаты')
+                            ->schema([
+                                Toggle::make('has_installment')
+                                    ->label('Возможна рассрочка'),
+                                Toggle::make('has_cod')
+                                    ->label('Возможна оплата при получении'),
+                            ]),
+                        Fieldset::make()
+                            ->label('Способы доставки')
+                            ->schema([
+                                Toggle::make('has_fitting')
+                                    ->label('Возможна примерка'),
+                            ]),
                     ]),
             ]);
     }

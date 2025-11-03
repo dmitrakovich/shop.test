@@ -11,8 +11,9 @@ enum SaleAlgorithm: int implements HasLabel
     case FAKE = 3;
     case ASCENDING = 4;
     case DESCENDING = 5;
+    case CUSTOM = 6;
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return match ($this) {
             self::FAKE => 'Ложная',
@@ -20,6 +21,7 @@ enum SaleAlgorithm: int implements HasLabel
             self::COUNT => 'От количества',
             self::ASCENDING => 'По возрастанию',
             self::DESCENDING => 'По убыванию',
+            self::CUSTOM => 'Настраиваемая',
         };
     }
 
@@ -36,5 +38,10 @@ enum SaleAlgorithm: int implements HasLabel
     public function isCount(): bool
     {
         return $this === self::COUNT;
+    }
+
+    public function isCustom(): bool
+    {
+        return $this === self::CUSTOM;
     }
 }

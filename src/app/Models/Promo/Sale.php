@@ -87,7 +87,17 @@ class Sale extends Model
     }
 
     /**
+     * @return HasMany<SaleSetting, $this>
+     */
+    public function settings(): HasMany
+    {
+        return $this->hasMany(SaleSetting::class);
+    }
+
+    /**
      * Get the promocodes associated with the sale.
+     *
+     * @return HasMany<Promocode, $this>
      */
     public function promocodes(): HasMany
     {
