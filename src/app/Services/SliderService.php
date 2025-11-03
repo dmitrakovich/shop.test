@@ -88,7 +88,10 @@ class SliderService
     {
         $productIds = Cache::remember('imidj_slider', self::CACHE_TTL, function () {
             return Product::query()
-                ->where('label_id', '!=', ProductLabel::HIT)
+                ->where(function ($query) {
+                    $query->where('label_id', '!=', ProductLabel::HIT)
+                        ->orWhereNull('label_id');
+                })
                 ->orderBy('collection_id', 'desc')
                 ->orderBy('rating', 'desc')
                 ->limit(20)
