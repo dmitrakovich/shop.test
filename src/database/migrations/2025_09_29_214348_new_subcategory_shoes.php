@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Category::query()->doesntExist()) {
+            return;
+        }
+
         Category::query()
             ->where('id', Category::ROOT_CATEGORY_ID)
             ->update(['one_c_name' => null]);
