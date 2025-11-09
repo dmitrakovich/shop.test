@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Data\Order\OrderData;
 use App\Enums\Promo\SaleAlgorithm;
+use App\Enums\Promo\SettingType;
 use App\Facades\Cart as CartFacade;
 use App\Facades\Currency;
 use App\Models\Cart;
@@ -12,12 +13,12 @@ use App\Models\Data\SaleData;
 use App\Models\Product;
 use App\Models\Promo\Promocode;
 use App\Models\Promo\Sale;
+use App\Models\Promo\SaleSetting;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\View;
-use RuntimeException;
 
 class SaleService
 {
@@ -53,11 +54,15 @@ class SaleService
 
     /**
      * List of discounts
+     *
+     * @var array<int, mixed>
      */
     private array $discounts = [];
 
     /**
      * Cache for checked products
+     *
+     * @var array<int, bool>
      */
     private array $productHasSale = [];
 
@@ -78,6 +83,8 @@ class SaleService
 
     /**
      * List of disabled sales
+     *
+     * @var array<string, int>
      */
     private array $disabled = [];
 
@@ -137,14 +144,36 @@ class SaleService
 
     /**
      * Prepare discounts list
+     *
+     * @todo use VO for 2 types of discount
+     * @example https://shopify.dev/docs/api/admin-rest/2024-04/resources/pricerule#get-price-rules-price-rule-id
      */
-    protected function prepareDiscounts(): void
+    private function prepareDiscounts(): void
     {
-        // todo: use VO for 2 types of discount
-        // ? example: https://shopify.dev/docs/api/admin-rest/2024-04/resources/pricerule#get-price-rules-price-rule-id
-        if ($this->hasSale()) {
-            $this->discounts = array_filter(array_map('trim', explode(',', $this->sale->sale_percentage)));
+        if (!$this->hasSale()) {
+            return;
         }
+
+        $this->discounts = $this->sale->algorithm->isCustom()
+            ? $this->prepareCustomDiscounts()
+            : array_filter(array_map('trim', explode(',', $this->sale->sale_percentage)));
+    }
+
+    /**
+     * @return array<int, array<int, float>>
+     */
+    private function prepareCustomDiscounts(): array
+    {
+        $this->sale->load('settings');
+        $discounts = [];
+
+        $this->sale->settings->each(function (SaleSetting $setting) use (&$discounts) {
+            foreach ($setting->ids as $id) {
+                $discounts[$setting->type->value][$id] = $setting->percentage;
+            }
+        });
+
+        return $discounts;
     }
 
     /**
@@ -158,7 +187,7 @@ class SaleService
     /**
      * Check user's discount
      */
-    protected function hasUserSale(Product $product): bool
+    private function hasUserSale(Product $product): bool
     {
         if (isset($this->disabled[self::USER_SALE_KEY]) || $product->old_price > $product->price) {
             return false;
@@ -171,7 +200,7 @@ class SaleService
     /**
      * Get review discount sum by current currency
      */
-    protected function getReviewDiscount(): ?float
+    private function getReviewDiscount(): ?float
     {
         $currency = Currency::getCurrentCurrency();
         $discount = Config::findCacheable('feedback')['discount'][$currency->code] ?? 0;
@@ -182,7 +211,7 @@ class SaleService
     /**
      * Check user's discount
      */
-    protected function hasReviewSale(Product $product): bool
+    private function hasReviewSale(Product $product): bool
     {
         if (isset($this->disabled[self::REVIEW_SALE_KEY])) {
             return false;
@@ -193,32 +222,28 @@ class SaleService
     }
 
     /**
-     * Check needing apply for product
-     */
-    protected function applyForOneProduct(): bool
-    {
-        return true;
-        // return match ($this->sale->algorithm) {
-        //     SaleAlgorithm::FAKE, SaleAlgorithm::SIMPLE => true,
-        //     default => false,
-        // };
-    }
-
-    /**
      * Check special for algorithm conditions
      */
-    protected function checkSpecialConditions(float $price, float $oldPrice): bool
+    private function checkSpecialConditions(Product $product): bool
     {
         return match ($this->sale->algorithm) {
-            SaleAlgorithm::FAKE => $price < $oldPrice,
+            SaleAlgorithm::FAKE => $product->hasBaseDiscount(),
+            SaleAlgorithm::CUSTOM => $this->checkCustomConditions($product),
             default => true,
         };
+    }
+
+    private function checkCustomConditions(Product $product): bool
+    {
+        return isset($this->discounts[SettingType::CATEGORY->value][$product->category_id])
+            || isset($this->discounts[SettingType::MANUFACTURER->value][$product->manufacturer_id])
+            || isset($this->discounts[SettingType::PRODUCT->value][$product->id]);
     }
 
     /**
      * Check categories condition
      */
-    protected function checkCategory(int $categoryId): bool
+    private function checkCategory(int $categoryId): bool
     {
         return is_null($this->sale->categories) || in_array($categoryId, $this->sale->categories);
     }
@@ -226,15 +251,17 @@ class SaleService
     /**
      * Check collections condition
      */
-    protected function checkCollection(int $collectionId): bool
+    private function checkCollection(int $collectionId): bool
     {
         return is_null($this->sale->collections) || in_array($collectionId, $this->sale->collections);
     }
 
     /**
      * Check styles condition
+     *
+     * @param  EloquentCollection<int, \App\Models\Style>  $styles
      */
-    protected function checkStyles(EloquentCollection $styles): bool
+    private function checkStyles(EloquentCollection $styles): bool
     {
         return is_null($this->sale->styles) || !empty(array_intersect($styles->modelKeys(), $this->sale->styles));
     }
@@ -242,7 +269,7 @@ class SaleService
     /**
      * Check season condition
      */
-    protected function checkSeason(int $seasonId): bool
+    private function checkSeason(int $seasonId): bool
     {
         return is_null($this->sale->seasons) || in_array($seasonId, $this->sale->seasons);
     }
@@ -250,7 +277,7 @@ class SaleService
     /**
      * check all conditions related to discounts
      */
-    protected function checkDiscountConditions(float $price, float $oldPrice): bool
+    private function checkDiscountConditions(float $price, float $oldPrice): bool
     {
         return (!$this->sale->only_new || $price > $oldPrice)
             && (!$this->sale->only_discount || $oldPrice > $price);
@@ -259,7 +286,7 @@ class SaleService
     /**
      * Check if sale is applied to a product
      */
-    protected function productHasGeneralSale(Product $product): bool
+    private function productHasGeneralSale(Product $product): bool
     {
         return $this->hasSale() && $this->checkSaleConditions($product);
     }
@@ -267,7 +294,7 @@ class SaleService
     /**
      * Check the terms of sale for a product using the cache
      */
-    protected function checkSaleConditions(Product $product): bool
+    private function checkSaleConditions(Product $product): bool
     {
         return $this->productHasSale[$product->id] ??= $this->_checkSaleConditions($product);
     }
@@ -275,9 +302,9 @@ class SaleService
     /**
      * Mix check sale conditions
      */
-    protected function _checkSaleConditions(Product $product): bool
+    private function _checkSaleConditions(Product $product): bool
     {
-        return $this->checkSpecialConditions($product->price, $product->old_price)
+        return $this->checkSpecialConditions($product)
             && $this->checkCategory($product->category_id)
             && $this->checkCollection($product->collection_id)
             && $this->checkStyles($product->styles)
@@ -285,18 +312,26 @@ class SaleService
             && $this->checkDiscountConditions($product->price, $product->old_price);
     }
 
-    /**
-     * get sale discount
-     */
-    protected function getDiscount(int $index = 0): float
+    private function getDiscount(int $index = 0): float
     {
         return $this->discounts[$index] ?? $this->getOverflowDiscount();
+    }
+
+    private function getCustomDiscount(Product $product): float
+    {
+        $maxDiscount = 0;
+
+        $maxDiscount = max($maxDiscount, $this->discounts[SettingType::CATEGORY->value][$product->category_id] ?? 0);
+        $maxDiscount = max($maxDiscount, $this->discounts[SettingType::MANUFACTURER->value][$product->manufacturer_id] ?? 0);
+        $maxDiscount = max($maxDiscount, $this->discounts[SettingType::PRODUCT->value][$product->id] ?? 0);
+
+        return $maxDiscount;
     }
 
     /**
      * get overflow sale discount
      */
-    protected function getOverflowDiscount(): float
+    private function getOverflowDiscount(): float
     {
         if ($this->sale->algorithm->isCount()) {
             return (float)end($this->discounts);
@@ -308,36 +343,36 @@ class SaleService
     /**
      * Apply sale
      */
-    private function applySale(float $price, float $oldPrice, int $index = 0, int $count = 1): float
+    private function applySale(float $price, Product $product, int $index = 0, int $count = 1): float
     {
+        $oldPrice = $product->getFixedOldPrice();
         $baseDiscount = ($oldPrice - $price) / $oldPrice;
 
         return match ($this->sale->algorithm) {
             SaleAlgorithm::FAKE => $price,
             SaleAlgorithm::SIMPLE => $this->round($oldPrice * (1 - ($this->getDiscount() + $baseDiscount))),
             SaleAlgorithm::COUNT => $this->round($oldPrice * (1 - ($this->getDiscount(--$count) + $baseDiscount))),
-            SaleAlgorithm::ASCENDING, SaleAlgorithm::DESCENDING => $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount))),
-            SaleAlgorithm::CUSTOM => throw new RuntimeException('in development'),
+            SaleAlgorithm::ASCENDING,
+            SaleAlgorithm::DESCENDING => $this->round($oldPrice * (1 - ($this->getDiscount($index) + $baseDiscount))),
+            SaleAlgorithm::CUSTOM => $this->round($oldPrice * (1 - ($this->getCustomDiscount($product) + $baseDiscount))),
         };
     }
 
     /**
      * Rounding to 5 kopecks
-     *
-     * @return float
      */
-    protected function round(float $num)
+    private function round(float $num): float
     {
-        return ceil($num * 20) / 20;
+        return round($num * 20) / 20;
     }
 
     /**
      * Get sale data
      */
-    private function getSaleData(float $price, float $oldPrice, int $index = 0, int $count = 1): SaleData
+    private function getSaleData(float $price, Product $product, int $index = 0, int $count = 1): SaleData
     {
-        $discountPrice = $this->applySale($price, $oldPrice, $index, $count);
-        [$discount, $discountPercentage] = $this->getDiscountData($price, $discountPrice, $oldPrice, $index);
+        $discountPrice = $this->applySale($price, $product, $index, $count);
+        [$discount, $discountPercentage] = $this->getDiscountData($price, $discountPrice, $product, $index);
 
         return new SaleData(
             price: $discountPrice,
@@ -350,12 +385,18 @@ class SaleService
 
     /**
      * Calculate final general sale's discount data
+     *
+     * @return array{0: float, 1: float}
      */
-    private function getDiscountData(float $price, float $discountPrice, float $oldPrice, int $index): array
+    private function getDiscountData(float $price, float $discountPrice, Product $product, int $index): array
     {
-        return $this->sale->algorithm->isFake()
-            ? [$oldPrice - $price, floor((1 - ($price / $oldPrice)) * 100)]
-            : [$price - $discountPrice, $this->getDiscount($index) * 100];
+        $oldPrice = $product->getFixedOldPrice();
+
+        return match ($this->sale->algorithm) {
+            SaleAlgorithm::FAKE => [$oldPrice - $price, floor((1 - ($price / $oldPrice)) * 100)],
+            SaleAlgorithm::CUSTOM => [$price - $discountPrice, $this->getCustomDiscount($product) * 100],
+            default => [$price - $discountPrice, $this->getDiscount($index) * 100],
+        };
     }
 
     /**
@@ -386,9 +427,6 @@ class SaleService
         );
     }
 
-    /**
-     * Get user's review's sale data from auth user
-     */
     private function getProductDiscountAsSale(Product $product): SaleData
     {
         $oldPrice = $product->getFixedOldPrice();
@@ -426,12 +464,12 @@ class SaleService
         $sales = [];
         $finalPrice = $product->price;
 
-        if (!$this->hasFakeSale()) {
+        if (!$this->hasFakeSale() && $product->hasBaseDiscount()) {
             $sales[self::PRODUCT_DISCOUNT] = $this->getProductDiscountAsSale($product);
         }
 
-        if ($this->hasSale() && $this->applyForOneProduct() && $this->checkSaleConditions($product)) {
-            $sale = $this->getSaleData($finalPrice, $product->getFixedOldPrice());
+        if ($this->hasSale() && $this->checkSaleConditions($product)) {
+            $sale = $this->getSaleData($finalPrice, $product);
             $sales[self::GENERAL_SALE_KEY] = $sale;
             $finalPrice = $sale->price;
         }
@@ -443,6 +481,8 @@ class SaleService
 
     /**
      * Apply user's sales to sales list by price
+     *
+     * @param  array<string, SaleData>  $sales
      */
     private function applyUserSales(Product $product, array &$sales, float &$finalPrice): void
     {
@@ -511,20 +551,20 @@ class SaleService
                 if ($this->checkSaleConditions($product)) {
                     $productSaleList[$product->id] = [
                         'price' => $product->price,
-                        'oldPrice' => $product->getFixedOldPrice(),
+                        'product' => $product,
                     ];
                     $this->hasSaleProductsInCart = true;
                 }
             }
             $index = 0;
             foreach ($productSaleList as &$sale) {
-                $sale = $this->getSaleData($sale['price'], $sale['oldPrice'], $index++, count($productSaleList));
+                $sale = $this->getSaleData($sale['price'], $sale['product'], $index++, count($productSaleList));
             }
         }
 
         foreach ($cart->availableItems() as $item) {
             $sales = [];
-            if (!$this->hasFakeSale()) {
+            if (!$this->hasFakeSale() && $item->product->hasBaseDiscount()) {
                 $sales[self::PRODUCT_DISCOUNT] = $this->getProductDiscountAsSale($item->product);
             }
             /** @var \App\Models\Data\SaleData|null $generalSale */
@@ -541,6 +581,9 @@ class SaleService
 
     /**
      * Apply the sorting to a collection of products in cart.
+     *
+     * @param  Collection<array-key, Product>  $products
+     * @return Collection<array-key, Product>
      */
     private function sortCartProductsForSale(Collection $products): Collection
     {
@@ -554,7 +597,7 @@ class SaleService
     /**
      * Apply sales to order
      */
-    public function applyToOrder(Cart $cart, OrderData $orderData)
+    public function applyToOrder(Cart $cart, OrderData $orderData): void
     {
         if ($orderData->paymentMethod?->instance === 'Installment') {
             $this->disableUserSale();
@@ -588,12 +631,8 @@ class SaleService
     /**
      * Apply a pending promocode to the user's cart.
      */
-    public function applyPendingPromocode($user): void
+    public function applyPendingPromocode(User $user): void
     {
-        if (!$user instanceof User) {
-            return;
-        }
-
         $pendingPromocodeCode = Cookie::get(self::COOKIE_KEY_FOR_PENDING_PROMOCODE);
         if (!$pendingPromocodeCode) {
             return;

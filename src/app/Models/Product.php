@@ -451,6 +451,11 @@ class Product extends Model implements HasMedia
         return $this->getPrice() < $this->getOldPrice();
     }
 
+    public function hasBaseDiscount(): bool
+    {
+        return $this->price < $this->getFixedOldPrice();
+    }
+
     /**
      * Get product discount percentage
      */

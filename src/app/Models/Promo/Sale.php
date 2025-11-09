@@ -17,10 +17,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \App\Enums\Promo\SaleAlgorithm $algorithm
  * @property string|null $sale_percentage discounts amount in percentage
  * @property int|null $sale_fix fixed discount amount
- * @property array|null $categories
- * @property array|null $collections
- * @property array|null $styles
- * @property array|null $seasons
+ * @property array<int, int>|null $categories
+ * @property array<int, int>|null $collections
+ * @property array<int, int>|null $styles
+ * @property array<int, int>|null $seasons
  * @property bool $only_new
  * @property bool $only_discount
  * @property bool $add_client_sale
@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Promo\SaleSetting[] $settings
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Promo\Promocode[] $promocodes
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promo\Sale actual()
@@ -71,6 +72,9 @@ class Sale extends Model
 
     /**
      * Scope a query to only include actual sales
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeActual(Builder $query): Builder
     {

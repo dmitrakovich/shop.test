@@ -144,13 +144,17 @@ class SaleResource extends Resource
                                     ->options(fn (Get $get) => match ($get('type')) {
                                         SettingType::CATEGORY => Category::query()->whereNotIn('id', [1, 2, 25, 35])->pluck('title', 'id'),
                                         SettingType::MANUFACTURER => Manufacturer::query()->pluck('name', 'id'),
-                                        SettingType::PRODUCT => Product::query()->orderByDesc('id')->limit(50)->pluck('id', 'id'),
+                                        SettingType::PRODUCT => Product::query()->orderByDesc('id')->pluck('id', 'id'),
                                         default => [],
                                     }),
                                 TextInput::make('percentage')
                                     ->numeric()
+                                    ->minValue(0)
+                                    ->maxValue(100)
                                     ->suffix('%')
                                     ->label('Скидка')
+                                    ->formatStateUsing(fn (?float $state) => is_null($state) ? null : $state * 100)
+                                    ->dehydrateStateUsing(fn (?float $state) => is_null($state) ? null : round($state / 100, 5))
                                     ->required(),
                             ]),
                     ]),
@@ -177,7 +181,7 @@ class SaleResource extends Resource
                                     ->columnSpan(2)
                                     ->placeholder('в секундах')
                                     ->helperText('* после активации')
-                                    ->datalist([60, 300, 600, 1800, 3600, 86400])
+                                    ->datalist(['60', '300', '600', '1800', '3600', '86400'])
                                     ->numeric(),
                                 TextInput::make('activations_count')
                                     ->label('Количество активаций')
@@ -278,7 +282,7 @@ class SaleResource extends Resource
                     ->formatStateUsing(function ($state) {
                         $discounts = explode(',', $state);
                         $formattedDiscounts = array_map(
-                            fn ($discount) => round(trim($discount) * 100, 2) . '%',
+                            fn ($discount) => round((float)trim($discount) * 100, 2) . '%',
                             $discounts
                         );
 
