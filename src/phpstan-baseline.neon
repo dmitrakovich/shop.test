@@ -685,18 +685,6 @@ parameters:
 			path: app/Console/Commands/Payment/EripStatusUpdateCommand.php
 
 		-
-			message: '#^Method App\\Contracts\\ClientInterface\:\:cart\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Contracts/ClientInterface.php
-
-		-
-			message: '#^Method App\\Contracts\\ClientInterface\:\:favorites\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Contracts/ClientInterface.php
-
-		-
 			message: '#^Method App\\Contracts\\Filterable\:\:applyFilter\(\) has parameter \$builder with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
 			identifier: missingType.generics
 			count: 1
@@ -3571,18 +3559,6 @@ parameters:
 			path: app/Models/User/Device.php
 
 		-
-			message: '#^Method App\\Models\\User\\Device\:\:cart\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/Device.php
-
-		-
-			message: '#^Method App\\Models\\User\\Device\:\:favorites\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/Device.php
-
-		-
 			message: '#^Method App\\Models\\User\\Device\:\:orders\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
 			count: 1
@@ -3619,19 +3595,7 @@ parameters:
 			path: app/Models/User/User.php
 
 		-
-			message: '#^Method App\\Models\\User\\User\:\:cart\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
 			message: '#^Method App\\Models\\User\\User\:\:discountCard\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:favorites\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Models/User/User.php

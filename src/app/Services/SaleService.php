@@ -122,8 +122,7 @@ class SaleService
      */
     private function setAuthUserSales(): void
     {
-        $user = auth()->user();
-        if (!$user instanceof User) {
+        if (!$user = client()->getUser()) {
             return;
         }
 

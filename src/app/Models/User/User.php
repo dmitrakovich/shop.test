@@ -66,6 +66,8 @@ use libphonenumber\PhoneNumberUtil;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePayment[] $payments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserPromocode[] $usedPromocodes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\Device[] $devices
+ *
+ * @implements ClientInterface<$this>
  */
 class User extends Authenticatable implements AuthorInterface, ClientInterface, MustVerifyEmail
 {
@@ -338,6 +340,11 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
     public function devices(): HasMany
     {
         return $this->hasMany(Device::class);
+    }
+
+    public function getUser(): self
+    {
+        return $this;
     }
 
     /**

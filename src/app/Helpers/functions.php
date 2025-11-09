@@ -3,6 +3,7 @@
 use App\Contracts\ClientInterface;
 use App\Facades\Device;
 use App\Models\User\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 // for $absolute = false
@@ -15,6 +16,8 @@ if (!function_exists('route')) {
 
 /**
  * Get the current client (authorized user or device).
+ *
+ * @return ClientInterface<covariant Model>
  */
 function client(): ClientInterface
 {

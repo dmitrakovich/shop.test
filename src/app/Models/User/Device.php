@@ -41,6 +41,8 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\Order[] $orders
  * @property-read \App\Models\User\User|null $user
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\DeviceError[] $errors
+ *
+ * @implements ClientInterface<$this>
  */
 class Device extends Model implements ClientInterface
 {
@@ -144,6 +146,11 @@ class Device extends Model implements ClientInterface
     public function errors(): HasMany
     {
         return $this->hasMany(DeviceError::class);
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
     }
 
     /**
