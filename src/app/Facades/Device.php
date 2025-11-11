@@ -31,7 +31,7 @@ class Device
      */
     public static function setConsoleDevice(): void
     {
-        self::setDevice(UserDevice::console());
+        self::$currentDevice = UserDevice::console();
     }
 
     /**
