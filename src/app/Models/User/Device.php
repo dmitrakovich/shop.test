@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Contracts\ClientInterface;
 use App\Enums\Cookie as CookieEnum;
+use App\Enums\Device\DeviceType;
 use App\Enums\User\BanReason;
 use App\Helpers\UrlHelper;
 use App\Models\Cart;
@@ -27,7 +28,7 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  * @property int|null $user_id
  * @property int|null $yandex_id
  * @property string|null $google_id
- * @property string $type
+ * @property DeviceType $type
  * @property string|null $ip_address
  * @property string|null $country_code
  * @property \Illuminate\Support\Carbon|null $banned_at
@@ -52,11 +53,6 @@ class Device extends Model implements ClientInterface
     final const COOKIE_LIFE_TIME = 525600;
 
     /**
-     * @var array
-     */
-    final const TYPES = ['mobile', 'desktop'];
-
-    /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
@@ -77,6 +73,7 @@ class Device extends Model implements ClientInterface
      * @var array<string, string>
      */
     protected $casts = [
+        'type' => DeviceType::class,
         'banned_at' => 'datetime',
         'ban_reason' => BanReason::class,
     ];
@@ -181,13 +178,9 @@ class Device extends Model implements ClientInterface
     /**
      * Set the device's type
      */
-    public function setType(?string $type = null): void
+    public function setType(): void
     {
-        if ($type && in_array($type, self::TYPES)) {
-            $this->attributes['type'] = $type;
-        } else {
-            $this->attributes['type'] = Agent::isDesktop() ? 'desktop' : 'mobile';
-        }
+        $this->attributes['type'] = Agent::isDesktop() ? DeviceType::DESKTOP : DeviceType::MOBILE;
     }
 
     /**
@@ -261,5 +254,17 @@ class Device extends Model implements ClientInterface
         if ($this->errors()->count() > DeviceError::BEFORE_BAN_COUNT) {
             $this->ban(BanReason::BY_ERRORS);
         }
+    }
+
+    public static function console(): self
+    {
+        return new self([
+            'web_id' => Str::uuid7(),
+            'api_id' => Str::uuid7(),
+            'type' => DeviceType::CONSOLE,
+            'ip_address' => '127.0.0.1',
+            'country_code' => 'BY',
+            'agent' => 'Console',
+        ]);
     }
 }

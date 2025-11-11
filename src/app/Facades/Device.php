@@ -27,6 +27,14 @@ class Device
     }
 
     /**
+     * Sets the current device to the console device
+     */
+    public static function setConsoleDevice(): void
+    {
+        self::setDevice(UserDevice::console());
+    }
+
+    /**
      * Gets the current device
      */
     public static function current(): UserDevice

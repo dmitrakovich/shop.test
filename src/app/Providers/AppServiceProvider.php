@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Database\SqlServerConnection;
+use App\Facades\Device;
 use App\Logging\FacebookApiLogger;
 use App\Notifications\ChannelManagerWithLimits;
 use App\Policies\RolePolicy;
@@ -72,6 +73,10 @@ class AppServiceProvider extends ServiceProvider
 
         if ($app->isLocal()) {
             $app['config']['filesystems.disks.public.url'] = 'https://rest.barocco.by/media';
+        }
+
+        if ($app->runningInConsole()) {
+            Device::setConsoleDevice();
         }
 
         JsonResource::withoutWrapping();
