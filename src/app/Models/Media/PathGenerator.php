@@ -15,29 +15,17 @@ class PathGenerator extends DefaultPathGenerator
      */
     protected function getBasePath(Media $media): string
     {
-        $path = 'other';
-        $nestingLevel = 0;
-        $key = $media->getKey();
+        $path = match ($media->model_type) {
+            Banner::class => 'b',
+            Feedback::class => 'f',
+            Product::class => 'p',
+            default => 'other',
+        };
 
-        switch ($media->model_type) {
-            case Banner::class:
-                $path = 'b'; // banners
-                break;
-
-            case Feedback::class:
-                $path = 'feedbacks';
-                break;
-
-            case Product::class:
-                $nestingLevel = 4;
-                $path = 'products';
-                break;
+        if ($media->model_type === Product::class) {
+            $path .= '/' . substr($media->model_id, 0, -3) . '/' . $media->model_id;
         }
 
-        for ($i = 0; $i < $nestingLevel; $i++) {
-            $path .= '/' . substr($key, 0, $i + 1);
-        }
-
-        return "$path/$key";
+        return "$path/{$media->getKey()}";
     }
 }

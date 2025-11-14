@@ -71,10 +71,6 @@ class AppServiceProvider extends ServiceProvider
 
         // $this->logQueries();
 
-        if ($app->isLocal()) {
-            $app['config']['filesystems.disks.public.url'] = 'https://rest.barocco.by/media';
-        }
-
         if ($app->runningInConsole()) {
             Device::setConsoleDevice();
         }
