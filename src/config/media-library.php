@@ -6,7 +6,7 @@ return [
      * The disk on which to store added files and derived images by default. Choose
      * one or more of the disks you've configured in config/filesystems.php.
      */
-    'disk_name' => env('MEDIA_DISK', 'public'),
+    'disk_name' => env('MEDIA_DISK', 'media'),
 
     /*
      * The maximum file size of an item in bytes.
@@ -15,10 +15,16 @@ return [
     'max_file_size' => 1024 * 1024 * 50, // 50MB
 
     /*
+     * This queue connection will be used to generate derived and responsive images.
+     * Leave empty to use the default queue connection.
+     */
+    'queue_connection_name' => env('QUEUE_CONNECTION', 'sync'),
+
+    /*
      * This queue will be used to generate derived and responsive images.
      * Leave empty to use the default queue.
      */
-    'queue_name' => '',
+    'queue_name' => env('MEDIA_QUEUE', ''),
 
     /*
      * By default all conversions will be performed on a queue.
@@ -26,9 +32,19 @@ return [
     'queue_conversions_by_default' => env('QUEUE_CONVERSIONS_BY_DEFAULT', true),
 
     /*
+     * Should database transactions be run after database commits?
+     */
+    'queue_conversions_after_database_commit' => env('QUEUE_CONVERSIONS_AFTER_DB_COMMIT', true),
+
+    /*
      * The fully qualified class name of the media model.
      */
     'media_model' => Spatie\MediaLibrary\MediaCollections\Models\Media::class,
+
+    /*
+     * The fully qualified class name of the media observer.
+     */
+    'media_observer' => Spatie\MediaLibrary\MediaCollections\Models\Observers\MediaObserver::class,
 
     /*
      * This is the class that is responsible for naming generated files.
@@ -41,10 +57,17 @@ return [
     'path_generator' => App\Models\Media\PathGenerator::class,
 
     /*
+     * The class that contains the strategy for determining how to remove files.
+     */
+    'file_remover_class' => Spatie\MediaLibrary\Support\FileRemover\DefaultFileRemover::class,
+
+    /*
      * Here you can specify which path generator should be used for the given class.
      */
     'custom_path_generators' => [
         // Model::class => PathGenerator::class
+        // or
+        // 'model_morph_alias' => PathGenerator::class
     ],
 
     /*
@@ -98,6 +121,16 @@ return [
             '-mt', // multithreading for some speed improvements.
             '-q 90', // quality factor that brings the least noticeable changes.
         ],
+        Spatie\ImageOptimizer\Optimizers\Avifenc::class => [
+            '-a cq-level=23', // constant quality level, lower values mean better quality and greater file size (0-63).
+            '-j all', // number of jobs (worker threads, "all" uses all available cores).
+            '--min 0', // min quantizer for color (0-63).
+            '--max 63', // max quantizer for color (0-63).
+            '--minalpha 0', // min quantizer for alpha (0-63).
+            '--maxalpha 63', // max quantizer for alpha (0-63).
+            '-a end-usage=q', // rate control mode set to Constant Quality mode.
+            '-a tune=ssim', // SSIM as tune the encoder for distortion metric.
+        ],
     ],
 
     /*
@@ -106,6 +139,7 @@ return [
     'image_generators' => [
         Spatie\MediaLibrary\Conversions\ImageGenerators\Image::class,
         Spatie\MediaLibrary\Conversions\ImageGenerators\Webp::class,
+        Spatie\MediaLibrary\Conversions\ImageGenerators\Avif::class,
         Spatie\MediaLibrary\Conversions\ImageGenerators\Pdf::class,
         Spatie\MediaLibrary\Conversions\ImageGenerators\Svg::class,
         Spatie\MediaLibrary\Conversions\ImageGenerators\Video::class,
@@ -147,6 +181,19 @@ return [
      */
     'media_downloader' => Spatie\MediaLibrary\Downloaders\DefaultDownloader::class,
 
+    /*
+     * When using the addMediaFromUrl method the SSL is verified by default.
+     * This is option disables SSL verification when downloading remote media.
+     * Please note that this is a security risk and should only be false in a local environment.
+     */
+    'media_downloader_ssl' => env('MEDIA_DOWNLOADER_SSL', true),
+
+    /*
+     * The default lifetime in minutes for temporary urls.
+     * This is used when you call the `getLastTemporaryUrl` or `getLastTemporaryUrl` method on a media item.
+     */
+    'temporary_url_default_lifetime' => env('MEDIA_TEMPORARY_URL_DEFAULT_LIFETIME', 5),
+
     'remote' => [
         /*
          * Any extra headers that should be included when uploading media to
@@ -174,6 +221,7 @@ return [
         /*
          * By default rendering media to a responsive image will add some javascript and a tiny placeholder.
          * This ensures that the browser can already determine the correct layout.
+         * When disabled, no tiny placeholder is generated.
          */
         'use_tiny_placeholders' => true,
 
@@ -183,6 +231,13 @@ return [
          */
         'tiny_placeholder_generator' => Spatie\MediaLibrary\ResponsiveImages\TinyPlaceholderGenerator\Blurred::class,
     ],
+
+    /*
+     * When enabling this option, a route will be registered that will enable
+     * the Media Library Pro Vue and React components to move uploaded files
+     * in a S3 bucket to their right place.
+     */
+    'enable_vapor_uploads' => env('ENABLE_MEDIA_LIBRARY_VAPOR_UPLOADS', false),
 
     /*
      * When converting Media instances to response the media library will add
@@ -200,4 +255,10 @@ return [
      * If you set this to `/my-subdir`, all your media will be stored in a `/my-subdir` directory.
      */
     'prefix' => env('MEDIA_PREFIX', ''),
+
+    /*
+     * When forcing lazy loading, media will be loaded even if you don't eager load media and you have
+     * disabled lazy loading globally in the service provider.
+     */
+    'force_lazy_loading' => env('FORCE_MEDIA_LIBRARY_LAZY_LOADING', true),
 ];

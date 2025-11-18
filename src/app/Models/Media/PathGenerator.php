@@ -15,6 +15,26 @@ class PathGenerator extends DefaultPathGenerator
      */
     protected function getBasePath(Media $media): string
     {
+        if ($media->disk === 'public') {
+            return $this->getOldBasePath($media);
+        }
+
+        $path = match ($media->model_type) {
+            Banner::class => 'b',
+            Feedback::class => 'f',
+            Product::class => 'p',
+            default => 'other',
+        };
+
+        if ($media->model_type === Product::class) {
+            $path .= '/' . substr($media->model_id, 0, -3) . '/' . $media->model_id;
+        }
+
+        return "$path/{$media->getKey()}";
+    }
+
+    private function getOldBasePath(Media $media): string
+    {
         $path = 'other';
         $nestingLevel = 0;
         $key = $media->getKey();

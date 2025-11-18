@@ -60,6 +60,19 @@ return [
             'report' => false,
         ],
 
+        'media' => [
+            'driver' => 's3',
+            'key' => env('MEDIA_ACCESS_KEY_ID'),
+            'secret' => env('MEDIA_SECRET_ACCESS_KEY'),
+            'region' => env('MEDIA_REGION', 'us-east-1'),
+            'bucket' => env('MEDIA_BUCKET'),
+            // 'url' => env('MEDIA_URL'),
+            'endpoint' => env('MEDIA_ENDPOINT'),
+            'use_path_style_endpoint' => env('MEDIA_USE_PATH_STYLE_ENDPOINT', false),
+            'throw' => true,
+            'report' => true,
+        ],
+
         'admin' => [
             'driver' => 'local',
             'root' => public_path('uploads'),
