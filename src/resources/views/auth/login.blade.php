@@ -1,5 +1,6 @@
 @php
     $hasValidPhone = !empty(old('phone')) && !$errors->has('phone');
+    $discount = \App\Models\User\Group::where('id', \App\Models\User\Group::REGISTERED)->first()?->discount;
 @endphp
 @extends('layouts.app')
 
@@ -14,9 +15,9 @@
                     </div>
                 @endif
 
-                @if (isset($g_userDiscounts['registered']->discount))
+                @if ($discount)
                     <div class="alert alert-primary h4 text-dark text-center" role="alert">
-                        {{ $g_userDiscounts['registered']->discount }}% скидки
+                        {{ $discount }}% скидки
                         <span class="font-weight-normal">
                             на первый заказ за регистрацию!
                         </span>

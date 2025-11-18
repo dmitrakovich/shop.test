@@ -4381,12 +4381,6 @@ parameters:
 			path: app/Services/Payment/PaymentService.php
 
 		-
-			message: '#^Call to an undefined method App\\Contracts\\ClientInterface\<covariant Illuminate\\Database\\Eloquent\\Model\>\:\:toArray\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Services/SaleService.php
-
-		-
 			message: '#^Method App\\Services\\SearchService\:\:generateSearchQuery\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
 			identifier: missingType.generics
 			count: 1

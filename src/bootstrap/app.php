@@ -26,7 +26,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\MigrateCartToDevice::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Spatie\GoogleTagManager\GoogleTagManagerMiddleware::class,
-            \App\Http\Middleware\ViewMiddleware::class,
         ]);
 
         $middleware->alias([

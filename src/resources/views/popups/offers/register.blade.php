@@ -1,3 +1,6 @@
+@php
+    $discount = \App\Models\User\Group::where('id', \App\Models\User\Group::REGISTERED)->first()?->discount;
+@endphp
 <div class="col-12 offer-to-register-popup py-3" style="width: 640px; max-width: 90%;">
     <button data-fancybox-close type="button" title="Close"
         class="fancybox-button fancybox-close-small bg-danger rounded-circle m-2">
@@ -7,9 +10,9 @@
         </svg>
     </button>
     <div class="row" style="line-height: 1;">
-        @if (isset($g_userDiscounts['registered']->discount))
+        @if ($discount)
             <a href="{{ route('login') }}" class="col-12 col-md-6 text-danger">
-                <span style="font-size: 10rem; font-weight: 600;">{{ $g_userDiscounts['registered']->discount }}%</span>
+                <span style="font-size: 10rem; font-weight: 600;">{{ $discount }}%</span>
             </a>
         @endif
         <a href="{{ route('login') }}" class="col-12 col-md-6 text-danger mt-3">
