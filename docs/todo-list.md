@@ -9,8 +9,8 @@
 * добавить заглушку (mock) для локали
 
 ## переход на отдельный фронт
-* почистить ничейный корзины (пустой device и cart id)
-* найти и объединить дубликаты devices
+* создать foreignId для cart_id в таблице cart_data
+* переименовать cart_data -> cart_items
 
 ## Model-doc
 * use generics phpdoc 

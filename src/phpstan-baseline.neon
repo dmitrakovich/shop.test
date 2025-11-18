@@ -1159,12 +1159,6 @@ parameters:
 			path: app/Http/Middleware/DeviceAuth.php
 
 		-
-			message: '#^Parameter \#1 \$cartId of method App\\Http\\Middleware\\MigrateCartToDevice\:\:attachCartToCurrentDevice\(\) expects int, array\|string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Middleware/MigrateCartToDevice.php
-
-		-
 			message: '#^Method App\\Http\\Requests\\Auth\\LoginRequest\:\:returnBack\(\) has parameter \$errors with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1

@@ -23,7 +23,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
             \App\Http\Middleware\DeviceDetect::class,
-            \App\Http\Middleware\MigrateCartToDevice::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Spatie\GoogleTagManager\GoogleTagManagerMiddleware::class,
         ]);
