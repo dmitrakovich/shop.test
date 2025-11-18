@@ -18,7 +18,6 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 
 class AdminUserResource extends Resource
 {
@@ -69,10 +68,8 @@ class AdminUserResource extends Resource
                 Select::make('roles')
                     ->label('Роли')
                     ->multiple()
-                    ->preload()
                     ->searchable(false)
-                    ->relationship('roles')
-                    ->options(Role::query()->pluck('name', 'id')),
+                    ->relationship('roles', 'name'),
             ]);
     }
 
