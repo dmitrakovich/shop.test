@@ -13,8 +13,7 @@ class ConvertVideo implements ShouldQueue
      */
     public function handle(MediaHasBeenAddedEvent $event): void
     {
-        $collectionName = $event->media->collection_name ?? null;
-        if ($collectionName === 'videos') {
+        if ($event->media->collection_name === 'videos') {
             $ffmpeg = FFMpeg::create();
             $format = app(\FFMpeg\Format\Video\X264::class);
             $path = $event->media->getPath();
