@@ -35,3 +35,15 @@ function user(): User
 {
     return Auth::user();
 }
+
+/**
+ * Get the currently authenticated user.
+ */
+function authUser(): ?User
+{
+    if (($user = Auth::user()) instanceof User) {
+        return $user;
+    }
+
+    return null;
+}
