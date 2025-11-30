@@ -122,7 +122,7 @@ class SaleService
      */
     private function setAuthUserSales(): void
     {
-        if (!$user = authUser()) {
+        if (!$user = client()->getUser()) {
             return;
         }
 

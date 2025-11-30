@@ -42,6 +42,6 @@ class AuthController extends Controller
      */
     public function logout(Request $request): void
     {
-        $this->authService->revokeToken($request->user());
+        $this->authService->logout($request->user());
     }
 }
