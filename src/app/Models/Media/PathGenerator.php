@@ -13,10 +13,10 @@ class PathGenerator extends DefaultPathGenerator
     /*
      * Get a unique base path for the given media.
      */
-    protected function getBasePath(Media $media): string
+    protected function getBasePath(Media $media, bool $new = false): string
     {
         // todo: remove after move to S3
-        if ($media->conversions_disk === 'public') {
+        if (!$new) {
             return $this->getOldBasePath($media);
         }
 
@@ -44,7 +44,7 @@ class PathGenerator extends DefaultPathGenerator
             return parent::getPathForConversions($media);
         }
 
-        return $this->getBasePath($media) . '-';
+        return $this->getBasePath($media, $media->hasCustomProperty('moving')) . '-';
     }
 
     private function getOldBasePath(Media $media): string

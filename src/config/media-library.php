@@ -24,7 +24,7 @@ return [
      * This queue will be used to generate derived and responsive images.
      * Leave empty to use the default queue.
      */
-    'queue_name' => env('MEDIA_QUEUE', ''),
+    'queue_name' => env('MEDIA_QUEUE', 'media'),
 
     /*
      * By default all conversions will be performed on a queue.
@@ -49,7 +49,8 @@ return [
     /*
      * This is the class that is responsible for naming generated files.
      */
-    'file_namer' => \App\Models\Media\FileNamer::class,
+    // 'file_namer' => \App\Models\Media\FileNamer::class,
+    'file_namer' => Spatie\MediaLibrary\Support\FileNamer\DefaultFileNamer::class,
 
     /*
      * The class that contains the strategy for determining a media file's path.
