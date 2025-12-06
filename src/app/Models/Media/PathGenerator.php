@@ -44,7 +44,7 @@ class PathGenerator extends DefaultPathGenerator
             return parent::getPathForConversions($media);
         }
 
-        return $this->getBasePath($media, $media->hasCustomProperty('moving')) . '-';
+        return $this->getBasePath($media, new: true) . '-';
     }
 
     private function getOldBasePath(Media $media): string

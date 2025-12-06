@@ -33,14 +33,11 @@ class MoveProductsMediaToS3 extends Command
     {
         Config::set('media-library.file_namer', \App\Models\Media\FileNamer::class);
 
-        $mediaQuery = Media::query()->where('model_type', Product::class);
+        $mediaQuery = Media::query()->where('model_type', Product::class)
+            ->where('conversions_disk', '!=', 'media');
         $this->output->progressStart($mediaQuery->count());
 
         $mediaQuery->each(function (Media $media) {
-            if ($media->conversions_disk === 'media') {
-                return;
-            }
-
             foreach ($media->getMediaConversionNames() as $conversionName) {
                 Storage::disk($media->conversions_disk)->delete($media->getPathRelativeToRoot($conversionName));
             }
