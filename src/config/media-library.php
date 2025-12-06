@@ -49,7 +49,7 @@ return [
     /*
      * This is the class that is responsible for naming generated files.
      */
-    'file_namer' => Spatie\MediaLibrary\Support\FileNamer\DefaultFileNamer::class,
+    'file_namer' => \App\Models\Media\FileNamer::class,
 
     /*
      * The class that contains the strategy for determining a media file's path.
@@ -170,7 +170,7 @@ return [
      * your custom jobs extend the ones provided by the package.
      */
     'jobs' => [
-        'perform_conversions' => Spatie\MediaLibrary\Conversions\Jobs\PerformConversionsJob::class,
+        'perform_conversions' => \App\Jobs\Media\PerformConversionsJob::class,
         'generate_responsive_images' => Spatie\MediaLibrary\ResponsiveImages\Jobs\GenerateResponsiveImagesJob::class,
     ],
 
