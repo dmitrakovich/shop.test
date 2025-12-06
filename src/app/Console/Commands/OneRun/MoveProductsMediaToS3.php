@@ -24,7 +24,7 @@ class MoveProductsMediaToS3 extends Command
      *
      * @var string
      */
-    protected $description = 'Removes full conversion media files from products and updates their generated conversions';
+    protected $description = 'Moves product media files to S3 storage and regenerates conversions';
 
     /**
      * Execute the console command.
@@ -33,7 +33,7 @@ class MoveProductsMediaToS3 extends Command
     {
         Config::set('media-library.file_namer', \App\Models\Media\FileNamer::class);
 
-        $mediaQuery = Media::query()->where('model_type', Product::class)->where('id', 62034);
+        $mediaQuery = Media::query()->where('model_type', Product::class);
         $this->output->progressStart($mediaQuery->count());
 
         $mediaQuery->each(function (Media $media) {
