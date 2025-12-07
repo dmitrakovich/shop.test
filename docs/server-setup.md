@@ -97,10 +97,13 @@ sudo apt purge php8.1*
 ```
 
 ## Create DB
-```sql
-CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+```shell
+sudo mysql -e "
 CREATE DATABASE dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-GRANT ALL PRIVILEGES ON dbname.* TO 'username'@'localhost';
+CREATE USER 'username'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON bar.* TO 'username'@'%';
+FLUSH PRIVILEGES;
+"
 ```
 
 
