@@ -26,7 +26,9 @@ Schedule::command('backup:run')->dailyAt('01:00');
 // Schedule::command('backup:media')->weeklyOn(Carbon::MONDAY, '03:00');
 Schedule::command('backup:clean')->dailyAt('06:00');
 Schedule::command('backup:monitor')->dailyAt('06:30');
-Schedule::command('devices:cleanup')->dailyAt('04:20');
+
+Schedule::command('cleanup:devices')->dailyAt('04:20');
+Schedule::command('cleanup:defective-products')->weeklyOn(Carbon::SATURDAY, '04:30');
 
 Schedule::command('feed:generate')->everySixHours();
 Schedule::command('generate:sitemap')->dailyAt('00:30');
