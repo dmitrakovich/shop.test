@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 abstract class AbstractCleanupCommand extends Command
 {
     /**
-     * @return Builder<Model>
+     * @return Builder<covariant Model>
      */
     abstract protected function query(): Builder;
 
@@ -24,7 +24,7 @@ abstract class AbstractCleanupCommand extends Command
      */
     public function handle(): void
     {
-        $resultMessage = sprintf($this->logText(), $this->query()->delete());
+        $resultMessage = sprintf($this->logText(), $this->query()->forceDelete());
 
         Log::channel('jobs')->info($resultMessage);
         $this->info($resultMessage);
