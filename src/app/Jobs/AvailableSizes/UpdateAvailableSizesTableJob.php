@@ -18,7 +18,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     /**
      * Table name in 1C, contains the quantity in stock
      */
-    const ONE_C_STOCK_QUANTITY_TABLE = 'SC5925';
+    private const string ONE_C_STOCK_QUANTITY_TABLE = 'SC5925';
 
     /**
      * Minimum number of records expected from 1C.
@@ -26,7 +26,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
      * If the actual number of records retrieved from 1C is less than this value,
      * an exception should be thrown.
      */
-    const MIN_EXPECTED_RECORDS = 1000;
+    private const int MIN_EXPECTED_RECORDS = 3000;
 
     /**
      * Table for insert data
