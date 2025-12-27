@@ -124,6 +124,10 @@ class DefectiveProductResource extends Resource
                     ->label('Дата добавления')
                     ->dateTime()
                     ->sortable(),
+                TextColumn::make('deleted_at')
+                    ->label('Дата продажи')
+                    ->dateTime()
+                    ->sortable(),
             ])
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['product.brand']))
             ->searchPlaceholder('Поиск по коду товара')
