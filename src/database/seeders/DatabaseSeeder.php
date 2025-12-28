@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(SizeSeeder::class);
         $this->call(ColorSeeder::class);
@@ -26,11 +25,9 @@ class DatabaseSeeder extends Seeder
         $this->call(CollectionSeeder::class);
         $this->call(BrandSeeder::class);
         $this->call(ManufacturerSeeder::class);
-        $this->call(ProductSeeder::class);
         $this->call(UrlsSeeder::class);
 
         $this->call(CountriesSeeder::class);
-        $this->call(FeedbackSeeder::class);
 
         // admin panel
         Artisan::call('admin:install');

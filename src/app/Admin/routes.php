@@ -58,8 +58,6 @@ Route::group([
         $router->resource('payment-methods', PaymentController::class);
         $router->resource('delivery-methods', DeliveryController::class);
         $router->resource('currencies', CurrencyController::class);
-        $router->resource('order-statuses', OrderStatusController::class);
-        $router->resource('order-item-statuses', OrderItemStatusController::class);
         $router->get('installment', InstallmentForm::class);
         $router->get('feedback', FeedbackForm::class);
         $router->get('sms', SmsForm::class);

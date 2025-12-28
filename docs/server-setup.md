@@ -1,12 +1,12 @@
 ## Add user
 ```shell
 # create user with home dir
-sudo useradd -m -s /bin/bash www-root
+sudo useradd -m -s /bin/bash www-user
 # create password
-sudo passwd www-root
+sudo passwd www-user
 # add to www-data group & vice versa
-usermod -a -G www-data www-root
-usermod -a -G www-root www-data
+usermod -a -G www-data www-user
+usermod -a -G www-user www-data
 ```
 
 
@@ -51,15 +51,16 @@ List and keep note of existing PHP packages:
 dpkg -l | grep php | tee packages.txt
 ```
 
-## Add `ondrej/php` repository
+## Install New PHP 8.5 Packages:
 ```shell
-sudo add-apt-repository ppa:ondrej/php # Press enter when prompted.
+# Add the ondrej/php repository.
 sudo apt update
-```
+sudo apt install -y software-properties-common
+sudo LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php -y
+sudo apt update
 
-## Install New PHP 8.3 Packages:
-```shell
-apt install php8.3-common php8.3-cli php8.3-fpm php8.3-{curl,mysql,mbstring,intl,xml,redis,opcache,imap,zip,gd}
+# Install PHP.
+sudo apt install php8.5-common php8.5-cli php8.5-fpm php8.5-{curl,mysql,mbstring,intl,xml,redis,imap,zip,gd}
 ```
 
 ## In nginx config (/etc/nginx/sites-enabled/barocco.by):
@@ -96,10 +97,13 @@ sudo apt purge php8.1*
 ```
 
 ## Create DB
-```sql
-CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+```shell
+sudo mysql -e "
 CREATE DATABASE dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-GRANT ALL PRIVILEGES ON dbname.* TO 'username'@'localhost';
+CREATE USER 'username'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON bar.* TO 'username'@'%';
+FLUSH PRIVILEGES;
+"
 ```
 
 

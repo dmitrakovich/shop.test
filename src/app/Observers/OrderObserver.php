@@ -18,9 +18,9 @@ class OrderObserver
     {
         $this->logOrderChanges($order);
 
-        if ($order->isDirty('status_key')) {
+        if ($order->isDirty('status')) {
             $order->status_updated_at = now();
-            event(new OrderStatusChanged($order, $order->getOriginal('status_key')));
+            event(new OrderStatusChanged($order, $order->getOriginal('status')));
         }
     }
 
@@ -57,12 +57,12 @@ class OrderObserver
             $logService->logOrderAction($order->id, "Заказ передан от {$prevAdmin->name} к {$newAdmin->name}");
         }
 
-        if ($order->isDirty('status_key')) {
-            if ($order->status_key === 'in_work') {
+        if ($order->isDirty('status')) {
+            if ($order->status->isInWork()) {
                 $logService->logOrderAction($order->id, "Заказ взят в работу менеджером {$newAdmin->name}");
             }
 
-            $logService->logOrderAction($order->id, "Статус заказа изменился с “{$order->getOriginal('status_key')}” на “{$order->status_key}”");
+            $logService->logOrderAction($order->id, "Статус заказа изменился с “{$order->getOriginal('status')->value}” на “{$order->status->value}”");
         }
 
         if (!empty($order->user_id) && $order->isDirty('user_id')) {

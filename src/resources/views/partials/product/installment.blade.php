@@ -1,13 +1,11 @@
 <div class="col-12">
     <div class="row">
-        <button type="button" class="btn installment-help-block"
-            data-toggle="dropdown">
+        <button type="button" class="btn installment-help-block" data-toggle="dropdown">
             <span class="border-bottom border-secondary">Условия рассрочки</span>
             <div class="tooltip-trigger ml-2">?</div>
         </button>
         <div class="dropdown-menu p-3">
-            @if ($product->getPrice() >= $g_installmentMinPrice3Parts)
-
+            @if ($product->getPrice() >= \App\Models\Config::findCacheable('installment')['min_price_3_parts'] ?? 150)
                 <p class="font-size-15">
                     <b>РАССРОЧКА НА 3 ПЛАТЕЖА</b>
                 </p>

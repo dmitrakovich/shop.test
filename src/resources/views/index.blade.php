@@ -18,10 +18,6 @@
             @include('partials.index.simple-slider', ['simpleSlider' => $simpleSliders[1]])
         </div>
 
-        <div class="col-md-12 my-4">
-            @include('partials.index.imidj-slider')
-        </div>
-
         <div class="row wrapper mb-5">
             {{ Banner::getIndexBottom() }}
         </div>

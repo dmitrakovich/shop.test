@@ -123,7 +123,7 @@
                                 @if ($value == 'Оформить рассрочку')
                                     <div class="additional-form-check-info text-muted font-size-12">
                                         {{-- blade-formatter-disable --}}
-                                        @if ($totalPriceWithoutUserSale >= $g_installmentMinPrice3Parts)
+                                        @if ($totalPriceWithoutUserSale >= \App\Models\Config::findCacheable('installment')['min_price_3_parts'] ?? 150)
                                             Рассрочка на 3 платежа
                                             Первый взнос <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale - $totalPriceWithoutUserSale * 0.6 }} руб.</span>
                                             Оставшиеся 2 платежа по <span class="border-bottom border-secondary">{{ $totalPriceWithoutUserSale * 0.3 }} руб.</span> в месяц

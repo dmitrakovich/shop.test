@@ -14,6 +14,7 @@ use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
 use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
+use App\Enums\Order\OrderStatus;
 use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Order\UtmEnum;
 use App\Enums\StockTypeEnum;
@@ -27,7 +28,6 @@ use App\Models\Orders\Order;
 use App\Models\Orders\OrderAdminComment;
 use App\Models\Orders\OrderItemExtended;
 use App\Models\Orders\OrderItemStatus;
-use App\Models\Orders\OrderStatus;
 use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\Product;
@@ -70,7 +70,7 @@ class OrderController extends AbstractAdminController
     {
         $grid = new Grid(new Order());
 
-        $orderStatuses = OrderStatus::ordered()->pluck('name_for_admin', 'key');
+        $orderStatuses = enum_to_array(OrderStatus::class);
         $admins = app(AdministratorService::class)->getAdministratorList();
 
         $grid->column('id', 'Номер заказа');
@@ -107,7 +107,7 @@ class OrderController extends AbstractAdminController
                 return new Table(['Дата создания', 'Коммент'], $comments->toArray());
             }) : null);
 
-        $grid->column('status_key', 'Статус')->editable('select', $orderStatuses);
+        $grid->column('status', 'Статус')->editable('select', $orderStatuses);
         $grid->column('admin_id', 'Менеджер')->editable('select', $admins);
         $grid->column('created_at', 'Создан');
 
@@ -129,7 +129,7 @@ class OrderController extends AbstractAdminController
             $filter->disableIdFilter();
             $filter->equal('id', 'Номер заказа');
             $filter->like('last_name', 'Фамилия');
-            $filter->equal('status_key', 'Статус')->select($orderStatuses);
+            $filter->equal('status', 'Статус')->select($orderStatuses);
             $filter->equal('admin_id', 'Менеджер')->select($admins);
             $filter->between('created_at', 'Дата заказа')->datetime();
             $filter->equal('order_method', 'Способ заказа')->select(OrderMethod::getOptionsForSelect());
@@ -293,8 +293,8 @@ class OrderController extends AbstractAdminController
 
             $this->setUtmSources($form);
 
-            $form->select('status_key', 'Статус')->options(OrderStatus::ordered()->pluck('name_for_admin', 'key'))
-                ->default(OrderStatus::DEFAULT_VALUE)->required();
+            $form->select('status', 'Статус')->options(enum_to_array(OrderStatus::class))
+                ->default(OrderStatus::NEW)->required();
             $form->select('admin_id', 'Менеджер')->options($adminList);
         });
 
@@ -386,8 +386,7 @@ class OrderController extends AbstractAdminController
             if (empty($orderItems) && request()->pjax()) {
                 return $this->emptyItemsError();
             }
-            $statusKey = request()->input('status_key');
-            if ($statusKey === 'packaging') {
+            if ((int)request()->input('status') === OrderStatus::PACKAGING->value) {
                 $addressApprove = Order::query()
                     ->where('id', $form->model()->id)
                     ->whereHas('user', fn ($query) => $query->whereHas('lastAddress', fn ($q) => $q->where('approve', 1)))
@@ -422,7 +421,7 @@ class OrderController extends AbstractAdminController
                     $form->input("itemsExtended.$key.old_price", $product->getOldPrice());
                     $form->input("itemsExtended.$key.current_price", $product->getPrice());
                 }
-                if ($form->status_key === 'canceled') {
+                if ((int)$form->status === OrderStatus::CANCELED->value) {
                     $form->input("itemsExtended.$key.status_key", 'canceled');
                 }
             }

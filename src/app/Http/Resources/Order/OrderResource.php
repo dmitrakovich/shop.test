@@ -27,8 +27,9 @@ class OrderResource extends JsonResource
             'payment_name' => $this->payment?->name,
             'user_address' => $this->user_addr,
             'status' => [
-                'key' => $this->status->key,
-                'name_for_user' => $this->status->name_for_user,
+                'key' => $this->status->getOldKey(),
+                'value' => $this->status->value,
+                'name_for_user' => $this->status->getLabelForClient(),
             ],
             'track' => $this->when((bool)$this->track, fn () => [
                 'number' => $this->track->track_number,

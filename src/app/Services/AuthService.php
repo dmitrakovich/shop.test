@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\Analytics\Registered;
+use App\Facades\Device;
 use App\Models\User\User;
 use App\Notifications\VerificationPhoneSms;
 use App\ValueObjects\Phone;
@@ -58,10 +59,12 @@ class AuthService
     }
 
     /**
-     * Revoke current API token for user
+     * Revoke current API token for user & detach device
      */
-    public function revokeToken(User $user): void
+    public function logout(User $user): void
     {
         $user->currentAccessToken()->delete();
+
+        Device::current()->update(['user_id' => null]);
     }
 }

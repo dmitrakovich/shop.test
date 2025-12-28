@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Console\Commands\Device;
+namespace App\Console\Commands\Cleanup;
 
 use App\Models\User\Device;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
 
-class DeleteOldDevices extends Command
+class CleanupDevices extends AbstractCleanupCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'devices:cleanup';
+    protected $signature = 'cleanup:devices';
 
     /**
      * The console command description.
@@ -23,20 +22,16 @@ class DeleteOldDevices extends Command
     protected $description = 'Delete old unused devices that are not linked to Yandex/Google and have no cart or favorites';
 
     /**
-     * Execute the console command.
+     * @return Builder<Device>
      */
-    public function handle(): void
+    protected function query(): Builder
     {
-        $count = Device::query()
+        return Device::query()
             ->where('yandex_id', 0)
             ->where('google_id', '')
             ->where('created_at', '<', now()->subWeek())
             ->doesntHave('cart')
             ->doesntHave('favorites')
-            ->doesntHave('orders')
-            ->delete();
-
-        Log::channel('jobs')->info("Удалено {$count} устройств по крону.");
-        $this->info("Удалено {$count} устройств.");
+            ->doesntHave('orders');
     }
 }

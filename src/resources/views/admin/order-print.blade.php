@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
                         <td colspan="3" style="font-family:Roboto, Verdana; font-size:14px; color:#222222;">
-                            <b>Статус</b>: {{ $order->status->name_for_admin }}
+                            <b>Статус</b>: {{ $order->status->getLabel() }}
                         </td>
                     </tr>
 

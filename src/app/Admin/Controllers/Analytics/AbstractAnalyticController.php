@@ -4,6 +4,7 @@ namespace App\Admin\Controllers\Analytics;
 
 use App\Admin\Controllers\AbstractAdminController;
 use App\Admin\Exports\AnalyticsExporter;
+use App\Enums\Order\OrderStatus;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
 
@@ -13,12 +14,12 @@ abstract class AbstractAnalyticController extends AbstractAdminController
      * Mapping of custom order statuses to their corresponding database values.
      */
     protected array $statuses = [
-        'accepted' => "'new'",
-        'in_progress' => "'in_work', 'wait_payment', 'paid', 'assembled', 'packaging', 'ready', 'sent', 'fitting', 'confirmed'",
-        'purchased' => "'complete', 'installment', 'partial_complete'",
-        'canceled' => "'canceled'",
-        'returned' => "'return', 'return_fitting'",
-        'lost' => "'canceled', 'return', 'return_fitting'",
+        'accepted' => [OrderStatus::NEW],
+        'in_progress' => [OrderStatus::IN_WORK, OrderStatus::WAIT_PAYMENT, OrderStatus::PAID, OrderStatus::ASSEMBLED, OrderStatus::PACKAGING, OrderStatus::READY, OrderStatus::SENT, OrderStatus::FITTING, OrderStatus::CONFIRMED],
+        'purchased' => [OrderStatus::COMPLETED, OrderStatus::INSTALLMENT, OrderStatus::PARTIAL_COMPLETED],
+        'canceled' => [OrderStatus::CANCELED],
+        'returned' => [OrderStatus::RETURN, OrderStatus::RETURN_FITTING],
+        'lost' => [OrderStatus::CANCELED, OrderStatus::RETURN, OrderStatus::RETURN_FITTING],
     ];
 
     /**
@@ -84,6 +85,13 @@ abstract class AbstractAnalyticController extends AbstractAdminController
         $grid->disableRowSelector();
 
         return $grid;
+    }
+
+    protected function getStatusesForQuery(string $statusKey): string
+    {
+        return implode(',', array_map(
+            fn (OrderStatus $status) => $status->value, $this->statuses[$statusKey]
+        ));
     }
 
     /**
