@@ -2,6 +2,7 @@
 
 namespace App\Jobs\OneC;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Enums\User\OrderType;
 use App\Jobs\AbstractJob;
 use App\Models\Bots\Telegram\TelegramChat;
@@ -189,7 +190,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
         }
 
         $notification = new OrderItemStatusLog(['stock_id' => $offlineOrder->stock_id]);
-        $orderItem = (new OrderItem(['size_id' => $offlineOrder->size_id, 'status_key' => 'complete']))
+        $orderItem = (new OrderItem(['size_id' => $offlineOrder->size_id, 'status' => OrderItemStatus::COMPLETED]))
             ->setRelation('product', $this->getProductFromOfflineOrder($offlineOrder))
             ->setRelation('inventoryNotification', $notification);
 

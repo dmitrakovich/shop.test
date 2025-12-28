@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Models\AvailableSizes;
 use App\Models\Logs\OrderItemStatusLog;
 use App\Models\Orders\OrderItem;
@@ -20,14 +21,14 @@ class OrderItemInventoryService
     /**
      * Possible statuses for which notifications are sent.
      *
-     * @var array<string>
+     * @var list<OrderItemStatus>
      */
-    const STATUSES_FOR_NOTIFICATIONS = [
-        'confirmed',
-        'complete',
-        'installment',
-        'return',
-        'return_fitting',
+    private const array STATUSES_FOR_NOTIFICATIONS = [
+        OrderItemStatus::CONFIRMED,
+        OrderItemStatus::COMPLETED,
+        OrderItemStatus::INSTALLMENT,
+        OrderItemStatus::RETURN,
+        OrderItemStatus::RETURN_FITTING,
     ];
 
     /**
@@ -44,10 +45,10 @@ class OrderItemInventoryService
     public function handleChangeItemStatus(OrderItem $orderItem): void
     {
         if ($this->shouldSendNotification($orderItem)) {
-            $chat = $orderItem->inventoryNotification->getChatByStatus($orderItem->status_key);
+            $chat = $orderItem->inventoryNotification->getChatByStatus($orderItem->status);
             $chat->notify(new OrderItemInventoryNotification($orderItem));
         }
-        $orderItem->statusLog?->setDateFieldForStatus($orderItem->status_key);
+        $orderItem->statusLog?->setDateFieldForStatus($orderItem->status);
     }
 
     /**
@@ -55,7 +56,7 @@ class OrderItemInventoryService
      */
     protected function shouldSendNotification(OrderItem $orderItem): bool
     {
-        $status = $orderItem->status_key;
+        $status = $orderItem->status;
         $notification = $orderItem->inventoryNotification;
         if (empty($notification) || empty($notification->getChatByStatus($status))) {
             return false;
@@ -72,7 +73,7 @@ class OrderItemInventoryService
     public function reserveItem(int $notificationId): void
     {
         $inventoryNotification = $this->findNotification($notificationId);
-        $inventoryNotification->orderItem->update(['status_key' => 'reserved']);
+        $inventoryNotification->orderItem->update(['status' => OrderItemStatus::RESERVED]);
         $inventoryNotification->update(['reserved_at' => now()]);
     }
 
@@ -82,7 +83,7 @@ class OrderItemInventoryService
     public function collectItem(int $notificationId): void
     {
         $inventoryNotification = $this->findNotification($notificationId);
-        $inventoryNotification->orderItem->update(['status_key' => 'collect']);
+        $inventoryNotification->orderItem->update(['status' => OrderItemStatus::COLLECT]);
         $inventoryNotification->update(['collected_at' => now()]);
     }
 
@@ -279,7 +280,7 @@ class OrderItemInventoryService
         OrderItem::query()
             ->with('product')
             ->whereIn('id', $orderItemIds)
-            ->where('status_key', 'collect')
+            ->where('status', OrderItemStatus::COLLECT)
             ->each(function (OrderItem $orderItem) use (&$pickupList) {
                 $product = $orderItem->product;
                 $size = $orderItem->size;

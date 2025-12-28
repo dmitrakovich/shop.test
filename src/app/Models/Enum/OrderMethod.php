@@ -6,10 +6,8 @@ namespace App\Models\Enum;
  * @deprecated
  * @see \App\Enums\Order\OrderMethod
  */
-class OrderMethod implements Enum
+class OrderMethod
 {
-    use EnumTrait;
-
     final const UNDEFINED = 'undefined';
 
     final const DEFAULT = 'default';
@@ -72,5 +70,12 @@ class OrderMethod implements Enum
             self::WHATSAPP => ['whatsapp', 'messenger', 'manager'],
             default => ['none', 'none', 'manager'],
         };
+    }
+
+    public static function getValues(): array
+    {
+        $class = new \ReflectionClass(get_called_class());
+
+        return array_values($class->getConstants());
     }
 }

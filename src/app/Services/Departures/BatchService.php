@@ -2,8 +2,8 @@
 
 namespace App\Services\Departures;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Models\Orders\Batch;
-use App\Models\Orders\Order;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
@@ -28,7 +28,7 @@ class BatchService
         $batch->loadMissing([
             'orders' => fn (Builder $query) => $query->with([
                 'itemsExtended' => fn (Builder $query) => $query
-                    ->whereIn('status_key', Order::$itemDepartureStatuses)
+                    ->whereIn('status', OrderItemStatus::departureStatuses())
                     ->with('installment'),
                 'onlinePayments',
                 'delivery',

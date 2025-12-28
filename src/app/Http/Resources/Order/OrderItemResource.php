@@ -20,7 +20,7 @@ class OrderItemResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'status_name' => $this->status->name_for_user,
+            'status_name' => $this->status->getLabelForClient(),
             'current_price' => $this->current_price,
             'old_price' => $this->old_price,
             'discount' => $this->discount,

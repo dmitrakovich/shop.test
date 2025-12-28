@@ -4,6 +4,7 @@ namespace App\Admin\Controllers\Analytics;
 
 use App\Admin\Controllers\AbstractAdminController;
 use App\Admin\Exports\AnalyticsExporter;
+use App\Enums\Order\OrderItemStatus;
 use App\Enums\Order\OrderStatus;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
@@ -11,7 +12,7 @@ use Encore\Admin\Grid\Filter;
 abstract class AbstractAnalyticController extends AbstractAdminController
 {
     /**
-     * Mapping of custom order statuses to their corresponding database values.
+     * @var array<string, list<OrderStatus>>
      */
     protected array $statuses = [
         'accepted' => [OrderStatus::NEW],
@@ -20,6 +21,18 @@ abstract class AbstractAnalyticController extends AbstractAdminController
         'canceled' => [OrderStatus::CANCELED],
         'returned' => [OrderStatus::RETURN, OrderStatus::RETURN_FITTING],
         'lost' => [OrderStatus::CANCELED, OrderStatus::RETURN, OrderStatus::RETURN_FITTING],
+    ];
+
+    /**
+     * @var array<string, list<OrderItemStatus>>
+     */
+    protected array $itemsStatuses = [
+        'accepted' => [OrderItemStatus::NEW],
+        'in_progress' => [OrderItemStatus::PACKAGING, OrderItemStatus::SENT, OrderItemStatus::FITTING, OrderItemStatus::CONFIRMED],
+        'purchased' => [OrderItemStatus::COMPLETED, OrderItemStatus::INSTALLMENT],
+        'canceled' => [OrderItemStatus::CANCELED],
+        'returned' => [OrderItemStatus::RETURN, OrderItemStatus::RETURN_FITTING],
+        'lost' => [OrderItemStatus::CANCELED, OrderItemStatus::RETURN, OrderItemStatus::RETURN_FITTING],
     ];
 
     /**
@@ -91,6 +104,13 @@ abstract class AbstractAnalyticController extends AbstractAdminController
     {
         return implode(',', array_map(
             fn (OrderStatus $status) => $status->value, $this->statuses[$statusKey]
+        ));
+    }
+
+    protected function getItemStatusesForQuery(string $statusKey): string
+    {
+        return implode(',', array_map(
+            fn (OrderItemStatus $status) => $status->value, $this->itemsStatuses[$statusKey]
         ));
     }
 

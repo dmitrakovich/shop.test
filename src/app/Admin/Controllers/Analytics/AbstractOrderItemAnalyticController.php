@@ -17,8 +17,8 @@ abstract class AbstractOrderItemAnalyticController extends AbstractAnalyticContr
         SUM(CASE WHEN orders.status IN ({$this->getStatusesForQuery('canceled')}) THEN 1 ELSE 0 END) AS canceled_count,
         SUM(CASE WHEN orders.status IN ({$this->getStatusesForQuery('returned')}) THEN 1 ELSE 0 END) AS returned_count,
         COUNT(order_items.id) AS total_count,
-        ROUND(SUM(CASE WHEN orders.status IN ({$this->getStatusesForQuery('purchased')}) AND order_items.status_key IN ({$this->getStatusesForQuery('purchased')}) THEN order_items.current_price / orders.rate ELSE 0 END), 2) AS total_purchased_price,
-        ROUND(SUM(CASE WHEN orders.status IN ({$this->getStatusesForQuery('lost')}) AND order_items.status_key IN ({$this->getStatusesForQuery('lost')}) THEN order_items.current_price / orders.rate ELSE 0 END), 2) AS total_lost_price
+        ROUND(SUM(CASE WHEN orders.status IN ({$this->getStatusesForQuery('purchased')}) AND order_items.status IN ({$this->getItemStatusesForQuery('purchased')}) THEN order_items.current_price / orders.rate ELSE 0 END), 2) AS total_purchased_price,
+        ROUND(SUM(CASE WHEN orders.status IN ({$this->getStatusesForQuery('lost')}) AND order_items.status IN ({$this->getItemStatusesForQuery('lost')}) THEN order_items.current_price / orders.rate ELSE 0 END), 2) AS total_lost_price
         SQL;
     }
 }

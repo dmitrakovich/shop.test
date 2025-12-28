@@ -2,6 +2,7 @@
 
 namespace App\Admin\Actions\Order;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Models\Orders\Order;
 use App\Services\Order\BuyoutOrderService;
 use Encore\Admin\Actions\Action;
@@ -31,7 +32,7 @@ class BuyoutFormAction extends Action
         $buyoutService = new BuyoutOrderService();
         $order = Order::where('id', $request->orderId)->with([
             'itemsExtended' => fn ($query) => $query
-                ->whereIn('status_key', Order::$itemDepartureStatuses)
+                ->whereIn('status', OrderItemStatus::departureStatuses())
                 ->with('installment'),
             'onlinePayments',
             'delivery',

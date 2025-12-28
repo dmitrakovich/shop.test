@@ -2,6 +2,7 @@
 
 namespace App\Models\Orders;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Models\Logs\OrderItemStatusLog;
 use App\Models\Payments\Installment;
 use App\Models\Product;
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property float $current_price
  * @property float $discount
  * @property bool $promocode_applied
- * @property string $status_key
+ * @property \App\Enums\Order\OrderItemStatus $status
  * @property \Illuminate\Support\Carbon $status_updated_at
  * @property \Illuminate\Support\Carbon|null $release_date
  * @property int|null $pred_period
@@ -29,7 +30,6 @@ use Illuminate\Database\Eloquent\Relations;
  * @property-read \App\Models\Orders\Order|null $order
  * @property-read \App\Models\Product|null $product
  * @property-read \App\Models\Size|null $size
- * @property-read \App\Models\Orders\OrderItemStatus|null $status
  * @property-read \App\Models\Payments\Installment|null $installment
  * @property-read \App\Models\Logs\OrderItemStatusLog|null $inventoryNotification
  * @property-read \App\Models\Logs\OrderItemStatusLog|null $statusLog
@@ -47,8 +47,8 @@ class OrderItem extends Model
         'old_price',
         'current_price',
         'discount',
-        'status_key',
-        'item_status_key', // stub for admin panel
+        'status',
+        'item_status', // stub for admin panel
         'status_updated_at',
     ];
 
@@ -59,6 +59,7 @@ class OrderItem extends Model
      */
     protected $casts = [
         'promocode_applied' => 'boolean',
+        'status' => OrderItemStatus::class,
         'status_updated_at' => 'datetime',
         'release_date' => 'datetime',
     ];
@@ -93,14 +94,6 @@ class OrderItem extends Model
     }
 
     /**
-     * Order item status
-     */
-    public function status(): Relations\BelongsTo
-    {
-        return $this->belongsTo(OrderItemStatus::class);
-    }
-
-    /**
      * Get the installment associated with the order.
      */
     public function installment(): Relations\HasOne
@@ -129,7 +122,7 @@ class OrderItem extends Model
      */
     public function isCompleted(): bool
     {
-        return $this->status_key === 'complete';
+        return $this->status->isCompleted();
     }
 
     /**
@@ -137,9 +130,7 @@ class OrderItem extends Model
      */
     public function isFinalStatus(): bool
     {
-        $finalStatuses = ['no_availability', 'canceled', 'return', 'return_fitting'];
-
-        return in_array($this->status_key, $finalStatuses);
+        return $this->status->isFinalStatus();
     }
 
     /**
@@ -147,7 +138,7 @@ class OrderItem extends Model
      */
     public function cancel(): bool
     {
-        return $this->update(['status_key' => 'canceled']);
+        return $this->update(['status' => OrderItemStatus::CANCELED]);
     }
 
     /**
@@ -155,6 +146,6 @@ class OrderItem extends Model
      */
     public function outOfStock(): bool
     {
-        return $this->update(['status_key' => 'no_availability']);
+        return $this->update(['status' => OrderItemStatus::NO_AVAILABILITY]);
     }
 }

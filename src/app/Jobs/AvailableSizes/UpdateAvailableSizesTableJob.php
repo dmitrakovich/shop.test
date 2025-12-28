@@ -2,6 +2,7 @@
 
 namespace App\Jobs\AvailableSizes;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
@@ -342,7 +343,13 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $productsInOrders = [];
         $productsInOrdersDebug = [];
         $sizesCount = OrderItem::query()
-            ->whereIn('status_key', ['new', 'reserved', 'confirmed', 'collect', 'pickup'])
+            ->whereIn('status', [
+                OrderItemStatus::NEW,
+                OrderItemStatus::RESERVED,
+                OrderItemStatus::CONFIRMED,
+                OrderItemStatus::COLLECT,
+                OrderItemStatus::PICKUP,
+            ])
             ->whereHas('statusLog')
             ->with('statusLog:order_item_id,stock_id')
             ->get(['id', 'product_id', 'size_id', 'count'])

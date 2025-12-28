@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Helpers\TextHelper;
 use App\Models\Orders\Order;
 use App\Models\Payments\Installment;
@@ -20,7 +21,7 @@ class BuyoutOrderService
     {
         $order->loadMissing([
             'itemsExtended' => fn ($query) => $query
-                ->whereIn('status_key', Order::$itemDepartureStatuses)
+                ->whereIn('status', OrderItemStatus::departureStatuses())
                 ->with('installment'),
             'onlinePayments',
             'delivery',

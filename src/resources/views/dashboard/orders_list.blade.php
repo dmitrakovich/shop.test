@@ -60,7 +60,7 @@
                             <div><span>Размер:</span><span>{{ $item->size->name }}</span></div>
                             <div><span>Код:</span><span> {{ $item->product->sku ?? null }}</span></div>
                             <div>
-                                <span>Статус:</span><span>{{ $item->status->name_for_user ?? null }}</span>
+                                <span>Статус:</span><span>{{ $item->status->getLabelForClient() }}</span>
                             </div>
                             <div>
                                 <span>Цена:</span>
@@ -79,7 +79,7 @@
                                     </span>
                                 </span>
                             </div>
-                            @if ($item->status->key === 'complete')
+                            @if ($item->status->isCompleted())
                                 <button class="btn btn-dark js-leave-feedback-btn">Написать
                                     отзыв</button>
                             @endif

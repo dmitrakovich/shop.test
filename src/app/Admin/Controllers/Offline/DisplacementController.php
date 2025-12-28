@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers\Offline;
 
 use App\Admin\Actions\Offline\DisplacementLabelAction;
+use App\Enums\Order\OrderItemStatus;
 use App\Models\Offline\Displacement;
 use App\Models\Orders\OrderItem;
 use Encore\Admin\Controllers\AdminController;
@@ -67,10 +68,8 @@ class DisplacementController extends AdminController
     {
         $form = new Form(new Displacement());
 
-        // $stocks = Stock::with('city')
-        //     ->get()
-        //     ->mapWithKeys(fn ($item) => [$item->id => "{$item->city->name} - {$item->name} - {$item->internal_name}"]);
-        $orderItems = OrderItem::where('status_key', 'displacement')
+        $orderItems = OrderItem::query()
+            ->where('status', OrderItemStatus::DISPLACEMENT)
             ->with(['order', 'product'])
             ->get()
             ->mapWithKeys(

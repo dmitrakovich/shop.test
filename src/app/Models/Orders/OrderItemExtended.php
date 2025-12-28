@@ -14,7 +14,7 @@ namespace App\Models\Orders;
  * @property float $current_price
  * @property float $discount
  * @property bool $promocode_applied
- * @property string $status_key
+ * @property \App\Enums\Order\OrderItemStatus $status
  * @property \Illuminate\Support\Carbon $status_updated_at
  * @property \Illuminate\Support\Carbon|null $release_date
  * @property int|null $pred_period
@@ -29,12 +29,11 @@ namespace App\Models\Orders;
  * @property ?string $dispatch_date
  * @property ?string $fulfilled_date
  * @property ?string $stock_name
- * @property string $item_status_key
+ * @property string $item_status
  *
  * @property-read \App\Models\Orders\Order|null $order
  * @property-read \App\Models\Product|null $product
  * @property-read \App\Models\Size|null $size
- * @property-read \App\Models\Orders\OrderItemStatus|null $status
  * @property-read \App\Models\Payments\Installment|null $installment
  * @property-read \App\Models\Logs\OrderItemStatusLog|null $inventoryNotification
  * @property-read \App\Models\Logs\OrderItemStatusLog|null $statusLog
@@ -53,7 +52,7 @@ class OrderItemExtended extends OrderItem
         'stock_name',
         'dispatch_date',
         'fulfilled_date',
-        'item_status_key',
+        'item_status',
     ];
 
     /**
@@ -180,16 +179,16 @@ class OrderItemExtended extends OrderItem
     /**
      * Accessor for stupid admin panel
      */
-    public function getItemStatusKeyAttribute(): string
+    public function getItemStatusAttribute(): int
     {
-        return $this->status_key;
+        return $this->status->value;
     }
 
     /**
      * Mutator for stupid admin panel
      */
-    public function setItemStatusKeyAttribute($value): void
+    public function setItemStatusAttribute(int $value): void
     {
-        $this->attributes['status_key'] = $value;
+        $this->attributes['status'] = $value;
     }
 }

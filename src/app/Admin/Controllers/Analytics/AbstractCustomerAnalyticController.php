@@ -20,8 +20,8 @@ abstract class AbstractCustomerAnalyticController extends AbstractAnalyticContro
             COUNT(DISTINCT CASE WHEN (orders.user_id IN (SELECT user_id FROM UserOrderStatusCount where canceled_count >= 1 and purchased_count = 0 and progress_count = 0 and returned_count = 0)) THEN orders.user_id ELSE null END) AS canceled_count,
             COUNT(DISTINCT CASE WHEN (orders.user_id IN (SELECT user_id FROM UserOrderStatusCount where accepted_count >= 1 and purchased_count = 0 and progress_count = 0 and returned_count = 0 and canceled_count = 0)) THEN orders.user_id ELSE null END) AS accepted_count,
             COUNT(DISTINCT CASE WHEN (orders.user_id IN (SELECT user_id FROM UserOrderStatusCount)) THEN orders.user_id ELSE null END) AS total_count,
-            ROUND(SUM(CASE WHEN orders.status IN ({$this->getStatusesForQuery('purchased')}) AND order_items.status_key IN ({$this->getStatusesForQuery('purchased')}) THEN order_items.current_price / orders.rate ELSE 0 END), 2) AS total_purchased_price,
-            ROUND(SUM(CASE WHEN orders.status IN ({$this->getStatusesForQuery('lost')}) AND order_items.status_key IN ({$this->getStatusesForQuery('lost')}) THEN order_items.current_price / orders.rate ELSE 0 END), 2) AS total_lost_price
+            ROUND(SUM(CASE WHEN orders.status IN ({$this->getStatusesForQuery('purchased')}) AND order_items.status IN ({$this->getItemStatusesForQuery('purchased')}) THEN order_items.current_price / orders.rate ELSE 0 END), 2) AS total_purchased_price,
+            ROUND(SUM(CASE WHEN orders.status IN ({$this->getStatusesForQuery('lost')}) AND order_items.status IN ({$this->getItemStatusesForQuery('lost')}) THEN order_items.current_price / orders.rate ELSE 0 END), 2) AS total_lost_price
         SQL;
     }
 

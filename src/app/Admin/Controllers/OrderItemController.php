@@ -3,8 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Exports\OrderItemsExporter;
+use App\Enums\Order\OrderItemStatus;
 use App\Models\Orders\OrderItemExtended;
-use App\Models\Orders\OrderItemStatus;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
 
@@ -33,7 +33,9 @@ class OrderItemController extends AbstractAdminController
         $grid->column('order_id', 'Номер заказа')->display(function ($orderId) {
             return "<a href='orders/$orderId/edit' target='_blank'>$orderId</a>";
         });
-        $grid->column('status.name_for_admin', 'Статус модели');
+        $grid->column('status', 'Статус модели')->display(function ($status) {
+            return OrderItemStatus::tryFrom($status)->getLabel();
+        });
         $grid->column('stock_name', 'Склад');
         $grid->column('order.created_at', 'Дата заказа');
         $grid->column('dispatch_date', 'Дата отправки');
@@ -54,7 +56,7 @@ class OrderItemController extends AbstractAdminController
             $filter->equal('product_id', 'Код товара');
             $filter->equal('order_id', 'Номер заказа');
             $filter->like('order.phone', 'Номер телефона');
-            $filter->equal('status_key', 'Статус товара')->select(OrderItemStatus::pluck('name_for_admin', 'key'));
+            $filter->equal('status', 'Статус товара')->select(enum_to_array(OrderItemStatus::class));
         });
 
         $grid->exporter(new OrderItemsExporter());

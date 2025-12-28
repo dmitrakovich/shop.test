@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment\Methods;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
@@ -51,9 +52,14 @@ abstract class AbstractPaymentService
             if ($autoOrderStatuses && $status === OnlinePaymentStatusEnum::SUCCEEDED) {
                 $payment->load('order.items');
                 $payment->order->update(['status' => OrderStatus::PAID]);
-                $payment->order->items->whereIn('status_key', ['new', 'reserved', 'collect', 'pickup'])
+                $payment->order->items->whereIn('status', [
+                    OrderItemStatus::NEW,
+                    OrderItemStatus::RESERVED,
+                    OrderItemStatus::COLLECT,
+                    OrderItemStatus::PICKUP,
+                ])
                     ->each(function (OrderItem $orderItem) {
-                        $orderItem->update(['status_key' => 'confirmed']);
+                        $orderItem->update(['status' => OrderItemStatus::CONFIRMED]);
                     });
             }
         }

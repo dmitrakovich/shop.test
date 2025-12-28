@@ -2,6 +2,7 @@
 
 namespace App\Admin\Actions\Order;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Models\Orders\Order;
 use App\Services\Order\InstallmentOrderService;
 use Encore\Admin\Actions\Action;
@@ -31,7 +32,7 @@ class InstallmentForm extends Action
         $order = Order::where('id', $request->orderId)->with([
             'user.passport',
             'items' => fn ($query) => $query
-                ->whereIn('status_key', Order::$itemDepartureStatuses)
+                ->whereIn('status', OrderItemStatus::departureStatuses())
                 ->with('installment'),
             'user' => fn ($query) => $query->with('lastAddress'),
         ])->first();

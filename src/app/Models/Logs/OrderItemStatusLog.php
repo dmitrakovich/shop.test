@@ -2,6 +2,7 @@
 
 namespace App\Models\Logs;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Models\Bots\Telegram\TelegramChat;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
@@ -87,7 +88,7 @@ class OrderItemStatusLog extends Model
     /**
      * Set the specified status date field to the current date and time.
      */
-    public function setDateFieldForStatus(string $status): void
+    public function setDateFieldForStatus(OrderItemStatus $status): void
     {
         if ($dateField = $this->getDateFieldByStatus($status)) {
             $this->{$dateField} = now();
@@ -98,15 +99,15 @@ class OrderItemStatusLog extends Model
     /**
      * Get the corresponding date field name for the given status.
      */
-    public static function getDateFieldByStatus(string $status): ?string
+    public static function getDateFieldByStatus(OrderItemStatus $status): ?string
     {
         return match ($status) {
-            'canceled' => 'canceled_at',
-            'confirmed' => 'confirmed_at',
-            'pickup' => 'picked_up_at',
-            'sent', 'fitting' => 'sended_at',
-            'complete', 'installment' => 'completed_at',
-            'return', 'return_fitting' => 'returned_at',
+            OrderItemStatus::CANCELED => 'canceled_at',
+            OrderItemStatus::CONFIRMED => 'confirmed_at',
+            OrderItemStatus::PICKUP => 'picked_up_at',
+            OrderItemStatus::SENT, OrderItemStatus::FITTING => 'sended_at',
+            OrderItemStatus::COMPLETED, OrderItemStatus::INSTALLMENT => 'completed_at',
+            OrderItemStatus::RETURN, OrderItemStatus::RETURN_FITTING => 'returned_at',
             default => null
         };
     }
@@ -114,9 +115,9 @@ class OrderItemStatusLog extends Model
     /**
      * Get a Telegram chat based on the given order item status.
      */
-    public function getChatByStatus(string $status): ?TelegramChat
+    public function getChatByStatus(OrderItemStatus $status): ?TelegramChat
     {
-        if ($status === 'confirmed') {
+        if ($status->isConfirmed()) {
             return $this->stock->privateChat;
         }
 

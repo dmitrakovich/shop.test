@@ -4,6 +4,7 @@ namespace App\Models\Orders;
 
 use App\Admin\Models\Administrator;
 use App\Casts\AsPhone;
+use App\Enums\Order\OrderItemStatus;
 use App\Enums\Order\OrderMethod;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Order\OrderTypeEnum;
@@ -129,10 +130,6 @@ class Order extends Model
         'user_full_name',
     ];
 
-    public static $itemDepartureStatuses = [
-        'installment', 'packaging', 'pickup', 'sent', 'fitting', 'complete', 'return', 'return_fitting',
-    ];
-
     /**
      * The model's attributes.
      *
@@ -187,7 +184,6 @@ class Order extends Model
         return $this->hasMany(OrderItem::class)
             ->with([
                 'product' => fn ($query) => $query->withTrashed(),
-                'status:key,name_for_admin,name_for_user',
                 'size:id,name,slug',
             ]);
     }
@@ -200,7 +196,6 @@ class Order extends Model
         return $this->hasMany(OrderItemExtended::class)
             ->with([
                 'product' => fn ($query) => $query->withTrashed(),
-                'status:key,name_for_admin,name_for_user',
                 'size:id,name',
             ]);
     }
@@ -420,13 +415,13 @@ class Order extends Model
     {
         $this->loadMissing([
             'itemsExtended' => fn ($query) => $query
-                ->whereIn('status_key', self::$itemDepartureStatuses)
+                ->whereIn('status', OrderItemStatus::departureStatuses())
                 ->with('installment'),
         ]);
         $deliveryPrice = $this->delivery_price ? $this->delivery_price : 0;
         $onlinePaymentsSum = $this->getAmountPaidOrders();
         $resultItemPrice = 0;
-        $items = $this->itemsExtended->whereIn('status_key', self::$itemDepartureStatuses);
+        $items = $this->itemsExtended->whereIn('status', OrderItemStatus::departureStatuses());
         $uniqItemsCount = $this->getUniqItemsCount();
         foreach ($items as $item) {
             $itemPrice = $item->current_price;

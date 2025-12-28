@@ -3,6 +3,7 @@
 namespace App\Services\Departures;
 
 use App\Enums\DeliveryTypeEnum;
+use App\Enums\Order\OrderItemStatus;
 use App\Helpers\TextHelper;
 use App\Models\Offline\Displacement;
 use App\Models\Orders\Order;
@@ -30,7 +31,7 @@ class BelpostLabelService
     {
         $order->loadMissing([
             'itemsExtended' => fn ($query) => $query
-                ->whereIn('status_key', Order::$itemDepartureStatuses)
+                ->whereIn('status', OrderItemStatus::departureStatuses())
                 ->with('installment'),
             'onlinePayments',
             'delivery',

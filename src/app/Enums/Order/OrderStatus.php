@@ -83,7 +83,7 @@ enum OrderStatus: int implements HasLabel
     }
 
     /**
-     * @return array<int, static>
+     * @return list<self>
      */
     public static function shipmentPreparationStatuses(): array
     {

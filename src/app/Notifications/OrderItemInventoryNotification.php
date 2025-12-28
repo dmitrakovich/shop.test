@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Enums\Bot\TelegramBotActions;
+use App\Enums\Order\OrderItemStatus;
 use App\Models\Bots\Telegram\TelegramChat;
 use App\Models\Orders\OrderItem;
 use DefStudio\Telegraph\Client\TelegraphResponse;
@@ -41,7 +42,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
         $product = $this->orderItem->product;
         $size = $this->orderItem->size;
         $stock = $this->orderItem->inventoryNotification->stock;
-        $isConfirmAction = $this->orderItem->status_key === 'confirmed';
+        $isConfirmAction = $this->orderItem->status->isConfirmed();
 
         $message = <<<MSG
         <b>{$this->getActionTitleByOrderItemStatus()}</b>
@@ -65,14 +66,14 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
      */
     private function getActionTitleByOrderItemStatus(): string
     {
-        return match ($this->orderItem->status_key) {
-            'new' => 'Отложить модель',
-            'canceled' => 'Убрать с отложенного',
-            'confirmed' => 'Подтверждено на забор из магазина',
-            'pickup' => 'Забрано из магазина',
-            'complete', 'installment' => 'Убрать с наличия',
-            'return' => 'Возврат по срокам',
-            'return_fitting' => 'Возврат после примерки',
+        return match ($this->orderItem->status) {
+            OrderItemStatus::NEW => 'Отложить модель',
+            OrderItemStatus::CANCELED => 'Убрать с отложенного',
+            OrderItemStatus::CONFIRMED => 'Подтверждено на забор из магазина',
+            OrderItemStatus::PICKUP => 'Забрано из магазина',
+            OrderItemStatus::COMPLETED, OrderItemStatus::INSTALLMENT => 'Убрать с наличия',
+            OrderItemStatus::RETURN => 'Возврат по срокам',
+            OrderItemStatus::RETURN_FITTING => 'Возврат после примерки',
             default => throw new \Exception('Attempt to send message on unknown status'),
         };
     }

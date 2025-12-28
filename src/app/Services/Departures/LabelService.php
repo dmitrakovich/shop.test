@@ -2,6 +2,7 @@
 
 namespace App\Services\Departures;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Models\Orders\Order;
 
 class LabelService
@@ -13,7 +14,7 @@ class LabelService
     {
         $order = Order::where('id', $orderId)->with([
             'itemsExtended' => fn ($query) => $query
-                ->whereIn('status_key', Order::$itemDepartureStatuses)
+                ->whereIn('status', OrderItemStatus::departureStatuses())
                 ->with('installment'),
             'onlinePayments',
             'delivery',

@@ -14,6 +14,7 @@ use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
 use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
+use App\Enums\Order\OrderItemStatus;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Order\UtmEnum;
@@ -27,7 +28,6 @@ use App\Models\Logs\OrderActionLog;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderAdminComment;
 use App\Models\Orders\OrderItemExtended;
-use App\Models\Orders\OrderItemStatus;
 use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\Product;
@@ -84,7 +84,7 @@ class OrderController extends AbstractAdminController
                     'image' => "<img src='{$item->product->getFirstMediaUrl()}' style='width:70px'>",
                     'product' => "<a href='{$item->product->getUrl()}' target='_blank'>{$item->product->getFullName()}</a>",
                     'availability' => $item->product->trashed() ? '<i class="fa fa-close text-red"></i>' : '<i class="fa fa-check text-green"></i>',
-                    'status' => $item->status->name_for_admin,
+                    'status' => $item->status->getLabel(),
                     'size' => $item->size?->name,
                     'price' => "$item->current_price $model->currency",
                 ];
@@ -294,7 +294,7 @@ class OrderController extends AbstractAdminController
             $this->setUtmSources($form);
 
             $form->select('status', 'Статус')->options(enum_to_array(OrderStatus::class))
-                ->default(OrderStatus::NEW)->required();
+                ->default(OrderStatus::NEW->value)->required();
             $form->select('admin_id', 'Менеджер')->options($adminList);
         });
 
@@ -315,17 +315,17 @@ class OrderController extends AbstractAdminController
                 $nestedForm->display('product_link', 'Название модели');
                 $nestedForm->select('stock_id', 'Склад')
                     ->options(['загрузка...'])
-                    ->addElementClass($orderItem?->status_key === 'new' ? [] : ['disabled'])
+                    ->addElementClass($orderItem?->status->isNew() ? [] : ['disabled'])
                     ->required();
                 $nestedForm->image('product_photo', 'Фото товара')->readonly();
                 $nestedForm->select('size_id', 'Размер')
                     ->options(['загрузка...'])
                     ->addElementClass($orderItem?->isFinalStatus() ? ['disabled'] : [])
                     ->required();
-                $nestedForm->select('item_status_key', 'Статус модели')
-                    ->options(OrderItemStatus::ordered()->pluck('name_for_admin', 'key'))
+                $nestedForm->select('item_status', 'Статус модели')
+                    ->options(enum_to_array(OrderItemStatus::class))
                     ->addElementClass($orderItem?->isFinalStatus() ? ['disabled'] : [])
-                    ->default(OrderItemStatus::DEFAULT_VALUE)
+                    ->default(OrderItemStatus::NEW->value)
                     ->required();
                 $nestedForm->currency('old_price', 'Старая цена')->symbol($currencyCode);
                 $nestedForm->currency('current_price', 'Стоимость')->symbol($currencyCode);
@@ -422,7 +422,7 @@ class OrderController extends AbstractAdminController
                     $form->input("itemsExtended.$key.current_price", $product->getPrice());
                 }
                 if ((int)$form->status === OrderStatus::CANCELED->value) {
-                    $form->input("itemsExtended.$key.status_key", 'canceled');
+                    $form->input("itemsExtended.$key.status", OrderItemStatus::CANCELED->value);
                 }
             }
             if ($form->isCreating()) {
@@ -681,7 +681,7 @@ $(function () {
     });
     $('select.stock_id.disabled').attr('disabled', true);
     $('select.size_id.disabled').attr('disabled', true);
-    $('select.item_status_key.disabled').attr('disabled', true);
+    $('select.item_status.disabled').attr('disabled', true);
 
     // prepare current images
     $('#has-many-itemsExtended .file-input').each(function (index, element) {

@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment;
 
+use App\Enums\Order\OrderItemStatus;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
@@ -167,14 +168,14 @@ class PaymentService
                 if (ceil($paymentSum) >= floor($remainingOrderPayment)) {
                     $order->update(['status' => OrderStatus::COMPLETED]);
                     $order->data->each(function (OrderItem $orderItem) {
-                        $orderItem->update(['status_key' => 'complete']);
+                        $orderItem->update(['status' => OrderItemStatus::COMPLETED]);
                     });
                 } elseif (
                     $isInstallment && ceil($firstPaymentsSum) == ceil($paymentSum)
                 ) {
                     $order->update(['status' => OrderStatus::INSTALLMENT]);
                     $order->data->each(function (OrderItem $orderItem) {
-                        $orderItem->update(['status_key' => 'installment']);
+                        $orderItem->update(['status' => OrderItemStatus::INSTALLMENT]);
                     });
                 } elseif ($partialBuybackItemsCount === 1) {
                     $isPartialComplete = false;
@@ -184,13 +185,13 @@ class PaymentService
                             ceil($orderItem->current_price) == ceil($itemCodSum) ||
                             $isInstallment && ceil($firstPaymentSum) == ceil($itemCodSum)
                         ) {
-                            $orderItem->update(['status_key' => 'complete']);
+                            $orderItem->update(['status' => OrderItemStatus::COMPLETED]);
                         } else {
                             $productFullName = $orderItem->product->getFullName();
                             $order->adminComments()->create([
                                 'comment' => "Товар {$productFullName} не выкуплен - ожидайте возврат",
                             ]);
-                            $orderItem->update(['status_key' => 'waiting_refund']);
+                            $orderItem->update(['status' => OrderItemStatus::WAITING_REFUND]);
                             $isPartialComplete = true;
                         }
                     });

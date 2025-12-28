@@ -32,11 +32,11 @@ class OrderItemObserver
      */
     public function saving(OrderItem $orderItem): void
     {
-        if ($orderItem->isDirty('status_key')) {
+        if ($orderItem->isDirty('status')) {
             $orderItem->status_updated_at = now();
 
-            if ($orderItem->status_key !== 'new') {
-                $this->logService->logOrderAction($orderItem->order_id, "Товару {$orderItem->product_id} присвоен статус “{$orderItem->status_key}”");
+            if (!$orderItem->status->isNew()) {
+                $this->logService->logOrderAction($orderItem->order_id, "Товару {$orderItem->product_id} присвоен статус “{$orderItem->status->value}”");
             }
         }
     }
@@ -46,8 +46,8 @@ class OrderItemObserver
      */
     public function saved(OrderItem $orderItem): void
     {
-        if ($orderItem->isDirty('status_key')) {
-            (new OrderItemInventoryService())->handleChangeItemStatus($orderItem->refresh());
+        if ($orderItem->isDirty('status')) {
+            app(OrderItemInventoryService::class)->handleChangeItemStatus($orderItem->refresh());
         }
     }
 

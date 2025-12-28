@@ -2287,24 +2287,6 @@ parameters:
 			path: app/Models/Deliveries/DeliveryMethod.php
 
 		-
-			message: '#^Method App\\Models\\Enum\\Enum\:\:getKeys\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Enum/Enum.php
-
-		-
-			message: '#^Method App\\Models\\Enum\\Enum\:\:getValues\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Enum/Enum.php
-
-		-
-			message: '#^Method App\\Models\\Enum\\OrderMethod\:\:getKeys\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Enum/OrderMethod.php
-
-		-
 			message: '#^Method App\\Models\\Enum\\OrderMethod\:\:getOptionsForSelect\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -2857,12 +2839,6 @@ parameters:
 			path: app/Models/Orders/Order.php
 
 		-
-			message: '#^Method App\\Models\\Orders\\Order\:\:status\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
 			message: '#^Method App\\Models\\Orders\\Order\:\:stock\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
 			count: 1
@@ -2877,12 +2853,6 @@ parameters:
 		-
 			message: '#^Method App\\Models\\Orders\\Order\:\:user\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^Property App\\Models\\Orders\\Order\:\:\$itemDepartureStatuses has no type specified\.$#'
-			identifier: missingType.property
 			count: 1
 			path: app/Models/Orders/Order.php
 
@@ -2917,58 +2887,10 @@ parameters:
 			path: app/Models/Orders/OrderItem.php
 
 		-
-			message: '#^Method App\\Models\\Orders\\OrderItem\:\:status\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/OrderItem.php
-
-		-
 			message: '#^Method App\\Models\\Orders\\OrderItem\:\:statusLog\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Models/Orders/OrderItem.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\OrderItemExtended\:\:setItemStatusKeyAttribute\(\) has parameter \$value with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Models/Orders/OrderItemExtended.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\OrderItemStatus\:\:getKeys\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Orders/OrderItemStatus.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\OrderItemStatus\:\:getValues\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Orders/OrderItemStatus.php
-
-		-
-			message: '#^Property App\\Models\\Orders\\OrderItemStatus\:\:\$sortable has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: app/Models/Orders/OrderItemStatus.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\OrderStatus\:\:getKeys\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Orders/OrderStatus.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\OrderStatus\:\:getValues\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Orders/OrderStatus.php
-
-		-
-			message: '#^Property App\\Models\\Orders\\OrderStatus\:\:\$sortable has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: app/Models/Orders/OrderStatus.php
 
 		-
 			message: '#^Method App\\Models\\Orders\\OrderTrack\:\:order\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
