@@ -20,8 +20,7 @@
                                 Счет №{{ $order->onlinePayments->first()->payment_num }}
                             </a>
                         @endif
-                    @elseif (in_array($order->status, [\App\Enums\Order\OrderStatus::SENT, \App\Enums\Order\OrderStatus::FITTING]) &&
-                            $order->track->track_number)
+                    @elseif ($order->status->hasTracking() && $order->track->track_number)
                         <br>
                         <a @if ($order->track->track_link) href="{{ $order->track->track_link }}" @endif>
                             Трек№ {{ $order->track->track_number }}

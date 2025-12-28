@@ -82,6 +82,11 @@ enum OrderStatus: int implements HasLabel
         return $this === self::WAIT_PAYMENT;
     }
 
+    public function hasTracking(): bool
+    {
+        return in_array($this, [self::SENT, self::FITTING]);
+    }
+
     /**
      * @return list<self>
      */
