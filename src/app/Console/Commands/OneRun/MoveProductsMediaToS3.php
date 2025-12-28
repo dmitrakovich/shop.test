@@ -31,20 +31,20 @@ class MoveProductsMediaToS3 extends Command
      */
     public function handle(): void
     {
-        Config::set('media-library.file_namer', \App\Models\Media\FileNamer::class);
+        // Config::set('media-library.file_namer', \App\Models\Media\FileNamer::class);
 
         $mediaQuery = Media::query()->where('model_type', Product::class)
-            ->where('conversions_disk', '!=', 'media');
+            ->where('conversions_disk', '=', 'media');
         $this->output->progressStart($mediaQuery->count());
 
         $mediaQuery->each(function (Media $media) {
-            foreach ($media->getMediaConversionNames() as $conversionName) {
-                Storage::disk($media->conversions_disk)->delete($media->getPathRelativeToRoot($conversionName));
-            }
+            // foreach ($media->getMediaConversionNames() as $conversionName) {
+            //     Storage::disk($media->conversions_disk)->delete($media->getPathRelativeToRoot($conversionName));
+            // }
 
-            $media->setCustomProperty('moving', 's3');
+            $media->setCustomProperty('moving', 'public');
             $media->update([
-                'conversions_disk' => 'media',
+                'conversions_disk' => 'public',
                 'generated_conversions' => [],
             ]);
 

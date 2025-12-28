@@ -26,7 +26,6 @@ class RemoveOriginalMediaFile
 
     private function areAllConversionsGenerated(Media $media): bool
     {
-        return false;
         // if ($media->conversions_disk !== 'media') {
         //     return false;
         // }
@@ -36,5 +35,17 @@ class RemoveOriginalMediaFile
         // $model->registerMediaConversions();
 
         // return $media->getGeneratedConversions()->count() === count($model->mediaConversions);
+
+        // !!! варианта с чата гпт
+        $allConversionNames = $media->getMediaConversionNames();
+        $generatedConversions = $media->getGeneratedConversions();
+
+        foreach ($allConversionNames as $conversionName) {
+            if (!$generatedConversions->get($conversionName, false)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
