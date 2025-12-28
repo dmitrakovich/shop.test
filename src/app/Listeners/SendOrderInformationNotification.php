@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\OrderCreated;
+use App\Events\Order\OrderCreated;
 use App\Mail\OrderCreated as OrderCreatedMail;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;

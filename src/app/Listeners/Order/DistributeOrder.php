@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Order;
 
-use App\Events\OrderCreated;
+use App\Events\Order\OrderCreated;
 use App\Services\Order\OrdersDistributionService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;

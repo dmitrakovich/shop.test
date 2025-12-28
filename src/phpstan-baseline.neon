@@ -1783,24 +1783,6 @@ parameters:
 			path: app/Listeners/SyncOrderHistory.php
 
 		-
-			message: '#^Instanceof between App\\Models\\Orders\\Order and App\\Models\\Orders\\Order will always evaluate to true\.$#'
-			identifier: instanceof.alwaysTrue
-			count: 1
-			path: app/Listeners/User/UpdateUserAfterOrder.php
-
-		-
-			message: '#^PHPDoc tag @param for parameter \$event with type object is not subtype of native type App\\Events\\OrderCreated\.$#'
-			identifier: parameter.phpDocType
-			count: 1
-			path: app/Listeners/User/UpdateUserAfterOrder.php
-
-		-
-			message: '#^Variable \$user in PHPDoc tag @var does not exist\.$#'
-			identifier: varTag.variableNotFound
-			count: 1
-			path: app/Listeners/User/UpdateUserAfterOrder.php
-
-		-
 			message: '#^Method App\\Logging\\FacebookApiLogger\:\:logResponse\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1

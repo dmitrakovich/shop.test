@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Enums\Order\OrderItemStatus;
-use App\Events\OrderStatusChanged;
+use App\Events\Order\OrderStatusChanged;
 
 class UpdateOrderItemsStatus
 {

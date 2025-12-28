@@ -20,7 +20,7 @@ use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Order\UtmEnum;
 use App\Enums\StockTypeEnum;
 use App\Events\Analytics\OfflinePurchase;
-use App\Events\OrderCreated;
+use App\Events\Order\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
 use App\Models\Enum\OrderMethod;

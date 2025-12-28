@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Events\OrderStatusChanged;
+use App\Events\Order\OrderStatusChanged;
 use App\Models\Logs\OrderActionLog;
 use App\Models\Orders\Order;
 use App\Models\User\User;

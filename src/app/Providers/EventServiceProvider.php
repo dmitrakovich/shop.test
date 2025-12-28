@@ -4,8 +4,7 @@ namespace App\Providers;
 
 use App\Events\Analytics;
 use App\Events\Notifications\NotificationSkipped;
-use App\Events\OrderCreated;
-use App\Events\OrderStatusChanged;
+use App\Events\Order;
 use App\Events\Products;
 use App\Events\ReviewPosted;
 use App\Events\User\UserLogin;
@@ -28,6 +27,7 @@ use App\Listeners\SyncOrderHistory;
 use App\Listeners\UpdateInventory;
 use App\Listeners\UpdateOrderItemsStatus;
 use App\Listeners\User\HandleLogin;
+use App\Listeners\User\RecalculateUserGroup;
 use App\Listeners\User\UpdateUserAfterOrder;
 use App\Observers;
 use Illuminate\Auth\Events\Login;
@@ -66,7 +66,7 @@ class EventServiceProvider extends ServiceProvider
         Analytics\AddToCart::class => [
             FacebookPixel\SendAddToCartEvent::class,
         ],
-        OrderCreated::class => [
+        Order\OrderCreated::class => [
             SendOrderInformationNotification::class,
             SaveDevice::class,
             UpdateUserAfterOrder::class,
@@ -82,8 +82,11 @@ class EventServiceProvider extends ServiceProvider
         Analytics\OfflinePurchase::class => [
             FacebookPixel\SendPurchaseEvent::class,
         ],
-        OrderStatusChanged::class => [
+        Order\OrderStatusChanged::class => [
             UpdateOrderItemsStatus::class,
+        ],
+        Order\OrderItemCompleted::class => [
+            RecalculateUserGroup::class,
         ],
         NotificationSent::class => [
             LogNotification::class,

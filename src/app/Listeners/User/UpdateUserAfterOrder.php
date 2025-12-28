@@ -3,7 +3,7 @@
 namespace App\Listeners\User;
 
 use App\Enums\User\OrderType;
-use App\Events\OrderCreated;
+use App\Events\Order\OrderCreated;
 use App\Models\Orders\Order as OnlineOrder;
 use App\Models\User\User;
 
@@ -21,13 +21,9 @@ class UpdateUserAfterOrder
 
     /**
      * Handle the event.
-     *
-     * @param  object  $event
-     * @return void
      */
-    public function handle(OrderCreated $event)
+    public function handle(OrderCreated $event): void
     {
-        /** @var User $user */
         if (!($user = $event->user) instanceof User) {
             return;
         }

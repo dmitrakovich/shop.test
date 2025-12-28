@@ -12,7 +12,15 @@ use Illuminate\Support\Facades\Cache;
  */
 class Group extends Model
 {
-    const REGISTERED = 1;
+    public const int REGISTERED = 1;
+
+    private const int BEFORE_2K = 2;
+
+    private const int BEFORE_3K = 3;
+
+    private const int BEFORE_5K = 4;
+
+    private const int AFTER_5K = 5;
 
     /**
      * The table associated with the model.
@@ -50,5 +58,26 @@ class Group extends Model
             'name' => 'unknown',
             'discount' => 0,
         ];
+    }
+
+    /**
+     * todo: refactor if
+     * todo: в таблицу user_groups добавить поле отвечающее за сумму покупок для перехода в эту группу
+     */
+    public static function getGroupIdByPurchaseSum(float $sum): int
+    {
+        if ($sum >= 5000) {
+            return self::AFTER_5K;
+        }
+
+        if ($sum >= 3000) {
+            return self::BEFORE_5K;
+        }
+
+        if ($sum >= 2000) {
+            return self::BEFORE_3K;
+        }
+
+        return self::BEFORE_2K;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\Order\OrderItemCompleted;
 use App\Models\Orders\OrderItem;
 use App\Models\Orders\OrderItemExtended;
 use App\Models\Size;
@@ -46,9 +47,17 @@ class OrderItemObserver
      */
     public function saved(OrderItem $orderItem): void
     {
-        if ($orderItem->isDirty('status')) {
-            app(OrderItemInventoryService::class)->handleChangeItemStatus($orderItem->refresh());
+        if ($orderItem->isClean('status')) {
+            return;
         }
+
+        $orderItem->refresh();
+
+        if ($orderItem->status->isCompleted()) {
+            event(new OrderItemCompleted($orderItem));
+        }
+
+        app(OrderItemInventoryService::class)->handleChangeItemStatus($orderItem);
     }
 
     /**

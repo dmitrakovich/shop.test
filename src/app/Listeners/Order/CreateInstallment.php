@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Order;
 
-use App\Events\OrderCreated;
+use App\Events\Order\OrderCreated;
 use App\Services\Order\InstallmentOrderService;
 
 class CreateInstallment

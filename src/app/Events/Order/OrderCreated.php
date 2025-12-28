@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Order;
 
+use App\Models\Orders\OfflineOrder;
 use App\Models\Orders\Order;
 use App\Models\User\User;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -17,7 +18,7 @@ class OrderCreated
      * @return void
      */
     public function __construct(
-        public Order $order,
+        public Order|OfflineOrder $order,
         public ?User $user = null,
         public bool $shouldUpdateInventory = true
     ) {}

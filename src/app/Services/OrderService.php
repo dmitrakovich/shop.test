@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Data\Order\OrderData;
 use App\Enums\User\BanReason;
-use App\Events\OrderCreated;
+use App\Events\Order\OrderCreated;
 use App\Facades\Sale;
 use App\Models\Cart;
 use App\Models\Data\SaleData;

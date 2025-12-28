@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Order;
 
 use App\Enums\Order\OrderStatus;
 use App\Models\Orders\Order;
