@@ -12,15 +12,16 @@
             <div class="dh_order_list__top-item">
                 <span>Статус</span>
                 <div>
-                    {{ $order->status->name_for_user }}
-                    @if ($order->status->key === 'wait_payment')
+                    {{ $order->status->getLabelForClient() }}
+                    @if ($order->status->isWaitPayment())
                         <br>
                         @if (count($order->onlinePayments))
                             <a href="{{ $order->onlinePayments->first()->link }}">
                                 Счет №{{ $order->onlinePayments->first()->payment_num }}
                             </a>
                         @endif
-                    @elseif (in_array($order->status->key, ['sent', 'fitting']) && $order->track->track_number)
+                    @elseif (in_array($order->status, [\App\Enums\Order\OrderStatus::SENT, \App\Enums\Order\OrderStatus::FITTING]) &&
+                            $order->track->track_number)
                         <br>
                         <a @if ($order->track->track_link) href="{{ $order->track->track_link }}" @endif>
                             Трек№ {{ $order->track->track_number }}

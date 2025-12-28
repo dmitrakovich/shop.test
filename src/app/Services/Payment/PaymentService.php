@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment;
 
+use App\Enums\Order\OrderStatus;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
@@ -142,7 +143,7 @@ class PaymentService
                     'data' => fn ($query) => $query->with('installment'),
                 ])->first();
 
-            if (in_array($order->status_key, ['fitting', 'sent', 'installment', 'partial_complete'])) {
+            if (in_array($order->status, [OrderStatus::FITTING, OrderStatus::SENT, OrderStatus::INSTALLMENT, OrderStatus::PARTIAL_COMPLETED])) {
                 $partialBuybackItemsCount = 0;
                 $isInstallment = $order->payment_id === Installment::PAYMENT_METHOD_ID;
                 $successfulPaymentsSum = $order->onlinePayments
@@ -164,14 +165,14 @@ class PaymentService
                 $firstPaymentsSum = $firstPaymentsSum ? ($firstPaymentsSum - $successfulPaymentsSum) : 0;
 
                 if (ceil($paymentSum) >= floor($remainingOrderPayment)) {
-                    $order->update(['status_key' => 'complete']);
+                    $order->update(['status' => OrderStatus::COMPLETED]);
                     $order->data->each(function (OrderItem $orderItem) {
                         $orderItem->update(['status_key' => 'complete']);
                     });
                 } elseif (
                     $isInstallment && ceil($firstPaymentsSum) == ceil($paymentSum)
                 ) {
-                    $order->update(['status_key' => 'installment']);
+                    $order->update(['status' => OrderStatus::INSTALLMENT]);
                     $order->data->each(function (OrderItem $orderItem) {
                         $orderItem->update(['status_key' => 'installment']);
                     });
@@ -193,9 +194,9 @@ class PaymentService
                             $isPartialComplete = true;
                         }
                     });
-                    $order->update(['status_key' => ($isPartialComplete ? 'partial_complete' : 'complete')]);
+                    $order->update(['status' => ($isPartialComplete ? OrderStatus::PARTIAL_COMPLETED : OrderStatus::COMPLETED)]);
                 } else {
-                    $order->update(['status_key' => 'delivered']);
+                    $order->update(['status' => OrderStatus::DELIVERED]);
                     $order->adminComments()->create([
                         'comment' => "Получен наложенный платеж на сумму {$paymentSum}. Распределите сумму по товарам!",
                     ]);

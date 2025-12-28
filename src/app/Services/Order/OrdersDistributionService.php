@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\Admin\Models\Administrator;
+use App\Enums\Order\OrderStatus;
 use App\Models\Config;
 use App\Models\Logs\OrderDistributionLog;
 use App\Models\Orders\Order;
@@ -83,14 +84,14 @@ class OrdersDistributionService
     public function distributeAdditionalOrder(Order $order): bool
     {
         $userPrevOrder = Order::where(function ($query) {
-            return $query->whereNotIn('status_key', [
-                'complete',
-                'canceled',
-                'sent',
-                'fitting',
-                'return',
-                'return_fitting',
-                'partial_complete',
+            return $query->whereNotIn('status', [
+                OrderStatus::COMPLETED,
+                OrderStatus::CANCELED,
+                OrderStatus::SENT,
+                OrderStatus::FITTING,
+                OrderStatus::RETURN,
+                OrderStatus::RETURN_FITTING,
+                OrderStatus::PARTIAL_COMPLETED,
             ])->orWhere('created_at', '>', date('Y-m-d H:i:s', strtotime('-7 days')));
         })->where(fn ($query) => $query->whereNotNull('user_id')->where('user_id', $order->user_id))
             ->where('id', '!=', $order->id)

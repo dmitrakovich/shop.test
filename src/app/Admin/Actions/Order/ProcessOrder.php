@@ -2,21 +2,25 @@
 
 namespace App\Admin\Actions\Order;
 
+use App\Enums\Order\OrderStatus;
+use App\Models\Orders\Order;
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Facades\Admin;
-use Illuminate\Database\Eloquent\Model;
 
 class ProcessOrder extends RowAction
 {
     public $name = 'Взять в работу';
 
-    protected $isRow = false;
+    protected bool $isRow = false;
 
-    public function handle(Model $model)
+    /**
+     * @return mixed
+     */
+    public function handle(Order $order)
     {
         $this->isRow = true;
 
-        return $this->process($model);
+        return $this->process($order);
     }
 
     /**
@@ -24,18 +28,18 @@ class ProcessOrder extends RowAction
      *
      * @return mixed
      */
-    public function process(Model $model)
+    public function process(Order $order)
     {
-        if (!empty($model->admin_id)) {
-            return $this->warningResponse('Заказ уже обрабатывает менеджер ' . $model->admin->name);
+        if (!empty($order->admin_id)) {
+            return $this->warningResponse('Заказ уже обрабатывает менеджер ' . $order->admin->name);
         }
-        if ($model->status_key != 'new') {
-            return $this->warningResponse("Заказ находится в статусе \"{$model->status->name_for_admin}\", его нельзя взять в работу");
+        if (!$order->status->isNew()) {
+            return $this->warningResponse("Заказ находится в статусе \"{$order->status->getLabel()}\", его нельзя взять в работу");
         }
 
-        $model->admin_id = Admin::user()->id;
-        $model->status_key = 'in_work';
-        $model->save();
+        $order->admin_id = Admin::user()->getAuthIdentifier();
+        $order->status = OrderStatus::IN_WORK;
+        $order->save();
 
         return $this->successResponse('Заказ успешно принят в работу');
     }

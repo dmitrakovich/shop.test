@@ -5,6 +5,7 @@ namespace App\Models\Orders;
 use App\Admin\Models\Administrator;
 use App\Casts\AsPhone;
 use App\Enums\Order\OrderMethod;
+use App\Enums\Order\OrderStatus;
 use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Country;
@@ -53,7 +54,7 @@ use Payments\PaymentMethod;
  * @property string|null $utm_campaign
  * @property string|null $utm_content
  * @property string|null $utm_term
- * @property string $status_key
+ * @property \App\Enums\Order\OrderStatus $status
  * @property \Illuminate\Support\Carbon $status_updated_at
  * @property int|null $admin_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -74,7 +75,6 @@ use Payments\PaymentMethod;
  * @property-read \App\Models\Stock|null $stock
  * @property-read \Payments\PaymentMethod|null $payment
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePayment[] $onlinePayments
- * @property-read \App\Models\Orders\OrderStatus|null $status
  * @property-read \App\Admin\Models\Administrator|null $admin
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderAdminComment[] $adminComments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
@@ -118,7 +118,7 @@ class Order extends Model
         'utm_campaign',
         'utm_content',
         'utm_term',
-        'status_key',
+        'status',
         'status_updated_at',
         'admin_id',
         'created_at',
@@ -159,6 +159,7 @@ class Order extends Model
         return [
             'order_method' => OrderMethod::class,
             'order_type' => OrderTypeEnum::class,
+            'status' => OrderStatus::class,
             'status_updated_at' => 'datetime',
             'phone' => AsPhone::class,
         ];
@@ -258,14 +259,6 @@ class Order extends Model
     public function onlinePayments(): Relations\HasMany
     {
         return $this->hasMany(OnlinePayment::class);
-    }
-
-    /**
-     * Order status
-     */
-    public function status(): Relations\BelongsTo
-    {
-        return $this->belongsTo(OrderStatus::class);
     }
 
     /**
@@ -503,7 +496,7 @@ class Order extends Model
      */
     public function isCompleted(): bool
     {
-        return $this->status_key === 'complete';
+        return $this->status->isCompleted();
     }
 
     /**
@@ -511,7 +504,7 @@ class Order extends Model
      */
     public function isCanceled(): bool
     {
-        return $this->status_key === 'canceled';
+        return $this->status->isCanceled();
     }
 
     /**

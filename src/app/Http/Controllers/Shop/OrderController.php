@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Shop;
 use App\Data\Order\OneClickOrderData;
 use App\Data\Order\OrderData;
 use App\Enums\Order\OrderMethod;
+use App\Enums\Order\OrderStatus;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Facades\Cart;
 use App\Http\Requests\Order\StoreRequest;
@@ -26,15 +27,29 @@ class OrderController extends BaseController
             'track',
             'onlinePayments' => fn ($query) => $query->where('last_status_enum_id', OnlinePaymentStatusEnum::PENDING),
             'itemsExtended',
-            'status:key,name_for_user',
         ])->where('user_id', Auth::id())->orderBy('id', 'desc')->get();
 
         return view('dashboard.orders', [
             'allOrders' => $orders,
-            'expectedOrders' => $orders->whereIn('status.key', ['new', 'in_work', 'wait_payment', 'paid', 'assembled', 'packaging', 'ready']),
-            'sentOrders' => $orders->whereIn('status.key', ['sent', 'fitting']),
-            'completedOrders' => $orders->where('status.key', 'complete'),
-            'canceledOrders' => $orders->whereIn('status.key', ['canceled', 'return', 'return_fitting']),
+            'expectedOrders' => $orders->whereIn('status', [
+                OrderStatus::NEW,
+                OrderStatus::IN_WORK,
+                OrderStatus::WAIT_PAYMENT,
+                OrderStatus::PAID,
+                OrderStatus::ASSEMBLED,
+                OrderStatus::PACKAGING,
+                OrderStatus::READY,
+            ]),
+            'sentOrders' => $orders->whereIn('status', [
+                OrderStatus::SENT,
+                OrderStatus::FITTING,
+            ]),
+            'completedOrders' => $orders->where('status', OrderStatus::COMPLETED),
+            'canceledOrders' => $orders->whereIn('status', [
+                OrderStatus::CANCELED,
+                OrderStatus::RETURN,
+                OrderStatus::RETURN_FITTING,
+            ]),
         ]);
     }
 

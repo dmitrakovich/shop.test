@@ -2,38 +2,39 @@
 
 namespace App\Admin\Actions\Order;
 
+use App\Enums\Order\OrderStatus;
 use App\Models\Orders\Order;
-use App\Models\Orders\OrderStatus;
 use Encore\Admin\Actions\BatchAction;
+use Encore\Admin\Actions\Response;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class StatusBulkChange extends BatchAction
 {
-    public $name = 'Cмена статуса';
+    public $name = 'Смена статуса';
 
     protected $selector = '.js-statusBulkChange';
 
-    public function handle(Collection $collection, Request $request)
+    /**
+     * @param  Collection<int, Order>  $orders
+     */
+    public function handle(Collection $orders, Request $request): Response
     {
-        $statusKey = $request->status_key ?? null;
-        $orderIds = $collection->pluck('id');
-        if ($statusKey && !empty($orderIds)) {
-            Order::whereIn('id', $orderIds)->update([
-                'status_key' => $statusKey,
-            ]);
-        }
+        $orders->toQuery()->update([
+            'status' => $request->validate(['status' => 'required|integer'])['status'],
+        ]);
 
         return $this->response()->success('Успешно изменено!')->refresh();
     }
 
-    public function form()
+    public function form(): void
     {
-        $orderStatuses = OrderStatus::ordered()->pluck('name_for_admin', 'key');
-        $this->select('status_key', 'Статус')->options($orderStatuses);
+        $this->select('status', 'Статус')
+            ->options(enum_to_array(OrderStatus::class))
+            ->required();
     }
 
-    public function html()
+    public function html(): string
     {
         return "<a class='js-statusBulkChange'>$this->name</a>";
     }

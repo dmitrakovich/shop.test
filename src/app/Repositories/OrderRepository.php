@@ -26,7 +26,6 @@ class OrderRepository
                 'items',
                 'items.product.favorite', // todo: need only for catalogResource
                 'items.product.sizes', // todo: optimize it
-                'status:key,name_for_user',
             ])
             ->where('user_id', Auth::id())
             ->orderBy('id', 'desc')

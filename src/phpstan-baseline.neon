@@ -85,18 +85,6 @@ parameters:
 			path: app/Admin/Actions/Order/CreateOnlinePayment.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$orders\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Admin/Actions/Order/DeleteBatchAction.php
-
-		-
-			message: '#^Method App\\Admin\\Actions\\Order\\DeleteBatchAction\:\:handle\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Admin/Actions/Order/DeleteBatchAction.php
-
-		-
 			message: '#^Method App\\Admin\\Actions\\Order\\DistributeOrderAction\:\:handle\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -173,72 +161,6 @@ parameters:
 			identifier: missingType.return
 			count: 1
 			path: app/Admin/Actions/Order/PrintOrder.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Contracts\\Auth\\Authenticatable\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Admin/Actions/Order/ProcessOrder.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$admin\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Admin/Actions/Order/ProcessOrder.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$admin_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Admin/Actions/Order/ProcessOrder.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Admin/Actions/Order/ProcessOrder.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status_key\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Admin/Actions/Order/ProcessOrder.php
-
-		-
-			message: '#^Method App\\Admin\\Actions\\Order\\ProcessOrder\:\:handle\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Admin/Actions/Order/ProcessOrder.php
-
-		-
-			message: '#^Property App\\Admin\\Actions\\Order\\ProcessOrder\:\:\$isRow has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: app/Admin/Actions/Order/ProcessOrder.php
-
-		-
-			message: '#^Method App\\Admin\\Actions\\Order\\StatusBulkChange\:\:form\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Admin/Actions/Order/StatusBulkChange.php
-
-		-
-			message: '#^Method App\\Admin\\Actions\\Order\\StatusBulkChange\:\:handle\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Admin/Actions/Order/StatusBulkChange.php
-
-		-
-			message: '#^Method App\\Admin\\Actions\\Order\\StatusBulkChange\:\:handle\(\) has parameter \$collection with generic class Illuminate\\Database\\Eloquent\\Collection but does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Admin/Actions/Order/StatusBulkChange.php
-
-		-
-			message: '#^Variable \$orderIds in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
-			count: 1
-			path: app/Admin/Actions/Order/StatusBulkChange.php
 
 		-
 			message: '#^Method App\\Admin\\Actions\\Order\\TrackRange\:\:form\(\) has no return type specified\.$#'
