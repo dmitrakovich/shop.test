@@ -25,6 +25,9 @@ class RecalculateUserGroup
             ->where('status', OrderItemStatus::COMPLETED)
             ->sum('current_price');
 
-        $user->update(['group_id' => Group::getGroupIdByPurchaseSum($purchasesSum)]);
+        $newGroupId = Group::getGroupIdByPurchaseSum($purchasesSum);
+        if ($newGroupId > $user->group_id) {
+            $user->update(['group_id' => $newGroupId]);
+        }
     }
 }
