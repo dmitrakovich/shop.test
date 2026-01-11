@@ -236,7 +236,8 @@ class SaleService
     {
         return isset($this->discounts[SettingType::CATEGORY->value][$product->category_id])
             || isset($this->discounts[SettingType::MANUFACTURER->value][$product->manufacturer_id])
-            || isset($this->discounts[SettingType::PRODUCT->value][$product->id]);
+            || isset($this->discounts[SettingType::PRODUCT->value][$product->id])
+            || isset($this->discounts[SettingType::COLLECTION->value][$product->collection_id]);
     }
 
     /**
@@ -323,6 +324,7 @@ class SaleService
         $maxDiscount = max($maxDiscount, $this->discounts[SettingType::CATEGORY->value][$product->category_id] ?? 0);
         $maxDiscount = max($maxDiscount, $this->discounts[SettingType::MANUFACTURER->value][$product->manufacturer_id] ?? 0);
         $maxDiscount = max($maxDiscount, $this->discounts[SettingType::PRODUCT->value][$product->id] ?? 0);
+        $maxDiscount = max($maxDiscount, $this->discounts[SettingType::COLLECTION->value][$product->collection_id] ?? 0);
 
         return $maxDiscount;
     }

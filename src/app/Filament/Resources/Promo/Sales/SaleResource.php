@@ -139,12 +139,16 @@ class SaleResource extends Resource
                                             ->when($search, fn ($q) => $q->where('id', 'like', "{$search}%"))
                                             ->limit(50)
                                             ->pluck('id', 'id'),
+                                        SettingType::COLLECTION => Collection::query()
+                                            ->when($search, fn ($q) => $q->where('name', 'like', "%{$search}%"))
+                                            ->pluck('name', 'id'),
                                         default => [],
                                     })
                                     ->options(fn (Get $get) => match ($get('type')) {
                                         SettingType::CATEGORY => Category::query()->whereNotIn('id', [1, 2, 25, 35])->pluck('title', 'id'),
                                         SettingType::MANUFACTURER => Manufacturer::query()->pluck('name', 'id'),
                                         SettingType::PRODUCT => Product::query()->orderByDesc('id')->pluck('id', 'id'),
+                                        SettingType::COLLECTION => Collection::query()->orderByDesc('id')->pluck('name', 'id'),
                                         default => [],
                                     }),
                                 TextInput::make('percentage')
