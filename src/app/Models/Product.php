@@ -317,20 +317,11 @@ class Product extends Model implements HasMedia
         return route('product.show', $this->slug);
     }
 
-    // public function registerMediaCollections(): void
-    // {
-    //     $this->addMediaCollection('default')
-    //         ->useDisk('public')
-    //         ->storeConversionsOnDisk('media');
-    // }
-
     /**
      * Register media conversions.
      */
     public function registerMediaConversions(?Media $media = null): void
     {
-        // $this->addMediaConversion('full')->keepOriginalImageFormat();
-
         $this->addMediaConversion('thumb')->format('jpg')->width(100);
         $this->addMediaConversion('catalog')->format('jpg')->width(300);
         $this->addMediaConversion('normal')->format('jpg')->width(700);

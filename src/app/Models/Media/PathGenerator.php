@@ -10,13 +10,23 @@ use Spatie\MediaLibrary\Support\PathGenerator\DefaultPathGenerator;
 
 class PathGenerator extends DefaultPathGenerator
 {
+    public function getPath(Media $media): string
+    {
+        // todo: remove after move to S3
+        if ($media->disk === 'public') {
+            return parent::getBasePath($media);
+        }
+
+        return $this->getBasePath($media) . '-';
+    }
+
     /*
      * Get a unique base path for the given media.
      */
-    protected function getBasePath(Media $media, bool $new = false): string
+    protected function getBasePath(Media $media): string
     {
         // todo: remove after move to S3
-        if (!$new) {
+        if ($media->disk === 'public') {
             return $this->getOldBasePath($media);
         }
 
@@ -44,7 +54,7 @@ class PathGenerator extends DefaultPathGenerator
             return parent::getPathForConversions($media);
         }
 
-        return $this->getBasePath($media, new: true) . '-';
+        return $this->getBasePath($media) . '-';
     }
 
     private function getOldBasePath(Media $media): string
