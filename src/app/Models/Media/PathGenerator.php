@@ -5,6 +5,7 @@ namespace App\Models\Media;
 use App\Models\Banner;
 use App\Models\Feedback;
 use App\Models\Product;
+use App\Models\Stock;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\Support\PathGenerator\DefaultPathGenerator;
 
@@ -14,7 +15,7 @@ class PathGenerator extends DefaultPathGenerator
     {
         // todo: remove after move to S3
         if ($media->disk === 'public') {
-            return parent::getBasePath($media);
+            return parent::getPath($media);
         }
 
         return $this->getBasePath($media) . '-';
@@ -34,8 +35,13 @@ class PathGenerator extends DefaultPathGenerator
             Banner::class => 'b',
             Feedback::class => 'f',
             Product::class => 'p',
+            Stock::class => 's',
             default => 'other',
         };
+
+        if ($media->model_type === Feedback::class) {
+            $path .= '/' . $media->model_id;
+        }
 
         if ($media->model_type === Product::class) {
             $path .= '/' . (substr($media->model_id, 0, -3) ?: '0') . '/' . $media->model_id;

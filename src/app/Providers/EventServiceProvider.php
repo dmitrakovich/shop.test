@@ -13,7 +13,6 @@ use App\Listeners\FacebookPixel;
 use App\Listeners\GoogleTag;
 use App\Listeners\LogNotification;
 use App\Listeners\Media\ConvertVideo;
-use App\Listeners\Media\RemoveOriginalMediaFile;
 use App\Listeners\MergeCart;
 use App\Listeners\MergeFavorites;
 use App\Listeners\OneC;
@@ -33,7 +32,6 @@ use App\Observers;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Events\NotificationSent;
-use Spatie\MediaLibrary\Conversions\Events\ConversionHasBeenCompletedEvent;
 use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAddedEvent;
 
 class EventServiceProvider extends ServiceProvider
@@ -102,9 +100,6 @@ class EventServiceProvider extends ServiceProvider
         ],
         MediaHasBeenAddedEvent::class => [
             ConvertVideo::class,
-        ],
-        ConversionHasBeenCompletedEvent::class => [
-            RemoveOriginalMediaFile::class,
         ],
         Products\ProductCreated::class => [
             Product\GenerateSlug::class,

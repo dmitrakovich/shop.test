@@ -65,6 +65,7 @@ class ProductForm
                                 SpatieMediaLibraryFileUpload::make('media')
                                     ->panelLayout('grid')
                                     ->image()
+                                    ->disk('media')
                                     ->multiple()
                                     ->openable()
                                     ->conversion('normal')

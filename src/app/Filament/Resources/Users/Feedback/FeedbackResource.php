@@ -72,6 +72,7 @@ class FeedbackResource extends Resource
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('photos')
                                     ->image()
+                                    ->disk('media')
                                     ->collection('photos')
                                     ->multiple()
                                     ->maxFiles(10)
@@ -89,6 +90,7 @@ class FeedbackResource extends Resource
                                         'video/mpeg',
                                         'video/quicktime',
                                     ])
+                                    ->disk('media')
                                     ->collection('videos')
                                     ->multiple()
                                     ->maxFiles(5)
