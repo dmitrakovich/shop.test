@@ -54,7 +54,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
         Log::channel('debug')->debug($message);
 
         return $chat->message($message)
-            ->photo($product->getFirstMediaPath('default', 'catalog'))
+            ->photo($product->getFirstCatalogMediaUrl())
             ->when($isConfirmAction, $this->getConfirmKeyboard())
             ->send();
     }

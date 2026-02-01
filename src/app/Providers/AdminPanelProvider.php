@@ -115,7 +115,6 @@ class AdminPanelProvider extends PanelProvider
         return collect([
             'orders' => 'Заказы',
             'order-items' => 'Товары в заказах',
-            'products' => 'Товары',
             'logs/inventory' => 'Наличие - лог',
             'automation/inventory' => 'Наличие - добавить',
             'automation/stock' => 'Склад',

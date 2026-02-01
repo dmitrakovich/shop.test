@@ -57,7 +57,7 @@
         "spatie/laravel-backup": "^9.2",
         "spatie/laravel-data": "^4.13",
         "spatie/laravel-googletagmanager": "^2.7",
-        "spatie/laravel-medialibrary": "^11.12",
+        "spatie/laravel-medialibrary": "^11.17",
         "staudenmeir/eloquent-json-relations": "^1.14",
         "staudenmeir/laravel-cte": "^1.12",
         "yoomoney/yookassa-sdk-php": "^2.2"
