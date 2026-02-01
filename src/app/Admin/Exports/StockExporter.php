@@ -138,7 +138,6 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
 
         $this->grid->rows()->map(function (Row $row) use (&$images, $noImagePath) {
             $imgHtml = $row->column('media');
-            dd($imgHtml);
             if (str_contains($imgHtml, 'no-image-100')) {
                 $imagePath = $noImagePath;
             } else {
