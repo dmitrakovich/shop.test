@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 // for $absolute = false
-if (! function_exists('route')) {
+if (!function_exists('route')) {
     function route($name, $parameters = [], $absolute = false)
     {
         return app('url')->route($name, $parameters, $absolute);
@@ -45,11 +45,11 @@ function user(): User
  */
 function enum_to_array(string $enumClass): array
 {
-    if (! enum_exists($enumClass)) {
+    if (!enum_exists($enumClass)) {
         throw new InvalidArgumentException("Class '$enumClass' is not a valid enum.");
     }
 
-    if (! is_subclass_of($enumClass, HasLabel::class)) {
+    if (!is_subclass_of($enumClass, HasLabel::class)) {
         throw new InvalidArgumentException("Enum '$enumClass' must implement HasLabel interface.");
     }
 
