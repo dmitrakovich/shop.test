@@ -5,6 +5,7 @@ namespace App\Admin\Exports;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Row;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -18,6 +19,11 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
      * @var string
      */
     protected $fileName = 'Склад.xlsx';
+
+    /**
+     * @var string|null Temporary directory path to clean up
+     */
+    protected ?string $tempDir = null;
 
     /**
      * Create a new exporter instance.
@@ -115,7 +121,7 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
     }
 
     /**
-     * Insert product images
+     * Вставка изображений товаров
      *
      * @return BaseDrawing[]
      */
@@ -123,17 +129,35 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
     {
         $images = [];
         $noImagePath = public_path('images/no-image-100.png');
+        $this->tempDir = storage_path('app/temp/' . now()->format('Y_m_d_H_i_s'));
+
+        // Убеждаемся, что временный каталог существует
+        if (!is_dir($this->tempDir)) {
+            mkdir($this->tempDir, 0755, true);
+        }
 
         $this->grid->rows()->map(function (Row $row) use (&$images, $noImagePath) {
             $imgHtml = $row->column('media');
             if (str_contains($imgHtml, 'no-image-100')) {
                 $imagePath = $noImagePath;
             } else {
-                $start = strpos($imgHtml, 'media/products/');
-                $end = strpos($imgHtml, "'", $start);
-                $imagePath = public_path(substr($imgHtml, $start, $end - $start));
-                if (!file_exists($imagePath)) {
+                // Пытаемся извлечь URL из HTML (может быть в атрибуте src)
+                $imageUrl = $this->extractImageUrl($imgHtml);
+
+                if (!$imageUrl) {
                     $imagePath = $noImagePath;
+                } elseif (str_starts_with($imageUrl, 'http://') || str_starts_with($imageUrl, 'https://')) {
+                    // URL S3 - скачивание во временный файл
+                    $imagePath = $this->downloadImageFromUrl($imageUrl, $this->tempDir, $row->number);
+                    if (!$imagePath) {
+                        $imagePath = $noImagePath;
+                    }
+                } else {
+                    // Локальный путь
+                    $imagePath = public_path($imageUrl);
+                    if (!file_exists($imagePath)) {
+                        $imagePath = $noImagePath;
+                    }
                 }
             }
 
@@ -146,5 +170,97 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
         });
 
         return $images;
+    }
+
+    /**
+     * Извлечение URL изображения из HTML
+     */
+    private function extractImageUrl(string $html): ?string
+    {
+        // Пытаемся найти атрибут src
+        if (preg_match('/src=["\']([^"\']+)["\']/', $html, $matches)) {
+            return $matches[1];
+        }
+
+        // Резервное решение: пытаемся найти шаблон media/products/ (старый формат)
+        $start = strpos($html, 'media/products/');
+        if ($start !== false) {
+            $end = strpos($html, "'", $start);
+            if ($end === false) {
+                $end = strpos($html, '"', $start);
+            }
+            if ($end !== false) {
+                return substr($html, $start, $end - $start);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Скачивание изображения из URL в временный файл
+     */
+    private function downloadImageFromUrl(string $url, string $tempDir, int $rowNumber): ?string
+    {
+        try {
+            $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
+            $tempFile = $tempDir . '/stock_export_' . $rowNumber . '_' . uniqid() . '.' . $extension;
+
+            $response = Http::timeout(30)->get($url);
+
+            if ($response->successful()) {
+                file_put_contents($tempFile, $response->body());
+
+                return $tempFile;
+            }
+        } catch (\Exception $e) {
+            // Логирование ошибки, если нужно, но продолжаем с резервным изображением
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function export()
+    {
+        try {
+            $this->download($this->fileName)->prepare(request())->send();
+        } finally {
+            // Очистка временных файлов после генерации Excel и отправки
+            $this->cleanupTempFiles();
+        }
+
+        exit;
+    }
+
+    /**
+     * Очистка временного каталога
+     */
+    private function cleanupTempFiles(): void
+    {
+        if ($this->tempDir && is_dir($this->tempDir)) {
+            $this->deleteDirectory($this->tempDir);
+        }
+        $this->tempDir = null;
+    }
+
+    /**
+     * Рекурсивное удаление каталога
+     */
+    private function deleteDirectory(string $dir): bool
+    {
+        if (!is_dir($dir)) {
+            return false;
+        }
+
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            $path = $dir . '/' . $file;
+            is_dir($path) ? $this->deleteDirectory($path) : @unlink($path);
+        }
+
+        return @rmdir($dir);
     }
 }
