@@ -41,7 +41,6 @@ function user(): User
  * Convert backed enum implementing HasLabel to legacy associative array.
  *
  * @param class-string<covariant BackedEnum> $enumClass
- *
  * @return array<int|string, string>
  */
 function enum_to_array(string $enumClass): array
