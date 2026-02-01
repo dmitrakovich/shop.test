@@ -137,12 +137,13 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
         }
 
         $this->grid->rows()->map(function (Row $row) use (&$images, $noImagePath) {
-            $imgColumn = $row->column('media');
-            if (str_contains($imgColumn, 'no-image-100')) {
+            $imgHtml = $row->column('media');
+            dd($imgHtml);
+            if (str_contains($imgHtml, 'no-image-100')) {
                 $imagePath = $noImagePath;
             } else {
                 // Пытаемся извлечь URL из HTML (может быть в атрибуте src)
-                $imageUrl = $this->extractImageUrl($imgColumn);
+                $imageUrl = $this->extractImageUrl($imgHtml);
 
                 if (!$imageUrl) {
                     $imagePath = $noImagePath;
@@ -175,16 +176,22 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
     /**
      * Извлечение URL изображения из HTML
      */
-    private function extractImageUrl(string $imgColumn): ?string
+    private function extractImageUrl(string $html): ?string
     {
-        $start = strpos($imgColumn, 'media/products/');
+        // Пытаемся найти атрибут src
+        if (preg_match('/src=["\']([^"\']+)["\']/', $html, $matches)) {
+            return $matches[1];
+        }
+
+        // Резервное решение: пытаемся найти шаблон media/products/ (старый формат)
+        $start = strpos($html, 'media/products/');
         if ($start !== false) {
-            $end = strpos($imgColumn, "'", $start);
+            $end = strpos($html, "'", $start);
             if ($end === false) {
-                $end = strpos($imgColumn, '"', $start);
+                $end = strpos($html, '"', $start);
             }
             if ($end !== false) {
-                return substr($imgColumn, $start, $end - $start);
+                return substr($html, $start, $end - $start);
             }
         }
 
