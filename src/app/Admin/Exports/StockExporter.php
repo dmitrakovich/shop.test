@@ -45,7 +45,7 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
         $columns = $this->grid->visibleColumnNames();
 
         return $this->grid->rows()->map(function (Row $row) use ($columns) {
-            return array_map(fn ($name) => $this->prepareRow($name, $row), $columns);
+            return array_map(fn($name) => $this->prepareRow($name, $row), $columns);
         });
     }
 
@@ -137,12 +137,12 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
         }
 
         $this->grid->rows()->map(function (Row $row) use (&$images, $noImagePath) {
-            $imgHtml = $row->column('media');
-            if (str_contains($imgHtml, 'no-image-100')) {
+            $imgColumn = $row->column('media');
+            if (str_contains($imgColumn, 'no-image-100')) {
                 $imagePath = $noImagePath;
             } else {
                 // Пытаемся извлечь URL из HTML (может быть в атрибуте src)
-                $imageUrl = $this->extractImageUrl($imgHtml);
+                $imageUrl = $this->extractImageUrl($imgColumn);
 
                 if (!$imageUrl) {
                     $imagePath = $noImagePath;
@@ -175,22 +175,16 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
     /**
      * Извлечение URL изображения из HTML
      */
-    private function extractImageUrl(string $html): ?string
+    private function extractImageUrl(string $imgColumn): ?string
     {
-        // Пытаемся найти атрибут src
-        if (preg_match('/src=["\']([^"\']+)["\']/', $html, $matches)) {
-            return $matches[1];
-        }
-
-        // Резервное решение: пытаемся найти шаблон media/products/ (старый формат)
-        $start = strpos($html, 'media/products/');
+        $start = strpos($imgColumn, 'media/products/');
         if ($start !== false) {
-            $end = strpos($html, "'", $start);
+            $end = strpos($imgColumn, "'", $start);
             if ($end === false) {
-                $end = strpos($html, '"', $start);
+                $end = strpos($imgColumn, '"', $start);
             }
             if ($end !== false) {
-                return substr($html, $start, $end - $start);
+                return substr($imgColumn, $start, $end - $start);
             }
         }
 
