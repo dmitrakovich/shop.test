@@ -36,6 +36,7 @@ class MoveMediaToS3 extends Command
         $mediaQuery->eachById(function (Media $media) {
             $model = $media->model()->withTrashed()->first();
             if ($model) {
+                // @phpstan-ignore-next-line
                 $media->move(model: $model, collectionName: $media->collection_name, diskName: 'media');
             } else {
                 $media->forceDelete();

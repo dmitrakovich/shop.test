@@ -11,7 +11,9 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style;
+use PhpOffice\PhpSpreadsheet\Worksheet\BaseDrawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing;
 
 class StockExporter extends ExcelExporterFromCollection implements WithDrawings, WithEvents
 {
@@ -20,18 +22,16 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
      */
     protected $fileName = 'Склад.xlsx';
 
-    /**
-     * @var string|null Temporary directory path to clean up
-     */
-    protected ?string $tempDir = null;
+    private readonly string $noImagePath;
 
     /**
      * Create a new exporter instance.
      */
     public function __construct(?Grid $grid = null)
     {
-        ini_set('memory_limit', '512M');
-        set_time_limit(60);
+        ini_set('memory_limit', '2G');
+
+        $this->noImagePath = public_path('images/no-image-100.png');
 
         parent::__construct($grid);
     }
@@ -45,7 +45,7 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
         $columns = $this->grid->visibleColumnNames();
 
         return $this->grid->rows()->map(function (Row $row) use ($columns) {
-            return array_map(fn($name) => $this->prepareRow($name, $row), $columns);
+            return array_map(fn ($name) => $this->prepareRow($name, $row), $columns);
         });
     }
 
@@ -66,7 +66,7 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
     }
 
     /**
-     * Setup height, wedth, color & other styles
+     * Setup height, width, color & other styles
      */
     public function registerEvents(): array
     {
@@ -128,41 +128,10 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
     public function drawings()
     {
         $images = [];
-        $noImagePath = public_path('images/no-image-100.png');
-        $this->tempDir = storage_path('app/temp/' . now()->format('Y_m_d_H_i_s'));
-
-        // Убеждаемся, что временный каталог существует
-        if (!is_dir($this->tempDir)) {
-            mkdir($this->tempDir, 0755, true);
-        }
-
-        $this->grid->rows()->map(function (Row $row) use (&$images, $noImagePath) {
-            $imgHtml = $row->column('media');
-            if (str_contains($imgHtml, 'no-image-100')) {
-                $imagePath = $noImagePath;
-            } else {
-                // Пытаемся извлечь URL из HTML (может быть в атрибуте src)
-                $imageUrl = $this->extractImageUrl($imgHtml);
-
-                if (!$imageUrl) {
-                    $imagePath = $noImagePath;
-                } elseif (str_starts_with($imageUrl, 'http://') || str_starts_with($imageUrl, 'https://')) {
-                    // URL S3 - скачивание во временный файл
-                    $imagePath = $this->downloadImageFromUrl($imageUrl, $this->tempDir, $row->number);
-                    if (!$imagePath) {
-                        $imagePath = $noImagePath;
-                    }
-                } else {
-                    // Локальный путь
-                    $imagePath = public_path($imageUrl);
-                    if (!file_exists($imagePath)) {
-                        $imagePath = $noImagePath;
-                    }
-                }
-            }
-
-            $drawing = new Drawing();
-            $drawing->setPath($imagePath);
+        $this->grid->rows()->map(function (Row $row) use (&$images) {
+            $drawing = $this->getDrawing(
+                $this->extractImageUrl($row->column('media'))
+            );
             $drawing->setOffsetX(6)->setOffsetY(5);
             $drawing->setCoordinates('A' . ($row->number + 2));
 
@@ -177,90 +146,28 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
      */
     private function extractImageUrl(string $html): ?string
     {
-        // Пытаемся найти атрибут src
-        if (preg_match('/src=["\']([^"\']+)["\']/', $html, $matches)) {
-            return $matches[1];
+        if (!preg_match("~src='([^']+)'~", $html, $matches)) {
+            return null;
         }
 
-        // Резервное решение: пытаемся найти шаблон media/products/ (старый формат)
-        $start = strpos($html, 'media/products/');
-        if ($start !== false) {
-            $end = strpos($html, "'", $start);
-            if ($end === false) {
-                $end = strpos($html, '"', $start);
-            }
-            if ($end !== false) {
-                return substr($html, $start, $end - $start);
-            }
-        }
-
-        return null;
+        return $matches[1];
     }
 
-    /**
-     * Скачивание изображения из URL в временный файл
-     */
-    private function downloadImageFromUrl(string $url, string $tempDir, int $rowNumber): ?string
+    private function getImageString(?string $imageUrl): ?string
     {
-        try {
-            $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
-            $tempFile = $tempDir . '/stock_export_' . $rowNumber . '_' . uniqid() . '.' . $extension;
-
-            $response = Http::timeout(30)->get($url);
-
-            if ($response->successful()) {
-                file_put_contents($tempFile, $response->body());
-
-                return $tempFile;
-            }
-        } catch (\Exception $e) {
-            // Логирование ошибки, если нужно, но продолжаем с резервным изображением
+        if (!$imageUrl || str_contains($imageUrl, 'no-image-100')) {
+            return null;
         }
 
-        return null;
+        return Http::timeout(30)->get($imageUrl)->body();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function export()
+    private function getDrawing(?string $imageUrl): BaseDrawing
     {
-        try {
-            $this->download($this->fileName)->prepare(request())->send();
-        } finally {
-            // Очистка временных файлов после генерации Excel и отправки
-            $this->cleanupTempFiles();
+        if ($imageString = $this->getImageString($imageUrl)) {
+            return MemoryDrawing::fromString($imageString);
         }
 
-        exit;
-    }
-
-    /**
-     * Очистка временного каталога
-     */
-    private function cleanupTempFiles(): void
-    {
-        if ($this->tempDir && is_dir($this->tempDir)) {
-            $this->deleteDirectory($this->tempDir);
-        }
-        $this->tempDir = null;
-    }
-
-    /**
-     * Рекурсивное удаление каталога
-     */
-    private function deleteDirectory(string $dir): bool
-    {
-        if (!is_dir($dir)) {
-            return false;
-        }
-
-        $files = array_diff(scandir($dir), ['.', '..']);
-        foreach ($files as $file) {
-            $path = $dir . '/' . $file;
-            is_dir($path) ? $this->deleteDirectory($path) : @unlink($path);
-        }
-
-        return @rmdir($dir);
+        return (new Drawing())->setPath($this->noImagePath);
     }
 }
