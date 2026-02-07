@@ -19,11 +19,9 @@ class MediaResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'thumb_url' => $this->getUrl('thumb'),
-            'catalog_url' => $this->getUrl('catalog'),
-            'normal_url' => $this->getUrl('normal'),
-            'full_url' => $this->getFullUrl(),
-            'video_url' => $this->getCustomProperty('video'),
+            'full_ext' => substr($this->file_name, 5),
+            // 'thumb_url' => $this->getUrl('thumb'),
+            // 'video_url' => $this->getCustomProperty('video'),
         ];
     }
 }
