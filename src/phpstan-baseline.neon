@@ -331,18 +331,6 @@ parameters:
 			path: app/Admin/Exports/OrderItemsExporter.php
 
 		-
-			message: '#^Method App\\Admin\\Exports\\StockExporter\:\:drawings\(\) has invalid return type App\\Admin\\Exports\\BaseDrawing\.$#'
-			identifier: class.notFound
-			count: 1
-			path: app/Admin/Exports/StockExporter.php
-
-		-
-			message: '#^Method App\\Admin\\Exports\\StockExporter\:\:drawings\(\) should return array\<App\\Admin\\Exports\\BaseDrawing\> but returns list\<PhpOffice\\PhpSpreadsheet\\Worksheet\\Drawing\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Admin/Exports/StockExporter.php
-
-		-
 			message: '#^Method App\\Admin\\Exports\\StockExporter\:\:prepareRows\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
@@ -943,28 +931,10 @@ parameters:
 			path: app/Http/Controllers/Api/CatalogController.php
 
 		-
-			message: '#^Method App\\Http\\Controllers\\Api\\InfoPageController\:\:main\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Http/Controllers/Api/InfoPageController.php
-
-		-
 			message: '#^Method App\\Http\\Controllers\\CropperController\:\:crop\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
 			path: app/Http/Controllers/CropperController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\DebugController\:\:formatPhone\(\) has parameter \$model with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Http/Controllers/DebugController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\DebugController\:\:index\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Http/Controllers/DebugController.php
 
 		-
 			message: '#^Method App\\Http\\Controllers\\FavoriteController\:\:store\(\) return type has no value type specified in iterable type array\.$#'
@@ -1181,18 +1151,6 @@ parameters:
 			identifier: missingType.property
 			count: 1
 			path: app/Jobs/AbstractJob.php
-
-		-
-			message: '#^Method App\\Jobs\\AvailableSizes\\AbstractAvailableSizesJob\:\:debug\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/AvailableSizes/AbstractAvailableSizesJob.php
-
-		-
-			message: '#^Property App\\Jobs\\AvailableSizes\\AbstractAvailableSizesJob\:\:\$contextVars type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/AvailableSizes/AbstractAvailableSizesJob.php
 
 		-
 			message: '#^Method App\\Jobs\\AvailableSizes\\UpdateAvailabilityJob\:\:arrayDiffAssocRecursive\(\) has parameter \$array1 with no value type specified in iterable type array\.$#'

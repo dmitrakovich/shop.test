@@ -17,6 +17,8 @@ class InfoPageController extends Controller
 {
     /**
      * Show the application main page.
+     *
+     * @return array<string, mixed>
      */
     public function main(
         SliderService $sliderService,

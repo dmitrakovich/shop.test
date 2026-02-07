@@ -15,7 +15,7 @@ use libphonenumber\PhoneNumberUtil;
 
 class DebugController extends Controller
 {
-    public function index(InstagramService $instagramService)
+    public function index(InstagramService $instagramService): string
     {
         // dd(
         //     $instagramService->getPosts()
@@ -57,7 +57,7 @@ class DebugController extends Controller
     /**
      * @return void
      */
-    protected function formatPhone($model, string $phoneFieldName = 'phone', string $countryCode = 'BY')
+    protected function formatPhone(Model $model, string $phoneFieldName = 'phone', string $countryCode = 'BY')
     {
         try {
             $phone = $model->$phoneFieldName;

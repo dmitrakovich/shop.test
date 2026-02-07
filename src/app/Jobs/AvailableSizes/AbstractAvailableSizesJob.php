@@ -15,7 +15,7 @@ abstract class AbstractAvailableSizesJob extends AbstractJob
     public $timeout = 600;
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     protected $contextVars = ['usedMemory'];
 
@@ -29,6 +29,8 @@ abstract class AbstractAvailableSizesJob extends AbstractJob
 
     /**
      * Write message in debug log
+     *
+     * @param  mixed[]  $context
      */
     protected function debug(string $message, array $context = []): void
     {
