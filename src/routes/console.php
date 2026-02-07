@@ -23,7 +23,6 @@ Schedule::command('inventory:update')->withoutOverlapping()->everyFiveMinutes()-
 
 Schedule::command('sanctum:prune-expired')->dailyAt('00:10');
 Schedule::command('backup:run')->dailyAt('01:00');
-// Schedule::command('backup:media')->weeklyOn(Carbon::MONDAY, '03:00');
 Schedule::command('backup:clean')->dailyAt('06:00');
 Schedule::command('backup:monitor')->dailyAt('06:30');
 
