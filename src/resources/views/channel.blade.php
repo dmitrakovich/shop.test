@@ -153,7 +153,7 @@
 
     <div class="container">
         <div class="logo">
-            <img src="{{ url('/uploads/channel/barocco_logo.png') }}" alt="BAROCCO">
+            <img src="{{ asset('images/channel/barocco_logo.png') }}" alt="BAROCCO">
         </div>
 
         <div class="text">Выберите приложение<br>для подписки на канал:</div>
@@ -161,11 +161,11 @@
         <div class="box">
             <a class="button button_tg" href="{{ route('channel.subscribe', ['telegram', $eventId]) }}"
                 title="канал Telegram" onClick="leadComplete('telegram_subscribe');">
-                <img src="{{ url('/uploads/channel/tg_white.png') }}" alt="канал Telegram">Telegram
+                <img src="{{ asset('images/channel/tg_white.png') }}" alt="канал Telegram">Telegram
             </a>
             <a class="button button_vb" href="{{ route('channel.subscribe', ['viber', $eventId]) }}" title="канал Viber"
                 onClick="leadComplete('viber_subscribe');">
-                <img src="{{ url('/uploads/channel/vb_white.png') }}" alt="канал Viber">Viber
+                <img src="{{ asset('images/channel/vb_white.png') }}" alt="канал Viber">Viber
             </a>
         </div>
     </div>
