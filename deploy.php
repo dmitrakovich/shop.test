@@ -87,7 +87,7 @@ task('deploy', [
     'deploy:publish',
 ]);
 
-// after('deploy:symlink', 'artisan:opcache:clear'); // temp disable for new prod
+after('deploy:symlink', 'artisan:opcache:clear');
 after('deploy:symlink', 'artisan:queue:restart');
 
 after('deploy:failed', 'deploy:unlock');
