@@ -46,6 +46,6 @@
         "mustache": "^4.2.0",
         "recaptcha-v3": "^1.10.0",
         "sortablejs": "^1.14.0",
-        "swiper": "^8.4.5"
+        "swiper": "^12.1.2"
     }
 }
