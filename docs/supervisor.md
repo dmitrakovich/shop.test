@@ -13,20 +13,46 @@ Supervisor configuration files are typically stored in the `/etc/supervisor/conf
 ```properties
 [program:laravel-worker]
 process_name=%(program_name)s_%(process_num)02d
-command=php /home/www-root/deploy/current/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+command=php /home/www-user/www/api.barocco.by/current/artisan queue:work --queue=high,default,low --sleep=3 --tries=3 --max-time=3600
 autostart=true
 autorestart=true
 stopasgroup=true
 killasgroup=true
-user=www-root
-numprocs=3
-stdout_logfile=/home/www-root/deploy/current/storage/logs/worker/stdout.log
-stderr_logfile=/home/www-root/deploy/current/storage/logs/worker/stderr.log
+user=www-user
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/home/www-user/www/api.barocco.by/current/storage/logs/worker/stdout.log
 stopwaitsecs=3600
 stdout_logfile_maxbytes=50MB
 stdout_logfile_backups=10
-stderr_logfile_maxbytes=50MB
-stderr_logfile_backups=10
+
+[program:pixel]
+process_name=%(program_name)s_%(process_num)02d
+command=php /home/www-user/www/api.barocco.by/current/artisan queue:work --queue=pixel --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-user
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/dev/null
+stopwaitsecs=3600
+
+[program:media]
+process_name=%(program_name)s_%(process_num)02d
+command=php /home/www-user/www/api.barocco.by/current/artisan queue:work --queue=media --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-user
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/home/www-user/www/api.barocco.by/current/storage/logs/worker/stdout.log
+stopwaitsecs=3600
+stdout_logfile_maxbytes=50MB
+stdout_logfile_backups=10
 ```
 
 ## Starting Supervisor

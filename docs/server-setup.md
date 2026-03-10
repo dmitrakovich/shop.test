@@ -60,34 +60,50 @@ sudo LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php -y
 sudo apt update
 
 # Install PHP.
-sudo apt install php8.5-common php8.5-cli php8.5-fpm php8.5-{curl,mysql,mbstring,intl,xml,redis,imap,zip,gd}
+sudo apt install php8.5-common php8.5-cli php8.5-dev php8.5-fpm php8.5-{curl,mysql,mbstring,intl,xml,redis,imap,zip,gd}
 ```
 
 ## In nginx config (/etc/nginx/sites-enabled/barocco.by):
 ```diff
-- fastcgi_pass unix:/run/php/php8.1-fpm.sock;
-+ fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+- fastcgi_pass unix:/run/php/php8.3-fpm.sock;
++ fastcgi_pass unix:/run/php/php8.5-fpm.sock;
+```
+
+## Setup ssh tunnel
+```shell
+ssh site@93.84.100.176 -p2200
+echo public_key_string >> C:\ProgramData\ssh\administrators_authorized_keys
 ```
 
 ## Microsoft Drivers for PHP for SQL Server ([tutorial](https://learn.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac))
 
 ```shell
+sudo apt install unixodbc-dev
 sudo pecl install sqlsrv
 sudo pecl install pdo_sqlsrv
 sudo su
-printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.3/mods-available/sqlsrv.ini
-printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/8.3/mods-available/pdo_sqlsrv.ini
+printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.5/mods-available/sqlsrv.ini
+printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/8.5/mods-available/pdo_sqlsrv.ini
 exit
 sudo phpenmod sqlsrv pdo_sqlsrv
+# Download the package to configure the Microsoft repo
+curl -sSL -O https://packages.microsoft.com/config/ubuntu/$(grep VERSION_ID /etc/os-release | cut -d '"' -f 2)/packages-microsoft-prod.deb
+# Install the package
+sudo dpkg -i packages-microsoft-prod.deb
+# Delete the file
+rm packages-microsoft-prod.deb
+# Install the driver
+sudo apt-get update
+sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
 ```
 
 ## Migrate Configuration
-- [/etc/php/8.3/fpm/php.ini](https://github.com/dmitrakovich/shop.test/blob/master/docs/php/php.ini)
-- [/etc/php/8.3/fpm/pool.d/www.conf](https://github.com/dmitrakovich/shop.test/blob/master/docs/php/www.conf)
+- [/etc/php/8.5/fpm/php.ini](https://github.com/dmitrakovich/shop.test/blob/master/docs/php/php.ini)
+- [/etc/php/8.5/fpm/pool.d/www.conf](https://github.com/dmitrakovich/shop.test/blob/master/docs/php/www.conf)
 
 ## Restart php-fpm & nginx
 ```shell
-sudo systemctl restart php8.3-fpm
+sudo systemctl restart php8.5-fpm
 sudo systemctl restart nginx
 ```
 
