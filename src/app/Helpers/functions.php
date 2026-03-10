@@ -10,7 +10,14 @@ use Illuminate\Support\Facades\Auth;
 
 // for $absolute = false
 if (!function_exists('route')) {
-    function route($name, $parameters = [], $absolute = false)
+    /**
+     * Generate the URL to a named route.
+     *
+     * @param  \BackedEnum|string  $name
+     * @param  mixed  $parameters
+     * @param  bool  $absolute
+     */
+    function route($name, $parameters = [], $absolute = true): string
     {
         return app('url')->route($name, $parameters, $absolute);
     }
@@ -18,6 +25,8 @@ if (!function_exists('route')) {
 
 /**
  * Build URL to the frontend application.
+ *
+ * @param  array<string, mixed>  $query
  */
 function front_route(string $path = '', array $query = []): string
 {
@@ -36,6 +45,8 @@ function front_route(string $path = '', array $query = []): string
 
 /**
  * Redirect to the frontend application.
+ *
+ * @param  array<string, mixed>  $query
  */
 function front_redirect(?string $path = null, array $query = [], int $status = 301): RedirectResponse
 {
