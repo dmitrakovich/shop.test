@@ -5,6 +5,7 @@ use App\Facades\Device;
 use App\Models\User\User;
 use Filament\Support\Contracts\HasLabel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 // for $absolute = false
@@ -13,6 +14,32 @@ if (!function_exists('route')) {
     {
         return app('url')->route($name, $parameters, $absolute);
     }
+}
+
+/**
+ * Build URL to the frontend application.
+ */
+function front_route(string $path = '', array $query = []): string
+{
+    $url = config('app.front_url');
+
+    if ($path) {
+        $url .= '/' . ltrim($path, '/');
+    }
+
+    if ($query !== []) {
+        $url .= '?' . http_build_query($query);
+    }
+
+    return $url;
+}
+
+/**
+ * Redirect to the frontend application.
+ */
+function front_redirect(?string $path = null, array $query = [], int $status = 301): RedirectResponse
+{
+    return redirect()->away(front_route($path, $query), $status);
 }
 
 /**
