@@ -42,7 +42,7 @@ openssl dhparam -out /etc/ssl/certs/dhparam4096.pem 4096
 
 
 ## Nginx setup
-In nginx.conf change user to `www-root` and add site config ([example](https://github.com/dmitrakovich/shop.test/blob/master/docs/nginx.conf.md)).
+In nginx.conf change user to `www-root` and add site config ([example](https://github.com/dmitrakovich/shop.test/blob/master/docs/nginx/api.barocco.by.conf)).
 
 
 ## Php setup
