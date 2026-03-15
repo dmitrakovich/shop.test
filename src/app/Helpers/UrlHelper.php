@@ -119,7 +119,7 @@ class UrlHelper
             array_unshift($sorted, 'city-' . $city->slug);
         }
 
-        return route('shop', ltrim(str_replace(['/catalog', 'catalog'], '', implode('/', $sorted)), '/') . self::buildParams($params));
+        return front_route(implode('/', $sorted) . self::buildParams($params));
     }
 
     /**

@@ -55,9 +55,3 @@ Breadcrumbs::for('dashboard-favorites', function ($trail) {
     $trail->parent('dashboard');
     $trail->push('Избранное', route('favorites.index'));
 });
-
-// Index > dashboard > profile
-Breadcrumbs::for('dashboard-profile', function ($trail) {
-    $trail->parent('dashboard');
-    $trail->push('Мои данные', route('dashboard-profile'));
-});
