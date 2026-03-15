@@ -47,18 +47,4 @@ class CartService
 
         return $cart;
     }
-
-    /**
-     * Calc & return cart prices
-     *
-     * @deprecated
-     */
-    public function getCartPrices(Cart $cart): array
-    {
-        return [
-            'totalPrice' => $cart->getTotalPrice(),
-            'totalOldPrice' => $cart->getTotalOldPrice(),
-            'totalPriceWithoutUserSale' => $cart->getTotalPriceWithoutUserSale(),
-        ];
-    }
 }

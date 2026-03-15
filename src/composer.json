@@ -28,7 +28,6 @@
         "ddeboer/imap": "^1.19",
         "defstudio/telegraph": "^1.57",
         "deployer/deployer": "^7.5",
-        "diglactic/laravel-breadcrumbs": "^10.0",
         "dmitrakovich/smstraffic-for-laravel": "^0.4.0",
         "dmitrakovich/sxgeo": "^0.2.0",
         "drandin/declension-nouns": "dev-master",

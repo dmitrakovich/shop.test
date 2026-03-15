@@ -53,9 +53,6 @@
     <main class="content">
         <div class="container-fluid">
             <div class="row wrapper justify-content-center">
-                <div class="col-12">
-                    @yield('breadcrumbs', '')
-                </div>
                 @yield('content')
             </div>
         </div>

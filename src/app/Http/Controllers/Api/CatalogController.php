@@ -21,7 +21,6 @@ use App\Services\FilterService;
 use App\Services\GoogleTagManagerService;
 use App\Services\Seo\CatalogSeoService;
 use App\Services\SliderService;
-use Diglactic\Breadcrumbs\Breadcrumbs;
 use Illuminate\Http\JsonResponse;
 
 class CatalogController extends Controller
@@ -96,7 +95,7 @@ class CatalogController extends Controller
         event(new ProductView($product));
 
         return [
-            'breadcrumbs' => Breadcrumbs::generate('product', $product),
+            'breadcrumbs' => [], // todo: remove after remove on frontend
             'product' => new ProductResource($product),
             'feedbacks' => FeedbackResource::collection($feedbackService->getForProduct($product->id)),
             'similarProducts' => CatalogProductResource::collection($sliderService->getSimilarProducts($product->id)),

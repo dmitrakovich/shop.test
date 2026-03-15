@@ -35,11 +35,6 @@
                         </div>
                     @endforeach
                 </div>
-                <button type="button" aria-label="быстрый просмотр"
-                    data-src="{{ route('product.quick', $product->id) }}"
-                    class="quick-link btn btn-block btn-outline-dark d-none d-lg-block">
-                    быстрый просмотр
-                </button>
             </div>
         </a>
     </div>

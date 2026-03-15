@@ -16,6 +16,7 @@ return [
                  */
                 'include' => [
                     base_path('.env'),
+                    public_path('uploads'),
                 ],
 
                 /*

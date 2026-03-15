@@ -30,20 +30,6 @@ class FavoriteService
         return $this->productService->getById($productIds);
     }
 
-    public function addProduct(Product $product): Favorite
-    {
-        return $this->favorite->newQuery()->updateOrCreate([
-            'user_id' => Auth::id(),
-            'device_id' => Device::id(),
-            'product_id' => $product->id,
-        ]);
-    }
-
-    public function removeProduct(Product $product): void
-    {
-        $this->favorite->forUser()->where('product_id', $product->id)->delete();
-    }
-
     public function toggleProduct(Product $product): void
     {
         $favorite = $this->favorite->newQuery()->updateOrCreate([

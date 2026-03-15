@@ -84,7 +84,7 @@
                     </div>
                 </div>
 
-                <form class="col-12 col-xl-10" id="product-info" action=" {{ route('cart-add') }}" method="post">
+                <form class="col-12 col-xl-10" id="product-info" action="/" method="post">
                     <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                     <div class="row mt-4">
                         {{-- blade-formatter-disable-next-line --}}
@@ -252,8 +252,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <p class="p-product__stock-text">Контакты магазинов можно посмотреть по <a
-                                    href="{{ route('static-shops') }}">ссылке</a>.</p>
+                            <p class="p-product__stock-text">Контакты магазинов можно посмотреть по ссылке.</p>
                         </div>
                     </div>
                 @endif
@@ -360,14 +359,6 @@
                 </button>
             </div>
         </div>
-        <div class="col-12 mt-3">
-            @include('includes.feedbacks')
-        </div>
-        <div class="col-12 mb-4 px-0 text-right">
-            <a href="{{ route('feedbacks') }}" class="text-decoration-underline">
-                Смотреть все отзывы
-            </a>
-        </div>
 
         @if (!$product->trashed() && !empty($similarProducts) && count($similarProducts))
             <div class="col-md-12 mb-5 mt-3">
@@ -386,33 +377,6 @@
     </div>
 
     {{-- modals --}}
-    <div style="display: none;" id="buy-one-click" class="row">
-
-        <form action="{{ route('orders.store') }}" method="post" class="col-12 text-center" id="oneclick-form">
-            @csrf
-            <input type="hidden" name="product_id" value="{{ $product->id }}">
-            <h3 class="mx-5 mb-4">Купить в один клик</h3>
-            <div class="form-group">
-                <input type="text" class="form-control" name="first_name" placeholder="Имя"
-                    value="{{ optional(auth()->user())->first_name }}" autocomplete="given-name" required>
-            </div>
-            <div class="form-group">
-                @include('partials.inputs.phone')
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" name="user_addr" placeholder="Населенный пункт"
-                    autocomplete="address" required value="{{ optional(auth()->user())->getFirstFullAddress() }}">
-            </div>
-            <button type="button" class="btn btn-dark my-3 px-5" id="buy-one-click-submit">
-                Купить
-            </button>
-            <p class="text-muted font-size-12">
-                После заказа менеджер перезвонит Вам и уточнит <br>
-                адрес доставки
-            </p>
-        </form>
-    </div>
-
 
     <div style="display: none;" id="size-table" class="row">
 

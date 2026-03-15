@@ -31,23 +31,21 @@
                         </a>
                     </p>
                 </div>
-                <a href="{{ route('index-page') }}" class="inc-header__top-logo">
+                <a href="/" class="inc-header__top-logo">
                     <img src="/images/icons/barocco.svg" alt="Barocco" loading="lazy">
                 </a>
                 <div class="inc-header__top-right">
                     <div class="inc-header__top-btns">
-                        <a href="{{ route('orders.index') }}">
+                        <a href="/">
                             @include('svg.account')
                         </a>
-                        <a href="{{ route('favorites.index') }}" class="d-none d-md-flex">
+                        <a href="/" class="d-none d-md-flex">
                             @include('svg.favorites')
                         </a>
-                        <a href="{{ route('cart') }}">
+                        <a href="/">
                             <span class="position-relative">
                                 @include('svg.cart')
-                                <span class="inc-header__top-btns_count js-cartCount">
-                                    {{ Cart::itemsCount() }}
-                                </span>
+                                <span class="inc-header__top-btns_count js-cartCount">0</span>
                             </span>
                         </a>
                     </div>
@@ -62,7 +60,7 @@
                             <li>Магазины</li>
                             <li>Условия</li>
                             <li>Рассрочка</li>
-                            <li><a href="{{ route('feedbacks') }}">Отзывы</a></li>
+                            <li>Отзывы</li>
                         </ul>
                     </nav>
                     <form action="/catalog" method="get" class="inc-header__menu-search">

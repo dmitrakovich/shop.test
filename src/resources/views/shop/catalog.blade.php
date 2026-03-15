@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@section('breadcrumbs', Breadcrumbs::render('category', $category))
 @section('content')
     <div class="col-12">
         <div class="row d-flex d-lg-none mb-2">
