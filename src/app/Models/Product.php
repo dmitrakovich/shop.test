@@ -313,7 +313,7 @@ class Product extends Model implements HasMedia
      */
     public function getUrl(): string
     {
-        return route('product.show', $this->slug);
+        return front_route("product/{$this->slug}");
     }
 
     /**

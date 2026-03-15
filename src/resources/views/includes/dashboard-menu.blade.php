@@ -10,10 +10,6 @@
     <img src="/images/icons/account.svg" class="img-fluid mr-3" alt="Мои данные">
     Мои данные
 </a>
-<a class="col static-pages-menu-item" href="{{ route('dashboard-card') }}">
-    <img src="/images/icons/gift-card.svg" class="img-fluid mr-3" alt="Карта клиента">
-    Карта клиента
-</a>
 @auth
     <a class="col static-pages-menu-item" href="{{ route('logout') }}"
         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

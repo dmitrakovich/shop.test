@@ -25,9 +25,6 @@
         <div class="p-index__follow">
             <h2 class="p-index__follow-title">Войдите в мир BAROCCO</h2>
             <p class="p-index__follow-text">Будьте вкурсе событий, коллекций и эксклюзивных новостей.</p>
-            <a href="{{ route('dashboard-card') }}" class="p-index__follow-btn">
-                Присоединиться
-            </a>
         </div>
 
         <div class="wrapper">

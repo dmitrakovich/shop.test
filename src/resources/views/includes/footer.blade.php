@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row wrapper">
             <div class="inc-footer__main col-12 col-lg-4 col-xl-3">
-                <a href="{{ route('index-page') }}" class="inc-footer__logo">
+                <a href="/" class="inc-footer__logo">
                     <img src="/images/icons/barocco.svg" alt="Barocco" loading="lazy" decoding="async">
                 </a>
                 <p>
@@ -36,22 +36,9 @@
                                 <div class="inc-footer__info-text collapse" id="js-footerInfo">
                                     <nav>
                                         <ul>
-                                            <li>
-                                                <a href="{{ route('info.terms') }}" title="Публичная оферта">
-                                                    Публичная оферта
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ route('info.policy') }}"
-                                                    title="Политика конфиденциальности">
-                                                    Политика конфиденциальности
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ route('info', 'certificate') }}" title="Сертификаты">
-                                                    Сертификаты
-                                                </a>
-                                            </li>
+                                            <li>Публичная оферта</li>
+                                            <li>Политика конфиденциальности</li>
+                                            <li>Сертификаты</li>
                                         </ul>
                                     </nav>
                                 </div>

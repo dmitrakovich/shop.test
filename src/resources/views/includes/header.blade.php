@@ -58,30 +58,14 @@
                 <div class="inc-header__menu-content">
                     <nav class="inc-header__menu-nav">
                         <ul class="inc-header__menu-nav_list">
-                            <li><a href="{{ route('shop') }}">Каталог</a></li>
-                            <li><a href="{{ route('shop', ['st-new']) }}">New!</a></li>
-                            <li class="d-md-none"><a href="{{ route('shop', ['st-sale']) }}">Sale</a>
-                            </li>
-                            <li><a href="{{ route('static-shops') }}">Магазины</a></li>
-                            <li class="inc-header__menu-nav_dropdown">
-                                <a href="{{ route('info') }}" class="d-none d-md-block">Условия</a>
-                                <a data-toggle="collapse"
-                                    class="d-flex d-md-none inc-header__menu-nav_collapse-btn collapsed"
-                                    href="#mainMenuInfoCollapse" role="button" aria-expanded="false"
-                                    aria-controls="mainMenuInfoCollapse">
-                                    Условия
-                                </a>
-                            </li>
-                            <li><a href="{{ route('info', 'installments') }}">Рассрочка</a></li>
+                            <li><a href="/catalog">Каталог</a></li>
+                            <li>Магазины</li>
+                            <li>Условия</li>
+                            <li>Рассрочка</li>
                             <li><a href="{{ route('feedbacks') }}">Отзывы</a></li>
-                            <li class="d-none d-lg-block"><a href="{{ route('dashboard-card') }}">Карта
-                                    клиента</a></li>
-                            <li class="inc-header__menu-nav_sale"><a href="{{ route('shop', ['st-sale']) }}">Sale</a>
-                            </li>
-                            <li class="inc-header__menu-nav_backdrop"></li>
                         </ul>
                     </nav>
-                    <form action="{{ route('shop') }}" method="get" class="inc-header__menu-search">
+                    <form action="/catalog" method="get" class="inc-header__menu-search">
                         <input type="text" name="search" value="{{ request()->get('search') }}"
                             placeholder="Поиск">
                         <button type="submit" class="btn p-0">
@@ -93,8 +77,7 @@
                     </div>
                 </div>
             </div>
-            <form class="inc-header__search collapse" action="{{ route('shop') }}" method="get"
-                id="js-headerSearchInput">
+            <form class="inc-header__search collapse" action="/catalog" method="get" id="js-headerSearchInput">
                 <input type="text" name="search" value="{{ request()->get('search') }}" placeholder="Поиск">
                 <button type="submit" class="btn p-0">
                     @include('svg.search')

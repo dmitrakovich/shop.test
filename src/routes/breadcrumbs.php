@@ -31,36 +31,6 @@ Breadcrumbs::for('cart', function ($trail) {
 });
 // endregion
 
-// region Online shoping
-// Index > online-shopping
-Breadcrumbs::for('online-shopping', function ($trail) {
-    $trail->parent('index');
-    $trail->push('Онлайн покупки', url('online-shopping'));
-});
-
-// Index > online-shopping > {item}
-Breadcrumbs::for('info-page', function ($trail, $item) {
-    $trail->parent('online-shopping');
-    $trail->push($item['name'], route('info', $item['slug']));
-});
-
-// Index > shops
-Breadcrumbs::for('static-shops', function ($trail) {
-    $trail->parent('index');
-    $trail->push('Магазины', route('static-shops'));
-});
-
-Breadcrumbs::for('terms', function ($trail) {
-    $trail->parent('index');
-    $trail->push('Публичная оферта', route('info.terms'));
-});
-
-Breadcrumbs::for('policy', function ($trail) {
-    $trail->parent('index');
-    $trail->push('Политика конфиденциальности', route('info.policy'));
-});
-// endregion
-
 // Index > feedbacks
 Breadcrumbs::for('feedbacks', function ($trail) {
     $trail->parent('index');
@@ -91,10 +61,3 @@ Breadcrumbs::for('dashboard-profile', function ($trail) {
     $trail->parent('dashboard');
     $trail->push('Мои данные', route('dashboard-profile'));
 });
-
-// Index > dashboard > card
-Breadcrumbs::for('dashboard-card', function ($trail) {
-    $trail->parent('dashboard');
-    $trail->push('Карта клиента', route('dashboard-card'));
-});
-// endregion
