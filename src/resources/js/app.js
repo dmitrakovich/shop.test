@@ -10,4 +10,3 @@ import './components/inputs';
 
 import './scripts';
 import './pages';
-import './popups';

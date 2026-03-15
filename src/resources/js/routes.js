@@ -5,13 +5,6 @@ export const FAVORITE = {
   DEL: '/favorites/'
 }
 
-export const POPUP = {
-  OFFER: {
-    REGISTER: '/popup/offer/register',
-    NEW_SITE: '/popup/new-site',
-  }
-}
-
 export const CART = {
   APPLY_PROMOCODE: 'cart/apply-promocode',
 }
