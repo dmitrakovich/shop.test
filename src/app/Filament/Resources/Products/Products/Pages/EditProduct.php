@@ -24,7 +24,7 @@ class EditProduct extends EditRecord
             Action::make('open')
                 ->label('Открыть страницу товара')
                 ->icon(Heroicon::ArrowTopRightOnSquare)
-                ->url(fn (Product $record) => route('product.show', $record->slug))
+                ->url(fn (Product $record) => $record->getUrl())
                 ->openUrlInNewTab(),
             DeleteAction::make(),
             RestoreAction::make(),

@@ -211,9 +211,7 @@ class ProductController extends AbstractAdminController
             } else {
                 $form->text('slug', 'Slug')->disable();
                 $form->html(function (Form $form) {
-                    $link = route('product.show', $form->model()->slug);
-
-                    return "<a href='{$link}' target='_blank' class='btn btn-primary'>Открыть страницу товара</a>";
+                    return "<a href='{$form->model()->getUrl()}' target='_blank' class='btn btn-primary'>Открыть страницу товара</a>";
                 }, 'Ссылка');
             }
 
