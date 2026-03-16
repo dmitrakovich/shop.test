@@ -22,6 +22,11 @@
                 ]
             ],
             "skip_unlisted_annotations": true
+        },
+        "fully_qualified_strict_types": {
+            "import_symbols": false,
+            "leading_backslash_in_global_namespace": true,
+            "phpdoc_tags": []
         }
     }
 }

@@ -84,11 +84,11 @@ function user(): User
 function enum_to_array(string $enumClass): array
 {
     if (!enum_exists($enumClass)) {
-        throw new InvalidArgumentException("Class '$enumClass' is not a valid enum.");
+        throw new \InvalidArgumentException("Class '$enumClass' is not a valid enum.");
     }
 
     if (!is_subclass_of($enumClass, HasLabel::class)) {
-        throw new InvalidArgumentException("Enum '$enumClass' must implement HasLabel interface.");
+        throw new \InvalidArgumentException("Enum '$enumClass' must implement HasLabel interface.");
     }
 
     $result = [];

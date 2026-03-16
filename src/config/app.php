@@ -140,12 +140,12 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'DeclensionNoun' => \Drandin\DeclensionNouns\Facades\DeclensionNoun::class,
-        'Banner' => App\Models\Banner::class,
-        'Cart' => App\Facades\Cart::class,
-        'UrlHelper' => App\Helpers\UrlHelper::class,
-        'Currency' => App\Facades\Currency::class,
-        'Redis' => Illuminate\Support\Facades\Redis::class,
-        'SeoFacade' => App\Libraries\Seo\Facades\SeoFacade::class,
+        'Banner' => \App\Models\Banner::class,
+        'Cart' => \App\Facades\Cart::class,
+        'UrlHelper' => \App\Helpers\UrlHelper::class,
+        'Currency' => \App\Facades\Currency::class,
+        'Redis' => \Illuminate\Support\Facades\Redis::class,
+        'SeoFacade' => \App\Libraries\Seo\Facades\SeoFacade::class,
     ])->toArray(),
 
 ];

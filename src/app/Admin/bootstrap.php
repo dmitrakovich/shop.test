@@ -20,9 +20,9 @@ use Encore\Admin\Facades\Admin;
  * Admin::css('/packages/prettydocs/css/styles.css');
  * Admin::js('/packages/prettydocs/js/main.js');
  */
-Encore\Admin\Form::forget(['map', 'editor']);
+\Encore\Admin\Form::forget(['map', 'editor']);
 
-Encore\Admin\Form::extend('phone', Field\Phone::class);
+\Encore\Admin\Form::extend('phone', Field\Phone::class);
 
 Admin::js(mix('js/admin.js'));
 Admin::css(mix('css/admin.css'));

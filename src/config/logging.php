@@ -76,7 +76,7 @@ return [
 
         'telegram' => [
             'driver' => 'monolog',
-            'handler' => Monolog\Handler\TelegramBotHandler::class,
+            'handler' => \Monolog\Handler\TelegramBotHandler::class,
             'tap' => [TelegramFormatter::class],
             'with' => [
                 'apiKey' => env('TELEGRAM_BOT_TOKEN'),
@@ -86,7 +86,7 @@ return [
 
         'telegram-dev' => [
             'driver' => 'monolog',
-            'handler' => Monolog\Handler\TelegramBotHandler::class,
+            'handler' => \Monolog\Handler\TelegramBotHandler::class,
             'tap' => [TelegramFormatter::class],
             'with' => [
                 'parseMode' => 'MarkdownV2',

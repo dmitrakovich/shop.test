@@ -392,7 +392,7 @@ class OrderController extends AbstractAdminController
                     ->whereHas('user', fn ($query) => $query->whereHas('lastAddress', fn ($q) => $q->where('approve', 1)))
                     ->exists();
                 if (!$addressApprove) {
-                    $error = new \Illuminate\Support\MessageBag([
+                    $error = new MessageBag([
                         'message' => 'Введите и подтвердите адрес доставки',
                     ]);
                     if (request()->ajax() && !request()->pjax()) {
