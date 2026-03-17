@@ -78,7 +78,7 @@ class GoogleCsv extends AbstractFeed
                 return [
                     $item->id,
                     $this->getItemTitle($item),
-                    $this->getHost() . $item->getUrl(),
+                    $item->getUrl(),
                     $media['images'][0] ?? [],
                     $this->getDescription($item),
                     $item->category->name,

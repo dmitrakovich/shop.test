@@ -89,7 +89,7 @@ class YandexXml extends AbstractFeed
 
                 return (object)[
                     'id' => $item->id,
-                    'url' => $this->getHost() . $item->getUrl(),
+                    'url' => $item->getUrl(),
                     'name' => $this->xmlSpecialChars($item->category->name . ' ' . $item->brand->name),
                     'price' => $item->getPrice(),
                     'old_price' => $item->getOldPrice(),

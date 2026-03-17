@@ -56,7 +56,7 @@ class GoogleXml extends AbstractFeed
 
                 return (object)[
                     'id' => $item->id,
-                    'link' => $this->getHost() . $item->getUrl(),
+                    'link' => $item->getUrl(),
                     'size' => $item->sizes->implode('name', '/'),
                     'availability' => $item->trashed() ? 'out of stock' : 'in stock',
                     'price' => $item->getPrice(),
