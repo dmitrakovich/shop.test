@@ -68,6 +68,8 @@ class ProductService
             'media',
             'styles:id,name',
             'favorite:product_id',
+            'productsFromGroup:id,product_group_id',
+            'productsFromGroup.colors:id,value',
         ])
             ->get()
             ->each(function (Product $product) {

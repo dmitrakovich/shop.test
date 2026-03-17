@@ -17,7 +17,16 @@ class ProductRepository
     {
         return $this->model->newQuery()
             ->withTrashed()
-            ->with(['favorite', 'media', 'category', 'brand', 'styles', 'sizes'])
+            ->with([
+                'favorite',
+                'media',
+                'category',
+                'brand',
+                'styles',
+                'sizes',
+                'productsFromGroup:id,product_group_id',
+                'productsFromGroup.colors:id,value',
+            ])
             ->whereIn('id', $ids)
             ->get();
     }
