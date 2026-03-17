@@ -47,6 +47,8 @@ class ProductService
             'sizes:id,name',
             'media',
             'favorite:product_id',
+            'productsFromGroup:id,product_group_id',
+            'productsFromGroup.colors:id,value',
         ]);
     }
 

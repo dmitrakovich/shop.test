@@ -31,6 +31,7 @@ class CatalogProductResource extends JsonResource
 
             'media' => MediaResource::collection($this->getMedia()),
             'sizes' => SizeResource::collection($this->sizes),
+            'variants' => ProductVariantResource::collection($this->productsFromGroup),
         ];
     }
 }
