@@ -1,17 +1,8 @@
 /.phpunit.cache
-/node_modules
-/public/build
-/public/hot
 /public/storage
 /public/media
 /public/temp
 /public/xml
-/public/css/*
-!/public/css/filament/
-!/public/css/filament/*
-/public/js/*
-!/public/js/filament
-!/public/js/filament/*
 /public/mix-manifest.json
 /storage/*.key
 /storage/media-library
