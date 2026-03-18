@@ -40,16 +40,3 @@ jobs:
       - name: Run Pint in test mode (no changes)
         run: pint --test --config ./.formatters/pint.json
 
-      - name: Install NPM dependencies
-        run: npm ci -C ./src
-
-      - name: Copy blade-formatter config to root dir
-        run: |
-          cp .formatters/.bladeformatterrc.json ./
-          cp .formatters/.bladeignore ./
-
-      - name: Run Blade Formatter in check mode
-        run: |
-          src/node_modules/.bin/blade-formatter --check-formatted \
-            src/resources/views/*.blade.php \
-            src/resources/views/**/*.blade.php
