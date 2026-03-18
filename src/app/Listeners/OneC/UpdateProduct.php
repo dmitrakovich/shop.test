@@ -2,19 +2,20 @@
 
 namespace App\Listeners\OneC;
 
+use App\Enums\Queue;
 use App\Events\Products\ProductCreated;
 use App\Events\Products\ProductUpdated;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\App;
 
-class UpdateProduct
+class UpdateProduct implements ShouldQueue
 {
     /**
-     * Create the event listener.
+     * The name of the queue the job should be sent to.
+     *
+     * @var string|null
      */
-    public function __construct()
-    {
-        //
-    }
+    public $queue = Queue::ONE_C->value;
 
     /**
      * Handle the event.
