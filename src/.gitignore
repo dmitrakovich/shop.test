@@ -3,7 +3,6 @@
 /public/media
 /public/temp
 /public/xml
-/public/mix-manifest.json
 /storage/*.key
 /storage/media-library
 /vendor
@@ -11,5 +10,3 @@
 .env.backup
 .env.production
 .phpunit.result.cache
-npm-debug.log
-yarn-error.log
