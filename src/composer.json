@@ -17,11 +17,15 @@
         {
             "type": "vcs",
             "url": "https://github.com/dmitrakovich/laravel-admin.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/dmitrakovich/filament-rating.git"
         }
     ],
     "require": {
         "php": "^8.3",
-        "achyutn/filament-log-viewer": "^1.5",
+        "achyutn/filament-log-viewer": "^2.0",
         "appstract/laravel-opcache": "^4.0",
         "bezhansalleh/filament-shield": "^4.0",
         "calebporzio/sushi": "^2.5",
@@ -33,8 +37,8 @@
         "drandin/declension-nouns": "dev-master",
         "encore/laravel-admin": "^1.9",
         "facebook/php-business-sdk": "^19.0",
-        "filament/filament": "^4.1",
-        "filament/spatie-laravel-media-library-plugin": "^4.1",
+        "filament/filament": "^5.0",
+        "filament/spatie-laravel-media-library-plugin": "^5.0",
         "giggsey/libphonenumber-for-php": "^8.13",
         "guzzlehttp/guzzle": "^7.9",
         "jenssegers/agent": "^2.6",
@@ -48,7 +52,7 @@
         "laravie/serialize-queries": "^3.2",
         "league/flysystem-aws-s3-v3": "^3.29",
         "maatwebsite/excel": "^3.1",
-        "mokhosh/filament-rating": "^2.0",
+        "mokhosh/filament-rating": "dev-main as 5.0.0",
         "php-ffmpeg/php-ffmpeg": "^1.3",
         "phpoffice/phpspreadsheet": "^1.30",
         "picqer/php-barcode-generator": "^2.4",
@@ -64,6 +68,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",
         "fakerphp/faker": "^1.23",
+        "filament/upgrade": "^5.0",
         "larastan/larastan": "^3.1",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.27",
