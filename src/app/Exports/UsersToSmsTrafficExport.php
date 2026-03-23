@@ -2,8 +2,9 @@
 
 namespace App\Exports;
 
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -17,6 +18,9 @@ class UsersToSmsTrafficExport implements FromQuery, Responsable, ShouldAutoSize,
 
     private string $fileName;
 
+    /**
+     * @param  Builder<Model>  $query
+     */
     public function __construct(private readonly Builder $query)
     {
         $this->setFileName();
@@ -32,6 +36,9 @@ class UsersToSmsTrafficExport implements FromQuery, Responsable, ShouldAutoSize,
         ];
     }
 
+    /**
+     * @return Builder<Model>
+     */
     public function query(): Builder
     {
         return $this->query->select([

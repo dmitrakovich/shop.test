@@ -56,7 +56,7 @@ class ProductResource extends Resource
     }
 
     /**
-     * @return Builder<Product>
+     * @return Builder<\Illuminate\Database\Eloquent\Model>
      */
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
