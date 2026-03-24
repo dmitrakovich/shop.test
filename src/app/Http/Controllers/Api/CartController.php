@@ -38,18 +38,6 @@ class CartController extends Controller
     }
 
     /**
-     * Apply a promocode to the cart. (web version)
-     */
-    // public function applyPromoCode(Request $request): RedirectResponse
-    // {
-    //     if ($promocode = $request->input('promocode')) {
-    //         Sale::applyPromocode($promocode);
-    //     }
-
-    //     return back();
-    // }
-
-    /**
      * Remove a specific item from the cart.
      */
     public function removeItem(int $itemId): CartResource
