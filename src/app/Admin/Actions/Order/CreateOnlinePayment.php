@@ -46,6 +46,6 @@ class CreateOnlinePayment extends Action
 
     public function html()
     {
-        return '<div class="text-center"><a class="report-posts btn btn-success">Создать платеж</a></div>';
+        return '<a class="report-posts btn btn-success">Создать платеж</a>';
     }
 }
