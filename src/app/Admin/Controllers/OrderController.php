@@ -6,7 +6,6 @@ use App\Admin\Actions\Order\BanDeviceAction;
 use App\Admin\Actions\Order\BuyoutFormAction;
 use App\Admin\Actions\Order\CancelPayment;
 use App\Admin\Actions\Order\CapturePayment;
-use App\Admin\Actions\Order\CreateOnlinePayment;
 use App\Admin\Actions\Order\DistributeOrderAction;
 use App\Admin\Actions\Order\EnvelopeAction;
 use App\Admin\Actions\Order\InstallmentForm;
@@ -14,6 +13,7 @@ use App\Admin\Actions\Order\PrintOrder;
 use App\Admin\Actions\Order\ProcessOrder;
 use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
+use App\Admin\Tools\CreateOnlinePaymentTool;
 use App\Enums\Order\OrderItemStatus;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Order\OrderTypeEnum;
@@ -533,7 +533,7 @@ class OrderController extends AbstractAdminController
             }
         });
         $grid->tools(function (Grid\Tools $tools) use ($orderId) {
-            $tools->append(new CreateOnlinePayment($orderId));
+            $tools->append(new CreateOnlinePaymentTool($orderId));
         });
         $grid->setActionClass(ContextMenuActions::class);
         $grid->disableCreateButton();
