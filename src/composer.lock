@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5bfdfe6c1d788403c63b5216416c331",
+    "content-hash": "e9716e6ca465ee1a67e6bcd34913b256",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
