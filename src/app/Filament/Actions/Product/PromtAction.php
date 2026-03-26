@@ -77,7 +77,7 @@ class PromtAction extends Action
      */
     private static function getProduct(array $productData): Product
     {
-        $product = new Product(Arr::only($productData, [
+        return new Product(Arr::only($productData, [
             'id',
             'category_id',
             'fabric_top_txt',
@@ -86,13 +86,9 @@ class PromtAction extends Action
             'fabric_outsole_txt',
             'heel_txt',
             'key_features',
-        ]));
-
-        $product->setRelations([
+        ]))->setRelations([
             'colors' => Color::query()->whereIn('id', $productData['colors'])->get(),
             'fabrics' => Fabric::query()->whereIn('id', $productData['fabrics'])->get(),
         ]);
-
-        return $product;
     }
 }
