@@ -2,11 +2,14 @@
 
 namespace App\Filament\Actions\Product;
 
+use App\Models\Color;
+use App\Models\Fabric;
 use App\Models\Product;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Arr;
 
 class PromtAction extends Action
 {
@@ -16,8 +19,7 @@ class PromtAction extends Action
             ->label('Составить промт')
             ->icon(Heroicon::OutlinedPencil)
             ->action(function (CreateRecord|EditRecord $livewire) {
-                /** @var Product $product */
-                $product = $livewire->record ?? new Product($livewire->data);
+                $product = self::getProduct($livewire->data);
 
                 $properties = collect();
                 if ($product->heel_txt) {
@@ -68,5 +70,29 @@ class PromtAction extends Action
                 .iconColor('primary')
                 .send());
         JS;
+    }
+
+    /**
+     * @param  array<string, mixed>  $productData
+     */
+    private static function getProduct(array $productData): Product
+    {
+        $product = new Product(Arr::only($productData, [
+            'id',
+            'category_id',
+            'fabric_top_txt',
+            'fabric_inner_txt',
+            'fabric_insole_txt',
+            'fabric_outsole_txt',
+            'heel_txt',
+            'key_features',
+        ]));
+
+        $product->setRelations([
+            'colors' => Color::query()->whereIn('id', $productData['colors'])->get(),
+            'fabrics' => Fabric::query()->whereIn('id', $productData['fabrics'])->get(),
+        ]);
+
+        return $product;
     }
 }
