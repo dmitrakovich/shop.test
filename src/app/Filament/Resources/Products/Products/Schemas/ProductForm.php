@@ -12,12 +12,16 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\Operation;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductForm
 {
@@ -72,10 +76,24 @@ class ProductForm
                                     ->reorderable()
                                     ->downloadable()
                                     ->hiddenLabel(),
+                                Repeater::make('media_properties')
+                                    ->relationship('media')
+                                    ->visibleOn(Operation::Edit)
+                                    ->schema([
+                                        ImageEntry::make('preview0')
+                                            ->state(fn (Media $record) => $record->getUrl('thumb'))
+                                            ->hiddenLabel()
+                                            ->imageHeight(80)
+                                            ->square(),
+                                        Toggle::make('generated_conversions.is_imidj')
+                                            ->label('Имиджевое'),
+                                    ])
+                                    ->deletable(false)
+                                    ->addable(false)
+                                    ->columns(3),
                             ]),
 
                         // todo: для видео репитер
-                        // todo: для имеджевых отдельную коллекцию как вариант через отдельную связь
                         // Repeater::make('video')
                         //     ->schema([
                         //         FileUpload::make('preview')
