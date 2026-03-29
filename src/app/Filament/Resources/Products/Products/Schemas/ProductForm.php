@@ -78,6 +78,7 @@ class ProductForm
                                     ->hiddenLabel(),
                                 Repeater::make('media_properties')
                                     ->relationship('media')
+                                    ->label('Характеристики фото')
                                     ->visibleOn(Operation::Edit)
                                     ->schema([
                                         ImageEntry::make('preview0')
