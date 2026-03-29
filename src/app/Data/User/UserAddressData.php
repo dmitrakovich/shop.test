@@ -19,7 +19,7 @@ class UserAddressData extends Data
     public string $city;
 
     #[Max(191)]
-    public ?string $address;
+    public ?string $address = null;
 
     public function toArray(): array
     {

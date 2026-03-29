@@ -50,7 +50,7 @@ class Device extends Model implements ClientInterface
     /**
      * @var int 1 year
      */
-    final const COOKIE_LIFE_TIME = 525600;
+    final const int COOKIE_LIFE_TIME = 525600;
 
     /**
      * The attributes that are mass assignable.

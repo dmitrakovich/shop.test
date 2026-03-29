@@ -10,15 +10,12 @@ use Illuminate\Support\Facades\Log;
  */
 class Guest
 {
-    /**
-     * @var string
-     */
-    final const COOKIE_NAME = 'guest_data';
+    final const string COOKIE_NAME = 'guest_data';
 
     /**
      * @var int 1 year
      */
-    final const COOKIE_LIFE_TIME = 525600;
+    final const int COOKIE_LIFE_TIME = 525600;
 
     /**
      * Save guest data

@@ -56,7 +56,7 @@ class InstallmentOrderService
             $itemPrice = $item->current_price;
             $itemPrice += $order->delivery_price ? ($order->delivery_price / $uniqItemsCount) : 0;
             $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $uniqItemsCount) : 0;
-            $adminFio = $order?->admin?->user_last_name . ' ' . mb_strtoupper(mb_substr($order?->admin?->name, 0, 1)) . '.' . mb_strtoupper(mb_substr($order?->admin?->user_patronymic_name, 0, 1)) . '.';
+            $adminFio = $order?->admin?->user_last_name . ' ' . mb_strtoupper(mb_substr((string)$order?->admin?->name, 0, 1)) . '.' . mb_strtoupper(mb_substr((string)$order?->admin?->user_patronymic_name, 0, 1)) . '.';
             $adminTrustDate = isset($order->admin->trust_date) ? date('d.m.Y', strtotime($order?->admin?->trust_date)) : null;
             $adminTrustNumber = $order->admin->trust_number ?? null;
             $dateContractInstallment = Carbon::parse(($item->installment->contract_date ?? 'now'))->translatedFormat('d.m.Y');
@@ -112,8 +112,8 @@ class InstallmentOrderService
             $sheet->setCellValue('Z43', $order->user->passport->registration_address ?? null);
             $sheet->setCellValue('AH47', substr(trim($order->phone), -9, -7));
             $sheet->setCellValue('AL47', substr(trim($order->phone), -7));
-            $sheet->setCellValue('AK52', mb_strtoupper(mb_substr($firstName, 0, 1)) . '.' . mb_strtoupper(mb_substr($patronymicName, 0, 1)) . '. ' . $lastName);
-            $sheet->setCellValue('L52', mb_strtoupper(mb_substr($order?->admin?->name, 0, 1)) . '.' . mb_strtoupper(mb_substr($order?->admin?->user_patronymic_name, 0, 1)) . '. ' . $order?->admin?->user_last_name);
+            $sheet->setCellValue('AK52', mb_strtoupper(mb_substr((string)$firstName, 0, 1)) . '.' . mb_strtoupper(mb_substr((string)$patronymicName, 0, 1)) . '. ' . $lastName);
+            $sheet->setCellValue('L52', mb_strtoupper(mb_substr((string)$order?->admin?->name, 0, 1)) . '.' . mb_strtoupper(mb_substr((string)$order?->admin?->user_patronymic_name, 0, 1)) . '. ' . $order?->admin?->user_last_name);
 
             $item->installment->installment_form_file = $resultPath;
             $item->installment->save();

@@ -16,7 +16,7 @@ class SxGeoUpdateJob extends AbstractJob
      * Путь к скачиваемому файлу
      */
     // final const URL = 'https://sypexgeo.net/ru/pc/download/%s/SxGeoCountry.zip'; // premium
-    final const URL = 'https://sypexgeo.net/files/SxGeoCountry.zip';
+    final const string URL = 'https://sypexgeo.net/files/SxGeoCountry.zip';
 
     protected $jobName = 'Обновление базы Sypex Geo';
 

@@ -23,9 +23,9 @@ class Size extends Model implements Filterable
 {
     use AttributeFilterTrait;
 
-    final const ONE_SIZE_ID = 1;
+    final const int ONE_SIZE_ID = 1;
 
-    final const ONE_SIZE_SLUG = 'size-none';
+    final const string ONE_SIZE_SLUG = 'size-none';
 
     /**
      * The connection name for the model.
@@ -72,7 +72,7 @@ class Size extends Model implements Filterable
 
     public static function getFilters(): array
     {
-        return (new self())->newQuery()
+        return new self()->newQuery()
             ->where('is_active', true)
             ->get(['id', 'name', 'slug', 'insole'])
             ->keyBy('slug')

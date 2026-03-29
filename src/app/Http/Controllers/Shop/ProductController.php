@@ -19,10 +19,10 @@ class ProductController extends BaseController
      */
     public function __construct(
         Request $request,
-        private ProductService $productService,
-        private SliderService $sliderService,
-        private ProductSeoService $seoService,
-        private FeedbackService $feedbackService,
+        private readonly ProductService $productService,
+        private readonly SliderService $sliderService,
+        private readonly ProductSeoService $seoService,
+        private readonly FeedbackService $feedbackService,
     ) {
         parent::__construct($request);
     }

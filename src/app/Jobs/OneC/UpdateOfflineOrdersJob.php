@@ -190,7 +190,7 @@ class UpdateOfflineOrdersJob extends AbstractJob
         }
 
         $notification = new OrderItemStatusLog(['stock_id' => $offlineOrder->stock_id]);
-        $orderItem = (new OrderItem(['size_id' => $offlineOrder->size_id, 'status' => OrderItemStatus::COMPLETED]))
+        $orderItem = new OrderItem(['size_id' => $offlineOrder->size_id, 'status' => OrderItemStatus::COMPLETED])
             ->setRelation('product', $this->getProductFromOfflineOrder($offlineOrder))
             ->setRelation('inventoryNotification', $notification);
 

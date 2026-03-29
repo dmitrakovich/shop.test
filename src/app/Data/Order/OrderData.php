@@ -32,26 +32,26 @@ class OrderData extends Data
     public string $firstName;
 
     #[Max(50)]
-    public ?string $patronymicName;
+    public ?string $patronymicName = null;
 
     #[Max(50)]
-    public ?string $lastName;
+    public ?string $lastName = null;
 
     #[WithCastable(Phone::class)]
     public Phone $phone;
 
     #[Max(50)]
-    public ?string $email;
+    public ?string $email = null;
 
-    public ?string $comment;
+    public ?string $comment = null;
 
     #[MapInputName('payment_id')]
     #[WithCast(ModelCast::class, modelClass: PaymentMethod::class)]
-    public ?PaymentMethod $paymentMethod;
+    public ?PaymentMethod $paymentMethod = null;
 
     #[MapInputName('delivery_id')]
     #[WithCast(ModelCast::class, modelClass: DeliveryMethod::class)]
-    public ?DeliveryMethod $deliveryMethod;
+    public ?DeliveryMethod $deliveryMethod = null;
 
     public OrderMethod $orderMethod = OrderMethod::DEFAULT;
 
@@ -60,37 +60,37 @@ class OrderData extends Data
 
     #[MapInputName('country_id')]
     #[WithCast(ModelCast::class, modelClass: Country::class)]
-    public ?Country $country;
+    public ?Country $country = null;
 
     #[Max(50)]
-    public ?string $region;
+    public ?string $region = null;
 
     #[Max(50)]
-    public ?string $city;
+    public ?string $city = null;
 
     #[Max(10)]
-    public ?int $zip;
+    public ?int $zip = null;
 
     #[Max(191)]
-    public ?string $userAddr;
+    public ?string $userAddr = null;
 
     #[MapInputName('stock_id')]
     #[WithCast(ModelCast::class, modelClass: Stock::class)]
     #[RequiredIf('delivery_id', [ShopPvz::ID]), ProhibitedUnless('delivery_id', [ShopPvz::ID])]
-    public ?Stock $stock;
+    public ?Stock $stock = null;
 
     #[Computed]
     public Currency $currency;
 
-    public ?string $utmMedium;
+    public ?string $utmMedium = null;
 
-    public ?string $utmSource;
+    public ?string $utmSource = null;
 
-    public ?string $utmCampaign;
+    public ?string $utmCampaign = null;
 
-    public ?string $utmContent;
+    public ?string $utmContent = null;
 
-    public ?string $utmTerm;
+    public ?string $utmTerm = null;
 
     public function __construct()
     {

@@ -51,7 +51,7 @@ class Price extends Model implements Filterable
         foreach ($values as $url) {
             /** @var self $self */
             $self = $url->filters;
-            $operator = str_starts_with($self->slug, 'price-from-') ? '>' : '<';
+            $operator = str_starts_with((string)$self->slug, 'price-from-') ? '>' : '<';
             $builder->where('price', $operator, $self->price);
         }
 

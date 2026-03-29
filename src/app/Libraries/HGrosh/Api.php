@@ -7,7 +7,7 @@ use ReflectionClass;
 
 class Api
 {
-    private HttpClient $http_client; // Объект для взаимодействия с API api-epos.hgrosh.by
+    private readonly HttpClient $http_client; // Объект для взаимодействия с API api-epos.hgrosh.by
 
     private array $action_container = [];
 
@@ -20,7 +20,7 @@ class Api
     {
         $reflection = new ReflectionClass($this->http_client);
         $action_namespace = $reflection->getNamespaceName() . '\Actions\\';
-        $class_name = $action_namespace . ucfirst($name);
+        $class_name = $action_namespace . ucfirst((string)$name);
         if (class_exists($class_name)) {
             if (!isset($this->action_container[$class_name])) {
                 $this->action_container[$class_name] = new $class_name($this->http_client, $arguments);

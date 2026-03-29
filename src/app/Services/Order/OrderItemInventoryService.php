@@ -220,15 +220,9 @@ class OrderItemInventoryService
 
                 return $stock2Priority <=> $stock1Priority;
             },
-            function (AvailableSizes $stock1, AvailableSizes $stock2) use ($sizeField) {
-                return $stock2->{$sizeField} <=> $stock1->{$sizeField};
-            },
-            function (AvailableSizes $stock1, AvailableSizes $stock2) {
-                return $stock2->total <=> $stock1->total;
-            },
-            function (AvailableSizes $stock1, AvailableSizes $stock2) {
-                return $stock1->id <=> $stock2->id;
-            },
+            fn (AvailableSizes $stock1, AvailableSizes $stock2) => $stock2->{$sizeField} <=> $stock1->{$sizeField},
+            fn (AvailableSizes $stock1, AvailableSizes $stock2) => $stock2->total <=> $stock1->total,
+            fn (AvailableSizes $stock1, AvailableSizes $stock2) => $stock1->id <=> $stock2->id,
         ];
     }
 

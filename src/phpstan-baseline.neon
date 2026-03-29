@@ -523,12 +523,6 @@ parameters:
 			path: app/Console/Commands/DispatchJob.php
 
 		-
-			message: '#^Constant App\\Console\\Commands\\GenerateFeed\:\:INSTANCES type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Console/Commands/GenerateFeed.php
-
-		-
 			message: '#^Method App\\Console\\Commands\\GenerateFeed\:\:getCurrencies\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
 			identifier: missingType.generics
 			count: 1
@@ -893,12 +887,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: app/Http/Controllers/Api/CatalogController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\CropperController\:\:crop\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Http/Controllers/CropperController.php
 
 		-
 			message: '#^Argument of an invalid type Illuminate\\Contracts\\Pagination\\CursorPaginator supplied for foreach, only iterables are supported\.$#'
@@ -4091,12 +4079,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Services/SearchService.php
-
-		-
-			message: '#^Method App\\Services\\Seo\\CatalogSeoService\:\:getCatalogTitle\(\) invoked with 1 parameter, 0 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: app/Services/Seo/CatalogSeoService.php
 
 		-
 			message: '#^Method App\\Services\\Seo\\CatalogSeoService\:\:setCurrentFilters\(\) has parameter \$currentFilters with no value type specified in iterable type array\.$#'

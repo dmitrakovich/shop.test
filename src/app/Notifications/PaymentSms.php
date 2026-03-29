@@ -10,9 +10,9 @@ class PaymentSms extends AbstractSmsTraffic
      * @return void
      */
     public function __construct(
-        private string $paymentNum,
-        private string $link,
-        private ?string $firstName = null
+        private readonly string $paymentNum,
+        private readonly string $link,
+        private readonly ?string $firstName = null
     ) {}
 
     /**

@@ -14,7 +14,7 @@ class DiscountAfterRegisterSms extends AbstractSmsTraffic
      *
      * @return void
      */
-    public function __construct(private string $discount) {}
+    public function __construct(private readonly string $discount) {}
 
     /**
      * Content for sms message

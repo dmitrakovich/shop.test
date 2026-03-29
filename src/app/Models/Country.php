@@ -16,7 +16,7 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  */
 class Country extends Model
 {
-    final const DEFAULT_COUNTRY_CODE = 'BY';
+    final const string DEFAULT_COUNTRY_CODE = 'BY';
 
     /**
      * Countries cache list

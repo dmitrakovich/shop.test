@@ -25,7 +25,7 @@ class PhoneNumber implements ValidationRule
      */
     private function fastValidate(mixed $value): bool
     {
-        return $value && strlen($value) > 8;
+        return $value && strlen((string)$value) > 8;
     }
 
     /**

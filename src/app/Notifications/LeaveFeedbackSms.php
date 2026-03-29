@@ -21,7 +21,7 @@ class LeaveFeedbackSms extends AbstractSmsTraffic
      *
      * @return void
      */
-    public function __construct(private Order $order) {}
+    public function __construct(private readonly Order $order) {}
 
     /**
      * Content for sms message
@@ -32,9 +32,7 @@ class LeaveFeedbackSms extends AbstractSmsTraffic
         $discount = Config::findCacheable('feedback')['discount'][$currency];
         $discount = Currency::format($discount, $currency, '');
 
-        $orderItems = $this->order->items->filter(function (OrderItem $item) {
-            return $item->isCompleted();
-        });
+        $orderItems = $this->order->items->filter(fn (OrderItem $item) => $item->isCompleted());
 
         $link = $orderItems->count() > 1
             ? $this->orderLink()

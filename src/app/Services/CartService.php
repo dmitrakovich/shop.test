@@ -7,7 +7,7 @@ use App\Models\CartData;
 
 class CartService
 {
-    public function __construct(private Cart $cart) {}
+    public function __construct(private readonly Cart $cart) {}
 
     /**
      * Initialize and load the user's shopping cart.

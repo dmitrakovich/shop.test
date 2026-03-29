@@ -12,7 +12,7 @@ class UserService
     /**
      * AuthService constructor.
      */
-    public function __construct(private User $user) {}
+    public function __construct(private readonly User $user) {}
 
     public function findOrCreateByPhone(Phone $phone): User
     {

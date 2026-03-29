@@ -19,6 +19,6 @@ readonly class ModelCast implements Cast
 
     public function cast(DataProperty $property, mixed $value, array $properties, CreationContext $context): mixed
     {
-        return (new $this->modelClass())->setKeyName($this->keyName)->findOrFail($value);
+        return new $this->modelClass()->setKeyName($this->keyName)->findOrFail($value);
     }
 }

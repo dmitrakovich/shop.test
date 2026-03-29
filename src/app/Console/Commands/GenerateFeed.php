@@ -22,10 +22,7 @@ class GenerateFeed extends Command
                             {instance? : Feed instance name}
                             {currency? : Currency for feed}';
 
-    /**
-     * @var array
-     */
-    final const INSTANCES = [
+    final const array INSTANCES = [
         'yandex_xml' => YandexXml::class,
         'google_xml' => GoogleXml::class,
         'google_csv' => GoogleCsv::class,

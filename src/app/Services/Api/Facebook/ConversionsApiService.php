@@ -11,7 +11,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 class ConversionsApiService
 {
-    public function __construct(private Api $api, private int $pixelId) {}
+    public function __construct(private readonly Api $api, private readonly int $pixelId) {}
 
     public function sendEvent(Event $event): PromiseInterface
     {
@@ -20,7 +20,7 @@ class ConversionsApiService
 
     public function sendEvents(array $events): PromiseInterface // EventResponse
     {
-        return (new EventRequestAsync($this->pixelId)) // EventRequest
+        return new EventRequestAsync($this->pixelId) // EventRequest
             ->setEvents($events)
             ->execute();
     }

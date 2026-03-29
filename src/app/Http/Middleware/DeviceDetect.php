@@ -17,7 +17,7 @@ class DeviceDetect
     /**
      * Web ID for robot devices
      */
-    private const WEB_ID_FOR_ROBOT_DEVICES = '6b8945bed1e18bc4f2d1691ac63f5f56';
+    private const string WEB_ID_FOR_ROBOT_DEVICES = '6b8945bed1e18bc4f2d1691ac63f5f56';
 
     /**
      * Handle an incoming request.

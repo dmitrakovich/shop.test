@@ -12,7 +12,7 @@ class InstallmentPaymentSms extends AbstractSmsTraffic
      * @return void
      */
     public function __construct(
-        private Installment $installment,
+        private readonly Installment $installment,
     ) {}
 
     /**

@@ -14,7 +14,7 @@ class OrderItemObserver
     /**
      * OrderItemObserver constructor.
      */
-    public function __construct(private LogService $logService) {}
+    public function __construct(private readonly LogService $logService) {}
 
     /**
      * Handle the OrderItem "created" event.

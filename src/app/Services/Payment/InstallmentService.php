@@ -16,7 +16,7 @@ class InstallmentService
     /**
      * InstallmentService constructor.
      */
-    public function __construct(private Installment $installment) {}
+    public function __construct(private readonly Installment $installment) {}
 
     /**
      * Send notifications to buyers and return their quantity

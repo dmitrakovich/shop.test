@@ -49,7 +49,7 @@ return [
     |
     */
 
-    'auth_provider_model' => 'App\\Models\\Admin\\AdminUser',
+    'auth_provider_model' => \App\Models\Admin\AdminUser::class,
 
     /*
     |--------------------------------------------------------------------------

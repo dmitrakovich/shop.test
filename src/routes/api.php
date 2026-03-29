@@ -15,12 +15,10 @@ use App\Http\Middleware\RedirectOldProductUrls;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return [
-        'user' => $request->user(),
-        'device' => Device::current(),
-    ];
-})->middleware('auth:sanctum');
+Route::get('/user', fn (Request $request) => [
+    'user' => $request->user(),
+    'device' => Device::current(),
+])->middleware('auth:sanctum');
 
 Route::prefix('auth')->as('auth.')->middleware('captcha')->group(function () {
     Route::prefix('otp')->as('otp.')->group(function () {

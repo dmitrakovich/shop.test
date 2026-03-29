@@ -37,7 +37,7 @@ class SendingTracksJob implements ShouldQueue
                 ->with(['user', 'track'])
                 ->each(function (Order $order) use ($config) {
                     $ignoreCities = $config['ignore_cities'] ?? [];
-                    $orderCity = $order->city ? mb_strtolower($order->city) : null;
+                    $orderCity = $order->city ? mb_strtolower((string)$order->city) : null;
                     if (empty($ignoreCities) || array_search($orderCity, $ignoreCities) === false) {
                         $order->notify(new SendingTracksSms($order));
                     }

@@ -10,14 +10,14 @@ use Ddeboer\Imap\Server;
 
 class ImapParseEmailService
 {
-    private Server $server;
+    private readonly Server $server;
 
     private $connection;
 
     public function __construct(
-        private string $imapHost,
-        private string $userName,
-        private string $password
+        private readonly string $imapHost,
+        private readonly string $userName,
+        private readonly string $password
     ) {
         $this->server = new Server($imapHost);
         $this->connection = $this->server->authenticate($userName, $password);

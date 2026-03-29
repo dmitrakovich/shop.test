@@ -31,7 +31,7 @@ class TelegramBotHandler extends WebhookHandler
     /**
      * The service responsible for managing order item inventory.
      */
-    private OrderItemInventoryService $inventoryService;
+    private readonly OrderItemInventoryService $inventoryService;
 
     /**
      * TelegramBotHandler constructor.
@@ -149,17 +149,6 @@ class TelegramBotHandler extends WebhookHandler
         $chatId ??= $this->data->get('chat_id');
         $pickupList = $this->inventoryService->pickupList($chatId);
         $this->chat->html($pickupList)->send();
-    }
-
-    /**
-     * Pause command. Initiate a pause action for offline notifications.
-     *
-     * @todo: remove after 01.09.2024
-     * @deprecated
-     */
-    public function pause(): void
-    {
-        $this->chat->message('Этот функционал больше не используется')->send();
     }
 
     /**

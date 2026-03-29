@@ -83,7 +83,7 @@ class YandexXml extends AbstractFeed
      */
     protected function getOffers(): array
     {
-        return (new ProductService())->getForFeed()
+        return new ProductService()->getForFeed()
             ->map(function (Product $item) {
                 $media = $this->getProductMedia($item->getMedia());
 
@@ -112,9 +112,7 @@ class YandexXml extends AbstractFeed
      */
     public function getColors(EloquentCollection $colors): array
     {
-        return $colors->map(function (Color $color) {
-            return $color->name;
-        })->toArray();
+        return $colors->map(fn (Color $color) => $color->name)->toArray();
     }
 
     /**

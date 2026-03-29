@@ -90,7 +90,7 @@ class OrderItemStatusLog extends Model
      */
     public function setDateFieldForStatus(OrderItemStatus $status): void
     {
-        if ($dateField = $this->getDateFieldByStatus($status)) {
+        if ($dateField = static::getDateFieldByStatus($status)) {
             $this->{$dateField} = now();
             $this->save();
         }

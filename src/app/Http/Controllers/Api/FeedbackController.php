@@ -12,7 +12,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class FeedbackController extends Controller
 {
-    public function __construct(private FeedbackService $feedbackService) {}
+    public function __construct(private readonly FeedbackService $feedbackService) {}
 
     /**
      * Display a listing of the resource.

@@ -51,7 +51,7 @@ class SeoLink extends Model
     {
         if ($value) {
             $result = '';
-            $parse_url = parse_url($value);
+            $parse_url = parse_url((string)$value);
             $result .= ($parse_url['path'] ?? '') . (!empty($parse_url['query']) ? ('?' . $parse_url['query']) : '');
             $result = ltrim(ltrim(ltrim($result, '/'), 'catalog'), '/');
             $this->attributes['destination'] = 'catalog/' . $result;

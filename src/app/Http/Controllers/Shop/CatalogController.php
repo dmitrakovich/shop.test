@@ -21,8 +21,8 @@ class CatalogController extends BaseController
      */
     public function __construct(
         Request $request,
-        private GoogleTagManagerService $gtmService,
-        private CatalogService $catalogService,
+        private readonly GoogleTagManagerService $gtmService,
+        private readonly CatalogService $catalogService,
     ) {
         parent::__construct($request);
     }

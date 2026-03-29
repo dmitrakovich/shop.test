@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class CaptchaScore implements ValidationRule
 {
-    public function __construct(private int $acceptable = 6)
+    public function __construct(private readonly int $acceptable = 6)
     {
         //
     }

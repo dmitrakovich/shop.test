@@ -34,7 +34,7 @@ class CountryOfOrigin extends Model implements Filterable
     {
         parent::boot();
         static::creating(function ($model) {
-            $model->slug = $model->slug ? $model->slug : Str::slug($model->name);
+            $model->slug = $model->slug ?: Str::slug($model->name);
         });
     }
 }

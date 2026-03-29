@@ -33,11 +33,11 @@ class BelpostCODService
         ];
 
         while (($currentRow <= $sheet->getHighestRow())) {
-            $trackCell = trim($sheet->getCell('F' . $currentRow)->getValue());
+            $trackCell = trim((string)$sheet->getCell('F' . $currentRow)->getValue());
             preg_match('/№(.*?),/', $trackCell, $currentTrack);
             $currentTrack = $currentTrack[1] ?? null;
             if ($currentTrack) {
-                $parsedData[$currentTrack] = trim($sheet->getCell('C' . $currentRow)->getValue());
+                $parsedData[$currentTrack] = trim((string)$sheet->getCell('C' . $currentRow)->getValue());
             }
             $currentRow++;
         }
@@ -90,7 +90,7 @@ class BelpostCODService
                 if (!empty($mails)) {
                     foreach ($mails as $mail) {
                         $subject = $mail->getSubject();
-                        if (str_contains($subject, 'Приложение к ППИ от Брестского филиала РУП')) {
+                        if (str_contains((string)$subject, 'Приложение к ППИ от Брестского филиала РУП')) {
                             $attachments = $mail->getAttachments();
                             foreach ($attachments as $attachment) {
                                 $path = storage_path('app/public/belpost/cod/' . date('d-m-Y') . '/') . $attachment->getFilename();

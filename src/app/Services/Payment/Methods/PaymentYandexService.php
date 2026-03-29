@@ -13,7 +13,7 @@ use YooKassa\Model\NotificationEventType;
 
 class PaymentYandexService extends AbstractPaymentService
 {
-    private Client $api;
+    private readonly Client $api;
 
     private bool $isTest;
 
@@ -76,7 +76,7 @@ class PaymentYandexService extends AbstractPaymentService
             $dbData['currency_code'] = $currencyCode;
             $dbData['method_enum_id'] = OnlinePaymentMethodEnum::YANDEX;
             $dbData['amount'] = $amount;
-            $dbData['expires_at'] = date('Y-m-d H:i:s', strtotime($expiresAt));
+            $dbData['expires_at'] = date('Y-m-d H:i:s', strtotime((string)$expiresAt));
             $dbData['payment_id'] = $paymentId;
             $dbData['payment_num'] = $paymentNum;
             $dbData['payment_url'] = $paymentUrl;

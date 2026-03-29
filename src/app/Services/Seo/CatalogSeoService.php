@@ -73,9 +73,7 @@ class CatalogSeoService
     public function __construct()
     {
         $requestUri = ltrim(Request::getRequestUri(), '/');
-        $this->seoLink = Cache::remember('seo_link_uri_' . $requestUri, 1800, function () use ($requestUri) {
-            return SeoLink::firstWhere('destination', $requestUri);
-        });
+        $this->seoLink = Cache::remember('seo_link_uri_' . $requestUri, 1800, fn () => SeoLink::firstWhere('destination', $requestUri));
     }
 
     /**
@@ -132,7 +130,7 @@ class CatalogSeoService
                 }
                 if ($attrModel === Price::class) {
                     foreach ($currentFilters[$attrModel] ?? [] as $price) {
-                        if (str_starts_with($price->slug, 'price-from-')) {
+                        if (str_starts_with((string)$price->slug, 'price-from-')) {
                             unset($currentFilters[$attrModel][$price->slug]);
                         }
                     }
@@ -221,7 +219,7 @@ class CatalogSeoService
         } else {
             $currentFilters = $this->currentFilters;
 
-            return $this->getCatalogTitle($currentFilters) . ' ✔ Примерка по РБ ✔ Доставка курьером ✔ Сертификаты и гарантия ✔ Оплата 3-я платежами 📞 +375291793790';
+            return $this->getCatalogTitle() . ' ✔ Примерка по РБ ✔ Доставка курьером ✔ Сертификаты и гарантия ✔ Оплата 3-я платежами 📞 +375291793790';
         }
     }
 
@@ -245,7 +243,7 @@ class CatalogSeoService
         foreach ($currentFilters as $filterType => $filters) {
             if ($filterType === Price::class) {
                 foreach ($filters as $filterKey => $filter) {
-                    if (str_contains($filterKey, 'price-from')) {
+                    if (str_contains((string)$filterKey, 'price-from')) {
                         return 'noindex, follow';
                     }
                 }

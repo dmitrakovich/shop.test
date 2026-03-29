@@ -34,7 +34,7 @@ class FeedbackData extends Data
     #[Between(0, 5)]
     public int $rating = 5;
 
-    public ?int $productId;
+    public ?int $productId = null;
 
     // todo: need withTrashed
     // #[MapInputName('product_id')]
@@ -69,8 +69,8 @@ class FeedbackData extends Data
     public static function rules(): array
     {
         return [
-            'photos.*' => [(new ImageFile())->max('5mb')],
-            'videos.*' => [(new VideoFile())->max('50mb')],
+            'photos.*' => [new ImageFile()->max('5mb')],
+            'videos.*' => [new VideoFile()->max('50mb')],
         ];
     }
 

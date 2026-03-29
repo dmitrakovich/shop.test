@@ -25,14 +25,14 @@ class UserData extends Data
     public string $firstName;
 
     #[Max(50)]
-    public ?string $patronymicName;
+    public ?string $patronymicName = null;
 
     #[Email]
     #[Max(191)]
-    public ?string $email;
+    public ?string $email = null;
 
     #[WithCast(DateTimeInterfaceCast::class, format: 'Y-m-d')]
-    public ?Carbon $birthDate;
+    public ?Carbon $birthDate = null;
 
     public UserAddressData $address;
 

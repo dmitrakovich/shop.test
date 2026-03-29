@@ -34,7 +34,7 @@ abstract class AbstractAnalyticEvent
     /**
      * Source URL for the analytic event.
      */
-    public ?string $sourceUrl;
+    public ?string $sourceUrl = null;
 
     /**
      * Where the Conversion occurred
@@ -44,7 +44,7 @@ abstract class AbstractAnalyticEvent
     /**
      * Visit ID for the analytic event.
      */
-    public ?string $visitId;
+    public ?string $visitId = null;
 
     /**
      * User data for the analytic event.
@@ -118,7 +118,7 @@ abstract class AbstractAnalyticEvent
             $externalIds[] = Auth::id();
         }
         $userData = Auth::check() ? Auth::user()->toArray() : Guest::getData();
-        $this->userData = (new UserData($userData))
+        $this->userData = new UserData($userData)
             ->setExternalIds($externalIds)
             ->setClientIpAddress(request()->ip())
             ->setClientUserAgent(request()->userAgent())

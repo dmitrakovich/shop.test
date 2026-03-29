@@ -17,7 +17,7 @@ class SendingTracksSms extends AbstractSmsTraffic
      * @return void
      */
     public function __construct(
-        private Order $order,
+        private readonly Order $order,
     ) {}
 
     /**

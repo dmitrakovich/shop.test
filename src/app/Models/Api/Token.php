@@ -21,7 +21,7 @@ class Token extends Model
     /**
      * Services ids
      */
-    final const INSTAGRAM = 1;
+    final const int INSTAGRAM = 1;
 
     /**
      * The attributes that should be cast.
@@ -35,7 +35,7 @@ class Token extends Model
     /**
      * Convert the model to its string representation.
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->token;
     }

@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ShortLink extends Model
 {
-    final const SHORT_LINK_LENGTH = 7;
+    final const int SHORT_LINK_LENGTH = 7;
 
-    final const CHAR_LIST = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234567890';
+    final const string CHAR_LIST = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234567890';
 
     /**
      * Indicates if all mass assignment is enabled.
