@@ -20,6 +20,7 @@ class MediaResource extends JsonResource
         return [
             'id' => $this->id,
             'full_ext' => substr($this->file_name, 5),
+            'is_imidj' => $this->custom_properties['is_imidj'] ?? false,
             // 'thumb_url' => $this->getUrl('thumb'),
             // 'video_url' => $this->getCustomProperty('video'),
         ];
