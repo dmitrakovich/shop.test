@@ -28,7 +28,7 @@ class ProductForm
     public static function configure(Schema $schema): Schema
     {
 
-        // todo: $productFromStock
+        // todo: $productFromStock = self::getStockProduct();
 
         return $schema
             ->components([
@@ -245,4 +245,24 @@ class ProductForm
             ])
             ->columns(3);
     }
+
+    // protected static function getStockProduct(): AvailableSizes
+    // {
+    //     if (empty($stockIds = request('stock_ids'))) {
+    //         return new AvailableSizes();
+    //     }
+
+    //     return AvailableSizes::query()
+    //         ->selectRaw(implode(', ', [
+    //             'sku',
+    //             'brand_id',
+    //             'category_id',
+    //             'MAX(buy_price) as buy_price',
+    //             'MAX(sell_price) as sell_price',
+    //             implode(', ', AvailableSizes::getSumWrappedSizeFields()),
+    //         ]))
+    //         ->groupBy(['sku', 'brand_id', 'category_id'])
+    //         ->whereIn('id', explode(',', $stockIds))
+    //         ->first();
+    // }
 }

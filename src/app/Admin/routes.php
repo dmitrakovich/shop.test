@@ -33,7 +33,6 @@ use App\Admin\Controllers\ProductAttributes\SeasonController;
 use App\Admin\Controllers\ProductAttributes\StyleController;
 use App\Admin\Controllers\ProductAttributes\TagController;
 use App\Admin\Controllers\ProductAttributes\TagGroupController;
-use App\Admin\Controllers\ProductController;
 use App\Admin\Controllers\RatingController;
 use App\Admin\Controllers\Seo\SeoLinkController;
 use App\Admin\Controllers\StockController;
@@ -73,9 +72,6 @@ Route::group([
         $router->resource('users', UserController::class);
         $router->resource('groups', GroupController::class);
     });
-
-    $router->resource('products', ProductController::class); // todo: remove
-    $router->get('products/{product}/restore', [ProductController::class, 'restore'])->name('products.restore');
 
     $router->group(['prefix' => 'product-attributes'], function (Router $router) {
         $router->resource('categories', CategoryController::class);
