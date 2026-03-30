@@ -86,7 +86,7 @@ class ProductForm
                                             ->hiddenLabel()
                                             ->imageHeight(80)
                                             ->square(),
-                                        Toggle::make('generated_conversions.is_imidj')
+                                        Toggle::make('custom_properties.is_imidj')
                                             ->label('Имиджевое'),
                                     ])
                                     ->deletable(false)
