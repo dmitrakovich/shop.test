@@ -86,8 +86,20 @@ class ProductForm
                                             ->hiddenLabel()
                                             ->imageHeight(80)
                                             ->square(),
-                                        Toggle::make('custom_properties.is_imidj')
-                                            ->label('Имиджевое'),
+                                        Toggle::make('is_imidj')
+                                            ->label('Имиджевое')
+                                            ->dehydrated(false)
+                                            ->afterStateHydrated(function (Toggle $component, Media $record) {
+                                                $component->state(
+                                                    $record->getCustomProperty('is_imidj', false)
+                                                );
+                                            })
+                                            ->afterStateUpdated(function (bool $state, Media $record) {
+                                                $props = $record->custom_properties ?? [];
+                                                $props['is_imidj'] = $state;
+                                                $record->custom_properties = $props;
+                                                $record->save();
+                                            }),
                                     ])
                                     ->deletable(false)
                                     ->addable(false)
