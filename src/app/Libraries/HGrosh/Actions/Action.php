@@ -9,26 +9,24 @@ class Action
 {
     protected string $url = ''; // URL для запросов к API @var string
 
-    protected HttpClient $http_client; // Объект для взаимодействия с API
-
     protected string $method = 'post';
 
+    /**
+     * @var array<array-key, mixed>
+     */
     protected array $params = [];
 
+    /**
+     * @var array<array-key, mixed>
+     */
     protected array $getParams = [];
-
-    protected array $arguments = [];
 
     /**
      * Action constructor.
      *
-     * @param  Api  $request
+     * @param  array<array-key, mixed>  $arguments
      */
-    public function __construct(HttpClient $request, $arguments)
-    {
-        $this->http_client = $request;
-        $this->arguments = $arguments;
-    }
+    public function __construct(protected HttpClient $http_client, protected array $arguments) {}
 
     /**
      * Add get param

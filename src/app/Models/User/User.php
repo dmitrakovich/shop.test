@@ -393,7 +393,7 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
             if ($countryId) {
                 $address->country_id = $countryId;
             }
-        } catch (\Throwable $th) {
+        } catch (\Throwable) {
         }
 
         $address->save();

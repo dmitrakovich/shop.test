@@ -13,7 +13,7 @@ class SendProductViewEvent extends AbstractFacebookPixelListener
     public function handle(ProductView $productViewEvent): void
     {
         $product = $productViewEvent->product;
-        $customData = (new CustomData())
+        $customData = new CustomData()
             ->setValue($product->getPrice('USD'))
             ->setCurrency('USD')
             ->setContentIds([$product->id])

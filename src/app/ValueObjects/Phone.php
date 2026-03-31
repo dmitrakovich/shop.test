@@ -12,7 +12,7 @@ use Spatie\LaravelData\Support\DataProperty;
 /**
  * Phone value object class for handling phone number operations
  */
-class Phone implements Castable
+class Phone implements \Stringable, Castable
 {
     /**
      * @param  int  $value  The phone number as an integer

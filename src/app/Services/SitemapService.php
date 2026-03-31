@@ -89,7 +89,7 @@ class SitemapService
                                 $citiesExsist = true;
                             }
                             if ($relation) {
-                                $relations[get_class($relation->getModel())] = $optionValue;
+                                $relations[$relation->getModel()::class] = $optionValue;
                             }
                         }
 
@@ -105,7 +105,7 @@ class SitemapService
                         }
 
                         $cityList = $citiesExsist ? City::pluck('slug', 'id')->toArray() : [];
-                        $productsQuery = (new Product())->newQuery();
+                        $productsQuery = new Product()->newQuery();
                         $productsQuery = $productsQuery->select('id', 'label_id', 'category_id', 'season_id', 'brand_id', 'manufacturer_id', 'collection_id');
                         foreach ($relations as $relation) {
                             $productsQuery = $productsQuery->whereHas($relation)->with($relation);
@@ -119,10 +119,10 @@ class SitemapService
                                     $productRelation = $product->{$relation};
                                     if ($productRelation instanceof Collection) {
                                         foreach ($productRelation as $productRelationItem) {
-                                            $optionsGroup[get_class($productRelationItem)][$productRelationItem->id] = $productRelationItem->slug;
+                                            $optionsGroup[$productRelationItem::class][$productRelationItem->id] = $productRelationItem->slug;
                                         }
                                     } else {
-                                        $optionsGroup[get_class($productRelation)][$productRelation->id] = $productRelation->slug;
+                                        $optionsGroup[$productRelation::class][$productRelation->id] = $productRelation->slug;
                                     }
                                 }
                                 if (!empty($cityList)) {
@@ -151,7 +151,7 @@ class SitemapService
         $resultData .= "<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
         File::ensureDirectoryExists(dirname($finalPath));
         foreach ($this->resultFiles as $resultFile) {
-            $resultUrl = secure_url(basename($resultFile));
+            $resultUrl = secure_url(basename((string)$resultFile));
             $resultData .= <<<URL
         <sitemap>
           <loc>$resultUrl</loc>
@@ -192,7 +192,7 @@ class SitemapService
     private function getAttributeLinks(array $models): array
     {
         $result = [];
-        foreach (array_shift($models) as $attrKey => $attr) {
+        foreach (array_shift($models) as $attr) {
             if (!empty($models)) {
                 foreach ($this->getAttributeLinks($models) as $attributeLink) {
                     $result[] = implode('/', [$attr, $attributeLink]);

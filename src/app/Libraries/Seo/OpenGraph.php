@@ -29,13 +29,13 @@ class OpenGraph implements SeoContract
                 if ($key == 'image' || $key == 'url') {
                     $value = secure_url($value);
                 }
-                $key = 'og:' . strip_tags($key);
+                $key = 'og:' . strip_tags((string)$key);
                 $html[] = '<meta property="' . $key . '" content="' . strip_tags((string)$value) . '"/>';
             }
         }
         foreach ($this->productConfig as $key => $value) {
             if ($value !== false) {
-                $key = 'product:' . strip_tags($key);
+                $key = 'product:' . strip_tags((string)$key);
                 $html[] = '<meta property="' . $key . '" content="' . strip_tags((string)$value) . '"/>';
             }
         }

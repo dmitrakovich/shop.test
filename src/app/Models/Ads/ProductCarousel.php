@@ -77,7 +77,9 @@ class ProductCarousel extends Model implements Sortable
 
     public function setCategoriesListAttribute($value)
     {
-        $this->attributes['categories'] = json_encode(array_values(array_map('intval', array_filter($value))));
+        $this->attributes['categories'] = json_encode(
+            array_values(array_map(intval(...), array_filter($value)))
+        );
     }
 
     /**

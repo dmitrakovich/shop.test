@@ -25,7 +25,7 @@ class SaleService
     /**
      * Sale model
      */
-    private ?Sale $sale;
+    private ?Sale $sale = null;
 
     /**
      * Key for product discount as sale
@@ -155,7 +155,7 @@ class SaleService
 
         $this->discounts = $this->sale->algorithm->isCustom()
             ? $this->prepareCustomDiscounts()
-            : array_filter(array_map('trim', explode(',', $this->sale->sale_percentage)));
+            : array_filter(array_map(trim(...), explode(',', $this->sale->sale_percentage)));
     }
 
     /**

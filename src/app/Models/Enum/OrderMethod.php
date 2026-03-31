@@ -8,27 +8,27 @@ namespace App\Models\Enum;
  */
 class OrderMethod
 {
-    final const UNDEFINED = 'undefined';
+    final const string UNDEFINED = 'undefined';
 
-    final const DEFAULT = 'default';
+    final const string DEFAULT = 'default';
 
-    final const ONECLICK = 'oneclick';
+    final const string ONECLICK = 'oneclick';
 
-    final const CHAT = 'chat';
+    final const string CHAT = 'chat';
 
-    final const PHONE = 'phone';
+    final const string PHONE = 'phone';
 
-    final const INSTAGRAM = 'insta';
+    final const string INSTAGRAM = 'insta';
 
-    final const VIBER = 'viber';
+    final const string VIBER = 'viber';
 
-    final const TELEGRAM = 'telegram';
+    final const string TELEGRAM = 'telegram';
 
-    final const WHATSAPP = 'whatsapp';
+    final const string WHATSAPP = 'whatsapp';
 
-    final const EMAIL = 'email';
+    final const string EMAIL = 'email';
 
-    final const OTHER = 'other';
+    final const string OTHER = 'other';
 
     /**
      * Generate key => rus value for select box
@@ -74,7 +74,7 @@ class OrderMethod
 
     public static function getValues(): array
     {
-        $class = new \ReflectionClass(get_called_class());
+        $class = new \ReflectionClass(static::class);
 
         return array_values($class->getConstants());
     }

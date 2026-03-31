@@ -1303,12 +1303,6 @@ parameters:
 			path: app/Jobs/UpdateProductsRatingJob.php
 
 		-
-			message: '#^Method App\\Libraries\\HGrosh\\Actions\\Action\:\:__construct\(\) has parameter \$arguments with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Libraries/HGrosh/Actions/Action.php
-
-		-
 			message: '#^Method App\\Libraries\\HGrosh\\Actions\\Action\:\:addGetParam\(\) has parameter \$param with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1316,36 +1310,6 @@ parameters:
 
 		-
 			message: '#^Method App\\Libraries\\HGrosh\\Actions\\Action\:\:request\(\) has parameter \$params with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Libraries/HGrosh/Actions/Action.php
-
-		-
-			message: '#^PHPDoc tag @param for parameter \$request with type App\\Libraries\\HGrosh\\Actions\\Api is not subtype of native type App\\Libraries\\HGrosh\\HttpClient\.$#'
-			identifier: parameter.phpDocType
-			count: 1
-			path: app/Libraries/HGrosh/Actions/Action.php
-
-		-
-			message: '#^Parameter \$request of method App\\Libraries\\HGrosh\\Actions\\Action\:\:__construct\(\) has invalid type App\\Libraries\\HGrosh\\Actions\\Api\.$#'
-			identifier: class.notFound
-			count: 1
-			path: app/Libraries/HGrosh/Actions/Action.php
-
-		-
-			message: '#^Property App\\Libraries\\HGrosh\\Actions\\Action\:\:\$arguments type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Libraries/HGrosh/Actions/Action.php
-
-		-
-			message: '#^Property App\\Libraries\\HGrosh\\Actions\\Action\:\:\$getParams type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Libraries/HGrosh/Actions/Action.php
-
-		-
-			message: '#^Property App\\Libraries\\HGrosh\\Actions\\Action\:\:\$params type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Libraries/HGrosh/Actions/Action.php
@@ -1543,12 +1507,6 @@ parameters:
 			path: app/Libraries/Seo/Seo.php
 
 		-
-			message: '#^Method App\\Libraries\\Seo\\SeoMeta\:\:__construct\(\) has parameter \$config with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Libraries/Seo/SeoMeta.php
-
-		-
 			message: '#^Method App\\Libraries\\Seo\\SeoMeta\:\:setImage\(\) has parameter \$image with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1561,26 +1519,8 @@ parameters:
 			path: app/Libraries/Seo/SeoMeta.php
 
 		-
-			message: '#^Property App\\Libraries\\Seo\\SeoMeta\:\:\$config has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: app/Libraries/Seo/SeoMeta.php
-
-		-
-			message: '#^Method App\\Libraries\\Seo\\Twitter\:\:__construct\(\) has parameter \$config with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Libraries/Seo/Twitter.php
-
-		-
 			message: '#^Method App\\Libraries\\Seo\\Twitter\:\:setImage\(\) has parameter \$image with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: app/Libraries/Seo/Twitter.php
-
-		-
-			message: '#^Property App\\Libraries\\Seo\\Twitter\:\:\$config has no type specified\.$#'
-			identifier: missingType.property
 			count: 1
 			path: app/Libraries/Seo/Twitter.php
 
@@ -1633,7 +1573,7 @@ parameters:
 			path: app/Listeners/FacebookPixel/SendPurchaseEvent.php
 
 		-
-			message: '#^Match expression does not handle remaining values\: class\-string\<App\\Events\\Notifications\\NotificationSkipped\>\|class\-string\<Illuminate\\Notifications\\Events\\NotificationSent\>$#'
+			message: '#^Match expression does not handle remaining values\: \(class\-string\<App\\Events\\Notifications\\NotificationSkipped\>&literal\-string\)\|\(class\-string\<Illuminate\\Notifications\\Events\\NotificationSent\>&literal\-string\)$#'
 			identifier: match.unhandled
 			count: 1
 			path: app/Listeners/LogNotification.php
@@ -3937,12 +3877,6 @@ parameters:
 			path: app/Services/Payment/Methods/PaymentEripService.php
 
 		-
-			message: '#^Method Carbon\\Carbon\:\:subWeek\(\) invoked with 1 parameter, 0 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: app/Services/Payment/Methods/PaymentEripService.php
-
-		-
 			message: '#^Variable \$amount on left side of \?\? always exists and is not nullable\.$#'
 			identifier: nullCoalesce.variable
 			count: 1
@@ -4093,12 +4027,6 @@ parameters:
 			path: app/Services/Seo/CatalogSeoService.php
 
 		-
-			message: '#^Method App\\Services\\Seo\\ProductSeoService\:\:getProductTitle\(\) invoked with 1 parameter, 0 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: app/Services/Seo/ProductSeoService.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
 			identifier: property.notFound
 			count: 1
@@ -4141,7 +4069,7 @@ parameters:
 			path: app/Services/SitemapService.php
 
 		-
-			message: '#^Parameter \#2 \$callback of function uksort expects callable\(class\-string\<Illuminate\\Database\\Eloquent\\Model\>, class\-string\<Illuminate\\Database\\Eloquent\\Model\>\)\: int, Closure\(mixed, mixed\)\: bool given\.$#'
+			message: '#^Parameter \#2 \$callback of function uksort expects callable\(class\-string\<Illuminate\\Database\\Eloquent\\Model\>&literal\-string, class\-string\<Illuminate\\Database\\Eloquent\\Model\>&literal\-string\)\: int, Closure\(mixed, mixed\)\: bool given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Services/SitemapService.php

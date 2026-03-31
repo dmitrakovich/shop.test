@@ -30,7 +30,7 @@ class ApiResponse
             $this->status = $response->getStatusCode();
             if (
                 $response->hasHeader('Content-type') &&
-                strpos(implode(',', $response->getHeader('Content-type')), 'json') !== false
+                str_contains(implode(',', $response->getHeader('Content-type')), 'json')
             ) {
                 $this->body = (string)$response->getBody()->getContents();
             } else {

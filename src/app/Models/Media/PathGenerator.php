@@ -44,7 +44,7 @@ class PathGenerator extends DefaultPathGenerator
         }
 
         if ($media->model_type === Product::class) {
-            $path .= '/' . (substr($media->model_id, 0, -3) ?: '0') . '/' . $media->model_id;
+            $path .= '/' . (substr((string)$media->model_id, 0, -3) ?: '0') . '/' . $media->model_id;
         }
 
         return "$path/{$media->getKey()}";
@@ -85,7 +85,7 @@ class PathGenerator extends DefaultPathGenerator
         }
 
         for ($i = 0; $i < $nestingLevel; $i++) {
-            $path .= '/' . substr($key, 0, $i + 1);
+            $path .= '/' . substr((string)$key, 0, $i + 1);
         }
 
         return "$path/$key";

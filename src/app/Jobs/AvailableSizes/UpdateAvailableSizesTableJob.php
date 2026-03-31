@@ -225,8 +225,8 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
      */
     protected function prepareAvailableSizesData(\stdClass $stockUnit): array
     {
-        $sku = trim($stockUnit->sku);
-        $categoryName = trim($stockUnit->category_name);
+        $sku = trim((string)$stockUnit->sku);
+        $categoryName = trim((string)$stockUnit->category_name);
         $brandId = $this->getCurrentBrandId((int)$stockUnit->brand_id);
         $productId = $this->getCurrentProductId($brandId, $sku);
         $categoryId = $this->getCurrentCategoryId($categoryName);
@@ -291,11 +291,8 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
             return $brandProducts[$wrongSkuRus];
         }
         $wrongSkuEng = str_replace($this->rusSymbols, $this->engSymbols, $sku);
-        if (isset($brandProducts[$wrongSkuEng])) {
-            return $brandProducts[$wrongSkuEng];
-        }
 
-        return null;
+        return $brandProducts[$wrongSkuEng] ?? null;
     }
 
     /**

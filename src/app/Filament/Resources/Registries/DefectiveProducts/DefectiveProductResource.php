@@ -65,7 +65,7 @@ class DefectiveProductResource extends Resource
                         return DB::table('product_attributes')
                             ->join('sizes', 'product_attributes.attribute_id', '=', 'sizes.id')
                             ->where('product_attributes.product_id', $productId)
-                            ->where('product_attributes.attribute_type', (new Size())->getMorphClass())
+                            ->where('product_attributes.attribute_type', new Size()->getMorphClass())
                             ->pluck('sizes.name', 'sizes.id')
                             ->toArray();
                     })

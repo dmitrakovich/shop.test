@@ -38,9 +38,9 @@ class SearchService
      */
     public function getIds(): array
     {
-        $idList = array_filter($this->searchKeys, fn ($value) => is_numeric($value));
+        $idList = array_filter($this->searchKeys, is_numeric(...));
 
-        return array_values(array_map('intval', $idList));
+        return array_values(array_map(intval(...), $idList));
     }
 
     /**

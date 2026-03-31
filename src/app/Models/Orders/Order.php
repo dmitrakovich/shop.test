@@ -164,9 +164,8 @@ class Order extends Model
 
     /**
      * Товары заказа
-     *
-     * @deprecated
      */
+    #[\Deprecated]
     public function data(): Relations\HasMany
     {
         return $this->hasMany(OrderItem::class)
@@ -418,7 +417,7 @@ class Order extends Model
                 ->whereIn('status', OrderItemStatus::departureStatuses())
                 ->with('installment'),
         ]);
-        $deliveryPrice = $this->delivery_price ? $this->delivery_price : 0;
+        $deliveryPrice = $this->delivery_price ?: 0;
         $onlinePaymentsSum = $this->getAmountPaidOrders();
         $resultItemPrice = 0;
         $items = $this->itemsExtended->whereIn('status', OrderItemStatus::departureStatuses());
@@ -428,7 +427,7 @@ class Order extends Model
             $itemPrice += $deliveryPrice ? ($deliveryPrice / $uniqItemsCount) : 0;
             $itemPrice -= $onlinePaymentsSum ? ($onlinePaymentsSum / $uniqItemsCount) : 0;
             if ($this->hasInstallment() && $item->installment_num_payments) {
-                $itemPrice = ($itemPrice - (($item->installment_num_payments - 1) * $item->installment_monthly_fee));
+                $itemPrice -= ($item->installment_num_payments - 1) * $item->installment_monthly_fee;
             }
             $resultItemPrice += $itemPrice;
         }

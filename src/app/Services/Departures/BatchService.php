@@ -71,7 +71,7 @@ class BatchService
                 null, // Ярлык (штрихкод) заказного уведомления )(AD)
                 null, // Зарезервировано (AE)
                 null, // Зарезервировано (AF)
-                substr(preg_replace('/[^0-9]/', '', trim($order->phone)), -12), // Телефон получателя (AG)
+                substr((string)preg_replace('/[^0-9]/', '', trim($order->phone)), -12), // Телефон получателя (AG)
                 $order->email, // Эл. адрес получателя (AH)
             ];
         }

@@ -6,12 +6,10 @@ use App\Libraries\Seo\Contracts\SeoContract;
 
 class SeoMeta implements SeoContract
 {
-    protected $config; // @var Config
-
-    public function __construct($config)
-    {
-        $this->config = $config;
-    }
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    public function __construct(protected array $config) {}
 
     /**
      * Generate meta tags
@@ -71,9 +69,9 @@ class SeoMeta implements SeoContract
     {
         if ($keywords) {
             if (!is_array($keywords)) {
-                $keywords = array_map('trim', explode(',', $keywords));
+                $keywords = array_map(trim(...), explode(',', $keywords));
             }
-            $keywords = array_map('strip_tags', $keywords);
+            $keywords = array_map(strip_tags(...), $keywords);
         }
 
         return $this->addToConfig('keywords', $keywords);
@@ -121,7 +119,7 @@ class SeoMeta implements SeoContract
      */
     public function setRobots(?string $robots): self
     {
-        if (trim($robots)) {
+        if (trim((string)$robots)) {
             return $this->addToConfig('robots', $robots);
         }
 

@@ -37,12 +37,12 @@ class OrdersDistributionService
                     isset($workScheduleAdminIds[$item['admin_user_id']]) &&
                     isset($item[$timeFromKey]) &&
                     isset($item[$timeToKey]) &&
-                    strtotime($item[$timeFromKey]) <= strtotime('now') &&
-                    strtotime($item[$timeToKey]) >= strtotime('now');
+                    strtotime((string)$item[$timeFromKey]) <= strtotime('now') &&
+                    strtotime((string)$item[$timeToKey]) >= strtotime('now');
             });
             usort($scheduleSetup, function ($a, $b) use ($timeToKey) {
-                $timeA = strtotime($a[$timeToKey]);
-                $timeB = strtotime($b[$timeToKey]);
+                $timeA = strtotime((string)$a[$timeToKey]);
+                $timeB = strtotime((string)$b[$timeToKey]);
                 if ($timeA == $timeB) {
                     return $a['admin_user_id'] < $b['admin_user_id'] ? -1 : 1;
                 }

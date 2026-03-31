@@ -28,7 +28,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      *
      * @return void
      */
-    public function __construct(private LogService $logService) {}
+    public function __construct(private readonly LogService $logService) {}
 
     /**
      * Execute the job.
@@ -157,7 +157,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
                 $filteredSizes = array_filter((array)$productSizes, fn ($size) => (int)$size > 0);
 
                 return array_map(
-                    fn ($sizeField) => AvailableSizes::convertFieldToSizeId($sizeField),
+                    AvailableSizes::convertFieldToSizeId(...),
                     array_keys($filteredSizes)
                 );
             })
@@ -198,8 +198,8 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         }
 
         return [
-            array_sum(array_map('count', $attached)),
-            array_sum(array_map('count', $detached)),
+            array_sum(array_map(count(...), $attached)),
+            array_sum(array_map(count(...), $detached)),
         ];
     }
 

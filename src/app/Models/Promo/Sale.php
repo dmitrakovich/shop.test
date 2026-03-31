@@ -119,6 +119,6 @@ class Sale extends Model
             return null;
         }
 
-        return json_encode(array_map('intval', $value));
+        return json_encode(array_map(intval(...), $value));
     }
 }

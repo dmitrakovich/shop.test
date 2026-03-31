@@ -157,7 +157,7 @@ class OfflineOrder extends AbstractOneCModel
         }
         try {
             return Phone::fromRawString($phone);
-        } catch (\Throwable $th) {
+        } catch (\Throwable) {
         }
 
         return null;

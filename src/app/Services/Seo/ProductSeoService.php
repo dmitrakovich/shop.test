@@ -36,7 +36,7 @@ class ProductSeoService
     public function getProductDescription(): string
     {
         $product = $this->product;
-        $description = $this->getProductTitle($product);
+        $description = $this->getProductTitle();
 
         if (!empty($product->color_txt)) {
             $description .= " Цвет: {$product->color_txt}.";

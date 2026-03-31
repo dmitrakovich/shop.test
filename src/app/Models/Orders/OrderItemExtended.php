@@ -84,9 +84,8 @@ class OrderItemExtended extends OrderItem
 
     /**
      * Product name
-     *
-     * @deprecated
      */
+    #[\Deprecated]
     public function getProductNameAttribute(): string
     {
         return $this->product->getFullName();

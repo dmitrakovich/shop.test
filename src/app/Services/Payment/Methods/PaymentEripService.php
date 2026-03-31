@@ -22,7 +22,7 @@ class PaymentEripService extends AbstractPaymentService
     {
         $config = config('hgrosh');
         $postData = [];
-        $paymentNum = $paymentNum ?? $order->id;
+        $paymentNum ??= $order->id;
         $postData['number'] = $paymentNum;
         $postData['currency'] = 933;
         $postData['merchantInfo']['serviceId'] = $config['serviceid'];
@@ -71,7 +71,7 @@ class PaymentEripService extends AbstractPaymentService
         } else {
             $response = $payment->getBodyFormat();
             $message = $response['message'] ?? '';
-            if (strpos($message, 'с таким номером уже существует') !== false) {
+            if (str_contains($message, 'с таким номером уже существует')) {
                 return $this->create($order, $amount, ++$paymentNum, $data);
             }
         }
@@ -85,7 +85,7 @@ class PaymentEripService extends AbstractPaymentService
     public function updateStatuses(): void
     {
         OnlinePayment::where('last_status_enum_id', OnlinePaymentStatusEnum::PENDING)
-            ->where('created_at', '<', Carbon::now()->subWeek(1))
+            ->where('created_at', '<', Carbon::now()->subWeek())
             ->chunkById(50, function ($onlinePayments) {
                 foreach ($onlinePayments as $onlinePayment) {
                     $this->setPaymentStatus($onlinePayment, OnlinePaymentStatusEnum::CANCELED);
@@ -151,7 +151,7 @@ class PaymentEripService extends AbstractPaymentService
         if ($qrCode->isOk()) {
             $responseQrCode = $qrCode->getBodyFormat();
             $qrCodePath = 'hgrosh/' . date('m-Y') . '/' . $onlinePayment->payment_id . '.jpg';
-            Storage::disk('public')->put($qrCodePath, base64_decode($responseQrCode['result']['image']));
+            Storage::disk('public')->put($qrCodePath, base64_decode((string)$responseQrCode['result']['image']));
             $onlinePayment->update(['qr_code' => $qrCodePath]);
         }
 

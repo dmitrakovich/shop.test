@@ -27,7 +27,7 @@ class SliderService
      */
     const CACHE_TTL = 1800;
 
-    private const SIMILAR_PRODUCTS_COUNT = 12;
+    private const int SIMILAR_PRODUCTS_COUNT = 12;
 
     public function __construct(private readonly ProductRepository $productRepository) {}
 

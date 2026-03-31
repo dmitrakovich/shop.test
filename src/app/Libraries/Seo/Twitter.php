@@ -6,12 +6,10 @@ use App\Libraries\Seo\Contracts\SeoContract;
 
 class Twitter implements SeoContract
 {
-    protected $config = []; // @var array
-
-    public function __construct($config)
-    {
-        $this->config = $config;
-    }
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    public function __construct(protected array $config) {}
 
     /**
      * Generate meta tags
@@ -27,7 +25,7 @@ class Twitter implements SeoContract
                 if ($key == 'image' || $key == 'url') {
                     $value = secure_url($value);
                 }
-                $key = 'twitter:' . strip_tags($key);
+                $key = 'twitter:' . strip_tags((string)$key);
                 $html[] = '<meta name="' . $key . '" content="' . strip_tags((string)$value) . '"/>';
             }
         }

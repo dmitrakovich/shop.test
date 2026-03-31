@@ -30,21 +30,21 @@ class InstagramService
     /**
      * Token lifetime
      */
-    final const TTL_DAYS = 50;
+    final const int TTL_DAYS = 50;
 
     /**
      * Cache keys
      */
-    final const CACHE_POSTS_KEY = 'instagram_posts';
+    final const string CACHE_POSTS_KEY = 'instagram_posts';
 
-    final const CACHE_TITLE_KEY = 'instagram_title';
+    final const string CACHE_TITLE_KEY = 'instagram_title';
 
     /**
      * Media types
      */
-    final const MEDIA_TYPE_IMAGE = ['IMAGE', 'CAROUSEL_ALBUM'];
+    final const array MEDIA_TYPE_IMAGE = ['IMAGE', 'CAROUSEL_ALBUM'];
 
-    final const MEDIA_TYPE_VIDEO = ['VIDEO', 'REELS'];
+    final const array MEDIA_TYPE_VIDEO = ['VIDEO', 'REELS'];
 
     /**
      * Get access token

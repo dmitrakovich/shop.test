@@ -74,7 +74,7 @@ class FilterService
     {
         $urlModel = new Url([
             'slug' => $filter->slug,
-            'model_type' => get_class($filter),
+            'model_type' => $filter::class,
             'model_id' => $filter->id,
         ]);
 

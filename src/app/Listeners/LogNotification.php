@@ -16,7 +16,7 @@ class LogNotification
      *
      * @return void
      */
-    public function __construct(private LogService $logService) {}
+    public function __construct(private readonly LogService $logService) {}
 
     /**
      * Handle the event.
@@ -30,7 +30,7 @@ class LogNotification
             return;
         }
 
-        $status = match (get_class($event)) {
+        $status = match ($event::class) {
             NotificationSent::class => $event->response->getDescription(),
             NotificationSkipped::class => $this->logService::SMS_SKIPPED_KEY,
         };

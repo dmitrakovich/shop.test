@@ -49,7 +49,7 @@ class FilterRequest extends FormRequest
             }
 
             return $sorting ?? Product::DEFAULT_SORT;
-        } catch (\Throwable $th) {
+        } catch (\Throwable) {
             return Product::DEFAULT_SORT;
         }
     }
@@ -112,7 +112,7 @@ class FilterRequest extends FormRequest
     protected function addTopProducts(array &$filters): void
     {
         $top = $this->input('top', '');
-        $top = array_filter(explode(',', $top), 'is_numeric');
+        $top = array_filter(explode(',', (string)$top), is_numeric(...));
 
         if (!empty($top)) {
             $filters[Top::class] = array_map(function (int $id) {

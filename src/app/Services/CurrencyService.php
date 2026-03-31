@@ -50,12 +50,10 @@ class CurrencyService
      */
     private function setAllCurrencies(): void
     {
-        $this->allCurrencies = Cache::rememberForever('currencies', function () {
-            return DB::table('currencies')
-                ->get(['code', 'country', 'rate', 'decimals', 'symbol'])
-                ->keyBy('code')
-                ->toArray();
-        });
+        $this->allCurrencies = Cache::rememberForever('currencies', fn () => DB::table('currencies')
+            ->get(['code', 'country', 'rate', 'decimals', 'symbol'])
+            ->keyBy('code')
+            ->toArray());
     }
 
     /**
@@ -100,7 +98,7 @@ class CurrencyService
             $currencyCode = $this->getCurrencyCodeByCountry();
         }
 
-        return (new Currency())->forceFill((array)$this->allCurrencies[$currencyCode]);
+        return new Currency()->forceFill((array)$this->allCurrencies[$currencyCode]);
     }
 
     /**

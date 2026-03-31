@@ -229,7 +229,7 @@ class AvailableSizes extends Model implements HasMedia
      */
     protected function getSizeAttributes(): array
     {
-        return array_map('intval', $this->only($this->getSizeFields()));
+        return array_map(intval(...), $this->only(static::getSizeFields()));
     }
 
     /**
@@ -250,7 +250,7 @@ class AvailableSizes extends Model implements HasMedia
     public function getAvailableSizeIds(): array
     {
         return array_map(
-            fn ($field) => self::convertFieldToSizeId($field),
+            self::convertFieldToSizeId(...),
             array_keys($this->getAvailableSizeAttributes())
         );
     }
@@ -274,13 +274,13 @@ class AvailableSizes extends Model implements HasMedia
     public function getFormattedSizesForStock(string $stockField): ?string
     {
         $stockId = explode('_', $stockField)[1];
-        $i = array_search($stockId, explode(',', $this->{$stockField}));
+        $i = array_search($stockId, explode(',', (string)$this->{$stockField}));
 
         if ($i === false) {
             return null;
         }
         $sizes = [];
-        foreach ($this->only($this->getSizeFields()) as $sizeField => $counts) {
+        foreach ($this->only(static::getSizeFields()) as $sizeField => $counts) {
             if (!($count = explode(',', $counts)[$i])) {
                 continue;
             }

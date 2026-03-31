@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Connection::resolverFor('sqlsrv', function ($connection, $database, $prefix, $config) {
-            return (new SqlServerConnection($connection, $database, $prefix, $config))->createTunnel();
+            return new SqlServerConnection($connection, $database, $prefix, $config)->createTunnel();
         });
     }
 
