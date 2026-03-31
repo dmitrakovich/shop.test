@@ -40,7 +40,7 @@ class PaymentYandexService extends AbstractPaymentService
     {
         $paymentData = [];
         $preAuth = (bool)($data['pre_auth'] ?? false);
-        $currencyCode = (string)'RUB';
+        $currencyCode = 'RUB';
         $expiresAt = $preAuth ? date('c', strtotime('+7 days')) : null;
 
         if ($expiresAt) {
@@ -52,7 +52,7 @@ class PaymentYandexService extends AbstractPaymentService
         $paymentData['confirmation']['return_url'] = (string)secure_url(config('payment.return_url'));
         $paymentData['capture'] = !$preAuth;
         if ($order->id) {
-            $paymentData['description'] = (string)('Оплата заказа № ' . $order->id);
+            $paymentData['description'] = 'Оплата заказа № ' . $order->id;
             $paymentData['metadata']['order_id'] = $order->id;
         }
         if (!empty($order->user_full_name)) {
@@ -64,7 +64,7 @@ class PaymentYandexService extends AbstractPaymentService
         if (!empty($order->phone)) {
             $paymentData['receipt']['customer']['phone'] = (string)$order->phone;
         }
-        $paymentData['test'] = (bool)$this->isTest;
+        $paymentData['test'] = $this->isTest;
         $payment = $this->api->createPayment($paymentData, uniqid('', true));
 
         if ($payment) {
@@ -86,7 +86,7 @@ class PaymentYandexService extends AbstractPaymentService
             $dbData['email'] = $payment_info['email'] ?? null;
             $dbData['link_code'] = $paymentNum;
             $dbData['link_expires_at'] = date('Y-m-d H:i:s', strtotime('59 minutes'));
-            $dbData['is_test'] = (bool)$this->isTest;
+            $dbData['is_test'] = $this->isTest;
             $dbData['request_data'] = $data;
 
             return OnlinePayment::create($dbData);

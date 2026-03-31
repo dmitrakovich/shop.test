@@ -32,7 +32,7 @@ class ApiResponse
                 $response->hasHeader('Content-type') &&
                 str_contains(implode(',', $response->getHeader('Content-type')), 'json')
             ) {
-                $this->body = (string)$response->getBody()->getContents();
+                $this->body = $response->getBody()->getContents();
             } else {
                 $this->body = (string)$response->getBody();
             }
