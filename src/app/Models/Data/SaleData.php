@@ -2,6 +2,7 @@
 
 namespace App\Models\Data;
 
+use App\Facades\Currency;
 use Carbon\Carbon;
 
 class SaleData
@@ -12,5 +13,7 @@ class SaleData
         public float $discount_percentage,
         public string $label,
         public ?Carbon $end_datetime = null
-    ) {}
+    ) {
+        $this->discount = Currency::round($discount);
+    }
 }
