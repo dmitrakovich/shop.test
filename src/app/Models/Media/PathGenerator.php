@@ -2,7 +2,8 @@
 
 namespace App\Models\Media;
 
-use App\Models\Banner;
+use App\Enums\MorphMap;
+use App\Models\Ads\Banner;
 use App\Models\Feedback;
 use App\Models\Product;
 use App\Models\Stock;
@@ -32,7 +33,7 @@ class PathGenerator extends DefaultPathGenerator
         }
 
         $path = match ($media->model_type) {
-            Banner::class => 'b',
+            MorphMap::Banner->value => 'b',
             Feedback::class => 'f',
             Product::class => 'p',
             Stock::class => 's',

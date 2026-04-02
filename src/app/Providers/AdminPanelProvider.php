@@ -91,7 +91,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->bootUsing(function (Panel $panel) {
                 Table::configureUsing(function (Table $table) {
-                    $table->paginated([10, 25, 50, 100, 200]);
+                    $table->paginated([10, 25, 50, 100, 200])
+                        ->defaultSort('id', 'desc');
                 });
             })
             ->assets([

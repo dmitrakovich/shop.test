@@ -26,7 +26,7 @@ class PromocodeResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Промокоды';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 10;
 
     public static function form(Schema $schema): Schema
     {

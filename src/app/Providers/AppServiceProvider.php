@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Database\SqlServerConnection;
+use App\Enums\MorphMap;
 use App\Facades\Device;
 use App\Logging\FacebookApiLogger;
 use App\Notifications\ChannelManagerWithLimits;
@@ -12,6 +13,7 @@ use App\Services\CartService;
 use FacebookAds\Api;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -76,6 +78,8 @@ class AppServiceProvider extends ServiceProvider
         }
 
         JsonResource::withoutWrapping();
+
+        Relation::morphMap(MorphMap::getMorphMap());
 
         Gate::policy(Role::class, RolePolicy::class);
     }
