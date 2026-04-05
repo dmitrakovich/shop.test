@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Devices;
 
+use App\Enums\Device\DeviceType;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Actions\ToggleDeviceBanAction;
 use App\Filament\Resources\Users\Devices\Pages\ListDevices;
@@ -95,15 +96,7 @@ class DeviceResource extends Resource
 
                 IconColumn::make('type')
                     ->label('Устройство')
-                    ->tooltip(fn (string $state): string => $state === 'mobile'
-                        ? 'Мобильное устройство'
-                        : 'Настольный компьютер'
-                    )
-                    ->icon(fn (string $state): string => $state === 'mobile'
-                        ? 'heroicon-o-device-phone-mobile'
-                        : 'heroicon-o-computer-desktop'
-                    )
-                    ->color(fn (string $state): string => $state === 'mobile' ? 'info' : 'primary')
+                    ->tooltip(fn (DeviceType $state): string => $state->getTooltip())
                     ->alignCenter(),
                 TextColumn::make('ip_address')
                     ->label('IP'),

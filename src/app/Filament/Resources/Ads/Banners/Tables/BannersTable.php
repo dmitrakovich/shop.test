@@ -10,6 +10,7 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -23,20 +24,20 @@ class BannersTable
                     ->label('Позиция')
                     ->badge(),
                 SpatieMediaLibraryImageColumn::make('media')
-                    ->label('Баннер'),
+                    ->label('Баннер')
+                    ->conversion('thumb'),
                 TextColumn::make('title')
                     ->label('Заголовок')
                     ->searchable(),
                 TextColumn::make('url')
                     ->label('Ссылка')
                     ->searchable(),
-                TextColumn::make('priority')
-                    ->label('Приоритет')
-                    ->numeric()
-                    ->sortable(),
-                IconColumn::make('active')
-                    ->label('Активен')
-                    ->boolean(),
+                // TextColumn::make('priority')
+                //     ->label('Приоритет')
+                //     ->numeric()
+                //     ->sortable(),
+                ToggleColumn::make('active')
+                    ->label('Активен'),
                 TextColumn::make('start_datetime')
                     ->label('Дата начала')
                     ->dateTime()
@@ -65,7 +66,7 @@ class BannersTable
                 //     ->boolean(),
             ])
             ->filters([
-                TrashedFilter::make(),
+                TrashedFilter::make()->native(false),
             ])
             ->recordActions([
                 // EditAction::make(),

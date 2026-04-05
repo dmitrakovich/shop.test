@@ -2,10 +2,12 @@
 
 namespace App\Models\Ads;
 
+use App\Enums\Ads\BannerPosition;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -33,11 +35,27 @@ class Banner extends Model implements HasMedia
     use InteractsWithMedia,
         SoftDeletes;
 
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
+
     protected $casts = [
         'active' => 'boolean',
         'show_timer' => 'boolean',
         'spoiler' => 'json',
+        'position' => BannerPosition::class,
     ];
+
+    /**
+     * Register media conversions.
+     */
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')->format('jpg')->height(40);
+    }
 
     public static function getIndexMain()
     {
