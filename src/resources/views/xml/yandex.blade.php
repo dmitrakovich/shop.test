@@ -34,6 +34,9 @@
 @endforeach
                 <param name="Пол">Женский</param>
                 <param name="Возраст">Взрослый</param>
+@foreach ($offer->sizes ?? [] as $size)
+                <param name="Размер">{{ $size }}</param>
+@endforeach
 @foreach ($offer->params as $name => $value)
                 <param name="{{ $name }}">{{ $value }}</param>
 @endforeach
