@@ -95,8 +95,11 @@ abstract class AbstractFeed
      */
     protected function sizesToString(EloquentCollection $sizes): string
     {
-        $sizesList = $sizes->pluck('name');
-        $sizesStr = 'Размеры: ' . ($sizesList[0] ?? 'без размера');
+        $sizesList = $sizes->pluck('name')->filter(fn (?string $n) => $n !== null && $n !== '')->values()->all();
+        if ($sizesList === []) {
+            return 'Без размера';
+        }
+        $sizesStr = 'Размеры: ' . $sizesList[0];
 
         $useDash = false;
         $sizesListCount = count($sizesList);
