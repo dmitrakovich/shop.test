@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Consent\ConsentFormEnum;
 use App\Facades\Device;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AppController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\InfoPageController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Middleware\PersistDeviceConsentHeaders;
 use App\Http\Middleware\RedirectOldProductUrls;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,9 +24,13 @@ Route::get('/user', fn (Request $request) => [
 
 Route::prefix('auth')->as('auth.')->middleware('captcha')->group(function () {
     Route::prefix('otp')->as('otp.')->group(function () {
-        Route::post('send', [AuthController::class, 'sendOtp'])->name('send');
+        Route::post('send', [AuthController::class, 'sendOtp'])
+            ->middleware(PersistDeviceConsentHeaders::class . ':' . ConsentFormEnum::Login->value)
+            ->name('send');
     });
-    Route::post('attempt', [AuthController::class, 'attempt'])->name('attempt');
+    Route::post('attempt', [AuthController::class, 'attempt'])
+        ->middleware(PersistDeviceConsentHeaders::class . ':' . ConsentFormEnum::Login->value)
+        ->name('attempt');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
 });
 
@@ -60,14 +66,20 @@ Route::prefix('favorites')->as('favorites.')->group(function () {
 
 Route::prefix('orders')->as('orders.')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->middleware('auth:sanctum')->name('index');
-    Route::post('checkout', [OrderController::class, 'checkout'])->name('checkout');
-    Route::post('oneclick', [OrderController::class, 'oneclick'])->name('oneclick');
+    Route::post('checkout', [OrderController::class, 'checkout'])
+        ->middleware(PersistDeviceConsentHeaders::class . ':' . ConsentFormEnum::Order->value)
+        ->name('checkout');
+    Route::post('oneclick', [OrderController::class, 'oneclick'])
+        ->middleware(PersistDeviceConsentHeaders::class . ':' . ConsentFormEnum::OneClick->value)
+        ->name('oneclick');
 });
 
 Route::prefix('feedbacks')->as('feedbacks.')->group(function () {
     Route::get('/', [FeedbackController::class, 'index'])->name('index');
     Route::middleware('captcha')->group(function () {
-        Route::post('/', [FeedbackController::class, 'store'])->name('store');
+        Route::post('/', [FeedbackController::class, 'store'])
+            ->middleware(PersistDeviceConsentHeaders::class . ':' . ConsentFormEnum::Feedback->value)
+            ->name('store');
         Route::post('{feedback}/answers', [FeedbackController::class, 'storeAnswer'])->name('answers.store');
     });
 });
