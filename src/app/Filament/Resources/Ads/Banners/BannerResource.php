@@ -50,8 +50,8 @@ class BannerResource extends Resource
     {
         return [
             'index' => ListBanners::route('/'),
-            // 'create' => CreateBanner::route('/create'),
-            // 'edit' => EditBanner::route('/{record}/edit'),
+            'create' => CreateBanner::route('/create'),
+            'edit' => EditBanner::route('/{record}/edit'),
         ];
     }
 

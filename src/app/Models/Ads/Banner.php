@@ -3,6 +3,7 @@
 namespace App\Models\Ads;
 
 use App\Enums\Ads\BannerPosition;
+use App\Enums\Ads\BannerType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
@@ -43,18 +44,51 @@ class Banner extends Model implements HasMedia
     protected static $unguarded = true;
 
     protected $casts = [
+        'position' => BannerPosition::class,
+        'type' => BannerType::class,
         'active' => 'boolean',
         'show_timer' => 'boolean',
         'spoiler' => 'json',
-        'position' => BannerPosition::class,
     ];
 
-    /**
-     * Register media conversions.
-     */
-    public function registerMediaConversions(?Media $media = null): void
+    final const array ACCEPTED_VIDEO_TYPES = [
+        'video/mp4',
+        'video/webm',
+        'video/ogg',
+    ];
+
+    public function registerMediaCollections(): void
     {
-        $this->addMediaConversion('thumb')->format('jpg')->height(40);
+        $this
+            ->addMediaCollection('desktop_image')
+            ->singleFile()
+            ->registerMediaConversions(function (Media $media) {
+                $this->addMediaConversion('thumb')->format('jpg')->height(40);
+            });
+
+        $this
+            ->addMediaCollection('mobile_image')
+            ->singleFile();
+
+        $this
+            ->addMediaCollection('desktop_video')
+            ->singleFile();
+
+        $this
+            ->addMediaCollection('mobile_video')
+            ->singleFile();
+
+        $this
+            ->addMediaCollection('desktop_video_preview')
+            ->singleFile()
+            ->registerMediaConversions(function (Media $media) {
+                $this->addMediaConversion('thumb')->format('jpg')->height(40);
+            });
+
+        $this
+            ->addMediaCollection('mobile_video_preview')
+            ->singleFile();
+
     }
 
     public static function getIndexMain()

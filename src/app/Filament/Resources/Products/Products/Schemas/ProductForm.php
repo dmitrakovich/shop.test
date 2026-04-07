@@ -89,12 +89,15 @@ class ProductForm
                                         Toggle::make('is_imidj')
                                             ->label('Имиджевое')
                                             ->dehydrated(false)
-                                            ->afterStateHydrated(function (Toggle $component, Media $record) {
+                                            ->afterStateHydrated(function (Toggle $component, ?Media $record) {
                                                 $component->state(
-                                                    $record->getCustomProperty('is_imidj', false)
+                                                    $record?->getCustomProperty('is_imidj', false) ?? false
                                                 );
                                             })
-                                            ->afterStateUpdated(function (bool $state, Media $record) {
+                                            ->afterStateUpdated(function (bool $state, ?Media $record) {
+                                                if ($record === null) {
+                                                    return;
+                                                }
                                                 $props = $record->custom_properties ?? [];
                                                 $props['is_imidj'] = $state;
                                                 $record->custom_properties = $props;

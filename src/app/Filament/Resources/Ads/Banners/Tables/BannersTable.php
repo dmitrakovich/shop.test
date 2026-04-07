@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Ads\Banners\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
@@ -28,6 +29,7 @@ class BannersTable
                     ->conversion('thumb'),
                 TextColumn::make('title')
                     ->label('Заголовок')
+                    ->wrap()
                     ->searchable(),
                 TextColumn::make('url')
                     ->label('Ссылка')
@@ -69,7 +71,8 @@ class BannersTable
                 TrashedFilter::make()->native(false),
             ])
             ->recordActions([
-                // EditAction::make(),
+                EditAction::make()->hiddenLabel(),
+                DeleteAction::make()->hiddenLabel(),
             ])
             ->toolbarActions([
                 // BulkActionGroup::make([
