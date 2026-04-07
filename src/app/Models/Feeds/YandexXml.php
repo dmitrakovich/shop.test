@@ -158,7 +158,7 @@ class YandexXml extends AbstractFeed
     {
         if (!array_key_exists('yandex_shoes_category_ids', $this->cache)) {
             $shoesRoot = $this->getCategoriesList()->get(Category::SHOES_PARENT_ID);
-            if ($shoesRoot === null) {
+            if (!($shoesRoot instanceof Category)) {
                 $this->cache['yandex_shoes_category_ids'] = [];
             } else {
                 $ids = $this->getCategoriesList()
