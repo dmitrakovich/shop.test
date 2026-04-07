@@ -2,6 +2,7 @@
 
 namespace App\Models\Ads;
 
+use App\Enums\Ads\BannerMediaCollection;
 use App\Enums\Ads\BannerPosition;
 use App\Enums\Ads\BannerType;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,7 +14,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
- * @property string|null $position
+ * @property BannerPosition $position
+ * @property BannerType $type
  * @property string|null $title
  * @property string|null $url
  * @property int $priority
@@ -61,33 +63,33 @@ class Banner extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this
-            ->addMediaCollection('desktop_image')
+            ->addMediaCollection(BannerMediaCollection::DESKTOP_IMAGE->value)
             ->singleFile()
             ->registerMediaConversions(function (Media $media) {
                 $this->addMediaConversion('thumb')->format('jpg')->height(40);
             });
 
         $this
-            ->addMediaCollection('mobile_image')
+            ->addMediaCollection(BannerMediaCollection::MOBILE_IMAGE->value)
             ->singleFile();
 
         $this
-            ->addMediaCollection('desktop_video')
+            ->addMediaCollection(BannerMediaCollection::DESKTOP_VIDEO->value)
             ->singleFile();
 
         $this
-            ->addMediaCollection('mobile_video')
+            ->addMediaCollection(BannerMediaCollection::MOBILE_VIDEO->value)
             ->singleFile();
 
         $this
-            ->addMediaCollection('desktop_video_preview')
+            ->addMediaCollection(BannerMediaCollection::DESKTOP_VIDEO_PREVIEW->value)
             ->singleFile()
             ->registerMediaConversions(function (Media $media) {
                 $this->addMediaConversion('thumb')->format('jpg')->height(40);
             });
 
         $this
-            ->addMediaCollection('mobile_video_preview')
+            ->addMediaCollection(BannerMediaCollection::MOBILE_VIDEO_PREVIEW->value)
             ->singleFile();
 
     }

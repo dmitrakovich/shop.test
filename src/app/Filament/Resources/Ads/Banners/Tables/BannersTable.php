@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Ads\Banners\Tables;
 
+use App\Enums\Ads\BannerMediaCollection;
+use App\Models\Ads\Banner;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
@@ -22,6 +24,10 @@ class BannersTable
                     ->badge(),
                 SpatieMediaLibraryImageColumn::make('media')
                     ->label('Баннер')
+                    ->collection(fn (Banner $record) => $record->type->isVideo()
+                        ? BannerMediaCollection::DESKTOP_VIDEO_PREVIEW->value
+                        : BannerMediaCollection::DESKTOP_IMAGE->value
+                    )
                     ->conversion('thumb'),
                 TextColumn::make('title')
                     ->label('Заголовок')
