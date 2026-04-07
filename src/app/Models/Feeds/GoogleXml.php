@@ -50,9 +50,14 @@ class GoogleXml extends AbstractFeed
      */
     protected function getItems(): array
     {
-        return new ProductService()->getForFeed(true)
+        return (new ProductService())->getForFeed(true)
+            ->filter(function (Product $item) {
+                return count($this->getProductMedia($item->getMedia())['images']) > 0;
+            })
             ->map(function (Product $item) {
                 $media = $this->getProductMedia($item->getMedia());
+                $color = GoogleFeedFormatter::colorLabel($item->colors);
+                $material = GoogleFeedFormatter::material($item);
 
                 return (object)[
                     'id' => $item->id,
@@ -65,12 +70,12 @@ class GoogleXml extends AbstractFeed
                     'brand' => $this->xmlSpecialChars($item->brand->name),
                     'google_product_category' => $this->getGoogleCategory($item->category),
                     'product_type' => $this->getProductType($item->category),
-                    'description' => $this->getDescription($item),
-                    'title' => $this->xmlSpecialChars($item->extendedName()),
-                    'material' => $item->fabric_top_txt,
-                    'color' => $this->getColor($item->colors),
+                    'description' => GoogleFeedFormatter::description($item),
+                    'title' => GoogleFeedFormatter::title($item, $color),
+                    'material' => $material,
+                    'color' => $color,
                 ];
-            })->toArray();
+            })->values()->toArray();
     }
 
     /**
@@ -113,6 +118,6 @@ class GoogleXml extends AbstractFeed
      */
     public function getColor(EloquentCollection $colors): string
     {
-        return count($colors) == 1 ? $colors[0]->name : 'разноцветный';
+        return GoogleFeedFormatter::colorLabel($colors);
     }
 }
