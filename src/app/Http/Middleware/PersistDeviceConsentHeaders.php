@@ -36,6 +36,7 @@ class PersistDeviceConsentHeaders
 
         $updates['consent_request_source'] = $form;
         $updates['device_id'] = DeviceFacade::id();
+        $updates['user_id'] = $request->user()?->id;
 
         DeviceConsent::query()->create($updates);
 
@@ -75,7 +76,45 @@ class PersistDeviceConsentHeaders
             $updates['personal_data_consent'] = $pdConsent;
         }
 
+        $fio = $this->resolveFullName($request);
+        if ($fio !== null) {
+            $updates['fio'] = $fio;
+        }
+
         return $updates;
+    }
+
+    private function resolveFullName(Request $request): ?string
+    {
+        $fullNameFromInput = $this->normalizePart($request->input('user_name'));
+        if ($fullNameFromInput !== null) {
+            return $fullNameFromInput;
+        }
+
+        $parts = [
+            $this->normalizePart($request->input('last_name')),
+            $this->normalizePart($request->input('first_name')),
+            $this->normalizePart($request->input('patronymic_name')),
+        ];
+
+        $parts = array_values(array_filter($parts, fn (?string $part): bool => $part !== null));
+
+        if ($parts === []) {
+            return null;
+        }
+
+        return implode(' ', $parts);
+    }
+
+    private function normalizePart(mixed $value): ?string
+    {
+        if (!is_string($value)) {
+            return null;
+        }
+
+        $value = trim($value);
+
+        return $value === '' ? null : $value;
     }
 
     private function parseBoolHeader(Request $request, string $name): ?bool

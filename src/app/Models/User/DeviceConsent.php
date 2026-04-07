@@ -10,6 +10,8 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property int|null $device_id
+ * @property int|null $user_id
+ * @property string|null $fio
  * @property bool|null $cookie_analytics_enabled
  * @property bool|null $cookie_marketing_enabled
  * @property Carbon|null $personal_data_consent_recorded_at
@@ -19,11 +21,14 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  *
  * @property-read Device|null $device
+ * @property-read User|null $user
  */
 class DeviceConsent extends Model
 {
     protected $fillable = [
         'device_id',
+        'user_id',
+        'fio',
         'cookie_analytics_enabled',
         'cookie_marketing_enabled',
         'personal_data_consent_recorded_at',
@@ -48,5 +53,13 @@ class DeviceConsent extends Model
     public function device(): BelongsTo
     {
         return $this->belongsTo(Device::class);
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
