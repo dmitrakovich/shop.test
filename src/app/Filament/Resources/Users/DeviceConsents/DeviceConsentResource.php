@@ -43,6 +43,14 @@ class DeviceConsentResource extends Resource
                     ->label('Устройство')
                     ->sortable()
                     ->placeholder('—'),
+                TextColumn::make('user_id')
+                    ->label('Пользователь')
+                    ->sortable()
+                    ->placeholder('—'),
+                TextColumn::make('fio')
+                    ->label('ФИО')
+                    ->searchable()
+                    ->placeholder('—'),
                 TextColumn::make('device.api_id')
                     ->label('Device API ID')
                     ->searchable()
@@ -56,11 +64,6 @@ class DeviceConsentResource extends Resource
                     ->label('Маркетинг')
                     ->boolean()
                     ->alignCenter(),
-                TextColumn::make('personal_data_consent_recorded_at')
-                    ->label('Согласие зафиксировано')
-                    ->dateTime()
-                    ->sortable()
-                    ->placeholder('—'),
                 IconColumn::make('personal_data_consent')
                     ->label('Согласие на обработку персональных данных')
                     ->boolean()
@@ -68,7 +71,7 @@ class DeviceConsentResource extends Resource
                 TextColumn::make('consent_request_source')
                     ->label('Форма')
                     ->badge()
-                    ->formatStateUsing(fn (?ConsentFormEnum $state): ?string => $state?->label())
+                    ->formatStateUsing(fn(?ConsentFormEnum $state): ?string => $state?->label())
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Создано')
@@ -79,7 +82,7 @@ class DeviceConsentResource extends Resource
                 SelectFilter::make('consent_request_source')
                     ->label('Форма')
                     ->options(collect(ConsentFormEnum::cases())->mapWithKeys(
-                        fn (ConsentFormEnum $c): array => [$c->value => $c->label()]
+                        fn(ConsentFormEnum $c): array => [$c->value => $c->label()]
                     )),
             ]);
     }
@@ -113,6 +116,6 @@ class DeviceConsentResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('device');
+        return parent::getEloquentQuery()->with(['device', 'user']);
     }
 }
