@@ -7,19 +7,12 @@
     </div>
 
     <div class="p-index">
-
-        {{ Banner::getIndexMain() }}
-
         <div class="p-index__slider">
             @include('partials.index.simple-slider', ['simpleSlider' => $simpleSliders[0]])
         </div>
 
         <div class="p-index__slider">
             @include('partials.index.simple-slider', ['simpleSlider' => $simpleSliders[1]])
-        </div>
-
-        <div class="row wrapper mb-5">
-            {{ Banner::getIndexBottom() }}
         </div>
 
         <div class="p-index__follow">

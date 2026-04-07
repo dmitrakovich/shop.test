@@ -2,12 +2,8 @@
 
 namespace App\Filament\Resources\Ads\Banners\Tables;
 
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -63,7 +59,7 @@ class BannersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                // IconColumn::make('show_timer')
+                // IconColumn::make('show_timer') // нужна проверка что заполнена дата окончания
                 //     ->label('Показывать таймер')
                 //     ->boolean(),
             ])
@@ -73,13 +69,6 @@ class BannersTable
             ->recordActions([
                 EditAction::make()->hiddenLabel(),
                 DeleteAction::make()->hiddenLabel(),
-            ])
-            ->toolbarActions([
-                // BulkActionGroup::make([
-                //     DeleteBulkAction::make(),
-                //     ForceDeleteBulkAction::make(),
-                //     RestoreBulkAction::make(),
-                // ]),
             ]);
     }
 }

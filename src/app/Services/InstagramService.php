@@ -37,8 +37,6 @@ class InstagramService
      */
     final const string CACHE_POSTS_KEY = 'instagram_posts';
 
-    final const string CACHE_TITLE_KEY = 'instagram_title';
-
     /**
      * Media types
      */
@@ -112,26 +110,6 @@ class InstagramService
     public function getCachedPosts(): array
     {
         return Cache::remember(self::CACHE_POSTS_KEY, 3600, fn () => $this->getPosts());
-    }
-
-    /**
-     * Get title from admin panel
-     */
-    public function getTitle(): ?string
-    {
-        return Cache::get(self::CACHE_TITLE_KEY);
-    }
-
-    /**
-     * Set new title for instagram
-     */
-    public function setTitle(?string $title): void
-    {
-        if (empty($title)) {
-            Cache::forget(self::CACHE_TITLE_KEY);
-        } else {
-            Cache::forever(self::CACHE_TITLE_KEY, $title);
-        }
     }
 
     /**

@@ -2,7 +2,6 @@
 
 use App\Admin\Controllers\Analytics;
 use App\Admin\Controllers\Automation;
-use App\Admin\Controllers\BannerController;
 use App\Admin\Controllers\Bookkeeping;
 use App\Admin\Controllers\CityController;
 use App\Admin\Controllers\Config;
@@ -10,7 +9,6 @@ use App\Admin\Controllers\Debug\CacheController;
 use App\Admin\Controllers\Departures;
 use App\Admin\Controllers\DocController;
 use App\Admin\Controllers\Forms;
-use App\Admin\Controllers\IndexLinkController;
 use App\Admin\Controllers\InfoPageController;
 use App\Admin\Controllers\Logs;
 use App\Admin\Controllers\MediaController;
@@ -95,17 +93,13 @@ Route::group([
         $router->get('installment', Config\InstallmentForm::class);
         $router->get('feedback', Config\FeedbackForm::class);
         $router->get('sms', Config\SmsForm::class);
-        $router->get('instagram-token', Config\InstagramTokenForm::class);
         $router->get('newsletter_for_registered', Config\NewsletterForm::class);
         $router->get('sending-tracks', Config\SendingTracksForm::class);
         $router->get('auto-order-statuses', Config\AutoOrderStatusesForm::class);
     });
 
     $router->group(['prefix' => 'bnrs'], function (Router $router) {
-        $router->resource('bnrs', BannerController::class);
-        $router->resource('index-links', IndexLinkController::class);
         $router->get('upsell', Forms\UpsellSliders::class);
-        $router->get('instagram', Forms\Instagram::class);
         $router->get('short-link', Forms\ShortLink\ShortLinkController::class)->name('short-link');
     });
 
