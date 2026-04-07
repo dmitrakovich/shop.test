@@ -26,8 +26,6 @@
         @include('shop.filters.all')
     </div>
     <div class="col-12 col-lg-9 col-xl-10 catalog-page">
-        {{ Banner::getCatalogTop() }}
-        {{ Banner::getCatalogMob() }}
         @if (!empty($badges))
             <div class="d-flex flex-wrap my-3">
                 @foreach ($badges as $badge)

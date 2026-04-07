@@ -4,6 +4,7 @@ namespace App\Enums;
 
 use App\Models\Ads\Banner;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Model;
 
 enum MorphMap: string
 {
@@ -12,6 +13,8 @@ enum MorphMap: string
 
     /**
      * Get the morph map array.
+     *
+     * @return array<string, class-string<Model>>
      */
     public static function getMorphMap(): array
     {

@@ -59,7 +59,7 @@ class BannersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                // IconColumn::make('show_timer')
+                // IconColumn::make('show_timer') // нужна проверка что заполнена дата окончания
                 //     ->label('Показывать таймер')
                 //     ->boolean(),
             ])
