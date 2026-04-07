@@ -71,7 +71,7 @@ class DeviceConsentResource extends Resource
                 TextColumn::make('consent_request_source')
                     ->label('Форма')
                     ->badge()
-                    ->formatStateUsing(fn(?ConsentFormEnum $state): ?string => $state?->label())
+                    ->formatStateUsing(fn (?ConsentFormEnum $state): ?string => $state?->label())
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Создано')
@@ -82,7 +82,7 @@ class DeviceConsentResource extends Resource
                 SelectFilter::make('consent_request_source')
                     ->label('Форма')
                     ->options(collect(ConsentFormEnum::cases())->mapWithKeys(
-                        fn(ConsentFormEnum $c): array => [$c->value => $c->label()]
+                        fn (ConsentFormEnum $c): array => [$c->value => $c->label()]
                     )),
             ]);
     }
