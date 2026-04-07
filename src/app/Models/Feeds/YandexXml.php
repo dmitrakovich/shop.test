@@ -9,6 +9,7 @@ use App\Models\Currency;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class YandexXml extends AbstractFeed
@@ -161,7 +162,10 @@ class YandexXml extends AbstractFeed
                 $this->cache['yandex_shoes_category_ids'] = [];
             } else {
                 $ids = $this->getCategoriesList()
-                    ->filter(fn (Category $c) => $c->id === Category::SHOES_PARENT_ID || $c->isDescendantOf($shoesRoot))
+                    ->filter(function (Model $c) use ($shoesRoot): bool {
+                        return $c instanceof Category
+                            && ($c->id === Category::SHOES_PARENT_ID || $c->isDescendantOf($shoesRoot));
+                    })
                     ->keys()
                     ->all();
                 $this->cache['yandex_shoes_category_ids'] = array_fill_keys($ids, true);

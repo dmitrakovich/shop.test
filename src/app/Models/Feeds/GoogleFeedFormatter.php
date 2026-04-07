@@ -3,7 +3,9 @@
 namespace App\Models\Feeds;
 
 use App\Facades\Currency as CurrencyFacade;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 /**
@@ -15,6 +17,8 @@ final class GoogleFeedFormatter
 
     /**
      * Цвет для title / g:color (как в GoogleXml::getColor).
+     *
+     * @param  EloquentCollection<int, Color>  $colors
      */
     public static function colorLabel(EloquentCollection $colors): string
     {
@@ -58,6 +62,8 @@ final class GoogleFeedFormatter
 
     /**
      * Размеры для заголовка: перечисление через запятую (порядок как в каталоге).
+     *
+     * @param  EloquentCollection<int, Size>  $sizes
      */
     public static function formatSizesShort(EloquentCollection $sizes): string
     {
@@ -178,6 +184,9 @@ final class GoogleFeedFormatter
         return $sentences === [] ? '' : implode(' ', $sentences);
     }
 
+    /**
+     * @param  EloquentCollection<int, Size>  $sizes
+     */
     protected static function sizesLineForDescription(EloquentCollection $sizes): string
     {
         $names = $sizes->pluck('name')->filter(fn (?string $n) => $n !== null && $n !== '')->values();
