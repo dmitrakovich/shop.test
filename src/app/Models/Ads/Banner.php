@@ -15,7 +15,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * @property int $id
  * @property BannerPosition $position
- * @property BannerType $type
+ * @property BannerType|null $type
  * @property string|null $title
  * @property string|null $url
  * @property int $priority
