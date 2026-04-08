@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\Ads;
 
-use App\Enums\Ads\BannerMediaCollection;
 use App\Models\Ads\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @mixin Banner
@@ -29,20 +29,9 @@ class BannerResource extends JsonResource
             'end_datetime' => $this->end_datetime,
             'show_timer' => $this->show_timer,
             'spoiler' => $this->spoiler,
-            'media' => [
-                'desktop' => $isVideo
-                    ? $this->getFirstMediaUrl(BannerMediaCollection::DESKTOP_VIDEO->value)
-                    : $this->getFirstMediaUrl(BannerMediaCollection::DESKTOP_IMAGE->value),
-                'mobile' => $isVideo
-                    ? $this->getFirstMediaUrl(BannerMediaCollection::MOBILE_VIDEO->value)
-                    : $this->getFirstMediaUrl(BannerMediaCollection::MOBILE_IMAGE->value),
-                'desktop_preview' => $isVideo
-                    ? $this->getFirstMediaUrl(BannerMediaCollection::DESKTOP_VIDEO_PREVIEW->value)
-                    : null,
-                'mobile_preview' => $isVideo
-                    ? $this->getFirstMediaUrl(BannerMediaCollection::MOBILE_VIDEO_PREVIEW->value)
-                    : null,
-            ],
+            'media' => $this->media->mapWithKeys(function (Media $media) {
+                return [$media->collection_name => $media->getFullUrl()];
+            }),
         ];
     }
 }
