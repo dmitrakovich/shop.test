@@ -98,7 +98,7 @@ class BannerForm
                                 Select::make('position')
                                     ->label('Позиция')
                                     ->options(BannerPosition::class)
-                                    ->default(BannerPosition::INDEX_TOP)
+                                    ->default(BannerPosition::INDEX_MAIN)
                                     ->native(false)
                                     ->required()
                                     ->disabled()

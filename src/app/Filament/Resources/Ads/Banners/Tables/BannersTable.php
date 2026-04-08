@@ -24,7 +24,7 @@ class BannersTable
                     ->badge(),
                 SpatieMediaLibraryImageColumn::make('media')
                     ->label('Баннер')
-                    ->collection(fn (Banner $record) => $record->type->isVideo()
+                    ->collection(fn (Banner $record) => $record->type?->isVideo()
                         ? BannerMediaCollection::DESKTOP_VIDEO_PREVIEW->value
                         : BannerMediaCollection::DESKTOP_IMAGE->value
                     )
