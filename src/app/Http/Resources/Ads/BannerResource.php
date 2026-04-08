@@ -19,13 +19,13 @@ class BannerResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $isVideo = $this->type?->isVideo() ?? false;
+        $isVideo = $this->type->isVideo();
 
         return [
             'id' => $this->id,
             'title' => $this->title,
             'url' => $this->url,
-            'type' => $this->type?->value,
+            'type' => $this->type->value,
             'end_datetime' => $this->end_datetime,
             'show_timer' => $this->show_timer,
             'spoiler' => $this->spoiler,
