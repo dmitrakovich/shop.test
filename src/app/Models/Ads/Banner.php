@@ -132,7 +132,7 @@ class Banner extends Model implements HasMedia
      */
     public function scopeBannerFields(Builder $query): Builder
     {
-        return $query->select('id', 'title', 'url', 'end_datetime', 'show_timer', 'spoiler');
+        return $query->select('id', 'title', 'url', 'type', 'end_datetime', 'show_timer', 'spoiler');
     }
 
     /**
