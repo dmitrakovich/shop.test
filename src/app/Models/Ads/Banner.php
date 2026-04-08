@@ -15,7 +15,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * @property int $id
  * @property BannerPosition $position
- * @property BannerType|null $type
+ * @property BannerType $type
  * @property string|null $title
  * @property string|null $url
  * @property int $priority
@@ -91,7 +91,6 @@ class Banner extends Model implements HasMedia
         $this
             ->addMediaCollection(BannerMediaCollection::MOBILE_VIDEO_PREVIEW->value)
             ->singleFile();
-
     }
 
     /**
@@ -119,9 +118,9 @@ class Banner extends Model implements HasMedia
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('active', true)
-            ->where(fn ($query) => $query->where('start_datetime', '<', now())
+            ->where(fn($query) => $query->where('start_datetime', '<', now())
                 ->orWhereNull('start_datetime'))
-            ->where(fn ($query) => $query->where('end_datetime', '>=', now())
+            ->where(fn($query) => $query->where('end_datetime', '>=', now())
                 ->orWhereNull('end_datetime'));
     }
 
