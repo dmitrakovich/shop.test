@@ -27,66 +27,12 @@ class BannerForm
                     ->schema([
                         Section::make('Баннеры')
                             ->schema([
-                                ToggleButtons::make('type')
-                                    ->label('Тип баннера')
-                                    ->options(BannerType::class)
-                                    ->default(BannerType::IMAGE)
-                                    ->inline()
-                                    ->required()
-                                    ->live(),
-
                                 Fieldset::make('Десктоп')
                                     ->columns(1)
-                                    ->schema([
-                                        SpatieMediaLibraryFileUpload::make('desktop_image')
-                                            ->disk('media')
-                                            ->label('Фото (десктоп)')
-                                            ->collection('desktop_image')
-                                            ->image()
-                                            ->visible(fn (Get $get) => $get('type')->isImage())
-                                            ->required(fn (Get $get) => $get('type')->isImage()),
-
-                                        SpatieMediaLibraryFileUpload::make('desktop_video')
-                                            ->disk('media')
-                                            ->label('Видео (десктоп)')
-                                            ->collection('desktop_video')
-                                            ->acceptedFileTypes(Banner::ACCEPTED_VIDEO_TYPES)
-                                            ->visible(fn (Get $get) => $get('type')->isVideo())
-                                            ->required(fn (Get $get) => $get('type')->isVideo()),
-
-                                        SpatieMediaLibraryFileUpload::make('desktop_video_preview')
-                                            ->disk('media')
-                                            ->label('Превью (десктоп)')
-                                            ->collection('desktop_video_preview')
-                                            ->image()
-                                            ->visible(fn (Get $get) => $get('type')->isVideo())
-                                            ->required(fn (Get $get) => $get('type')->isVideo()),
-                                    ]),
-
+                                    ->schema(self::bannerBlock('desktop', 'десктоп')),
                                 Fieldset::make('Мобильная версия')
                                     ->columns(1)
-                                    ->schema([
-                                        SpatieMediaLibraryFileUpload::make('mobile_image')
-                                            ->disk('media')
-                                            ->label('Фото (мобильный)')
-                                            ->collection('mobile_image')
-                                            ->image()
-                                            ->visible(fn (Get $get) => $get('type')->isImage()),
-
-                                        SpatieMediaLibraryFileUpload::make('mobile_video')
-                                            ->disk('media')
-                                            ->label('Видео (мобильный)')
-                                            ->collection('mobile_video')
-                                            ->acceptedFileTypes(['video/mp4', 'video/webm'])
-                                            ->visible(fn (Get $get) => $get('type')->isVideo()),
-
-                                        SpatieMediaLibraryFileUpload::make('mobile_video_preview')
-                                            ->disk('media')
-                                            ->label('Превью (мобильный)')
-                                            ->collection('mobile_video_preview')
-                                            ->image()
-                                            ->visible(fn (Get $get) => $get('type')->isVideo()),
-                                    ]),
+                                    ->schema(self::bannerBlock('mobile', 'мобильный')),
                             ]),
 
                     ])
@@ -125,5 +71,43 @@ class BannerForm
                     ->columnSpan(['lg' => 1]),
             ])
             ->columns(3);
+    }
+
+    /**
+     * Блок загрузки баннера (desktop / mobile)
+     *
+     * @return array<array-key, \Filament\Forms\Components\Field>
+     */
+    private static function bannerBlock(string $prefix, string $label): array
+    {
+        return [
+            ToggleButtons::make("{$prefix}_type")
+                ->label("Тип ({$label})")
+                ->options(BannerType::class)
+                ->inline()
+                ->required()
+                ->live(),
+
+            SpatieMediaLibraryFileUpload::make("{$prefix}_image")
+                ->label("Фото ({$label})")
+                ->collection("{$prefix}_image")
+                ->image()
+                ->visible(fn (Get $get) => $get("{$prefix}_type")->isImage())
+                ->required(fn (Get $get) => $get("{$prefix}_type")->isImage()),
+
+            SpatieMediaLibraryFileUpload::make("{$prefix}_video")
+                ->label("Видео ({$label})")
+                ->collection("{$prefix}_video")
+                ->acceptedFileTypes(Banner::ACCEPTED_VIDEO_TYPES)
+                ->visible(fn (Get $get) => $get("{$prefix}_type")->isVideo())
+                ->required(fn (Get $get) => $get("{$prefix}_type")->isVideo()),
+
+            SpatieMediaLibraryFileUpload::make("{$prefix}_video_preview")
+                ->label("Превью ({$label})")
+                ->collection("{$prefix}_video_preview")
+                ->image()
+                ->visible(fn (Get $get) => $get("{$prefix}_type")->isVideo())
+                ->required(fn (Get $get) => $get("{$prefix}_type")->isVideo()),
+        ];
     }
 }

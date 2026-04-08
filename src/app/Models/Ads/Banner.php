@@ -15,7 +15,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * @property int $id
  * @property BannerPosition $position
- * @property BannerType $type
+ * @property BannerType $desktop_type
+ * @property BannerType $mobile_type
  * @property string|null $title
  * @property string|null $url
  * @property int $priority
@@ -31,7 +32,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
  * @method static Builder<self> active()
- * @method static Builder<self> bannerFields()
  * @method static Builder<self> orderByPriority()
  */
 class Banner extends Model implements HasMedia
@@ -48,7 +48,8 @@ class Banner extends Model implements HasMedia
 
     protected $casts = [
         'position' => BannerPosition::class,
-        'type' => BannerType::class,
+        'desktop_type' => BannerType::class,
+        'mobile_type' => BannerType::class,
         'active' => 'boolean',
         'show_timer' => 'boolean',
         'spoiler' => 'json',
@@ -122,17 +123,6 @@ class Banner extends Model implements HasMedia
                 ->orWhereNull('start_datetime'))
             ->where(fn ($query) => $query->where('end_datetime', '>=', now())
                 ->orWhereNull('end_datetime'));
-    }
-
-    /**
-     * Scope a query to only banner fields.
-     *
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeBannerFields(Builder $query): Builder
-    {
-        return $query->select('id', 'title', 'url', 'type', 'end_datetime', 'show_timer', 'spoiler');
     }
 
     /**

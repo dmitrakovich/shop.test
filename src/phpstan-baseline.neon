@@ -373,42 +373,6 @@ parameters:
 			path: app/Admin/Models/Administrator.php
 
 		-
-			message: '#^Class App\\Admin\\Models\\Banner has PHPDoc tag @property for property \$spoiler with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Admin/Models/Banner.php
-
-		-
-			message: '#^Method App\\Admin\\Models\\Banner\:\:getTypeAttribute\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Admin/Models/Banner.php
-
-		-
-			message: '#^Method App\\Admin\\Models\\Banner\:\:getVideosAttribute\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Admin/Models/Banner.php
-
-		-
-			message: '#^Method App\\Admin\\Models\\Banner\:\:getVideosAttribute\(\) should return array but returns null\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Admin/Models/Banner.php
-
-		-
-			message: '#^Method App\\Admin\\Models\\Banner\:\:setVideosAttribute\(\) has parameter \$videos with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Admin/Models/Banner.php
-
-		-
-			message: '#^Property App\\Admin\\Models\\Banner\:\:\$availablesVideoTypes has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: app/Admin/Models/Banner.php
-
-		-
 			message: '#^Class App\\Admin\\Models\\Media has PHPDoc tag @property for property \$custom_properties with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1693,18 +1657,6 @@ parameters:
 			path: app/Models/Admin/AdminUser.php
 
 		-
-			message: '#^Class App\\Models\\Ads\\IndexLink has PHPDoc tag @property for property \$links with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Ads/IndexLink.php
-
-		-
-			message: '#^Method App\\Models\\Ads\\IndexLink\:\:setLinksAttribute\(\) has parameter \$value with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Ads/IndexLink.php
-
-		-
 			message: '#^Class App\\Models\\Ads\\ProductCarousel has PHPDoc tag @property for property \$additional_settings with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1793,102 +1745,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Models/Api/Token.php
-
-		-
-			message: '#^Class App\\Models\\Banner has PHPDoc tag @property for property \$spoiler with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:getCatalogMob\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:getCatalogTop\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:getFeedback\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:getFeedbackMob\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:getIndexBottom\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:getIndexMain\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:getMainMenuCatalog\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:scopeActive\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:scopeActive\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:scopeBannerFields\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:scopeBannerFields\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:scopeOrderByPriority\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:scopeOrderByPriority\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:setShowTimerAttribute\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Models/Banner.php
-
-		-
-			message: '#^Method App\\Models\\Banner\:\:setShowTimerAttribute\(\) has parameter \$value with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Models/Banner.php
 
 		-
 			message: '#^Method App\\Models\\Bots\\Telegram\\TelegramBot\:\:chats\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<DefStudio\\Telegraph\\Models\\TelegraphChat, \$this\(App\\Models\\Bots\\Telegram\\TelegramBot\)\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\Bots\\Telegram\\TelegramChat, \$this\(App\\Models\\Bots\\Telegram\\TelegramBot\)\>\.$#'
@@ -2183,12 +2039,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Models/Feeds/GoogleCsv.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/Feeds/GoogleXml.php
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$title\.$#'

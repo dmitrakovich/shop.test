@@ -21,7 +21,6 @@ class BannerRepository
         return Cache::rememberForever(self::MAIN_BANNERS_CACHE_KEY, function () {
             return $this->model->newQuery()
                 ->active()
-                ->bannerFields()
                 ->where('position', BannerPosition::INDEX_MAIN)
                 ->orderByPriority()
                 ->get();
