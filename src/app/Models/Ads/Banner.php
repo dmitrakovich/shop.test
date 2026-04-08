@@ -118,9 +118,9 @@ class Banner extends Model implements HasMedia
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('active', true)
-            ->where(fn($query) => $query->where('start_datetime', '<', now())
+            ->where(fn ($query) => $query->where('start_datetime', '<', now())
                 ->orWhereNull('start_datetime'))
-            ->where(fn($query) => $query->where('end_datetime', '>=', now())
+            ->where(fn ($query) => $query->where('end_datetime', '>=', now())
                 ->orWhereNull('end_datetime'));
     }
 
