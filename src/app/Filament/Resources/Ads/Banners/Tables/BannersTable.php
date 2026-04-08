@@ -24,9 +24,10 @@ class BannersTable
                     ->badge(),
                 SpatieMediaLibraryImageColumn::make('media')
                     ->label('Баннер')
-                    ->collection(fn (Banner $record) => $record->type->isVideo()
-                        ? BannerMediaCollection::DESKTOP_VIDEO_PREVIEW->value
-                        : BannerMediaCollection::DESKTOP_IMAGE->value
+                    ->collection(
+                        fn (Banner $record) => $record->type->isVideo()
+                            ? BannerMediaCollection::DESKTOP_VIDEO_PREVIEW->value
+                            : BannerMediaCollection::DESKTOP_IMAGE->value
                     )
                     ->conversion('thumb'),
                 TextColumn::make('title')

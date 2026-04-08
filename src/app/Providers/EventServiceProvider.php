@@ -114,6 +114,9 @@ class EventServiceProvider extends ServiceProvider
      * The model observers for your application.
      */
     protected $observers = [
+        \App\Models\Ads\Banner::class => [
+            Observers\BannerObserver::class,
+        ],
         \App\Models\Orders\Order::class => [
             Observers\OrderObserver::class,
         ],

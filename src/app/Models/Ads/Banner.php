@@ -91,7 +91,6 @@ class Banner extends Model implements HasMedia
         $this
             ->addMediaCollection(BannerMediaCollection::MOBILE_VIDEO_PREVIEW->value)
             ->singleFile();
-
     }
 
     /**
