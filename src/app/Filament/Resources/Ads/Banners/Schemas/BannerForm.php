@@ -84,6 +84,7 @@ class BannerForm
             ToggleButtons::make("{$prefix}_type")
                 ->label("Тип ({$label})")
                 ->options(BannerType::class)
+                ->default(BannerType::IMAGE)
                 ->inline()
                 ->required()
                 ->live(),
