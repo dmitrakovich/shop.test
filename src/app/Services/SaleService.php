@@ -234,10 +234,19 @@ class SaleService
 
     private function checkCustomConditions(Product $product): bool
     {
+        if ($this->isExcludedProductFromCustomSale($product)) {
+            return false;
+        }
+
         return isset($this->discounts[SettingType::CATEGORY->value][$product->category_id])
             || isset($this->discounts[SettingType::MANUFACTURER->value][$product->manufacturer_id])
             || isset($this->discounts[SettingType::PRODUCT->value][$product->id])
             || isset($this->discounts[SettingType::COLLECTION->value][$product->collection_id]);
+    }
+
+    private function isExcludedProductFromCustomSale(Product $product): bool
+    {
+        return isset($this->discounts[SettingType::EXCLUDED_PRODUCT->value][$product->id]);
     }
 
     /**
