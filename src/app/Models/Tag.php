@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
  * @property-read \App\Models\TagGroup|null $group
  * @property-read \App\Models\Url|null $url
+ *
+ * @implements Filterable<Tag>
  */
 class Tag extends Model implements Filterable
 {

@@ -17,8 +17,11 @@ readonly class ModelCast implements Cast
         private readonly string $keyName = 'id'
     ) {}
 
+    /**
+     * @param  CreationContext<\Spatie\LaravelData\Data>  $context
+     */
     public function cast(DataProperty $property, mixed $value, array $properties, CreationContext $context): mixed
     {
-        return new $this->modelClass()->setKeyName($this->keyName)->findOrFail($value);
+        return (new $this->modelClass())->setKeyName($this->keyName)->findOrFail($value);
     }
 }

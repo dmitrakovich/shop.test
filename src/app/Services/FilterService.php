@@ -25,7 +25,7 @@ class FilterService
     /**
      * Filter-related classes
      *
-     * @var class-string<Model&Filterable>[]
+     * @var array<string, class-string<Model&Filterable<covariant Model>>>
      */
     private const array FILTERS_MODELS = [
         'categories' => Category::class,

@@ -24,7 +24,7 @@ class EripStatusUpdateCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(PaymentEripService $paymentEripService)
+    public function handle(PaymentEripService $paymentEripService): void
     {
         $paymentEripService->updateStatuses();
     }

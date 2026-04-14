@@ -28,7 +28,7 @@ class UpdateUserMetadata extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->output->progressStart(User::query()->count());
 

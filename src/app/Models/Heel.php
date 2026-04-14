@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $model
  *
  * @property-read \App\Models\Url|null $url
+ *
+ * @implements Filterable<Heel>
  */
 class Heel extends Model implements Filterable
 {

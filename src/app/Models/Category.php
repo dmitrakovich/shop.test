@@ -41,6 +41,8 @@ use Spatie\EloquentSortable\SortableTrait;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category d()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category ordered(string $direction = 'asc')
+ *
+ * @implements Filterable<Category>
  */
 class Category extends Model implements Filterable, Sortable
 {

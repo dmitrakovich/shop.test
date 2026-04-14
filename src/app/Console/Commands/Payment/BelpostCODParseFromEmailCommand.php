@@ -25,7 +25,7 @@ class BelpostCODParseFromEmailCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(BelpostCODService $belpostCODService)
+    public function handle(BelpostCODService $belpostCODService): void
     {
         if ((Config::findCacheable('auto_order_statuses')['belpost_parse_email'] ?? false)) {
             $belpostCODService->parseEmail();

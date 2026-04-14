@@ -6,6 +6,7 @@ use App\ValueObjects\Phone;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
+/** @implements CastsAttributes<Phone, Phone|int|string|null> */
 class AsPhone implements CastsAttributes
 {
     /**

@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
  * @property string $model
  *
  * @property-read \App\Models\Url|null $url
+ *
+ * @implements Filterable<Price>
  */
 class Price extends Model implements Filterable
 {

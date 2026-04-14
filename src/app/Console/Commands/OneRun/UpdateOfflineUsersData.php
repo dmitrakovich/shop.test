@@ -27,7 +27,7 @@ class UpdateOfflineUsersData extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         /** @var Collection|User[] */
         $users = User::query()
@@ -72,7 +72,7 @@ class UpdateOfflineUsersData extends Command
      *
      * @param  User  $user  The user model to check against
      * @param  DiscountCard  $discountCard  The discount card model containing new values
-     * @return array Array of field/value pairs that don't exist in user model
+     * @return array<string, mixed> Array of field/value pairs that don't exist in user model
      */
     private function filterExistingValues(User $user, DiscountCard $discountCard): array
     {

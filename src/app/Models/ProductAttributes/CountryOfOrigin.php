@@ -18,6 +18,8 @@ use Illuminate\Support\Str;
  * @property string $model
  *
  * @property-read \App\Models\Url|null $url
+ *
+ * @implements Filterable<CountryOfOrigin>
  */
 class CountryOfOrigin extends Model implements Filterable
 {

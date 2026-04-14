@@ -22,6 +22,9 @@ class GenerateFeed extends Command
                             {instance? : Feed instance name}
                             {currency? : Currency for feed}';
 
+    /**
+     * @var array<string, class-string<\App\Models\Feeds\AbstractFeed>>
+     */
     final const array INSTANCES = [
         'yandex_xml' => YandexXml::class,
         'google_xml' => GoogleXml::class,
@@ -37,6 +40,8 @@ class GenerateFeed extends Command
 
     /**
      * Get all instances or instance from arguments
+     *
+     * @return array<string, class-string<\App\Models\Feeds\AbstractFeed>>
      */
     protected function getInstances(): array
     {
@@ -44,7 +49,7 @@ class GenerateFeed extends Command
 
         if (!empty($this->argument('instance'))) {
             $instance = strtolower($this->argument('instance'));
-            $instances = Arr::only($instances, $instance);
+            $instances = Arr::only($instances, [$instance]);
 
             if (empty($instances)) {
                 throw new \Exception('Unknown instance');
@@ -57,15 +62,15 @@ class GenerateFeed extends Command
     /**
      * Get all currencies or currency from argument
      *
-     * @return EloquentCollection<Currency>
+     * @return EloquentCollection<int, Currency>
      */
-    protected function getCurrencies()
+    protected function getCurrencies(): EloquentCollection
     {
         $allCurrencies = Currency::all(['code', 'country', 'rate', 'decimals', 'symbol'])->keyBy('code');
 
         if (!empty($this->argument('currency'))) {
             $currency = strtoupper($this->argument('currency'));
-            $allCurrencies = $allCurrencies->only($currency);
+            $allCurrencies = $allCurrencies->only([$currency]);
 
             if ($allCurrencies->isEmpty()) {
                 throw new \Exception('Unknown currency');
@@ -77,10 +82,8 @@ class GenerateFeed extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): void
     {
         foreach ($this->getInstances() as $instance) {
             foreach ($this->getCurrencies() as $currency) {
@@ -89,7 +92,5 @@ class GenerateFeed extends Command
         }
 
         $this->info('Tasks created');
-
-        return 0;
     }
 }
