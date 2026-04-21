@@ -113,6 +113,15 @@ class Category extends Model implements Filterable, Sortable
     }
 
     /**
+     * Eager-load the full parent_category chain (for nested CategoryResource output).
+     */
+    public function loadParentCategoryChain(): void
+    {
+        $this->loadMissing('parentCategory');
+        $this->parentCategory?->loadParentCategoryChain();
+    }
+
+    /**
      * @return HasMany<Category, $this>
      */
     public function categories(): HasMany
@@ -294,7 +303,7 @@ class Category extends Model implements Filterable, Sortable
 
     public static function getFilters(): array
     {
-        return new self()->newQuery()
+        return (new self())->newQuery()
             ->whereNull('parent_id')
             ->with('childrenCategories:id,slug,path,title,parent_id')
             ->get(['id', 'slug', 'path', 'title', 'parent_id'])
