@@ -93,7 +93,7 @@ class CategoryResource extends Resource
             return $tree;
         }
 
-        $excludeIds = $record->descendants()->pluck('id')->push($record->id)->all();
+        $excludeIds = $record->descendants()->get(['id'])->pluck('id')->push($record->id)->all();
 
         return array_diff_key($tree, array_flip($excludeIds));
     }
