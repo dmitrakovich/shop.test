@@ -6,10 +6,12 @@ use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Kalnoy\Nestedset\NodeTrait;
@@ -26,18 +28,18 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property int $_lft
  * @property int $_rgt
  * @property int|null $parent_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property int $order Порядок сортировки
  * @property string $model
  * @property string $name
  *
- * @property-read \App\Models\Category|null $parentCategory
- * @property-read \App\Models\Category|null $parent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $childrenCategories
- * @property-read \App\Models\Url|null $url
+ * @property-read Category|null $parentCategory
+ * @property-read Category|null $parent
+ * @property-read Collection|Category[] $categories
+ * @property-read Collection|Category[] $childrenCategories
+ * @property-read Url|null $url
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category d()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category ordered(string $direction = 'asc')

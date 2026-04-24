@@ -11,6 +11,7 @@ enum NavGroup implements HasIcon, HasLabel
     case Promo;
     case Users;
     case Products;
+    case ProductAttributes;
     case Registers;
     case OldAdminPanel;
     case Automation;
@@ -22,6 +23,7 @@ enum NavGroup implements HasIcon, HasLabel
             self::Promo => 'Промо',
             self::Users => 'Клиенты',
             self::Products => 'Товары',
+            self::ProductAttributes => 'Атрибуты товаров',
             self::Registers => 'Реестры',
             self::OldAdminPanel => 'Старая админка',
             self::Automation => 'Автоматизация',
@@ -35,6 +37,7 @@ enum NavGroup implements HasIcon, HasLabel
             self::Promo => Heroicon::OutlinedFire,
             self::Users => Heroicon::OutlinedUserGroup,
             self::Products => Heroicon::OutlinedSquares2x2,
+            self::ProductAttributes => Heroicon::OutlinedSwatch,
             self::Registers => Heroicon::OutlinedFolder,
             self::OldAdminPanel => Heroicon::OutlinedArrowUturnLeft,
             self::Automation => Heroicon::OutlinedCog8Tooth,
