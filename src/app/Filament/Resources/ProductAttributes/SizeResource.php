@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\Products\Sizes;
+namespace App\Filament\Resources\ProductAttributes;
 
 use App\Enums\Filament\NavGroup;
-use App\Filament\Resources\Products\Sizes\Pages\ListSizes;
+use App\Filament\Resources\ProductAttributes\Pages\ListSizes;
 use App\Models\Size;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
@@ -26,7 +26,7 @@ class SizeResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Размеры';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 4;
 
     public static function form(Schema $schema): Schema
     {

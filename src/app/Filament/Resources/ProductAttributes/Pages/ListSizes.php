@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\Products\Sizes\Pages;
+namespace App\Filament\Resources\ProductAttributes\Pages;
 
-use App\Filament\Resources\Products\Sizes\SizeResource;
+use App\Filament\Resources\ProductAttributes\SizeResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Support\Enums\Width;

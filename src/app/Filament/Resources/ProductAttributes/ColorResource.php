@@ -20,13 +20,13 @@ class ColorResource extends Resource
 {
     protected static ?string $model = Color::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::ProductAttributes;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Products;
 
     protected static ?string $modelLabel = 'Цвет';
 
     protected static ?string $pluralModelLabel = 'Цвета';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 6;
 
     public static function form(Schema $schema): Schema
     {

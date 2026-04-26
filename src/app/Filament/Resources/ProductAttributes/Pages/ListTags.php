@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ProductAttributes\Pages;
 use App\Filament\Resources\ProductAttributes\TagResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Support\Enums\Width;
 
 class ListTags extends ListRecords
 {
@@ -15,5 +16,10 @@ class ListTags extends ListRecords
         return [
             CreateAction::make(),
         ];
+    }
+
+    public function getMaxContentWidth(): Width
+    {
+        return Width::SevenExtraLarge;
     }
 }

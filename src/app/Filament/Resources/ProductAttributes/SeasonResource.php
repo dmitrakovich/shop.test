@@ -21,13 +21,13 @@ class SeasonResource extends Resource
 {
     protected static ?string $model = Season::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::ProductAttributes;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Products;
 
     protected static ?string $modelLabel = 'Сезон';
 
     protected static ?string $pluralModelLabel = 'Сезоны';
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 8;
 
     public static function form(Schema $schema): Schema
     {

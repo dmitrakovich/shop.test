@@ -19,13 +19,13 @@ class FabricResource extends Resource
 {
     protected static ?string $model = Fabric::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::ProductAttributes;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Products;
 
     protected static ?string $modelLabel = 'Материал';
 
     protected static ?string $pluralModelLabel = 'Материалы';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 5;
 
     public static function form(Schema $schema): Schema
     {

@@ -19,13 +19,13 @@ class CountryOfOriginResource extends Resource
 {
     protected static ?string $model = CountryOfOrigin::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::ProductAttributes;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Products;
 
     protected static ?string $modelLabel = 'Страна производитель';
 
     protected static ?string $pluralModelLabel = 'Страны производства';
 
-    protected static ?int $navigationSort = 14;
+    protected static ?int $navigationSort = 15;
 
     public static function form(Schema $schema): Schema
     {

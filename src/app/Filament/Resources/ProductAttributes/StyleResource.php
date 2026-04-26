@@ -19,13 +19,13 @@ class StyleResource extends Resource
 {
     protected static ?string $model = Style::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::ProductAttributes;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Products;
 
     protected static ?string $modelLabel = 'Стиль';
 
     protected static ?string $pluralModelLabel = 'Стили';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 9;
 
     public static function form(Schema $schema): Schema
     {

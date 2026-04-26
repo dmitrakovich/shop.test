@@ -20,13 +20,13 @@ class TagGroupResource extends Resource
 {
     protected static ?string $model = TagGroup::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::ProductAttributes;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Products;
 
     protected static ?string $modelLabel = 'Группа тегов';
 
     protected static ?string $pluralModelLabel = 'Группы тегов';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 11;
 
     public static function form(Schema $schema): Schema
     {

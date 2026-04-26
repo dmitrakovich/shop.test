@@ -8,10 +8,9 @@ use Filament\Support\Icons\Heroicon;
 
 enum NavGroup implements HasIcon, HasLabel
 {
+    case Products;
     case Promo;
     case Users;
-    case Products;
-    case ProductAttributes;
     case Registers;
     case OldAdminPanel;
     case Automation;
@@ -20,10 +19,9 @@ enum NavGroup implements HasIcon, HasLabel
     public function getLabel(): string
     {
         return match ($this) {
+            self::Products => 'Товары',
             self::Promo => 'Промо',
             self::Users => 'Клиенты',
-            self::Products => 'Товары',
-            self::ProductAttributes => 'Атрибуты товаров',
             self::Registers => 'Реестры',
             self::OldAdminPanel => 'Старая админка',
             self::Automation => 'Автоматизация',
@@ -34,10 +32,9 @@ enum NavGroup implements HasIcon, HasLabel
     public function getIcon(): Heroicon
     {
         return match ($this) {
+            self::Products => Heroicon::OutlinedSquares2x2,
             self::Promo => Heroicon::OutlinedFire,
             self::Users => Heroicon::OutlinedUserGroup,
-            self::Products => Heroicon::OutlinedSquares2x2,
-            self::ProductAttributes => Heroicon::OutlinedSwatch,
             self::Registers => Heroicon::OutlinedFolder,
             self::OldAdminPanel => Heroicon::OutlinedArrowUturnLeft,
             self::Automation => Heroicon::OutlinedCog8Tooth,

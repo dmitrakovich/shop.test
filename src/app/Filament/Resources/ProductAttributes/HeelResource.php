@@ -19,13 +19,13 @@ class HeelResource extends Resource
 {
     protected static ?string $model = Heel::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::ProductAttributes;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Products;
 
     protected static ?string $modelLabel = 'Высота каблука';
 
     protected static ?string $pluralModelLabel = 'Высота каблука';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 7;
 
     public static function form(Schema $schema): Schema
     {

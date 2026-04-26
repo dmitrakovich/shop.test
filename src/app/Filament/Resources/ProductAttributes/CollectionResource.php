@@ -19,13 +19,13 @@ class CollectionResource extends Resource
 {
     protected static ?string $model = Collection::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::ProductAttributes;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Products;
 
     protected static ?string $modelLabel = 'Коллекция';
 
     protected static ?string $pluralModelLabel = 'Коллекции';
 
-    protected static ?int $navigationSort = 12;
+    protected static ?int $navigationSort = 13;
 
     public static function form(Schema $schema): Schema
     {

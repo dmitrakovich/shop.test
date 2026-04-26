@@ -18,13 +18,13 @@ class ManufacturerResource extends Resource
 {
     protected static ?string $model = Manufacturer::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::ProductAttributes;
+    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Products;
 
     protected static ?string $modelLabel = 'Производитель';
 
     protected static ?string $pluralModelLabel = 'Производители';
 
-    protected static ?int $navigationSort = 13;
+    protected static ?int $navigationSort = 14;
 
     public static function form(Schema $schema): Schema
     {
