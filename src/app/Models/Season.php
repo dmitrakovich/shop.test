@@ -35,6 +35,13 @@ class Season extends Model implements Filterable
         'is_actual',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function (self $season): void {
+            $season->url()->updateOrCreate([], ['slug' => $season->slug]);
+        });
+    }
+
     /**
      * @return array<string, string>
      */

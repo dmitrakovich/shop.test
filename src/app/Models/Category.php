@@ -67,8 +67,18 @@ class Category extends Model implements Filterable, Sortable
         static::addGlobalScope('order', function ($builder) {
             $builder->orderBy('order', 'asc');
         });
-        static::saved(function () {
+        static::saving(function (self $category): void {
+            if (!$category->exists || $category->isDirty(['slug', 'parent_id']) || blank($category->path)) {
+                $category->generatePath();
+            }
+        });
+        static::saved(function (self $category): void {
             Cache::forget(config('cache_config.global_nav_categories.key'));
+            $category->url()->updateOrCreate([], ['slug' => $category->slug]);
+
+            if ($category->wasChanged(['slug', 'parent_id'])) {
+                $category->updateDescendantsPaths();
+            }
         });
     }
 
@@ -96,14 +106,6 @@ class Category extends Model implements Filterable, Sortable
     protected static function getRelationColumn(): string
     {
         return 'category_id';
-    }
-
-    /**
-     * Generate path mutator
-     */
-    public function setPathAttribute(mixed $path): void
-    {
-        $this->generatePath();
     }
 
     /**
@@ -191,7 +193,18 @@ class Category extends Model implements Filterable, Sortable
 
     public function generatePath(): self
     {
-        $this->attributes['path'] = $this->isRoot() ? $this->slug : $this->parent->path . '/' . $this->slug;
+        if ($this->isRoot() || !$this->parent_id) {
+            $this->attributes['path'] = $this->slug;
+
+            return $this;
+        }
+
+        $parentPath = self::query()
+            ->withoutGlobalScope('order')
+            ->whereKey($this->parent_id)
+            ->value('path');
+
+        $this->attributes['path'] = $parentPath ? $parentPath . '/' . $this->slug : $this->slug;
 
         return $this;
     }

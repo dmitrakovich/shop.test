@@ -32,6 +32,13 @@ class Brand extends Model implements Filterable
      */
     protected static $unguarded = true;
 
+    protected static function booted(): void
+    {
+        static::saved(function (self $brand): void {
+            $brand->url()->updateOrCreate([], ['slug' => $brand->slug]);
+        });
+    }
+
     protected static function getRelationColumn(): string
     {
         return 'brand_id';

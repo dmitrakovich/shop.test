@@ -33,6 +33,13 @@ class Collection extends Model implements Filterable
         'seo',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function (self $collection): void {
+            $collection->url()->updateOrCreate([], ['slug' => $collection->slug]);
+        });
+    }
+
     protected static function getRelationColumn(): string
     {
         return 'collection_id';

@@ -8,6 +8,7 @@ use App\Filament\Resources\ProductAttributes\Pages\EditColor;
 use App\Filament\Resources\ProductAttributes\Pages\ListColors;
 use App\Models\Color;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -40,10 +41,10 @@ class ColorResource extends Resource
                     ->label('Slug')
                     ->required()
                     ->maxLength(255),
-                TextInput::make('value')
+                ColorPicker::make('value')
                     ->label('Код цвета')
                     ->default('#ffffff')
-                    ->maxLength(255),
+                    ->hex(),
                 Textarea::make('seo')
                     ->label('SEO')
                     ->rows(4),

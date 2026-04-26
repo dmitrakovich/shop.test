@@ -34,7 +34,8 @@ class BrandResource extends Resource
                 TextInput::make('one_c_id')
                     ->label('ID в 1С')
                     ->numeric()
-                    ->minValue(1),
+                    ->minValue(1)
+                    ->unique(ignoreRecord: true),
                 TextInput::make('name')
                     ->label('Название')
                     ->required()

@@ -39,6 +39,13 @@ class Tag extends Model implements Filterable
         'tag_group_id',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function (self $tag): void {
+            $tag->url()->updateOrCreate([], ['slug' => $tag->slug]);
+        });
+    }
+
     /**
      * Теги
      */

@@ -41,13 +41,15 @@ class CategoryResource extends Resource
                     ->required()
                     ->maxLength(255),
                 TextInput::make('one_c_name')
-                    ->label('Название в 1С'),
+                    ->label('Название в 1С')
+                    ->unique(ignoreRecord: true),
                 Textarea::make('description')
                     ->label('Описание')
                     ->rows(4),
                 Select::make('parent_id')
                     ->label('Родительская категория')
                     ->options(fn (?Category $record): array => self::parentCategoryOptions($record))
+                    ->default(Category::SHOES_PARENT_ID)
                     ->required()
                     ->searchable(),
             ]);
