@@ -19,18 +19,6 @@ use App\Admin\Controllers\OrderItemController;
 use App\Admin\Controllers\Orders\OfflineOrderController;
 use App\Admin\Controllers\OrdersDistribution\SettingsController;
 use App\Admin\Controllers\OrdersDistribution\StatisticController;
-use App\Admin\Controllers\ProductAttributes\BrandController;
-use App\Admin\Controllers\ProductAttributes\CategoryController;
-use App\Admin\Controllers\ProductAttributes\CollectionController;
-use App\Admin\Controllers\ProductAttributes\ColorController;
-use App\Admin\Controllers\ProductAttributes\CountryOfOriginController;
-use App\Admin\Controllers\ProductAttributes\FabricController;
-use App\Admin\Controllers\ProductAttributes\HeelHeightController;
-use App\Admin\Controllers\ProductAttributes\ManufacturerController;
-use App\Admin\Controllers\ProductAttributes\SeasonController;
-use App\Admin\Controllers\ProductAttributes\StyleController;
-use App\Admin\Controllers\ProductAttributes\TagController;
-use App\Admin\Controllers\ProductAttributes\TagGroupController;
 use App\Admin\Controllers\RatingController;
 use App\Admin\Controllers\Seo\SeoLinkController;
 use App\Admin\Controllers\StockController;
@@ -69,21 +57,6 @@ Route::group([
     $router->group(['prefix' => 'users'], function (Router $router) {
         $router->resource('users', UserController::class);
         $router->resource('groups', GroupController::class);
-    });
-
-    $router->group(['prefix' => 'product-attributes'], function (Router $router) {
-        $router->resource('categories', CategoryController::class);
-        $router->resource('fabrics', FabricController::class);
-        $router->resource('colors', ColorController::class);
-        $router->resource('heel-heights', HeelHeightController::class);
-        $router->resource('seasons', SeasonController::class);
-        $router->resource('styles', StyleController::class);
-        $router->resource('tags', TagController::class);
-        $router->resource('tag_groups', TagGroupController::class);
-        $router->resource('brands', BrandController::class);
-        $router->resource('manufacturers', ManufacturerController::class);
-        $router->resource('collections', CollectionController::class);
-        $router->resource('country-of-origin', CountryOfOriginController::class);
     });
 
     $router->group(['prefix' => 'config', 'as' => 'config.'], function (Router $router) {
