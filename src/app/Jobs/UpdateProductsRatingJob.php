@@ -312,7 +312,7 @@ class UpdateProductsRatingJob extends AbstractJob
         return DB::table('products')
             ->whereNull('deleted_at')
             ->where('price', '<>', 0)
-            ->where('label_id', '<>', 3)
+            // ->where('label_id', '<>', 3)
             ->selectRaw(<<<SQL
                 id, price, 100*(old_price - price)/old_price AS discount,
                 IF(DATEDIFF(NOW(), created_at) = 0,0.001, DATEDIFF(NOW(), created_at)) AS newless,
