@@ -9,6 +9,7 @@ use App\Models\Currency;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class YandexXml extends AbstractFeed
@@ -83,7 +84,7 @@ class YandexXml extends AbstractFeed
      */
     protected function getOffers(): array
     {
-        return new ProductService()->getForFeed()
+        return (new ProductService())->getForFeed()
             ->map(function (Product $item) {
                 $media = $this->getProductMedia($item->getMedia());
 
@@ -94,6 +95,9 @@ class YandexXml extends AbstractFeed
                     'price' => $item->getPrice(),
                     'old_price' => $item->getOldPrice(),
                     'colors' => $this->getColors($item->colors),
+                    'sizes' => $this->isShoesCategory($item->category) && $item->sizes->isNotEmpty()
+                        ? $item->sizes->pluck('name')->all()
+                        : [],
                     'params' => $this->getOfferParams($item),
                     'category_id' => $item->category_id,
                     'pictures' => $media['images'],
@@ -121,6 +125,7 @@ class YandexXml extends AbstractFeed
     public function getOfferParams(Product $product): array
     {
         $params = [];
+
         if (!empty($product->fabric_top_txt)) {
             $name = 'Материал';
             if ($product->category->parent_id != Category::ACCESSORIES_PARENT_ID) {
@@ -145,6 +150,40 @@ class YandexXml extends AbstractFeed
     }
 
     /**
+     * IDs of categories in the shoes branch.
+     *
+     * @return array<int, true>
+     */
+    protected function shoesCategoryIdSet(): array
+    {
+        if (!array_key_exists('yandex_shoes_category_ids', $this->cache)) {
+            $shoesRoot = $this->getCategoriesList()->get(Category::SHOES_PARENT_ID);
+            if (!($shoesRoot instanceof Category)) {
+                $this->cache['yandex_shoes_category_ids'] = [];
+            } else {
+                $ids = $this->getCategoriesList()
+                    ->filter(function (Model $c) use ($shoesRoot): bool {
+                        return $c instanceof Category
+                            && ($c->id === Category::SHOES_PARENT_ID || $c->isDescendantOf($shoesRoot));
+                    })
+                    ->keys()
+                    ->all();
+                $this->cache['yandex_shoes_category_ids'] = array_fill_keys($ids, true);
+            }
+        }
+
+        return $this->cache['yandex_shoes_category_ids'];
+    }
+
+    /**
+     * Check if the category is in the shoes branch.
+     */
+    protected function isShoesCategory(Category $category): bool
+    {
+        return isset($this->shoesCategoryIdSet()[$category->id]);
+    }
+
+    /**
      * Retrieves the sales notes for a given product.
      *
      * @param  Product  $product  The product object.
@@ -154,8 +193,8 @@ class YandexXml extends AbstractFeed
     {
         return match (true) {
             ($product->category->parent_id == Category::ACCESSORIES_PARENT_ID) => 'Оплата при получении. Курьером или почтой.',
-            ($product->getPrice() < 150) => 'Оплата при получении. Курьером или почтой. Примерка!',
-            ($product->getPrice() >= 150) => 'Примерка. Оплата при получении. Рассрочка на 3 платежа!',
+            ($product->getPrice() < 150) => 'Оплата при получении. Курьер или почта. Примерка!',
+            ($product->getPrice() >= 150) => 'Примерка. Оплата при получении. Рассрочка!',
         };
     }
 }

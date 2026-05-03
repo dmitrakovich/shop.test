@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -12,11 +13,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $slug
  * @property string|null $seo
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string $model
  *
- * @property-read \App\Models\Url|null $url
+ * @property-read Url|null $url
+ *
+ * @implements Filterable<Brand>
  */
 class Brand extends Model implements Filterable
 {
@@ -28,6 +31,13 @@ class Brand extends Model implements Filterable
      * @var bool
      */
     protected static $unguarded = true;
+
+    protected static function booted(): void
+    {
+        static::saved(function (self $brand): void {
+            $brand->url()->updateOrCreate([], ['slug' => $brand->slug]);
+        });
+    }
 
     protected static function getRelationColumn(): string
     {

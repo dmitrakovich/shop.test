@@ -4,26 +4,47 @@ namespace App\Models;
 
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property string $name
  * @property string $slug
  * @property string|null $seo
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int|null $tag_group_id Номер группы
  * @property string $model
  *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
- * @property-read \App\Models\TagGroup|null $group
- * @property-read \App\Models\Url|null $url
+ * @property-read Collection|Product[] $products
+ * @property-read TagGroup|null $group
+ * @property-read Url|null $url
+ *
+ * @implements Filterable<Tag>
  */
 class Tag extends Model implements Filterable
 {
     use AttributeFilterTrait;
+
+    /**
+     * @var list<string>
+     */
+    protected $fillable = [
+        'name',
+        'slug',
+        'seo',
+        'tag_group_id',
+    ];
+
+    protected static function booted(): void
+    {
+        static::saved(function (self $tag): void {
+            $tag->url()->updateOrCreate([], ['slug' => $tag->slug]);
+        });
+    }
 
     /**
      * Теги

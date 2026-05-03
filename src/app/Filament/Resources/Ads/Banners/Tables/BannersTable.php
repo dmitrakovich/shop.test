@@ -2,12 +2,10 @@
 
 namespace App\Filament\Resources\Ads\Banners\Tables;
 
-use Filament\Actions\BulkActionGroup;
+use App\Enums\Ads\BannerMediaCollection;
+use App\Models\Ads\Banner;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -26,6 +24,11 @@ class BannersTable
                     ->badge(),
                 SpatieMediaLibraryImageColumn::make('media')
                     ->label('Баннер')
+                    ->collection(
+                        fn (Banner $record) => $record->desktop_type->isVideo()
+                            ? BannerMediaCollection::DESKTOP_VIDEO_PREVIEW->value
+                            : BannerMediaCollection::DESKTOP_IMAGE->value
+                    )
                     ->conversion('thumb'),
                 TextColumn::make('title')
                     ->label('Заголовок')
@@ -63,7 +66,7 @@ class BannersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                // IconColumn::make('show_timer')
+                // IconColumn::make('show_timer') // нужна проверка что заполнена дата окончания
                 //     ->label('Показывать таймер')
                 //     ->boolean(),
             ])
@@ -73,13 +76,6 @@ class BannersTable
             ->recordActions([
                 EditAction::make()->hiddenLabel(),
                 DeleteAction::make()->hiddenLabel(),
-            ])
-            ->toolbarActions([
-                // BulkActionGroup::make([
-                //     DeleteBulkAction::make(),
-                //     ForceDeleteBulkAction::make(),
-                //     RestoreBulkAction::make(),
-                // ]),
             ]);
     }
 }

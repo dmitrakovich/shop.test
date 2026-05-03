@@ -6,10 +6,12 @@ use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Kalnoy\Nestedset\NodeTrait;
@@ -26,21 +28,23 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property int $_lft
  * @property int $_rgt
  * @property int|null $parent_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property int $order Порядок сортировки
  * @property string $model
  * @property string $name
  *
- * @property-read \App\Models\Category|null $parentCategory
- * @property-read \App\Models\Category|null $parent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $childrenCategories
- * @property-read \App\Models\Url|null $url
+ * @property-read Category|null $parentCategory
+ * @property-read Category|null $parent
+ * @property-read Collection|Category[] $categories
+ * @property-read Collection|Category[] $childrenCategories
+ * @property-read Url|null $url
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category d()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category ordered(string $direction = 'asc')
+ *
+ * @implements Filterable<Category>
  */
 class Category extends Model implements Filterable, Sortable
 {
@@ -63,8 +67,18 @@ class Category extends Model implements Filterable, Sortable
         static::addGlobalScope('order', function ($builder) {
             $builder->orderBy('order', 'asc');
         });
-        static::saved(function () {
+        static::saving(function (self $category): void {
+            if (!$category->exists || $category->isDirty(['slug', 'parent_id']) || blank($category->path)) {
+                $category->generatePath();
+            }
+        });
+        static::saved(function (self $category): void {
             Cache::forget(config('cache_config.global_nav_categories.key'));
+            $category->url()->updateOrCreate([], ['slug' => $category->slug]);
+
+            if ($category->wasChanged(['slug', 'parent_id'])) {
+                $category->updateDescendantsPaths();
+            }
         });
     }
 
@@ -95,19 +109,20 @@ class Category extends Model implements Filterable, Sortable
     }
 
     /**
-     * Generate path mutator
-     */
-    public function setPathAttribute(mixed $path): void
-    {
-        $this->generatePath();
-    }
-
-    /**
      * @return BelongsTo<self, $this>
      */
     public function parentCategory(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    /**
+     * Eager-load the full parent_category chain (for nested CategoryResource output).
+     */
+    public function loadParentCategoryChain(): void
+    {
+        $this->loadMissing('parentCategory');
+        $this->parentCategory?->loadParentCategoryChain();
     }
 
     /**
@@ -178,7 +193,18 @@ class Category extends Model implements Filterable, Sortable
 
     public function generatePath(): self
     {
-        $this->attributes['path'] = $this->isRoot() ? $this->slug : $this->parent->path . '/' . $this->slug;
+        if ($this->isRoot() || !$this->parent_id) {
+            $this->attributes['path'] = $this->slug;
+
+            return $this;
+        }
+
+        $parentPath = self::query()
+            ->withoutGlobalScope('order')
+            ->whereKey($this->parent_id)
+            ->value('path');
+
+        $this->attributes['path'] = $parentPath ? $parentPath . '/' . $this->slug : $this->slug;
 
         return $this;
     }
@@ -292,7 +318,7 @@ class Category extends Model implements Filterable, Sortable
 
     public static function getFilters(): array
     {
-        return new self()->newQuery()
+        return (new self())->newQuery()
             ->whereNull('parent_id')
             ->with('childrenCategories:id,slug,path,title,parent_id')
             ->get(['id', 'slug', 'path', 'title', 'parent_id'])

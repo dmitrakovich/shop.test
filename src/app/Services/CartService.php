@@ -33,6 +33,10 @@ class CartService
             'size',
         ]);
 
+        foreach ($cart->items as $item) {
+            $item->product?->category?->loadParentCategoryChain();
+        }
+
         /** @var CartData $item */
         foreach ($cart->items as $key => $item) {
             if (empty($item->product)) {

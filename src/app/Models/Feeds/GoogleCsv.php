@@ -71,21 +71,25 @@ class GoogleCsv extends AbstractFeed
     {
         $this->currency = Currency::getCurrentCurrency();
 
-        return new ProductService()->getForFeed()
+        return (new ProductService())->getForFeed(false)
+            ->filter(function (Product $item) {
+                return count($this->getProductMedia($item->getMedia())['images']) > 0;
+            })
             ->map(function (Product $item) {
                 $media = $this->getProductMedia($item->getMedia());
+                $color = GoogleFeedFormatter::colorLabel($item->colors);
 
                 return [
                     $item->id,
-                    $this->getItemTitle($item),
+                    GoogleFeedFormatter::title($item, $color),
                     $item->getUrl(),
-                    $media['images'][0] ?? [],
-                    $this->getDescription($item),
+                    $media['images'][0] ?? '',
+                    GoogleFeedFormatter::description($item),
                     $item->category->name,
                     $this->formatPrice($item->getOldPrice()),
                     $this->getSalePrice($item->getPrice(), $item->getOldPrice()),
                 ];
-            })->toArray();
+            })->values()->toArray();
     }
 
     /**
@@ -102,21 +106,5 @@ class GoogleCsv extends AbstractFeed
     protected function formatPrice(float $price): string
     {
         return number_format($price, 2) . ' ' . $this->currency->code;
-    }
-
-    /**
-     * Prepared item title
-     */
-    protected function getItemTitle(Product $item): string
-    {
-        return $item->category->name . ' ' . $item->sku;
-    }
-
-    /**
-     * Generate product description
-     */
-    public function getDescription(Product $product): string
-    {
-        return "Цвет: {$product->color_txt}. {$this->sizesToString($product->sizes)}";
     }
 }

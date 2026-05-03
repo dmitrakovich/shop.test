@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Ads\BannerResource;
 use App\Http\Resources\Info\PageResource;
 use App\Http\Resources\Info\ShopResource;
 use App\Http\Resources\Product\CatalogProductResource;
 use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\InfoPage;
+use App\Repositories\BannerRepository;
 use App\Services\GoogleTagManagerService;
 use App\Services\SliderService;
 use App\Services\StockService;
@@ -22,8 +24,10 @@ class InfoPageController extends Controller
      */
     public function main(
         SliderService $sliderService,
+        BannerRepository $bannerRepository,
     ): array {
         return [
+            'banners' => BannerResource::collection($bannerRepository->getMainBanners()),
             'hitSlider' => CatalogProductResource::collection($sliderService->getImidjProducts()),
             'trendSlider' => CatalogProductResource::collection($sliderService->getTrendProducts()),
         ];

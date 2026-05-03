@@ -27,7 +27,7 @@ class FillProductPropertiesInOneC extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $productsQuery = Product::withTrashed()->whereNotNull('one_c_id');
 

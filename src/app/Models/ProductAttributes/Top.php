@@ -5,7 +5,11 @@ namespace App\Models\ProductAttributes;
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @implements Filterable<Model>
+ */
 class Top implements Filterable
 {
     use AttributeFilterTrait;

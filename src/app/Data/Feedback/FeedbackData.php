@@ -57,6 +57,7 @@ class FeedbackData extends Data
         $this->type = $captchaScore > 4 ? FeedbackType::REVIEW : FeedbackType::SPAM;
     }
 
+    /** @return array<string, mixed> */
     public function with(): array
     {
         return [
@@ -66,6 +67,7 @@ class FeedbackData extends Data
         ];
     }
 
+    /** @return array<string, array<int, mixed>> */
     public static function rules(): array
     {
         return [
@@ -74,6 +76,7 @@ class FeedbackData extends Data
         ];
     }
 
+    /** @return array<string, string> */
     public static function attributes(): array
     {
         return [

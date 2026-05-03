@@ -10,6 +10,7 @@ enum SettingType: int implements HasLabel
     case MANUFACTURER = 2;
     case PRODUCT = 3;
     case COLLECTION = 4;
+    case EXCLUDED_PRODUCT = 5;
 
     public function getLabel(): string
     {
@@ -18,6 +19,7 @@ enum SettingType: int implements HasLabel
             self::MANUFACTURER => 'Производители',
             self::PRODUCT => 'Товары',
             self::COLLECTION => 'Коллекции',
+            self::EXCLUDED_PRODUCT => 'Товары-исключения',
         };
     }
 }

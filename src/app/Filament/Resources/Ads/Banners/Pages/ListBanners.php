@@ -25,34 +25,34 @@ class ListBanners extends ListRecords
         return [
             'all' => Tab::make('all')
                 ->label('Все')
-                ->extraAttributes(['class' => 'pointer-events-none ']),
+                ->extraAttributes(['class' => 'pointer-events-none']),
             'main' => Tab::make('main')
                 ->label('На главной')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('position', [
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
                     BannerPosition::INDEX_MAIN,
                     BannerPosition::INDEX_TOP,
                     BannerPosition::INDEX_BOTTOM,
                 ])),
             'catalog' => Tab::make('catalog')
                 ->label('В каталоге')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('position', [
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
                     BannerPosition::CATALOG_TOP,
                     BannerPosition::CATALOG_MOB,
                 ]))
-                ->extraAttributes(['class' => 'pointer-events-none ']),
+                ->extraAttributes(['class' => 'pointer-events-none']),
             'menu' => Tab::make('menu')
                 ->label('В меню')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('position', [
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
                     BannerPosition::MAIN_MENU_CATALOG,
                 ]))
-                ->extraAttributes(['class' => 'pointer-events-none ']),
+                ->extraAttributes(['class' => 'pointer-events-none']),
             'feedbacks' => Tab::make('feedbacks')
                 ->label('В отзывах')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('position', [
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
                     BannerPosition::FEEDBACK,
                     BannerPosition::FEEDBACK_MOB,
                 ]))
-                ->extraAttributes(['class' => 'pointer-events-none ']),
+                ->extraAttributes(['class' => 'pointer-events-none']),
         ];
     }
 

@@ -139,6 +139,10 @@ class SaleResource extends Resource
                                             ->when($search, fn ($q) => $q->where('id', 'like', "{$search}%"))
                                             ->limit(50)
                                             ->pluck('id', 'id'),
+                                        SettingType::EXCLUDED_PRODUCT => Product::query()
+                                            ->when($search, fn ($q) => $q->where('id', 'like', "{$search}%"))
+                                            ->limit(50)
+                                            ->pluck('id', 'id'),
                                         SettingType::COLLECTION => Collection::query()
                                             ->when($search, fn ($q) => $q->where('name', 'like', "%{$search}%"))
                                             ->pluck('name', 'id'),
@@ -148,6 +152,7 @@ class SaleResource extends Resource
                                         SettingType::CATEGORY => Category::query()->whereNotIn('id', [1, 2, 25, 35])->pluck('title', 'id'),
                                         SettingType::MANUFACTURER => Manufacturer::query()->pluck('name', 'id'),
                                         SettingType::PRODUCT => Product::query()->orderByDesc('id')->pluck('id', 'id'),
+                                        SettingType::EXCLUDED_PRODUCT => Product::query()->orderByDesc('id')->pluck('id', 'id'),
                                         SettingType::COLLECTION => Collection::query()->orderByDesc('id')->pluck('name', 'id'),
                                         default => [],
                                     }),
@@ -157,9 +162,16 @@ class SaleResource extends Resource
                                     ->maxValue(100)
                                     ->suffix('%')
                                     ->label('Скидка')
+                                    ->default(0)
+                                    ->disabled(fn (Get $get) => $get('type') === SettingType::EXCLUDED_PRODUCT)
+                                    ->dehydrated()
+                                    ->required()
                                     ->formatStateUsing(fn (?float $state) => is_null($state) ? null : $state * 100)
-                                    ->dehydrateStateUsing(fn (?float $state) => is_null($state) ? null : round($state / 100, 5))
-                                    ->required(),
+                                    ->dehydrateStateUsing(function (?float $state, Get $get) {
+                                        return $get('type') === SettingType::EXCLUDED_PRODUCT
+                                            ? 0
+                                            : (is_null($state) ? null : round($state / 100, 5));
+                                    }),
                             ]),
                     ]),
                 Section::make('Активация по промокоду')

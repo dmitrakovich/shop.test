@@ -2,7 +2,6 @@
 
 use App\Admin\Controllers\Analytics;
 use App\Admin\Controllers\Automation;
-use App\Admin\Controllers\BannerController;
 use App\Admin\Controllers\Bookkeeping;
 use App\Admin\Controllers\CityController;
 use App\Admin\Controllers\Config;
@@ -10,7 +9,6 @@ use App\Admin\Controllers\Debug\CacheController;
 use App\Admin\Controllers\Departures;
 use App\Admin\Controllers\DocController;
 use App\Admin\Controllers\Forms;
-use App\Admin\Controllers\IndexLinkController;
 use App\Admin\Controllers\InfoPageController;
 use App\Admin\Controllers\Logs;
 use App\Admin\Controllers\MediaController;
@@ -21,18 +19,6 @@ use App\Admin\Controllers\OrderItemController;
 use App\Admin\Controllers\Orders\OfflineOrderController;
 use App\Admin\Controllers\OrdersDistribution\SettingsController;
 use App\Admin\Controllers\OrdersDistribution\StatisticController;
-use App\Admin\Controllers\ProductAttributes\BrandController;
-use App\Admin\Controllers\ProductAttributes\CategoryController;
-use App\Admin\Controllers\ProductAttributes\CollectionController;
-use App\Admin\Controllers\ProductAttributes\ColorController;
-use App\Admin\Controllers\ProductAttributes\CountryOfOriginController;
-use App\Admin\Controllers\ProductAttributes\FabricController;
-use App\Admin\Controllers\ProductAttributes\HeelHeightController;
-use App\Admin\Controllers\ProductAttributes\ManufacturerController;
-use App\Admin\Controllers\ProductAttributes\SeasonController;
-use App\Admin\Controllers\ProductAttributes\StyleController;
-use App\Admin\Controllers\ProductAttributes\TagController;
-use App\Admin\Controllers\ProductAttributes\TagGroupController;
 use App\Admin\Controllers\RatingController;
 use App\Admin\Controllers\Seo\SeoLinkController;
 use App\Admin\Controllers\StockController;
@@ -73,21 +59,6 @@ Route::group([
         $router->resource('groups', GroupController::class);
     });
 
-    $router->group(['prefix' => 'product-attributes'], function (Router $router) {
-        $router->resource('categories', CategoryController::class);
-        $router->resource('fabrics', FabricController::class);
-        $router->resource('colors', ColorController::class);
-        $router->resource('heel-heights', HeelHeightController::class);
-        $router->resource('seasons', SeasonController::class);
-        $router->resource('styles', StyleController::class);
-        $router->resource('tags', TagController::class);
-        $router->resource('tag_groups', TagGroupController::class);
-        $router->resource('brands', BrandController::class);
-        $router->resource('manufacturers', ManufacturerController::class);
-        $router->resource('collections', CollectionController::class);
-        $router->resource('country-of-origin', CountryOfOriginController::class);
-    });
-
     $router->group(['prefix' => 'config', 'as' => 'config.'], function (Router $router) {
         $router->resource('payment-methods', Config\PaymentController::class);
         $router->resource('delivery-methods', Config\DeliveryController::class);
@@ -95,17 +66,13 @@ Route::group([
         $router->get('installment', Config\InstallmentForm::class);
         $router->get('feedback', Config\FeedbackForm::class);
         $router->get('sms', Config\SmsForm::class);
-        $router->get('instagram-token', Config\InstagramTokenForm::class);
         $router->get('newsletter_for_registered', Config\NewsletterForm::class);
         $router->get('sending-tracks', Config\SendingTracksForm::class);
         $router->get('auto-order-statuses', Config\AutoOrderStatusesForm::class);
     });
 
     $router->group(['prefix' => 'bnrs'], function (Router $router) {
-        $router->resource('bnrs', BannerController::class);
-        $router->resource('index-links', IndexLinkController::class);
         $router->get('upsell', Forms\UpsellSliders::class);
-        $router->get('instagram', Forms\Instagram::class);
         $router->get('short-link', Forms\ShortLink\ShortLinkController::class)->name('short-link');
     });
 

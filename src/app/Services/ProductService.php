@@ -90,6 +90,7 @@ class ProductService
             'media',
             'brand:id,name',
             'colors:id,name',
+            'fabrics:id,name',
         ])
             ->when($withTrashed, function ($query) {
                 $query->withTrashed();

@@ -33,7 +33,9 @@
         <g:gender>female</g:gender>
         <g:description><![CDATA[{!! $item->description !!}]]></g:description>
         <g:title>{{ $item->title }}</g:title>
+@if (!empty($item->material))
         <g:material>{{ $item->material }}</g:material>
+@endif
         <g:color>{{ $item->color }}</g:color>
         <g:target_country>{{ $currency->country }}</g:target_country>
     </item>

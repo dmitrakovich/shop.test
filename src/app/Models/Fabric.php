@@ -5,19 +5,31 @@ namespace App\Models;
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property string $name
  * @property string $slug
  * @property string|null $seo
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string $model
  *
- * @property-read \App\Models\Url|null $url
+ * @property-read Url|null $url
+ *
+ * @implements Filterable<Fabric>
  */
 class Fabric extends Model implements Filterable
 {
     use AttributeFilterTrait;
+
+    /**
+     * @var list<string>
+     */
+    protected $fillable = [
+        'name',
+        'slug',
+        'seo',
+    ];
 }
