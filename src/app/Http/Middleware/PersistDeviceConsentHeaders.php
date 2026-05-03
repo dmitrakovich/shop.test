@@ -20,6 +20,12 @@ class PersistDeviceConsentHeaders
 
     private const string HEADER_PERSONAL_DATA = 'X-Personal-Data-Consent';
 
+    private const array CONSENT_FIELDS = [
+        'cookie_analytics_enabled',
+        'cookie_marketing_enabled',
+        'personal_data_consent',
+    ];
+
     /**
      * @param  Closure(Request): (Response)  $next
      */
@@ -38,9 +44,36 @@ class PersistDeviceConsentHeaders
         $updates['device_id'] = DeviceFacade::id();
         $updates['user_id'] = $request->user()?->id;
 
+        if (!$this->hasConsentChanges($updates)) {
+            return $next($request);
+        }
+
         DeviceConsent::query()->create($updates);
 
         return $next($request);
+    }
+
+    /**
+     * @param  array<string, mixed>  $updates
+     */
+    private function hasConsentChanges(array $updates): bool
+    {
+        $latest = DeviceConsent::query()
+            ->where('device_id', $updates['device_id'])
+            ->latest('id')
+            ->first();
+
+        foreach (self::CONSENT_FIELDS as $field) {
+            if (!array_key_exists($field, $updates)) {
+                continue;
+            }
+
+            if ($latest === null || $latest->{$field} !== $updates[$field]) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -79,6 +112,11 @@ class PersistDeviceConsentHeaders
         $fio = $this->resolveFullName($request);
         if ($fio !== null) {
             $updates['fio'] = $fio;
+        }
+
+        $phone = $this->normalizePart($request->input('phone'));
+        if ($phone !== null) {
+            $updates['phone'] = $phone;
         }
 
         return $updates;

@@ -4,8 +4,11 @@ namespace App\Filament\Resources\Users\DeviceConsents;
 
 use App\Enums\Consent\ConsentFormEnum;
 use App\Enums\Filament\NavGroup;
+use App\Filament\Resources\Users\DeviceConsents\Pages\EditDeviceConsent;
 use App\Filament\Resources\Users\DeviceConsents\Pages\ListDeviceConsents;
 use App\Models\User\DeviceConsent;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
@@ -29,7 +32,12 @@ class DeviceConsentResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema->components([]);
+        return $schema
+            ->components([
+                TextInput::make('fio')
+                    ->label('ФИО')
+                    ->maxLength(255),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -49,6 +57,10 @@ class DeviceConsentResource extends Resource
                     ->placeholder('—'),
                 TextColumn::make('fio')
                     ->label('ФИО')
+                    ->searchable()
+                    ->placeholder('—'),
+                TextColumn::make('phone')
+                    ->label('Телефон')
                     ->searchable()
                     ->placeholder('—'),
                 TextColumn::make('device.api_id')
@@ -84,6 +96,9 @@ class DeviceConsentResource extends Resource
                     ->options(collect(ConsentFormEnum::cases())->mapWithKeys(
                         fn (ConsentFormEnum $c): array => [$c->value => $c->label()]
                     )),
+            ])
+            ->recordActions([
+                EditAction::make(),
             ]);
     }
 
@@ -91,6 +106,7 @@ class DeviceConsentResource extends Resource
     {
         return [
             'index' => ListDeviceConsents::route('/'),
+            'edit' => EditDeviceConsent::route('/{record}/edit'),
         ];
     }
 
@@ -101,7 +117,7 @@ class DeviceConsentResource extends Resource
 
     public static function canEdit(Model $record): bool
     {
-        return false;
+        return true;
     }
 
     public static function canDelete(Model $record): bool

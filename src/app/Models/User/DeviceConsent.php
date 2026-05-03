@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $device_id
  * @property int|null $user_id
  * @property string|null $fio
+ * @property string|null $phone
  * @property bool|null $cookie_analytics_enabled
  * @property bool|null $cookie_marketing_enabled
  * @property Carbon|null $personal_data_consent_recorded_at
@@ -29,6 +30,7 @@ class DeviceConsent extends Model
         'device_id',
         'user_id',
         'fio',
+        'phone',
         'cookie_analytics_enabled',
         'cookie_marketing_enabled',
         'personal_data_consent_recorded_at',
