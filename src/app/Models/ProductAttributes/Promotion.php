@@ -7,7 +7,9 @@ use App\Models\Collection;
 use App\Models\Promo\Sale;
 use App\Models\Season;
 use App\Models\Style;
+use Database\Factories\PromotionFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -19,6 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Promotion extends Model
 {
+    /** @use HasFactory<PromotionFactory> */
+    use HasFactory;
+
     /**
      * Get all sales & apply sales config to products
      */

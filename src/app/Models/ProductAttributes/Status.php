@@ -4,7 +4,9 @@ namespace App\Models\ProductAttributes;
 
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
+use Database\Factories\StatusFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -22,6 +24,9 @@ use Illuminate\Database\Eloquent\Model;
 class Status extends Model implements Filterable
 {
     use AttributeFilterTrait;
+
+    /** @use HasFactory<StatusFactory> */
+    use HasFactory;
 
     /**
      * Indicates if all mass assignment is enabled.

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Database\Factories\TagGroupFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 
@@ -15,6 +17,9 @@ use Illuminate\Database\Eloquent\Relations;
  */
 class TagGroup extends Model
 {
+    /** @use HasFactory<TagGroupFactory> */
+    use HasFactory;
+
     /**
      * Indicates if all mass assignment is enabled.
      *

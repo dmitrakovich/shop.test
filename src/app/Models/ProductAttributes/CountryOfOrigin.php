@@ -4,6 +4,8 @@ namespace App\Models\ProductAttributes;
 
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
+use Database\Factories\CountryOfOriginFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -24,6 +26,9 @@ use Illuminate\Support\Str;
 class CountryOfOrigin extends Model implements Filterable
 {
     use AttributeFilterTrait;
+
+    /** @use HasFactory<CountryOfOriginFactory> */
+    use HasFactory;
 
     /**
      * Indicates if all mass assignment is enabled.

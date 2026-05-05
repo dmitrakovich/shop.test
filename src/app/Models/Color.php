@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
+use Database\Factories\ColorFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -24,6 +26,9 @@ use Illuminate\Support\Carbon;
 class Color extends Model implements Filterable
 {
     use AttributeFilterTrait;
+
+    /** @use HasFactory<ColorFactory> */
+    use HasFactory;
 
     /**
      * @var list<string>

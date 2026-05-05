@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
+use Database\Factories\TagFactory;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Carbon;
@@ -28,6 +30,9 @@ use Illuminate\Support\Carbon;
 class Tag extends Model implements Filterable
 {
     use AttributeFilterTrait;
+
+    /** @use HasFactory<TagFactory> */
+    use HasFactory;
 
     /**
      * @var list<string>

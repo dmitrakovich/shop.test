@@ -2,6 +2,8 @@
 
 namespace App\Models\ProductAttributes;
 
+use Database\Factories\ManufacturerFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -13,6 +15,9 @@ use Illuminate\Support\Carbon;
  */
 class Manufacturer extends Model
 {
+    /** @use HasFactory<ManufacturerFactory> */
+    use HasFactory;
+
     /**
      * @var list<string>
      */

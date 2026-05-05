@@ -9,7 +9,9 @@ use App\Models\OneC\Product as ProductFromOneC;
 use App\Services\SearchService;
 use App\Traits\ProductMedia;
 use App\Traits\ProductSales;
+use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,7 +31,7 @@ use Spatie\MediaLibrary\HasMedia;
  * @property int $category_id
  * @property int $season_id
  * @property int $brand_id
- * @property int $manufacturer_id
+ * @property int|null $manufacturer_id
  * @property int $collection_id
  * @property string|null $color_txt
  * @property string|null $fabric_top_txt
@@ -75,6 +77,9 @@ use Spatie\MediaLibrary\HasMedia;
  */
 class Product extends Model implements HasMedia
 {
+    /** @use HasFactory<ProductFactory> */
+    use HasFactory;
+
     use ProductMedia;
     use ProductSales;
     use SoftDeletes {

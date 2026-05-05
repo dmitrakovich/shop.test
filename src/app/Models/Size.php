@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
+use Database\Factories\SizeFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -24,6 +26,9 @@ use Illuminate\Database\Eloquent\Model;
 class Size extends Model implements Filterable
 {
     use AttributeFilterTrait;
+
+    /** @use HasFactory<SizeFactory> */
+    use HasFactory;
 
     final const int ONE_SIZE_ID = 1;
 
@@ -74,7 +79,7 @@ class Size extends Model implements Filterable
 
     public static function getFilters(): array
     {
-        return new self()->newQuery()
+        return (new self())->newQuery()
             ->where('is_active', true)
             ->get(['id', 'name', 'slug', 'insole'])
             ->keyBy('slug')

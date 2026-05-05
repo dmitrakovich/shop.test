@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
+use Database\Factories\FabricFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -23,6 +25,9 @@ use Illuminate\Support\Carbon;
 class Fabric extends Model implements Filterable
 {
     use AttributeFilterTrait;
+
+    /** @use HasFactory<FabricFactory> */
+    use HasFactory;
 
     /**
      * @var list<string>
