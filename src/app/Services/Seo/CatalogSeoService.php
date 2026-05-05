@@ -267,7 +267,7 @@ class CatalogSeoService
         if (!$this->catalogProducts->isNotEmpty()) {
             SeoFacade::setRobots('noindex, nofollow');
         } else {
-            SeoFacade::setImage($this->catalogProducts->first()->getFirstMediaUrl('default', 'catalog'));
+            SeoFacade::setImage($this->catalogProducts->first()->getFirstMediaUrl('default', 'small'));
 
             $canonicalUrl = trim($this->getCatalogCanonicalUrl(), '/');
             $currentPath = request()->path();

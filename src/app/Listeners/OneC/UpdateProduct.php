@@ -33,7 +33,7 @@ class UpdateProduct implements ShouldQueue
 
         $productFromOneC->update(array_filter([
             'SP6111' => $product->getUrl(),
-            'SP6116' => $product->getFirstMediaUrl(conversionName: 'catalog'),
+            'SP6116' => $product->getFirstMediaUrl(conversionName: 'small'),
             'SP6122' => $product->countryOfOrigin?->name,
             'SP6123' => $product->manufacturer?->name,
             'SP6124' => $product->category->name,

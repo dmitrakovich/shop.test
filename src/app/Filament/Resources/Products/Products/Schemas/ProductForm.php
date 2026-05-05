@@ -74,7 +74,7 @@ class ProductForm
                                     ->disk('media')
                                     ->multiple()
                                     ->openable()
-                                    ->conversion('normal')
+                                    ->conversion('medium')
                                     ->reorderable()
                                     ->downloadable()
                                     ->hiddenLabel(),

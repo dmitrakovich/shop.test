@@ -265,7 +265,7 @@ class SliderService
                     'price_byn' => $product->getFinalPrice(),
                     'old_price_byn' => $product->getFinalOldPrice(),
                     'url' => $product->getUrl(),
-                    'image' => $product->getFirstMediaUrl('default', 'catalog'),
+                    'image' => $product->getFirstMediaUrl('default', 'small'),
                     'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                 ];
             })->toArray();
@@ -318,7 +318,7 @@ class SliderService
                             'price_byn' => $product->getFinalPrice(),
                             'old_price_byn' => $product->getFinalOldPrice(),
                             'url' => $product->getUrl(),
-                            'image' => $product->getFirstMediaUrl('default', 'catalog'),
+                            'image' => $product->getFirstMediaUrl('default', 'small'),
                             'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                         ];
                     })->toArray(),
@@ -363,7 +363,7 @@ class SliderService
                     'price_byn' => $product->getFinalPrice(),
                     'old_price_byn' => $product->getFinalOldPrice(),
                     'url' => $product->getUrl(),
-                    'image' => $product->getFirstMediaUrl('default', 'catalog'),
+                    'image' => $product->getFirstMediaUrl('default', 'small'),
                     'dataLayer' => GoogleTagManagerService::prepareProduct($product),
                 ];
             }

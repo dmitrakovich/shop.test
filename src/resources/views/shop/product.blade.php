@@ -50,7 +50,7 @@
                                     @else
                                         <div class="swiper-slide">
                                             <a href="{{ $image->getFullUrl() }}" data-fancybox="images">
-                                                <img src="{{ $image->getUrl('normal') }}"
+                                                <img src="{{ $image->getUrl('medium') }}"
                                                     alt="{{ $product->shortName() }}" class="img-fluid"
                                                     onerror="imageOnError(this)">
                                             </a>

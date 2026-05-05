@@ -30,7 +30,7 @@
                 <div class="product-item-images js-productItemImagesContainer">
                     @foreach ($product->getMedia()->take(5) as $key => $image)
                         <div style="@if ($key > 0) display: none; @endif">
-                            <img src="{{ $image->getUrl('catalog') }}" alt="{{ $product->shortName() }}"
+                            <img src="{{ $image->getUrl('small') }}" alt="{{ $product->shortName() }}"
                                 onerror="imageOnError(this)" loading="lazy" decoding="async" />
                         </div>
                     @endforeach
