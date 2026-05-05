@@ -12,7 +12,7 @@ alwaysApply: true
   - **Primary admin**: **Filament** (`src/app/Filament/**`).
   - **Legacy admin**: `encore/laravel-admin` / `z-song/laravel-admin` code in `src/app/Admin/**`, gradually migrated to Filament.
 - Formatting: **Laravel Pint** with config at `.formatters/pint.json` (Composer script: `lint`).
-- Static analysis: **PHPStan level 6** (`src/phpstan.neon`), and `src/app/Admin/` is excluded from analysis.
+- Static analysis: **PHPStan level 6** (`src/phpstan.neon`). **Run analyses via Sail** from `src/`, e.g. `cd src && ./vendor/bin/sail composer phpstan`. Legacy `src/app/Admin/` is excluded from PHPStan.
 
 # Working agreements for changes
 
