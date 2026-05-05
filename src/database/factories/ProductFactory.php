@@ -31,7 +31,7 @@ class ProductFactory extends Factory
 
         return [
             'one_c_id' => fake()->unique()->numberBetween(1, 999999999),
-            'slug' => Str::slug($name).'-'.fake()->unique()->numberBetween(1, 999999),
+            'slug' => Str::slug($name) . '-' . fake()->unique()->numberBetween(1, 999999),
             'sku' => fake()->unique()->bothify('SKU-######'),
             'label_id' => fake()->optional()->randomElement(ProductLabel::cases())?->value,
             'buy_price' => fake()->randomFloat(2, 500, $price),
@@ -65,7 +65,7 @@ class ProductFactory extends Factory
     public function discounted(): static
     {
         return $this->state(function (array $attributes): array {
-            $price = (float) ($attributes['price'] ?? fake()->randomFloat(2, 1000, 30000));
+            $price = (float)($attributes['price'] ?? fake()->randomFloat(2, 1000, 30000));
             $oldPrice = max($price + 1, $price * 1.5);
 
             return [

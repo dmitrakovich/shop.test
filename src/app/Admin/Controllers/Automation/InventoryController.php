@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers\Automation;
 
 use App\Admin\Controllers\AbstractAdminController;
+use App\Filament\Resources\Products\Products\ProductResource;
 use App\Models\AvailableSizes;
 use Encore\Admin\Grid;
 
@@ -56,9 +57,9 @@ class InventoryController extends AbstractAdminController
         $grid->column('buy_price', 'Цена покупки');
         $grid->column('sell_price', 'Цена продажи');
         $grid->column('stock_ids', 'Опции')->display(function (string $stockIds) {
-            $link = route('admin.products.create', ['stock_ids' => $stockIds]);
+            $link = ProductResource::getUrl('create', ['stock_ids' => $stockIds]);
 
-            return '<a href="' . $link . '" class="btn btn-xs btn-primary" target="_blank">Создать</a>';
+            return '<a href="' . e($link) . '" class="btn btn-xs btn-primary" target="_blank">Создать</a>';
         });
 
         $grid->paginate(50);

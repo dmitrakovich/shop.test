@@ -155,6 +155,33 @@ class AvailableSizes extends Model implements HasMedia
     }
 
     /**
+     * Агрегированная строка склада для тех же (sku, brand_id, category_id), что и в сетке
+     * «Товары которые необходимо добавить» — для префилла формы создания товара по {@see stock_ids} в URL.
+     *
+     * @param  non-empty-string  $commaSeparatedStockRowIds  id из {@see AvailableSizes}, через запятую
+     */
+    public static function aggregatedForStockIds(string $commaSeparatedStockRowIds): ?self
+    {
+        $ids = array_values(array_filter(array_map(intval(...), explode(',', $commaSeparatedStockRowIds))));
+        if ($ids === []) {
+            return null;
+        }
+
+        return self::query()
+            ->selectRaw(implode(', ', [
+                'sku',
+                'brand_id',
+                'category_id',
+                'MAX(buy_price) as buy_price',
+                'MAX(sell_price) as sell_price',
+                implode(', ', self::getSumWrappedSizeFields()),
+            ]))
+            ->groupBy(['sku', 'brand_id', 'category_id'])
+            ->whereIn('id', $ids)
+            ->first();
+    }
+
+    /**
      * Remove records where sum all sizes = 0
      */
     public static function removeEmptySizes(): int
