@@ -1,0 +1,19 @@
+---
+description: Database, migrations, and testing DB expectations
+globs: src/database/**/*.php
+alwaysApply: false
+---
+
+# Database & migrations (src/database/**)
+
+- Runtime DB is **MySQL** by default (`src/.env.example`: `DB_CONNECTION=mysql`, `DB_HOST=mysql`).
+- Queues default to **database driver**, so migrations for jobs/failed jobs matter.
+- Tests (`src/phpunit.xml`) default to:
+  - `DB_DATABASE=test`
+  - `QUEUE_CONNECTION=sync`
+  - cache/session/mail in-memory/array-like drivers
+
+## Migration style
+
+- Prefer additive, backwards-compatible migrations when possible.
+- Keep schema changes compatible with MySQL strict mode (`config/database.php` uses `strict => true`).

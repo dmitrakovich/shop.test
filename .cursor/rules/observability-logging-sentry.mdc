@@ -1,0 +1,15 @@
+---
+description: Logging and Sentry conventions
+globs: src/**/*.php
+alwaysApply: false
+---
+
+# Observability
+
+- Logging defaults (example env): `LOG_CHANNEL=stack`, `LOG_STACK=single`, `LOG_LEVEL=debug`.
+- Sentry is installed (`sentry/sentry-laravel`) but DSN is optional (`SENTRY_LARAVEL_DSN` in `.env.example`).
+
+## When adding error handling
+
+- Prefer actionable logs with context (ids, order numbers, user id) over silent catches.
+- If you introduce a new critical failure mode, consider whether it should be reported to Sentry.

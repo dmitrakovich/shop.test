@@ -1,0 +1,20 @@
+---
+description: Project context (Laravel 12, PHP 8.5, Sail in src, admin migration)
+alwaysApply: true
+---
+
+# Project core context
+
+- Stack: **Laravel 12** (app lives in `src/`), **PHP 8.5**.
+- Local dev: use **Laravel Sail** and run it **from inside `src/`**.
+  - Prefer commands like `cd src && ./vendor/bin/sail ...` (or `sail ...` if an alias exists).
+- Admin UIs:
+  - **Primary admin**: **Filament** (`src/app/Filament/**`).
+  - **Legacy admin**: `encore/laravel-admin` / `z-song/laravel-admin` code in `src/app/Admin/**`, gradually migrated to Filament.
+- Formatting: **Laravel Pint** with config at `.formatters/pint.json` (Composer script: `lint`).
+- Static analysis: **PHPStan level 6** (`src/phpstan.neon`), and `src/app/Admin/` is excluded from analysis.
+
+# Working agreements for changes
+
+- Prefer implementing new admin features in **Filament**; touch legacy admin only when necessary or as part of migration.
+- Keep changes compatible with the tools above (Pint + PHPStan level 6), unless working in excluded legacy area.

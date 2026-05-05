@@ -1,0 +1,13 @@
+---
+description: Local development workflow via Sail (run in src/)
+alwaysApply: true
+---
+
+# Sail workflow (local dev)
+
+- The Laravel app root is `src/`. **Run Sail commands from `src/`**.
+- Prefer suggesting commands in these forms:
+  - `cd src && ./vendor/bin/sail up -d`
+  - `cd src && ./vendor/bin/sail artisan ...`
+  - `cd src && ./vendor/bin/sail composer ...`
+- Default local services (from `src/docker-compose.yml`): `mysql` + `redis`.

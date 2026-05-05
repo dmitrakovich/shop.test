@@ -1,0 +1,13 @@
+---
+description: Legacy encore/laravel-admin area (limited changes, migration-friendly)
+globs: src/app/Admin/**/*.php
+alwaysApply: false
+---
+
+# Legacy laravel-admin area (src/app/Admin/**)
+
+- This is **legacy admin** (`encore/laravel-admin` / `z-song/laravel-admin`) being migrated to Filament.
+- Keep changes minimal and migration-friendly:
+  - Prefer extracting reusable domain logic into `App\` services/models instead of growing legacy controllers.
+  - Avoid large refactors unless they directly support a migration step.
+- Note: `src/app/Admin/` is excluded from PHPStan (`src/phpstan.neon`), so rely on careful typing and runtime coverage when changing code here.

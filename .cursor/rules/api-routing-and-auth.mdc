@@ -1,0 +1,16 @@
+---
+description: API routing conventions (Sanctum, captcha, device consent headers)
+globs: src/routes/api*.php
+alwaysApply: false
+---
+
+# API routing conventions
+
+- Auth for API uses **Sanctum** (see `routes/api.php`, `auth:sanctum` middleware).
+- Some endpoints are protected by `captcha` middleware (notably auth + feedback).
+- Device consent headers are persisted via `PersistDeviceConsentHeaders` middleware with `ConsentFormEnum` (login/order/oneclick/feedback).
+
+## Admin API
+
+- There is a legacy-ish admin API route file: `routes/api.admin.php` that points into `App\Admin\Controllers\Api\...`.
+  - Prefer new admin surfaces in Filament; keep admin API changes migration-friendly.

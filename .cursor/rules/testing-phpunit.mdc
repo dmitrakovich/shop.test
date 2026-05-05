@@ -1,0 +1,20 @@
+---
+description: PHPUnit testing conventions and env defaults
+globs: src/tests/**/*.php
+alwaysApply: false
+---
+
+# Testing (PHPUnit)
+
+- Test framework: **PHPUnit** (`src/phpunit.xml`).
+- Suites:
+  - `tests/Unit`
+  - `tests/Feature`
+- Test environment defaults (`phpunit.xml`):
+  - `APP_ENV=testing`
+  - `QUEUE_CONNECTION=sync`
+  - cache/session/mail are non-external drivers
+
+## Adding tests
+
+- Prefer Feature tests for HTTP/API behaviour; Unit tests for pure domain logic.

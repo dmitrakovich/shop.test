@@ -1,0 +1,14 @@
+---
+description: Filament admin conventions (preferred admin surface)
+globs: src/app/Filament/**/*.php
+alwaysApply: false
+---
+
+# Filament admin (src/app/Filament/**)
+
+- Filament is the **preferred** admin implementation surface for new work.
+- Keep resources/pages/widgets consistent with existing structure under `app/Filament/Resources/**`.
+- When migrating features from legacy admin:
+  - Reuse domain logic from `App\` services/models; avoid copying controller-heavy patterns.
+  - Keep backward compatibility in data/permissions; ensure navigation and labels match existing admin expectations.
+- If you change permissions/roles, check how **Filament Shield** is used (`bezhansalleh/filament-shield`).

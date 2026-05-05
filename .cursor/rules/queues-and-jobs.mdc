@@ -1,0 +1,15 @@
+---
+description: Queueing conventions (database queue, redis present)
+globs: src/app/**/*.php
+alwaysApply: false
+---
+
+# Queues & jobs
+
+- Default queue connection is `database` (`config/queue.php`, `src/.env.example`).
+- Redis exists locally (Sail `redis` service) but queue driver may still be database.
+
+## Expectations when adding async work
+
+- Be explicit about retries/timeouts and idempotency where it matters.
+- Remember that tests run with `QUEUE_CONNECTION=sync` (`src/phpunit.xml`), so side effects happen inline during tests.
