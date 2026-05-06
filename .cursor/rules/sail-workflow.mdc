@@ -10,5 +10,6 @@ alwaysApply: true
   - `cd src && ./vendor/bin/sail up -d`
   - `cd src && ./vendor/bin/sail artisan ...`
   - `cd src && ./vendor/bin/sail composer ...`
+- **Composer** (`install`, `update`, `require`, scripts, etc.): run **via Sail**, same pattern as artisan — `cd src && ./vendor/bin/sail composer …`. Avoid host-side `composer` for this repo unless Sail is intentionally bypassed (e.g. offline bootstrap); the container has the intended PHP/extensions and resolves private VCS deps with the auth available there.
 - **PHPStan**: run **only via Sail**, e.g. `cd src && ./vendor/bin/sail composer phpstan` (don’t rely on host `php`/`vendor/bin/phpstan` for project checks unless Sail is intentionally bypassed).
 - Default local services (from `src/docker-compose.yml`): `mysql` + `redis`.

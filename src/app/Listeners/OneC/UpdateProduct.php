@@ -15,7 +15,7 @@ class UpdateProduct implements ShouldQueue
      *
      * @var string|null
      */
-    public $queue = Queue::ONE_C->value;
+    public $queue = Queue::OneC->value;
 
     /**
      * Handle the event.

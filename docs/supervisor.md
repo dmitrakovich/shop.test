@@ -64,3 +64,22 @@ sudo supervisorctl update
  
 sudo supervisorctl start laravel-worker:*
 ```
+
+## Laravel Horizon (same queue topology)
+
+The application ships with [Laravel Horizon](https://laravel.com/docs/horizon); worker layout mirrors the three programmes above (`laravel-worker`: `high`, `default`, `low`, plus `one_c` from the codebase; `pixel`; `media`). See `src/config/horizon.php`.
+
+Requirements: Redis available for Horizon workers (supervisors stay on the `redis` queue connection — not `failover`), `QUEUE_CONNECTION=failover` in `.env` for app dispatch when using the project defaults, Scheduler running (includes `horizon:snapshot`).
+
+With Supervisor, prefer a **single** programme instead of three `queue:work` lines, for example:
+
+```properties
+[program:horizon]
+command=php /path/to/current/artisan horizon
+autostart=true
+autorestart=true
+user=www-user
+redirect_stderr=true
+stdout_logfile=/path/to/current/storage/logs/worker/horizon.log
+stopwaitsecs=3600
+```

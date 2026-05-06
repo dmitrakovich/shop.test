@@ -8,6 +8,7 @@ alwaysApply: true
 - Stack: **Laravel 12** (app lives in `src/`), **PHP 8.5**.
 - Local dev: use **Laravel Sail** and run it **from inside `src/`**.
   - Prefer commands like `cd src && ./vendor/bin/sail ...` (or `sail ...` if an alias exists).
+  - **`artisan` and `composer`** should run **through Sail** (see `.cursor/rules/sail-workflow.mdc`).
 - Admin UIs:
   - **Primary admin**: **Filament** (`src/app/Filament/**`).
   - **Legacy admin**: `encore/laravel-admin` / `z-song/laravel-admin` code in `src/app/Admin/**`, gradually migrated to Filament.

@@ -6,8 +6,9 @@ alwaysApply: false
 
 # Queues & jobs
 
-- Default queue connection is `database` (`config/queue.php`, `src/.env.example`).
-- Redis exists locally (Sail `redis` service) but queue driver may still be database.
+- Default queue connection is **`failover`** (`config/queue.php`, `src/.env.example`): tries **`redis`** first, then **`database`** on enqueue errors. Failover **`pop`** only reads the first backend (Redis): DB fallback jobs need `queue:work database` or Redis restored.
+- **Laravel Horizon** uses the **`redis`** connection for supervisors only (Horizon APIs require `RedisQueue`, not failover). Horizon still requires Redis (`php artisan horizon`).
+- Redis exists locally (Sail `redis` service).
 
 ## Expectations when adding async work
 
