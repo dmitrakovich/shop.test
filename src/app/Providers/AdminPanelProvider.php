@@ -17,6 +17,7 @@ use Filament\PanelProvider;
 use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Widgets;
 use Filament\Widgets\AccountWidget;
@@ -28,6 +29,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -67,7 +69,10 @@ class AdminPanelProvider extends PanelProvider
                 FilamentInfoWidget::class,
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->navigationItems($this->generateOldAdminNavItems())
+            ->navigationItems([
+                ...$this->generateHorizonNavItems(),
+                ...$this->generateOldAdminNavItems(),
+            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -99,6 +104,34 @@ class AdminPanelProvider extends PanelProvider
                 Css::make('custom', resource_path('css/custom-filament.css')),
             ], 'filament')
             ->spa();
+    }
+
+    /**
+     * @return array<int, NavigationItem>
+     */
+    private function generateHorizonNavItems(): array
+    {
+        return [
+            NavigationItem::make('Horizon')
+                ->label('Очереди (Horizon)')
+                ->icon(Heroicon::OutlinedServerStack)
+                ->group(NavGroup::Management)
+                ->url(fn (): string => route('horizon.index'))
+                ->openUrlInNewTab()
+                ->sort(5)
+                ->visible(fn (): bool => $this->userCanSeeHorizonLink()),
+        ];
+    }
+
+    private function userCanSeeHorizonLink(): bool
+    {
+        $user = auth()->user();
+
+        if ($user === null) {
+            return false;
+        }
+
+        return app()->environment('local') || Gate::check('viewHorizon', $user);
     }
 
     public function generateOldAdminNavItems(): array

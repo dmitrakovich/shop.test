@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\Queue;
+
 return [
 
     /*
@@ -24,7 +26,7 @@ return [
      * This queue will be used to generate derived and responsive images.
      * Leave empty to use the default queue.
      */
-    'queue_name' => env('MEDIA_QUEUE', 'media'),
+    'queue_name' => env('MEDIA_QUEUE', Queue::Media->value),
 
     /*
      * By default all conversions will be performed on a queue.

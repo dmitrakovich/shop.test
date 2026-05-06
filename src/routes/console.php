@@ -34,3 +34,5 @@ Schedule::command('feed:generate')->everySixHours();
 
 Schedule::command('erip:update-statuses')->everyTenMinutes();
 Schedule::command('belpost:cod-parse-from-email')->hourly()->between('8:00', '18:00');
+
+Schedule::command('horizon:snapshot')->everyFiveMinutes();

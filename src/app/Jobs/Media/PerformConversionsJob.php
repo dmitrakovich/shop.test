@@ -25,6 +25,6 @@ class PerformConversionsJob extends BasePerformConversionsJob
         protected Media $media,
         protected bool $onlyMissing = false,
     ) {
-        $this->onQueue(Queue::MEDIA);
+        $this->onQueue(Queue::Media);
     }
 }

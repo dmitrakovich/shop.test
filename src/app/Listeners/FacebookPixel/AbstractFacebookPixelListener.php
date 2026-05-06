@@ -2,6 +2,7 @@
 
 namespace App\Listeners\FacebookPixel;
 
+use App\Enums\Queue;
 use App\Events\Analytics\AbstractAnalyticEvent;
 use App\Services\Api\Facebook\ConversionsApiService;
 use FacebookAds\Object\ServerSide\Event;
@@ -20,7 +21,7 @@ abstract class AbstractFacebookPixelListener implements ShouldQueue
      *
      * @var string|null
      */
-    public $queue = 'pixel';
+    public $queue = Queue::Pixel->value;
 
     /**
      * Generate a Facebook Pixel event based on the provided analytic event.

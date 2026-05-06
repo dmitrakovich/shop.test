@@ -88,7 +88,7 @@ task('deploy', [
 ]);
 
 after('deploy:symlink', 'artisan:opcache:clear');
-after('deploy:symlink', 'artisan:queue:restart');
+after('deploy:symlink', 'artisan:horizon:terminate');
 
 after('deploy:failed', 'deploy:unlock');
 
