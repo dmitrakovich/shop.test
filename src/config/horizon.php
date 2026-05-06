@@ -202,8 +202,8 @@ return [
             'supervisor-default' => [
                 'connection' => 'redis',
                 'queue' => Queue::horizonWorkerQueues(),
-                'balance' => 'simple',
-                'maxProcesses' => 1,
+                'balance' => 'off',
+                'maxProcesses' => 2,
                 'tries' => 3,
             ],
             'supervisor-pixel' => [

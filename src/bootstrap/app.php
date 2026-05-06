@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Cookie;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withCommands([__DIR__ . '/../routes/console.php'])
     ->withMiddleware(function (Middleware $middleware) {
         $middleware
+            ->redirectGuestsTo(fn () => Filament::getPanel('admin')->getLoginUrl())
             ->validateSignatures(['utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term'])
             ->preventRequestsDuringMaintenance(['/opcache-api/*'])
             ->encryptCookies(['utm', Cookie::YANDEX_ID->value, Cookie::GOOGLE_ID->value]);
