@@ -34,6 +34,16 @@ jobs:
           wget https://sypexgeo.net/files/SxGeoCountry.zip
           unzip SxGeoCountry.zip -d database/sxgeo
 
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.composer/cache
+            src/vendor
+          key: composer-${{ runner.os }}-php8.5-${{ hashFiles('src/composer.lock') }}
+          restore-keys: |
+            composer-${{ runner.os }}-php8.5-
+
       - name: Install dependencies
         run: composer install --no-interaction --no-scripts --no-progress --prefer-dist
 

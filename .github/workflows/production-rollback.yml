@@ -19,6 +19,15 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.5'
+    - name: Cache Composer
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.composer/cache
+          src/vendor
+        key: composer-${{ runner.os }}-php8.5-${{ hashFiles('src/composer.lock') }}
+        restore-keys: |
+          composer-${{ runner.os }}-php8.5-
     - name: Install composer dependencies
       run: composer install --optimize-autoloader --no-dev --no-scripts --quiet
 
