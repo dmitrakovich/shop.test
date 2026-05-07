@@ -1,0 +1,18 @@
+---
+description: Blade templates are legacy; emails are OK; no new Blade pages
+globs: src/resources/views/**/*.blade.php
+alwaysApply: false
+---
+
+# Blade templates (legacy)
+
+- The main storefront frontend is **not Blade** anymore; it lives in a separate Vue project.
+- In this repo, Blade is mostly **legacy remnants** to be removed over time.
+- **Do not add new Blade pages/views** for new storefront/public UI features.
+
+## Allowed / expected Blade usage
+
+- **Transactional emails** under `src/resources/views/emails/**` are expected to remain Blade.
+- **XML views/feeds** under `src/resources/views/xml/**` are supported and may be extended when needed.
+- **Filament views** under `src/resources/views/filament/**` are supported and may be extended when needed.
+- Some Blade usage may still exist for legacy admin or internal tools; prefer migrating those flows to Filament when feasible.
