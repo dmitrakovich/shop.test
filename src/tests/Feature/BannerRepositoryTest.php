@@ -94,4 +94,3 @@ class BannerRepositoryTest extends TestCase
         $this->assertInstanceOf(Collection::class, $repo->getBannersByPosition($position));
     }
 }
-
