@@ -23,3 +23,6 @@ alwaysApply: true
 
 - Prefer implementing new admin features in **Filament**; touch legacy admin only when necessary or as part of migration.
 - Keep changes compatible with the tools above (Pint + PHPStan level 6), unless working in excluded legacy area.
+- Language conventions:
+  - Code comments and developer-facing notes should be written in **English**.
+  - Commit messages are **English**; if asked, propose commit message options in English.

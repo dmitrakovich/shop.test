@@ -137,7 +137,7 @@ class FeedbackResource extends Resource
                                 SpatieMediaLibraryImageEntry::make('product.media')
                                     ->label('Фото товара')
                                     ->hiddenOn(Operation::Create)
-                                    ->conversion('normal')
+                                    ->conversion('medium')
                                     ->imageSize('100%')
                                     ->limit(1),
                             ]),
