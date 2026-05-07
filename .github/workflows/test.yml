@@ -6,6 +6,9 @@ on:
   repository_dispatch:
     types: [ retry-* ]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
@@ -24,7 +27,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.5'
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - uses: symfonycorp/security-checker-action@v2
       with:
         lock: src/composer.lock

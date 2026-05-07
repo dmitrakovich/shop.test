@@ -12,6 +12,9 @@ on:
         default: "-vvv"
         type: string
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
