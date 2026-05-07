@@ -23,7 +23,6 @@ class BannerResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'url' => $this->url,
-            'type' => $this->desktop_type->value, // todo: remove deprecated field
             'desktop_type' => $this->desktop_type->value,
             'mobile_type' => $this->mobile_type->value,
             'end_datetime' => $this->end_datetime,
