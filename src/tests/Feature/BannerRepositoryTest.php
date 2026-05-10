@@ -48,7 +48,7 @@ class BannerRepositoryTest extends TestCase
                 120,
                 Mockery::type('callable')
             )
-            ->andReturn(new Collection());
+            ->andReturn(new Collection);
 
         $repo = new BannerRepository($banner, $cache);
 
@@ -59,7 +59,7 @@ class BannerRepositoryTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-01-01 00:00:00'));
 
-        $position = BannerPosition::INDEX_TOP;
+        $position = BannerPosition::INDEX_DOUBLE;
 
         $builderEnd = Mockery::mock();
         $builderEnd->shouldReceive('where')->with('position', $position)->andReturnSelf();
@@ -83,11 +83,11 @@ class BannerRepositoryTest extends TestCase
         $cache->shouldReceive('get')->with('banners.cache_version', 1)->andReturn(1);
         $cache->shouldReceive('remember')
             ->with(
-                'banners.v1.position.index_top',
+                'banners.v1.position.index_double',
                 30,
                 Mockery::type('callable')
             )
-            ->andReturn(new Collection());
+            ->andReturn(new Collection);
 
         $repo = new BannerRepository($banner, $cache);
 

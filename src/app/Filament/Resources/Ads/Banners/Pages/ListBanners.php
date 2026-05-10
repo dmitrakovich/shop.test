@@ -24,13 +24,12 @@ class ListBanners extends ListRecords
     {
         return [
             'all' => Tab::make('all')
-                ->label('Все')
-                ->extraAttributes(['class' => 'pointer-events-none']),
+                ->label('Все'),
             'main' => Tab::make('main')
                 ->label('На главной')
                 ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
                     BannerPosition::INDEX_MAIN,
-                    BannerPosition::INDEX_TOP,
+                    BannerPosition::INDEX_DOUBLE,
                     BannerPosition::INDEX_BOTTOM,
                 ])),
             'catalog' => Tab::make('catalog')
