@@ -7,6 +7,7 @@ use App\Facades\Sale;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterRequest;
+use App\Http\Resources\Ads\BannerResource;
 use App\Http\Resources\Feedback\FeedbackResource;
 use App\Http\Resources\Info\InstallmentResource;
 use App\Http\Resources\Product\CatalogProductCollection;
@@ -15,6 +16,7 @@ use App\Http\Resources\Product\ProductResource;
 use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\Category;
 use App\Models\Product;
+use App\Repositories\BannerRepository;
 use App\Services\CatalogService;
 use App\Services\FeedbackService;
 use App\Services\FilterService;
@@ -30,6 +32,7 @@ class CatalogController extends Controller
         GoogleTagManagerService $gtmService,
         CatalogService $catalogService,
         CatalogSeoService $seoService,
+        BannerRepository $bannerRepository,
     ): JsonResponse {
         if ($promocode = $filterRequest->get('promocode')) {
             Sale::applyPromocode($promocode);
@@ -65,6 +68,7 @@ class CatalogController extends Controller
 
         $data = [
             'products' => new CatalogProductCollection($products),
+            'banners' => BannerResource::collection($bannerRepository->getCatalogBanners()),
             'category' => $category,
             'currentFilters' => $currentFilters,
             'badges' => $badges,

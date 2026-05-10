@@ -10,10 +10,8 @@ enum BannerPosition: string implements HasLabel
     case INDEX_TOP = 'index_top';
     case INDEX_BOTTOM = 'index_bottom';
     case MAIN_MENU_CATALOG = 'main_menu_catalog';
-    case CATALOG_TOP = 'catalog_top';
-    case CATALOG_MOB = 'catalog_mob';
-    case FEEDBACK = 'feedback';
-    case FEEDBACK_MOB = 'feedback_mob';
+    case CATALOG_MAIN = 'catalog_main';
+    case FEEDBACK_MAIN = 'feedback_main';
 
     public function getLabel(): string
     {
@@ -22,10 +20,8 @@ enum BannerPosition: string implements HasLabel
             self::INDEX_TOP => 'На главной сверху',
             self::INDEX_BOTTOM => 'На главной снизу',
             self::MAIN_MENU_CATALOG => 'В главном меню | каталог',
-            self::CATALOG_TOP => 'В каталоге',
-            self::CATALOG_MOB => 'В каталоге моб.',
-            self::FEEDBACK => 'В отзывах.',
-            self::FEEDBACK_MOB => 'В отзывах моб.',
+            self::CATALOG_MAIN => 'В каталоге',
+            self::FEEDBACK_MAIN => 'В отзывах',
         };
     }
 }

@@ -35,11 +35,7 @@ class ListBanners extends ListRecords
                 ])),
             'catalog' => Tab::make('catalog')
                 ->label('В каталоге')
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
-                    BannerPosition::CATALOG_TOP,
-                    BannerPosition::CATALOG_MOB,
-                ]))
-                ->extraAttributes(['class' => 'pointer-events-none']),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('position', BannerPosition::CATALOG_MAIN)),
             'menu' => Tab::make('menu')
                 ->label('В меню')
                 ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
@@ -48,11 +44,7 @@ class ListBanners extends ListRecords
                 ->extraAttributes(['class' => 'pointer-events-none']),
             'feedbacks' => Tab::make('feedbacks')
                 ->label('В отзывах')
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
-                    BannerPosition::FEEDBACK,
-                    BannerPosition::FEEDBACK_MOB,
-                ]))
-                ->extraAttributes(['class' => 'pointer-events-none']),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('position', BannerPosition::FEEDBACK_MAIN)),
         ];
     }
 

@@ -5,21 +5,30 @@ namespace App\Http\Controllers\Api;
 use App\Data\Feedback\FeedbackData;
 use App\Enums\Feedback\FeedbackType;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Feedback\FeedbackResource;
+use App\Http\Resources\Ads\BannerResource;
+use App\Http\Resources\Feedback\FeedbackCollection;
 use App\Models\Feedback;
+use App\Repositories\BannerRepository;
 use App\Services\FeedbackService;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class FeedbackController extends Controller
 {
-    public function __construct(private readonly FeedbackService $feedbackService) {}
+    public function __construct(
+        private readonly FeedbackService $feedbackService,
+        private readonly BannerRepository $bannerRepository,
+    ) {}
 
     /**
      * Display a listing of the resource.
+     *
+     * @return array{feedbacks: FeedbackCollection, banners: AnonymousResourceCollection}
      */
-    public function index(): AnonymousResourceCollection
+    public function index(): array
     {
-        return FeedbackResource::collection($this->feedbackService->getByType(FeedbackType::REVIEW));
+        return [
+            'feedbacks' => new FeedbackCollection($this->feedbackService->getByType(FeedbackType::REVIEW)),
+            'banners' => BannerResource::collection($this->bannerRepository->getFeedbackBanners()),
+        ];
     }
 
     /**

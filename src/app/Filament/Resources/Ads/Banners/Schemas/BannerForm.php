@@ -6,6 +6,7 @@ use App\Enums\Ads\BannerPosition;
 use App\Enums\Ads\BannerType;
 use App\Models\Ads\Banner;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -16,6 +17,7 @@ use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\Operation;
 
 class BannerForm
 {
@@ -47,8 +49,12 @@ class BannerForm
                                     ->default(BannerPosition::INDEX_MAIN)
                                     ->native(false)
                                     ->required()
-                                    ->disabled()
-                                    ->dehydrated(),
+                                    ->disableOptionWhen(static fn (mixed $value): bool => !in_array((string)$value, [
+                                        BannerPosition::INDEX_MAIN->value,
+                                        BannerPosition::CATALOG_MAIN->value,
+                                        BannerPosition::FEEDBACK_MAIN->value,
+                                    ], true))
+                                    ->disabledOn(Operation::Edit),
                                 TextInput::make('title')
                                     ->required()
                                     ->label('Заголовок')
@@ -76,7 +82,7 @@ class BannerForm
     /**
      * Блок загрузки баннера (desktop / mobile)
      *
-     * @return array<array-key, \Filament\Forms\Components\Field>
+     * @return array<array-key, Field>
      */
     private static function bannerBlock(string $prefix, string $label): array
     {

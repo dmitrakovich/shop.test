@@ -30,6 +30,26 @@ class BannerRepository
     }
 
     /**
+     * Active banners for the catalog listing (desktop + mobile on each record).
+     *
+     * @return Collection<int, Banner>
+     */
+    public function getCatalogBanners(): Collection
+    {
+        return $this->getBannersByPosition(BannerPosition::CATALOG_MAIN);
+    }
+
+    /**
+     * Active banners for the reviews / feedback listing.
+     *
+     * @return Collection<int, Banner>
+     */
+    public function getFeedbackBanners(): Collection
+    {
+        return $this->getBannersByPosition(BannerPosition::FEEDBACK_MAIN);
+    }
+
+    /**
      * @return Collection<int, Banner>
      */
     public function getBannersByPosition(BannerPosition $position): Collection
@@ -42,6 +62,7 @@ class BannerRepository
                 ->active()
                 ->where('position', $position)
                 ->orderByPriority()
+                ->with('media')
                 ->get();
         });
     }
