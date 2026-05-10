@@ -30,7 +30,7 @@ class ListBanners extends ListRecords
                 ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
                     BannerPosition::INDEX_MAIN,
                     BannerPosition::INDEX_DOUBLE,
-                    BannerPosition::INDEX_BOTTOM,
+                    BannerPosition::INDEX_CATEGORY,
                 ])),
             'catalog' => Tab::make('catalog')
                 ->label('В каталоге')

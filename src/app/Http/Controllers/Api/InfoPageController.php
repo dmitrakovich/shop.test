@@ -30,6 +30,7 @@ class InfoPageController extends Controller
             'banners' => BannerResource::collection($bannerRepository->getMainBanners()), // todo: remove after change front
             'main_banners' => BannerResource::collection($bannerRepository->getMainBanners()),
             'double_banners' => BannerResource::collection($bannerRepository->getIndexDoubleBanners()),
+            'category_banners' => BannerResource::collection($bannerRepository->getIndexCategoryBanners()),
             'hitSlider' => CatalogProductResource::collection($sliderService->getImidjProducts()),
             'trendSlider' => CatalogProductResource::collection($sliderService->getTrendProducts()),
         ];

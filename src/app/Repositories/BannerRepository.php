@@ -40,6 +40,16 @@ class BannerRepository
     }
 
     /**
+     * Homepage category tiles — each banner targets a category URL (slot `index_category`).
+     *
+     * @return Collection<int, Banner>
+     */
+    public function getIndexCategoryBanners(): Collection
+    {
+        return $this->getBannersByPosition(BannerPosition::INDEX_CATEGORY);
+    }
+
+    /**
      * Active banners for the catalog listing (desktop + mobile on each record).
      *
      * @return Collection<int, Banner>

@@ -52,6 +52,7 @@ class BannerForm
                                     ->disableOptionWhen(static fn (mixed $value): bool => ! in_array((string) $value, [
                                         BannerPosition::INDEX_MAIN->value,
                                         BannerPosition::INDEX_DOUBLE->value,
+                                        BannerPosition::INDEX_CATEGORY->value,
                                         BannerPosition::CATALOG_MAIN->value,
                                         BannerPosition::FEEDBACK_MAIN->value,
                                     ], true))
