@@ -34,6 +34,7 @@ class BannerForm
                                     ->schema(self::bannerBlock('desktop', 'десктоп')),
                                 Fieldset::make('Мобильная версия')
                                     ->columns(1)
+                                    ->visible(fn (Get $get): bool => self::showsMobileUploadSection($get('position')))
                                     ->schema(self::bannerBlock('mobile', 'мобильный')),
                             ]),
 
@@ -48,6 +49,7 @@ class BannerForm
                                     ->options(BannerPosition::class)
                                     ->default(BannerPosition::INDEX_MAIN)
                                     ->native(false)
+                                    ->live()
                                     ->required()
                                     ->disabledOn(Operation::Edit),
                                 TextInput::make('title')
@@ -72,6 +74,43 @@ class BannerForm
                     ->columnSpan(['lg' => 1]),
             ])
             ->columns(3);
+    }
+
+    /**
+     * When position is desktop-only, keep mobile_type aligned with desktop (form has no mobile fields).
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    public static function fillMobileTypeForDesktopOnlyPosition(array $data): array
+    {
+        $position = self::resolvePosition($data['position'] ?? null);
+        if ($position === null || !$position->isDesktopOnly()) {
+            return $data;
+        }
+
+        $desktop = $data['desktop_type'] ?? BannerType::IMAGE;
+        $data['mobile_type'] = $desktop instanceof BannerType
+            ? $desktop
+            : (BannerType::tryFrom((string)$desktop) ?? BannerType::IMAGE);
+
+        return $data;
+    }
+
+    private static function showsMobileUploadSection(mixed $position): bool
+    {
+        $resolved = self::resolvePosition($position);
+
+        return $resolved === null || !$resolved->isDesktopOnly();
+    }
+
+    private static function resolvePosition(mixed $position): ?BannerPosition
+    {
+        if ($position instanceof BannerPosition) {
+            return $position;
+        }
+
+        return is_string($position) ? BannerPosition::tryFrom($position) : null;
     }
 
     /**

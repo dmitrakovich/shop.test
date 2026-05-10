@@ -22,4 +22,15 @@ enum BannerPosition: string implements HasLabel
             self::FEEDBACK_MAIN => 'В отзывах',
         };
     }
+
+    /**
+     * These slots only use desktop creatives in Filament; {@see BannerForm} hides mobile uploads.
+     */
+    public function isDesktopOnly(): bool
+    {
+        return match ($this) {
+            self::INDEX_DOUBLE, self::INDEX_CATEGORY => true,
+            default => false,
+        };
+    }
 }
