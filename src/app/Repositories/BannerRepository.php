@@ -74,7 +74,7 @@ class BannerRepository
      */
     public function getBannersByPosition(BannerPosition $position): Collection
     {
-        $version = (int) $this->cache->get(self::CACHE_VERSION_KEY, 1);
+        $version = (int)$this->cache->get(self::CACHE_VERSION_KEY, 1);
         $cacheKey = "banners.v{$version}.position.{$position->value}";
 
         return $this->cache->remember($cacheKey, $this->ttlForPosition($position), function () use ($position) {
@@ -89,7 +89,7 @@ class BannerRepository
 
     public function clearCache(): void
     {
-        if (! $this->cache->increment(self::CACHE_VERSION_KEY)) {
+        if (!$this->cache->increment(self::CACHE_VERSION_KEY)) {
             $this->cache->forever(self::CACHE_VERSION_KEY, 2);
         }
     }
@@ -117,7 +117,7 @@ class BannerRepository
             ->sortBy(fn (Carbon $date) => $date->getTimestamp())
             ->first();
 
-        if (! $nextChangeAt instanceof Carbon) {
+        if (!$nextChangeAt instanceof Carbon) {
             return self::FALLBACK_TTL_SECONDS;
         }
 

@@ -19,13 +19,13 @@ return new class extends Migration
         $finalDefinition = '\'catalog_main\',\'feedback_main\',\'index_main\',\'index_double\',\'index_bottom\',\'main_menu_catalog\'';
 
         DB::statement(
-            'ALTER TABLE `banners` MODIFY COLUMN `position` '.$this->positionEnumSql($transitionalDefinition)
+            'ALTER TABLE `banners` MODIFY COLUMN `position` ' . $this->positionEnumSql($transitionalDefinition)
         );
 
         DB::table('banners')->where('position', 'index_top')->update(['position' => 'index_double']);
 
         DB::statement(
-            'ALTER TABLE `banners` MODIFY COLUMN `position` '.$this->positionEnumSql($finalDefinition)
+            'ALTER TABLE `banners` MODIFY COLUMN `position` ' . $this->positionEnumSql($finalDefinition)
         );
     }
 
@@ -38,13 +38,13 @@ return new class extends Migration
         $originalDefinition = '\'catalog_main\',\'feedback_main\',\'index_main\',\'index_top\',\'index_bottom\',\'main_menu_catalog\'';
 
         DB::statement(
-            'ALTER TABLE `banners` MODIFY COLUMN `position` '.$this->positionEnumSql($transitionalDefinition)
+            'ALTER TABLE `banners` MODIFY COLUMN `position` ' . $this->positionEnumSql($transitionalDefinition)
         );
 
         DB::table('banners')->where('position', 'index_double')->update(['position' => 'index_top']);
 
         DB::statement(
-            'ALTER TABLE `banners` MODIFY COLUMN `position` '.$this->positionEnumSql($originalDefinition)
+            'ALTER TABLE `banners` MODIFY COLUMN `position` ' . $this->positionEnumSql($originalDefinition)
         );
     }
 };

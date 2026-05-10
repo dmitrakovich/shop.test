@@ -32,7 +32,7 @@ return new class extends Migration
         $finalDefinition = '\'catalog_main\',\'feedback_main\',\'index_main\',\'index_double\',\'index_category\'';
 
         DB::statement(
-            'ALTER TABLE `banners` MODIFY COLUMN `position` '.$this->positionEnumSql($finalDefinition)
+            'ALTER TABLE `banners` MODIFY COLUMN `position` ' . $this->positionEnumSql($finalDefinition)
         );
     }
 
@@ -46,7 +46,7 @@ return new class extends Migration
         $withLegacy = '\'catalog_main\',\'feedback_main\',\'index_main\',\'index_double\',\'index_category\',\'main_menu_catalog\'';
 
         DB::statement(
-            'ALTER TABLE `banners` MODIFY COLUMN `position` '.$this->positionEnumSql($withLegacy)
+            'ALTER TABLE `banners` MODIFY COLUMN `position` ' . $this->positionEnumSql($withLegacy)
         );
     }
 };

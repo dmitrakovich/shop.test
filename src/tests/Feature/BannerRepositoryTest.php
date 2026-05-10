@@ -48,7 +48,7 @@ class BannerRepositoryTest extends TestCase
                 120,
                 Mockery::type('callable')
             )
-            ->andReturn(new Collection);
+            ->andReturn(new Collection());
 
         $repo = new BannerRepository($banner, $cache);
 
@@ -87,7 +87,7 @@ class BannerRepositoryTest extends TestCase
                 30,
                 Mockery::type('callable')
             )
-            ->andReturn(new Collection);
+            ->andReturn(new Collection());
 
         $repo = new BannerRepository($banner, $cache);
 
