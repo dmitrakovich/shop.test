@@ -229,7 +229,7 @@ DROP TABLE IF EXISTS `banners`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `banners` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `position` enum('catalog_main','feedback_main','index_main','index_double','index_category','main_menu_catalog') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `position` enum('catalog_main','feedback_main','index_main','index_double','index_category') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `priority` int unsigned NOT NULL DEFAULT '0',

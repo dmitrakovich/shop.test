@@ -25,30 +25,37 @@ class ListBanners extends ListRecords
         return [
             'all' => Tab::make('all')
                 ->label('Все'),
-            'main' => Tab::make('main')
-                ->label('На главной')
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
-                    BannerPosition::INDEX_MAIN,
-                    BannerPosition::INDEX_DOUBLE,
-                    BannerPosition::INDEX_CATEGORY,
-                ])),
-            'catalog' => Tab::make('catalog')
-                ->label('В каталоге')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('position', BannerPosition::CATALOG_MAIN)),
-            'menu' => Tab::make('menu')
-                ->label('В меню')
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('position', [
-                    BannerPosition::MAIN_MENU_CATALOG,
-                ]))
-                ->extraAttributes(['class' => 'pointer-events-none']),
-            'feedbacks' => Tab::make('feedbacks')
-                ->label('В отзывах')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('position', BannerPosition::FEEDBACK_MAIN)),
+            ...$this->tabsForBannerPositions(),
         ];
+    }
+
+    /**
+     * Tab id (URL/query) may differ from {@see BannerPosition::$value} where Filament needs a shorter key.
+     *
+     * @return array<string, Tab>
+     */
+    private function tabsForBannerPositions(): array
+    {
+        $definition = [
+            ['index_main', BannerPosition::INDEX_MAIN],
+            ['index_double', BannerPosition::INDEX_DOUBLE],
+            ['index_category', BannerPosition::INDEX_CATEGORY],
+            ['catalog', BannerPosition::CATALOG_MAIN],
+            ['feedbacks', BannerPosition::FEEDBACK_MAIN],
+        ];
+
+        $tabs = [];
+        foreach ($definition as [$tabId, $position]) {
+            $tabs[$tabId] = Tab::make($tabId)
+                ->label($position->getLabel())
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('position', $position));
+        }
+
+        return $tabs;
     }
 
     public function getDefaultActiveTab(): string|int|null
     {
-        return 'main';
+        return 'all';
     }
 }
