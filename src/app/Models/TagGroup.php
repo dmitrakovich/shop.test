@@ -29,6 +29,8 @@ class TagGroup extends Model
 
     /**
      * Tags
+     *
+     * @return Relations\HasMany<Tag, $this>
      */
     public function tags(): Relations\HasMany
     {

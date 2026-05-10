@@ -52,6 +52,8 @@ class Url extends Model
 
     /**
      * Get the parent filters model
+     *
+     * @return MorphTo<Model, $this>
      */
     public function filters(): MorphTo
     {

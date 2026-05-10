@@ -164,6 +164,8 @@ class Order extends Model
 
     /**
      * Товары заказа
+     *
+     * @return Relations\HasMany<OrderItem, $this>
      */
     #[\Deprecated]
     public function data(): Relations\HasMany
@@ -177,6 +179,8 @@ class Order extends Model
 
     /**
      * Order items
+     *
+     * @return Relations\HasMany<OrderItem, $this>
      */
     public function items(): Relations\HasMany
     {
@@ -189,6 +193,8 @@ class Order extends Model
 
     /**
      * Order items extended
+     *
+     * @return Relations\HasMany<OrderItemExtended, $this>
      */
     public function itemsExtended(): Relations\HasMany
     {
@@ -261,6 +267,8 @@ class Order extends Model
 
     /**
      * Order online payments
+     *
+     * @return Relations\HasMany<OnlinePayment, $this>
      */
     public function onlinePayments(): Relations\HasMany
     {
@@ -304,6 +312,8 @@ class Order extends Model
 
     /**
      * Admin comments log
+     *
+     * @return Relations\HasMany<OrderAdminComment, $this>
      */
     public function adminComments(): Relations\HasMany
     {
@@ -312,6 +322,8 @@ class Order extends Model
 
     /**
      * Mailings sent by order
+     *
+     * @return Relations\HasMany<SmsLog, $this>
      */
     public function mailings(): Relations\HasMany
     {
@@ -330,6 +342,8 @@ class Order extends Model
 
     /**
      * Track number
+     *
+     * @return Relations\HasOne<OrderTrack, $this>
      */
     public function track(): Relations\HasOne
     {
@@ -338,6 +352,8 @@ class Order extends Model
 
     /**
      * Order actions history
+     *
+     * @return Relations\HasMany<OrderActionLog, $this>
      */
     public function logs(): Relations\HasMany
     {
@@ -346,6 +362,8 @@ class Order extends Model
 
     /**
      * Order distribution history
+     *
+     * @return Relations\HasMany<OrderDistributionLog, $this>
      */
     public function distributionLogs(): Relations\HasMany
     {

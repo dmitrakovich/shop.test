@@ -53,6 +53,8 @@ class Tag extends Model implements Filterable
 
     /**
      * Теги
+     *
+     * @return Relations\MorphToMany<Product, $this, Relations\MorphPivot>
      */
     public function products(): Relations\MorphToMany
     {

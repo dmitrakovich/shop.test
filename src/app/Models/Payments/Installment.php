@@ -68,6 +68,8 @@ class Installment extends Model
 
     /**
      * Get the installment's order.
+     *
+     * @return HasOneThrough<Order, OrderItem, $this>
      */
     public function order(): HasOneThrough
     {

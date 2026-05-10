@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Facades\Cache;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -92,6 +93,8 @@ class ProductCarousel extends Model implements Sortable
 
     /**
      * Categories products
+     *
+     * @return BelongsToMany<Category, $this, Pivot>
      */
     public function categoriesList(): BelongsToMany
     {

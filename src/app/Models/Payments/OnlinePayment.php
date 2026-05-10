@@ -93,6 +93,8 @@ class OnlinePayment extends Model
 
     /**
      * Payment statuses
+     *
+     * @return Relations\HasMany<OnlinePaymentStatus, $this>
      */
     public function statuses(): Relations\HasMany
     {
@@ -101,6 +103,8 @@ class OnlinePayment extends Model
 
     /**
      * Payment statuses
+     *
+     * @return Relations\HasOne<OnlinePaymentStatus, $this>
      */
     public function lastStatus(): Relations\HasOne
     {
@@ -109,6 +113,8 @@ class OnlinePayment extends Model
 
     /**
      * Last canceled status
+     *
+     * @return Relations\HasOne<OnlinePaymentStatus, $this>
      */
     public function lastCanceledStatus(): Relations\HasOne
     {
@@ -117,6 +123,8 @@ class OnlinePayment extends Model
 
     /**
      * Last succeeded status
+     *
+     * @return Relations\HasOne<OnlinePaymentStatus, $this>
      */
     public function lastSucceededStatus(): Relations\HasOne
     {

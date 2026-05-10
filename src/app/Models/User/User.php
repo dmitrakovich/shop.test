@@ -153,6 +153,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * User's cart
+     *
+     * @return HasOne<Cart, $this>
      */
     public function cart(): HasOne
     {
@@ -161,6 +163,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * User's favorites
+     *
+     * @return HasMany<Favorite, $this>
      */
     public function favorites(): HasMany
     {
@@ -169,6 +173,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * User passport
+     *
+     * @return HasOne<UserPassport, $this>
      */
     public function passport(): HasOne
     {
@@ -177,6 +183,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * User addresses
+     *
+     * @return HasMany<Address, $this>
      */
     public function addresses(): HasMany
     {
@@ -185,6 +193,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * User last address
+     *
+     * @return HasOne<Address, $this>
      */
     public function lastAddress(): HasOne
     {
@@ -193,6 +203,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * Get the user metadata associated with the user.
+     *
+     * @return HasOne<UserMetadata, $this>
      */
     public function metadata(): HasOne
     {
@@ -266,6 +278,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * User's orders
+     *
+     * @return HasMany<Order, $this>
      */
     public function orders(): HasMany
     {
@@ -274,6 +288,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * User's offline orders
+     *
+     * @return HasMany<OfflineOrder, $this>
      */
     public function offlineOrders(): HasMany
     {
@@ -282,6 +298,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * User's reviews
+     *
+     * @return HasMany<Feedback, $this>
      */
     public function reviews(): HasMany
     {
@@ -290,6 +308,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * Mailings sent to the user
+     *
+     * @return HasMany<SmsLog, $this>
      */
     public function mailings(): HasMany
     {
@@ -298,6 +318,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * Retrieve the blacklist associated with the user.
+     *
+     * @return HasOne<UserBlacklist, $this>
      */
     public function blacklist(): HasOne
     {
@@ -306,6 +328,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * Retrieve the blacklistLogs associated with the user.
+     *
+     * @return HasMany<UserBlacklist, $this>
      */
     public function blacklistLogs(): HasMany
     {
@@ -314,6 +338,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * Define a relationship with the user's online payments.
+     *
+     * @return HasManyThrough<OnlinePayment, Order, $this>
      */
     public function payments(): HasManyThrough
     {
@@ -322,6 +348,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * Get the user promocodes associated with the user.
+     *
+     * @return HasMany<UserPromocode, $this>
      */
     public function usedPromocodes(): HasMany
     {

@@ -68,6 +68,8 @@ class Cart extends Model
 
     /**
      * Cart's items
+     *
+     * @return HasMany<CartData, $this>
      */
     public function items(): HasMany
     {

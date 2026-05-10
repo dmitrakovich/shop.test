@@ -48,6 +48,8 @@ class FeedbackAnswer extends Model implements HasMedia
 
     /**
      * Get the user that owns the feedback answer.
+     *
+     * @return Relations\MorphTo<Model, $this>
      */
     public function user(): Relations\MorphTo
     {

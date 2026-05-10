@@ -6,6 +6,7 @@ use App\Models\Orders\OrderItem;
 use App\Models\Stock;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * @property int $id
@@ -30,6 +31,8 @@ class Displacement extends Model
 
     /**
      * Retrieve the items associated with the order.
+     *
+     * @return Relations\BelongsToMany<OrderItem, $this, Pivot>
      */
     public function orderItems(): Relations\BelongsToMany
     {

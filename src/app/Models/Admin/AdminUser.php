@@ -6,6 +6,7 @@ use App\Contracts\AuthorInterface;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -68,6 +69,8 @@ class AdminUser extends Authenticatable implements AuthorInterface, FilamentUser
 
     /**
      * A user has and belongs to many roles.
+     *
+     * @return BelongsToMany<\Encore\Admin\Auth\Database\Role, $this, Pivot>
      */
     public function oldRoles(): BelongsToMany
     {
@@ -78,6 +81,8 @@ class AdminUser extends Authenticatable implements AuthorInterface, FilamentUser
 
     /**
      * A User has and belongs to many permissions.
+     *
+     * @return BelongsToMany<\Encore\Admin\Auth\Database\Permission, $this, Pivot>
      */
     public function oldPermissions(): BelongsToMany
     {

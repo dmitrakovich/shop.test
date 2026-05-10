@@ -1015,18 +1015,6 @@ parameters:
 			path: app/Models/Admin/AdminUser.php
 
 		-
-			message: '#^Method App\\Models\\Admin\\AdminUser\:\:oldPermissions\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Admin/AdminUser.php
-
-		-
-			message: '#^Method App\\Models\\Admin\\AdminUser\:\:oldRoles\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Admin/AdminUser.php
-
-		-
 			message: '#^Method App\\Models\\Admin\\AdminUser\:\:visible\(\) has parameter \$roles with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1064,12 +1052,6 @@ parameters:
 
 		-
 			message: '#^Method App\\Models\\Ads\\ProductCarousel\:\:categories\(\) return type with generic class Staudenmeir\\EloquentJsonRelations\\Relations\\BelongsToJson does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
-			message: '#^Method App\\Models\\Ads\\ProductCarousel\:\:categoriesList\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Models/Ads/ProductCarousel.php
@@ -1165,12 +1147,6 @@ parameters:
 			path: app/Models/Cart.php
 
 		-
-			message: '#^Method App\\Models\\Cart\:\:items\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Cart.php
-
-		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Category\>\:\:toTree\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -1197,12 +1173,6 @@ parameters:
 		-
 			message: '#^Method App\\Models\\City\:\:setNameAttribute\(\) has parameter \$value with no type specified\.$#'
 			identifier: missingType.parameter
-			count: 1
-			path: app/Models/City.php
-
-		-
-			message: '#^Method App\\Models\\City\:\:stocks\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
 			count: 1
 			path: app/Models/City.php
 
@@ -1297,12 +1267,6 @@ parameters:
 			path: app/Models/Favorite.php
 
 		-
-			message: '#^Method App\\Models\\Feedback\:\:answers\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Feedback.php
-
-		-
 			message: '#^Method App\\Models\\Feedback\:\:scopeForProduct\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
 			identifier: missingType.generics
 			count: 1
@@ -1313,12 +1277,6 @@ parameters:
 			identifier: missingType.generics
 			count: 1
 			path: app/Models/Feedback.php
-
-		-
-			message: '#^Method App\\Models\\FeedbackAnswer\:\:user\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/FeedbackAnswer.php
 
 		-
 			message: '#^PHPDoc tag @mixin contains generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
@@ -1531,12 +1489,6 @@ parameters:
 			path: app/Models/Logs/OrderItemStatusLog.php
 
 		-
-			message: '#^Method App\\Models\\Offline\\Displacement\:\:orderItems\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Offline/Displacement.php
-
-		-
 			message: '#^Method App\\Models\\OneC\\AbstractOneCModel\:\:hydrate\(\) has parameter \$objects with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1579,12 +1531,6 @@ parameters:
 			path: app/Models/OneC/DiscountCard.php
 
 		-
-			message: '#^Method App\\Models\\OneC\\OfflineOrder\:\:availableSizes\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/OneC/OfflineOrder.php
-
-		-
 			message: '#^Property App\\Models\\OneC\\OfflineOrder\:\:\$doNotHydrate type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1597,60 +1543,6 @@ parameters:
 			path: app/Models/OneC/OfflineOrder.php
 
 		-
-			message: '#^Method App\\Models\\Orders\\Batch\:\:orders\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Batch.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\Order\:\:adminComments\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\Order\:\:data\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\Order\:\:distributionLogs\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\Order\:\:items\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\Order\:\:itemsExtended\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\Order\:\:logs\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\Order\:\:mailings\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\Order\:\:onlinePayments\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
 			message: '#^Method App\\Models\\Orders\\Order\:\:setInstallmentContractDateAttribute\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -1661,36 +1553,6 @@ parameters:
 			identifier: missingType.parameter
 			count: 1
 			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\Order\:\:track\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/Order.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\OrderItem\:\:installment\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/OrderItem.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\OrderItem\:\:inventoryNotification\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/OrderItem.php
-
-		-
-			message: '#^Method App\\Models\\Orders\\OrderItem\:\:statusLog\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Orders/OrderItem.php
-
-		-
-			message: '#^Method App\\Models\\Payments\\Installment\:\:order\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOneThrough does not specify its types\: TRelatedModel, TIntermediateModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Payments/Installment.php
 
 		-
 			message: '#^PHPDoc type array of property App\\Models\\Payments\\Installment\:\:\$casts is not covariant with PHPDoc type array\<string, string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$casts\.$#'
@@ -1707,30 +1569,6 @@ parameters:
 		-
 			message: '#^Class App\\Models\\Payments\\OnlinePayment has PHPDoc tag @property for property \$request_data with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Payments/OnlinePayment.php
-
-		-
-			message: '#^Method App\\Models\\Payments\\OnlinePayment\:\:lastCanceledStatus\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Payments/OnlinePayment.php
-
-		-
-			message: '#^Method App\\Models\\Payments\\OnlinePayment\:\:lastStatus\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Payments/OnlinePayment.php
-
-		-
-			message: '#^Method App\\Models\\Payments\\OnlinePayment\:\:lastSucceededStatus\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Payments/OnlinePayment.php
-
-		-
-			message: '#^Method App\\Models\\Payments\\OnlinePayment\:\:statuses\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
 			count: 1
 			path: app/Models/Payments/OnlinePayment.php
 
@@ -1759,38 +1597,8 @@ parameters:
 			path: app/Models/Payments/PaymentMethod.php
 
 		-
-			message: '#^Method App\\Models\\Product\:\:availableSizes\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Product.php
-
-		-
-			message: '#^Method App\\Models\\Product\:\:colors\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Product.php
-
-		-
 			message: '#^Method App\\Models\\Product\:\:excludedLabels\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Product.php
-
-		-
-			message: '#^Method App\\Models\\Product\:\:fabrics\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Product.php
-
-		-
-			message: '#^Method App\\Models\\Product\:\:heels\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Product.php
-
-		-
-			message: '#^Method App\\Models\\Product\:\:productsFromGroup\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
 			count: 1
 			path: app/Models/Product.php
 
@@ -1838,30 +1646,6 @@ parameters:
 
 		-
 			message: '#^Method App\\Models\\Product\:\:scopeSorting\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Product.php
-
-		-
-			message: '#^Method App\\Models\\Product\:\:sizes\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Product.php
-
-		-
-			message: '#^Method App\\Models\\Product\:\:styles\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Product.php
-
-		-
-			message: '#^Method App\\Models\\Product\:\:tags\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Product.php
-
-		-
-			message: '#^Method App\\Models\\Product\:\:url\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Models/Product.php
@@ -1921,18 +1705,6 @@ parameters:
 			path: app/Models/ProductGroup.php
 
 		-
-			message: '#^Method App\\Models\\Promo\\Promocode\:\:userPromocode\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Promo/Promocode.php
-
-		-
-			message: '#^Method App\\Models\\Promo\\Promocode\:\:userPromocodes\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Promo/Promocode.php
-
-		-
 			message: '#^Method App\\Models\\Seo\\SeoLink\:\:setDestinationAttribute\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -1981,24 +1753,6 @@ parameters:
 			path: app/Models/Stock.php
 
 		-
-			message: '#^Method App\\Models\\Tag\:\:products\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Tag.php
-
-		-
-			message: '#^Method App\\Models\\TagGroup\:\:tags\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/TagGroup.php
-
-		-
-			message: '#^Method App\\Models\\Url\:\:filters\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Url.php
-
-		-
 			message: '#^Method App\\Models\\User\\Address\:\:getAddressRow\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -2011,34 +1765,10 @@ parameters:
 			path: app/Models/User/Address.php
 
 		-
-			message: '#^Method App\\Models\\User\\Device\:\:orders\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/Device.php
-
-		-
 			message: '#^Method App\\Models\\User\\Group\:\:defaultData\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Models/User/Group.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:addresses\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:blacklist\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:blacklistLogs\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
 
 		-
 			message: '#^Method App\\Models\\User\\User\:\:firstName\(\) return type with generic class Illuminate\\Database\\Eloquent\\Casts\\Attribute does not specify its types\: TGet, TSet$#'
@@ -2049,60 +1779,6 @@ parameters:
 		-
 			message: '#^Method App\\Models\\User\\User\:\:getDataForCache\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:lastAddress\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:mailings\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:metadata\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:offlineOrders\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:orders\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:passport\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasOne does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:payments\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasManyThrough does not specify its types\: TRelatedModel, TIntermediateModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:reviews\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/User/User.php
-
-		-
-			message: '#^Method App\\Models\\User\\User\:\:usedPromocodes\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
 			count: 1
 			path: app/Models/User/User.php
 
@@ -2609,12 +2285,6 @@ parameters:
 			identifier: varTag.variableNotFound
 			count: 1
 			path: app/Services/Order/OrderItemInventoryService.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:statuses\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Services/Payment/BelpostCODService.php
 
 		-
 			message: '#^Method App\\Services\\Payment\\BelpostCODService\:\:importExcelCOD\(\) return type has no value type specified in iterable type array\.$#'

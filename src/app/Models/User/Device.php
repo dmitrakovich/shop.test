@@ -121,6 +121,8 @@ class Device extends Model implements ClientInterface
 
     /**
      * Device's orders
+     *
+     * @return HasMany<Order, $this>
      */
     public function orders(): HasMany
     {

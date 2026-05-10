@@ -39,6 +39,8 @@ class City extends Model
 
     /**
      * Stocks
+     *
+     * @return Relations\HasMany<Stock, $this>
      */
     public function stocks(): Relations\HasMany
     {

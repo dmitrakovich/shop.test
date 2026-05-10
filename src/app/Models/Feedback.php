@@ -70,6 +70,8 @@ class Feedback extends Model implements HasMedia
 
     /**
      * Feedback related answers
+     *
+     * @return HasMany<FeedbackAnswer, $this>
      */
     public function answers(): HasMany
     {

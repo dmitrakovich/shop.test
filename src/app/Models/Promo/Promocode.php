@@ -61,6 +61,8 @@ class Promocode extends Model
 
     /**
      * Get the user promocodes associated with the promocode.
+     *
+     * @return HasMany<UserPromocode, $this>
      */
     public function userPromocodes(): HasMany
     {
@@ -69,6 +71,8 @@ class Promocode extends Model
 
     /**
      * Get the user promocode for the current authenticated user.
+     *
+     * @return HasOne<UserPromocode, $this>
      */
     public function userPromocode(): HasOne
     {

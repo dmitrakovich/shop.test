@@ -149,6 +149,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Размеры
+     *
+     * @return Relations\MorphToMany<Size, $this, Relations\MorphPivot>
      */
     public function sizes(): Relations\MorphToMany
     {
@@ -157,6 +159,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Цвет
+     *
+     * @return Relations\MorphToMany<Color, $this, Relations\MorphPivot>
      */
     public function colors(): Relations\MorphToMany
     {
@@ -165,6 +169,8 @@ class Product extends Model implements HasMedia
 
     /**
      * материалы
+     *
+     * @return Relations\MorphToMany<Fabric, $this, Relations\MorphPivot>
      */
     public function fabrics(): Relations\MorphToMany
     {
@@ -173,6 +179,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Типы каблука
+     *
+     * @return Relations\MorphToMany<Heel, $this, Relations\MorphPivot>
      */
     public function heels(): Relations\MorphToMany
     {
@@ -181,6 +189,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Стили
+     *
+     * @return Relations\MorphToMany<Style, $this, Relations\MorphPivot>
      */
     public function styles(): Relations\MorphToMany
     {
@@ -199,6 +209,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Теги
+     *
+     * @return Relations\MorphToMany<Tag, $this, Relations\MorphPivot>
      */
     public function tags(): Relations\MorphToMany
     {
@@ -237,6 +249,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Slug для фильтра
+     *
+     * @return Relations\MorphOne<Url, $this>
      */
     public function url(): Relations\MorphOne
     {
@@ -265,6 +279,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Get the products from group associated with the product.
+     *
+     * @return Relations\HasMany<Product, $this>
      */
     public function productsFromGroup(): Relations\HasMany
     {
@@ -273,6 +289,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Get the available sizes associated with the product.
+     *
+     * @return Relations\HasMany<AvailableSizes, $this>
      */
     public function availableSizes(): Relations\HasMany
     {

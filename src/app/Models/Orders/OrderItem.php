@@ -101,6 +101,8 @@ class OrderItem extends Model
 
     /**
      * Get the installment associated with the order.
+     *
+     * @return Relations\HasOne<Installment, $this>
      */
     public function installment(): Relations\HasOne
     {
@@ -109,6 +111,8 @@ class OrderItem extends Model
 
     /**
      * Get the inventory notification associated with the order item. Alias for statusLog
+     *
+     * @return Relations\HasOne<OrderItemStatusLog, $this>
      */
     public function inventoryNotification(): Relations\HasOne
     {
@@ -117,6 +121,8 @@ class OrderItem extends Model
 
     /**
      * Get the status log associated with the order item.
+     *
+     * @return Relations\HasOne<OrderItemStatusLog, $this>
      */
     public function statusLog(): Relations\HasOne
     {

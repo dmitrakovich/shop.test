@@ -98,6 +98,8 @@ class OfflineOrder extends AbstractOneCModel
 
     /**
      * Get the available sizes associated with the offline order.
+     *
+     * @return HasMany<AvailableSizesFull, $this>
      */
     public function availableSizes(): HasMany
     {

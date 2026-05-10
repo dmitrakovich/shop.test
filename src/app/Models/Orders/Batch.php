@@ -24,6 +24,8 @@ class Batch extends Model
 
     /**
      * Orders
+     *
+     * @return Relations\HasMany<Order, $this>
      */
     public function orders(): Relations\HasMany
     {
