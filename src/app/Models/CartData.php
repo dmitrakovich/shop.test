@@ -37,6 +37,8 @@ class CartData extends Model
 
     /**
      * Get the product associated with this cart data.
+     *
+     * @return BelongsTo<Product, $this>
      */
     public function product(): BelongsTo
     {
@@ -45,6 +47,8 @@ class CartData extends Model
 
     /**
      * Get the size associated with this cart data.
+     *
+     * @return BelongsTo<Size, $this>
      */
     public function size(): BelongsTo
     {

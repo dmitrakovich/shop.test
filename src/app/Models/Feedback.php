@@ -78,6 +78,8 @@ class Feedback extends Model implements HasMedia
 
     /**
      * Product related feedback.
+     *
+     * @return BelongsTo<Product, $this>
      */
     public function product(): BelongsTo
     {
@@ -86,6 +88,8 @@ class Feedback extends Model implements HasMedia
 
     /**
      * User related feedback.
+     *
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {

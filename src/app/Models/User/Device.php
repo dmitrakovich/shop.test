@@ -131,6 +131,8 @@ class Device extends Model implements ClientInterface
      * Get the user that owns the device.
      *
      * @todo need many to many relation
+     *
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {

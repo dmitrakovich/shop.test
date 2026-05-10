@@ -36,6 +36,8 @@ class Promocode extends Model
 
     /**
      * Get the sale that owns the promocode.
+     *
+     * @return BelongsTo<Sale, $this>
      */
     public function sale(): BelongsTo
     {

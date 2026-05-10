@@ -201,6 +201,8 @@ class Order extends Model
 
     /**
      * The authorized user who made the order
+     *
+     * @return Relations\BelongsTo<User, $this>
      */
     public function user(): Relations\BelongsTo
     {
@@ -209,6 +211,8 @@ class Order extends Model
 
     /**
      * The device from which the order was made
+     *
+     * @return Relations\BelongsTo<Device, $this>
      */
     public function device(): Relations\BelongsTo
     {
@@ -217,6 +221,8 @@ class Order extends Model
 
     /**
      * Order country
+     *
+     * @return Relations\BelongsTo<Country, $this>
      */
     public function country(): Relations\BelongsTo
     {
@@ -225,6 +231,8 @@ class Order extends Model
 
     /**
      * Order delivery method
+     *
+     * @return Relations\BelongsTo<DeliveryMethod, $this>
      */
     public function delivery(): Relations\BelongsTo
     {
@@ -233,6 +241,8 @@ class Order extends Model
 
     /**
      * Stock from which the order will be picked up
+     *
+     * @return Relations\BelongsTo<Stock, $this>
      */
     public function stock(): Relations\BelongsTo
     {
@@ -241,6 +251,8 @@ class Order extends Model
 
     /**
      * Order payment method
+     *
+     * @return Relations\BelongsTo<PaymentMethod, $this>
      */
     public function payment(): Relations\BelongsTo
     {
@@ -257,6 +269,8 @@ class Order extends Model
 
     /**
      * Admin user
+     *
+     * @return Relations\BelongsTo<Administrator, $this>
      */
     public function admin(): Relations\BelongsTo
     {
@@ -306,6 +320,8 @@ class Order extends Model
 
     /**
      * Batch
+     *
+     * @return Relations\BelongsTo<Batch, $this>
      */
     public function batch(): Relations\BelongsTo
     {

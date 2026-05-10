@@ -143,6 +143,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * User's discount group
+     *
+     * @return BelongsTo<Group, $this>
      */
     public function group(): BelongsTo
     {
@@ -328,6 +330,8 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
 
     /**
      * Get the user discount card from 1C associated with the user.
+     *
+     * @return BelongsTo<OneC\DiscountCard, $this>
      */
     public function discountCard(): BelongsTo
     {

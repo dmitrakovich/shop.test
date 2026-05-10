@@ -38,6 +38,8 @@ class Displacement extends Model
 
     /**
      * A description of the directionFromStock function.
+     *
+     * @return Relations\BelongsTo<Stock, $this>
      */
     public function directionFromStock(): Relations\BelongsTo
     {
@@ -46,6 +48,8 @@ class Displacement extends Model
 
     /**
      * Get the relation to the stock for the direction.
+     *
+     * @return Relations\BelongsTo<Stock, $this>
      */
     public function directionToStock(): Relations\BelongsTo
     {

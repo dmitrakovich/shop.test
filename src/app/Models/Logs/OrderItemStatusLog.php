@@ -71,6 +71,8 @@ class OrderItemStatusLog extends Model
 
     /**
      * Get the order item associated with the notification log.
+     *
+     * @return BelongsTo<OrderItem, $this>
      */
     public function orderItem(): BelongsTo
     {
@@ -79,6 +81,8 @@ class OrderItemStatusLog extends Model
 
     /**
      * Get the stock associated with the notification log.
+     *
+     * @return BelongsTo<Stock, $this>
      */
     public function stock(): BelongsTo
     {

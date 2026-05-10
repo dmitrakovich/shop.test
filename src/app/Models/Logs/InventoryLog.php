@@ -77,6 +77,8 @@ class InventoryLog extends Model
 
     /**
      * Get the product that the inventory log belongs to.
+     *
+     * @return BelongsTo<Product, $this>
      */
     public function product(): BelongsTo
     {

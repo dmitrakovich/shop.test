@@ -38,6 +38,8 @@ class OrderTrack extends Model
 
     /**
      * Order.
+     *
+     * @return Relations\BelongsTo<Order, $this>
      */
     public function order(): Relations\BelongsTo
     {

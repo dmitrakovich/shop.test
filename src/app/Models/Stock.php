@@ -99,6 +99,8 @@ class Stock extends Model implements HasMedia, Sortable
 
     /**
      * City
+     *
+     * @return Relations\BelongsTo<City, $this>
      */
     public function city(): Relations\BelongsTo
     {
@@ -107,6 +109,8 @@ class Stock extends Model implements HasMedia, Sortable
 
     /**
      * Private chat for notifications
+     *
+     * @return Relations\BelongsTo<TelegramChat, $this>
      */
     public function privateChat(): Relations\BelongsTo
     {
@@ -115,6 +119,8 @@ class Stock extends Model implements HasMedia, Sortable
 
     /**
      * Group chat for notifications
+     *
+     * @return Relations\BelongsTo<TelegramChat, $this>
      */
     public function groupChat(): Relations\BelongsTo
     {

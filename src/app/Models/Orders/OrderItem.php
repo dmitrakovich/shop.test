@@ -66,6 +66,8 @@ class OrderItem extends Model
 
     /**
      * Get the order associated with the order's item.
+     *
+     * @return Relations\BelongsTo<Order, $this>
      */
     public function order(): Relations\BelongsTo
     {
@@ -74,6 +76,8 @@ class OrderItem extends Model
 
     /**
      * Product from order item
+     *
+     * @return Relations\BelongsTo<Product, $this>
      */
     public function product(): Relations\BelongsTo
     {
@@ -87,6 +91,8 @@ class OrderItem extends Model
 
     /**
      * Product size
+     *
+     * @return Relations\BelongsTo<Size, $this>
      */
     public function size(): Relations\BelongsTo
     {

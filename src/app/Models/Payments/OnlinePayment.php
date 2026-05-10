@@ -125,6 +125,8 @@ class OnlinePayment extends Model
 
     /**
      * Get the order that owns the payment.
+     *
+     * @return Relations\BelongsTo<Order, $this>
      */
     public function order(): Relations\BelongsTo
     {
@@ -133,6 +135,8 @@ class OnlinePayment extends Model
 
     /**
      * Get the order that owns the payment.
+     *
+     * @return Relations\BelongsTo<Administrator, $this>
      */
     public function admin(): Relations\BelongsTo
     {

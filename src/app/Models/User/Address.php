@@ -53,6 +53,8 @@ class Address extends Model
 
     /**
      * Address country
+     *
+     * @return Relations\BelongsTo<Country, $this>
      */
     public function country(): Relations\BelongsTo
     {
@@ -61,6 +63,8 @@ class Address extends Model
 
     /**
      * Get the user associated with this address.
+     *
+     * @return Relations\BelongsTo<User, $this>
      */
     public function user(): Relations\BelongsTo
     {

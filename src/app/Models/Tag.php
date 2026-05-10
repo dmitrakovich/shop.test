@@ -61,6 +61,8 @@ class Tag extends Model implements Filterable
 
     /**
      * Tag group
+     *
+     * @return Relations\BelongsTo<TagGroup, $this>
      */
     public function group(): Relations\BelongsTo
     {

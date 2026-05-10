@@ -47,6 +47,8 @@ class Favorite extends Model
 
     /**
      * Get the product associated with this favorite
+     *
+     * @return BelongsTo<Product, $this>
      */
     public function product(): BelongsTo
     {

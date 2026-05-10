@@ -88,6 +88,8 @@ class OfflineOrder extends AbstractOneCModel
 
     /**
      * Get the stock associated with the offline order.
+     *
+     * @return BelongsTo<Stock, $this>
      */
     public function stock(): BelongsTo
     {
@@ -104,6 +106,8 @@ class OfflineOrder extends AbstractOneCModel
 
     /**
      * Get the product associated with the offline order.
+     *
+     * @return BelongsTo<Product, $this>
      */
     public function product(): BelongsTo
     {
@@ -112,6 +116,8 @@ class OfflineOrder extends AbstractOneCModel
 
     /**
      * Get the size associated with the offline order.
+     *
+     * @return BelongsTo<Size, $this>
      */
     public function size(): BelongsTo
     {
@@ -120,6 +126,8 @@ class OfflineOrder extends AbstractOneCModel
 
     /**
      * Get the user discount card from 1C associated with the order.
+     *
+     * @return BelongsTo<DiscountCard, $this>
      */
     public function discountCard(): BelongsTo
     {

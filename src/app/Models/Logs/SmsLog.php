@@ -60,6 +60,8 @@ class SmsLog extends Model
 
     /**
      * The manager who sent the message
+     *
+     * @return BelongsTo<Administrator, $this>
      */
     public function admin(): BelongsTo
     {
@@ -68,6 +70,8 @@ class SmsLog extends Model
 
     /**
      * The user to which the message refers
+     *
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
@@ -76,6 +80,8 @@ class SmsLog extends Model
 
     /**
      * The order to which the message refers
+     *
+     * @return BelongsTo<Order, $this>
      */
     public function order(): BelongsTo
     {
@@ -84,6 +90,8 @@ class SmsLog extends Model
 
     /**
      * The mailing to which the message refers
+     *
+     * @return BelongsTo<Mailing, $this>
      */
     public function mailing(): BelongsTo
     {

@@ -38,6 +38,8 @@ class Cart extends Model
 
     /**
      * Get the device associated with the cart.
+     *
+     * @return BelongsTo<UserDevice, $this>
      */
     public function device(): BelongsTo
     {
@@ -46,6 +48,8 @@ class Cart extends Model
 
     /**
      * Get the user associated with the cart.
+     *
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
@@ -54,6 +58,8 @@ class Cart extends Model
 
     /**
      * Get the promocode associated with the cart.
+     *
+     * @return BelongsTo<Promocode, $this>
      */
     public function promocode(): BelongsTo
     {

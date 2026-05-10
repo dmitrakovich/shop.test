@@ -32,6 +32,8 @@ class OrderDistributionLog extends Model
 
     /**
      * Get the admin associated with the action log.
+     *
+     * @return BelongsTo<Administrator, $this>
      */
     public function admin(): BelongsTo
     {

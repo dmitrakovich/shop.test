@@ -58,6 +58,8 @@ class Installment extends Model
 
     /**
      * Get the order that owns the installment.
+     *
+     * @return BelongsTo<OrderItem, $this>
      */
     public function orderItem(): BelongsTo
     {

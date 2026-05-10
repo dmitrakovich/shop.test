@@ -129,6 +129,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Категория товара
+     *
+     * @return Relations\BelongsTo<Category, $this>
      */
     public function category(): Relations\BelongsTo
     {
@@ -137,6 +139,8 @@ class Product extends Model implements HasMedia
 
     /**
      * коллекция
+     *
+     * @return Relations\BelongsTo<ProductCollection, $this>
      */
     public function collection(): Relations\BelongsTo
     {
@@ -185,6 +189,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Сезон
+     *
+     * @return Relations\BelongsTo<Season, $this>
      */
     public function season(): Relations\BelongsTo
     {
@@ -201,6 +207,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Бренд
+     *
+     * @return Relations\BelongsTo<Brand, $this>
      */
     public function brand(): Relations\BelongsTo
     {
@@ -209,6 +217,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Производитель
+     *
+     * @return Relations\BelongsTo<ProductAttributes\Manufacturer, $this>
      */
     public function manufacturer(): Relations\BelongsTo
     {
@@ -217,6 +227,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Country of origin
+     *
+     * @return Relations\BelongsTo<ProductAttributes\CountryOfOrigin, $this>
      */
     public function countryOfOrigin(): Relations\BelongsTo
     {
@@ -243,6 +255,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Product group relation.
+     *
+     * @return Relations\BelongsTo<ProductGroup, $this>
      */
     public function productGroup(): Relations\BelongsTo
     {
@@ -267,6 +281,8 @@ class Product extends Model implements HasMedia
 
     /**
      * Get the product from 1C associated with the site product.
+     *
+     * @return Relations\BelongsTo<ProductFromOneC, $this>
      */
     public function productFromOneC(): Relations\BelongsTo
     {

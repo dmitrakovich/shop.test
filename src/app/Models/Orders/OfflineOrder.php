@@ -53,6 +53,8 @@ class OfflineOrder extends Model
 
     /**
      * Get the product associated with the offline order.
+     *
+     * @return BelongsTo<Product, $this>
      */
     public function product(): BelongsTo
     {
@@ -61,6 +63,8 @@ class OfflineOrder extends Model
 
     /**
      * Get the size associated with the offline order.
+     *
+     * @return BelongsTo<Size, $this>
      */
     public function size(): BelongsTo
     {
@@ -69,6 +73,8 @@ class OfflineOrder extends Model
 
     /**
      * Get the stock associated with the offline order.
+     *
+     * @return BelongsTo<Stock, $this>
      */
     public function stock(): BelongsTo
     {
@@ -77,6 +83,8 @@ class OfflineOrder extends Model
 
     /**
      * Get the user associated with the offline order.
+     *
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {

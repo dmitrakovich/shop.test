@@ -36,7 +36,7 @@ class UserMetadata extends Model
     /**
      * Define a relationship with the User model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return Relations\BelongsTo<User, $this>
      */
     public function user(): Relations\BelongsTo
     {

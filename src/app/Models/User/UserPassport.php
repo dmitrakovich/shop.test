@@ -37,6 +37,8 @@ class UserPassport extends Model
 
     /**
      * user
+     *
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {

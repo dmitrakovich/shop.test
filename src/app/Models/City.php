@@ -29,6 +29,8 @@ class City extends Model
 
     /**
      * коллекция
+     *
+     * @return Relations\BelongsTo<Country, $this>
      */
     public function country(): Relations\BelongsTo
     {
