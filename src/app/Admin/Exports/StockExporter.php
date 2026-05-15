@@ -17,6 +17,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing;
 
 class StockExporter extends ExcelExporterFromCollection implements WithDrawings, WithEvents
 {
+    private const PHOTO_COLUMN_WIDTH = 16;
+
+    private const PHOTO_IMAGE_WIDTH = 100;
+
     /**
      * @var string
      */
@@ -93,7 +97,7 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
                     $sheet->getRowDimension($row->getRowIndex())->setRowHeight(82);
                 }
 
-                $sheet->getColumnDimension('A')->setWidth(16); // фото
+                $sheet->getColumnDimension('A')->setWidth(self::PHOTO_COLUMN_WIDTH); // фото
                 $sheet->getColumnDimension('B')->setWidth(22); // название
                 $sheet->getColumnDimension('C')->setWidth(27); // артикул
                 for ($i = 4; $i < $columnCount - 4; $i++) {
@@ -132,6 +136,8 @@ class StockExporter extends ExcelExporterFromCollection implements WithDrawings,
             $drawing = $this->getDrawing(
                 $this->extractImageUrl($row->column('media'))
             );
+            $drawing->setResizeProportional(true);
+            $drawing->setWidth(self::PHOTO_IMAGE_WIDTH);
             $drawing->setOffsetX(6)->setOffsetY(5);
             $drawing->setCoordinates('A' . ($row->number + 2));
 
