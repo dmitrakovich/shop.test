@@ -3,10 +3,11 @@
 namespace App\Filament\Resources\Ads\Banners\Tables;
 
 use App\Enums\Ads\BannerMediaCollection;
+use App\Filament\Resources\Ads\Banners\Pages\ListBanners;
 use App\Models\Ads\Banner;
+use App\Repositories\BannerRepository;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -19,6 +20,9 @@ class BannersTable
     {
         return $table
             ->columns([
+                TextColumn::make('priority')
+                    ->label('№')
+                    ->numeric(),
                 TextColumn::make('position')
                     ->label('Позиция')
                     ->badge(),
@@ -37,10 +41,6 @@ class BannersTable
                 TextColumn::make('url')
                     ->label('Ссылка')
                     ->searchable(),
-                // TextColumn::make('priority')
-                //     ->label('Приоритет')
-                //     ->numeric()
-                //     ->sortable(),
                 ToggleColumn::make('active')
                     ->label('Активен'),
                 TextColumn::make('start_datetime')
@@ -66,13 +66,17 @@ class BannersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                // IconColumn::make('show_timer') // нужна проверка что заполнена дата окончания
-                //     ->label('Показывать таймер')
-                //     ->boolean(),
             ])
             ->filters([
                 TrashedFilter::make()->native(false),
             ])
+            ->reorderable(
+                'priority',
+                fn (mixed $livewire): bool => $livewire instanceof ListBanners
+                    && filled($livewire->activeTab)
+                    && $livewire->activeTab !== 'all',
+            )
+            ->afterReordering(fn () => app(BannerRepository::class)->clearCache())
             ->recordActions([
                 EditAction::make()->hiddenLabel(),
                 DeleteAction::make()->hiddenLabel(),

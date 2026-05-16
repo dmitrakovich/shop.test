@@ -33,4 +33,15 @@ enum BannerPosition: string implements HasLabel
             default => false,
         };
     }
+
+    public static function defaultForCreate(): self
+    {
+        $activeTab = request()->query('activeTab');
+
+        if (is_string($activeTab) && $activeTab !== '' && $activeTab !== 'all') {
+            return self::tryFrom($activeTab) ?? self::INDEX_MAIN;
+        }
+
+        return self::INDEX_MAIN;
+    }
 }

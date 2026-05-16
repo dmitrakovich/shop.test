@@ -27,7 +27,6 @@ class InfoPageController extends Controller
         BannerRepository $bannerRepository,
     ): array {
         return [
-            'banners' => BannerResource::collection($bannerRepository->getMainBanners()), // todo: remove after change front
             'main_banners' => BannerResource::collection($bannerRepository->getMainBanners()),
             'double_banners' => BannerResource::collection($bannerRepository->getIndexDoubleBanners()),
             'category_banners' => BannerResource::collection($bannerRepository->getIndexCategoryBanners()),

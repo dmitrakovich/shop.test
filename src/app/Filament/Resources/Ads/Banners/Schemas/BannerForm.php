@@ -47,7 +47,7 @@ class BannerForm
                                 Select::make('position')
                                     ->label('Позиция')
                                     ->options(BannerPosition::class)
-                                    ->default(BannerPosition::INDEX_MAIN)
+                                    ->default(fn (): BannerPosition => BannerPosition::defaultForCreate())
                                     ->native(false)
                                     ->live()
                                     ->required()
@@ -59,12 +59,19 @@ class BannerForm
                                 TextInput::make('url')
                                     ->required()
                                     ->label('Ссылка'),
+                                TextInput::make('priority')
+                                    ->label('Приоритет')
+                                    ->numeric()
+                                    ->integer()
+                                    ->default(0)
+                                    ->required()
+                                    ->minValue(0),
                                 Toggle::make('active')
                                     ->label('Активный')
                                     ->default(true),
                                 DateTimePicker::make('start_datetime')
                                     ->label('Дата начала')
-                                    ->default(now()->addDay()->startOfDay())
+                                    ->nullable()
                                     ->native(false),
                                 DateTimePicker::make('end_datetime')
                                     ->label('Дата окончания')
