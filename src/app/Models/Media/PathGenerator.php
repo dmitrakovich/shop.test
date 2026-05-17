@@ -40,7 +40,7 @@ class PathGenerator extends DefaultPathGenerator
             default => 'other',
         };
 
-        if ($media->model_type === Feedback::class || $this->isNewBanner($media)) {
+        if (in_array($media->model_type, [Feedback::class, MorphMap::Banner->value])) {
             $path .= '/' . $media->model_id;
         }
 
@@ -90,10 +90,5 @@ class PathGenerator extends DefaultPathGenerator
         }
 
         return "$path/$key";
-    }
-
-    private function isNewBanner(Media $media): bool
-    {
-        return $media->model_type === MorphMap::Banner->value && $media->id > 95150;
     }
 }
