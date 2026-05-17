@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Ads\Banners\Tables;
 
+use App\Enums\Ads\BannerImageSize;
 use App\Enums\Ads\BannerMediaCollection;
 use App\Filament\Resources\Ads\Banners\Pages\ListBanners;
 use App\Models\Ads\Banner;
@@ -33,7 +34,7 @@ class BannersTable
                             ? BannerMediaCollection::DESKTOP_VIDEO_PREVIEW->value
                             : BannerMediaCollection::DESKTOP_IMAGE->value
                     )
-                    ->conversion('thumb'),
+                    ->conversion(BannerImageSize::THUMB->value),
                 TextColumn::make('title')
                     ->label('Заголовок')
                     ->wrap()

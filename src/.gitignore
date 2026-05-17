@@ -5,6 +5,7 @@
 /public/xml
 /storage/*.key
 /storage/media-library
+/storage/app/livewire-tmp/
 /vendor
 .env
 .env.backup

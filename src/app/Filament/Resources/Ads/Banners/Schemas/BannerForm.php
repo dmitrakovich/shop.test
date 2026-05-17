@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Ads\Banners\Schemas;
 
+use App\Enums\Ads\BannerMediaCollection;
 use App\Enums\Ads\BannerPosition;
 use App\Enums\Ads\BannerType;
 use App\Models\Ads\Banner;
@@ -16,6 +17,7 @@ use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\Operation;
 
@@ -34,7 +36,7 @@ class BannerForm
                                     ->schema(self::bannerBlock('desktop', 'десктоп')),
                                 Fieldset::make('Мобильная версия')
                                     ->columns(1)
-                                    ->visible(fn (Get $get): bool => self::showsMobileUploadSection($get('position')))
+                                    ->visible(fn (Get $get): bool => !BannerPosition::fromFormState($get('position'))->isDesktopOnly())
                                     ->schema(self::bannerBlock('mobile', 'мобильный')),
                             ]),
 
@@ -51,7 +53,12 @@ class BannerForm
                                     ->native(false)
                                     ->live()
                                     ->required()
-                                    ->disabledOn(Operation::Edit),
+                                    ->disabledOn(Operation::Edit)
+                                    ->afterStateUpdated(function (Set $set): void {
+                                        foreach (BannerMediaCollection::images() as $collection) {
+                                            $set($collection->value, []);
+                                        }
+                                    }),
                                 TextInput::make('title')
                                     ->required()
                                     ->label('Заголовок')
@@ -84,45 +91,6 @@ class BannerForm
     }
 
     /**
-     * When position is desktop-only, keep mobile_type aligned with desktop (form has no mobile fields).
-     *
-     * @param  array<string, mixed>  $data
-     * @return array<string, mixed>
-     */
-    public static function fillMobileTypeForDesktopOnlyPosition(array $data): array
-    {
-        $position = self::resolvePosition($data['position'] ?? null);
-        if ($position === null || !$position->isDesktopOnly()) {
-            return $data;
-        }
-
-        $desktop = $data['desktop_type'] ?? BannerType::IMAGE;
-        $data['mobile_type'] = $desktop instanceof BannerType
-            ? $desktop
-            : (BannerType::tryFrom((string)$desktop) ?? BannerType::IMAGE);
-
-        return $data;
-    }
-
-    private static function showsMobileUploadSection(mixed $position): bool
-    {
-        $resolved = self::resolvePosition($position);
-
-        return $resolved === null || !$resolved->isDesktopOnly();
-    }
-
-    private static function resolvePosition(mixed $position): ?BannerPosition
-    {
-        if ($position instanceof BannerPosition) {
-            return $position;
-        }
-
-        return is_string($position) ? BannerPosition::tryFrom($position) : null;
-    }
-
-    /**
-     * Блок загрузки баннера (desktop / mobile)
-     *
      * @return array<array-key, Field>
      */
     private static function bannerBlock(string $prefix, string $label): array
@@ -136,26 +104,53 @@ class BannerForm
                 ->required()
                 ->live(),
 
-            SpatieMediaLibraryFileUpload::make("{$prefix}_image")
-                ->label("Фото ({$label})")
-                ->collection("{$prefix}_image")
-                ->image()
-                ->visible(fn (Get $get) => $get("{$prefix}_type")->isImage())
-                ->required(fn (Get $get) => $get("{$prefix}_type")->isImage()),
+            self::imageUpload(
+                SpatieMediaLibraryFileUpload::make("{$prefix}_image")
+                    ->label("Фото ({$label})")
+                    ->collection("{$prefix}_image")
+                    ->visible(fn (Get $get) => $get("{$prefix}_type")->isImage())
+                    ->required(fn (Get $get) => $get("{$prefix}_type")->isImage()),
+                $prefix,
+            ),
 
             SpatieMediaLibraryFileUpload::make("{$prefix}_video")
                 ->label("Видео ({$label})")
                 ->collection("{$prefix}_video")
+                ->disk('media')
                 ->acceptedFileTypes(Banner::ACCEPTED_VIDEO_TYPES)
                 ->visible(fn (Get $get) => $get("{$prefix}_type")->isVideo())
                 ->required(fn (Get $get) => $get("{$prefix}_type")->isVideo()),
 
-            SpatieMediaLibraryFileUpload::make("{$prefix}_video_preview")
-                ->label("Превью ({$label})")
-                ->collection("{$prefix}_video_preview")
-                ->image()
-                ->visible(fn (Get $get) => $get("{$prefix}_type")->isVideo())
-                ->required(fn (Get $get) => $get("{$prefix}_type")->isVideo()),
+            self::imageUpload(
+                SpatieMediaLibraryFileUpload::make("{$prefix}_video_preview")
+                    ->label("Превью ({$label})")
+                    ->collection("{$prefix}_video_preview")
+                    ->visible(fn (Get $get) => $get("{$prefix}_type")->isVideo())
+                    ->required(fn (Get $get) => $get("{$prefix}_type")->isVideo()),
+                $prefix,
+            ),
         ];
+    }
+
+    private static function imageUpload(SpatieMediaLibraryFileUpload $upload, string $prefix): SpatieMediaLibraryFileUpload
+    {
+        return $upload
+            ->image()
+            ->key(fn (Get $get): string => self::imageUploadKey($get, $prefix))
+            ->imageAspectRatio(fn (Get $get): string => self::imageAspectRatioFor($get, $prefix))
+            ->automaticallyCropImagesToAspectRatio()
+            ->automaticallyOpenImageEditorForAspectRatio()
+            ->disk('media');
+    }
+
+    private static function imageAspectRatioFor(Get $get, string $prefix): string
+    {
+        return BannerPosition::fromFormState($get('position'))
+            ->imageAspectRatio($prefix === 'desktop');
+    }
+
+    private static function imageUploadKey(Get $get, string $prefix): string
+    {
+        return BannerPosition::fromFormState($get('position'))->value . '-' . $prefix;
     }
 }

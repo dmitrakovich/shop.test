@@ -2,12 +2,14 @@
 
 namespace App\Models\Ads;
 
+use App\Enums\Ads\BannerImageSize;
 use App\Enums\Ads\BannerMediaCollection;
 use App\Enums\Ads\BannerPosition;
 use App\Enums\Ads\BannerType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Image\Enums\Constraint;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -39,6 +41,8 @@ class Banner extends Model implements HasMedia
     use InteractsWithMedia,
         SoftDeletes;
 
+    public bool $registerMediaConversionsUsingModelInstance = true;
+
     /**
      * Indicates if all mass assignment is enabled.
      *
@@ -55,20 +59,31 @@ class Banner extends Model implements HasMedia
         'spoiler' => 'json',
     ];
 
+    protected static function booted(): void
+    {
+        static::saving(function (self $banner): void {
+            if ($banner->position->isDesktopOnly()) {
+                $banner->mobile_type = $banner->desktop_type;
+            }
+        });
+    }
+
     final const array ACCEPTED_VIDEO_TYPES = [
         'video/mp4',
         'video/webm',
         'video/ogg',
     ];
 
+    private const array IMAGE_CONVERSION_CONSTRAINTS = [
+        Constraint::PreserveAspectRatio,
+        Constraint::DoNotUpsize,
+    ];
+
     public function registerMediaCollections(): void
     {
         $this
             ->addMediaCollection(BannerMediaCollection::DESKTOP_IMAGE->value)
-            ->singleFile()
-            ->registerMediaConversions(function (Media $media) {
-                $this->addMediaConversion('thumb')->format('jpg')->height(40);
-            });
+            ->singleFile();
 
         $this
             ->addMediaCollection(BannerMediaCollection::MOBILE_IMAGE->value)
@@ -76,22 +91,35 @@ class Banner extends Model implements HasMedia
 
         $this
             ->addMediaCollection(BannerMediaCollection::DESKTOP_VIDEO->value)
-            ->singleFile();
+            ->singleFile()
+            ->acceptsMimeTypes(self::ACCEPTED_VIDEO_TYPES);
 
         $this
             ->addMediaCollection(BannerMediaCollection::MOBILE_VIDEO->value)
-            ->singleFile();
+            ->singleFile()
+            ->acceptsMimeTypes(self::ACCEPTED_VIDEO_TYPES);
 
         $this
             ->addMediaCollection(BannerMediaCollection::DESKTOP_VIDEO_PREVIEW->value)
-            ->singleFile()
-            ->registerMediaConversions(function (Media $media) {
-                $this->addMediaConversion('thumb')->format('jpg')->height(40);
-            });
+            ->singleFile();
 
         $this
             ->addMediaCollection(BannerMediaCollection::MOBILE_VIDEO_PREVIEW->value)
             ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        foreach (BannerMediaCollection::images() as $collection) {
+            foreach ($this->position->imageConversionWidths($collection->isDesktop()) as $name => $width) {
+                foreach (BannerImageSize::from($name)->conversionNames() as $format => $conversionName) {
+                    $this->addMediaConversion($conversionName)
+                        ->performOnCollections($collection->value)
+                        ->format($format)
+                        ->width($width, self::IMAGE_CONVERSION_CONSTRAINTS);
+                }
+            }
+        }
     }
 
     /**

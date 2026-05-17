@@ -28,9 +28,12 @@ class BannerResource extends JsonResource
             'end_datetime' => $this->end_datetime,
             'show_timer' => $this->show_timer,
             'spoiler' => $this->spoiler,
-            'media' => $this->media->mapWithKeys(function (Media $media) {
-                return [$media->collection_name => $media->getFullUrl()];
-            }),
+            'media' => $this->media->mapWithKeys(fn (Media $media) => [
+                $media->collection_name => $media->getFullUrl(),
+            ]),
+            'new_media' => $this->media->mapWithKeys(fn (Media $media) => [
+                $media->collection_name => $media->id,
+            ]),
         ];
     }
 }
