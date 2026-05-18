@@ -29,9 +29,6 @@ class BannerResource extends JsonResource
             'show_timer' => $this->show_timer,
             'spoiler' => $this->spoiler,
             'media' => $this->media->mapWithKeys(fn (Media $media) => [
-                $media->collection_name => $media->getFullUrl(),
-            ]),
-            'new_media' => $this->media->mapWithKeys(fn (Media $media) => [
                 $media->collection_name => $media->id,
             ]),
         ];
