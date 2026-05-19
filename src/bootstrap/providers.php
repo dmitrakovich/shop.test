@@ -1,12 +1,23 @@
 <?php
 
+use App\Libraries\Seo\Providers\SeoServiceProvider;
+use App\Providers\AdminPanelProvider;
+use App\Providers\AppServiceProvider;
+use App\Providers\BelpostServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Providers\GoogleTagManagerProvider;
+use App\Providers\HorizonServiceProvider;
+use App\Providers\RouteServiceProvider;
+use Drandin\DeclensionNouns\DeclensionNounsServiceProvider;
+
 return [
-    \App\Libraries\Seo\Providers\SeoServiceProvider::class,
-    \App\Providers\AdminPanelProvider::class,
-    \App\Providers\AppServiceProvider::class,
-    \App\Providers\EventServiceProvider::class,
-    \App\Providers\GoogleTagManagerProvider::class,
-    \App\Providers\HorizonServiceProvider::class,
-    \App\Providers\RouteServiceProvider::class,
-    \Drandin\DeclensionNouns\DeclensionNounsServiceProvider::class,
+    SeoServiceProvider::class,
+    AdminPanelProvider::class,
+    AppServiceProvider::class,
+    BelpostServiceProvider::class,
+    EventServiceProvider::class,
+    GoogleTagManagerProvider::class,
+    HorizonServiceProvider::class,
+    RouteServiceProvider::class,
+    DeclensionNounsServiceProvider::class,
 ];
