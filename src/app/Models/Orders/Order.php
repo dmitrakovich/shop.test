@@ -18,10 +18,14 @@ use App\Models\Payments\OnlinePayment;
 use App\Models\Stock;
 use App\Models\User\Device;
 use App\Models\User\User;
+use App\ValueObjects\Phone;
 use Deliveries\DeliveryMethod;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Carbon;
 use Payments\PaymentMethod;
 
 /**
@@ -33,7 +37,7 @@ use Payments\PaymentMethod;
  * @property string|null $patronymic_name
  * @property int|null $promocode_id
  * @property string|null $email
- * @property \App\ValueObjects\Phone $phone
+ * @property Phone $phone
  * @property string|null $comment
  * @property float $total_price
  * @property string $currency
@@ -49,40 +53,42 @@ use Payments\PaymentMethod;
  * @property int|null $stock_id Warehouse (Stock) from which the order will be picked up
  * @property float|null $delivery_cost
  * @property float|null $delivery_price
- * @property \App\Enums\Order\OrderMethod $order_method
+ * @property OrderMethod $order_method
  * @property string|null $utm_medium
  * @property string|null $utm_source
  * @property string|null $utm_campaign
  * @property string|null $utm_content
  * @property string|null $utm_term
- * @property \App\Enums\Order\OrderStatus $status
- * @property \Illuminate\Support\Carbon $status_updated_at
+ * @property OrderStatus $status
+ * @property Carbon $status_updated_at
  * @property int|null $admin_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int|null $batch_id Номер партии
+ * @property int|null $belpost_item_id
+ * @property string|null $belpost_s10code
  * @property float|null $weight
- * @property \App\Enums\Order\OrderTypeEnum|null $order_type Типы заказа
+ * @property OrderTypeEnum|null $order_type Типы заказа
  * @property string $user_full_name
  * @property ?string $installment_contract_date
  *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderItem[] $data
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderItem[] $items
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderItemExtended[] $itemsExtended
- * @property-read \App\Models\User\User|null $user
- * @property-read \App\Models\User\Device|null $device
- * @property-read \App\Models\Country|null $country
- * @property-read \Deliveries\DeliveryMethod|null $delivery
- * @property-read \App\Models\Stock|null $stock
- * @property-read \Payments\PaymentMethod|null $payment
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payments\OnlinePayment[] $onlinePayments
- * @property-read \App\Admin\Models\Administrator|null $admin
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Orders\OrderAdminComment[] $adminComments
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\SmsLog[] $mailings
- * @property-read \App\Models\Orders\Batch|null $batch
- * @property-read \App\Models\Orders\OrderTrack|null $track
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\OrderActionLog[] $logs
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Logs\OrderDistributionLog[] $distributionLogs
+ * @property-read Collection|OrderItem[] $data
+ * @property-read Collection|OrderItem[] $items
+ * @property-read Collection|OrderItemExtended[] $itemsExtended
+ * @property-read User|null $user
+ * @property-read Device|null $device
+ * @property-read Country|null $country
+ * @property-read DeliveryMethod|null $delivery
+ * @property-read Stock|null $stock
+ * @property-read PaymentMethod|null $payment
+ * @property-read Collection|OnlinePayment[] $onlinePayments
+ * @property-read Administrator|null $admin
+ * @property-read Collection|OrderAdminComment[] $adminComments
+ * @property-read Collection|SmsLog[] $mailings
+ * @property-read Batch|null $batch
+ * @property-read OrderTrack|null $track
+ * @property-read Collection|OrderActionLog[] $logs
+ * @property-read Collection|OrderDistributionLog[] $distributionLogs
  */
 class Order extends Model
 {
@@ -538,7 +544,7 @@ class Order extends Model
     /**
      * Route notifications for the SmsTraffic channel.
      *
-     * @param  \Illuminate\Notifications\Notification  $notification
+     * @param  Notification  $notification
      * @return int
      */
     public function routeNotificationForSmsTraffic($notification)
