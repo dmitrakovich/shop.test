@@ -6,6 +6,9 @@ use Illuminate\Http\Client\Response;
 
 class BelpostApiException extends BelpostException
 {
+    /**
+     * @param  array<string, mixed>|null  $responseBody
+     */
     public function __construct(
         string $message,
         public readonly ?int $statusCode = null,

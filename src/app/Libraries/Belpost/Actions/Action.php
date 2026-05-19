@@ -32,6 +32,9 @@ class Action
         protected array $arguments = [],
     ) {}
 
+    /**
+     * @param  array<string, mixed>  $query
+     */
     public function addQuery(array $query): self
     {
         $this->query = array_merge($query, $this->query);

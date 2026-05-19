@@ -42,22 +42,26 @@ class BelpostGeoDirectoryService
         $order->loadMissing('user.lastAddress');
         $address = $order->user?->lastAddress;
 
-        $postcode = $this->geoDirectory->normalizePostcode($address?->zip ?? $order->zip);
-        $city = $this->geoDirectory->normalizeCity($address?->city ?? $order->city);
+        $postcode = $this->geoDirectory->normalizePostcode(
+            $address !== null ? ($address->zip ?? $order->zip) : $order->zip,
+        );
+        $city = $this->geoDirectory->normalizeCity(
+            $address !== null ? ($address->city ?? $order->city) : $order->city,
+        );
         $street = $this->geoDirectory->normalizeStreetName(
-            $address?->street
+            ($address !== null ? $address->street : null)
             ?? $this->geoDirectory->parseStreetFromText($order->user_addr)
-            ?? $this->geoDirectory->parseStreetFromText($address?->address)
+            ?? $this->geoDirectory->parseStreetFromText($address !== null ? $address->address : null)
         );
 
         return [
             'postcode' => $postcode,
             'city' => $city,
             'street' => $street,
-            'building' => $this->geoDirectory->normalizeBuilding($address?->house, $order->user_addr),
-            'housing' => $this->geoDirectory->normalizeHousing($address?->corpus),
-            'region' => $this->geoDirectory->normalizeRegion($address?->region ?? $order->region),
-            'district' => $this->geoDirectory->normalizeDistrict($address?->district),
+            'building' => $this->geoDirectory->normalizeBuilding($address !== null ? $address->house : null, $order->user_addr),
+            'housing' => $this->geoDirectory->normalizeHousing($address !== null ? $address->corpus : null),
+            'region' => $this->geoDirectory->normalizeRegion(($address !== null ? $address->region : null) ?? $order->region),
+            'district' => $this->geoDirectory->normalizeDistrict($address !== null ? $address->district : null),
         ];
     }
 }

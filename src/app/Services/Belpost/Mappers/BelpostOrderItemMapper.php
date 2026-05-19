@@ -4,7 +4,6 @@ namespace App\Services\Belpost\Mappers;
 
 use App\Enums\Belpost\BelpostNotification;
 use App\Enums\Belpost\BelpostPostalDeliveryType;
-use App\Enums\DeliveryTypeEnum;
 use App\Enums\Order\OrderItemStatus;
 use App\Libraries\Belpost\Exceptions\BelpostApiException;
 use App\Models\Orders\Batch;
@@ -46,10 +45,11 @@ class BelpostOrderItemMapper
             'recipient_phone' => $phone,
         ];
 
+        $addons = [];
+
         if ($notification === BelpostNotification::Electronic->value) {
-            $payload['addons'] ??= [];
-            $payload['addons']['email'] = $email;
-            $payload['addons']['phone'] = $phone;
+            $addons['email'] = $email;
+            $addons['phone'] = $phone;
         }
 
         $s10code = $this->resolveS10Code($order);
@@ -59,8 +59,11 @@ class BelpostOrderItemMapper
 
         $cod = $this->resolveCashOnDelivery($order);
         if ($cod > 0) {
-            $payload['addons'] ??= [];
-            $payload['addons']['cash_on_delivery'] = round($cod, 2);
+            $addons['cash_on_delivery'] = round($cod, 2);
+        }
+
+        if ($addons !== []) {
+            $payload['addons'] = $addons;
         }
 
         return $payload;
@@ -74,7 +77,7 @@ class BelpostOrderItemMapper
         }
 
         $track = $order->track;
-        if ($track === null || $track->delivery_type_enum !== DeliveryTypeEnum::BELPOST) {
+        if ($track === null) {
             return null;
         }
 

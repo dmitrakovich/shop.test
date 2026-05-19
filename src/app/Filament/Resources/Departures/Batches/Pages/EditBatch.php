@@ -56,6 +56,14 @@ class EditBatch extends EditRecord
         return 'Партия сохранена';
     }
 
+    public function getRecord(): Batch
+    {
+        $record = parent::getRecord();
+        assert($record instanceof Batch);
+
+        return $record;
+    }
+
     protected function afterSave(): void
     {
         $record = $this->getRecord();
@@ -188,7 +196,7 @@ class EditBatch extends EditRecord
                     return response()->streamDownload(
                         static fn () => print ($response->body()),
                         'belpost-batch-' . $record->id . '.zip',
-                        ['Content-Type' => $response->header('Content-Type') ?? 'application/zip'],
+                        ['Content-Type' => $response->header('Content-Type') ?: 'application/zip'],
                     );
                 } catch (BelpostApiException $exception) {
                     $record->update(['belpost_sync_error' => $exception->getMessage()]);

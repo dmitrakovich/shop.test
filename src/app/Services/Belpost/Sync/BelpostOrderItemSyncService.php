@@ -9,6 +9,9 @@ use Illuminate\Support\Arr;
 
 class BelpostOrderItemSyncService
 {
+    /**
+     * @param  array<string, mixed>  $item
+     */
     public function applyItemResponse(Order $order, array $item): Order
     {
         $s10code = Arr::get($item, 's10code');

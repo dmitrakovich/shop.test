@@ -11,6 +11,9 @@ class BelpostBatchSyncService
         private readonly BelpostOrderItemSyncService $orderItemSync,
     ) {}
 
+    /**
+     * @param  array<string, mixed>  $response
+     */
     public function applyListResponse(Batch $batch, array $response): Batch
     {
         $batch->update([
@@ -32,6 +35,9 @@ class BelpostBatchSyncService
         return $batch->refresh();
     }
 
+    /**
+     * @param  array<string, mixed>  $response
+     */
     public function applyDocumentFromListResponse(Batch $batch, array $response): void
     {
         $document = $this->extractDocument($response);
@@ -59,6 +65,7 @@ class BelpostBatchSyncService
     }
 
     /**
+     * @param  array<string, mixed>  $response
      * @return array<string, mixed>|null
      */
     public function extractDocument(array $response): ?array
@@ -78,7 +85,11 @@ class BelpostBatchSyncService
         return is_array($first) ? $first : null;
     }
 
-    /** Match list items to orders via `foreign_id` (our order primary key). */
+    /**
+     * Match list items to orders via `foreign_id` (our order primary key).
+     *
+     * @param  array<string, mixed>  $response
+     */
     private function applyItemsFromListResponse(Batch $batch, array $response): void
     {
         $items = Arr::get($response, 'items', []);

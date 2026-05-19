@@ -358,6 +358,7 @@ class BelpostGeoDirectory
     }
 
     /**
+     * @param  array<string, mixed>  $response
      * @return array<int, array<string, mixed>>
      */
     private function unwrapRows(array $response): array
@@ -372,6 +373,7 @@ class BelpostGeoDirectory
     }
 
     /**
+     * @param  array<int, array<string, mixed>>|array<string, mixed>  $rows
      * @return array<int, array<string, mixed>>
      */
     private function normalizeRowsList(array $rows): array

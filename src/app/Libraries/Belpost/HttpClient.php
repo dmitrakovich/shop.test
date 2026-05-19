@@ -52,6 +52,9 @@ class HttpClient
         return $this->request('put', $path, data: $data)->getBodyFormat();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function delete(string $path): array
     {
         return $this->request('delete', $path)->getBodyFormat();

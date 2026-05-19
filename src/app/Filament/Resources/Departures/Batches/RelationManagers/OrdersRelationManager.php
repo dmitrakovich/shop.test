@@ -31,6 +31,14 @@ class OrdersRelationManager extends RelationManager
 
     protected static ?string $pluralModelLabel = 'заказы';
 
+    public function getOwnerRecord(): Batch
+    {
+        $record = parent::getOwnerRecord();
+        assert($record instanceof Batch);
+
+        return $record;
+    }
+
     public function form(Schema $schema): Schema
     {
         return $schema->components([]);
@@ -65,7 +73,7 @@ class OrdersRelationManager extends RelationManager
                 Action::make('attachOrders')
                     ->label('Добавить заказы')
                     ->icon(Heroicon::OutlinedPlus)
-                    ->visible(fn (): bool => $this->getOwnerRecord()->isBelpostEditable())
+                    ->visible(fn (): bool => $this->getBatch()->isBelpostEditable())
                     ->form([
                         Select::make('order_ids')
                             ->label('Заказы')
@@ -85,8 +93,7 @@ class OrdersRelationManager extends RelationManager
                                 ->all()),
                     ])
                     ->action(function (array $data): void {
-                        /** @var Batch $batch */
-                        $batch = $this->getOwnerRecord();
+                        $batch = $this->getBatch();
 
                         Order::query()
                             ->whereIn('id', $data['order_ids'])
@@ -113,10 +120,10 @@ class OrdersRelationManager extends RelationManager
                 Action::make('generateItemBlank')
                     ->label('Бланк')
                     ->icon(Heroicon::OutlinedDocumentText)
-                    ->visible(fn (Order $record): bool => $this->getOwnerRecord()->isLinkedToBelpost() && (bool)$record->belpost_item_id)
+                    ->visible(fn (Order $record): bool => $this->getBatch()->isLinkedToBelpost() && (bool)$record->belpost_item_id)
                     ->action(function (Order $record): void {
                         try {
-                            app(BelpostBatchDocumentService::class)->generateItemBlanks($this->getOwnerRecord(), $record);
+                            app(BelpostBatchDocumentService::class)->generateItemBlanks($this->getBatch(), $record);
                             Notification::make()->title('Бланк отправления сгенерирован')->success()->send();
                         } catch (BelpostApiException $exception) {
                             Notification::make()->title('Ошибка')->body($exception->getMessage())->danger()->send();
@@ -130,7 +137,7 @@ class OrdersRelationManager extends RelationManager
                     ->requiresConfirmation()
                     ->action(function (Order $record): void {
                         try {
-                            app(BelpostBatchItemService::class)->delete($this->getOwnerRecord(), $record);
+                            app(BelpostBatchItemService::class)->delete($this->getBatch(), $record);
                             Notification::make()->title('Отправление удалено в Белпочте')->success()->send();
                         } catch (BelpostApiException $exception) {
                             Notification::make()->title('Ошибка')->body($exception->getMessage())->danger()->send();
@@ -140,12 +147,12 @@ class OrdersRelationManager extends RelationManager
                     ->label('Отвязать')
                     ->icon(Heroicon::OutlinedXMark)
                     ->color('gray')
-                    ->visible(fn (): bool => $this->getOwnerRecord()->isBelpostEditable())
+                    ->visible(fn (): bool => $this->getBatch()->isBelpostEditable())
                     ->requiresConfirmation()
                     ->action(function (Order $record): void {
-                        if ($record->belpost_item_id && $this->getOwnerRecord()->isLinkedToBelpost()) {
+                        if ($record->belpost_item_id && $this->getBatch()->isLinkedToBelpost()) {
                             try {
-                                app(BelpostBatchItemService::class)->delete($this->getOwnerRecord(), $record);
+                                app(BelpostBatchItemService::class)->delete($this->getBatch(), $record);
                             } catch (BelpostApiException $exception) {
                                 Notification::make()
                                     ->title('Не удалось удалить в Белпочте')
@@ -170,9 +177,14 @@ class OrdersRelationManager extends RelationManager
             ->modifyQueryUsing(fn (Builder $query) => $query->orderByDesc('id'));
     }
 
+    private function getBatch(): Batch
+    {
+        return $this->getOwnerRecord();
+    }
+
     private function canSyncOrder(Order $record): bool
     {
-        $batch = $this->getOwnerRecord();
+        $batch = $this->getBatch();
 
         return $batch->isLinkedToBelpost()
             && $batch->isBelpostEditable()
@@ -193,7 +205,7 @@ class OrdersRelationManager extends RelationManager
 
         try {
             $items = app(BelpostBatchItemService::class);
-            $batch = $this->getOwnerRecord();
+            $batch = $this->getBatch();
 
             if ($create) {
                 $items->create($batch, $record);
