@@ -23,6 +23,7 @@ class CreateBatch extends CreateRecord
         $data['payment_type'] ??= BelpostPaymentType::tryFrom(
             (string)config('belpost.defaults.payment_type')
         )?->value;
+        $data['card_number'] ??= config('belpost.defaults.card_number');
 
         return $data;
     }

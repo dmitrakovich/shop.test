@@ -15,6 +15,7 @@ return [
         'postal_delivery_type' => env('BELPOST_POSTAL_DELIVERY_TYPE', BelpostPostalDeliveryType::EcommerceElite->value),
         'direction' => env('BELPOST_DIRECTION', BelpostDirection::Internal->value),
         'payment_type' => env('BELPOST_PAYMENT_TYPE', BelpostPaymentType::ElectronicPersonalAccount->value),
+        'card_number' => env('BELPOST_CARD_NUMBER'),
         'negotiated_rate' => (bool)env('BELPOST_NEGOTIATED_RATE', false),
         // For e-commerce parcel types API accepts only 1, 2, 5 (not 0).
         'notification' => (int)env('BELPOST_NOTIFICATION', BelpostNotification::Electronic->value),

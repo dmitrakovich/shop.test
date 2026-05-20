@@ -14,6 +14,24 @@ enum BelpostPaymentType: string implements HasLabel
     case NotSpecified = 'not_specified';
     case Cash = 'cash';
 
+    public function requiresCardNumber(): bool
+    {
+        return $this === self::ElectronicPersonalAccount;
+    }
+
+    public static function tryFromFormState(mixed $state): ?self
+    {
+        if ($state instanceof self) {
+            return $state;
+        }
+
+        if (is_string($state) && $state !== '') {
+            return self::tryFrom($state);
+        }
+
+        return null;
+    }
+
     public function getLabel(): string
     {
         return match ($this) {

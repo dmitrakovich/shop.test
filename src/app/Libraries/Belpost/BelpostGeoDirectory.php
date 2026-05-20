@@ -24,6 +24,7 @@ class BelpostGeoDirectory
      *     street: ?string,
      *     building: ?string,
      *     housing: ?string,
+     *     apartment: ?string,
      *     region: ?string,
      *     district: ?string,
      * }  $hints
@@ -78,6 +79,7 @@ class BelpostGeoDirectory
      *     street: ?string,
      *     building: ?string,
      *     housing: ?string,
+     *     apartment: ?string,
      * }  $hints
      */
     public function formatSearchString(array $hints): string
@@ -98,6 +100,10 @@ class BelpostGeoDirectory
 
         if ($hints['building'] !== null) {
             $parts[] = $this->formatBuildingNumber($hints['building'], $hints['housing']);
+        }
+
+        if (($hints['apartment'] ?? null) !== null) {
+            $parts[] = 'кв. ' . $hints['apartment'];
         }
 
         return $this->formatAddressString(implode(' ', $parts));
@@ -180,6 +186,22 @@ class BelpostGeoDirectory
         }
 
         return trim($corpus);
+    }
+
+    public function normalizeApartment(?string $room, ?string $userAddr): ?string
+    {
+        if ($room !== null && trim($room) !== '') {
+            $apartment = trim($room);
+        } elseif ($userAddr !== null && preg_match('/(?:кв\.?|квартира)\s*([0-9]+[A-Za-zА-Яа-я\-]*)/iu', $userAddr, $matches)) {
+            $apartment = trim($matches[1]);
+        } else {
+            return null;
+        }
+
+        $apartment = preg_replace('/^(кв\.?|квартира)\s*/iu', '', $apartment) ?? $apartment;
+        $apartment = trim($apartment);
+
+        return $apartment !== '' ? mb_substr($apartment, 0, 5) : null;
     }
 
     public function normalizeRegion(mixed $region): ?string
@@ -265,6 +287,7 @@ class BelpostGeoDirectory
      *     street: ?string,
      *     building: ?string,
      *     housing: ?string,
+     *     apartment: ?string,
      * }  $hints
      * @return array<string, mixed>
      */
@@ -319,6 +342,10 @@ class BelpostGeoDirectory
         }
 
         $payload['housing'] = mb_substr((string)($housing ?? ''), 0, 2);
+
+        if ($apartment === null || $apartment === '') {
+            $apartment = $hints['apartment'] ?? null;
+        }
 
         if ($apartment !== null && $apartment !== '') {
             $apartment = preg_replace('/^(кв\.?|квартира)\s*/iu', '', trim((string)$apartment)) ?? trim((string)$apartment);

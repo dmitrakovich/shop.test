@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property BelpostPostalDeliveryType|string|null $postal_delivery_type
  * @property BelpostDirection|string|null $direction
  * @property BelpostPaymentType|string|null $payment_type
+ * @property string|null $card_number
  * @property bool $negotiated_rate
  * @property bool $is_declared_value
  * @property bool $is_partial_receipt
