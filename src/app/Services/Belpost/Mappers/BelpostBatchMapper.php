@@ -19,16 +19,16 @@ class BelpostBatchMapper
 
         $payload = [
             'name' => $batch->name ?: "Партия #{$batch->id}",
-            'postal_delivery_type' => $postalType?->value ?? (string)config('belpost.defaults.postal_delivery_type'),
+            'postal_delivery_type' => $postalType->value,
             'direction' => $batch->direction ?? config('belpost.defaults.direction'),
             'payment_type' => $paymentType,
-            'negotiated_rate' => $batch->negotiated_rate ? 1 : 0,
-            'is_declared_value' => (bool)$batch->is_declared_value,
+            'negotiated_rate' => $this->resolveNegotiatedRateForApi($batch, $postalType),
+            'is_declared_value' => $this->resolveIsDeclaredValueForApi($batch, $postalType),
             'is_partial_receipt' => $this->resolveIsPartialReceiptForApi($batch),
-            'is_document' => $postalType?->isDocumentOnlyShipmentTariff() ?? false,
+            'is_document' => $postalType->isDocumentOnlyShipmentTariff(),
         ];
 
-        if ($postalType?->isEcommercePostal() ?? false) {
+        if ($postalType->isEcommercePostal()) {
             $payload['postal_items_in_ops'] = config('belpost.defaults.postal_items_in_ops', true);
         }
 
@@ -46,10 +46,28 @@ class BelpostBatchMapper
             return false;
         }
 
-        return $this->resolvePostalDeliveryType($batch)?->supportsPartialReceiptOfEnclosures() ?? true;
+        return $this->resolvePostalDeliveryType($batch)->supportsPartialReceiptOfEnclosures();
     }
 
-    private function resolvePostalDeliveryType(Batch $batch): ?BelpostPostalDeliveryType
+    private function resolveIsDeclaredValueForApi(Batch $batch, BelpostPostalDeliveryType $postalType): bool
+    {
+        if (!$batch->is_declared_value) {
+            return false;
+        }
+
+        return $postalType->supportsDeclaredValueListFlag();
+    }
+
+    private function resolveNegotiatedRateForApi(Batch $batch, BelpostPostalDeliveryType $postalType): int
+    {
+        if ($postalType->requiresNegotiatedRateFalseForApi()) {
+            return 0;
+        }
+
+        return $batch->negotiated_rate ? 1 : 0;
+    }
+
+    private function resolvePostalDeliveryType(Batch $batch): BelpostPostalDeliveryType
     {
         $value = $batch->postal_delivery_type;
 
@@ -58,10 +76,15 @@ class BelpostBatchMapper
         }
 
         if (is_string($value) && $value !== '') {
-            return BelpostPostalDeliveryType::tryFrom($value);
+            $parsed = BelpostPostalDeliveryType::tryFrom($value);
+            if ($parsed !== null) {
+                return $parsed;
+            }
         }
 
-        return null;
+        $fromConfig = BelpostPostalDeliveryType::tryFrom((string)config('belpost.defaults.postal_delivery_type'));
+
+        return $fromConfig ?? BelpostPostalDeliveryType::EcommerceElite;
     }
 
     private function resolvePaymentType(Batch $batch): string

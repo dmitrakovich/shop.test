@@ -4,12 +4,15 @@ namespace App\Services\Belpost\Mappers;
 
 use App\Enums\Belpost\BelpostNotification;
 use App\Enums\Belpost\BelpostPostalDeliveryType;
+use App\Enums\DeliveryTypeEnum;
 use App\Enums\Order\OrderItemStatus;
 use App\Libraries\Belpost\Exceptions\BelpostApiException;
 use App\Models\Orders\Batch;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderTrack;
 use App\Services\Belpost\Recipient\BelpostRecipientService;
 use App\Services\Belpost\Support\BelpostPhoneNormalizer;
+use App\Services\Belpost\Support\BelpostS10CodeValidator;
 
 /**
  * Maps a local {@see Order} to the Belpost batch-mailing item payload.
@@ -19,6 +22,7 @@ class BelpostOrderItemMapper
     public function __construct(
         private readonly BelpostRecipientService $recipientService,
         private readonly BelpostPhoneNormalizer $phoneNormalizer,
+        private readonly BelpostS10CodeValidator $s10CodeValidator,
     ) {}
 
     /**
@@ -38,7 +42,7 @@ class BelpostOrderItemMapper
 
         $payload = [
             'foreign_id' => (string)$order->id,
-            'weight' => (int)max((int)ceil($order->weight ?: 1), 1),
+            'weight' => $order->getWeightInGrams(),
             'category' => $this->resolveItemCategory($batch),
             'notification' => $notification,
             'recipient_foreign_id' => $recipientForeignId,
@@ -57,11 +61,7 @@ class BelpostOrderItemMapper
             $payload['s10code'] = $s10code;
         }
 
-        $cod = $this->resolveCashOnDelivery($order);
-        if ($cod > 0) {
-            $addons['cash_on_delivery'] = round($cod, 2);
-        }
-
+        $addons = $this->applyCashOnDeliveryAddons($order, $batch, $addons);
         $addons = $this->applyBatchAddonsForDeclaredOrPartialReceipt($order, $batch, $addons);
 
         if ($addons !== []) {
@@ -69,6 +69,41 @@ class BelpostOrderItemMapper
         }
 
         return $payload;
+    }
+
+    /**
+     * Belarus Post: COD above {@see config belpost.defaults.max_cod_without_declared_value} BYN
+     * requires batch declared value and matching item `addons.declared_value` (COD must not exceed it).
+     *
+     * @param  array<string, mixed>  $addons
+     * @return array<string, mixed>
+     */
+    private function applyCashOnDeliveryAddons(Order $order, ?Batch $batch, array $addons): array
+    {
+        $cod = round($this->resolveCashOnDelivery($order), 2);
+        if ($cod <= 0) {
+            return $addons;
+        }
+
+        $maxWithoutDeclared = (float)config('belpost.defaults.max_cod_without_declared_value', 238);
+        $hasDeclared = $this->batchHasEffectiveDeclaredValue($batch);
+
+        if ($cod > $maxWithoutDeclared && !$hasDeclared) {
+            throw new BelpostApiException(
+                "Order #{$order->id}: наложенный платёж {$cod} BYN превышает лимит {$maxWithoutDeclared} BYN "
+                . 'без объявленной ценности. Включите «С объявленной ценностью» в параметрах партии.',
+            );
+        }
+
+        if ($hasDeclared) {
+            $addons['declared_value'] = max($this->resolveDeclaredValueAmount($order), $cod);
+        }
+
+        $addons['cash_on_delivery'] = isset($addons['declared_value'])
+            ? min($cod, (float)$addons['declared_value'])
+            : $cod;
+
+        return $addons;
     }
 
     /**
@@ -83,11 +118,13 @@ class BelpostOrderItemMapper
             return $addons;
         }
 
-        if ($batch->is_declared_value) {
-            $addons['declared_value'] = $this->resolveDeclaredValueAmount($order);
+        if ($this->batchHasEffectiveDeclaredValue($batch)) {
+            $declared = $this->resolveDeclaredValueAmount($order);
+            $cod = isset($addons['cash_on_delivery']) ? (float)$addons['cash_on_delivery'] : 0.0;
+            $addons['declared_value'] = max($declared, $cod);
         }
 
-        if ($batch->is_declared_value || $this->partialReceiptRequiresShelfLifeAddon($batch)) {
+        if ($this->batchHasEffectiveDeclaredValue($batch) || $this->partialReceiptRequiresShelfLifeAddon($batch)) {
             $days = (int)config('belpost.defaults.shelf_life_days', 10);
             if ($days < 1) {
                 $days = 10;
@@ -96,6 +133,15 @@ class BelpostOrderItemMapper
         }
 
         return $addons;
+    }
+
+    private function batchHasEffectiveDeclaredValue(Batch $batch): bool
+    {
+        if (!$batch->is_declared_value) {
+            return false;
+        }
+
+        return $this->resolveBatchPostalDeliveryEnum($batch)?->supportsDeclaredValueListFlag() ?? false;
     }
 
     /**
@@ -153,19 +199,91 @@ class BelpostOrderItemMapper
 
     private function resolveS10Code(Order $order): ?string
     {
-        $code = trim((string)($order->belpost_s10code ?? ''));
-        if ($code !== '') {
-            return $code;
+        $allowedSeries = config('belpost.defaults.s10_series_prefixes', ['PC']);
+        if (!is_array($allowedSeries)) {
+            $allowedSeries = ['PC'];
         }
 
-        $track = $order->track;
-        if ($track === null) {
+        $serialMin = config('belpost.defaults.s10_serial_min');
+        $serialMax = config('belpost.defaults.s10_serial_max');
+        $serialMin = is_int($serialMin) || (is_string($serialMin) && $serialMin !== '') ? (int)$serialMin : null;
+        $serialMax = is_int($serialMax) || (is_string($serialMax) && $serialMax !== '') ? (int)$serialMax : null;
+
+        $sources = array_filter([
+            $order->belpost_s10code,
+            $this->resolveBelpostTrackNumber($order),
+        ], static fn (mixed $value): bool => is_string($value) && trim($value) !== '');
+
+        foreach ($sources as $raw) {
+            $valid = $this->s10CodeValidator->validateForApi($raw, $allowedSeries);
+            if ($valid === null) {
+                continue;
+            }
+
+            $inRange = $this->s10CodeValidator->validateSerialRange($valid, $serialMin, $serialMax);
+            if ($inRange !== null) {
+                return $inRange;
+            }
+        }
+
+        $normalized = $this->s10CodeValidator->normalize($order->belpost_s10code)
+            ?? $this->s10CodeValidator->normalize($this->resolveBelpostTrackNumber($order));
+
+        if ($normalized === null) {
             return null;
         }
 
-        $trackNumber = trim((string)($track->track_number ?? ''));
+        if (!$this->s10CodeValidator->isValid($normalized)) {
+            $allowed = $allowedSeries !== [] ? implode(', ', $allowedSeries) : 'любая';
 
-        return $trackNumber !== '' ? $trackNumber : null;
+            throw new BelpostApiException(
+                "Order #{$order->id}: неверный S10-код «{$normalized}». "
+                . "Формат: XX12345678XBY (серии {$allowed}).",
+            );
+        }
+
+        if ($allowedSeries !== [] && !$this->s10CodeValidator->isAllowedSeries($normalized, $allowedSeries)) {
+            $prefix = $this->s10CodeValidator->seriesPrefix($normalized);
+            $allowed = implode(', ', $allowedSeries);
+
+            if (config('belpost.defaults.omit_s10code_on_series_mismatch', true)) {
+                return null;
+            }
+
+            throw new BelpostApiException(
+                "Order #{$order->id}: серия {$prefix} не в списке разрешённых ({$allowed}).",
+            );
+        }
+
+        $serial = $this->s10CodeValidator->extractSerialNumber($normalized);
+        if ($serial !== null && ($serialMin !== null || $serialMax !== null)) {
+            if (($serialMin !== null && $serial < $serialMin) || ($serialMax !== null && $serial > $serialMax)) {
+                $range = ($serialMin ?? '…') . '–' . ($serialMax ?? '…');
+
+                throw new BelpostApiException(
+                    "Order #{$order->id}: номер «{$normalized}» (серийный {$serial}) вне договорного диапазона Белпочты ({$range}). "
+                    . 'Уточните границы в кабинете Белпочты и задайте BELPOST_S10_SERIAL_MIN / BELPOST_S10_SERIAL_MAX в .env.',
+                );
+            }
+        }
+
+        // Format OK; API may still reject if the number is not registered or already used at Belpost.
+        return $normalized;
+    }
+
+    private function resolveBelpostTrackNumber(Order $order): ?string
+    {
+        $track = $order->track;
+        if ($track !== null && filled($track->track_number)) {
+            return $track->track_number;
+        }
+
+        $number = OrderTrack::query()
+            ->where('order_id', $order->id)
+            ->where('delivery_type_enum', DeliveryTypeEnum::BELPOST)
+            ->value('track_number');
+
+        return is_string($number) && trim($number) !== '' ? $number : null;
     }
 
     private function resolveRecipientEmail(Order $order): string

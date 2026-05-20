@@ -70,11 +70,15 @@ class EditBatch extends EditRecord
      */
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $enum = isset($data['postal_delivery_type'])
-            ? BelpostPostalDeliveryType::tryFrom((string)$data['postal_delivery_type'])
-            : null;
+        $enum = BelpostPostalDeliveryType::tryFromFormState($data['postal_delivery_type'] ?? null);
         if ($enum?->isEcommercePostal()) {
             $data['is_partial_receipt'] = false;
+        }
+        if ($enum !== null && !$enum->supportsDeclaredValueListFlag()) {
+            $data['is_declared_value'] = false;
+        }
+        if ($enum?->requiresNegotiatedRateFalseForApi()) {
+            $data['negotiated_rate'] = false;
         }
 
         return $data;

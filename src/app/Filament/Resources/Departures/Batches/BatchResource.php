@@ -54,11 +54,20 @@ class BatchResource extends Resource
                             ->options(BelpostPostalDeliveryType::class)
                             ->default(config('belpost.defaults.postal_delivery_type'))
                             ->required()
-                            ->live(onBlur: true)
+                            ->live()
                             ->afterStateUpdated(function (mixed $state, callable $set): void {
-                                $enum = BelpostPostalDeliveryType::tryFrom(is_string($state) ? $state : '');
-                                if ($enum !== null && $enum->isEcommercePostal()) {
+                                $enum = BelpostPostalDeliveryType::tryFromFormState($state);
+                                if ($enum === null) {
+                                    return;
+                                }
+                                if ($enum->isEcommercePostal()) {
                                     $set('is_partial_receipt', false);
+                                }
+                                if (!$enum->supportsDeclaredValueListFlag()) {
+                                    $set('is_declared_value', false);
+                                }
+                                if ($enum->requiresNegotiatedRateFalseForApi()) {
+                                    $set('negotiated_rate', false);
                                 }
                             })
                             ->native(false),
@@ -83,13 +92,14 @@ class BatchResource extends Resource
                             ->required(fn (Get $get): bool => BelpostPaymentType::tryFromFormState($get('payment_type'))?->requiresCardNumber() ?? false),
                         Toggle::make('negotiated_rate')
                             ->label('Договорной тариф')
-                            ->default(config('belpost.defaults.negotiated_rate')),
+                            ->default(config('belpost.defaults.negotiated_rate'))
+                            ->visible(fn (Get $get): bool => !BelpostPostalDeliveryType::tryFromFormState($get('postal_delivery_type'))?->requiresNegotiatedRateFalseForApi()),
                         Toggle::make('is_declared_value')
-                            ->label('С объявленной ценностью'),
+                            ->label('С объявленной ценностью')
+                            ->visible(fn (Get $get): bool => BelpostPostalDeliveryType::tryFromFormState($get('postal_delivery_type'))?->supportsDeclaredValueListFlag() ?? false),
                         Toggle::make('is_partial_receipt')
                             ->label('Частичная выдача вложений')
-                            ->live(onBlur: true)
-                            ->visible(fn (Get $get): bool => BelpostPostalDeliveryType::tryFrom(is_string($get('postal_delivery_type')) ? $get('postal_delivery_type') : '')?->supportsPartialReceiptOfEnclosures() ?? true),
+                            ->visible(fn (Get $get): bool => BelpostPostalDeliveryType::tryFromFormState($get('postal_delivery_type'))?->supportsPartialReceiptOfEnclosures() ?? true),
                     ]),
                 Section::make('Белпочта')
                     ->columns(2)
