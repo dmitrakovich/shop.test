@@ -21,6 +21,32 @@ enum BelpostPostalDeliveryType: string implements HasLabel
     case EcommerceLight = 'ecommerce_light';
     case EcommerceOptima = 'ecommerce_optima';
 
+    /**
+     * Belarus Post rules: e‑commerce parcel tariffs do not accept partial enclosure receipt;
+     * turning it on in the cabinet leads to mandatory attachment lines we do not populate.
+     */
+    public function isEcommercePostal(): bool
+    {
+        return str_starts_with($this->value, 'ecommerce_');
+    }
+
+    /**
+     * Whether `is_partial_receipt` may be synced to the API as true with this tariff.
+     */
+    public function supportsPartialReceiptOfEnclosures(): bool
+    {
+        return !$this->isEcommercePostal();
+    }
+
+    /** Party is только документы (письма, карточки, бандероль) — Белпочте нужен признак «документы». */
+    public function isDocumentOnlyShipmentTariff(): bool
+    {
+        return match ($this) {
+            self::OrderedLetter, self::OrderedPostcard, self::OrderedParcelPost => true,
+            default => false,
+        };
+    }
+
     public function getLabel(): string
     {
         return match ($this) {

@@ -22,6 +22,13 @@ return [
         'fallback_recipient_email' => env('BELPOST_FALLBACK_RECIPIENT_EMAIL'),
         'sender_phone' => env('BELPOST_SENDER_PHONE', config('app.phone')),
         'sender_email' => env('BELPOST_SENDER_EMAIL', config('app.email')),
+        // Item `addons.shelf_life` when batch flags require it.
+        'shelf_life_days' => (int)env('BELPOST_SHELF_LIFE_DAYS', 10),
+        // Batch item `category`: official API allows 0, 1, 2; 1 is used for typical e-commerce merchandise.
+        'item_category_ecommerce' => (int)env('BELPOST_ITEM_CATEGORY_ECOMMERCE', 1),
+        'item_category' => (int)env('BELPOST_ITEM_CATEGORY', 0),
+        // Приём списков отправлений в ОПС (рекомендуется Белпочтой для e-commerce тарифов).
+        'postal_items_in_ops' => (bool)env('BELPOST_POSTAL_ITEMS_IN_OPS', true),
     ],
 
     'cod_payment_ids' => [1, 4],

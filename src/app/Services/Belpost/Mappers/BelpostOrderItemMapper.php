@@ -39,7 +39,7 @@ class BelpostOrderItemMapper
         $payload = [
             'foreign_id' => (string)$order->id,
             'weight' => (int)max((int)ceil($order->weight ?: 1), 1),
-            'category' => 0,
+            'category' => $this->resolveItemCategory($batch),
             'notification' => $notification,
             'recipient_foreign_id' => $recipientForeignId,
             'recipient_phone' => $phone,
@@ -62,11 +62,93 @@ class BelpostOrderItemMapper
             $addons['cash_on_delivery'] = round($cod, 2);
         }
 
+        $addons = $this->applyBatchAddonsForDeclaredOrPartialReceipt($order, $batch, $addons);
+
         if ($addons !== []) {
             $payload['addons'] = $addons;
         }
 
         return $payload;
+    }
+
+    /**
+     * When list flags include declared value or partial receipt, business API expects matching item addons.
+     *
+     * @param  array<string, mixed>  $addons
+     * @return array<string, mixed>
+     */
+    private function applyBatchAddonsForDeclaredOrPartialReceipt(Order $order, ?Batch $batch, array $addons): array
+    {
+        if ($batch === null) {
+            return $addons;
+        }
+
+        if ($batch->is_declared_value) {
+            $addons['declared_value'] = $this->resolveDeclaredValueAmount($order);
+        }
+
+        if ($batch->is_declared_value || $this->partialReceiptRequiresShelfLifeAddon($batch)) {
+            $days = (int)config('belpost.defaults.shelf_life_days', 10);
+            if ($days < 1) {
+                $days = 10;
+            }
+            $addons['shelf_life'] = $days;
+        }
+
+        return $addons;
+    }
+
+    /**
+     * Adds shelf life addon when declaration or tariff-valid partial enclosure receipt applies.
+     */
+    private function partialReceiptRequiresShelfLifeAddon(Batch $batch): bool
+    {
+        if (!$batch->is_partial_receipt) {
+            return false;
+        }
+
+        return $this->resolveBatchPostalDeliveryEnum($batch)?->supportsPartialReceiptOfEnclosures() ?? true;
+    }
+
+    private function resolveBatchPostalDeliveryEnum(?Batch $batch): ?BelpostPostalDeliveryType
+    {
+        if ($batch === null) {
+            return null;
+        }
+
+        $type = $batch->postal_delivery_type;
+
+        if ($type instanceof BelpostPostalDeliveryType) {
+            return $type;
+        }
+
+        if (is_string($type) && $type !== '') {
+            return BelpostPostalDeliveryType::tryFrom($type);
+        }
+
+        return BelpostPostalDeliveryType::tryFrom((string)config('belpost.defaults.postal_delivery_type'));
+    }
+
+    private function resolveItemCategory(?Batch $batch): int
+    {
+        $enum = $this->resolveBatchPostalDeliveryEnum($batch);
+
+        if ($enum?->isEcommercePostal()) {
+            $category = (int)config('belpost.defaults.item_category_ecommerce', 1);
+
+            return in_array($category, [0, 1, 2], true) ? $category : 1;
+        }
+
+        $category = (int)config('belpost.defaults.item_category', 0);
+
+        return in_array($category, [0, 1, 2], true) ? $category : 0;
+    }
+
+    private function resolveDeclaredValueAmount(Order $order): float
+    {
+        $raw = round((float)($order->total_price > 0 ? $order->total_price : $order->getItemsPrice()), 2);
+
+        return max($raw, 0.01);
     }
 
     private function resolveS10Code(Order $order): ?string
@@ -89,12 +171,22 @@ class BelpostOrderItemMapper
     private function resolveRecipientEmail(Order $order): string
     {
         $email = trim((string)($order->email ?: $order->user?->email ?: ''));
-
-        if ($email === '') {
-            $email = (string)config('belpost.defaults.fallback_recipient_email', config('app.email'));
+        if ($email !== '') {
+            return mb_strtolower($email);
         }
 
-        return mb_strtolower($email);
+        foreach ([
+            config('belpost.defaults.fallback_recipient_email'),
+            config('app.email'),
+            config('mail.from.address'),
+        ] as $candidate) {
+            $candidate = trim((string)($candidate ?? ''));
+            if ($candidate !== '') {
+                return mb_strtolower($candidate);
+            }
+        }
+
+        return '';
     }
 
     private function resolveRecipientPhone(Order $order): ?string

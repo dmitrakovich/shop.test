@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Departures\Batches\Pages;
 
+use App\Enums\Belpost\BelpostPostalDeliveryType;
 use App\Filament\Resources\Departures\Batches\BatchResource;
 use App\Libraries\Belpost\Exceptions\BelpostApiException;
 use App\Libraries\Belpost\Facades\ApiBelpostFacade;
@@ -62,6 +63,21 @@ class EditBatch extends EditRecord
         assert($record instanceof Batch);
 
         return $record;
+    }
+
+    /**
+     * When the tariff is e-commerce, the cabinet must not persist “partial receipt”: API treats it like attachment declarations.
+     */
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $enum = isset($data['postal_delivery_type'])
+            ? BelpostPostalDeliveryType::tryFrom((string)$data['postal_delivery_type'])
+            : null;
+        if ($enum?->isEcommercePostal()) {
+            $data['is_partial_receipt'] = false;
+        }
+
+        return $data;
     }
 
     protected function afterSave(): void

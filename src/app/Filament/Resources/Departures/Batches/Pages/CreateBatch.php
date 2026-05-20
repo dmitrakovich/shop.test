@@ -25,6 +25,13 @@ class CreateBatch extends CreateRecord
         )?->value;
         $data['card_number'] ??= config('belpost.defaults.card_number');
 
+        $enum = isset($data['postal_delivery_type'])
+            ? BelpostPostalDeliveryType::tryFrom((string)$data['postal_delivery_type'])
+            : null;
+        if ($enum?->isEcommercePostal()) {
+            $data['is_partial_receipt'] = false;
+        }
+
         return $data;
     }
 }
