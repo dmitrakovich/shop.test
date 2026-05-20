@@ -19,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -65,7 +66,14 @@ class BatchResource extends Resource
                             ->options(BelpostPaymentType::class)
                             ->default(config('belpost.defaults.payment_type'))
                             ->required()
+                            ->live()
                             ->native(false),
+                        TextInput::make('card_number')
+                            ->label('Номер карты (л/с)')
+                            ->maxLength(64)
+                            ->default(config('belpost.defaults.card_number'))
+                            ->visible(fn (Get $get): bool => BelpostPaymentType::tryFromFormState($get('payment_type'))?->requiresCardNumber() ?? false)
+                            ->required(fn (Get $get): bool => BelpostPaymentType::tryFromFormState($get('payment_type'))?->requiresCardNumber() ?? false),
                         Toggle::make('negotiated_rate')
                             ->label('Договорной тариф')
                             ->default(config('belpost.defaults.negotiated_rate')),

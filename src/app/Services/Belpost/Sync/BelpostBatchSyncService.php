@@ -23,6 +23,7 @@ class BelpostBatchSyncService
             'postal_delivery_type' => Arr::get($response, 'postal_delivery_type', $batch->postal_delivery_type),
             'direction' => Arr::get($response, 'direction', $batch->direction),
             'payment_type' => Arr::get($response, 'payment_type', $batch->payment_type),
+            'card_number' => Arr::get($response, 'card_number', $batch->card_number),
             'negotiated_rate' => (bool)Arr::get($response, 'negotiated_rate', $batch->negotiated_rate),
             'is_declared_value' => (bool)Arr::get($response, 'is_declared_value', $batch->is_declared_value),
             'is_partial_receipt' => (bool)Arr::get($response, 'is_partial_receipt', $batch->is_partial_receipt),

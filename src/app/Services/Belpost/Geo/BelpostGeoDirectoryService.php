@@ -33,6 +33,7 @@ class BelpostGeoDirectoryService
      *     street: ?string,
      *     building: ?string,
      *     housing: ?string,
+     *     apartment: ?string,
      *     region: ?string,
      *     district: ?string,
      * }
@@ -60,6 +61,7 @@ class BelpostGeoDirectoryService
             'street' => $street,
             'building' => $this->geoDirectory->normalizeBuilding($address !== null ? $address->house : null, $order->user_addr),
             'housing' => $this->geoDirectory->normalizeHousing($address !== null ? $address->corpus : null),
+            'apartment' => $this->geoDirectory->normalizeApartment($address !== null ? $address->room : null, $order->user_addr),
             'region' => $this->geoDirectory->normalizeRegion(($address !== null ? $address->region : null) ?? $order->region),
             'district' => $this->geoDirectory->normalizeDistrict($address !== null ? $address->district : null),
         ];
