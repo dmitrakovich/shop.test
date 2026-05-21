@@ -16,8 +16,13 @@ class BelpostOrderItemSyncService
     {
         $s10code = Arr::get($item, 's10code');
 
+        $itemId = Arr::get($item, 'id')
+            ?? Arr::get($item, 'item_id')
+            ?? Arr::get($item, 'list_item_id')
+            ?? $order->belpost_item_id;
+
         $order->update([
-            'belpost_item_id' => Arr::get($item, 'id', $order->belpost_item_id),
+            'belpost_item_id' => $itemId,
             'belpost_s10code' => $s10code,
         ]);
 

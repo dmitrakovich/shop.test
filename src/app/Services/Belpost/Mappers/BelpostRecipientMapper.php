@@ -25,11 +25,7 @@ class BelpostRecipientMapper
     {
         $order->loadMissing('user.lastAddress');
 
-        $email = mb_strtolower(trim((string)(
-            $order->email
-            ?: $order->user?->email
-            ?: config('belpost.defaults.fallback_recipient_email', config('app.email'))
-        )));
+        $email = $this->resolveRecipientEmailForBelpost($order);
 
         $phone = $this->phoneNormalizer->normalize($order->phone)
             ?? ($order->user ? $this->phoneNormalizer->normalize($order->user->phone) : null);
@@ -44,5 +40,31 @@ class BelpostRecipientMapper
             'email' => mb_substr($email, 0, 30),
             'address' => $this->addressResolver->resolve($order),
         ], fn ($value) => $value !== null && $value !== '');
+    }
+
+    /**
+     * Order / user e-mail, then fallbacks (`BELPOST_FALLBACK_RECIPIENT_EMAIL`, optional `app.email`, `mail.from.address`).
+     *
+     * Laravel does not substitute `config($key, $default)` when the key exists but is null.
+     */
+    private function resolveRecipientEmailForBelpost(Order $order): string
+    {
+        $email = trim((string)($order->email ?: $order->user?->email ?: ''));
+        if ($email !== '') {
+            return mb_strtolower($email);
+        }
+
+        foreach ([
+            config('belpost.defaults.fallback_recipient_email'),
+            config('app.email'),
+            config('mail.from.address'),
+        ] as $candidate) {
+            $candidate = trim((string)($candidate ?? ''));
+            if ($candidate !== '') {
+                return mb_strtolower($candidate);
+            }
+        }
+
+        return '';
     }
 }

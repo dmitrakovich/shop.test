@@ -61,13 +61,20 @@ class OrdersRelationManager extends RelationManager
                     ->badge(),
                 TextColumn::make('belpost_item_id')
                     ->label('Belpost item')
-                    ->placeholder('—'),
-                TextColumn::make('belpost_s10code')
+                    ->placeholder('—')
+                    ->numeric(),
+                TextColumn::make('belpost_track')
                     ->label('Трек S10')
+                    ->state(fn (Order $record): ?string => $this->resolveBelpostTrackForDisplay($record))
                     ->copyable()
+                    ->copyableState(fn (Order $record): ?string => $this->resolveBelpostTrackForDisplay($record))
                     ->placeholder('—'),
-                TextColumn::make('weight')
-                    ->label('Вес, г'),
+                TextColumn::make('weight_grams')
+                    ->label('Вес, г')
+                    ->state(fn (Order $record): int => $record->getWeightInGrams())
+                    ->description(fn (Order $record): ?string => ($record->weight ?? 0) > 0
+                        ? number_format((float)$record->weight, 2, ',', ' ') . ' кг'
+                        : null),
             ])
             ->headerActions([
                 Action::make('attachOrders')
@@ -107,20 +114,19 @@ class OrdersRelationManager extends RelationManager
                     }),
             ])
             ->recordActions([
-                Action::make('pushToBelpost')
-                    ->label('Отправить в Белпочту')
-                    ->icon(Heroicon::OutlinedCloudArrowUp)
-                    ->visible(fn (Order $record): bool => $this->canSyncOrder($record) && !$record->belpost_item_id)
-                    ->action(fn (Order $record) => $this->syncOrder($record, create: true)),
-                Action::make('updateInBelpost')
-                    ->label('Обновить')
-                    ->icon(Heroicon::OutlinedArrowPath)
-                    ->visible(fn (Order $record): bool => $this->canSyncOrder($record) && (bool)$record->belpost_item_id)
-                    ->action(fn (Order $record) => $this->syncOrder($record, create: false)),
+                Action::make('syncBelpost')
+                    ->label(fn (Order $record): string => filled($record->belpost_item_id)
+                        ? 'Обновить в Белпочте'
+                        : 'Отправить в Белпочту')
+                    ->icon(fn (Order $record) => filled($record->belpost_item_id)
+                        ? Heroicon::OutlinedArrowPath
+                        : Heroicon::OutlinedCloudArrowUp)
+                    ->visible(fn (Order $record): bool => $this->canSyncOrder($record))
+                    ->action(fn (Order $record) => $this->syncOrder($record)),
                 Action::make('generateItemBlank')
                     ->label('Бланк')
                     ->icon(Heroicon::OutlinedDocumentText)
-                    ->visible(fn (Order $record): bool => $this->getBatch()->isLinkedToBelpost() && (bool)$record->belpost_item_id)
+                    ->visible(fn (Order $record): bool => $this->getBatch()->isLinkedToBelpost() && filled($record->belpost_item_id))
                     ->action(function (Order $record): void {
                         try {
                             app(BelpostBatchDocumentService::class)->generateItemBlanks($this->getBatch(), $record);
@@ -133,7 +139,7 @@ class OrdersRelationManager extends RelationManager
                     ->label('Удалить в Белпочте')
                     ->icon(Heroicon::OutlinedCloudArrowDown)
                     ->color('danger')
-                    ->visible(fn (Order $record): bool => $this->canSyncOrder($record) && (bool)$record->belpost_item_id)
+                    ->visible(fn (Order $record): bool => $this->canSyncOrder($record) && filled($record->belpost_item_id))
                     ->requiresConfirmation()
                     ->action(function (Order $record): void {
                         try {
@@ -144,13 +150,16 @@ class OrdersRelationManager extends RelationManager
                         }
                     }),
                 Action::make('detachOrder')
-                    ->label('Отвязать')
+                    ->label('Убрать из партии')
                     ->icon(Heroicon::OutlinedXMark)
                     ->color('gray')
                     ->visible(fn (): bool => $this->getBatch()->isBelpostEditable())
                     ->requiresConfirmation()
+                    ->modalDescription('Заказ будет отвязан от партии. Если он уже в Белпочте, сначала удалите отправление там.')
                     ->action(function (Order $record): void {
-                        if ($record->belpost_item_id && $this->getBatch()->isLinkedToBelpost()) {
+                        $record->refresh();
+
+                        if (filled($record->belpost_item_id) && $this->getBatch()->isLinkedToBelpost()) {
                             try {
                                 app(BelpostBatchItemService::class)->delete($this->getBatch(), $record);
                             } catch (BelpostApiException $exception) {
@@ -174,12 +183,26 @@ class OrdersRelationManager extends RelationManager
                     //
                 ]),
             ])
-            ->modifyQueryUsing(fn (Builder $query) => $query->orderByDesc('id'));
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('track')->orderByDesc('id'));
     }
 
     private function getBatch(): Batch
     {
         return $this->getOwnerRecord();
+    }
+
+    private function resolveBelpostTrackForDisplay(Order $order): ?string
+    {
+        if (filled($order->belpost_s10code)) {
+            return $order->belpost_s10code;
+        }
+
+        $track = $order->track;
+        if ($track !== null && filled($track->track_number)) {
+            return $track->track_number;
+        }
+
+        return null;
     }
 
     private function canSyncOrder(Order $record): bool
@@ -191,7 +214,7 @@ class OrdersRelationManager extends RelationManager
             && ApiBelpostFacade::isConfigured();
     }
 
-    private function syncOrder(Order $record, bool $create): void
+    private function syncOrder(Order $record): void
     {
         if (!ApiBelpostFacade::isConfigured()) {
             Notification::make()
@@ -206,15 +229,18 @@ class OrdersRelationManager extends RelationManager
         try {
             $items = app(BelpostBatchItemService::class);
             $batch = $this->getBatch();
+            $record->refresh();
 
-            if ($create) {
-                $items->create($batch, $record);
-            } else {
+            if (filled($record->belpost_item_id)) {
                 $items->update($batch, $record);
+                $title = 'Отправление обновлено в Белпочте';
+            } else {
+                $items->create($batch, $record);
+                $title = 'Отправление создано в Белпочте';
             }
 
             Notification::make()
-                ->title($create ? 'Отправление создано в Белпочте' : 'Отправление обновлено в Белпочте')
+                ->title($title)
                 ->success()
                 ->send();
         } catch (BelpostApiException $exception) {

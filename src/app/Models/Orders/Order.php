@@ -448,6 +448,19 @@ class Order extends Model
     }
 
     /**
+     * Order weight is stored in kilograms; Belpost API expects grams.
+     */
+    public function getWeightInGrams(): int
+    {
+        $kg = (float)($this->weight ?: 0);
+        if ($kg <= 0) {
+            return 1;
+        }
+
+        return max((int)round($kg * 1000), 1);
+    }
+
+    /**
      * Get total COD amount.
      */
     public function getTotalCODSum(): float

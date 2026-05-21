@@ -21,6 +21,75 @@ enum BelpostPostalDeliveryType: string implements HasLabel
     case EcommerceLight = 'ecommerce_light';
     case EcommerceOptima = 'ecommerce_optima';
 
+    /**
+     * Belarus Post rules: e‑commerce parcel tariffs do not accept partial enclosure receipt;
+     * turning it on in the cabinet leads to mandatory attachment lines we do not populate.
+     */
+    public function isEcommercePostal(): bool
+    {
+        return str_starts_with($this->value, 'ecommerce_');
+    }
+
+    /**
+     * Whether `is_partial_receipt` may be synced to the API as true with this tariff.
+     */
+    public function supportsPartialReceiptOfEnclosures(): bool
+    {
+        return !$this->isEcommercePostal();
+    }
+
+    /**
+     * Whether batch list `is_declared_value` may be synced to the API as true.
+     *
+     * Belarus Post accepts the flag only for e-commerce tariffs. Classic tariffs use
+     * dedicated types (e.g. package_declare_value) or do not support declared value at list level.
+     */
+    public function supportsDeclaredValueListFlag(): bool
+    {
+        if ($this->isDocumentOnlyShipmentTariff() || $this->hasDeclaredValueBuiltIntoTariff()) {
+            return false;
+        }
+
+        return $this->isEcommercePostal();
+    }
+
+    /** Tariff already implies declared value; list flag must stay false. */
+    public function hasDeclaredValueBuiltIntoTariff(): bool
+    {
+        return match ($this) {
+            self::SmallPackageDeclareValue, self::PackageDeclareValue => true,
+            default => false,
+        };
+    }
+
+    /** E-commerce list payloads must send negotiated_rate as false. */
+    public function requiresNegotiatedRateFalseForApi(): bool
+    {
+        return $this->isEcommercePostal();
+    }
+
+    /** Party is только документы (письма, карточки, бандероль) — Белпочте нужен признак «документы». */
+    public function isDocumentOnlyShipmentTariff(): bool
+    {
+        return match ($this) {
+            self::OrderedLetter, self::OrderedPostcard, self::OrderedParcelPost => true,
+            default => false,
+        };
+    }
+
+    public static function tryFromFormState(mixed $state): ?self
+    {
+        if ($state instanceof self) {
+            return $state;
+        }
+
+        if (is_string($state) && $state !== '') {
+            return self::tryFrom($state);
+        }
+
+        return null;
+    }
+
     public function getLabel(): string
     {
         return match ($this) {
