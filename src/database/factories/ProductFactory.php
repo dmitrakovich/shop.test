@@ -52,6 +52,7 @@ class ProductFactory extends Factory
             'description' => fake()->optional()->paragraph(),
             'action' => fake()->boolean(),
             'rating' => fake()->numberBetween(0, 100),
+            'newness_rating' => fake()->numberBetween(0, 100),
             'product_group_id' => null,
             'product_features' => fake()->optional()->sentence(3),
             'key_features' => fake()->optional()->sentence(3),

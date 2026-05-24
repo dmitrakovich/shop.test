@@ -71,6 +71,11 @@ class ProductsTable
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('newness_rating')
+                    ->label('Рейтинг новинок')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

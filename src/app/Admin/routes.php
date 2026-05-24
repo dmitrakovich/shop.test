@@ -19,7 +19,6 @@ use App\Admin\Controllers\OrderItemController;
 use App\Admin\Controllers\Orders\OfflineOrderController;
 use App\Admin\Controllers\OrdersDistribution\SettingsController;
 use App\Admin\Controllers\OrdersDistribution\StatisticController;
-use App\Admin\Controllers\RatingController;
 use App\Admin\Controllers\Seo\SeoLinkController;
 use App\Admin\Controllers\StockController;
 use App\Admin\Controllers\Users\GroupController;
@@ -101,9 +100,6 @@ Route::group([
     $router->get('send-sms', Forms\Sms::class);
 
     $router->resource('stock', StockController::class);
-
-    // legacy
-    $router->any('config/rating', RatingController::class);
 
     // Automation
     $router->group(['prefix' => 'automation', 'as' => 'automation.'], function (Router $router) {

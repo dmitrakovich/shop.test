@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Product\ProductLabel;
+use App\Enums\Product\ProductSort;
 use App\Facades\Currency;
 use App\Models\Collection as ProductCollection;
 use App\Models\OneC\Product as ProductFromOneC;
@@ -43,6 +44,7 @@ use Spatie\MediaLibrary\HasMedia;
  * @property string|null $description
  * @property bool $action
  * @property int $rating
+ * @property int $newness_rating
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -70,7 +72,7 @@ use Spatie\MediaLibrary\HasMedia;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AvailableSizes[] $availableSizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product sorting(string $type)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product sorting(ProductSort $type)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product search(?string $search = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyWithDiscount(float $amount = 0.01)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyNew(int $days = 10)
@@ -89,7 +91,7 @@ class Product extends Model implements HasMedia
     /**
      * Default sorting
      */
-    public const DEFAULT_SORT = 'rating';
+    public const DEFAULT_SORT = ProductSort::Rating;
 
     /**
      * The connection name for the model.
@@ -360,13 +362,13 @@ class Product extends Model implements HasMedia
      *
      * @return Builder
      */
-    public function scopeSorting(Builder $query, string $type)
+    public function scopeSorting(Builder $query, ProductSort $sort)
     {
-        return match ($type) {
-            'newness' => $query->orderByDesc('created_at')->orderByDesc('id'),
-            'price-up' => $query->orderBy('price')->orderBy('id'),
-            'price-down' => $query->orderByDesc('price')->orderByDesc('id'),
-            default => $query->orderByDesc('rating')->orderByDesc('id'), // rating
+        return match ($sort) {
+            ProductSort::Newness => $query->orderByDesc('newness_rating')->orderByDesc('id'),
+            ProductSort::PriceUp => $query->orderBy('price')->orderBy('id'),
+            ProductSort::PriceDown => $query->orderByDesc('price')->orderByDesc('id'),
+            ProductSort::Rating => $query->orderByDesc('rating')->orderByDesc('id'),
             // 'discount' => $query->orderByDesc('discount')->orderByDesc('id'),
         };
     }

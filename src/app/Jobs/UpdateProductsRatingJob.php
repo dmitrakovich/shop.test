@@ -2,145 +2,128 @@
 
 namespace App\Jobs;
 
+use App\Enums\Product\RatingFactor;
 use App\Models\Config;
-use App\Models\Product;
-use App\Models\Size;
+use App\Models\RatingAlgorithm;
 use Illuminate\Bus\Queueable;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use stdClass;
 
 class UpdateProductsRatingJob extends AbstractJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
+    private const string CONFIG_KEY = 'rating';
 
     /**
      * Execute the job.
      *
-     * @return void
+     * @throws \Exception
      */
-    public function handle()
+    public function handle(): void
     {
         $this->log('Старт');
-        /** @var Config $ratingConfigModel */
-        $ratingConfigModel = Config::query()->findOrFail('rating');
-        $ratingConfig = $ratingConfigModel->config;
-        $counterYandexId = config('services.yandex.counter_id');
 
-        // Предустановки
-        $Koef = $ratingConfig['algoritm'][$ratingConfig['curr_algoritm']];
+        $configModel = Config::query()->findOrFail(self::CONFIG_KEY);
+        $config = $this->normalizeConfig($configModel->config);
+        $algorithms = $this->getAlgorithms($config);
+        $products = $this->getProductsData();
 
-        $info = $this->getInitInfo();
-        $this->setNewlessesAndPrices($info);
-        $this->setDiscount($info);
+        if ($products->isEmpty()) {
+            $this->saveConfig($configModel, $config);
+            $this->log('0 товаров');
+            $this->log('Успешно выполнено');
 
+            return;
+        }
+
+        $productIds = $products->pluck('id')->map(fn ($id): int => (int)$id)->all();
+        $metrics = $this->getMetrics($productIds);
+        $ranges = $this->getRanges($products, $metrics);
         $rating = [];
-        $products = $this->getCalculatedProductsData($ratingConfig);
-        foreach ($products as $prod) {
-            $newless = 100 / sqrt($prod->newless);
-            $info['newless']['summ'] += abs($newless);
-            $price = 100 * ($prod->price - $info['price']['min']) / $info['price']['base'];
-            $info['price']['summ'] += abs($price);
-            $discount = 100 * ($prod->discount - $info['discount']['min']) / $info['discount']['base'];
-            $info['discount']['summ'] += abs($discount);
-            $info['season']['summ'] += abs($prod->season);
-            $info['action']['summ'] += abs($prod->action);
-            $info['hit']['summ'] += abs($prod->hit);
-            $info['sale']['summ'] += abs($prod->sale);
-            $info['category']['summ'] += abs($prod->cat);
 
-            $rating[$prod->id] = [
-                'popular' => 0,
-                'purshase' => 0,
-                'trand' => 0,
-                'newless' => $newless,
-                'price' => $price,
-                'discount' => $discount,
-                'photo' => 0,
-                'aviable' => 0,
-                'season' => $prod->season,
-                'category' => $prod->cat,
-                'action' => $prod->action,
-                'hit' => $prod->hit,
-                'sale' => $prod->sale,
+        foreach ($products as $product) {
+            $scores = $this->scoresForProduct($product, $metrics, $ranges, $config);
+
+            $rating[(int)$product->id] = [
+                'rating' => $this->calculateRating($scores, $algorithms['popularity']),
+                'newness_rating' => $this->calculateRating($scores, $algorithms['newness']),
             ];
         }
 
-        $productsIds = $products->pluck('id')->toArray();
-        unset($products);
+        $this->updateProductsRating($rating);
+        $this->saveConfig($configModel, $config);
 
-        // photo
-        $productsCounters = $this->getProductsCounters($productsIds);
-        foreach ($productsCounters as $ph) {
-            if (isset($rating[$ph->id])) {
-                $photo = 0;
-                if ($ph->media_count == 1) {
-                    $photo = 10;
-                } elseif ($ph->media_count == 2) {
-                    $photo = 30;
-                } elseif ($ph->media_count == 3) {
-                    $photo = 50;
-                } elseif ($ph->media_count == 4) {
-                    $photo = 70;
-                } elseif ($ph->media_count > 4) {
-                    $photo = 100;
-                }
+        $this->log(count($rating) . ' товаров');
+        $this->log('Успешно выполнено');
+    }
 
-                $info['photo']['summ'] += abs($photo);
-                if ($info['photo']['min'] > $ph->media_count) {
-                    $info['photo']['min'] = $ph->media_count;
-                }
-                if ($info['photo']['max'] < $ph->media_count) {
-                    $info['photo']['max'] = $ph->media_count;
-                }
-                $rating[$ph->id]['photo'] = $photo;
-            }
+    /**
+     * @param  array<string, mixed>  $config
+     * @return array{popularity: RatingAlgorithm, newness: RatingAlgorithm}
+     */
+    private function getAlgorithms(array $config): array
+    {
+        $popularityAlgorithmId = (int)$config['popularity_algorithm_id'];
+        $newnessAlgorithmId = (int)$config['newness_algorithm_id'];
+
+        $algorithms = RatingAlgorithm::query()
+            ->whereIn('id', [$popularityAlgorithmId, $newnessAlgorithmId])
+            ->get()
+            ->keyBy('id');
+
+        $popularityAlgorithm = $algorithms->get($popularityAlgorithmId);
+        $newnessAlgorithm = $algorithms->get($newnessAlgorithmId);
+
+        if (!$popularityAlgorithm instanceof RatingAlgorithm || !$newnessAlgorithm instanceof RatingAlgorithm) {
+            throw new \Exception('Не выбран алгоритм рейтинга для популярности или новинок');
         }
 
-        // available
-        foreach ($productsCounters as $av) {
-            if (isset($rating[$av->id])) {
-                $available = 0;
-                if ($av->sizes_count == 1) {
-                    $available = 10;
-                } elseif ($av->sizes_count == 2) {
-                    $available = 30;
-                } elseif ($av->sizes_count == 3) {
-                    $available = 50;
-                } elseif ($av->sizes_count == 4) {
-                    $available = 70;
-                } elseif ($av->sizes_count > 4) {
-                    $available = 100;
-                }
+        return [
+            'popularity' => $popularityAlgorithm,
+            'newness' => $newnessAlgorithm,
+        ];
+    }
 
-                $info['aviable']['summ'] += abs($available);
-                if ($info['aviable']['min'] > $av->sizes_count) {
-                    $info['aviable']['min'] = $av->sizes_count;
-                }
-                if ($info['aviable']['max'] < $av->sizes_count) {
-                    $info['aviable']['max'] = $av->sizes_count;
-                }
-                $rating[$av->id]['aviable'] = $available;
-            }
-        }
-        unset($productsCounters);
+    /**
+     * @return Collection<int, stdClass>
+     */
+    private function getProductsData(): Collection
+    {
+        return DB::table('products')
+            ->leftJoin('seasons', 'products.season_id', '=', 'seasons.id')
+            ->whereNull('products.deleted_at')
+            ->where('products.price', '<>', 0)
+            ->selectRaw(<<<'SQL'
+                products.id,
+                products.price,
+                products.old_price,
+                products.category_id,
+                DATEDIFF(CURDATE(), DATE(products.created_at)) AS days_from_created_at,
+                IF(seasons.is_actual = 1, 1, 0) AS season_is_actual
+            SQL)
+            ->get();
+    }
 
-        // popular & purshase
-        $result_popular = $this->getYandexMetrikaData([
+    /**
+     * @param  list<int>  $productIds
+     * @return array<string, array<int, float>>
+     *
+     * @throws \Exception
+     */
+    private function getMetrics(array $productIds): array
+    {
+        $views = array_fill_keys($productIds, 0.0);
+        $purchases = array_fill_keys($productIds, 0.0);
+        $carts = array_fill_keys($productIds, 0.0);
+        $counterYandexId = config('services.yandex.counter_id');
+
+        $popularResult = $this->getYandexMetrikaData([
             'ids' => $counterYandexId,
             'metrics' => 'ym:s:productImpressionsUniq,ym:s:productPurchasedUniq',
             'dimensions' => 'ym:s:productID',
@@ -150,35 +133,15 @@ class UpdateProductsRatingJob extends AbstractJob
             'limit' => 3000,
         ]);
 
-        $info['popular'] = [
-            'min' => 0,
-            'max' => $result_popular['max'][0],
-            'base' => $result_popular['max'][0],
-            'summ' => 0,
-        ];
-
-        $info['purshase'] = [
-            'min' => 0,
-            'max' => $result_popular['max'][1],
-            'base' => $result_popular['max'][1],
-            'summ' => 0,
-        ];
-
-        foreach ($result_popular['data'] as $v) {
-            $x = $v['dimensions'][0]['name'];
-            if (isset($rating[$x])) {
-                $popular = 100 * ($v['metrics'][0] - $info['popular']['min']) / $info['popular']['base'];
-                $rating[$x]['popular'] = $popular;
-                $info['popular']['summ'] += abs($popular);
-                $purshase = 100 * ($v['metrics'][1] - $info['purshase']['min']) / $info['purshase']['base'];
-                $rating[$x]['purshase'] = $purshase;
-                $info['purshase']['summ'] += abs($purshase);
+        foreach ($popularResult['data'] as $row) {
+            $productId = (int)($row['dimensions'][0]['name'] ?? 0);
+            if (array_key_exists($productId, $views)) {
+                $views[$productId] = (float)($row['metrics'][0] ?? 0);
+                $purchases[$productId] = (float)($row['metrics'][1] ?? 0);
             }
         }
-        unset($result_popular);
 
-        // trand
-        $result_tranding = $this->getYandexMetrikaData([
+        $cartsResult = $this->getYandexMetrikaData([
             'ids' => $counterYandexId,
             'metrics' => 'ym:s:productBasketsUniq',
             'dimensions' => 'ym:s:productID',
@@ -188,172 +151,189 @@ class UpdateProductsRatingJob extends AbstractJob
             'limit' => 3000,
         ]);
 
-        $info['trand'] = [
-            'min' => 0,
-            'max' => $result_tranding['max'][0],
-            'base' => $result_tranding['max'][0],
-            'summ' => 0,
-        ];
-
-        foreach ($result_tranding['data'] as $v) {
-            $x = $v['dimensions'][0]['name'];
-            if (isset($rating[$x])) {
-                $trand = 100 * ($v['metrics'][0] - $info['trand']['min']) / $info['trand']['base'];
-                $rating[$x]['trand'] = $trand;
-                $info['trand']['summ'] += abs($trand);
+        foreach ($cartsResult['data'] as $row) {
+            $productId = (int)($row['dimensions'][0]['name'] ?? 0);
+            if (array_key_exists($productId, $carts)) {
+                $carts[$productId] = (float)($row['metrics'][0] ?? 0);
             }
         }
-        unset($result_tranding);
 
-        foreach (array_chunk($rating, 1000, true) as $ratingChunk) {
-            $cases = '';
-            foreach ($ratingChunk as $id => $val) {
-                if ($id > 0) {
-                    $productRating = 0;
-                    foreach ($info as $par => $par_v) {
-                        $productRating += $Koef[$par] * $val[$par];
-                    }
-                    $productRating = intval(abs($productRating));
-                    $cases .= "WHEN id = {$id} THEN {$productRating} ";
-                }
-            }
-            DB::statement("UPDATE products SET rating = (CASE {$cases} ELSE rating END)");
-        }
-
-        $i_summ = 0;
-        foreach ($info as $k => $v) {
-            $i_summ += abs($v['summ']);
-            $ratingConfig['basic_summ'][$k] = ['summ' => $v['summ']];
-        }
-
-        foreach ($info as $k => $v) {
-            $ratingConfig['basic_summ'][$k]['segment'] = $info[$k]['summ'] / $i_summ;
-        }
-
-        $ratingConfig['last_update'] = date('Y-m-d H:i:s');
-
-        $this->log(count($rating) . ' товаров');
-        unset($rating);
-
-        $ratingConfigModel->update(['config' => $ratingConfig]);
-
-        $this->log('Успешно выполнено');
-    }
-
-    private function getInitInfo(): array
-    {
         return [
-            'season' => ['summ' => 0],
-            'action' => ['summ' => 0],
-            'hit' => ['summ' => 0],
-            'sale' => ['summ' => 0],
-            'category' => ['summ' => 0],
-            'photo' => ['min' => 10, 'max' => 0, 'base' => 5, 'summ' => 0],
-            'aviable' => ['min' => 10, 'max' => 0, 'base' => 5, 'summ' => 0],
+            RatingFactor::Views->value => $views,
+            RatingFactor::Purchases->value => $purchases,
+            RatingFactor::Carts->value => $carts,
         ];
     }
 
     /**
-     * Sets the newlesses and prices information in the provided array.
+     * @param  Collection<int, stdClass>  $products
+     * @param  array<string, array<int, float>>  $metrics
+     * @return array<string, array{min: float, max: float}>
      */
-    private function setNewlessesAndPrices(array &$info): void
+    private function getRanges(Collection $products, array $metrics): array
     {
-        $result = DB::table('products')
-            ->whereNull('deleted_at')
-            ->where('price', '<>', 0)
-            ->where('label_id', '<>', 3)
-            ->selectRaw('MIN(price) AS price_min, MAX(price) AS price_max,
-                MIN(DATEDIFF(NOW(), created_at)) AS newless_min,
-                MAX(DATEDIFF(NOW(), created_at)) AS newless_max')
-            ->first();
-
-        $info['newless'] = [
-            'min' => $result->newless_min,
-            'max' => $result->newless_max,
-            'base' => $result->newless_max - $result->newless_min,
-            'summ' => 0,
-        ];
-        $info['price'] = [
-            'min' => $result->price_min,
-            'max' => $result->price_max,
-            'base' => $result->price_max - $result->price_min,
-            'summ' => 0,
-        ];
-    }
-
-    /**
-     * Sets the discount information in the provided array.
-     */
-    private function setDiscount(array &$info): void
-    {
-        $maxDiscount = DB::table('products')
-            ->whereNull('deleted_at')
-            ->where('price', '<>', 0)
-            ->where('label_id', '<>', 3)
-            ->selectRaw('MAX(100*(old_price - price)/old_price) AS max_discount')
-            ->value('max_discount');
-
-        $info['discount'] = [
-            'min' => 0,
-            'max' => $maxDiscount,
-            'base' => $maxDiscount,
-            'summ' => 0,
-        ];
-    }
-
-    /**
-     * Retrieves the calculated products data based on the provided configuration.
-     */
-    private function getCalculatedProductsData(array $config): Collection
-    {
-        $currentSeasonId = $config['cur_season'];
-        $excludedCategories = $config['false_category'];
-
-        return DB::table('products')
-            ->whereNull('deleted_at')
-            ->where('price', '<>', 0)
-            // ->where('label_id', '<>', 3)
-            ->selectRaw(<<<SQL
-                id, price, 100*(old_price - price)/old_price AS discount,
-                IF(DATEDIFF(NOW(), created_at) = 0,0.001, DATEDIFF(NOW(), created_at)) AS newless,
-                IF(season_id IN($currentSeasonId),100,0) AS season,
-                IF(action = 1,100,0) AS action,
-                IF(label_id = 1,100,0) AS hit,
-                IF(label_id = 2,100,0) AS sale,
-                IF(category_id IN($excludedCategories),0,100) as cat
-            SQL)
-            ->get();
-    }
-
-    /**
-     * Retrieves the counters for the given product IDs.
-     *
-     * @return EloquentCollection|Product[]
-     */
-    private function getProductsCounters(array $productsIds): EloquentCollection
-    {
-        $products = Product::query()
-            ->whereIn('id', $productsIds)
-            ->withCount('media')
-            ->get(['id']);
-
-        $sizeCounts = DB::table('product_attributes')
-            ->where('attribute_type', Size::class)
-            ->whereIn('product_id', $productsIds)
-            ->selectRaw('count(product_id) as count, product_id')
-            ->groupBy('product_id')
-            ->pluck('count', 'product_id')
-            ->toArray();
+        $prices = [];
+        $discounts = [];
 
         foreach ($products as $product) {
-            $product->sizes_count = $sizeCounts[$product->id] ?? 0; // @phpstan-ignore-line
+            $prices[] = (float)$product->price;
+            $discounts[] = $this->discountPercent((float)$product->price, (float)$product->old_price);
         }
 
-        return $products;
+        return [
+            RatingFactor::Views->value => $this->range($metrics[RatingFactor::Views->value]),
+            RatingFactor::Carts->value => $this->range($metrics[RatingFactor::Carts->value]),
+            RatingFactor::Purchases->value => $this->range($metrics[RatingFactor::Purchases->value]),
+            RatingFactor::Price->value => $this->range($prices),
+            RatingFactor::Discount->value => $this->range($discounts),
+        ];
     }
 
     /**
-     * Get metrika data from yandex api
+     * @param  array<string, array<int, float>>  $metrics
+     * @param  array<string, array{min: float, max: float}>  $ranges
+     * @param  array<string, mixed>  $config
+     * @return array<string, float>
+     */
+    private function scoresForProduct(stdClass $product, array $metrics, array $ranges, array $config): array
+    {
+        $productId = (int)$product->id;
+        $categoryId = (int)$product->category_id;
+        $days = max(0, (int)$product->days_from_created_at);
+
+        return [
+            RatingFactor::Views->value => $this->minMaxScore($metrics[RatingFactor::Views->value][$productId] ?? 0.0, $ranges[RatingFactor::Views->value]),
+            RatingFactor::Carts->value => $this->minMaxScore($metrics[RatingFactor::Carts->value][$productId] ?? 0.0, $ranges[RatingFactor::Carts->value]),
+            RatingFactor::Purchases->value => $this->minMaxScore($metrics[RatingFactor::Purchases->value][$productId] ?? 0.0, $ranges[RatingFactor::Purchases->value]),
+            RatingFactor::Price->value => $this->minMaxScore((float)$product->price, $ranges[RatingFactor::Price->value]),
+            RatingFactor::Discount->value => $this->minMaxScore($this->discountPercent((float)$product->price, (float)$product->old_price), $ranges[RatingFactor::Discount->value]),
+            RatingFactor::CategoryUp->value => in_array($categoryId, $config['category_up_ids'], true) ? 100.0 : 0.0,
+            RatingFactor::CategoryDown->value => in_array($categoryId, $config['category_down_ids'], true) ? -100.0 : 0.0,
+            RatingFactor::Season->value => (bool)$product->season_is_actual ? 100.0 : 0.0,
+            RatingFactor::CreatedAt->value => 100 / sqrt($days + 1),
+            RatingFactor::ProductUp->value => in_array($productId, $config['product_up_ids'], true) ? 100.0 : 0.0,
+            RatingFactor::ProductDown->value => in_array($productId, $config['product_down_ids'], true) ? -100.0 : 0.0,
+        ];
+    }
+
+    /**
+     * @param  array<string, float>  $scores
+     */
+    private function calculateRating(array $scores, RatingAlgorithm $algorithm): int
+    {
+        $rating = 0.0;
+
+        foreach (RatingFactor::cases() as $factor) {
+            $rating += ($scores[$factor->value] ?? 0.0) * $algorithm->coefficientFor($factor);
+        }
+
+        return (int)round($rating);
+    }
+
+    /**
+     * @param  array<int, array{rating: int, newness_rating: int}>  $rating
+     */
+    private function updateProductsRating(array $rating): void
+    {
+        foreach (array_chunk($rating, 1000, true) as $ratingChunk) {
+            $ratingCases = '';
+            $newnessRatingCases = '';
+            $productIds = [];
+
+            foreach ($ratingChunk as $id => $values) {
+                $productIds[] = (int)$id;
+                $ratingCases .= "WHEN id = {$id} THEN {$values['rating']} ";
+                $newnessRatingCases .= "WHEN id = {$id} THEN {$values['newness_rating']} ";
+            }
+
+            $ids = implode(',', $productIds);
+
+            DB::statement(
+                "UPDATE products SET rating = (CASE {$ratingCases} ELSE rating END), " .
+                "newness_rating = (CASE {$newnessRatingCases} ELSE newness_rating END) WHERE id IN ({$ids})"
+            );
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
+     * @return array<string, mixed>
+     */
+    private function normalizeConfig(array $config): array
+    {
+        return [
+            'popularity_algorithm_id' => (int)($config['popularity_algorithm_id'] ?? 0),
+            'newness_algorithm_id' => (int)($config['newness_algorithm_id'] ?? 0),
+            'category_up_ids' => $this->ids($config['category_up_ids'] ?? []),
+            'category_down_ids' => $this->ids($config['category_down_ids'] ?? []),
+            'product_up_ids' => $this->ids($config['product_up_ids'] ?? []),
+            'product_down_ids' => $this->ids($config['product_down_ids'] ?? []),
+            'last_update' => $config['last_update'] ?? null,
+        ];
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function ids(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_unique(array_map('intval', array_filter($value, 'is_numeric'))));
+    }
+
+    /**
+     * @param  array{min: float, max: float}  $range
+     */
+    private function minMaxScore(float $value, array $range): float
+    {
+        if ($range['max'] === $range['min']) {
+            return 0.0;
+        }
+
+        $raw = ($value - $range['min']) / ($range['max'] - $range['min']) * 100;
+
+        return min(100.0, max(0.0, ceil($raw / 2) * 2));
+    }
+
+    private function discountPercent(float $price, float $oldPrice): float
+    {
+        if ($oldPrice <= 0 || $oldPrice <= $price) {
+            return 0.0;
+        }
+
+        return (1 - ($price / $oldPrice)) * 100;
+    }
+
+    /**
+     * @param  array<int|string, float|int>  $values
+     * @return array{min: float, max: float}
+     */
+    private function range(array $values): array
+    {
+        if ($values === []) {
+            return ['min' => 0.0, 'max' => 0.0];
+        }
+
+        return [
+            'min' => (float)min($values),
+            'max' => (float)max($values),
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
+     */
+    private function saveConfig(Config $configModel, array $config): void
+    {
+        $config['last_update'] = now()->toDateTimeString();
+        $configModel->update(['config' => $config]);
+    }
+
+    /**
+     * Get metrika data from yandex api.
      *
      * @throws \Exception
      */

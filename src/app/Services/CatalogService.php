@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Product\ProductSort;
 use App\Facades\Currency;
 use App\Helpers\UrlHelper;
 use App\Models\Category;
@@ -30,7 +31,7 @@ class CatalogService
     /**
      * @return \Illuminate\Contracts\Pagination\CursorPaginator
      */
-    public function getProducts(array $filters, string $sort, ?string $search = null)
+    public function getProducts(array $filters, ProductSort $sort, ?string $search = null)
     {
         $productsQuery = $this->productService
             ->applyFilters($filters)
@@ -54,7 +55,7 @@ class CatalogService
     /**
      * @param  array<string, array<string, Url>>  $filters
      */
-    public function getProductsWithPagination(array $filters, string $sort, ?string $search = null, ?int $perPage = 12): LengthAwarePaginator
+    public function getProductsWithPagination(array $filters, ProductSort $sort, ?string $search = null, ?int $perPage = 12): LengthAwarePaginator
     {
         /** @var Builder $productsQuery */
         $productsQuery = $this->productService

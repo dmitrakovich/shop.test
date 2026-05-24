@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Enums\Product\ProductSort;
 use App\Facades\Sale;
 use App\Helpers\UrlHelper;
 use App\Http\Requests\FilterRequest;
@@ -71,12 +72,7 @@ class CatalogController extends BaseController
 
         $products = $this->catalogService->getProducts($currentFilters, $sort, $searchQuery);
 
-        $sortingList = [
-            'rating' => 'по популярности',
-            'newness' => 'новинки',
-            'price-up' => 'по возрастанию цены',
-            'price-down' => 'по убыванию цены',
-        ];
+        $sortingList = ProductSort::options();
 
         $category = end($currentFilters[Category::class])->getFilterModel();
         $badges = $this->catalogService->getFilterBadges($currentFilters, $searchQuery);
@@ -89,7 +85,7 @@ class CatalogController extends BaseController
             'currentFilters' => $currentFilters,
             'badges' => $badges,
             'filters' => app(FilterService::class)->getAll(),
-            'sort' => $sort,
+            'sort' => $sort->value,
             'sortingList' => $sortingList,
             'searchQuery' => $searchQuery,
         ];

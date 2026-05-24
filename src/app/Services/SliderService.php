@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\Product\ProductLabel;
+use App\Enums\Product\ProductSort;
 use App\Enums\ProductCarouselEnum;
 use App\Facades\Currency;
 use App\Models\Ads\ProductCarousel;
@@ -46,7 +47,7 @@ class SliderService
                     ->when($carousel->only_new, function ($query) {
                         $query->onlyNew();
                     })
-                    ->sorting('rating')
+                    ->sorting(ProductSort::Rating)
                     ->limit($carousel->count)
                     ->pluck('id')
             )->toArray();
@@ -299,7 +300,7 @@ class SliderService
             $products = Product::query()
                 ->whereIn('category_id', $carousel->getCategoryIds())
                 ->onlyWithDiscount(0.03)
-                ->sorting('rating')
+                ->sorting(ProductSort::Rating)
                 ->limit($carousel->count)
                 ->with(['media', 'category', 'brand'])
                 ->get();

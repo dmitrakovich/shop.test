@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Product\ProductSort;
 use App\Models\City;
-use App\Models\Product;
 use App\Models\ProductAttributes\Top;
 use App\Models\Url;
 use App\Services\FilterService;
@@ -36,22 +36,11 @@ class FilterRequest extends FormRequest
     /**
      * Get current sorting
      */
-    public function getSorting(): string
+    public function getSorting(): ProductSort
     {
-        try {
-            $sorting = $this->input('sort');
+        $sorting = $this->input('sort');
 
-            if ($this->hasSession()) {
-                $sessionSorting = $this->session()->get('sorting');
-                if ($sorting && $sorting !== $sessionSorting) {
-                    $this->session()->put('sorting', (string)$sorting);
-                }
-            }
-
-            return $sorting ?? Product::DEFAULT_SORT;
-        } catch (\Throwable) {
-            return Product::DEFAULT_SORT;
-        }
+        return ProductSort::fromRequest(is_string($sorting) ? $sorting : null);
     }
 
     /**
