@@ -15,6 +15,7 @@ use App\Admin\Requests\ChangeUserByPhoneRequest;
 use App\Admin\Requests\UserAddressRequest;
 use App\Admin\Tools\CreateOnlinePaymentTool;
 use App\Enums\Order\OrderItemStatus;
+use App\Enums\Order\OrderMethod;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Order\UtmEnum;
@@ -23,7 +24,6 @@ use App\Events\Analytics\OfflinePurchase;
 use App\Events\Order\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
-use App\Models\Enum\OrderMethod;
 use App\Models\Logs\OrderActionLog;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderAdminComment;
@@ -231,7 +231,7 @@ class OrderController extends AbstractAdminController
             if ($form->isCreating()) {
                 $form->select('order_method', 'Способ заказа')
                     ->options(OrderMethod::getOptionsForSelect())
-                    ->default(OrderMethod::UNDEFINED);
+                    ->default(OrderMethod::UNDEFINED->value);
             } elseif ($order) {
                 $utmEnum = UtmEnum::tryFrom("{$order->utm_source}-{$order->utm_campaign}");
                 if (!$order->utm_source || ($order->utm_source == 'none')) {
@@ -578,8 +578,10 @@ class OrderController extends AbstractAdminController
         $form->hidden('utm_campaign');
 
         $form->saving(function (Form $form) {
-            if (!empty($form->order_method)) {
-                [$utmSource, $utmMedium, $utmCampaign] = OrderMethod::getUtmSources($form->order_method);
+            $orderMethod = is_string($form->order_method) ? OrderMethod::tryFrom($form->order_method) : null;
+
+            if ($orderMethod !== null) {
+                [$utmSource, $utmMedium, $utmCampaign] = $orderMethod->utmSources();
                 $form->utm_source = $utmSource;
                 $form->utm_medium = $utmMedium;
                 $form->utm_campaign = $utmCampaign;

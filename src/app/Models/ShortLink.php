@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $short_link
  * @property string $full_link
+ * @property int $hits_count
+ * @property \Illuminate\Support\Carbon|null $last_used_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
@@ -23,6 +25,21 @@ class ShortLink extends Model
      * @var bool
      */
     protected static $unguarded = true;
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'last_used_at' => 'datetime',
+        ];
+    }
+
+    public function recordHit(): void
+    {
+        $this->increment('hits_count', 1, ['last_used_at' => now()]);
+    }
 
     /**
      * Generate, save & return short link

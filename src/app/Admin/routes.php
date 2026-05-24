@@ -70,7 +70,6 @@ Route::group([
 
     $router->group(['prefix' => 'bnrs'], function (Router $router) {
         $router->get('upsell', Forms\UpsellSliders::class);
-        $router->get('short-link', Forms\ShortLink\ShortLinkController::class)->name('short-link');
     });
 
     $router->group(['prefix' => 'bookkeeping'], function (Router $router) {

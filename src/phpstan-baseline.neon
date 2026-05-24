@@ -613,30 +613,6 @@ parameters:
 			path: app/Jobs/SxGeoUpdateJob.php
 
 		-
-			message: '#^Method App\\Jobs\\UpdateProductsRatingJob\:\:getCalculatedProductsData\(\) has parameter \$config with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/UpdateProductsRatingJob.php
-
-		-
-			message: '#^Method App\\Jobs\\UpdateProductsRatingJob\:\:getCalculatedProductsData\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Jobs/UpdateProductsRatingJob.php
-
-		-
-			message: '#^Method App\\Jobs\\UpdateProductsRatingJob\:\:getInitInfo\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/UpdateProductsRatingJob.php
-
-		-
-			message: '#^Method App\\Jobs\\UpdateProductsRatingJob\:\:getProductsCounters\(\) has parameter \$productsIds with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/UpdateProductsRatingJob.php
-
-		-
 			message: '#^Method App\\Jobs\\UpdateProductsRatingJob\:\:getYandexMetrikaData\(\) has parameter \$params with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -644,18 +620,6 @@ parameters:
 
 		-
 			message: '#^Method App\\Jobs\\UpdateProductsRatingJob\:\:getYandexMetrikaData\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/UpdateProductsRatingJob.php
-
-		-
-			message: '#^Method App\\Jobs\\UpdateProductsRatingJob\:\:setDiscount\(\) has parameter \$info with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/UpdateProductsRatingJob.php
-
-		-
-			message: '#^Method App\\Jobs\\UpdateProductsRatingJob\:\:setNewlessesAndPrices\(\) has parameter \$info with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Jobs/UpdateProductsRatingJob.php
@@ -1247,18 +1211,6 @@ parameters:
 			identifier: missingType.generics
 			count: 1
 			path: app/Models/Deliveries/DeliveryMethod.php
-
-		-
-			message: '#^Method App\\Models\\Enum\\OrderMethod\:\:getOptionsForSelect\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Enum/OrderMethod.php
-
-		-
-			message: '#^Method App\\Models\\Enum\\OrderMethod\:\:getValues\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Enum/OrderMethod.php
 
 		-
 			message: '#^Method App\\Models\\Favorite\:\:scopeForUser\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
