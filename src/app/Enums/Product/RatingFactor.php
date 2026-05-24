@@ -21,7 +21,7 @@ enum RatingFactor: string implements HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::Views => 'Кол-во просмотров (Я.Метрика)',
+            self::Views => 'Кол-во просмотров',
             self::Carts => 'Кол-во добавлений в корзину',
             self::Purchases => 'Кол-во покупок',
             self::Price => 'Цена',

@@ -7,7 +7,9 @@ alwaysApply: false
 # Filament admin (src/app/Filament/**)
 
 - Filament is the **preferred** admin implementation surface for new work.
+- Use **Filament 5** APIs and patterns in this project.
 - Keep resources/pages/widgets consistent with existing structure under `app/Filament/Resources/**`.
+- For Filament 5 resources, prefer extracting table definitions to dedicated `Tables/*Table` classes with a `configure(Table $table): Table` method.
 - When migrating features from legacy admin:
   - Reuse domain logic from `App\` services/models; avoid copying controller-heavy patterns.
   - Keep backward compatibility in data/permissions; ensure navigation and labels match existing admin expectations.

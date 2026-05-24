@@ -63,7 +63,6 @@ Route::group([
         $router->resource('currencies', Config\CurrencyController::class);
         $router->get('installment', Config\InstallmentForm::class);
         $router->get('feedback', Config\FeedbackForm::class);
-        $router->get('sms', Config\SmsForm::class);
         $router->get('newsletter_for_registered', Config\NewsletterForm::class);
         $router->get('sending-tracks', Config\SendingTracksForm::class);
         $router->get('auto-order-statuses', Config\AutoOrderStatusesForm::class);
@@ -93,8 +92,6 @@ Route::group([
         $router->resource('seo-links', SeoLinkController::class);
     });
     $router->resource('cities', CityController::class);
-
-    $router->get('send-sms', Forms\Sms::class);
 
     $router->resource('stock', StockController::class);
 
@@ -130,7 +127,6 @@ Route::group([
 
     // logs
     $router->group(['prefix' => 'logs', 'as' => 'logs.'], function (Router $router) {
-        $router->resource('sms', Logs\SmsController::class);
         $router->resource('inventory', Logs\InventoryController::class);
         $router->resource('order-item-statuses', Logs\OrderItemStatusController::class);
     });
