@@ -11,7 +11,6 @@ use App\Admin\Controllers\DocController;
 use App\Admin\Controllers\Forms;
 use App\Admin\Controllers\InfoPageController;
 use App\Admin\Controllers\Logs;
-use App\Admin\Controllers\MediaController;
 use App\Admin\Controllers\Offline\DisplacementController;
 use App\Admin\Controllers\OrderCommentController;
 use App\Admin\Controllers\OrderController as AdminOrderController;
@@ -94,8 +93,6 @@ Route::group([
         $router->resource('seo-links', SeoLinkController::class);
     });
     $router->resource('cities', CityController::class);
-
-    $router->resource('media', MediaController::class);
 
     $router->get('send-sms', Forms\Sms::class);
 
