@@ -9,6 +9,8 @@ use App\Models\Country;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\Group;
 use App\Models\User\User;
+use App\Rules\PhoneNumber;
+use App\Rules\UniqueUserPhone;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\ContextMenuActions;
@@ -135,7 +137,13 @@ class UserController extends AbstractAdminController
             });
         }
 
-        $form->submitted(function (Form $form) {
+        $form->submitted(function (Form $form) use ($id) {
+            request()->validate([
+                'phone' => ['bail', 'required', new PhoneNumber(), new UniqueUserPhone($id)],
+            ], [
+                'phone.required' => 'Поле телефон обязательно для заполнения.',
+            ]);
+
             $requestData = request()->all();
             $passportData = $requestData['passport'] ?? [];
             $emptyPassport = empty(array_filter($passportData, function ($a) {

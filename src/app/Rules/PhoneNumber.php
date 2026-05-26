@@ -4,6 +4,7 @@ namespace App\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
+use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberUtil;
 
 class PhoneNumber implements ValidationRule
@@ -34,8 +35,13 @@ class PhoneNumber implements ValidationRule
     private function phoneValidate(mixed $value): bool
     {
         $phoneUtil = PhoneNumberUtil::getInstance();
-        $parsedPhone = $phoneUtil->parse($value, 'BY');
 
-        return $phoneUtil->isValidNumber($parsedPhone);
+        try {
+            $parsedPhone = $phoneUtil->parse((string)$value, 'BY');
+
+            return $phoneUtil->isValidNumber($parsedPhone);
+        } catch (NumberParseException) {
+            return false;
+        }
     }
 }
