@@ -9,6 +9,7 @@ use App\Models\Country;
 use App\Models\Payments\OnlinePayment;
 use App\Models\User\Group;
 use App\Models\User\User;
+use App\Rules\User\UniqueUserPhone;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\ContextMenuActions;
@@ -93,7 +94,9 @@ class UserController extends AbstractAdminController
             $form->text('last_name', 'Фамилия')->required();
             $form->text('patronymic_name', 'Отчество');
             $form->email('email', 'Email');
-            $form->phone('phone', 'Телефон')->required();
+            $form->phone('phone', 'Телефон')
+                ->rules(['required', new UniqueUserPhone($this->routeUserId())])
+                ->required();
             $form->date('birth_date', 'Дата рождения')->default(now());
             $form->select('group_id', 'Группа')->options(Group::query()->pluck('name', 'id'))->required();
 
@@ -161,6 +164,17 @@ class UserController extends AbstractAdminController
         });
 
         return $form;
+    }
+
+    private function routeUserId(): ?int
+    {
+        $routeUser = request()->route('user');
+
+        if ($routeUser instanceof User) {
+            return $routeUser->getKey();
+        }
+
+        return is_numeric($routeUser) ? (int)$routeUser : null;
     }
 
     private function onlinePaymentGrid($userId)
