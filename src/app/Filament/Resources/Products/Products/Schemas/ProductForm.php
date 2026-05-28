@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Products\Products\Schemas;
 
 use App\Enums\Product\ProductLabel;
+use App\Models\Product;
 use App\Models\TagGroup;
 use Filament\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
@@ -21,6 +22,7 @@ use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\Operation;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\Rules\Unique;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductForm
@@ -36,7 +38,17 @@ class ProductForm
                             ->schema([
                                 TextInput::make('sku')
                                     ->label('Артикул')
-                                    ->required(),
+                                    ->required()
+                                    ->unique(
+                                        table: Product::class,
+                                        ignoreRecord: true,
+                                        modifyRuleUsing: function (Unique $rule, Get $get): Unique {
+                                            return $rule->where('brand_id', $get('brand_id'));
+                                        },
+                                    )
+                                    ->validationMessages([
+                                        'unique' => 'Товар с таким артикулом и брендом уже существует.',
+                                    ]),
                                 TextInput::make('slug')
                                     ->default('temp_slug_' . time())
                                     ->readOnly(),
