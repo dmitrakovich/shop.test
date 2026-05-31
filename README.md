@@ -64,5 +64,8 @@ Never commit real secrets, API tokens, DSNs, database passwords, or SSH keys.
 Start with [`docs/README.md`](docs/README.md) for subsystem docs and runbooks.
 Recently documented areas include:
 
+- [`docs/belpost-batch-mailing.md`](docs/belpost-batch-mailing.md) - Belpost
+  batch API workflow, Filament operations, shipment constraints, blanks, and
+  COD import.
 - [`docs/product-rating.md`](docs/product-rating.md) - catalog rating
   algorithms, admin workflow, scheduler, and storefront sort behavior.
