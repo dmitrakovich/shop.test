@@ -48,11 +48,15 @@ class UpdateProductsRatingJob extends AbstractJob
         $rating = [];
 
         foreach ($products as $product) {
-            $scores = $this->scoresForProduct($product, $metrics, $ranges, $config);
-
             $rating[(int)$product->id] = [
-                'rating' => $this->calculateRating($scores, $algorithms['popularity']),
-                'newness_rating' => $this->calculateRating($scores, $algorithms['newness']),
+                'rating' => $this->calculateRating(
+                    $this->scoresForProduct($product, $metrics, $ranges, $algorithms['popularity']),
+                    $algorithms['popularity']
+                ),
+                'newness_rating' => $this->calculateRating(
+                    $this->scoresForProduct($product, $metrics, $ranges, $algorithms['newness']),
+                    $algorithms['newness']
+                ),
             ];
         }
 
@@ -192,10 +196,9 @@ class UpdateProductsRatingJob extends AbstractJob
     /**
      * @param  array<string, array<int, float>>  $metrics
      * @param  array<string, array{min: float, max: float}>  $ranges
-     * @param  array<string, mixed>  $config
      * @return array<string, float>
      */
-    private function scoresForProduct(stdClass $product, array $metrics, array $ranges, array $config): array
+    private function scoresForProduct(stdClass $product, array $metrics, array $ranges, RatingAlgorithm $algorithm): array
     {
         $productId = (int)$product->id;
         $categoryId = (int)$product->category_id;
@@ -207,12 +210,12 @@ class UpdateProductsRatingJob extends AbstractJob
             RatingFactor::Purchases->value => $this->minMaxScore($metrics[RatingFactor::Purchases->value][$productId] ?? 0.0, $ranges[RatingFactor::Purchases->value]),
             RatingFactor::Price->value => $this->minMaxScore((float)$product->price, $ranges[RatingFactor::Price->value]),
             RatingFactor::Discount->value => $this->minMaxScore($this->discountPercent((float)$product->price, (float)$product->old_price), $ranges[RatingFactor::Discount->value]),
-            RatingFactor::CategoryUp->value => in_array($categoryId, $config['category_up_ids'], true) ? 100.0 : 0.0,
-            RatingFactor::CategoryDown->value => in_array($categoryId, $config['category_down_ids'], true) ? -100.0 : 0.0,
+            RatingFactor::CategoryUp->value => in_array($categoryId, $algorithm->categoryUpIds(), true) ? 100.0 : 0.0,
+            RatingFactor::CategoryDown->value => in_array($categoryId, $algorithm->categoryDownIds(), true) ? -100.0 : 0.0,
             RatingFactor::Season->value => (bool)$product->season_is_actual ? 100.0 : 0.0,
             RatingFactor::CreatedAt->value => 100 / sqrt($days + 1),
-            RatingFactor::ProductUp->value => in_array($productId, $config['product_up_ids'], true) ? 100.0 : 0.0,
-            RatingFactor::ProductDown->value => in_array($productId, $config['product_down_ids'], true) ? -100.0 : 0.0,
+            RatingFactor::ProductUp->value => in_array($productId, $algorithm->productUpIds(), true) ? 100.0 : 0.0,
+            RatingFactor::ProductDown->value => in_array($productId, $algorithm->productDownIds(), true) ? -100.0 : 0.0,
         ];
     }
 
@@ -264,24 +267,8 @@ class UpdateProductsRatingJob extends AbstractJob
         return [
             'popularity_algorithm_id' => (int)($config['popularity_algorithm_id'] ?? 0),
             'newness_algorithm_id' => (int)($config['newness_algorithm_id'] ?? 0),
-            'category_up_ids' => $this->ids($config['category_up_ids'] ?? []),
-            'category_down_ids' => $this->ids($config['category_down_ids'] ?? []),
-            'product_up_ids' => $this->ids($config['product_up_ids'] ?? []),
-            'product_down_ids' => $this->ids($config['product_down_ids'] ?? []),
             'last_update' => $config['last_update'] ?? null,
         ];
-    }
-
-    /**
-     * @return list<int>
-     */
-    private function ids(mixed $value): array
-    {
-        if (!is_array($value)) {
-            return [];
-        }
-
-        return array_values(array_unique(array_map('intval', array_filter($value, 'is_numeric'))));
     }
 
     /**

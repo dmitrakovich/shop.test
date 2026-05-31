@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Products\RatingAlgorithms\Tables;
 
 use App\Enums\Product\RatingFactor;
+use App\Models\RatingAlgorithm;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -26,6 +28,8 @@ class RatingAlgorithmsTable
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make()
+                    ->visible(fn (RatingAlgorithm $record): bool => !$record->isUsedInRatingConfig()),
             ])
             ->defaultSort('id', 'desc');
     }

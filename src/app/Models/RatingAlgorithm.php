@@ -20,6 +20,10 @@ use Illuminate\Support\Carbon;
  * @property int $created_at_coefficient
  * @property int $product_up_coefficient
  * @property int $product_down_coefficient
+ * @property list<int>|null $category_up_ids
+ * @property list<int>|null $category_down_ids
+ * @property list<int>|null $product_up_ids
+ * @property list<int>|null $product_down_ids
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -41,6 +45,10 @@ class RatingAlgorithm extends Model
         'created_at_coefficient',
         'product_up_coefficient',
         'product_down_coefficient',
+        'category_up_ids',
+        'category_down_ids',
+        'product_up_ids',
+        'product_down_ids',
     ];
 
     /**
@@ -60,7 +68,53 @@ class RatingAlgorithm extends Model
             'created_at_coefficient' => 'integer',
             'product_up_coefficient' => 'integer',
             'product_down_coefficient' => 'integer',
+            'category_up_ids' => 'array',
+            'category_down_ids' => 'array',
+            'product_up_ids' => 'array',
+            'product_down_ids' => 'array',
         ];
+    }
+
+    public function isUsedInRatingConfig(): bool
+    {
+        $config = Config::findCacheable('rating');
+
+        $popularityAlgorithmId = (int)($config['popularity_algorithm_id'] ?? 0);
+        $newnessAlgorithmId = (int)($config['newness_algorithm_id'] ?? 0);
+
+        return $this->id === $popularityAlgorithmId || $this->id === $newnessAlgorithmId;
+    }
+
+    /**
+     * @return list<int>
+     */
+    public function categoryUpIds(): array
+    {
+        return $this->normalizeIds($this->category_up_ids);
+    }
+
+    /**
+     * @return list<int>
+     */
+    public function categoryDownIds(): array
+    {
+        return $this->normalizeIds($this->category_down_ids);
+    }
+
+    /**
+     * @return list<int>
+     */
+    public function productUpIds(): array
+    {
+        return $this->normalizeIds($this->product_up_ids);
+    }
+
+    /**
+     * @return list<int>
+     */
+    public function productDownIds(): array
+    {
+        return $this->normalizeIds($this->product_down_ids);
     }
 
     /**
@@ -79,5 +133,17 @@ class RatingAlgorithm extends Model
         $column = $factor->coefficientColumn();
 
         return (int)$this->{$column};
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function normalizeIds(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_unique(array_map('intval', array_filter($value, 'is_numeric'))));
     }
 }

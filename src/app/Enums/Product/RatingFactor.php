@@ -39,4 +39,13 @@ enum RatingFactor: string implements HasLabel
     {
         return $this->value . '_coefficient';
     }
+
+    public function boostPenaltyPrefix(): ?string
+    {
+        return match ($this) {
+            self::CategoryUp, self::ProductUp => '↑',
+            self::CategoryDown, self::ProductDown => '↓',
+            default => null,
+        };
+    }
 }
