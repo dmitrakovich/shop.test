@@ -59,6 +59,7 @@ instead of calling the API when the token is missing.
 | `BELPOST_S10_SERIES_PREFIXES` | Comma-separated allowed S10 series prefixes. Empty means any valid series. | `PC` |
 | `BELPOST_S10_SERIAL_MIN` / `BELPOST_S10_SERIAL_MAX` | Optional inclusive S10 serial bounds from the Belpost contract. | none |
 | `BELPOST_OMIT_S10CODE_ON_SERIES_MISMATCH` | Omit mismatched S10 codes instead of throwing. | `true` |
+| `BELPOST_GEO_DIRECTORY_ENABLED` | Enables Belpost geo-directory address resolution for recipient registration. | `true` |
 
 COD email import uses IMAP settings from `src/config/services.php`:
 
