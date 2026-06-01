@@ -19,6 +19,20 @@ class BelpostRecipientMapper
     }
 
     /**
+     * Inline recipient for batch list items (Belpost API workaround when `recipient_foreign_id` breaks COD / declared value).
+     *
+     * @return array<string, mixed>
+     */
+    public function toRecipientObject(Order $order): array
+    {
+        $object = $this->toPayload($order, $this->foreignIdFor($order));
+        unset($object['foreign_id']);
+        $object['company_name'] = '';
+
+        return $object;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function toPayload(Order $order, string $foreignId): array

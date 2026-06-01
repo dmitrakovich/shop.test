@@ -3,6 +3,7 @@
 namespace App\Services\Belpost\Sync;
 
 use App\Enums\DeliveryTypeEnum;
+use App\Libraries\Belpost\Exceptions\BelpostApiException;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderTrack;
 use Illuminate\Support\Arr;
@@ -18,8 +19,17 @@ class BelpostOrderItemSyncService
 
         $itemId = Arr::get($item, 'id')
             ?? Arr::get($item, 'item_id')
-            ?? Arr::get($item, 'list_item_id')
-            ?? $order->belpost_item_id;
+            ?? Arr::get($item, 'list_item_id');
+
+        if ($itemId !== null && $itemId !== '') {
+            $itemId = (int)$itemId;
+        } elseif ($order->belpost_item_id !== null) {
+            $itemId = (int)$order->belpost_item_id;
+        } else {
+            throw new BelpostApiException(
+                "Order #{$order->id}: Belpost API response did not contain item id.",
+            );
+        }
 
         $order->update([
             'belpost_item_id' => $itemId,

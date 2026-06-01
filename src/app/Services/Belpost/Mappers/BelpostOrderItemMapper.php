@@ -21,6 +21,7 @@ class BelpostOrderItemMapper
 {
     public function __construct(
         private readonly BelpostRecipientService $recipientService,
+        private readonly BelpostRecipientMapper $recipientMapper,
         private readonly BelpostPhoneNormalizer $phoneNormalizer,
         private readonly BelpostS10CodeValidator $s10CodeValidator,
     ) {}
@@ -38,16 +39,15 @@ class BelpostOrderItemMapper
 
         $this->assertRecipientContact($order, $notification, $email, $phone);
 
-        $recipientForeignId = $this->recipientService->ensureForeignId($order);
-
         $payload = [
             'foreign_id' => (string)$order->id,
             'weight' => $order->getWeightInGrams(),
             'category' => $this->resolveItemCategory($batch),
             'notification' => $notification,
-            'recipient_foreign_id' => $recipientForeignId,
             'recipient_phone' => $phone,
         ];
+
+        $payload = $this->applyRecipientReference($order, $batch, $payload);
 
         $addons = [];
 
@@ -67,6 +67,26 @@ class BelpostOrderItemMapper
         if ($addons !== []) {
             $payload['addons'] = $addons;
         }
+
+        return $payload;
+    }
+
+    /**
+     * Belpost API bug: linking items via `recipient_foreign_id` rejects COD when the batch has declared value.
+     * Inline `recipient_object` matches the registered recipient payload and works until Belpost fixes the API.
+     *
+     * @param  array<string, mixed>  $payload
+     * @return array<string, mixed>
+     */
+    private function applyRecipientReference(Order $order, ?Batch $batch, array $payload): array
+    {
+        if ($batch !== null && $this->batchHasEffectiveDeclaredValue($batch)) {
+            $payload['recipient_object'] = $this->recipientMapper->toRecipientObject($order);
+
+            return $payload;
+        }
+
+        $payload['recipient_foreign_id'] = $this->recipientService->ensureForeignId($order);
 
         return $payload;
     }
