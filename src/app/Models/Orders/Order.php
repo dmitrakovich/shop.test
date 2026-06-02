@@ -128,6 +128,9 @@ class Order extends Model
         'status',
         'status_updated_at',
         'admin_id',
+        'batch_id',
+        'belpost_item_id',
+        'belpost_s10code',
         'created_at',
     ];
 
@@ -449,12 +452,13 @@ class Order extends Model
 
     /**
      * Order weight is stored in kilograms; Belpost API expects grams.
+     * When weight is missing or zero, defaults to 1 kg (1000 g).
      */
     public function getWeightInGrams(): int
     {
         $kg = (float)($this->weight ?: 0);
         if ($kg <= 0) {
-            return 1;
+            return 1000;
         }
 
         return max((int)round($kg * 1000), 1);
