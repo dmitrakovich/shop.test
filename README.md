@@ -64,8 +64,13 @@ Never commit real secrets, API tokens, DSNs, database passwords, or SSH keys.
 Start with [`docs/README.md`](docs/README.md) for subsystem docs and runbooks.
 Recently documented areas include:
 
+- [`docs/catalog-product-admin.md`](docs/catalog-product-admin.md) - Filament
+  product editing workflow, SKU/brand uniqueness, and duplicate cleanup notes.
 - [`docs/belpost-batch-mailing.md`](docs/belpost-batch-mailing.md) - Belpost
   batch API workflow, Filament operations, shipment constraints, blanks, and
   COD import.
+- [`docs/promo-short-links.md`](docs/promo-short-links.md) - Filament
+  short-link generator, UTM normalization, redirect tracking, and common
+  pitfalls.
 - [`docs/product-rating.md`](docs/product-rating.md) - catalog rating
   algorithms, admin workflow, scheduler, and storefront sort behavior.

@@ -96,8 +96,11 @@ Header actions on the edit page map directly to lifecycle services:
 | `deleteBelpostAction()` | `BelpostBatchListService::delete()` | Deletes the remote list and clears local Belpost fields. |
 
 Per-order relation actions call `BelpostBatchItemService::create()`,
-`update()`, or `delete()`. The item sync first ensures a Belpost recipient
-exists for the order, then sends the item payload.
+`update()`, or `delete()`. For ordinary batches, item sync first ensures a
+Belpost recipient exists for the order and sends `recipient_foreign_id`. For
+batches with effective declared value, the item payload inlines
+`recipient_object` instead; this works around a Belpost API rejection of COD
+items linked through `recipient_foreign_id`.
 
 ## Local state model
 
@@ -140,6 +143,10 @@ committed, in OPS, or has a `dispatch_date`.
   Belpost.
 - When declared value applies, item payloads include
   `addons.declared_value`; the COD addon is capped to the declared value.
+- Declared-value item payloads include an inline `recipient_object` instead of
+  `recipient_foreign_id`. Keep recipient field fixes in both
+  `BelpostRecipientMapper::toPayload()` and `toRecipientObject()` paths because
+  the inline object is derived from the same recipient mapping.
 - Declared value or tariff-valid partial receipt adds `addons.shelf_life`.
 - Electronic notifications require a recipient phone with at least nine
   digits. Every item also needs an email, resolved from order, user, fallback
