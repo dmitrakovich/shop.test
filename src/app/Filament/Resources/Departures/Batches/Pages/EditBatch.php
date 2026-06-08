@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Departures\Batches\Pages;
 
+use App\Enums\Belpost\BelpostPaymentType;
 use App\Enums\Belpost\BelpostPostalDeliveryType;
 use App\Filament\Resources\Departures\Batches\BatchResource;
 use App\Libraries\Belpost\Exceptions\BelpostApiException;
@@ -68,6 +69,21 @@ class EditBatch extends EditRecord
     /**
      * When the tariff is e-commerce, the cabinet must not persist “partial receipt”: API treats it like attachment declarations.
      */
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        if (
+            BelpostPaymentType::tryFromFormState($data['payment_type'] ?? null)?->requiresCardNumber()
+            && blank($data['card_number'] ?? null)
+        ) {
+            $data['card_number'] = config('belpost.defaults.card_number');
+        }
+
+        return $data;
+    }
+
+    /**
+     * When the tariff is e-commerce, the cabinet must not persist “partial receipt”: API treats it like attachment declarations.
+     */
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $enum = BelpostPostalDeliveryType::tryFromFormState($data['postal_delivery_type'] ?? null);
@@ -79,6 +95,13 @@ class EditBatch extends EditRecord
         }
         if ($enum?->requiresNegotiatedRateFalseForApi()) {
             $data['negotiated_rate'] = false;
+        }
+
+        if (
+            BelpostPaymentType::tryFromFormState($data['payment_type'] ?? null)?->requiresCardNumber()
+            && blank($data['card_number'] ?? null)
+        ) {
+            $data['card_number'] = config('belpost.defaults.card_number');
         }
 
         return $data;
