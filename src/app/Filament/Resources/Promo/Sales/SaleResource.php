@@ -125,37 +125,23 @@ class SaleResource extends Resource
                                     ->multiple()
                                     ->required()
                                     ->searchable()
-                                    ->getSearchResultsUsing(fn (?string $search, Get $get) => match ($get('type')) {
-                                        SettingType::CATEGORY => Category::query()
-                                            ->when($search, fn ($q) => $q->where('title', 'like', "%{$search}%"))
-                                            ->whereNotIn('id', [1, 2, 25, 35])
-                                            ->limit(50)
-                                            ->pluck('title', 'id'),
-                                        SettingType::MANUFACTURER => Manufacturer::query()
-                                            ->when($search, fn ($q) => $q->where('name', 'like', "%{$search}%"))
-                                            ->limit(50)
-                                            ->pluck('name', 'id'),
-                                        SettingType::PRODUCT => Product::query()
-                                            ->when($search, fn ($q) => $q->where('id', 'like', "{$search}%"))
-                                            ->limit(50)
-                                            ->pluck('id', 'id'),
-                                        SettingType::EXCLUDED_PRODUCT => Product::query()
-                                            ->when($search, fn ($q) => $q->where('id', 'like', "{$search}%"))
-                                            ->limit(50)
-                                            ->pluck('id', 'id'),
-                                        SettingType::COLLECTION => Collection::query()
-                                            ->when($search, fn ($q) => $q->where('name', 'like', "%{$search}%"))
-                                            ->pluck('name', 'id'),
-                                        default => [],
-                                    })
-                                    ->options(fn (Get $get) => match ($get('type')) {
-                                        SettingType::CATEGORY => Category::query()->whereNotIn('id', [1, 2, 25, 35])->pluck('title', 'id'),
-                                        SettingType::MANUFACTURER => Manufacturer::query()->pluck('name', 'id'),
-                                        SettingType::PRODUCT => Product::query()->orderByDesc('id')->pluck('id', 'id'),
-                                        SettingType::EXCLUDED_PRODUCT => Product::query()->orderByDesc('id')->pluck('id', 'id'),
-                                        SettingType::COLLECTION => Collection::query()->orderByDesc('id')->pluck('name', 'id'),
-                                        default => [],
-                                    }),
+                                    ->getSearchResultsUsing(
+                                        fn (?string $search, Get $get): array => self::saleSettingIdsSearchResults(
+                                            $search,
+                                            self::resolveSettingType($get('type')),
+                                        ),
+                                    )
+                                    ->getOptionLabelsUsing(
+                                        fn (array $values, Get $get): array => self::saleSettingIdsOptionLabels(
+                                            $values,
+                                            self::resolveSettingType($get('type')),
+                                        ),
+                                    )
+                                    ->options(
+                                        fn (Get $get): array => self::saleSettingIdsOptions(
+                                            self::resolveSettingType($get('type')),
+                                        ),
+                                    ),
                                 TextInput::make('percentage')
                                     ->numeric()
                                     ->minValue(0)
@@ -163,12 +149,16 @@ class SaleResource extends Resource
                                     ->suffix('%')
                                     ->label('Скидка')
                                     ->default(0)
-                                    ->disabled(fn (Get $get) => $get('type') === SettingType::EXCLUDED_PRODUCT)
+                                    ->disabled(
+                                        fn (Get $get) => self::resolveSettingType($get('type')) === SettingType::EXCLUDED_PRODUCT,
+                                    )
                                     ->dehydrated()
-                                    ->required()
+                                    ->required(
+                                        fn (Get $get) => self::resolveSettingType($get('type')) !== SettingType::EXCLUDED_PRODUCT,
+                                    )
                                     ->formatStateUsing(fn (?float $state) => is_null($state) ? null : $state * 100)
                                     ->dehydrateStateUsing(function (?float $state, Get $get) {
-                                        return $get('type') === SettingType::EXCLUDED_PRODUCT
+                                        return self::resolveSettingType($get('type')) === SettingType::EXCLUDED_PRODUCT
                                             ? 0
                                             : (is_null($state) ? null : round($state / 100, 5));
                                     }),
@@ -344,5 +334,110 @@ class SaleResource extends Resource
             'create' => CreateSale::route('/create'),
             'edit' => EditSale::route('/{record}/edit'),
         ];
+    }
+
+    private static function resolveSettingType(mixed $type): ?SettingType
+    {
+        if ($type instanceof SettingType) {
+            return $type;
+        }
+
+        if (is_int($type) || (is_string($type) && is_numeric($type))) {
+            return SettingType::tryFrom((int) $type);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return list<int>
+     */
+    private static function normalizeIds(array $values): array
+    {
+        return array_values(array_unique(array_map('intval', array_filter($values, 'is_numeric'))));
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private static function saleSettingIdsSearchResults(?string $search, ?SettingType $type): array
+    {
+        return match ($type) {
+            SettingType::CATEGORY => Category::query()
+                ->when($search, fn ($query) => $query->where('title', 'like', "%{$search}%"))
+                ->whereNotIn('id', [1, 2, 25, 35])
+                ->limit(50)
+                ->pluck('title', 'id')
+                ->all(),
+            SettingType::MANUFACTURER => Manufacturer::query()
+                ->when($search, fn ($query) => $query->where('name', 'like', "%{$search}%"))
+                ->limit(50)
+                ->pluck('name', 'id')
+                ->all(),
+            SettingType::PRODUCT, SettingType::EXCLUDED_PRODUCT => Product::query()
+                ->when($search, fn ($query) => $query->where('id', 'like', "{$search}%"))
+                ->limit(50)
+                ->pluck('id', 'id')
+                ->all(),
+            SettingType::COLLECTION => Collection::query()
+                ->when($search, fn ($query) => $query->where('name', 'like', "%{$search}%"))
+                ->pluck('name', 'id')
+                ->all(),
+            default => [],
+        };
+    }
+
+    /**
+     * @param  array<array-key, mixed>  $values
+     * @return array<int, string>
+     */
+    private static function saleSettingIdsOptionLabels(array $values, ?SettingType $type): array
+    {
+        $ids = self::normalizeIds($values);
+
+        if ($ids === []) {
+            return [];
+        }
+
+        return match ($type) {
+            SettingType::CATEGORY => Category::query()
+                ->whereIn('id', $ids)
+                ->pluck('title', 'id')
+                ->all(),
+            SettingType::MANUFACTURER => Manufacturer::query()
+                ->whereIn('id', $ids)
+                ->pluck('name', 'id')
+                ->all(),
+            SettingType::PRODUCT, SettingType::EXCLUDED_PRODUCT => Product::query()
+                ->whereIn('id', $ids)
+                ->pluck('id', 'id')
+                ->all(),
+            SettingType::COLLECTION => Collection::query()
+                ->whereIn('id', $ids)
+                ->pluck('name', 'id')
+                ->all(),
+            default => [],
+        };
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private static function saleSettingIdsOptions(?SettingType $type): array
+    {
+        return match ($type) {
+            SettingType::CATEGORY => Category::query()
+                ->whereNotIn('id', [1, 2, 25, 35])
+                ->pluck('title', 'id')
+                ->all(),
+            SettingType::MANUFACTURER => Manufacturer::query()
+                ->pluck('name', 'id')
+                ->all(),
+            SettingType::COLLECTION => Collection::query()
+                ->orderByDesc('id')
+                ->pluck('name', 'id')
+                ->all(),
+            default => [],
+        };
     }
 }
