@@ -343,13 +343,14 @@ class SaleResource extends Resource
         }
 
         if (is_int($type) || (is_string($type) && is_numeric($type))) {
-            return SettingType::tryFrom((int) $type);
+            return SettingType::tryFrom((int)$type);
         }
 
         return null;
     }
 
     /**
+     * @param  array<mixed>  $values
      * @return list<int>
      */
     private static function normalizeIds(array $values): array
