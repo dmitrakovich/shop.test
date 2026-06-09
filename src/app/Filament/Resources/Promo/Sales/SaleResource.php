@@ -442,7 +442,7 @@ class SaleResource extends Resource
 
     private static function saleSettingProductLabel(Product $product): string
     {
-        $label = (string) $product->id;
+        $label = (string)$product->id;
 
         if ($product->trashed()) {
             $label .= ' (удалён)';
