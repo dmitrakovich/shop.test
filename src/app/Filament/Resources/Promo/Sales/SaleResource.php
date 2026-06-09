@@ -419,12 +419,11 @@ class SaleResource extends Resource
      */
     private static function saleSettingProductSearchResults(?string $search): array
     {
-        return Product::withTrashed()
+        return Product::query()
             ->when($search, fn ($query) => $query->where('id', 'like', "{$search}%"))
             ->orderByDesc('id')
             ->limit(50)
-            ->get(['id', 'deleted_at'])
-            ->mapWithKeys(fn (Product $product): array => [$product->id => self::saleSettingProductLabel($product)])
+            ->pluck('id', 'id')
             ->all();
     }
 
