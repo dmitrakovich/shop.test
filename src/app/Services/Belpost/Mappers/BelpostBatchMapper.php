@@ -17,8 +17,8 @@ class BelpostBatchMapper
         $paymentType = $this->resolvePaymentType($batch);
         $postalType = $this->resolvePostalDeliveryType($batch);
 
+        // Name is assigned by Belpost in LK; do not send a local label (e.g. "Партия #123").
         $payload = [
-            'name' => $batch->name ?: "Партия #{$batch->id}",
             'postal_delivery_type' => $postalType->value,
             'direction' => $batch->direction ?? config('belpost.defaults.direction'),
             'payment_type' => $paymentType,

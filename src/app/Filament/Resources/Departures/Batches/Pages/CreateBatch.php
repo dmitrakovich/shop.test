@@ -23,7 +23,12 @@ class CreateBatch extends CreateRecord
         $data['payment_type'] ??= BelpostPaymentType::tryFrom(
             (string)config('belpost.defaults.payment_type')
         )?->value;
-        $data['card_number'] ??= config('belpost.defaults.card_number');
+        if (
+            BelpostPaymentType::tryFromFormState($data['payment_type'] ?? null)?->requiresCardNumber()
+            && blank($data['card_number'] ?? null)
+        ) {
+            $data['card_number'] = config('belpost.defaults.card_number');
+        }
 
         $enum = BelpostPostalDeliveryType::tryFromFormState($data['postal_delivery_type'] ?? null);
         if ($enum?->isEcommercePostal()) {

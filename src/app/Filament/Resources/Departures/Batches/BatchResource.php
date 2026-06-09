@@ -46,8 +46,12 @@ class BatchResource extends Resource
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')
-                            ->label('Название')
-                            ->maxLength(255)
+                            ->label('Название в Белпочте')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->placeholder('Присваивается Белпочтой после создания партии')
+                            ->helperText('Не задавайте название вручную — для поиска в ЛК Белпочты используйте значение из этого поля после синхронизации.')
+                            ->visibleOn('edit')
                             ->columnSpanFull(),
                         Select::make('postal_delivery_type')
                             ->label('Тип отправления')
@@ -83,11 +87,30 @@ class BatchResource extends Resource
                             ->default(config('belpost.defaults.payment_type'))
                             ->required()
                             ->live()
+                            ->afterStateUpdated(function (mixed $state, callable $set, Get $get): void {
+                                if (!BelpostPaymentType::tryFromFormState($state)?->requiresCardNumber()) {
+                                    return;
+                                }
+
+                                if (blank($get('card_number'))) {
+                                    $set('card_number', config('belpost.defaults.card_number'));
+                                }
+                            })
                             ->native(false),
                         TextInput::make('card_number')
                             ->label('Номер карты (л/с)')
                             ->maxLength(64)
-                            ->default(config('belpost.defaults.card_number'))
+                            ->default(fn (): ?string => config('belpost.defaults.card_number'))
+                            ->afterStateHydrated(function (TextInput $component, ?string $state): void {
+                                if (filled($state)) {
+                                    return;
+                                }
+
+                                $default = config('belpost.defaults.card_number');
+                                if (filled($default)) {
+                                    $component->state($default);
+                                }
+                            })
                             ->visible(fn (Get $get): bool => BelpostPaymentType::tryFromFormState($get('payment_type'))?->requiresCardNumber() ?? false)
                             ->required(fn (Get $get): bool => BelpostPaymentType::tryFromFormState($get('payment_type'))?->requiresCardNumber() ?? false),
                         Toggle::make('negotiated_rate')
@@ -150,8 +173,8 @@ class BatchResource extends Resource
                     ->label('№')
                     ->sortable(),
                 TextColumn::make('name')
-                    ->label('Название')
-                    ->placeholder(fn (Batch $record): string => "Партия #{$record->id}")
+                    ->label('Название в Белпочте')
+                    ->placeholder('—')
                     ->searchable(),
                 TextColumn::make('orders_count')
                     ->counts('orders')

@@ -19,7 +19,7 @@ class BelpostBatchSyncService
         $batch->update([
             'belpost_list_id' => Arr::get($response, 'id', $batch->belpost_list_id),
             'belpost_status' => Arr::get($response, 'status'),
-            'name' => Arr::get($response, 'name', $batch->name),
+            'name' => Arr::get($response, 'name') ?: $batch->name,
             'postal_delivery_type' => Arr::get($response, 'postal_delivery_type', $batch->postal_delivery_type),
             'direction' => Arr::get($response, 'direction', $batch->direction),
             'payment_type' => Arr::get($response, 'payment_type', $batch->payment_type),
@@ -57,6 +57,7 @@ class BelpostBatchSyncService
             'belpost_status' => null,
             'belpost_document_id' => null,
             'belpost_sync_error' => null,
+            'name' => null,
         ]);
 
         $batch->orders()->update([
