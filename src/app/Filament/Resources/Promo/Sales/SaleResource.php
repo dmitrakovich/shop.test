@@ -156,7 +156,7 @@ class SaleResource extends Resource
                                     ->required(
                                         fn (Get $get) => self::resolveSettingType($get('type')) !== SettingType::EXCLUDED_PRODUCT,
                                     )
-                                    ->formatStateUsing(fn (?float $state) => is_null($state) ? null : $state * 100)
+                                    ->formatStateUsing(fn (?float $state) => is_null($state) ? null : round($state * 100, 2))
                                     ->dehydrateStateUsing(function (?float $state, Get $get) {
                                         return self::resolveSettingType($get('type')) === SettingType::EXCLUDED_PRODUCT
                                             ? 0
@@ -375,11 +375,7 @@ class SaleResource extends Resource
                 ->limit(50)
                 ->pluck('name', 'id')
                 ->all(),
-            SettingType::PRODUCT, SettingType::EXCLUDED_PRODUCT => Product::query()
-                ->when($search, fn ($query) => $query->where('id', 'like', "{$search}%"))
-                ->limit(50)
-                ->pluck('id', 'id')
-                ->all(),
+            SettingType::PRODUCT, SettingType::EXCLUDED_PRODUCT => self::saleSettingProductSearchResults($search),
             SettingType::COLLECTION => Collection::query()
                 ->when($search, fn ($query) => $query->where('name', 'like', "%{$search}%"))
                 ->pluck('name', 'id')
@@ -409,16 +405,50 @@ class SaleResource extends Resource
                 ->whereIn('id', $ids)
                 ->pluck('name', 'id')
                 ->all(),
-            SettingType::PRODUCT, SettingType::EXCLUDED_PRODUCT => Product::query()
-                ->whereIn('id', $ids)
-                ->pluck('id', 'id')
-                ->all(),
+            SettingType::PRODUCT, SettingType::EXCLUDED_PRODUCT => self::saleSettingProductOptionLabels($ids),
             SettingType::COLLECTION => Collection::query()
                 ->whereIn('id', $ids)
                 ->pluck('name', 'id')
                 ->all(),
             default => [],
         };
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private static function saleSettingProductSearchResults(?string $search): array
+    {
+        return Product::query()
+            ->when($search, fn ($query) => $query->where('id', 'like', "{$search}%"))
+            ->orderByDesc('id')
+            ->limit(50)
+            ->pluck('id', 'id')
+            ->all();
+    }
+
+    /**
+     * @param  list<int>  $ids
+     * @return array<int, string>
+     */
+    private static function saleSettingProductOptionLabels(array $ids): array
+    {
+        return Product::withTrashed()
+            ->whereIn('id', $ids)
+            ->get(['id', 'deleted_at'])
+            ->mapWithKeys(fn (Product $product): array => [$product->id => self::saleSettingProductLabel($product)])
+            ->all();
+    }
+
+    private static function saleSettingProductLabel(Product $product): string
+    {
+        $label = (string)$product->id;
+
+        if ($product->trashed()) {
+            $label .= ' (удалён)';
+        }
+
+        return $label;
     }
 
     /**

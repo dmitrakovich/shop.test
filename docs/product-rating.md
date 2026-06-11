@@ -14,6 +14,8 @@ integer scores on each product:
   `src/app/Enums/Product/RatingFactor.php`
 - Filament resource:
   `src/app/Filament/Resources/Products/RatingAlgorithms/**`
+- Boost/penalty list migration:
+  `src/database/migrations/2026_05_24_170000_add_boost_penalty_lists_to_rating_algorithms_table.php`
 - Recalculation job: `src/app/Jobs/UpdateProductsRatingJob.php`
 - Console command: `src/app/Console/Commands/UpdateRating.php`
 - Schedule: `src/routes/console.php`
@@ -29,12 +31,19 @@ all factors listed below.
 
 The list page provides two header actions:
 
-1. **Settings** - choose the algorithm used for popularity, the algorithm used
-   for newness, and optional product/category boost or penalty lists.
+1. **Settings** - choose the algorithm used for popularity and the algorithm
+   used for newness.
 2. **Recalculate rating** - runs `UpdateProductsRatingJob::dispatchSync()` in
    the current request and updates product scores immediately.
 
-The settings are stored in the `configs` table with key `rating`.
+The settings are stored in the `configs` table with key `rating`; current
+settings contain only `popularity_algorithm_id`, `newness_algorithm_id`, and
+`last_update`.
+
+Boost and penalty lists are edited on each rating algorithm record, not in the
+global settings modal. If the same product or category should affect both the
+default popularity score and the newness score, add it to both selected
+algorithms.
 
 ## Factors and scoring
 
@@ -56,12 +65,12 @@ Both values are rounded to integers and written back to `products` in chunks of
 | Purchases | Yandex Metrika `ym:s:productPurchasedUniq`, last 30 days through yesterday | Min/max normalized to 0..100. |
 | Price | Current product price | Min/max normalized to 0..100. Use a negative coefficient to favor lower prices. |
 | Discount | Percent difference between `old_price` and `price` | Min/max normalized to 0..100; zero when `old_price` is empty or not greater than `price`. |
-| Category up | Category IDs in rating settings | `100` when matched, otherwise `0`. |
-| Category down | Category IDs in rating settings | `-100` when matched, otherwise `0`. |
+| Category up | Category IDs on the selected rating algorithm | `100` when matched, otherwise `0`. |
+| Category down | Category IDs on the selected rating algorithm | `-100` when matched, otherwise `0`. |
 | Season | Related season marked actual | `100` when actual, otherwise `0`. |
 | Created at | Product age in days | `100 / sqrt(days + 1)`, so newer products score higher. |
-| Product up | Product IDs in rating settings | `100` when matched, otherwise `0`. |
-| Product down | Product IDs in rating settings | `-100` when matched, otherwise `0`. |
+| Product up | Product IDs on the selected rating algorithm | `100` when matched, otherwise `0`. |
+| Product down | Product IDs on the selected rating algorithm | `-100` when matched, otherwise `0`. |
 
 The rating columns are signed integers, so penalties can push final scores
 below zero.
@@ -108,7 +117,9 @@ Recommendation sliders in `SliderService` also order several product sets by
 The rating algorithm migration creates `rating_algorithms`, adds
 `products.newness_rating`, and converts legacy `configs.rating` algorithm data
 when present. A follow-up migration makes `products.rating` signed to support
-negative penalties.
+negative penalties. The boost/penalty list migration moves legacy global lists
+from `configs.rating` into the selected popularity and newness algorithm
+records, then strips those lists from the config row.
 
 When changing factors or score semantics:
 

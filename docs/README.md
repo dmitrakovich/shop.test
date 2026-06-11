@@ -9,7 +9,9 @@ infer from code alone.
 | Audience | Page | Covers |
 | --- | --- | --- |
 | Developers | [Repository README](../README.md) | Stack, app layout, local Sail workflow, quality commands. |
+| Catalog/admin | [Catalog product admin](catalog-product-admin.md) | Filament product workflow, SKU/brand uniqueness, migration troubleshooting. |
 | Catalog/admin | [Product rating](product-rating.md) | Rating algorithms, Filament workflow, scheduled recalculation, storefront sort behavior. |
+| Promo/admin | [Promo short links](promo-short-links.md) | Filament short-link generator, UTM normalization, redirect counters. |
 | Departures/operations | [Belpost batch mailing](belpost-batch-mailing.md) | Filament batch workflow, Belpost API sync, shipment payload rules, blanks, COD import. |
 | Operations | [Server setup](server-setup.md) | Host user, PHP-FPM/nginx, SQL Server driver, deploy skeleton, cron, supervisor links. |
 | Operations | [Supervisor](supervisor.md) | Queue workers and Horizon process supervision. |
