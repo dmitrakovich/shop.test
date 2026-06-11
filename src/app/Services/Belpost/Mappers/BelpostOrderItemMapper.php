@@ -144,15 +144,31 @@ class BelpostOrderItemMapper
             $addons['declared_value'] = max($declared, $cod);
         }
 
-        if ($this->batchHasEffectiveDeclaredValue($batch) || $this->partialReceiptRequiresShelfLifeAddon($batch)) {
-            $days = (int)config('belpost.defaults.shelf_life_days', 10);
-            if ($days < 1) {
-                $days = 10;
-            }
-            $addons['shelf_life'] = $days;
+        if ($this->requiresShelfLifeAddon($batch)) {
+            $addons['shelf_life'] = $this->resolveShelfLifeDays();
         }
 
         return $addons;
+    }
+
+    private function requiresShelfLifeAddon(Batch $batch): bool
+    {
+        if ($this->batchHasEffectiveDeclaredValue($batch)) {
+            return true;
+        }
+
+        if ($this->partialReceiptRequiresShelfLifeAddon($batch)) {
+            return true;
+        }
+
+        return $this->resolveBatchPostalDeliveryEnum($batch)?->isEcommercePostal() ?? false;
+    }
+
+    private function resolveShelfLifeDays(): int
+    {
+        $days = (int)config('belpost.defaults.shelf_life_days', 10);
+
+        return $days >= 1 ? $days : 10;
     }
 
     private function batchHasEffectiveDeclaredValue(Batch $batch): bool
@@ -165,7 +181,7 @@ class BelpostOrderItemMapper
     }
 
     /**
-     * Adds shelf life addon when declaration or tariff-valid partial enclosure receipt applies.
+     * Adds shelf life addon when partial enclosure receipt applies on a tariff that supports it.
      */
     private function partialReceiptRequiresShelfLifeAddon(Batch $batch): bool
     {

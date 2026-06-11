@@ -62,6 +62,7 @@ class BelpostBatchListService
     public function commit(Batch $batch): Batch
     {
         $this->guards->ensureListId($batch);
+        $this->guards->ensureAllOrdersSyncedToBelpost($batch);
 
         $response = ApiBelpostFacade::batchMailingCommitList($batch->belpost_list_id)
             ->request()

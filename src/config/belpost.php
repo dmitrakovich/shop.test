@@ -22,7 +22,7 @@ return [
         'fallback_recipient_email' => env('BELPOST_FALLBACK_RECIPIENT_EMAIL'),
         'sender_phone' => env('BELPOST_SENDER_PHONE', config('app.phone')),
         'sender_email' => env('BELPOST_SENDER_EMAIL', config('app.email')),
-        // Item `addons.shelf_life` when batch flags require it.
+        // Item `addons.shelf_life` for e-commerce tariffs and when batch flags require it.
         'shelf_life_days' => (int)env('BELPOST_SHELF_LIFE_DAYS', 10),
         // Batch item `category`: official API allows 0, 1, 2; 1 is used for typical e-commerce merchandise.
         'item_category_ecommerce' => (int)env('BELPOST_ITEM_CATEGORY_ECOMMERCE', 1),
