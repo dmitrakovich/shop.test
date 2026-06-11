@@ -38,4 +38,25 @@ class BelpostBatchGuards
             );
         }
     }
+
+    public function ensureAllOrdersSyncedToBelpost(Batch $batch): void
+    {
+        $unsyncedIds = $batch->orders()
+            ->whereNull('belpost_item_id')
+            ->orderBy('id')
+            ->pluck('id');
+
+        if ($unsyncedIds->isEmpty()) {
+            return;
+        }
+
+        $listed = $unsyncedIds->take(10)->map(static fn (int $id): string => "#{$id}")->join(', ');
+        $suffix = $unsyncedIds->count() > 10 ? '…' : '';
+
+        throw new BelpostApiException(
+            'Нельзя сформировать партию: не все заказы синхронизированы с Белпочтой. '
+            . "Не отправлены: {$listed}{$suffix}. "
+            . 'Синхронизируйте заказы вручную или нажмите «Синхронизировать заказы в Белпочте».',
+        );
+    }
 }

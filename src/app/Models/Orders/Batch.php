@@ -91,4 +91,14 @@ class Batch extends Model
     {
         return $this->belpost_list_id !== null;
     }
+
+    public function allOrdersSyncedToBelpost(): bool
+    {
+        return !$this->orders()->whereNull('belpost_item_id')->exists();
+    }
+
+    public function unsyncedBelpostOrdersCount(): int
+    {
+        return $this->orders()->whereNull('belpost_item_id')->count();
+    }
 }

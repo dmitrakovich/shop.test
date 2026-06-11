@@ -183,8 +183,18 @@ class EditBatch extends EditRecord
             ->icon(Heroicon::OutlinedCheckCircle)
             ->color('success')
             ->visible(fn (Batch $record): bool => $record->isLinkedToBelpost() && $record->isBelpostEditable())
+            ->disabled(fn (Batch $record): bool => !$record->allOrdersSyncedToBelpost())
+            ->tooltip(function (Batch $record): ?string {
+                if ($record->allOrdersSyncedToBelpost()) {
+                    return null;
+                }
+
+                $count = $record->unsyncedBelpostOrdersCount();
+
+                return "Сначала синхронизируйте все заказы с Белпочтой ({$count} не отправлено)";
+            })
             ->requiresConfirmation()
-            ->modalDescription('После формирования изменить отправления будет нельзя.')
+            ->modalDescription('После формирования изменить отправления будет нельзя. Все заказы партии должны быть отправлены в Белпочту.')
             ->action(function (Batch $record): void {
                 $this->runBelpostAction(
                     fn () => app(BelpostBatchListService::class)->commit($record),
