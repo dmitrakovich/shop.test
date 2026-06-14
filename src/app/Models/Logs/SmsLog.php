@@ -17,9 +17,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $mailing_id
  * @property string $route
  * @property string $phone
+ * @property string|null $sms_id
  * @property string $text
  * @property string|null $status
  * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  *
  * @property-read \App\Admin\Models\Administrator|null $admin
  * @property-read \App\Models\User\User|null $user
@@ -47,16 +49,10 @@ class SmsLog extends Model
         'route',
         'phone',
         'text',
+        'sms_id',
         'status',
         'created_at',
     ];
-
-    /**
-     * The name of the "updated at" column.
-     *
-     * @var string|null
-     */
-    public const UPDATED_AT = null;
 
     /**
      * The manager who sent the message

@@ -61,7 +61,7 @@ class ListSms extends ListRecords
             ->action(function (array $data): void {
                 $phone = (string)$data['phone'];
                 $text = (string)$data['text'];
-                $route = (string)$data['route'];
+                $route = $data['route']->value;
                 $adminId = auth('admin')->id();
                 $logService = app(LogService::class);
 
@@ -92,7 +92,8 @@ class ListSms extends ListRecords
                     text: $text,
                     route: $route,
                     adminId: is_int($adminId) ? $adminId : null,
-                    status: $response->getDescription()
+                    status: $response->getDescription(),
+                    smsId: $response->getSmsId(),
                 );
 
                 Notification::make()

@@ -7,6 +7,7 @@ use App\Models\Orders\Order;
 use App\Models\User\User;
 use App\Notifications\AbstractSmsTraffic;
 use App\Services\LogService;
+use Illuminate\Notifications\Client\Response\SmsTrafficResponse;
 use Illuminate\Notifications\Events\NotificationSent;
 
 class LogNotification
@@ -20,21 +21,16 @@ class LogNotification
 
     /**
      * Handle the event.
-     *
-     * @return void
      */
-    public function handle(NotificationSent|NotificationSkipped $event)
+    public function handle(NotificationSent|NotificationSkipped $event): void
     {
         $notification = $event->notification;
-        if (!($notification instanceof AbstractSmsTraffic)) {
+        if (!$notification instanceof AbstractSmsTraffic) {
             return;
         }
 
-        $status = match ($event::class) {
-            NotificationSent::class => $event->response->getDescription(),
-            NotificationSkipped::class => $this->logService::SMS_SKIPPED_KEY,
-        };
         $notifiable = $event->notifiable;
+        [$status, $smsId] = $this->resolveDeliveryMeta($event);
 
         $this->logService->logSms(
             phone: $notifiable->routeNotificationFor('smstraffic', $notification),
@@ -43,7 +39,25 @@ class LogNotification
             userId: $notifiable instanceof User ? $notifiable->id : null,
             orderId: $notifiable instanceof Order ? $notifiable->id : null,
             mailingId: $notification->getMailingId(),
-            status: $status
+            status: $status,
+            smsId: $smsId,
         );
+    }
+
+    /**
+     * @return array{0: ?string, 1: ?string}
+     */
+    private function resolveDeliveryMeta(NotificationSent|NotificationSkipped $event): array
+    {
+        if ($event instanceof NotificationSkipped) {
+            return [LogService::SMS_SKIPPED_KEY, null];
+        }
+
+        $response = $event->response;
+        if (!$response instanceof SmsTrafficResponse) {
+            return [null, null];
+        }
+
+        return [$response->getDescription(), $response->getSmsId()];
     }
 }

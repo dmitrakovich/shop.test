@@ -12,8 +12,69 @@ alwaysApply: false
   - `DB_DATABASE=test`
   - `QUEUE_CONNECTION=sync`
   - cache/session/mail in-memory/array-like drivers
+- Reference dump: `src/database/schema/mysql-schema.sql` (do not edit by hand unless the team explicitly refreshes it).
 
-## Migration style
+## Running migrations
 
-- Prefer additive, backwards-compatible migrations when possible.
-- Keep schema changes compatible with MySQL strict mode (`config/database.php` uses `strict => true`).
+- Run **via Sail** from `src/`:
+  - `cd src && ./vendor/bin/sail artisan migrate`
+  - single file: `cd src && ./vendor/bin/sail artisan migrate --path=database/migrations/YYYY_MM_DD_HHMMSS_name.php`
+
+## File naming & structure
+
+- Location: `src/database/migrations/`.
+- Name pattern: `YYYY_MM_DD_HHMMSS_{action}_{subject}.php`.
+  - Examples: `add_sms_id_and_updated_at_to_log_sms_table`, `create_device_consents_table`, `drop_product_carousels_table`, `make_banner_position_not_null`, `rename_banner_index_bottom_to_index_category`.
+- Use **anonymous class** returning `Migration`:
+
+```php
+return new class extends Migration
+{
+    public function up(): void { /* ... */ }
+
+    public function down(): void { /* ... */ }
+};
+```
+
+- Prefer `public function up(): void` / `down(): void` with return type; docblocks on `up`/`down` are optional (both styles exist in the repo).
+- **Never edit already-deployed migrations** — add a new migration instead.
+
+## Schema change style
+
+- Prefer **additive, backwards-compatible** changes when possible.
+- Keep schema compatible with MySQL strict mode (`config/database.php`: `strict => true`).
+- Use `Schema::table()` / `Schema::create()` + `Blueprint`; raw SQL only when Blueprint is insufficient (e.g. MySQL `ENUM` changes).
+- When adding columns to existing tables, place them logically with `->after('column')` (common in this project).
+- Type conventions seen in the codebase:
+  - PK / FK ids: `$table->id()`, `$table->foreignId(...)`, `$table->unsignedBigInteger(...)`.
+  - External provider ids (e.g. SmsTraffic message id): `string(..., 64)`, nullable, indexed — may exceed PHP/MySQL bigint range.
+  - Short status codes: `string(..., 32)` or similar fixed length.
+  - Flags: `boolean()->default(false)`.
+  - New tables: `$table->timestamps()` unless there is a deliberate reason not to.
+- Indexes: add explicitly when the column will be queried (`$table->index('sms_id')` or `->index()` chained on the column).
+- Foreign keys: prefer `foreignId(...)->constrained(...)->nullOnDelete()->cascadeOnUpdate()`; when changing FK behavior, `dropForeign` in a separate `Schema::table` closure, then re-add.
+
+## Timestamps on models
+
+- Prefer Laravel's standard **`updated_at`** over custom columns like `status_updated_at` when the model previously had `UPDATED_AT = null`.
+- Remove `public const UPDATED_AT = null` and let Eloquent maintain `updated_at` on `save()` / `update()`.
+- Do **not** put `updated_at` in `$fillable`; cast via default Eloquent datetime handling.
+
+## `down()` reversibility
+
+- Mirror `up()` precisely: drop indexes **before** dropping indexed columns.
+- Multi-column drops: `$table->dropColumn(['col_a', 'col_b'])`.
+- Unique / index drops: `$table->dropUnique([...])`, `$table->dropIndex([...])`.
+- Table drops: `Schema::dropIfExists(...)`; in `down()`, recreate the previous table definition when feasible (see `drop_product_carousels` migration).
+
+## Data & enum migrations
+
+- Data backfills: `DB::table(...)` / `DB::statement(...)` inside `up()`, with private helpers when logic is non-trivial.
+- JSON writes: use `JSON_THROW_ON_ERROR`.
+- MySQL `ENUM` value changes: expand enum → update rows → shrink enum (see banner position migrations); implement reversible steps in `down()`.
+- Destructive constraints (unique, not null): if duplicates or nulls may exist, add a **file-level comment** with diagnostic SQL and cleanup steps before running (see `add_unique_sku_brand_id_to_products_table`).
+
+## After schema changes
+
+- Update the related Eloquent model: `$fillable`, `@property` PHPDoc, `casts()` when needed.
+- Do not commit secrets or environment-specific DSNs.

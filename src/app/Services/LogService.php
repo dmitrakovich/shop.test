@@ -30,6 +30,7 @@ class LogService
         ?int $orderId = null,
         ?int $mailingId = null,
         ?string $status = null,
+        ?string $smsId = null,
     ): Logs\SmsLog {
         $log = new Logs\SmsLog();
         $log->phone = $phone;
@@ -40,6 +41,7 @@ class LogService
         $log->order_id = $orderId;
         $log->mailing_id = $mailingId;
         $log->status = $status;
+        $log->sms_id = $smsId;
         $log->save();
 
         return $log;
