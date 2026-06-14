@@ -11,7 +11,6 @@ use App\Models\ProductAttributes\Price;
 use App\Services\CatalogService;
 use App\Services\FilterService;
 use App\Services\GoogleTagManagerService;
-use App\Services\SliderService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -89,10 +88,6 @@ class CatalogController extends BaseController
             'sortingList' => $sortingList,
             'searchQuery' => $searchQuery,
         ];
-
-        if ($products->isEmpty()) {
-            $data['simpleSliders'] = app(SliderService::class)->getFormattedSimple();
-        }
 
         return view('shop.catalog', $data);
     }

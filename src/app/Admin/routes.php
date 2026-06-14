@@ -8,7 +8,6 @@ use App\Admin\Controllers\Config;
 use App\Admin\Controllers\Debug\CacheController;
 use App\Admin\Controllers\Departures;
 use App\Admin\Controllers\DocController;
-use App\Admin\Controllers\Forms;
 use App\Admin\Controllers\InfoPageController;
 use App\Admin\Controllers\Logs;
 use App\Admin\Controllers\Offline\DisplacementController;
@@ -66,10 +65,6 @@ Route::group([
         $router->get('newsletter_for_registered', Config\NewsletterForm::class);
         $router->get('sending-tracks', Config\SendingTracksForm::class);
         $router->get('auto-order-statuses', Config\AutoOrderStatusesForm::class);
-    });
-
-    $router->group(['prefix' => 'bnrs'], function (Router $router) {
-        $router->get('upsell', Forms\UpsellSliders::class);
     });
 
     $router->group(['prefix' => 'bookkeeping'], function (Router $router) {

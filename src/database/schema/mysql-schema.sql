@@ -1101,26 +1101,6 @@ CREATE TABLE `product_attributes` (
   KEY `product_attributes_attribute_type_attribute_id_index` (`attribute_type`,`attribute_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `product_carousels`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `product_carousels` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `categories` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `is_imidj` tinyint(1) NOT NULL DEFAULT '0',
-  `only_sale` tinyint(1) NOT NULL DEFAULT '0',
-  `only_new` tinyint(1) NOT NULL DEFAULT '0',
-  `speed` int unsigned NOT NULL DEFAULT '3000',
-  `count` smallint unsigned NOT NULL DEFAULT '15',
-  `sorting` tinyint unsigned NOT NULL DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `enum_type_id` tinyint unsigned DEFAULT NULL,
-  `additional_settings` json DEFAULT NULL COMMENT 'Дополнительные настройки',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `product_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;

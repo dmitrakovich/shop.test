@@ -49,9 +49,7 @@ class ProductController extends BaseController
         return view('shop.product-page', [
             'product' => $product,
             'feedbacks' => $this->feedbackService->getForProduct($product->id),
-            'similarProducts' => $this->sliderService->getFormattedSimilarProducts($product->id),
             'productGroup' => $this->sliderService->getFormattedProductGroup($product),
-            'recentProductsSlider' => $this->sliderService->getRecentProducts($this->productService),
         ]);
     }
 

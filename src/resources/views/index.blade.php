@@ -7,14 +7,6 @@
     </div>
 
     <div class="p-index">
-        <div class="p-index__slider">
-            @include('partials.index.simple-slider', ['simpleSlider' => $simpleSliders[0]])
-        </div>
-
-        <div class="p-index__slider">
-            @include('partials.index.simple-slider', ['simpleSlider' => $simpleSliders[1]])
-        </div>
-
         <div class="p-index__follow">
             <h2 class="p-index__follow-title">Войдите в мир BAROCCO</h2>
             <p class="p-index__follow-text">Будьте вкурсе событий, коллекций и эксклюзивных новостей.</p>

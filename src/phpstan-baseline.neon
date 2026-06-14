@@ -1003,60 +1003,6 @@ parameters:
 			path: app/Models/Admin/AdminUser.php
 
 		-
-			message: '#^Class App\\Models\\Ads\\ProductCarousel has PHPDoc tag @property for property \$additional_settings with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
-			message: '#^Class App\\Models\\Ads\\ProductCarousel has PHPDoc tag @property for property \$categories with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
-			message: '#^Method App\\Models\\Ads\\ProductCarousel\:\:categories\(\) return type with generic class Staudenmeir\\EloquentJsonRelations\\Relations\\BelongsToJson does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
-			message: '#^Method App\\Models\\Ads\\ProductCarousel\:\:getCategoriesListAttribute\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
-			message: '#^Method App\\Models\\Ads\\ProductCarousel\:\:getCategoryIds\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
-			message: '#^Method App\\Models\\Ads\\ProductCarousel\:\:setCategoriesListAttribute\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
-			message: '#^Method App\\Models\\Ads\\ProductCarousel\:\:setCategoriesListAttribute\(\) has parameter \$value with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
-			message: '#^Property ''categories_list'' does not exist in model\.$#'
-			identifier: rules.modelAppends
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
-			message: '#^Property App\\Models\\Ads\\ProductCarousel\:\:\$sortable has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: app/Models/Ads/ProductCarousel.php
-
-		-
 			message: '#^Method App\\Models\\Api\\Token\:\:scopeInstagram\(\) has parameter \$builder with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
 			identifier: missingType.generics
 			count: 1
@@ -2509,73 +2455,13 @@ parameters:
 			path: app/Services/SitemapService.php
 
 		-
-			message: '#^Method App\\Services\\SliderService\:\:addConvertedAndFormattedPrice\(\) has parameter \$products with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: '#^Method App\\Services\\SliderService\:\:addFavorites\(\) has parameter \$products with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
 			message: '#^Method App\\Services\\SliderService\:\:formatProducts\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Services/SliderService.php
 
 		-
-			message: '#^Method App\\Services\\SliderService\:\:getFinalOrderPageSliders\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: '#^Method App\\Services\\SliderService\:\:getFinalSale\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: '#^Method App\\Services\\SliderService\:\:getFinalUpsells\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: '#^Method App\\Services\\SliderService\:\:getFormattedImidj\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
 			message: '#^Method App\\Services\\SliderService\:\:getFormattedProductGroup\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: '#^Method App\\Services\\SliderService\:\:getFormattedSimilarProducts\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: '#^Method App\\Services\\SliderService\:\:getFormattedSimple\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: '#^Method App\\Services\\SliderService\:\:getRecentProducts\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SliderService.php
-
-		-
-			message: '#^Method App\\Services\\SliderService\:\:getSimpleProducts\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Services/SliderService.php

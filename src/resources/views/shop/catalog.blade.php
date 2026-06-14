@@ -74,7 +74,7 @@
                     <h1 class="text-center mb-4">ТОВАРЫ НЕ НАЙДЕНЫ</h1>
                     <p class="text-center">
                         К сожалению, нет товаров, соответствующих запросу, но...<br>
-                        Вы можете вернутся назад, воспользоваться меню или выбрать из популярных товаров
+                        Вы можете вернуться назад или воспользоваться меню
                     </p>
                     <div class="text-center my-5">
                         <a href="{{ url()->previous() }}" class="btn btn-outline-dark mx-2 mb-2 py-1 px-3"
@@ -84,11 +84,6 @@
                         <a href="{{ route('shop') }}" class="btn btn-dark mx-2 mb-2 py-1 px-3" style="min-width: 134px;">
                             В каталог
                         </a>
-                    </div>
-                    <div class="col-md-12 my-4">
-                        @includeWhen(isset($simpleSliders[0]), 'partials.index.simple-slider', [
-                            'simpleSlider' => $simpleSliders[0] ?? null,
-                        ])
                     </div>
                 </div>
             @endif

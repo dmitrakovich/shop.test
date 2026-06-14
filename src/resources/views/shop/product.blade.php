@@ -260,16 +260,6 @@
             </div>
         </div>
 
-        @if ($product->trashed() && !empty($similarProducts) && count($similarProducts))
-            <div class="row">
-                <div class="col-md-12 mb-5 mt-3">
-                    @include('partials.index.simple-slider', [
-                        'simpleSlider' => $similarProducts,
-                    ])
-                </div>
-            </div>
-        @endif
-
         <div class="row product-description my-5">
             <div class="col-12 font-size-15 mb-1">
                 ОПИСАНИЕ
@@ -360,20 +350,6 @@
             </div>
         </div>
 
-        @if (!$product->trashed() && !empty($similarProducts) && count($similarProducts))
-            <div class="col-md-12 mb-5 mt-3">
-                @include('partials.index.simple-slider', [
-                    'simpleSlider' => $similarProducts,
-                ])
-            </div>
-        @endif
-        @if (!empty($recentProductsSlider['products']) && count($recentProductsSlider['products']))
-            <div class="col-md-12 my-3">
-                @include('partials.index.simple-slider', [
-                    'simpleSlider' => $recentProductsSlider,
-                ])
-            </div>
-        @endif
     </div>
 
     {{-- modals --}}
