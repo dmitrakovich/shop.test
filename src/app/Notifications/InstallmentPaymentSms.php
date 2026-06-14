@@ -11,18 +11,20 @@ class InstallmentPaymentSms extends AbstractSmsTraffic
      *
      * @return void
      */
-    public function __construct(
-        private readonly Installment $installment,
-    ) {}
+    public function __construct(private readonly Installment $installment) {}
 
     /**
      * Content for sms message
      */
     public function getContent(): string
     {
-        $order = $this->installment->order;
         $nextPaymentDate = $this->installment->getNextPaymentDate()->format('d.m.Y');
 
-        return "{$order->first_name}, минимальный платеж по кредитному договору {$this->installment->contract_number} суммой {$this->installment->monthly_fee} руб. Оплата до {$nextPaymentDate}. Благодарим, если уже совершили платёж";
+        return <<<SMS
+        {$this->installment->order->first_name}, благодарим за покупку!
+
+        Напоминаем о следующем платеже по договору №{$this->installment->contract_number} на сумму {$this->installment->monthly_fee} BYN. Оплату необходимо произвести в срок до {$nextPaymentDate}.
+        С заботой о Вас, компания BAROCCO!
+        SMS;
     }
 }

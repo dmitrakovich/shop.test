@@ -16,9 +16,7 @@ class SendingTracksSms extends AbstractSmsTraffic
      *
      * @return void
      */
-    public function __construct(
-        private readonly Order $order,
-    ) {}
+    public function __construct(private readonly Order $order) {}
 
     /**
      * Content for sms message
@@ -26,9 +24,17 @@ class SendingTracksSms extends AbstractSmsTraffic
     public function getContent(): string
     {
         $track = $this->order->track->track_number;
-        $orderId = $this->order->id;
-        $link = "https://belpost.by/Otsleditotpravleniye?number=$track";
 
-        return "Ваш заказ №{$orderId} отправлен. Трек-номер {$track}. Отследите посылку {$link}";
+        return <<<SMS
+        {$this->order->first_name}, ваш заказ №{$this->order->id} передан в службу доставки Белпочты!
+
+        Трек-номер {$track}.
+        Отслеживайте отправление перейдя по ссылке: https://belpost.by/Otsleditotpravleniye?number={$track}.
+
+        Не пропустите наши новинки в Instagram👇
+        https://www.instagram.com/barocco.by?igsh=dWptYmt3b3ZjaDNm
+
+        Благодарим за заказ!
+        SMS;
     }
 }
