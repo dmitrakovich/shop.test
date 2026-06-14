@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('log_sms', function (Blueprint $table) {
-            $table->string('sms_id', 64)->nullable()->after('phone');
+            $table->string('sms_id', 64)->nullable()->after('text');
             $table->timestamp('updated_at')->nullable()->after('status');
 
             $table->index('sms_id');

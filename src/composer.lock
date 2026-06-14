@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c9633e3955384b1158d4e25f9e04cae",
+    "content-hash": "617211f3ec5f2f87ef41208bef3beba6",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -1536,16 +1536,16 @@
         },
         {
             "name": "dmitrakovich/smstraffic-for-laravel",
-            "version": "0.4.0",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmitrakovich/smstraffic-for-laravel.git",
-                "reference": "93a381a60ac8f6d97b3c632666815d59ca825cd2"
+                "reference": "df2a7090f36fb65c4774065c6680d91de52bfd85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/93a381a60ac8f6d97b3c632666815d59ca825cd2",
-                "reference": "93a381a60ac8f6d97b3c632666815d59ca825cd2",
+                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/df2a7090f36fb65c4774065c6680d91de52bfd85",
+                "reference": "df2a7090f36fb65c4774065c6680d91de52bfd85",
                 "shasum": ""
             },
             "require": {
@@ -1553,6 +1553,9 @@
                 "illuminate/notifications": "^10.0|^11.0|^12.0",
                 "illuminate/support": "^10.0|^11.0|^12.0",
                 "php": "^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.0|^11.0"
             },
             "type": "library",
             "extra": {
@@ -1587,9 +1590,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dmitrakovich/smstraffic-for-laravel/issues",
-                "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/0.4.0"
+                "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/0.5.0"
             },
-            "time": "2025-04-04T21:57:34+00:00"
+            "time": "2026-06-14T21:01:26+00:00"
         },
         {
             "name": "dmitrakovich/sxgeo",

@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $mailing_id
  * @property string $route
  * @property string $phone
- * @property string|null $sms_id
  * @property string $text
+ * @property string|null $sms_id
  * @property string|null $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -48,8 +48,8 @@ class SmsLog extends Model
         'mailing_id',
         'route',
         'phone',
-        'text',
         'sms_id',
+        'text',
         'status',
         'created_at',
     ];

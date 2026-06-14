@@ -32,7 +32,7 @@
         "ddeboer/imap": "^1.19",
         "defstudio/telegraph": "^1.57",
         "deployer/deployer": "^7.5",
-        "dmitrakovich/smstraffic-for-laravel": "^0.4.0",
+        "dmitrakovich/smstraffic-for-laravel": "^0.5.0",
         "dmitrakovich/sxgeo": "^0.2.0",
         "drandin/declension-nouns": "dev-master",
         "encore/laravel-admin": "^1.9",
