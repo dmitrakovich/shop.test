@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "617211f3ec5f2f87ef41208bef3beba6",
+    "content-hash": "f2b0a7846ff6f3abad398cd1506d79d4",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -1536,16 +1536,16 @@
         },
         {
             "name": "dmitrakovich/smstraffic-for-laravel",
-            "version": "0.5.0",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmitrakovich/smstraffic-for-laravel.git",
-                "reference": "df2a7090f36fb65c4774065c6680d91de52bfd85"
+                "reference": "4d436a4b6dfc6c2b9e1a158873919405232f8033"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/df2a7090f36fb65c4774065c6680d91de52bfd85",
-                "reference": "df2a7090f36fb65c4774065c6680d91de52bfd85",
+                "url": "https://api.github.com/repos/dmitrakovich/smstraffic-for-laravel/zipball/4d436a4b6dfc6c2b9e1a158873919405232f8033",
+                "reference": "4d436a4b6dfc6c2b9e1a158873919405232f8033",
                 "shasum": ""
             },
             "require": {
@@ -1590,9 +1590,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dmitrakovich/smstraffic-for-laravel/issues",
-                "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/0.5.0"
+                "source": "https://github.com/dmitrakovich/smstraffic-for-laravel/tree/0.6.0"
             },
-            "time": "2026-06-14T21:01:26+00:00"
+            "time": "2026-06-16T18:58:18+00:00"
         },
         {
             "name": "dmitrakovich/sxgeo",

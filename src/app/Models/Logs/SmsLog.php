@@ -3,9 +3,14 @@
 namespace App\Models\Logs;
 
 use App\Admin\Models\Administrator;
+use App\Casts\AsSmsDeliveryStatus;
+use App\Enums\Sms\SmsDeliveryChannel;
+use App\Enums\Sms\SmsDeliveryStatus;
+use App\Enums\Sms\SmsRoute;
 use App\Models\Ads\Mailing;
 use App\Models\Orders\Order;
 use App\Models\User\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -15,11 +20,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $user_id
  * @property int|null $order_id
  * @property int|null $mailing_id
- * @property string $route
+ * @property SmsRoute $route
  * @property string $phone
  * @property string $text
  * @property string|null $sms_id
- * @property string|null $status
+ * @property SmsDeliveryStatus|string|null $status
+ * @property SmsDeliveryChannel|null $delivery_channel
+ * @property \Illuminate\Support\Carbon|null $delivered_at
+ * @property \Illuminate\Support\Carbon|null $read_at
+ * @property string|null $status_error
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
@@ -51,8 +60,45 @@ class SmsLog extends Model
         'sms_id',
         'text',
         'status',
+        'delivery_channel',
+        'delivered_at',
+        'read_at',
+        'status_error',
         'created_at',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'route' => SmsRoute::class,
+            'status' => AsSmsDeliveryStatus::class,
+            'delivery_channel' => SmsDeliveryChannel::class,
+            'delivered_at' => 'datetime',
+            'read_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopePendingDeliveryStatusUpdate(Builder $query): Builder
+    {
+        return $query
+            ->whereNotNull('sms_id')
+            ->whereNull('status_error')
+            ->where('created_at', '>=', now()->subDays(2))
+            ->where(function (Builder $query): void {
+                $query->whereNull('status')
+                    ->orWhere(function (Builder $query): void {
+                        $query->where('status', '<>', SmsDeliveryStatus::Skipped->value)
+                            ->whereNotIn('status', SmsDeliveryStatus::finalValues());
+                    });
+            });
+    }
 
     /**
      * The manager who sent the message

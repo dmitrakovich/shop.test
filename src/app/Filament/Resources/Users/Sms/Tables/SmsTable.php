@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Sms\Tables;
 
+use App\Enums\Sms\SmsDeliveryChannel;
 use App\Enums\Sms\SmsRoute;
 use App\Models\Logs\SmsLog;
 use Filament\Forms\Components\DatePicker;
@@ -41,22 +42,40 @@ class SmsTable
                     ->sortable(),
                 TextColumn::make('route')
                     ->label('Тип')
+                    ->badge(),
+                TextColumn::make('delivery_channel')
+                    ->label('Канал')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => SmsRoute::tryFrom($state)?->getLabel() ?? $state),
+                    ->placeholder('—'),
                 TextColumn::make('phone')
                     ->label('Номер телефона')
                     ->copyable()
                     ->searchable(),
                 TextColumn::make('text')
                     ->label('Текст сообщения')
-                    ->limit(120)
                     ->wrap()
+                    ->formatStateUsing(fn (?string $state): string => nl2br(e((string)$state)))
+                    ->html()
                     ->searchable(),
                 TextColumn::make('status')
                     ->label('Статус')
-                    ->limit(80)
+                    ->badge()
+                    ->description(fn (SmsLog $record): ?string => $record->status_error)
+                    ->color(fn (SmsLog $record): ?string => $record->status_error ? 'danger' : null)
                     ->wrap()
                     ->placeholder('—'),
+                TextColumn::make('delivered_at')
+                    ->label('Доставлено')
+                    ->dateTime('d.m.Y H:i:s')
+                    ->placeholder('—')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('read_at')
+                    ->label('Прочитано')
+                    ->dateTime('d.m.Y H:i:s')
+                    ->placeholder('—')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->label('Дата и время отправки')
                     ->dateTime('d.m.Y H:i:s')
@@ -67,6 +86,10 @@ class SmsTable
                 SelectFilter::make('route')
                     ->label('Тип отправки')
                     ->options(SmsRoute::class)
+                    ->native(false),
+                SelectFilter::make('delivery_channel')
+                    ->label('Канал доставки')
+                    ->options(SmsDeliveryChannel::class)
                     ->native(false),
                 Filter::make('created_at')
                     ->schema([

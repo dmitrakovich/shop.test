@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Users\Sms\Pages;
 use App\Enums\Sms\SmsRoute;
 use App\Filament\Resources\Users\Sms\SmsResource;
 use App\Models\Config;
-use App\Services\LogService;
+use App\Services\Sms\SmsLogService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -63,19 +63,19 @@ class ListSms extends ListRecords
                 $text = (string)$data['text'];
                 $route = $data['route']->value;
                 $adminId = auth('admin')->id();
-                $logService = app(LogService::class);
+                $smsLogService = app(SmsLogService::class);
 
                 try {
                     $response = SmsTraffic::send($phone, $text, ['route' => $route]);
                 } catch (Throwable $exception) {
                     report($exception);
 
-                    $logService->logSms(
+                    $smsLogService->log(
                         phone: $phone,
                         text: $text,
                         route: $route,
                         adminId: is_int($adminId) ? $adminId : null,
-                        status: 'Ошибка отправки: ' . $exception->getMessage(),
+                        statusError: 'Ошибка отправки: ' . $exception->getMessage(),
                     );
 
                     Notification::make()
@@ -87,18 +87,27 @@ class ListSms extends ListRecords
                     return;
                 }
 
-                $logService->logSms(
+                $log = $smsLogService->log(
                     phone: $phone,
                     text: $text,
                     route: $route,
                     adminId: is_int($adminId) ? $adminId : null,
-                    status: $response->getDescription(),
-                    smsId: $response->getSmsId(),
+                    sendResponse: $response,
                 );
+
+                if ($log->status_error !== null) {
+                    Notification::make()
+                        ->title('Сообщение не отправлено')
+                        ->body($log->status_error)
+                        ->danger()
+                        ->send();
+
+                    return;
+                }
 
                 Notification::make()
                     ->title('Сообщение отправлено')
-                    ->body('Id сообщения: ' . $response->getSmsId())
+                    ->body('Id сообщения: ' . $log->sms_id)
                     ->success()
                     ->send();
             });

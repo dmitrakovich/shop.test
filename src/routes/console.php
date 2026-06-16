@@ -33,6 +33,7 @@ Schedule::command('feed:generate')->everySixHours();
 // Schedule::command('generate:sitemap')->dailyAt('00:30'); // todo: update for new frontend
 
 Schedule::command('erip:update-statuses')->everyTenMinutes();
+Schedule::command('sms:update-statuses')->withoutOverlapping()->everyTenMinutes();
 Schedule::command('belpost:cod-parse-from-email')->hourly()->between('8:00', '18:00');
 
 Schedule::command('horizon:snapshot')->everyFiveMinutes();
