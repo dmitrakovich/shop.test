@@ -44,10 +44,6 @@ class SmsTable
                 TextColumn::make('route')
                     ->label('Тип')
                     ->badge(),
-                TextColumn::make('delivery_channel')
-                    ->label('Канал')
-                    ->badge()
-                    ->placeholder('—'),
                 TextColumn::make('phone')
                     ->label('Номер телефона')
                     ->copyable()
@@ -63,6 +59,10 @@ class SmsTable
                     ->badge()
                     ->color(fn (SmsDeliveryStatus|string|null $state): ?string => SmsDeliveryStatus::colorFor($state))
                     ->wrap()
+                    ->placeholder('—'),
+                TextColumn::make('delivery_channel')
+                    ->label('Канал')
+                    ->badge()
                     ->placeholder('—'),
                 TextColumn::make('delivered_at')
                     ->label('Доставлено')
