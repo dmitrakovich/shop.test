@@ -27,8 +27,9 @@ class SmsLogService
         if ($sendResponse !== null) {
             if (self::sendResponseIsSuccessful($sendResponse)) {
                 $smsId = $sendResponse->getSmsId();
+                $status = self::sendResponseDescription($sendResponse, SmsDeliveryStatus::QueuedOneMessage->value);
             } else {
-                $status = self::sendResponseErrorMessage($sendResponse);
+                $status = self::sendResponseDescription($sendResponse, 'Сообщение не принято шлюзом');
             }
         }
 
@@ -100,27 +101,15 @@ class SmsLogService
 
     private static function sendResponseIsSuccessful(SmsTrafficResponse $response): bool
     {
-        if ($response->hasError()) {
-            return false;
-        }
-
-        if ($response->getSmsId() !== null) {
-            return true;
-        }
-
-        $description = strtolower(trim((string)($response->getDescription() ?? '')));
-
-        return in_array($description, ['', 'success', 'ok'], true);
+        return !$response->hasError() && $response->getSmsId() !== null;
     }
 
-    private static function sendResponseErrorMessage(SmsTrafficResponse $response): string
+    private static function sendResponseDescription(SmsTrafficResponse $response, string $fallback): string
     {
         if ($response->hasError()) {
             return $response->getErrorMessage();
         }
 
-        $description = trim((string)($response->getDescription() ?? ''));
-
-        return $description !== '' ? $description : 'Сообщение не принято шлюзом';
+        return trim($response->getDescription() ?? '') ?: $fallback;
     }
 }

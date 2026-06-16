@@ -26,3 +26,10 @@ alwaysApply: true
 - Language conventions:
   - Code comments and developer-facing notes should be written in **English**.
   - Commit messages are **English**; if asked, propose commit message options in English.
+
+# Code simplicity
+
+- Write the simplest code that matches **real production behaviour**; do not add defensive branches for APIs, formats, or edge cases the project does not use.
+- Do not guess alternate response values (e.g. legacy API formats) without evidence from production, fixtures, or docs.
+- Prefer `??` and `?:` over redundant empty-string checks (`!== ''`, `!== null` chains) when the intent is “use fallback if missing/empty”.
+- After `trim()`, `?: $fallback` is usually enough; avoid duplicate helpers that differ only by fallback text unless it improves readability.

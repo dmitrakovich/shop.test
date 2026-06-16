@@ -2,9 +2,9 @@
 
 namespace App\Enums\Sms;
 
+use Filament\Support\Colors\Color;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
-use Filament\Support\Colors\Color;
 
 enum SmsDeliveryChannel: string implements HasColor, HasLabel
 {
@@ -32,10 +32,10 @@ enum SmsDeliveryChannel: string implements HasColor, HasLabel
         };
     }
 
-    public function getColor(): string | array
+    public function getColor(): string|array
     {
         return match ($this) {
-            self::Viber => Color::Violet,
+            self::Viber => Color::Purple,
             self::Sms => 'info',
         };
     }
