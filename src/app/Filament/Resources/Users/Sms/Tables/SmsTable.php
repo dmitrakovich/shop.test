@@ -66,19 +66,19 @@ class SmsTable
                     ->placeholder('—'),
                 TextColumn::make('delivered_at')
                     ->label('Доставлено')
-                    ->dateTime('d.m.Y H:i:s')
+                    ->dateTime()
                     ->placeholder('—')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('read_at')
                     ->label('Прочитано')
-                    ->dateTime('d.m.Y H:i:s')
+                    ->dateTime()
                     ->placeholder('—')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->label('Дата и время отправки')
-                    ->dateTime('d.m.Y H:i:s')
+                    ->dateTime()
                     ->sortable(),
             ])
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['admin', 'order']))

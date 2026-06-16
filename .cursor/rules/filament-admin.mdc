@@ -12,6 +12,7 @@ alwaysApply: false
 - For Filament 5 resources, prefer extracting table definitions to dedicated `Tables/*Table` classes with a `configure(Table $table): Table` method.
 - For backed enums implementing `Filament\Support\Contracts\HasLabel`, prefer `->options(SomeEnum::class)` when every case belongs in the select.
 - When only a subset of cases should appear, keep the allowed list in domain logic on the enum and build select options from it (e.g. `OrderMethod::shortLinkSelectOptions()`). Use `->disableOptionWhen()` only when most cases stay enabled and a few should be excluded (see `FeedbackType::isDisabled()`).
+- For `TextColumn::dateTime()` / `TextEntry::dateTime()` (and similar), call `->dateTime()` **without** a format argument — the panel default applies. Do not pass literals like `'d.m.Y H:i:s'` unless there is a deliberate, documented reason (e.g. date-only display via `->date()`).
 - When migrating features from legacy admin:
   - Reuse domain logic from `App\` services/models; avoid copying controller-heavy patterns.
   - Keep backward compatibility in data/permissions; ensure navigation and labels match existing admin expectations.
