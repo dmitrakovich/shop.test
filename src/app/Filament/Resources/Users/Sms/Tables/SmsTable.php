@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Users\Sms\Tables;
 
 use App\Enums\Sms\SmsDeliveryChannel;
+use App\Enums\Sms\SmsDeliveryStatus;
 use App\Enums\Sms\SmsRoute;
 use App\Models\Logs\SmsLog;
 use Filament\Forms\Components\DatePicker;
@@ -60,8 +61,7 @@ class SmsTable
                 TextColumn::make('status')
                     ->label('Статус')
                     ->badge()
-                    ->description(fn (SmsLog $record): ?string => $record->status_error)
-                    ->color(fn (SmsLog $record): ?string => $record->status_error ? 'danger' : null)
+                    ->color(fn (SmsDeliveryStatus|string|null $state): ?string => SmsDeliveryStatus::colorFor($state))
                     ->wrap()
                     ->placeholder('—'),
                 TextColumn::make('delivered_at')

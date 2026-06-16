@@ -75,7 +75,7 @@ class ListSms extends ListRecords
                         text: $text,
                         route: $route,
                         adminId: is_int($adminId) ? $adminId : null,
-                        statusError: 'Ошибка отправки: ' . $exception->getMessage(),
+                        status: 'Ошибка отправки: ' . $exception->getMessage(),
                     );
 
                     Notification::make()
@@ -95,10 +95,10 @@ class ListSms extends ListRecords
                     sendResponse: $response,
                 );
 
-                if ($log->status_error !== null) {
+                if ($log->sms_id === null) {
                     Notification::make()
                         ->title('Сообщение не отправлено')
-                        ->body($log->status_error)
+                        ->body(is_string($log->status) ? $log->status : (string) $log->status?->value)
                         ->danger()
                         ->send();
 

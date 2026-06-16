@@ -78,8 +78,8 @@ class SmsStatusUpdateService
     private function applyStatusResponse(SmsLog $log, SmsTrafficStatusResponse $statusResponse): bool
     {
         if ($statusResponse->hasError()) {
-            $log->status_error = $statusResponse->getError();
-            if (!$log->isDirty('status_error')) {
+            $log->status = $statusResponse->getError();
+            if (!$log->isDirty('status')) {
                 return false;
             }
 
@@ -95,7 +95,6 @@ class SmsStatusUpdateService
             'delivery_channel' => $channel !== null
                 ? SmsDeliveryChannel::tryFrom(strtolower($channel))
                 : null,
-            'status_error' => null,
             'delivered_at' => $this->parseDateTime(
                 $statusResponse->getDeliveryDate() ?? $statusResponse->getLastStatusChangeDate(),
             ),

@@ -22,14 +22,13 @@ class SmsLogService
         ?int $mailingId = null,
         ?string $status = null,
         ?string $smsId = null,
-        ?string $statusError = null,
         ?SmsTrafficResponse $sendResponse = null,
     ): SmsLog {
         if ($sendResponse !== null) {
             if (self::sendResponseIsSuccessful($sendResponse)) {
                 $smsId = $sendResponse->getSmsId();
             } else {
-                $statusError = self::sendResponseErrorMessage($sendResponse);
+                $status = self::sendResponseErrorMessage($sendResponse);
             }
         }
 
@@ -43,7 +42,6 @@ class SmsLogService
         $log->mailing_id = $mailingId;
         $log->status = SmsDeliveryStatus::resolve($status);
         $log->sms_id = $smsId;
-        $log->status_error = $statusError;
         $log->save();
 
         return $log;

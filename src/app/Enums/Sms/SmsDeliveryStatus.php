@@ -2,10 +2,11 @@
 
 namespace App\Enums\Sms;
 
+use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 use Illuminate\Notifications\Client\Response\SmsTrafficStatusResponse;
 
-enum SmsDeliveryStatus: string implements HasLabel
+enum SmsDeliveryStatus: string implements HasColor, HasLabel
 {
     case Read = 'READ';
     case Delivered = 'DELIVERED';
@@ -22,6 +23,8 @@ enum SmsDeliveryStatus: string implements HasLabel
     case Unknown = 'Unknown status';
     case BufferedSmsc = 'Buffered SMSC';
     case Skipped = 'skipped';
+    case MessageIsSpam = 'Message is spam';
+    case QueuedOneMessage = 'queued 1 messages';
 
     /**
      * @return list<string>
@@ -55,6 +58,36 @@ enum SmsDeliveryStatus: string implements HasLabel
         return self::tryFromCaseInsensitive($value) ?? $value;
     }
 
+    /**
+     * @return list<string>
+     */
+    public static function trackableValues(): array
+    {
+        return array_values(array_map(
+            fn (self $case) => $case->value,
+            array_filter(
+                self::cases(),
+                fn (self $case) => $case->isTrackable(),
+            ),
+        ));
+    }
+
+    public static function colorFor(self|string|null $status): ?string
+    {
+        if ($status instanceof self) {
+            return $status->getColor();
+        }
+
+        return $status !== null ? 'danger' : null;
+    }
+
+    public function isTrackable(): bool
+    {
+        return $this !== self::Skipped
+            && $this !== self::MessageIsSpam
+            && !in_array($this->value, self::finalValues(), true);
+    }
+
     public function getLabel(): string
     {
         return match ($this) {
@@ -68,6 +101,21 @@ enum SmsDeliveryStatus: string implements HasLabel
             self::Unknown => 'Неизвестный статус',
             self::BufferedSmsc => 'Доставляется',
             self::Skipped => 'Пропущено',
+            self::MessageIsSpam => 'Спам',
+            self::QueuedOneMessage => 'В очереди',
+        };
+    }
+
+    public function getColor(): string
+    {
+        return match ($this) {
+            self::Read, self::Delivered, self::ClassicDelivered => 'success',
+            self::BufferedSmsc, self::QueuedOneMessage => 'info',
+            self::Expired, self::ClassicExpired => 'warning',
+            self::Rejected, self::ClassicRejected,
+            self::Failed, self::Undelivered, self::ClassicNonDelivered,
+            self::MessageIsSpam => 'danger',
+            self::Deleted, self::ClassicDeleted, self::Unknown, self::Skipped => 'gray',
         };
     }
 }

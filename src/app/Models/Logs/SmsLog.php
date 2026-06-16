@@ -28,7 +28,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property SmsDeliveryChannel|null $delivery_channel
  * @property \Illuminate\Support\Carbon|null $delivered_at
  * @property \Illuminate\Support\Carbon|null $read_at
- * @property string|null $status_error
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
@@ -63,7 +62,6 @@ class SmsLog extends Model
         'delivery_channel',
         'delivered_at',
         'read_at',
-        'status_error',
         'created_at',
     ];
 
@@ -89,14 +87,10 @@ class SmsLog extends Model
     {
         return $query
             ->whereNotNull('sms_id')
-            ->whereNull('status_error')
             ->where('created_at', '>=', now()->subDays(2))
             ->where(function (Builder $query): void {
                 $query->whereNull('status')
-                    ->orWhere(function (Builder $query): void {
-                        $query->where('status', '<>', SmsDeliveryStatus::Skipped->value)
-                            ->whereNotIn('status', SmsDeliveryStatus::finalValues());
-                    });
+                    ->orWhereIn('status', SmsDeliveryStatus::trackableValues());
             });
     }
 
