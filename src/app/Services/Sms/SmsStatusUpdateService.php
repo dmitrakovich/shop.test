@@ -88,13 +88,9 @@ class SmsStatusUpdateService
             return true;
         }
 
-        $channel = $statusResponse->getChannel();
-
         $log->fill([
             'status' => SmsDeliveryStatus::resolve($statusResponse->getStatus()),
-            'delivery_channel' => $channel !== null
-                ? SmsDeliveryChannel::tryFrom(strtolower($channel))
-                : null,
+            'delivery_channel' => SmsDeliveryChannel::resolve($statusResponse->getChannel()),
             'delivered_at' => $this->parseDateTime(
                 $statusResponse->getDeliveryDate() ?? $statusResponse->getLastStatusChangeDate(),
             ),

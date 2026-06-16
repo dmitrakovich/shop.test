@@ -98,7 +98,7 @@ class ListSms extends ListRecords
                 if ($log->sms_id === null) {
                     Notification::make()
                         ->title('Сообщение не отправлено')
-                        ->body(is_string($log->status) ? $log->status : (string) $log->status?->value)
+                        ->body(is_string($log->status) ? $log->status : (string)$log->status?->value)
                         ->danger()
                         ->send();
 
