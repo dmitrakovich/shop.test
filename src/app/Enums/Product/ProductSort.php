@@ -23,7 +23,7 @@ enum ProductSort: string implements HasLabel
 
     public static function default(): self
     {
-        return self::Rating;
+        return self::Newness;
     }
 
     /**
