@@ -31,9 +31,6 @@ class SendingTracksSms extends AbstractSmsTraffic
         Трек-номер {$track}.
         Отслеживайте отправление перейдя по ссылке: https://belpost.by/Otsleditotpravleniye?number={$track}.
 
-        Не пропустите наши новинки в Instagram👇
-        https://www.instagram.com/barocco.by?igsh=dWptYmt3b3ZjaDNm
-
         Благодарим за заказ!
         SMS;
     }
