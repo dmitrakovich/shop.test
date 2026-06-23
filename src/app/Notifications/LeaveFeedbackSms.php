@@ -47,6 +47,11 @@ class LeaveFeedbackSms extends AbstractSmsTraffic
         📸 Оставьте отзыв с фото — получите скидку 10 BYN.
 
         🎥 Запишите видеоотзыв или снимите распаковку и забирайте скидку 20 BYN.
+
+        Поделиться мнением о покупке можно здесь:
+        https://barocco.by/feedbacks
+
+        Ждем ваш отзыв!
         SMS;
     }
 
