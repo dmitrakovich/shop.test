@@ -90,7 +90,11 @@ class SmsLog extends Model
             ->where('created_at', '>=', now()->subDays(2))
             ->where(function (Builder $query): void {
                 $query->whereNull('status')
-                    ->orWhereIn('status', SmsDeliveryStatus::trackableValues());
+                    ->orWhereIn('status', SmsDeliveryStatus::trackableValues())
+                    ->orWhere(function (Builder $query): void {
+                        $query->where('delivery_channel', SmsDeliveryChannel::Viber->value)
+                            ->whereIn('status', SmsDeliveryStatus::deliveredValues());
+                    });
             });
     }
 

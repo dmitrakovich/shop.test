@@ -72,6 +72,17 @@ enum SmsDeliveryStatus: string implements HasColor, HasLabel
         ));
     }
 
+    /**
+     * @return list<string>
+     */
+    public static function deliveredValues(): array
+    {
+        return [
+            self::Delivered->value,
+            self::ClassicDelivered->value,
+        ];
+    }
+
     public static function colorFor(self|string|null $status): ?string
     {
         if ($status instanceof self) {
