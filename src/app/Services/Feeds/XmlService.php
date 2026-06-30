@@ -11,7 +11,7 @@ class XmlService extends AbstractFeedService
      */
     public function generate(): void
     {
-        $data = view('xml.' . $this->feedInstance->getKey(), [
+        $data = view('xml.' . $this->feedInstance->getViewName(), [
             'currency' => $this->currency,
             'data' => $this->feedInstance->getPreparedData(),
         ]);

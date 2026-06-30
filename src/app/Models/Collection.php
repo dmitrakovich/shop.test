@@ -44,4 +44,14 @@ class Collection extends Model implements Filterable
     {
         return 'collection_id';
     }
+
+    /**
+     * ID of the current (latest) collection.
+     */
+    public static function getCurrentId(): ?int
+    {
+        $id = self::query()->orderByDesc('id')->value('id');
+
+        return $id !== null ? (int)$id : null;
+    }
 }

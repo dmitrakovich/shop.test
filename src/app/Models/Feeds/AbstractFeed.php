@@ -34,6 +34,14 @@ abstract class AbstractFeed
     abstract public function getKey(): string;
 
     /**
+     * Blade view name (without xml. prefix) used to render the feed.
+     */
+    public function getViewName(): string
+    {
+        return $this->getKey();
+    }
+
+    /**
      * Prepare data for xml file
      */
     abstract public function getPreparedData(): object;

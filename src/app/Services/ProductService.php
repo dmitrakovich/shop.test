@@ -82,7 +82,7 @@ class ProductService
      *
      * @return EloquentCollection<array-key, Product>
      */
-    public function getForFeed(bool $withTrashed = false): EloquentCollection
+    public function getForFeed(bool $withTrashed = false, ?int $collectionId = null): EloquentCollection
     {
         return Product::with([
             'category',
@@ -94,6 +94,9 @@ class ProductService
         ])
             ->when($withTrashed, function ($query) {
                 $query->withTrashed();
+            })
+            ->when($collectionId !== null, function ($query) use ($collectionId) {
+                $query->where('collection_id', $collectionId);
             })
             ->has('brand')
             ->has('colors')
