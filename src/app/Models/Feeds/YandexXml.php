@@ -80,11 +80,21 @@ class YandexXml extends AbstractFeed
     }
 
     /**
+     * Products included in the feed.
+     *
+     * @return EloquentCollection<array-key, Product>
+     */
+    protected function getFeedProducts(): EloquentCollection
+    {
+        return (new ProductService())->getForFeed();
+    }
+
+    /**
      * Offers data
      */
     protected function getOffers(): array
     {
-        return (new ProductService())->getForFeed()
+        return $this->getFeedProducts()
             ->map(function (Product $item) {
                 $media = $this->getProductMedia($item->getMedia());
 

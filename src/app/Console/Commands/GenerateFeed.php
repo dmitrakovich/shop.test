@@ -6,6 +6,7 @@ use App\Jobs\FeedGeneratorJob;
 use App\Models\Currency;
 use App\Models\Feeds\GoogleCsv;
 use App\Models\Feeds\GoogleXml;
+use App\Models\Feeds\YandexBusinessXml;
 use App\Models\Feeds\YandexXml;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -27,6 +28,7 @@ class GenerateFeed extends Command
      */
     final const array INSTANCES = [
         'yandex_xml' => YandexXml::class,
+        'yandex_business_xml' => YandexBusinessXml::class,
         'google_xml' => GoogleXml::class,
         'google_csv' => GoogleCsv::class,
     ];
