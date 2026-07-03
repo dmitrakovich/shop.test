@@ -12,7 +12,7 @@ use Spatie\LaravelData\Support\DataProperty;
 /**
  * Phone value object class for handling phone number operations
  */
-class Phone implements \Stringable, Castable
+class Phone implements \JsonSerializable, \Stringable, Castable
 {
     /**
      * @param  int  $value  The phone number as an integer
@@ -85,5 +85,10 @@ class Phone implements \Stringable, Castable
     public function forSms(): int
     {
         return $this->toInt();
+    }
+
+    public function jsonSerialize(): string
+    {
+        return $this->toE164();
     }
 }
