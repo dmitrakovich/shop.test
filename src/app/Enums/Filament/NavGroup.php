@@ -16,6 +16,7 @@ enum NavGroup implements HasIcon, HasLabel
     case Automation;
     case Management;
     case Departures;
+    case Seo;
 
     public function getLabel(): string
     {
@@ -28,6 +29,7 @@ enum NavGroup implements HasIcon, HasLabel
             self::Automation => 'Автоматизация',
             self::Management => 'Управление',
             self::Departures => 'Отправления',
+            self::Seo => 'SEO',
         };
     }
 
@@ -42,6 +44,7 @@ enum NavGroup implements HasIcon, HasLabel
             self::Automation => Heroicon::OutlinedCog8Tooth,
             self::Management => Heroicon::OutlinedCog6Tooth,
             self::Departures => Heroicon::OutlinedTruck,
+            self::Seo => Heroicon::OutlinedGlobeAlt,
         };
     }
 }

@@ -14,7 +14,7 @@ use App\Models\Heel;
 use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
 use App\Models\Season;
-use App\Models\Seo\SeoLink;
+use App\Models\Seo\SeoPage;
 use App\Models\Size;
 use App\Models\Style;
 use App\Models\Tag;
@@ -29,7 +29,7 @@ class CatalogSeoService
 
     private ?City $currentCity = null;
 
-    private ?SeoLink $seoLink = null;
+    private ?SeoPage $seoPage = null;
 
     /**
      * @var LengthAwarePaginator<int, \App\Models\Product>
@@ -73,7 +73,7 @@ class CatalogSeoService
     public function __construct()
     {
         $requestUri = ltrim(Request::getRequestUri(), '/');
-        $this->seoLink = Cache::remember('seo_link_uri_' . $requestUri, 1800, fn () => SeoLink::firstWhere('destination', $requestUri));
+        $this->seoPage = Cache::remember('seo_page_uri_' . $requestUri, 1800, fn () => SeoPage::firstWhere('url', $requestUri));
     }
 
     /**
@@ -113,8 +113,8 @@ class CatalogSeoService
      */
     public function getCatalogTitle(): string
     {
-        if (!empty($this->seoLink->meta_title)) {
-            return $this->seoLink->meta_title;
+        if (filled($this->seoPage?->title)) {
+            return $this->seoPage->title;
         } else {
             $currentFilters = $this->currentFilters;
             $emptyCategory = true;
@@ -214,8 +214,8 @@ class CatalogSeoService
      */
     public function getCatalogDescription(): string
     {
-        if (!empty($this->seoLink->meta_description)) {
-            return $this->seoLink->meta_description;
+        if (filled($this->seoPage?->description)) {
+            return $this->seoPage->description;
         } else {
             $currentFilters = $this->currentFilters;
 
@@ -228,9 +228,11 @@ class CatalogSeoService
      */
     public function getCatalogCanonicalUrl(): string
     {
-        $canonicalUrl = $this->seoLink->destination ?? UrlHelper::generate([], [], true);
+        if (filled($this->seoPage?->url)) {
+            return $this->seoPage->url;
+        }
 
-        return $canonicalUrl;
+        return UrlHelper::generate([], [], true);
     }
 
     /**
