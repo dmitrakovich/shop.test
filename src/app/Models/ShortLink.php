@@ -41,6 +41,11 @@ class ShortLink extends Model
         $this->increment('hits_count', 1, ['last_used_at' => now()]);
     }
 
+    public function publicUrl(): string
+    {
+        return front_route("lnk/{$this->short_link}");
+    }
+
     /**
      * Generate, save & return short link
      */

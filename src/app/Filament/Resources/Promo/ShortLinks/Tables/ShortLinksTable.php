@@ -17,7 +17,7 @@ class ShortLinksTable
                     ->sortable(),
                 TextColumn::make('short_link')
                     ->label('Короткая ссылка')
-                    ->formatStateUsing(fn (ShortLink $record): string => route('short-link', $record, true))
+                    ->formatStateUsing(fn (ShortLink $record): string => $record->publicUrl())
                     ->copyable()
                     ->searchable(),
                 TextColumn::make('full_link')

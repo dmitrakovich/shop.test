@@ -94,6 +94,6 @@ class LeaveFeedbackSms extends AbstractSmsTraffic
      */
     protected function reduceLink(string $link): string
     {
-        return route('short-link', ShortLink::createShortLink($link), true);
+        return ShortLink::createShortLink($link)->publicUrl();
     }
 }

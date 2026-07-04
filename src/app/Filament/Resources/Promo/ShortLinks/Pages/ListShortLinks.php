@@ -92,7 +92,7 @@ class ListShortLinks extends ListRecords
         $data = $form->getState();
         $outLink = $this->buildTrackedLink((string)$data['init_link'], is_string($data['source'] ?? null) ? $data['source'] : null);
         $shortLink = ShortLink::createShortLink($outLink);
-        $shortUrl = route('short-link', $shortLink, true);
+        $shortUrl = $shortLink->publicUrl();
 
         $form->fill([
             ...$data,
