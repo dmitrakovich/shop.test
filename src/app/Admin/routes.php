@@ -17,7 +17,6 @@ use App\Admin\Controllers\OrderItemController;
 use App\Admin\Controllers\Orders\OfflineOrderController;
 use App\Admin\Controllers\OrdersDistribution\SettingsController;
 use App\Admin\Controllers\OrdersDistribution\StatisticController;
-use App\Admin\Controllers\Seo\SeoLinkController;
 use App\Admin\Controllers\StockController;
 use App\Admin\Controllers\Users\GroupController;
 use App\Admin\Controllers\Users\UserController;
@@ -82,9 +81,6 @@ Route::group([
         $router->resource('track-numbers', Departures\OrderTrackController::class);
     });
 
-    $router->group(['prefix' => 'seo'], function (Router $router) {
-        $router->resource('seo-links', SeoLinkController::class);
-    });
     $router->resource('cities', CityController::class);
 
     $router->resource('stock', StockController::class);
