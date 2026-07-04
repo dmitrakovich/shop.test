@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Cookie;
+use App\Exceptions\ReportDeviceError;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -38,6 +39,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->report(function (NumberParseException $e) {
             throw ValidationException::withMessages(['phone' => 'Номер телефона имеет неверный формат.']);
         });
+
+        $exceptions->report(app(ReportDeviceError::class));
 
         Integration::handles($exceptions);
     })

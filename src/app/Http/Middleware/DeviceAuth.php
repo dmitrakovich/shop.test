@@ -6,6 +6,7 @@ use App\Facades\Device as DeviceFacade;
 use App\Models\User\Device as UserDevice;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class DeviceAuth
@@ -15,13 +16,13 @@ class DeviceAuth
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         $deviceId = $request->header(self::DEVICE_ID_HEADER_KEY);
 
-        abort_if(!$deviceId, Response::HTTP_UNAUTHORIZED, 'Device ID is missing');
+        abort_unless(Str::isUuid($deviceId), Response::HTTP_UNAUTHORIZED, 'Invalid device ID');
 
         $device = UserDevice::query()->firstOrCreate(['api_id' => $deviceId]);
 
