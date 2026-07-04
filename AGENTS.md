@@ -191,8 +191,10 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 # Laravel Pint Code Formatter
 
-- If you have modified any PHP files, you must run `src/vendor/bin/sail bin pint --dirty --format agent` before finalizing changes to ensure your code matches the project's expected style.
-- Do not run `src/vendor/bin/sail bin pint --test --format agent`, simply run `src/vendor/bin/sail bin pint --format agent` to fix any formatting issues.
+- **Always** pass the project config: `--config ../.formatters/pint.json` (when run from `src/`). There is no `src/pint.json`; Pint without `--config` uses only the default `laravel` preset and skips project rules (including `fully_qualified_strict_types`).
+- Prefer `cd src && ./vendor/bin/sail composer lint` — the Composer `lint` script already includes the correct config.
+- After editing PHP files, run `./vendor/bin/sail bin pint --config ../.formatters/pint.json --dirty --format agent` (or `composer lint` on the touched paths).
+- Do not run bare `pint`, `sail bin pint --dirty`, or `sail bin pint --format agent` without `--config ../.formatters/pint.json`.
 
 === phpunit/core rules ===
 

@@ -8,8 +8,10 @@ alwaysApply: false
 
 - Target runtime: **PHP 8.5**; prefer modern language features when they improve clarity.
 - Formatting:
-  - Use **Laravel Pint**; project config is `.formatters/pint.json`.
-  - If you propose commands, prefer `cd src && ./vendor/bin/sail composer lint` (runs Pint with correct config inside Sail).
+  - Use **Laravel Pint**; project config is `.formatters/pint.json` (repo root, not `src/`).
+  - **Never run Pint without `--config ../.formatters/pint.json`** (from `src/`). There is no `src/pint.json`; bare `pint` / `sail bin pint` uses the default preset only and ignores rules such as `fully_qualified_strict_types` (`import_symbols: false`).
+  - Prefer `cd src && ./vendor/bin/sail composer lint` (Composer `lint` script passes the config).
+  - When formatting dirty files directly: `cd src && ./vendor/bin/sail bin pint --config ../.formatters/pint.json --dirty --format agent`.
 - Static analysis:
   - Use **PHPStan (Larastan) level 6**. **Run PHPStan inside Sail** from `src/`: `cd src && ./vendor/bin/sail composer phpstan` (uses `composer.json` script → `phpstan.neon`; same PHP/container as local dev).
   - Avoid patterns that commonly break Larastan inference (overly dynamic properties, ambiguous collections).
