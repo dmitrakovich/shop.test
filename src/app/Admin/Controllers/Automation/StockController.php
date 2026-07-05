@@ -6,6 +6,7 @@ use App\Admin\Controllers\AbstractAdminController;
 use App\Admin\Exports\StockExporter;
 use App\Admin\Models\AvailableSizesFull;
 use App\Admin\Tools\UpdateAvailability;
+use App\Enums\Product\ProductLabel;
 use App\Jobs\AvailableSizes\UpdateAvailableSizesFullTableJob;
 use App\Models\Brand;
 use App\Models\Category;
@@ -208,7 +209,7 @@ class StockController extends AbstractAdminController
                     'discounts' => $query->whereColumn('products.old_price', '>', 'products.price'),
                     'new_items' => $query->where('products.old_price', 0),
                     'out_of_stock' => $query->whereNull('available_sizes_full.product_id'),
-                    'excluded' => $query->whereIn('products.label_id', Product::excludedLabels()),
+                    'excluded' => $query->whereIn('products.label_id', ProductLabel::getNotUpdateLabels()),
                     'not_added' => $query->whereNull('products.id')->whereNull('available_sizes_full.product_id'),
                     default => $query,
                 };
@@ -284,7 +285,7 @@ class StockController extends AbstractAdminController
         return function (Row $row) use ($yellow, $red, $turquoise, $gray) {
             $isInCatalogue = !empty($row->column('product_id'));
             $isInStock = !empty($row->column('available_sizes_product_id'));
-            $isExcluded = in_array((int)$row->column('label_id'), Product::excludedLabels());
+            $isExcluded = ProductLabel::tryFrom((int)$row->column('label_id'))?->isNotUpdateLabel() ?? false;
             $oldPrice = (float)$row->column('old_price');
             $currentPrice = (float)$row->column('current_price');
 

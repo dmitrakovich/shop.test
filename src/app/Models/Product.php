@@ -363,10 +363,11 @@ class Product extends Model implements HasMedia
     /**
      * Сортировка товаров
      *
+     * @param  Builder<Product>  $query
      * @param  array<string, array<string, Url>>  $filters
-     * @return Builder
+     * @return Builder<Product>
      */
-    public function scopeSorting(Builder $query, ProductSort $sort, array $filters = [])
+    public function scopeSorting(Builder $query, ProductSort $sort, array $filters = []): Builder
     {
         return match ($sort) {
             ProductSort::Newness => $query->orderByDesc('newness_rating')->orderByDesc('id'),
@@ -382,9 +383,10 @@ class Product extends Model implements HasMedia
     /**
      * Поиск товаров
      *
-     * @return Builder
+     * @param  Builder<Product>  $query
+     * @return Builder<Product>
      */
-    public function scopeSearch(Builder $query, ?string $search = null)
+    public function scopeSearch(Builder $query, ?string $search = null): Builder
     {
         if (empty($search)) {
             return $query;
@@ -421,9 +423,10 @@ class Product extends Model implements HasMedia
     /**
      * Get only products with discount
      *
-     * @return Builder
+     * @param  Builder<Product>  $query
+     * @return Builder<Product>
      */
-    public function scopeOnlyWithDiscount(Builder $query, float $amount = 0.01)
+    public function scopeOnlyWithDiscount(Builder $query, float $amount = 0.01): Builder
     {
         return $query->whereRaw('((`old_price` - `price`) / `old_price`) > ?', $amount);
     }
@@ -431,9 +434,10 @@ class Product extends Model implements HasMedia
     /**
      * Get only new products
      *
-     * @return Builder
+     * @param  Builder<Product>  $query
+     * @return Builder<Product>
      */
-    public function scopeOnlyNew(Builder $query, int $days = 10)
+    public function scopeOnlyNew(Builder $query, int $days = 10): Builder
     {
         // return $query->where('created_at', '>', now()->subDays($days));
         return $query->where('old_price', 0);
@@ -555,19 +559,6 @@ class Product extends Model implements HasMedia
     public function availableInstallment(): bool
     {
         return $this->getPrice() >= Config::findCacheable('installment')['min_price'];
-    }
-
-    /**
-     * Returns an array of product labels that should be excluded during processing.
-     *
-     * @todo move to ProductLabel enum
-     */
-    public static function excludedLabels(): array
-    {
-        return [
-            ProductLabel::DO_NOT_PUBLISH->value,
-            ProductLabel::DO_NOT_UPDATE->value,
-        ];
     }
 
     /**

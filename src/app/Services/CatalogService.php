@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\Filterable;
 use App\Enums\Product\ProductSort;
 use App\Facades\Currency;
 use App\Helpers\UrlHelper;
@@ -9,9 +10,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
 use App\Models\Url;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use App\Pagination\CatalogCursorPaginator;
+use App\Pagination\CatalogLengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
@@ -29,16 +30,17 @@ class CatalogService
     ) {}
 
     /**
-     * @return \Illuminate\Contracts\Pagination\CursorPaginator
+     * @param  array<string, array<string, Url>>  $filters
+     * @return CatalogCursorPaginator<int, Product>
      */
-    public function getProducts(array $filters, ProductSort $sort, ?string $search = null)
+    public function getProducts(array $filters, ProductSort $sort, ?string $search = null): CatalogCursorPaginator
     {
         $productsQuery = $this->productService
             ->applyFilters($filters)
             ->search($search)
             ->sorting($sort, $filters);
 
-        $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
+        $products = CatalogCursorPaginator::fromPaginator($productsQuery->cursorPaginate(self::PAGE_SIZE));
         $this->addTopProducts($products, $filters);
         $products->totalCount = $productsQuery->count() + $this->topProductsCount($products);
 
@@ -54,17 +56,18 @@ class CatalogService
 
     /**
      * @param  array<string, array<string, Url>>  $filters
+     * @return CatalogLengthAwarePaginator<int, Product>
      */
-    public function getProductsWithPagination(array $filters, ProductSort $sort, ?string $search = null, ?int $perPage = 12): LengthAwarePaginator
+    public function getProductsWithPagination(array $filters, ProductSort $sort, ?string $search = null, ?int $perPage = 12): CatalogLengthAwarePaginator
     {
-        /** @var Builder $productsQuery */
+        /** @var Builder<Product> $productsQuery */
         $productsQuery = $this->productService
             ->applyFilters($filters)
             ->search($search)
             ->sorting($sort, $filters);
 
         $perPage = min(max($perPage, 12), 100);
-        $products = $productsQuery->paginate($perPage);
+        $products = CatalogLengthAwarePaginator::fromPaginator($productsQuery->paginate($perPage));
         $this->addTopProducts($products, $filters);
         $products->totalCount = $products->total() + $this->topProductsCount($products);
 
@@ -75,6 +78,10 @@ class CatalogService
         return $products;
     }
 
+    /**
+     * @param  array<string, array<string, Url>>  $currentFiltersGroups
+     * @return list<object{name: string, url: string}>
+     */
     public function getFilterBadges(array $currentFiltersGroups = [], ?string $searchQuery = null): array
     {
         $badges = [];
@@ -83,13 +90,13 @@ class CatalogService
                 $currentFiltersGroup = [end($currentFiltersGroup)];
             }
             foreach ($currentFiltersGroup as $currentFilter) {
-                $filterModel = $currentFilter->filters;
-                if ($filterModel->isInvisible()) {
+                $filter = $currentFilter->filters;
+                if (!$filter instanceof Filterable || $filter->isInvisible()) {
                     continue;
                 }
                 $badges[] = (object)[
-                    'name' => $filterModel->getBadgeName(),
-                    'url' => UrlHelper::generate([], [$filterModel]),
+                    'name' => $filter->getBadgeName(),
+                    'url' => UrlHelper::generate([], [$filter]),
                 ];
             }
         }
@@ -105,19 +112,18 @@ class CatalogService
     }
 
     /**
-     * load next products
-     *
-     * @return \Illuminate\Contracts\Pagination\CursorPaginator
+     * @return CatalogCursorPaginator<int, Product>
      */
-    public function getNextProducts()
+    public function getNextProducts(): CatalogCursorPaginator
     {
         $productsQuery = Cache::get($this->getQueryCacheKey());
 
         abort_if(empty($productsQuery), 419, 'Query cache not found');
 
         try {
+            /** @var Builder<Product> $productsQuery */
             $productsQuery = Eloquent::unserialize($productsQuery);
-            $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
+            $products = CatalogCursorPaginator::fromPaginator($productsQuery->cursorPaginate(self::PAGE_SIZE));
         } catch (\Throwable $th) {
             abort(419, 'Page maby expired. Error: ' . $th->getMessage());
         }
@@ -137,9 +143,10 @@ class CatalogService
     }
 
     /**
-     * @param  mixed  $products
+     * @param  CatalogCursorPaginator<int, Product>|CatalogLengthAwarePaginator<int, Product>  $products
+     * @param  array<string, array<string, Url>>  $filters
      */
-    protected function addTopProducts($products, array $filters): void
+    protected function addTopProducts(CatalogCursorPaginator|CatalogLengthAwarePaginator $products, array $filters): void
     {
         if (empty($filters[Top::class])) {
             return;
@@ -161,14 +168,18 @@ class CatalogService
     }
 
     /**
-     * @param  mixed  $products
+     * @param  CatalogCursorPaginator<int, Product>|CatalogLengthAwarePaginator<int, Product>  $products
      */
-    protected function topProductsCount($products): int
+    protected function topProductsCount(CatalogCursorPaginator|CatalogLengthAwarePaginator $products): int
     {
         return $products->count() - self::PAGE_SIZE;
     }
 
-    protected function addMinMaxPrices(CursorPaginator|LengthAwarePaginator $products, Builder $productsQuery): void
+    /**
+     * @param  CatalogCursorPaginator<int, Product>|CatalogLengthAwarePaginator<int, Product>  $products
+     * @param  Builder<Product>  $productsQuery
+     */
+    protected function addMinMaxPrices(CatalogCursorPaginator|CatalogLengthAwarePaginator $products, Builder $productsQuery): void
     {
         $priceQuery = clone $productsQuery;
         $query = $priceQuery->getQuery();
@@ -181,12 +192,6 @@ class CatalogService
             } else {
                 continue;
             }
-            // match ($where['type']) {
-            //     'Basic' => $bindkey++,
-            //     'Column' => $bindkey,
-            //     'In' => $bindkey += count($where['values']),
-            //     'Exists', 'Nested' => $bindkey += count($where['query']->getBindings()),
-            // };
             if (isset($where['column']) && $where['column'] === 'price') {
                 unset($bindings[$bindkey - 1]);
                 unset($query->wheres[$key]);
@@ -200,11 +205,9 @@ class CatalogService
     }
 
     /**
-     * Add GTM data to products
-     *
-     * @param  Collection  $products
+     * @param  CatalogCursorPaginator<int, Product>|CatalogLengthAwarePaginator<int, Product>|Collection<int, Product>  $products
      */
-    protected function addGtmData($products): void
+    protected function addGtmData(CatalogCursorPaginator|CatalogLengthAwarePaginator|Collection $products): void
     {
         $products->each(function (Product $product) {
             $product->dataLayer = GoogleTagManagerService::prepareProduct($product);

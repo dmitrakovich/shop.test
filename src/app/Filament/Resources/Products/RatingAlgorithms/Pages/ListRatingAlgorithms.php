@@ -51,7 +51,7 @@ class ListRatingAlgorithms extends ListRecords
                     ->native(false)
                     ->required(),
                 Select::make('sale_algorithm_id')
-                    ->label('Алгоритм для SALE')
+                    ->label('Алгоритм для скидок')
                     ->options(fn () => RatingAlgorithm::query()->orderBy('name')->pluck('name', 'id'))
                     ->searchable()
                     ->native(false)

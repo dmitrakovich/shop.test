@@ -346,6 +346,9 @@ class UpdateProductsRatingJob extends AbstractJob
     /**
      * Get metrika data from yandex api.
      *
+     * @param  array<string, mixed>  $params
+     * @return array<string, mixed>
+     *
      * @throws \Exception
      */
     private function getYandexMetrikaData(array $params): array
