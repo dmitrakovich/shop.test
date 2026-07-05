@@ -20,13 +20,12 @@ class CatalogLengthAwarePaginator extends LengthAwarePaginator
 
     /**
      * @param  LengthAwarePaginator<TKey, TValue>  $paginator
-     * @return static
      */
     public static function fromPaginator(LengthAwarePaginator $paginator): static
     {
         /** @var static $catalogPaginator */
         $catalogPaginator = new self(
-            $paginator->items(),
+            $paginator->getCollection(),
             $paginator->total(),
             $paginator->perPage(),
             $paginator->currentPage(),

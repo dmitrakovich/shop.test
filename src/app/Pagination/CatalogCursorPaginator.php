@@ -20,13 +20,12 @@ class CatalogCursorPaginator extends CursorPaginator
 
     /**
      * @param  CursorPaginator<TKey, TValue>  $paginator
-     * @return static
      */
     public static function fromPaginator(CursorPaginator $paginator): static
     {
         /** @var static $catalogPaginator */
         $catalogPaginator = new self(
-            $paginator->items(),
+            $paginator->getCollection(),
             $paginator->perPage(),
             $paginator->cursor(),
             [
