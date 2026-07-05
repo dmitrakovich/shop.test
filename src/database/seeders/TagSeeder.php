@@ -2,11 +2,14 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\TruncatesTables;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class TagSeeder extends Seeder
 {
+    use TruncatesTables;
+
     protected $tableName = 'tags';
 
     protected $values = [
@@ -22,7 +25,7 @@ class TagSeeder extends Seeder
      */
     public function run()
     {
-        DB::table($this->tableName)->truncate();
+        $this->truncateTable($this->tableName);
 
         foreach ($this->values as $value) {
             DB::table($this->tableName)->insert($value);

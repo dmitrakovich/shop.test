@@ -2,11 +2,14 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\TruncatesTables;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 abstract class AbstractSeeder extends Seeder
 {
+    use TruncatesTables;
+
     protected $useTimestamps = true;
 
     protected $sortColumn = null;
@@ -89,7 +92,7 @@ abstract class AbstractSeeder extends Seeder
         $this->setSort();
         $this->prepareValues();
 
-        DB::table($this->tableName)->truncate();
+        $this->truncateTable($this->tableName);
 
         foreach ($this->values as $value) {
             DB::table($this->tableName)->insert($value);

@@ -11,7 +11,7 @@ class AdminPanelSeeder extends Seeder
 
     protected $values = [
         ['id' => 8, 'parent_id' => 9, 'order' => 4, 'title' => 'Размеры', 'icon' => 'fa-signal', 'uri' => 'sizes'],
-        ['id' => 9, 'parent_id' => 0, 'order' => 1, 'title' => 'Аттрибуты товаров', 'icon' => 'fa-bars'],
+        ['id' => 9, 'parent_id' => 0, 'order' => 1, 'title' => 'Аттрибуты товаров', 'icon' => 'fa-bars', 'uri' => ''],
         ['id' => 10, 'parent_id' => 9, 'order' => 5, 'title' => 'Цвет', 'icon' => 'fa-adjust', 'uri' => 'colors'],
         ['id' => 11, 'parent_id' => 9, 'order' => 2, 'title' => 'Категории', 'icon' => 'fa-align-left', 'uri' => 'categories'],
         ['id' => 12, 'parent_id' => 9, 'order' => 3, 'title' => 'Материал', 'icon' => 'fa-500px', 'uri' => 'fabrics'],
@@ -28,8 +28,10 @@ class AdminPanelSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->values as $value) {
-            DB::table($this->tableName)->insert($value);
-        }
+        DB::table($this->tableName)->upsert(
+            $this->values,
+            ['id'],
+            ['parent_id', 'order', 'title', 'icon', 'uri'],
+        );
     }
 }

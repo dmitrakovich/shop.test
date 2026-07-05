@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(HeelSeeder::class);
         $this->call(StyleSeeder::class);
         $this->call(SeasonSeeder::class);
+        $this->call(TagGroupsTableSeeder::class);
         $this->call(TagSeeder::class);
         $this->call(CollectionSeeder::class);
         $this->call(BrandSeeder::class);
@@ -28,9 +30,17 @@ class DatabaseSeeder extends Seeder
         $this->call(UrlsSeeder::class);
 
         $this->call(CountriesSeeder::class);
+        $this->call(CurrencySeeder::class);
 
         // admin panel
-        Artisan::call('admin:install');
+        Schema::disableForeignKeyConstraints();
+
+        try {
+            Artisan::call('admin:install');
+        } finally {
+            Schema::enableForeignKeyConstraints();
+        }
+
         $this->call(AdminPanelSeeder::class);
 
         // auto-generated
@@ -38,6 +48,5 @@ class DatabaseSeeder extends Seeder
         $this->call(ConfigsTableSeeder::class);
         $this->call(UserGroupsTableSeeder::class);
         $this->call(StocksTableSeeder::class);
-        $this->call(TagGroupsTableSeeder::class);
     }
 }

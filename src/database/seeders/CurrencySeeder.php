@@ -2,11 +2,15 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\TruncatesTables;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class CurrencySeeder extends Seeder
 {
+    use TruncatesTables;
+
     protected $tableName = 'currencies';
 
     /**
@@ -16,7 +20,7 @@ class CurrencySeeder extends Seeder
      */
     public function run()
     {
-        DB::table($this->tableName)->truncate();
+        $this->truncateTable($this->tableName);
 
         DB::table($this->tableName)->insert([
             [
@@ -48,5 +52,7 @@ class CurrencySeeder extends Seeder
                 'symbol' => '$',
             ],
         ]);
+
+        Cache::forget('currencies');
     }
 }

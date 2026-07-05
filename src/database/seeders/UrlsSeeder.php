@@ -4,11 +4,13 @@ namespace Database\Seeders;
 
 use App\Models\ProductAttributes\Status;
 use App\Models\Url;
+use Database\Seeders\Concerns\TruncatesTables;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UrlsSeeder extends Seeder
 {
+    use TruncatesTables;
+
     protected $slugs = null;
 
     /**
@@ -18,7 +20,7 @@ class UrlsSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('urls')->truncate();
+        $this->truncateTable('urls');
 
         $this->setSlugs('App\Models\Category');
         $this->setSlugs('App\Models\Product', true);

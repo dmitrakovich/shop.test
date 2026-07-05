@@ -3,12 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use Database\Seeders\Concerns\TruncatesTables;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
+    use TruncatesTables;
+
     /**
      * Run the database seeds.
      *
@@ -16,7 +18,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categories')->truncate();
+        $this->truncateTable('categories');
 
         $catData = [
             [0, 'Каталог'],                       // 1
