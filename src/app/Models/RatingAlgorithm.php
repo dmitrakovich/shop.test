@@ -79,10 +79,14 @@ class RatingAlgorithm extends Model
     {
         $config = Config::findCacheable('rating');
 
-        $popularityAlgorithmId = (int)($config['popularity_algorithm_id'] ?? 0);
-        $newnessAlgorithmId = (int)($config['newness_algorithm_id'] ?? 0);
+        $algorithmIds = array_values(array_unique(array_filter([
+            (int)($config['popularity_algorithm_id'] ?? 0),
+            (int)($config['newness_algorithm_id'] ?? 0),
+            (int)($config['season_algorithm_id'] ?? 0),
+            (int)($config['sale_algorithm_id'] ?? 0),
+        ])));
 
-        return $this->id === $popularityAlgorithmId || $this->id === $newnessAlgorithmId;
+        return in_array($this->id, $algorithmIds, true);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Product\ProductLabel;
+use App\Enums\Product\ProductRatingColumn;
 use App\Enums\Product\ProductSort;
 use App\Facades\Currency;
 use App\Models\Collection as ProductCollection;
@@ -45,6 +46,8 @@ use Spatie\MediaLibrary\HasMedia;
  * @property bool $action
  * @property int $rating
  * @property int $newness_rating
+ * @property int $season_rating
+ * @property int $sale_rating
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -72,7 +75,7 @@ use Spatie\MediaLibrary\HasMedia;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AvailableSizes[] $availableSizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product sorting(ProductSort $type)
+ * @method static \Illuminate\Database\Eloquent\Builder<static> sorting(ProductSort $type, array<string, array<string, Url>> $filters = [])
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product search(?string $search = null)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyWithDiscount(float $amount = 0.01)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyNew(int $days = 10)
@@ -360,15 +363,18 @@ class Product extends Model implements HasMedia
     /**
      * Сортировка товаров
      *
+     * @param  array<string, array<string, Url>>  $filters
      * @return Builder
      */
-    public function scopeSorting(Builder $query, ProductSort $sort)
+    public function scopeSorting(Builder $query, ProductSort $sort, array $filters = [])
     {
         return match ($sort) {
             ProductSort::Newness => $query->orderByDesc('newness_rating')->orderByDesc('id'),
             ProductSort::PriceUp => $query->orderBy('price')->orderBy('id'),
             ProductSort::PriceDown => $query->orderByDesc('price')->orderByDesc('id'),
-            ProductSort::Rating => $query->orderByDesc('rating')->orderByDesc('id'),
+            ProductSort::Rating => $query
+                ->orderByDesc(ProductRatingColumn::fromFilters($filters)->value)
+                ->orderByDesc('id'),
             // 'discount' => $query->orderByDesc('discount')->orderByDesc('id'),
         };
     }

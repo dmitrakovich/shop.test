@@ -44,6 +44,18 @@ class ListRatingAlgorithms extends ListRecords
                     ->searchable()
                     ->native(false)
                     ->required(),
+                Select::make('season_algorithm_id')
+                    ->label('Алгоритм для актуального сезона')
+                    ->options(fn () => RatingAlgorithm::query()->orderBy('name')->pluck('name', 'id'))
+                    ->searchable()
+                    ->native(false)
+                    ->required(),
+                Select::make('sale_algorithm_id')
+                    ->label('Алгоритм для SALE')
+                    ->options(fn () => RatingAlgorithm::query()->orderBy('name')->pluck('name', 'id'))
+                    ->searchable()
+                    ->native(false)
+                    ->required(),
             ])
             ->action(function (array $data): void {
                 Config::query()->updateOrCreate(
@@ -90,6 +102,8 @@ class ListRatingAlgorithms extends ListRecords
         return [
             'popularity_algorithm_id' => isset($config['popularity_algorithm_id']) ? (int)$config['popularity_algorithm_id'] : null,
             'newness_algorithm_id' => isset($config['newness_algorithm_id']) ? (int)$config['newness_algorithm_id'] : null,
+            'season_algorithm_id' => isset($config['season_algorithm_id']) ? (int)$config['season_algorithm_id'] : null,
+            'sale_algorithm_id' => isset($config['sale_algorithm_id']) ? (int)$config['sale_algorithm_id'] : null,
             'last_update' => $config['last_update'] ?? null,
         ];
     }

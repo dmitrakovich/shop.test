@@ -57,6 +57,14 @@ class UpdateProductsRatingJob extends AbstractJob
                     $this->scoresForProduct($product, $metrics, $ranges, $algorithms['newness']),
                     $algorithms['newness']
                 ),
+                'season_rating' => $this->calculateRating(
+                    $this->scoresForProduct($product, $metrics, $ranges, $algorithms['season']),
+                    $algorithms['season']
+                ),
+                'sale_rating' => $this->calculateRating(
+                    $this->scoresForProduct($product, $metrics, $ranges, $algorithms['sale']),
+                    $algorithms['sale']
+                ),
             ];
         }
 
@@ -69,29 +77,35 @@ class UpdateProductsRatingJob extends AbstractJob
 
     /**
      * @param  array<string, mixed>  $config
-     * @return array{popularity: RatingAlgorithm, newness: RatingAlgorithm}
+     * @return array{popularity: RatingAlgorithm, newness: RatingAlgorithm, season: RatingAlgorithm, sale: RatingAlgorithm}
      */
     private function getAlgorithms(array $config): array
     {
-        $popularityAlgorithmId = (int)$config['popularity_algorithm_id'];
-        $newnessAlgorithmId = (int)$config['newness_algorithm_id'];
+        $algorithmIds = [
+            'popularity' => (int)$config['popularity_algorithm_id'],
+            'newness' => (int)$config['newness_algorithm_id'],
+            'season' => (int)$config['season_algorithm_id'],
+            'sale' => (int)$config['sale_algorithm_id'],
+        ];
 
         $algorithms = RatingAlgorithm::query()
-            ->whereIn('id', [$popularityAlgorithmId, $newnessAlgorithmId])
+            ->whereIn('id', array_values($algorithmIds))
             ->get()
             ->keyBy('id');
 
-        $popularityAlgorithm = $algorithms->get($popularityAlgorithmId);
-        $newnessAlgorithm = $algorithms->get($newnessAlgorithmId);
+        $resolved = [];
 
-        if (!$popularityAlgorithm instanceof RatingAlgorithm || !$newnessAlgorithm instanceof RatingAlgorithm) {
-            throw new \Exception('Не выбран алгоритм рейтинга для популярности или новинок');
+        foreach ($algorithmIds as $key => $algorithmId) {
+            $algorithm = $algorithms->get($algorithmId);
+
+            if (!$algorithm instanceof RatingAlgorithm) {
+                throw new \Exception("Не выбран алгоритм рейтинга для {$key}");
+            }
+
+            $resolved[$key] = $algorithm;
         }
 
-        return [
-            'popularity' => $popularityAlgorithm,
-            'newness' => $newnessAlgorithm,
-        ];
+        return $resolved;
     }
 
     /**
@@ -234,27 +248,35 @@ class UpdateProductsRatingJob extends AbstractJob
     }
 
     /**
-     * @param  array<int, array{rating: int, newness_rating: int}>  $rating
+     * @param  array<int, array{rating: int, newness_rating: int, season_rating: int, sale_rating: int}>  $rating
      */
     private function updateProductsRating(array $rating): void
     {
         foreach (array_chunk($rating, 1000, true) as $ratingChunk) {
             $ratingCases = '';
             $newnessRatingCases = '';
+            $seasonRatingCases = '';
+            $saleRatingCases = '';
             $productIds = [];
 
             foreach ($ratingChunk as $id => $values) {
                 $productIds[] = (int)$id;
                 $ratingCases .= "WHEN id = {$id} THEN {$values['rating']} ";
                 $newnessRatingCases .= "WHEN id = {$id} THEN {$values['newness_rating']} ";
+                $seasonRatingCases .= "WHEN id = {$id} THEN {$values['season_rating']} ";
+                $saleRatingCases .= "WHEN id = {$id} THEN {$values['sale_rating']} ";
             }
 
             $ids = implode(',', $productIds);
 
-            DB::statement(
-                "UPDATE products SET rating = (CASE {$ratingCases} ELSE rating END), " .
-                "newness_rating = (CASE {$newnessRatingCases} ELSE newness_rating END) WHERE id IN ({$ids})"
-            );
+            DB::statement(<<<SQL
+                UPDATE products SET
+                    rating = (CASE {$ratingCases} ELSE rating END),
+                    newness_rating = (CASE {$newnessRatingCases} ELSE newness_rating END),
+                    season_rating = (CASE {$seasonRatingCases} ELSE season_rating END),
+                    sale_rating = (CASE {$saleRatingCases} ELSE sale_rating END)
+                WHERE id IN ({$ids})
+                SQL);
         }
     }
 
@@ -267,6 +289,8 @@ class UpdateProductsRatingJob extends AbstractJob
         return [
             'popularity_algorithm_id' => (int)($config['popularity_algorithm_id'] ?? 0),
             'newness_algorithm_id' => (int)($config['newness_algorithm_id'] ?? 0),
+            'season_algorithm_id' => (int)($config['season_algorithm_id'] ?? 0),
+            'sale_algorithm_id' => (int)($config['sale_algorithm_id'] ?? 0),
             'last_update' => $config['last_update'] ?? null,
         ];
     }

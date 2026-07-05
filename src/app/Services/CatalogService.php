@@ -36,7 +36,7 @@ class CatalogService
         $productsQuery = $this->productService
             ->applyFilters($filters)
             ->search($search)
-            ->sorting($sort);
+            ->sorting($sort, $filters);
 
         $products = $productsQuery->cursorPaginate(self::PAGE_SIZE);
         $this->addTopProducts($products, $filters);
@@ -61,7 +61,7 @@ class CatalogService
         $productsQuery = $this->productService
             ->applyFilters($filters)
             ->search($search)
-            ->sorting($sort);
+            ->sorting($sort, $filters);
 
         $perPage = min(max($perPage, 12), 100);
         $products = $productsQuery->paginate($perPage);
