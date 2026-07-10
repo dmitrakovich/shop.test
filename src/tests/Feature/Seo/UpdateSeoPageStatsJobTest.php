@@ -7,6 +7,7 @@ use App\Jobs\UpdateSeoPageStatsJob;
 use App\Models\Seo\SeoPage;
 use App\Services\Seo\SeoPageStatsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
@@ -53,6 +54,76 @@ class UpdateSeoPageStatsJobTest extends TestCase
             $page->score,
             0.0001,
         );
+
+        Http::assertSent(function (Request $request): bool {
+            parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
+
+            return str_starts_with($request->url(), 'https://api-metrika.yandex.ru/stat/v1/data')
+                && (int) ($query['offset'] ?? 0) === 1
+                && (int) ($query['limit'] ?? 0) === 100;
+        });
+    }
+
+    public function test_job_paginates_metrika_with_one_based_offset(): void
+    {
+        config([
+            'services.yandex.token' => 'test-token',
+            'services.yandex.counter_id' => '12345',
+            'seo.page_stats.api_limit' => 1,
+        ]);
+
+        $firstPage = SeoPage::query()->create([
+            'page_type' => SeoPageType::Catalog,
+            'url' => 'catalog/first',
+            'title' => 'First',
+        ]);
+        $secondPage = SeoPage::query()->create([
+            'page_type' => SeoPageType::Catalog,
+            'url' => 'catalog/second',
+            'title' => 'Second',
+        ]);
+
+        Http::fake([
+            'api-metrika.yandex.ru/*' => Http::sequence()
+                ->push([
+                    'data' => [
+                        [
+                            'dimensions' => [['name' => 'https://barocco.by/catalog/first/']],
+                            'metrics' => [10, 5],
+                        ],
+                    ],
+                    'total_rows' => 2,
+                ])
+                ->push([
+                    'data' => [
+                        [
+                            'dimensions' => [['name' => 'https://barocco.by/catalog/second/']],
+                            'metrics' => [20, 8],
+                        ],
+                    ],
+                    'total_rows' => 2,
+                ]),
+        ]);
+
+        UpdateSeoPageStatsJob::dispatchSync();
+
+        $firstPage->refresh();
+        $secondPage->refresh();
+
+        $this->assertSame(10, $firstPage->pageviews);
+        $this->assertSame(20, $secondPage->pageviews);
+
+        Http::assertSentCount(2);
+        Http::assertSent(function (Request $request): bool {
+            parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
+
+            return (int) ($query['offset'] ?? 0) === 1;
+        });
+        Http::assertSent(function (Request $request): bool {
+            parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
+
+            return (int) ($query['offset'] ?? 0) === 2;
+        });
     }
 
     public function test_job_matches_catalog_root_with_and_without_trailing_slash(): void

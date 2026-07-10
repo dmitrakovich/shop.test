@@ -95,7 +95,8 @@ class MetrikaService
     public function fetchPageUrlStats(int $periodDays, int $limit): array
     {
         $counterId = config('services.yandex.counter_id');
-        $offset = 0;
+        // Metrika Reporting API uses 1-based offsets (min 1).
+        $offset = 1;
         $rows = [];
 
         do {
@@ -120,7 +121,7 @@ class MetrikaService
 
             $totalRows = (int) ($result['total_rows'] ?? 0);
             $offset += $limit;
-        } while ($offset < $totalRows);
+        } while ($offset <= $totalRows);
 
         return $rows;
     }

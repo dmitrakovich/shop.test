@@ -19,8 +19,8 @@ class SeoPageStatsService
      */
     public function fetchMetricsByUrl(): array
     {
-        $periodDays = (int) config('seo.page_stats.period_days');
-        $limit = (int) config('seo.page_stats.api_limit');
+        $periodDays = (int)config('seo.page_stats.period_days');
+        $limit = (int)config('seo.page_stats.api_limit');
 
         $rows = $this->metrika->fetchPageUrlStats($periodDays, $limit);
         $mapped = [];
@@ -54,13 +54,13 @@ class SeoPageStatsService
     public function syncStats(): int
     {
         $metricsByUrl = $this->fetchMetricsByUrl();
-        $pageviewsWeight = (float) config('seo.page_stats.pageviews_weight');
+        $pageviewsWeight = (float)config('seo.page_stats.pageviews_weight');
         $updates = [];
 
         foreach (SeoPage::query()->pluck('url', 'id') as $id => $url) {
             $metrics = $metricsByUrl[SeoPage::urlKey($url)] ?? ['pageviews' => 0, 'visits' => 0];
 
-            $updates[(int) $id] = [
+            $updates[(int)$id] = [
                 'pageviews' => $metrics['pageviews'],
                 'visits' => $metrics['visits'],
                 'score' => self::calculateScore($metrics['pageviews'], $metrics['visits'], $pageviewsWeight),
@@ -90,7 +90,7 @@ class SeoPageStatsService
             $pageIds = [];
 
             foreach ($chunk as $id => $values) {
-                $pageIds[] = (int) $id;
+                $pageIds[] = (int)$id;
                 $pageviewsCases .= "WHEN id = {$id} THEN {$values['pageviews']} ";
                 $visitsCases .= "WHEN id = {$id} THEN {$values['visits']} ";
                 $scoreCases .= "WHEN id = {$id} THEN {$values['score']} ";
