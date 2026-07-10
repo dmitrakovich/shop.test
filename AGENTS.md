@@ -191,10 +191,11 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 # Laravel Pint Code Formatter
 
-- **Always** pass the project config: `--config ../.formatters/pint.json` (when run from `src/`). There is no `src/pint.json`; Pint without `--config` uses only the default `laravel` preset and skips project rules (including `fully_qualified_strict_types`).
+- **Always** pass the project config: `--config ../.formatters/pint.json` (when run from `src/`). There is no `src/pint.json`; Pint without `--config` uses only the default `laravel` preset and skips project rules (including `fully_qualified_strict_types` and `cast_spaces`).
 - Prefer `cd src && ./vendor/bin/sail composer lint` — the Composer `lint` script already includes the correct config.
 - After editing PHP files, run `./vendor/bin/sail bin pint --config ../.formatters/pint.json --dirty --format agent` (or `composer lint` on the touched paths).
 - Do not run bare `pint`, `sail bin pint --dirty`, or `sail bin pint --format agent` without `--config ../.formatters/pint.json`.
+- Write casts **without** a space (`cast_spaces: none`): `(int)$id`, `(string)config('…')` — not `(int) $id`.
 
 === phpunit/core rules ===
 

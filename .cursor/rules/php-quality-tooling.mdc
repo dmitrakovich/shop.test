@@ -12,6 +12,7 @@ alwaysApply: false
   - **Never run Pint without `--config ../.formatters/pint.json`** (from `src/`). There is no `src/pint.json`; bare `pint` / `sail bin pint` uses the default preset only and ignores rules such as `fully_qualified_strict_types` (`import_symbols: false`).
   - Prefer `cd src && ./vendor/bin/sail composer lint` (Composer `lint` script passes the config).
   - When formatting dirty files directly: `cd src && ./vendor/bin/sail bin pint --config ../.formatters/pint.json --dirty --format agent`.
+  - **Casts without a space** (`cast_spaces: none` in Pint): write `(int)$id`, `(string)config('…')`, `(float)($row['x'] ?? 0)` — not `(int) $id` / `(string) config(...)`. Do not follow the default Laravel/Pint spaced-cast style.
 - Static analysis:
   - Use **PHPStan (Larastan) level 6**. **Run PHPStan inside Sail** from `src/`: `cd src && ./vendor/bin/sail composer phpstan` (uses `composer.json` script → `phpstan.neon`; same PHP/container as local dev).
   - Avoid patterns that commonly break Larastan inference (overly dynamic properties, ambiguous collections).

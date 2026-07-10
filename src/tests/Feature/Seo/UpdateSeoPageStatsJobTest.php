@@ -56,11 +56,11 @@ class UpdateSeoPageStatsJobTest extends TestCase
         );
 
         Http::assertSent(function (Request $request): bool {
-            parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
+            parse_str((string)parse_url($request->url(), PHP_URL_QUERY), $query);
 
             return str_starts_with($request->url(), 'https://api-metrika.yandex.ru/stat/v1/data')
-                && (int) ($query['offset'] ?? 0) === 1
-                && (int) ($query['limit'] ?? 0) === 100;
+                && (int)($query['offset'] ?? 0) === 1
+                && (int)($query['limit'] ?? 0) === 100;
         });
     }
 
@@ -115,14 +115,14 @@ class UpdateSeoPageStatsJobTest extends TestCase
 
         Http::assertSentCount(2);
         Http::assertSent(function (Request $request): bool {
-            parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
+            parse_str((string)parse_url($request->url(), PHP_URL_QUERY), $query);
 
-            return (int) ($query['offset'] ?? 0) === 1;
+            return (int)($query['offset'] ?? 0) === 1;
         });
         Http::assertSent(function (Request $request): bool {
-            parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
+            parse_str((string)parse_url($request->url(), PHP_URL_QUERY), $query);
 
-            return (int) ($query['offset'] ?? 0) === 2;
+            return (int)($query['offset'] ?? 0) === 2;
         });
     }
 

@@ -52,14 +52,14 @@ class MetrikaService
         ]);
 
         foreach ($popularResult['data'] ?? [] as $row) {
-            $productId = (int) ($row['dimensions'][0]['name'] ?? 0);
+            $productId = (int)($row['dimensions'][0]['name'] ?? 0);
 
             if (!array_key_exists($productId, $views)) {
                 continue;
             }
 
-            $views[$productId] = (float) ($row['metrics'][0] ?? 0);
-            $purchases[$productId] = (float) ($row['metrics'][1] ?? 0);
+            $views[$productId] = (float)($row['metrics'][0] ?? 0);
+            $purchases[$productId] = (float)($row['metrics'][1] ?? 0);
         }
 
         $cartsResult = $this->fetch([
@@ -73,10 +73,10 @@ class MetrikaService
         ]);
 
         foreach ($cartsResult['data'] ?? [] as $row) {
-            $productId = (int) ($row['dimensions'][0]['name'] ?? 0);
+            $productId = (int)($row['dimensions'][0]['name'] ?? 0);
 
             if (array_key_exists($productId, $carts)) {
-                $carts[$productId] = (float) ($row['metrics'][0] ?? 0);
+                $carts[$productId] = (float)($row['metrics'][0] ?? 0);
             }
         }
 
@@ -113,13 +113,13 @@ class MetrikaService
 
             foreach ($result['data'] ?? [] as $row) {
                 $rows[] = [
-                    'url' => (string) ($row['dimensions'][0]['name'] ?? ''),
-                    'pageviews' => (int) ($row['metrics'][0] ?? 0),
-                    'visits' => (int) ($row['metrics'][1] ?? 0),
+                    'url' => (string)($row['dimensions'][0]['name'] ?? ''),
+                    'pageviews' => (int)($row['metrics'][0] ?? 0),
+                    'visits' => (int)($row['metrics'][1] ?? 0),
                 ];
             }
 
-            $totalRows = (int) ($result['total_rows'] ?? 0);
+            $totalRows = (int)($result['total_rows'] ?? 0);
             $offset += $limit;
         } while ($offset <= $totalRows);
 

@@ -10,7 +10,7 @@ class DiskService
 
     public function __construct()
     {
-        $this->token = (string) config('services.yandex.token');
+        $this->token = (string)config('services.yandex.token');
     }
 
     /**
