@@ -72,7 +72,7 @@ class CatalogSeoService
 
     public function __construct()
     {
-        $requestUri = ltrim(Request::getRequestUri(), '/');
+        $requestUri = SeoPage::urlKey(ltrim(Request::getRequestUri(), '/'));
         $this->seoPage = Cache::remember('seo_page_uri_' . $requestUri, 1800, fn () => SeoPage::firstWhere('url', $requestUri));
     }
 

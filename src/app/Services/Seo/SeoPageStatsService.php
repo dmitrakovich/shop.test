@@ -5,7 +5,6 @@ namespace App\Services\Seo;
 use App\Models\Seo\SeoPage;
 use App\Services\Api\Yandex\MetrikaService;
 use Illuminate\Support\Facades\DB;
-use League\Uri\Uri;
 
 class SeoPageStatsService
 {
@@ -27,7 +26,7 @@ class SeoPageStatsService
         $mapped = [];
 
         foreach ($rows as $row) {
-            $url = self::normalizeMetrikaUrl($row['url']);
+            $url = SeoPage::urlKey($row['url']);
 
             if ($url === '') {
                 continue;
@@ -59,7 +58,7 @@ class SeoPageStatsService
         $updates = [];
 
         foreach (SeoPage::query()->pluck('url', 'id') as $id => $url) {
-            $metrics = $metricsByUrl[$url] ?? ['pageviews' => 0, 'visits' => 0];
+            $metrics = $metricsByUrl[SeoPage::urlKey($url)] ?? ['pageviews' => 0, 'visits' => 0];
 
             $updates[(int) $id] = [
                 'pageviews' => $metrics['pageviews'],
@@ -112,23 +111,5 @@ class SeoPageStatsService
     public static function calculateScore(int $pageviews, int $visits, float $pageviewsWeight): float
     {
         return log(1 + $visits + ($pageviewsWeight * $pageviews));
-    }
-
-    public static function normalizeMetrikaUrl(string $url): string
-    {
-        $uri = Uri::parse($url);
-
-        if ($uri === null) {
-            return ltrim($url, '/');
-        }
-
-        $path = ltrim($uri->getPath(), '/');
-        $query = $uri->getQuery();
-
-        if (filled($query)) {
-            $path .= '?' . $query;
-        }
-
-        return $path;
     }
 }

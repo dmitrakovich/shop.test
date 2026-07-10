@@ -26,15 +26,15 @@ class UpdateSeoPageStatsJobTest extends TestCase
 
         $page = SeoPage::query()->create([
             'page_type' => SeoPageType::Catalog,
-            'url' => 'catalog/shoes',
-            'title' => 'Shoes',
+            'url' => 'catalog/heel-stiletto/evening/corporate',
+            'title' => 'Corporate shoes',
         ]);
 
         Http::fake([
             'api-metrika.yandex.ru/*' => Http::response([
                 'data' => [
                     [
-                        'dimensions' => [['name' => 'https://barocco.by/catalog/shoes']],
+                        'dimensions' => [['name' => 'https://barocco.by/catalog/heel-stiletto/evening/corporate/']],
                         'metrics' => [120, 45],
                     ],
                 ],
@@ -53,6 +53,39 @@ class UpdateSeoPageStatsJobTest extends TestCase
             $page->score,
             0.0001,
         );
+    }
+
+    public function test_job_matches_catalog_root_with_and_without_trailing_slash(): void
+    {
+        config([
+            'services.yandex.token' => 'test-token',
+            'services.yandex.counter_id' => '12345',
+        ]);
+
+        $page = SeoPage::query()->create([
+            'page_type' => SeoPageType::Catalog,
+            'url' => 'catalog',
+            'title' => 'Catalog',
+        ]);
+
+        Http::fake([
+            'api-metrika.yandex.ru/*' => Http::response([
+                'data' => [
+                    [
+                        'dimensions' => [['name' => 'https://barocco.by/catalog']],
+                        'metrics' => [500, 200],
+                    ],
+                ],
+                'total_rows' => 1,
+            ]),
+        ]);
+
+        UpdateSeoPageStatsJob::dispatchSync();
+
+        $page->refresh();
+
+        $this->assertSame(500, $page->pageviews);
+        $this->assertSame(200, $page->visits);
     }
 
     public function test_job_keeps_existing_stats_when_api_fails(): void
@@ -113,5 +146,24 @@ class UpdateSeoPageStatsJobTest extends TestCase
         $this->assertSame(0, $page->pageviews);
         $this->assertSame(0, $page->visits);
         $this->assertEqualsWithDelta(0.0, $page->score, 0.0001);
+    }
+
+    public function test_job_fails_when_there_are_no_seo_pages(): void
+    {
+        config([
+            'services.yandex.token' => 'test-token',
+            'services.yandex.counter_id' => '12345',
+        ]);
+
+        Http::fake([
+            'api-metrika.yandex.ru/*' => Http::response([
+                'data' => [],
+                'total_rows' => 0,
+            ]),
+        ]);
+
+        UpdateSeoPageStatsJob::dispatchSync();
+
+        $this->assertSame(0, SeoPage::query()->count());
     }
 }

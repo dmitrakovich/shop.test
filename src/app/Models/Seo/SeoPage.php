@@ -74,4 +74,16 @@ class SeoPage extends Model
 
         return $prefix . ($result !== '' ? '/' . $result : '');
     }
+
+    public static function urlKey(string $url): string
+    {
+        if (str_contains($url, '://')) {
+            $uri = Uri::parse($url);
+            $path = ltrim($uri?->getPath() ?? '', '/');
+        } else {
+            $path = ltrim(explode('?', $url, 2)[0], '/');
+        }
+
+        return rtrim($path, '/');
+    }
 }
