@@ -5,13 +5,13 @@ namespace App\Jobs;
 use App\Enums\Product\RatingFactor;
 use App\Models\Config;
 use App\Models\RatingAlgorithm;
+use App\Services\Api\Yandex\MetrikaService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use stdClass;
 
 class UpdateProductsRatingJob extends AbstractJob
@@ -25,7 +25,7 @@ class UpdateProductsRatingJob extends AbstractJob
      *
      * @throws \Exception
      */
-    public function handle(): void
+    public function handle(MetrikaService $metrika): void
     {
         $this->log('Старт');
 
@@ -43,7 +43,7 @@ class UpdateProductsRatingJob extends AbstractJob
         }
 
         $productIds = $products->pluck('id')->map(fn ($id): int => (int)$id)->all();
-        $metrics = $this->getMetrics($productIds);
+        $metrics = $this->getMetrics($productIds, $metrika);
         $ranges = $this->getRanges($products, $metrics);
         $rating = [];
 
@@ -131,55 +131,15 @@ class UpdateProductsRatingJob extends AbstractJob
     /**
      * @param  list<int>  $productIds
      * @return array<string, array<int, float>>
-     *
-     * @throws \Exception
      */
-    private function getMetrics(array $productIds): array
+    private function getMetrics(array $productIds, MetrikaService $metrika): array
     {
-        $views = array_fill_keys($productIds, 0.0);
-        $purchases = array_fill_keys($productIds, 0.0);
-        $carts = array_fill_keys($productIds, 0.0);
-        $counterYandexId = config('services.yandex.counter_id');
-
-        $popularResult = $this->getYandexMetrikaData([
-            'ids' => $counterYandexId,
-            'metrics' => 'ym:s:productImpressionsUniq,ym:s:productPurchasedUniq',
-            'dimensions' => 'ym:s:productID',
-            'date1' => '30daysAgo',
-            'date2' => 'yesterday',
-            'sort' => 'ym:s:productID',
-            'limit' => 3000,
-        ]);
-
-        foreach ($popularResult['data'] as $row) {
-            $productId = (int)($row['dimensions'][0]['name'] ?? 0);
-            if (array_key_exists($productId, $views)) {
-                $views[$productId] = (float)($row['metrics'][0] ?? 0);
-                $purchases[$productId] = (float)($row['metrics'][1] ?? 0);
-            }
-        }
-
-        $cartsResult = $this->getYandexMetrikaData([
-            'ids' => $counterYandexId,
-            'metrics' => 'ym:s:productBasketsUniq',
-            'dimensions' => 'ym:s:productID',
-            'date1' => '7daysAgo',
-            'date2' => 'yesterday',
-            'sort' => 'ym:s:productID',
-            'limit' => 3000,
-        ]);
-
-        foreach ($cartsResult['data'] as $row) {
-            $productId = (int)($row['dimensions'][0]['name'] ?? 0);
-            if (array_key_exists($productId, $carts)) {
-                $carts[$productId] = (float)($row['metrics'][0] ?? 0);
-            }
-        }
+        $productMetrics = $metrika->fetchProductMetrics($productIds);
 
         return [
-            RatingFactor::Views->value => $views,
-            RatingFactor::Purchases->value => $purchases,
-            RatingFactor::Carts->value => $carts,
+            RatingFactor::Views->value => $productMetrics['views'],
+            RatingFactor::Purchases->value => $productMetrics['purchases'],
+            RatingFactor::Carts->value => $productMetrics['carts'],
         ];
     }
 
@@ -341,26 +301,5 @@ class UpdateProductsRatingJob extends AbstractJob
     {
         $config['last_update'] = now()->toDateTimeString();
         $configModel->update(['config' => $config]);
-    }
-
-    /**
-     * Get metrika data from yandex api.
-     *
-     * @param  array<string, mixed>  $params
-     * @return array<string, mixed>
-     *
-     * @throws \Exception
-     */
-    private function getYandexMetrikaData(array $params): array
-    {
-        $result = Http::withToken(config('services.yandex.token'), 'OAuth')
-            ->get('https://api-metrika.yandex.ru/stat/v1/data', $params)
-            ->json();
-
-        if (empty($result) || isset($result['errors'])) {
-            throw new \Exception($result['message'] ?? 'Яндекс метрика не вернула данные');
-        }
-
-        return $result;
     }
 }

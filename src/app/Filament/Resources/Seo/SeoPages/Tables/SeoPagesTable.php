@@ -23,6 +23,18 @@ class SeoPagesTable
                     ->label('Тип')
                     ->badge()
                     ->sortable(),
+                TextColumn::make('pageviews')
+                    ->label('Просмотры')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('visits')
+                    ->label('Визиты')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('score')
+                    ->label('Score')
+                    ->numeric(decimalPlaces: 2)
+                    ->sortable(),
                 TextColumn::make('title')
                     ->label('Title')
                     ->searchable()

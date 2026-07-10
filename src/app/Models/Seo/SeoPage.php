@@ -17,6 +17,9 @@ use League\Uri\Uri;
  * @property string|null $seo_text
  * @property string|null $keywords
  * @property string|null $tag_name
+ * @property int $pageviews
+ * @property int $visits
+ * @property float $score
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
@@ -25,17 +28,7 @@ class SeoPage extends Model
     /**
      * @var list<string>
      */
-    protected $fillable = [
-        'page_type',
-        'url',
-        'title',
-        'description',
-        'h1',
-        'seo_text_title',
-        'seo_text',
-        'keywords',
-        'tag_name',
-    ];
+    protected $guarded = [];
 
     /**
      * @return array<string, string>

@@ -19,6 +19,7 @@ Schedule::job(new \App\Jobs\Mailing\SendingTracksJob())->dailyAt('10:15');
 Schedule::job(new \App\Jobs\OneC\UpdateOfflineOrdersJob())->withoutOverlapping()->everyTenMinutes();
 
 Schedule::command('rating:update')->withoutOverlapping()->cron('15 5,11,17,23 * * *');
+Schedule::command('seo-page-stats:update')->withoutOverlapping()->dailyAt('05:30');
 Schedule::command('inventory:update')->withoutOverlapping()->everyFiveMinutes()->sentryMonitor();
 
 Schedule::command('sanctum:prune-expired')->dailyAt('00:10');
