@@ -18,8 +18,6 @@ use App\Admin\Controllers\Orders\OfflineOrderController;
 use App\Admin\Controllers\OrdersDistribution\SettingsController;
 use App\Admin\Controllers\OrdersDistribution\StatisticController;
 use App\Admin\Controllers\StockController;
-use App\Admin\Controllers\Users\GroupController;
-use App\Admin\Controllers\Users\UserController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\Shop\OrderController;
 use Encore\Admin\Facades\Admin;
@@ -49,11 +47,6 @@ Route::group([
     $router->post('orders/change-user-by-phone', [AdminOrderController::class, 'changeUserByPhone']);
     $router->post('orders/update-user-address', [AdminOrderController::class, 'updateUserAddress']);
     $router->post('orders/add-order-comment', [AdminOrderController::class, 'addOrderComment']);
-
-    $router->group(['prefix' => 'users'], function (Router $router) {
-        $router->resource('users', UserController::class);
-        $router->resource('groups', GroupController::class);
-    });
 
     $router->group(['prefix' => 'config', 'as' => 'config.'], function (Router $router) {
         $router->get('feedback', Config\FeedbackForm::class);

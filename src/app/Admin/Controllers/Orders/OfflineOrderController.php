@@ -4,6 +4,7 @@ namespace App\Admin\Controllers\Orders;
 
 use App\Admin\Controllers\AbstractAdminController;
 use App\Enums\StockTypeEnum;
+use App\Filament\Resources\Users\Users\UserResource;
 use App\Models\Orders\OfflineOrder;
 use App\Models\Stock;
 use Encore\Admin\Grid;
@@ -39,7 +40,7 @@ class OfflineOrderController extends AbstractAdminController
         $grid->column('sold_at', 'Дата')->display(fn ($datetime) => self::formatDateTime($datetime));
         $grid->column('stock.internal_name', 'Магазин');
         $grid->column('user', 'Клиент')->display(function (?array $user) {
-            return $user ? '<a href="' . route('admin.users.edit', $user['id']) . '" target="_blank">' . $this->user->getFullName() . '</a>' : null;
+            return $user ? '<a href="' . UserResource::getUrl('edit', ['record' => $user['id']]) . '" target="_blank">' . $this->user->getFullName() . '</a>' : null;
         });
         $grid->column('user_phone', 'Телефон');
         $grid->column('returned_at', 'Дата возврата')->display(fn ($datetime) => self::formatDateTime($datetime));

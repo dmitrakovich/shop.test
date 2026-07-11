@@ -28,7 +28,7 @@ class DeviceConsentResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Согласия на обработку персональных данных';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 25;
 
     public static function form(Schema $schema): Schema
     {

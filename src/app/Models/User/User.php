@@ -432,6 +432,34 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
     }
 
     /**
+     * Remove blank address stubs left by setCountryByPhone when real addresses exist.
+     */
+    public function pruneEmptyAddresses(): void
+    {
+        $addresses = $this->addresses()->get();
+
+        if ($addresses->count() < 2) {
+            return;
+        }
+
+        $hasFilled = $addresses->contains(fn (Address $address): bool => ! $address->isBlank());
+
+        if (! $hasFilled) {
+            return;
+        }
+
+        $stubIds = $addresses
+            ->filter(fn (Address $address): bool => $address->isBlank())
+            ->pluck('id');
+
+        if ($stubIds->isEmpty()) {
+            return;
+        }
+
+        $this->addresses()->whereIn('id', $stubIds)->delete();
+    }
+
+    /**
      * Get calculated & cached user data
      */
     public function getCachedUser(): CachedUser

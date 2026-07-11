@@ -11,6 +11,7 @@ use App\Filament\Resources\Users\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\Users\RelationManagers\BlacklistRelationManager;
 use App\Filament\Resources\Users\Users\RelationManagers\PaymentsRelationManager;
+use App\Models\Country;
 use App\Models\User\Group;
 use App\Models\User\User;
 use App\ValueObjects\Phone;
@@ -23,9 +24,11 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\Operation;
 use Filament\Tables\Columns\TextColumn;
@@ -49,7 +52,7 @@ class UserResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Пользователи';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 5;
 
     public static function form(Schema $schema): Schema
     {
@@ -70,45 +73,85 @@ class UserResource extends Resource
                             ->maxLength(255),
                         TextInput::make('email')
                             ->label('E-mail')
+                            ->email()
                             ->maxLength(255),
                         TextInput::make('phone')
                             ->label('Телефон')
                             ->formatStateUsing(fn (?Phone $state): ?string => $state?->toE164())
                             ->tel()
+                            ->required()
                             ->maxLength(255),
                         DatePicker::make('birth_date')
-                            ->label('Дата рождения'),
+                            ->label('Дата рождения')
+                            ->native(false),
                         Select::make('group_id')
-                            ->options(Group::all()->pluck('name', 'id'))
-                            ->label('Группа'),
+                            ->options(fn () => Group::query()->pluck('name', 'id'))
+                            ->label('Группа')
+                            ->required()
+                            ->native(false),
                         Section::make('Адреса')->schema([
                             Repeater::make('addresses')
                                 ->label('')
                                 ->relationship()
                                 ->schema([
-                                    TextInput::make('zip')
-                                        ->label('Почтовый индекс'),
-                                    TextInput::make('region')
-                                        ->label('Область/край'),
-                                    TextInput::make('city')
-                                        ->label('Город'),
-                                    TextInput::make('district')
-                                        ->label('Район'),
-                                    TextInput::make('street')
-                                        ->label('Улица'),
-                                    TextInput::make('house')
-                                        ->label('Дом'),
-                                    TextInput::make('corpus')
-                                        ->label('Корпус'),
-                                    TextInput::make('room')
-                                        ->label('Квартира'),
-                                    TextInput::make('address')
-                                        ->label('Адрес'),
-                                    Toggle::make('approve')
-                                        ->label('Подтверждение о проверке'),
+                                    Grid::make(12)->schema([
+                                        Select::make('country_id')
+                                            ->label('Страна')
+                                            ->options(fn () => Country::query()->orderBy('name')->pluck('name', 'id'))
+                                            ->native(false)
+                                            ->columnSpan(8),
+                                        TextInput::make('zip')
+                                            ->label('Индекс')
+                                            ->columnSpan(4),
+                                        TextInput::make('region')
+                                            ->label('Область / край')
+                                            ->columnSpan(6),
+                                        TextInput::make('district')
+                                            ->label('Район')
+                                            ->columnSpan(6),
+                                        TextInput::make('city')
+                                            ->label('Город')
+                                            ->columnSpan(12),
+                                        TextInput::make('street')
+                                            ->label('Улица')
+                                            ->columnSpan(12),
+                                        TextInput::make('house')
+                                            ->label('Дом')
+                                            ->columnSpan(4),
+                                        TextInput::make('corpus')
+                                            ->label('Корпус')
+                                            ->columnSpan(4),
+                                        TextInput::make('room')
+                                            ->label('Квартира')
+                                            ->columnSpan(4),
+                                        TextInput::make('address')
+                                            ->label('Адрес одной строкой')
+                                            ->columnSpan(12),
+                                        Toggle::make('approve')
+                                            ->label('Адрес проверен')
+                                            ->inline(false)
+                                            ->columnSpan(12),
+                                    ]),
                                 ])
-                                ->columns(3),
-                        ]),
+                                ->collapsible()
+                                ->itemLabel(function (array $state): string {
+                                    if (filled($state['address'] ?? null)) {
+                                        return (string) $state['address'];
+                                    }
+
+                                    $parts = array_filter([
+                                        $state['city'] ?? null,
+                                        isset($state['street']) ? 'ул. ' . $state['street'] : null,
+                                        isset($state['house']) ? 'д. ' . $state['house'] : null,
+                                    ]);
+
+                                    $label = trim(implode(', ', $parts));
+
+                                    return $label !== '' ? $label : 'Новый адрес';
+                                })
+                                ->defaultItems(0)
+                                ->addActionLabel('Добавить адрес'),
+                        ])->columnSpanFull(),
 
                         Section::make('Отзывы')->schema([
                             Repeater::make('reviews')
@@ -123,7 +166,7 @@ class UserResource extends Resource
                                 ->addable(false)
                                 ->deletable(false)
                                 ->columns(1),
-                        ]),
+                        ])->columnSpanFull(),
 
                     ]),
                     Tab::make('Паспортные данные')->schema([
@@ -132,23 +175,31 @@ class UserResource extends Resource
                             ->schema([
                                 TextInput::make('passport_number')
                                     ->label('Номер паспорта')
-                                    ->maxLength(255),
+                                    ->maxLength(255)
+                                    ->required(fn (Get $get): bool => self::passportHasAnyValue($get))
+                                    ->live(onBlur: true),
                                 TextInput::make('series')
                                     ->label('Серия паспорта')
-                                    ->maxLength(255),
+                                    ->maxLength(255)
+                                    ->required(fn (Get $get): bool => self::passportHasAnyValue($get)),
                                 TextInput::make('issued_by')
                                     ->label('Кем выдан')
-                                    ->maxLength(255),
-                                TextInput::make('issued_date')
+                                    ->maxLength(255)
+                                    ->required(fn (Get $get): bool => self::passportHasAnyValue($get)),
+                                DatePicker::make('issued_date')
                                     ->label('Когда выдан')
-                                    ->maxLength(255),
+                                    ->native(false)
+                                    ->required(fn (Get $get): bool => self::passportHasAnyValue($get)),
                                 TextInput::make('personal_number')
                                     ->label('Личный номер')
-                                    ->maxLength(255),
+                                    ->maxLength(255)
+                                    ->required(fn (Get $get): bool => self::passportHasAnyValue($get)),
                                 TextInput::make('registration_address')
                                     ->label('Адрес прописки')
-                                    ->maxLength(255),
-                            ]),
+                                    ->maxLength(255)
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(2),
                     ]),
                     Tab::make('Платежи')->hiddenOn(Operation::Create)->schema([
                         RelationManager::make()->manager(PaymentsRelationManager::class)->lazy(true),
@@ -337,5 +388,16 @@ class UserResource extends Resource
             'create' => CreateUser::route('/create'),
             'edit' => EditUser::route('/{record}/edit'),
         ];
+    }
+
+    private static function passportHasAnyValue(Get $get): bool
+    {
+        foreach (['passport_number', 'series', 'issued_by', 'issued_date', 'personal_number', 'registration_address'] as $field) {
+            if (filled($get($field))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

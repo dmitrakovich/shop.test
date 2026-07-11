@@ -94,4 +94,20 @@ class Address extends Model
 
         return implode(', ', array_filter($resultAddress, fn ($item) => $item));
     }
+
+    /**
+     * Whether the address has no location details (country-only stub is blank).
+     */
+    public function isBlank(): bool
+    {
+        return blank($this->zip)
+            && blank($this->region)
+            && blank($this->district)
+            && blank($this->city)
+            && blank($this->street)
+            && blank($this->house)
+            && blank($this->corpus)
+            && blank($this->room)
+            && blank($this->address);
+    }
 }

@@ -43,7 +43,7 @@ class FeedbackResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Отзывы';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 15;
 
     public static function form(Schema $schema): Schema
     {
