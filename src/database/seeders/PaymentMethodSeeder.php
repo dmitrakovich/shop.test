@@ -13,10 +13,10 @@ class PaymentMethodSeeder extends Seeder
     protected $tableName = 'payment_methods';
 
     protected $values = [
-        ['name' => 'При получении', 'class' => 'COD', 'active' => true],
-        ['name' => 'Банковской картой', 'class' => 'Card', 'active' => true],
-        ['name' => 'Ерип', 'class' => 'ERIP', 'active' => true],
-        ['name' => 'Оформить рассрочку', 'class' => 'Installment', 'active' => true],
+        ['name' => 'При получении', 'instance' => 'COD', 'active' => true],
+        ['name' => 'Банковской картой', 'instance' => 'Card', 'active' => true],
+        ['name' => 'Ерип', 'instance' => 'ERIP', 'active' => true],
+        ['name' => 'Оформить рассрочку', 'instance' => 'Installment', 'active' => true],
     ];
 
     /**

@@ -13,10 +13,10 @@ class DeliveryMethodSeeder extends Seeder
     protected $tableName = 'delivery_methods';
 
     protected $values = [
-        ['name' => 'Курьером с примеркой', 'class' => 'BelpostCourierFitting', 'active' => true],
-        ['name' => 'Курьер', 'class' => 'BelpostCourier', 'active' => true],
-        ['name' => 'Белпочта', 'class' => 'Belpost', 'active' => true],
-        ['name' => 'Емс', 'class' => 'BelpostEMS', 'active' => true],
+        ['name' => 'Курьером с примеркой', 'instance' => 'BelpostCourierFitting', 'active' => true],
+        ['name' => 'Курьер', 'instance' => 'BelpostCourier', 'active' => true],
+        ['name' => 'Белпочта', 'instance' => 'Belpost', 'active' => true],
+        ['name' => 'Емс', 'instance' => 'BelpostEMS', 'active' => true],
     ];
 
     /**
