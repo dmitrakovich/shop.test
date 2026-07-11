@@ -66,7 +66,7 @@ class DeliveryMethodResource extends Resource
                     ->sortable(),
                 TextColumn::make('instance')
                     ->label('Класс')
-                    ->getStateUsing(fn (DeliveryMethod $record): string => (string) $record->getRawOriginal('instance'))
+                    ->getStateUsing(fn (DeliveryMethod $record): string => (string)$record->getRawOriginal('instance'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

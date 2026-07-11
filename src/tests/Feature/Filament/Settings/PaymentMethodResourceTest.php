@@ -38,9 +38,9 @@ class PaymentMethodResourceTest extends TestCase
 
         $this->actingAs($this->admin, 'admin');
 
-        Livewire::test(ListPaymentMethods::class)
-            ->assertSuccessful()
-            ->assertCanSeeTableRecords(PaymentMethod::query()->get());
+        $component = Livewire::test(ListPaymentMethods::class);
+        $component->assertSuccessful();
+        $component->assertCanSeeTableRecords(PaymentMethod::query()->get());
     }
 
     public function test_payment_method_can_be_updated(): void
@@ -54,8 +54,9 @@ class PaymentMethodResourceTest extends TestCase
 
         $this->actingAs($this->admin, 'admin');
 
-        Livewire::test(EditPaymentMethod::class, ['record' => $method->getKey()])
-            ->assertSuccessful()
+        $component = Livewire::test(EditPaymentMethod::class, ['record' => $method->getKey()]);
+        $component->assertSuccessful();
+        $component
             ->fillForm([
                 'name' => 'Банковской картой',
                 'active' => true,

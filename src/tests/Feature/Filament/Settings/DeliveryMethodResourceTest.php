@@ -38,9 +38,9 @@ class DeliveryMethodResourceTest extends TestCase
 
         $this->actingAs($this->admin, 'admin');
 
-        Livewire::test(ListDeliveryMethods::class)
-            ->assertSuccessful()
-            ->assertCanSeeTableRecords(DeliveryMethod::query()->get());
+        $component = Livewire::test(ListDeliveryMethods::class);
+        $component->assertSuccessful();
+        $component->assertCanSeeTableRecords(DeliveryMethod::query()->get());
     }
 
     public function test_delivery_method_can_be_updated(): void
@@ -54,8 +54,9 @@ class DeliveryMethodResourceTest extends TestCase
 
         $this->actingAs($this->admin, 'admin');
 
-        Livewire::test(EditDeliveryMethod::class, ['record' => $method->getKey()])
-            ->assertSuccessful()
+        $component = Livewire::test(EditDeliveryMethod::class, ['record' => $method->getKey()]);
+        $component->assertSuccessful();
+        $component
             ->assertFormSet([
                 'name' => 'Белпочта',
                 'instance' => 'Belpost',

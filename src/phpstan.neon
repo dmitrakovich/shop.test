@@ -12,3 +12,10 @@ parameters:
     - tests
   excludePaths:
     - app/Admin/
+  stubFiles:
+    - vendor/filament/actions/.stubs.php
+    - vendor/filament/forms/.stubs.php
+    - vendor/filament/infolists/.stubs.php
+    - vendor/filament/notifications/.stubs.php
+    - vendor/filament/schemas/.stubs.php
+    - vendor/filament/tables/.stubs.php

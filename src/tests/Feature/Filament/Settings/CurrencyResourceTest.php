@@ -37,9 +37,9 @@ class CurrencyResourceTest extends TestCase
 
         $this->actingAs($this->admin, 'admin');
 
-        Livewire::test(ListCurrencies::class)
-            ->assertSuccessful()
-            ->assertCanSeeTableRecords(Currency::query()->get());
+        $component = Livewire::test(ListCurrencies::class);
+        $component->assertSuccessful();
+        $component->assertCanSeeTableRecords(Currency::query()->get());
     }
 
     public function test_currency_rate_can_be_updated_and_cache_is_cleared(): void
@@ -56,8 +56,9 @@ class CurrencyResourceTest extends TestCase
 
         $this->actingAs($this->admin, 'admin');
 
-        Livewire::test(EditCurrency::class, ['record' => $currency->getKey()])
-            ->assertSuccessful()
+        $component = Livewire::test(EditCurrency::class, ['record' => $currency->getKey()]);
+        $component->assertSuccessful();
+        $component
             ->fillForm([
                 'country' => 'US',
                 'rate' => 0.55,
