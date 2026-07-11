@@ -442,9 +442,9 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
             return;
         }
 
-        $hasFilled = $addresses->contains(fn (Address $address): bool => ! $address->isBlank());
+        $hasFilled = $addresses->contains(fn (Address $address): bool => !$address->isBlank());
 
-        if (! $hasFilled) {
+        if (!$hasFilled) {
             return;
         }
 

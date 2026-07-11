@@ -134,9 +134,10 @@ class UserResource extends Resource
                                     ]),
                                 ])
                                 ->collapsible()
+                                ->collapsed()
                                 ->itemLabel(function (array $state): string {
                                     if (filled($state['address'] ?? null)) {
-                                        return (string) $state['address'];
+                                        return (string)$state['address'];
                                     }
 
                                     $parts = array_filter([
