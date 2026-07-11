@@ -15,6 +15,7 @@ enum NavGroup implements HasIcon, HasLabel
     case OldAdminPanel;
     case Automation;
     case Management;
+    case Settings;
     case Departures;
     case Seo;
 
@@ -28,6 +29,7 @@ enum NavGroup implements HasIcon, HasLabel
             self::OldAdminPanel => 'Старая админка',
             self::Automation => 'Автоматизация',
             self::Management => 'Управление',
+            self::Settings => 'Настройки',
             self::Departures => 'Отправления',
             self::Seo => 'SEO',
         };
@@ -42,7 +44,8 @@ enum NavGroup implements HasIcon, HasLabel
             self::Registers => Heroicon::OutlinedFolder,
             self::OldAdminPanel => Heroicon::OutlinedArrowUturnLeft,
             self::Automation => Heroicon::OutlinedCog8Tooth,
-            self::Management => Heroicon::OutlinedCog6Tooth,
+            self::Management => Heroicon::OutlinedShieldCheck,
+            self::Settings => Heroicon::OutlinedAdjustmentsHorizontal,
             self::Departures => Heroicon::OutlinedTruck,
             self::Seo => Heroicon::OutlinedGlobeAlt,
         };

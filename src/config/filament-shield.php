@@ -65,7 +65,8 @@ return [
     'super_admin' => [
         'enabled' => true,
         'name' => 'super_admin',
-        'define_via_gate' => false,
+        // Bypass policy checks for Spatie super_admin (permissions table may be empty).
+        'define_via_gate' => true,
         'intercept_gate' => 'before',
     ],
 

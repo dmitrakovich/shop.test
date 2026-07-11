@@ -232,15 +232,21 @@ return [
     |--------------------------------------------------------------------------
     | Indicates whether to check route permission.
     |--------------------------------------------------------------------------
+    |
+    | TEMPORARY: disabled until legacy admin → Filament migration is finished
+    | and Shield permissions are configured properly.
     */
-    'check_route_permission' => true,
+    'check_route_permission' => false,
 
     /*
     |--------------------------------------------------------------------------
     | Indicates whether to check menu roles.
     |--------------------------------------------------------------------------
+    |
+    | TEMPORARY: disabled until legacy admin → Filament migration is finished
+    | and Shield permissions are configured properly.
     */
-    'check_menu_roles' => true,
+    'check_menu_roles' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -329,8 +335,11 @@ return [
     |--------------------------------------------------------------------------
     |
     | whether enable menu bind to a permission
+    |
+    | TEMPORARY: disabled until legacy admin → Filament migration is finished
+    | and Shield permissions are configured properly.
     */
-    'menu_bind_permission' => true,
+    'menu_bind_permission' => false,
 
     /*
     |--------------------------------------------------------------------------

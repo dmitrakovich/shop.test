@@ -5,6 +5,7 @@ namespace App\Models\Admin;
 use App\Contracts\AuthorInterface;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -56,6 +57,9 @@ class AdminUser extends Authenticatable implements AuthorInterface, FilamentUser
     // !!! old admin roles & permissions
     // *** роли для старой админки используются, они мешают работать новой админке
     // *** пока старая админка не будет полностью выпилена, права корректно работать не будут
+    //
+    // TEMPORARY: full access for any authenticated admin user (Filament + legacy admin).
+    // Revisit when the Filament migration is complete and configure Shield permissions properly.
 
     /**
      * Get avatar attribute.
@@ -65,6 +69,14 @@ class AdminUser extends Authenticatable implements AuthorInterface, FilamentUser
     public function getAvatarAttribute($avatar): string
     {
         return admin_asset('favicon-96x96.png');
+    }
+
+    /**
+     * TEMPORARY: allow every authenticated admin into the Filament panel.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
     }
 
     /**
@@ -108,23 +120,13 @@ class AdminUser extends Authenticatable implements AuthorInterface, FilamentUser
     /**
      * Check if user has permission.
      *
+     * TEMPORARY: always allow — restore real checks after Filament migration.
+     *
      * @param  array  $arguments
      */
     public function can($ability, $arguments = []): bool
     {
-        if (empty($ability)) {
-            return true;
-        }
-
-        if ($this->isAdministrator()) {
-            return true;
-        }
-
-        if ($this->oldPermissions->pluck('slug')->contains($ability)) {
-            return true;
-        }
-
-        return $this->oldRoles->pluck('permissions')->flatten()->pluck('slug')->contains($ability);
+        return true;
     }
 
     /**
@@ -142,26 +144,35 @@ class AdminUser extends Authenticatable implements AuthorInterface, FilamentUser
     /**
      * Check if user is administrator.
      *
-     * @return mixed
+     * TEMPORARY: always true — restore real checks after Filament migration.
+     * Legacy laravel-admin also calls isRole('administrator') via Auth\Permission.
      */
     public function isAdministrator(): bool
     {
-        return $this->isRole('super_admin');
+        return true;
     }
 
     /**
      * Check if user is $role.
      *
+     * TEMPORARY: treat every user as legacy `administrator` so Encore\Admin\Auth\Permission
+     * bypasses work. Other role slugs still resolve against oldRoles.
      *
      * @return mixed
      */
     public function isRole(string $role): bool
     {
+        if ($role === 'administrator') {
+            return true;
+        }
+
         return $this->oldRoles->pluck('slug')->contains($role);
     }
 
     /**
      * Check if user in $oldRoles.
+     *
+     * TEMPORARY: always true — restore real checks after Filament migration.
      *
      * @param  array  $oldRoles
      *
@@ -169,21 +180,17 @@ class AdminUser extends Authenticatable implements AuthorInterface, FilamentUser
      */
     public function inRoles(array $roles = []): bool
     {
-        return $this->oldRoles->pluck('slug')->intersect($roles)->isNotEmpty();
+        return true;
     }
 
     /**
      * If visible for roles.
+     *
+     * TEMPORARY: always true — restore real checks after Filament migration.
      */
     public function visible(array $roles = []): bool
     {
-        if (empty($roles)) {
-            return true;
-        }
-
-        $roles = array_column($roles, 'slug');
-
-        return $this->inRoles($roles) || $this->isAdministrator();
+        return true;
     }
 
     public static function getTypeName(): string
