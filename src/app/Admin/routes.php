@@ -56,10 +56,6 @@ Route::group([
     });
 
     $router->group(['prefix' => 'config', 'as' => 'config.'], function (Router $router) {
-        $router->resource('payment-methods', Config\PaymentController::class);
-        $router->resource('delivery-methods', Config\DeliveryController::class);
-        $router->resource('currencies', Config\CurrencyController::class);
-        $router->get('installment', Config\InstallmentForm::class);
         $router->get('feedback', Config\FeedbackForm::class);
         $router->get('newsletter_for_registered', Config\NewsletterForm::class);
         $router->get('sending-tracks', Config\SendingTracksForm::class);
