@@ -3,7 +3,6 @@
 use App\Admin\Controllers\Analytics;
 use App\Admin\Controllers\Automation;
 use App\Admin\Controllers\Bookkeeping;
-use App\Admin\Controllers\CityController;
 use App\Admin\Controllers\Config;
 use App\Admin\Controllers\Debug\CacheController;
 use App\Admin\Controllers\Departures;
@@ -69,8 +68,6 @@ Route::group([
         $router->resource('batches', Departures\BatchController::class);
         $router->resource('track-numbers', Departures\OrderTrackController::class);
     });
-
-    $router->resource('cities', CityController::class);
 
     $router->resource('stock', StockController::class);
 

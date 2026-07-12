@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Database\Factories\CountryFactory;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use RuntimeException;
 use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
 
 /**
@@ -16,21 +19,47 @@ use Scriptixru\SypexGeo\SypexGeoFacade as SxGeo;
  */
 class Country extends Model
 {
+    /** @use HasFactory<CountryFactory> */
+    use HasFactory;
+
     final const string DEFAULT_COUNTRY_CODE = 'BY';
 
     /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = true;
+
+    /**
+     * The table does not have created_at / updated_at columns.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * Countries cache list
+     *
+     * @var Collection<int, self>|null
      */
     public static ?Collection $countries = null;
 
     /**
      * Get countries collection
      *
-     * @return Collection<self>
+     * @return Collection<int, self>
      */
     public static function getAll(): Collection
     {
-        return self::$countries ?? (self::$countries = self::all());
+        if (self::$countries instanceof Collection) {
+            return self::$countries;
+        }
+
+        /** @var Collection<int, self> $countries */
+        $countries = self::all();
+
+        return self::$countries = $countries;
     }
 
     /**
@@ -38,7 +67,13 @@ class Country extends Model
      */
     public static function getDefaultCountry(): self
     {
-        return self::getAll()->where('code', self::DEFAULT_COUNTRY_CODE)->first();
+        $country = self::getAll()->firstWhere('code', self::DEFAULT_COUNTRY_CODE);
+
+        if (!$country instanceof self) {
+            throw new RuntimeException('Default country is missing.');
+        }
+
+        return $country;
     }
 
     /**
@@ -48,8 +83,8 @@ class Country extends Model
     {
         $userCountryId = optional(auth()->user())->getFirstAddressCountryId();
 
-        return self::getAll()->where('id', $userCountryId)->first()
-            ?? self::getAll()->where('code', SxGeo::getCountry())->first()
+        return self::getAll()->firstWhere('id', $userCountryId)
+            ?? self::getAll()->firstWhere('code', SxGeo::getCountry())
             ?? self::getDefaultCountry();
     }
 }

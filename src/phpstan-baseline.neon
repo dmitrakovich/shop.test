@@ -1027,12 +1027,6 @@ parameters:
 			path: app/Models/Category.php
 
 		-
-			message: '#^Method App\\Models\\City\:\:setNameAttribute\(\) has parameter \$value with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Models/City.php
-
-		-
 			message: '#^Class App\\Models\\Config has PHPDoc tag @property for property \$config with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -1043,36 +1037,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Models/Config.php
-
-		-
-			message: '#^Method App\\Models\\Country\:\:getAll\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Country.php
-
-		-
-			message: '#^Method App\\Models\\Country\:\:getAll\(\) should return Illuminate\\Database\\Eloquent\\Collection&iterable\<App\\Models\\Country\> but returns Illuminate\\Database\\Eloquent\\Collection\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Models/Country.php
-
-		-
-			message: '#^Method App\\Models\\Country\:\:getCurrent\(\) should return App\\Models\\Country but returns Illuminate\\Database\\Eloquent\\Model\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Models/Country.php
-
-		-
-			message: '#^Method App\\Models\\Country\:\:getDefaultCountry\(\) should return App\\Models\\Country but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Models/Country.php
-
-		-
-			message: '#^Property App\\Models\\Country\:\:\$countries with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/Country.php
 
 		-
 			message: '#^Method App\\Models\\Data\\UserData\:\:normalizeForGtm\(\) has no return type specified\.$#'
