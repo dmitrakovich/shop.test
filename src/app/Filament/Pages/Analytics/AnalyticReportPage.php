@@ -16,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
@@ -93,7 +94,24 @@ abstract class AnalyticReportPage extends Page implements HasTable
                                 : null),
                     ])
                     ->columns(2)
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->indicateUsing(function (array $state): array {
+                        $indicators = [];
+
+                        if (filled($state['start'] ?? null)) {
+                            $indicators[] = Indicator::make(
+                                'С ' . Carbon::parse($state['start'])->format('d.m.Y'),
+                            )->removeField('start');
+                        }
+
+                        if (filled($state['end'] ?? null)) {
+                            $indicators[] = Indicator::make(
+                                'По ' . Carbon::parse($state['end'])->format('d.m.Y'),
+                            )->removeField('end');
+                        }
+
+                        return $indicators;
+                    }),
             ])
             ->headerActions([
                 Action::make('export')

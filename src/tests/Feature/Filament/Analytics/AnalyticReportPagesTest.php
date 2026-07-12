@@ -56,12 +56,12 @@ class AnalyticReportPagesTest extends TestCase
     {
         $this->actingAs($this->admin, 'admin');
 
-        $component = Livewire::test($pageClass)
-            ->assertSuccessful()
-            ->assertSee($report->getLabel());
-
+        $component = Livewire::test($pageClass);
+        $component->assertSuccessful();
+        $component->assertSee($report->getLabel());
         $component->html();
 
+        /** @var array{start: ?string, end: ?string} $period */
         $period = $component->get('tableFilters.period');
 
         if ($report->hasDefaultDateFilter()) {

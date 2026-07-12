@@ -41,17 +41,18 @@ class CityResourceTest extends TestCase
 
         $this->actingAs($this->admin, 'admin');
 
-        Livewire::test(ListCities::class)
-            ->assertSuccessful()
-            ->assertCanSeeTableRecords([$city]);
+        $component = Livewire::test(ListCities::class);
+        $component->assertSuccessful();
+        $component->assertCanSeeTableRecords([$city]);
     }
 
     public function test_city_can_be_created(): void
     {
         $this->actingAs($this->admin, 'admin');
 
-        Livewire::test(CreateCity::class)
-            ->assertSuccessful()
+        $component = Livewire::test(CreateCity::class);
+        $component->assertSuccessful();
+        $component
             ->fillForm([
                 'country_id' => $this->country->id,
                 'name' => 'Брест',
@@ -78,8 +79,9 @@ class CityResourceTest extends TestCase
 
         $this->actingAs($this->admin, 'admin');
 
-        Livewire::test(EditCity::class, ['record' => $city->getKey()])
-            ->assertSuccessful()
+        $component = Livewire::test(EditCity::class, ['record' => $city->getKey()]);
+        $component->assertSuccessful();
+        $component
             ->fillForm([
                 'country_id' => $this->country->id,
                 'name' => 'Гомель',
@@ -100,7 +102,8 @@ class CityResourceTest extends TestCase
     {
         $this->actingAs($this->admin, 'admin');
 
-        Livewire::test(CreateCity::class)
+        $component = Livewire::test(CreateCity::class);
+        $component
             ->fillForm([
                 'country_id' => $this->country->id,
                 'name' => '',

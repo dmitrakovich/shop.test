@@ -98,7 +98,7 @@ enum AnalyticReport: string implements HasLabel
     }
 
     /**
-     * @param  Builder  $query
+     * Apply joins and grouping for the report dimension.
      */
     public function configureQuery(Builder $query): void
     {
