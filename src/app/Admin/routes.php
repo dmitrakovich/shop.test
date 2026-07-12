@@ -1,6 +1,5 @@
 <?php
 
-use App\Admin\Controllers\Analytics;
 use App\Admin\Controllers\Automation;
 use App\Admin\Controllers\Bookkeeping;
 use App\Admin\Controllers\Config;
@@ -77,18 +76,6 @@ Route::group([
         $router->resource('stock', Automation\StockController::class);
         $router->get('stock-update', [Automation\StockController::class, 'updateAvailability'])->name('stock-update');
         $router->get('inventory-blacklist', Automation\InventoryBlacklistForm::class);
-    });
-
-    // Automation
-    $router->group(['prefix' => 'analytics', 'as' => 'analytics.'], function (Router $router) {
-        $router->resource('countries', Analytics\CountriesController::class);
-        $router->resource('payment-methods', Analytics\PaymentMethodsController::class);
-        $router->resource('delivery-methods', Analytics\DeliveryMethodsController::class);
-        $router->resource('manager-customers', Analytics\ManagerCustomersController::class);
-        $router->resource('manager-order-items', Analytics\ManagerOrderItemsController::class);
-        $router->resource('type', Analytics\OrderTypeController::class);
-        $router->resource('source', Analytics\OrderSourceController::class);
-        $router->resource('source-detail', Analytics\OrderSourceDetailController::class);
     });
 
     // Orders distribution
