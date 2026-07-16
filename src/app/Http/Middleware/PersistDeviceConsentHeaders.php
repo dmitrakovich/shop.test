@@ -5,9 +5,12 @@ namespace App\Http\Middleware;
 use App\Enums\Consent\ConsentFormEnum;
 use App\Facades\Device as DeviceFacade;
 use App\Models\User\DeviceConsent;
+use App\Models\User\User;
+use App\ValueObjects\Phone;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use libphonenumber\NumberParseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class PersistDeviceConsentHeaders
@@ -40,9 +43,18 @@ class PersistDeviceConsentHeaders
             return $next($request);
         }
 
+        $user = $this->resolveUser($request, $updates['phone'] ?? null);
+
         $updates['consent_request_source'] = $form;
         $updates['device_id'] = DeviceFacade::id();
-        $updates['user_id'] = $request->user()?->id;
+        $updates['user_id'] = $user?->id;
+
+        if (!isset($updates['fio'])) {
+            $fio = $this->normalizePart($user?->getFullName());
+            if ($fio !== null) {
+                $updates['fio'] = $fio;
+            }
+        }
 
         if (!$this->hasConsentChanges($updates)) {
             return $next($request);
@@ -54,21 +66,75 @@ class PersistDeviceConsentHeaders
     }
 
     /**
+     * Resolve the user from the authenticated request or by phone from the body.
+     * Login runs this middleware before auth, so registered users are looked up by phone.
+     */
+    private function resolveUser(Request $request, mixed $phone): ?User
+    {
+        $authenticated = $request->user();
+        if ($authenticated instanceof User) {
+            return $authenticated;
+        }
+
+        if (!is_string($phone) || $phone === '') {
+            return null;
+        }
+
+        try {
+            return User::getByPhone(Phone::fromRawString($phone));
+        } catch (NumberParseException) {
+            return null;
+        }
+    }
+
+    /**
+     * Skip write when:
+     * - this device already has the same consent flags, or
+     * - this device has no consent row yet, but the user (resolved by phone)
+     *   already has the same consent flags.
+     *
      * @param  array<string, mixed>  $updates
      */
     private function hasConsentChanges(array $updates): bool
     {
-        $latest = DeviceConsent::query()
-            ->where('device_id', $updates['device_id'])
+        $byDevice = isset($updates['device_id'])
+            ? DeviceConsent::query()
+                ->where('device_id', $updates['device_id'])
+                ->latest('id')
+                ->first()
+            : null;
+
+        if ($byDevice !== null) {
+            return $this->consentFieldsDiffer($updates, $byDevice);
+        }
+
+        if (!isset($updates['user_id'])) {
+            return true;
+        }
+
+        $byUser = DeviceConsent::query()
+            ->where('user_id', $updates['user_id'])
             ->latest('id')
             ->first();
 
+        if ($byUser === null) {
+            return true;
+        }
+
+        return $this->consentFieldsDiffer($updates, $byUser);
+    }
+
+    /**
+     * @param  array<string, mixed>  $updates
+     */
+    private function consentFieldsDiffer(array $updates, DeviceConsent $existing): bool
+    {
         foreach (self::CONSENT_FIELDS as $field) {
             if (!array_key_exists($field, $updates)) {
                 continue;
             }
 
-            if ($latest === null || $latest->{$field} !== $updates[$field]) {
+            if ($existing->{$field} !== $updates[$field]) {
                 return true;
             }
         }
