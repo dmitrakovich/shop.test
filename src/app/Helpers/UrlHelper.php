@@ -119,7 +119,10 @@ class UrlHelper
             array_unshift($sorted, 'city-' . $city->slug);
         }
 
-        return front_route(implode('/', $sorted) . self::buildParams($params));
+        // Empty filter path must stay in catalog (/catalog), not the homepage
+        $path = implode('/', $sorted) ?: 'catalog';
+
+        return front_route($path . self::buildParams($params));
     }
 
     /**
