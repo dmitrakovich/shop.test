@@ -225,7 +225,16 @@ class UserResource extends Resource
                         $query->whereAny($nameColumns, 'like', "%$search%");
                     }),
                 TextColumn::make('phone')
-                    ->label('Телефон'),
+                    ->label('Телефон')
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $digits = preg_replace('/\D+/', '', $search) ?? '';
+
+                        if ($digits === '') {
+                            return $query->whereRaw('0 = 1');
+                        }
+
+                        return $query->where('phone', 'like', "%{$digits}%");
+                    }),
                 TextColumn::make('metadata.last_order_type')
                     ->label('Тип последнего заказа')
                     ->sortable()
