@@ -10,8 +10,8 @@ use App\ValueObjects\Phone;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use libphonenumber\NumberParseException;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class PersistDeviceConsentHeaders
 {
@@ -30,17 +30,30 @@ class PersistDeviceConsentHeaders
     ];
 
     /**
+     * Persist consent side-effects without blocking the main request.
+     * Consent must never produce a 500 for checkout/login/feedback POSTs.
+     *
      * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next, string $consentForm): Response
     {
-        $form = ConsentFormEnum::tryFrom((int)$consentForm);
-        abort_if($form === null, Response::HTTP_INTERNAL_SERVER_ERROR);
+        try {
+            $this->persistConsent($request, $consentForm);
+        } catch (Throwable $e) {
+            report($e);
+        }
+
+        return $next($request);
+    }
+
+    private function persistConsent(Request $request, string $consentForm): void
+    {
+        $form = ConsentFormEnum::tryFrom((int)$consentForm) ?? ConsentFormEnum::Unknown;
 
         $updates = $this->collectUpdates($request);
 
         if ($updates === []) {
-            return $next($request);
+            return;
         }
 
         $user = $this->resolveUser($request, $updates['phone'] ?? null);
@@ -57,12 +70,10 @@ class PersistDeviceConsentHeaders
         }
 
         if (!$this->hasConsentChanges($updates)) {
-            return $next($request);
+            return;
         }
 
         DeviceConsent::query()->create($updates);
-
-        return $next($request);
     }
 
     /**
@@ -82,7 +93,7 @@ class PersistDeviceConsentHeaders
 
         try {
             return User::getByPhone(Phone::fromRawString($phone));
-        } catch (NumberParseException) {
+        } catch (Throwable) {
             return null;
         }
     }
@@ -164,7 +175,7 @@ class PersistDeviceConsentHeaders
             if ($raw !== null && $raw !== '') {
                 try {
                     $updates['personal_data_consent_recorded_at'] = Carbon::parse($raw);
-                } catch (\Throwable) {
+                } catch (Throwable) {
                     // ignore invalid datetime
                 }
             }
