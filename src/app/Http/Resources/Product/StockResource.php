@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
+use App\Http\Resources\Address\CityResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,6 +25,7 @@ class StockResource extends JsonResource
             'name' => $stock->name,
             'address' => $stock->address,
             'sizes' => $this->getFormattedSizes(), // todo: array
+            'city' => $stock->city ? new CityResource($stock->city) : null,
         ];
     }
 }
