@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Media\Media;
 use App\Services\Media\VideoConversionService;
 use Illuminate\Console\Command;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Backfill command for videos uploaded before automatic conversion was enabled.
@@ -25,16 +25,16 @@ class ConvertVideosToMp4Command extends Command
      *
      * @var string
      */
-    protected $description = 'Convert non-MP4 video files in media library to MP4';
+    protected $description = 'Convert videos in media library to web-compatible MP4 (H.264 + AAC), including HEVC-in-MP4';
 
     /**
      * Execute the console command.
      */
     public function handle(VideoConversionService $videoConversionService): int
     {
+        // Include .mp4 — HEVC/H.265 inside an MP4 container still needs re-encoding for Chrome.
         $query = Media::query()
-            ->where('mime_type', 'like', 'video/%')
-            ->where('file_name', 'not like', '%.mp4');
+            ->where('mime_type', 'like', 'video/%');
 
         $collections = $this->option('collection');
         if ($collections !== []) {
@@ -49,23 +49,26 @@ class ConvertVideosToMp4Command extends Command
         $mediaItems = $query->orderBy('id')->get();
 
         if ($mediaItems->isEmpty()) {
-            $this->info('No videos require conversion.');
+            $this->info('No videos found.');
 
             return self::SUCCESS;
         }
 
-        $this->info(sprintf('Converting %d video(s) to MP4...', $mediaItems->count()));
+        $this->info(sprintf('Checking %d video(s) for conversion to H.264 MP4...', $mediaItems->count()));
 
         $progressBar = $this->output->createProgressBar($mediaItems->count());
         $progressBar->start();
 
         $converted = 0;
+        $skipped = 0;
         $failed = 0;
 
         foreach ($mediaItems as $media) {
             try {
                 if ($videoConversionService->convertToMp4($media)) {
                     $converted++;
+                } else {
+                    $skipped++;
                 }
             } catch (\Throwable $exception) {
                 $failed++;
@@ -78,7 +81,7 @@ class ConvertVideosToMp4Command extends Command
 
         $progressBar->finish();
         $this->newLine(2);
-        $this->info(sprintf('Converted: %d, failed: %d', $converted, $failed));
+        $this->info(sprintf('Converted: %d, skipped (already compatible): %d, failed: %d', $converted, $skipped, $failed));
 
         return $failed > 0 ? self::FAILURE : self::SUCCESS;
     }
