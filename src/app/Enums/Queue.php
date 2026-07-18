@@ -40,7 +40,7 @@ enum Queue: string
     }
 
     /**
-     * Single Horizon supervisor (e.g. local)
+     * Single Horizon supervisor (e.g. local) — all queues including media.
      *
      * @return list<string>
      */
@@ -65,6 +65,9 @@ enum Queue: string
         foreach (self::cases() as $queue) {
             $waits[$queue->redisWaitKey()] = $queue->horizonWaitSeconds();
         }
+
+        // Media is consumed via the redis-long connection in Horizon.
+        $waits['redis-long:' . self::Media->value] = self::Media->horizonWaitSeconds();
 
         return $waits;
     }

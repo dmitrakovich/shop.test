@@ -26,6 +26,12 @@ class VideoConversionService
 
     private const string MP4_MIME_TYPE = 'video/mp4';
 
+    /**
+     * FFmpeg / FFProbe wall-clock limit. Must stay below ConvertVideo::TIMEOUT_SECONDS (600)
+     * so the queue worker can finish upload/finalize after the process exits.
+     */
+    private const int PROCESS_TIMEOUT_SECONDS = 540;
+
     /** Video codecs supported by Chrome / Firefox / Edge in an MP4 container. */
     private const array WEB_COMPATIBLE_VIDEO_CODECS = ['h264'];
 
@@ -44,8 +50,29 @@ class VideoConversionService
     {
         $originalRelativePath = $media->getPathRelativeToRoot();
         $mp4RelativePath = $this->mp4RelativePath($media);
+        $sourceExists = $this->diskExists($media, $originalRelativePath);
+        $mp4Exists = $this->diskExists($media, $mp4RelativePath);
 
-        if (!$this->diskExists($media, $originalRelativePath)) {
+        // Recovery: a previous run uploaded full.mp4 then failed during finalize
+        // (often after deleting the source). Sync the media row without re-encoding.
+        if (
+            $mp4Exists
+            && $originalRelativePath !== $mp4RelativePath
+            && !$this->isNormalizedMp4Record($media, $originalRelativePath, $mp4RelativePath)
+        ) {
+            $disk = Storage::disk($media->disk);
+
+            $this->finalizeMp4(
+                $media,
+                $mp4RelativePath,
+                $sourceExists ? $originalRelativePath : null,
+                $disk->exists($mp4RelativePath) ? $disk->size($mp4RelativePath) : null,
+            );
+
+            return true;
+        }
+
+        if (!$sourceExists) {
             throw new RuntimeException(sprintf(
                 'Source video not found on disk for media #%d: %s',
                 $media->id,
@@ -203,7 +230,7 @@ class VideoConversionService
         return FFProbe::create([
             'ffmpeg.binaries' => config('media-library.ffmpeg_path'),
             'ffprobe.binaries' => config('media-library.ffprobe_path'),
-            'timeout' => 3600,
+            'timeout' => self::PROCESS_TIMEOUT_SECONDS,
         ]);
     }
 
@@ -212,7 +239,7 @@ class VideoConversionService
         return FFMpeg::create([
             'ffmpeg.binaries' => config('media-library.ffmpeg_path'),
             'ffprobe.binaries' => config('media-library.ffprobe_path'),
-            'timeout' => 3600,
+            'timeout' => self::PROCESS_TIMEOUT_SECONDS,
         ]);
     }
 
@@ -230,7 +257,7 @@ class VideoConversionService
      */
     private function remuxWithFaststart(string $inputPath, string $outputPath): void
     {
-        $result = Process::timeout(3600)->run([
+        $result = Process::timeout(self::PROCESS_TIMEOUT_SECONDS)->run([
             config('media-library.ffmpeg_path', 'ffmpeg'),
             '-y',
             '-i',

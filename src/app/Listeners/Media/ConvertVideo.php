@@ -16,7 +16,13 @@ class ConvertVideo implements ShouldQueue
 {
     use InteractsWithQueue;
 
-    public int $timeout = 600;
+    /**
+     * Max seconds for HEVC re-encode + upload + finalize.
+     * Must stay below Horizon media supervisor timeout and Redis retry_after.
+     */
+    public const int TIMEOUT_SECONDS = 600;
+
+    public int $timeout = self::TIMEOUT_SECONDS;
 
     public int $tries = 2;
 

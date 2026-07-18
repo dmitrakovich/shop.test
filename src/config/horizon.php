@@ -214,21 +214,35 @@ return [
                 'tries' => 3,
             ],
             'supervisor-media' => [
-                'connection' => 'redis',
+                // redis-long: retry_after 690 so ConvertVideo (600s) is not released early.
+                'connection' => 'redis-long',
                 'queue' => [Queue::Media->value],
                 'balance' => 'auto',
                 'maxProcesses' => 3,
                 'tries' => 3,
+                // ConvertVideo / PerformConversionsJob timeout is 600s; keep headroom below retry_after.
+                'timeout' => 630,
             ],
         ],
 
         'local' => [
-            'supervisor-all' => [
+            'supervisor-default' => [
                 'connection' => 'redis',
-                'queue' => Queue::horizonAllQueuesOrdered(),
+                'queue' => array_values(array_filter(
+                    Queue::horizonAllQueuesOrdered(),
+                    static fn (string $queue): bool => $queue !== Queue::Media->value,
+                )),
                 'balance' => 'simple',
                 'maxProcesses' => 1,
                 'tries' => 3,
+            ],
+            'supervisor-media' => [
+                'connection' => 'redis-long',
+                'queue' => [Queue::Media->value],
+                'balance' => 'simple',
+                'maxProcesses' => 1,
+                'tries' => 3,
+                'timeout' => 630,
             ],
         ],
     ],
