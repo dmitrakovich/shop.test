@@ -76,6 +76,21 @@ return [
         ],
 
         /*
+        | Long-running jobs (media video conversion / Spatie conversions).
+        | Same Redis server & queue names as `redis`; higher retry_after only.
+        | Horizon supervisor-media must use this connection.
+        */
+        'redis-long' => [
+            'driver' => 'redis',
+            'connection' => env('REDIS_QUEUE_CONNECTION', 'default'),
+            'queue' => env('REDIS_QUEUE', Queue::Default->value),
+            // Must exceed ConvertVideo timeout (600s) and Horizon media timeout (630s).
+            'retry_after' => (int)env('REDIS_LONG_QUEUE_RETRY_AFTER', 690),
+            'block_for' => null,
+            'after_commit' => false,
+        ],
+
+        /*
         | Primary Redis for enqueue; falls back to the database connection on push failures.
         | Note: Workers using this connection pop only from the first backend (Redis). Jobs that
         | landed on the database need `php artisan queue:work database` until Redis is back.
