@@ -25,7 +25,8 @@ class BelpostGeoDirectoryService
     }
 
     /**
-     * Prefer the order shipping fields; use structured `user.lastAddress` only after admin approval.
+     * Prefer the order shipping snapshot until admin approves `user.lastAddress`;
+     * once approved, the structured address wins (including zip/region corrections).
      *
      * @return array{
      *     postcode: ?string,
@@ -45,10 +46,14 @@ class BelpostGeoDirectoryService
         $useStructuredAddress = $address !== null && $address->approve;
 
         $postcode = $this->geoDirectory->normalizePostcode(
-            $order->zip ?: ($useStructuredAddress ? $address->zip : null),
+            $useStructuredAddress
+                ? ($address->zip ?: $order->zip)
+                : $order->zip,
         );
         $city = $this->geoDirectory->normalizeCity(
-            $order->city ?: ($useStructuredAddress ? $address->city : null),
+            $useStructuredAddress
+                ? ($address->city ?: $order->city)
+                : $order->city,
         );
         $street = $this->geoDirectory->normalizeStreetName(
             ($useStructuredAddress ? $address->street : null)
@@ -69,7 +74,11 @@ class BelpostGeoDirectoryService
                 $useStructuredAddress ? $address->room : null,
                 $order->user_addr,
             ),
-            'region' => $this->geoDirectory->normalizeRegion($order->region ?: ($useStructuredAddress ? $address->region : null)),
+            'region' => $this->geoDirectory->normalizeRegion(
+                $useStructuredAddress
+                    ? ($address->region ?: $order->region)
+                    : $order->region,
+            ),
             'district' => $this->geoDirectory->normalizeDistrict($useStructuredAddress ? $address->district : null),
         ];
     }

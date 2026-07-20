@@ -804,11 +804,14 @@ JS;
             } else {
                 $user->addresses()->create($request->validated());
             }
+            $user->load('lastAddress');
         }
-        if ($order) {
+        if ($order && $user?->lastAddress) {
             $order->update([
                 'country_id' => $user->lastAddress->country_id,
+                'region' => $user->lastAddress->region,
                 'city' => $user->lastAddress->city,
+                'zip' => $user->lastAddress->zip,
                 'user_addr' => $user->lastAddress->getAddressRow(),
             ]);
         }
