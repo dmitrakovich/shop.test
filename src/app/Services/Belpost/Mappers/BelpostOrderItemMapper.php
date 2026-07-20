@@ -10,7 +10,6 @@ use App\Libraries\Belpost\Exceptions\BelpostApiException;
 use App\Models\Orders\Batch;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderTrack;
-use App\Services\Belpost\Recipient\BelpostRecipientService;
 use App\Services\Belpost\Support\BelpostPhoneNormalizer;
 use App\Services\Belpost\Support\BelpostS10CodeValidator;
 
@@ -20,7 +19,6 @@ use App\Services\Belpost\Support\BelpostS10CodeValidator;
 class BelpostOrderItemMapper
 {
     public function __construct(
-        private readonly BelpostRecipientService $recipientService,
         private readonly BelpostRecipientMapper $recipientMapper,
         private readonly BelpostPhoneNormalizer $phoneNormalizer,
         private readonly BelpostS10CodeValidator $s10CodeValidator,
@@ -47,7 +45,7 @@ class BelpostOrderItemMapper
             'recipient_phone' => $phone,
         ];
 
-        $payload = $this->applyRecipientReference($order, $batch, $payload);
+        $payload = $this->applyRecipientReference($order, $payload);
 
         $addons = [];
 
@@ -72,21 +70,17 @@ class BelpostOrderItemMapper
     }
 
     /**
-     * Belpost API bug: linking items via `recipient_foreign_id` rejects COD when the batch has declared value.
-     * Inline `recipient_object` matches the registered recipient payload and works until Belpost fixes the API.
+     * Always send inline recipient data so each order ships to its current address.
+     *
+     * `recipient_foreign_id` is keyed by `user_id`, so returning customers kept the address
+     * from their first Belpost shipment even after the order address was updated in admin.
      *
      * @param  array<string, mixed>  $payload
      * @return array<string, mixed>
      */
-    private function applyRecipientReference(Order $order, ?Batch $batch, array $payload): array
+    private function applyRecipientReference(Order $order, array $payload): array
     {
-        if ($batch !== null && $this->batchHasEffectiveDeclaredValue($batch)) {
-            $payload['recipient_object'] = $this->recipientMapper->toRecipientObject($order);
-
-            return $payload;
-        }
-
-        $payload['recipient_foreign_id'] = $this->recipientService->ensureForeignId($order);
+        $payload['recipient_object'] = $this->recipientMapper->toRecipientObject($order);
 
         return $payload;
     }

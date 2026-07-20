@@ -19,7 +19,7 @@ class BelpostRecipientMapper
     }
 
     /**
-     * Inline recipient for batch list items (Belpost API workaround when `recipient_foreign_id` breaks COD / declared value).
+     * Inline recipient for batch list items (current order address, not cached by user_id).
      *
      * @return array<string, mixed>
      */
