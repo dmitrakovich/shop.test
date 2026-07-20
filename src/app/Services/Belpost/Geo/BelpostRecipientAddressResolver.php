@@ -5,7 +5,7 @@ namespace App\Services\Belpost\Geo;
 use App\Models\Orders\Order;
 
 /**
- * Resolves the `address` object for Belpost recipient registration (geo-directory format).
+ * Resolves the `address` object for Belpost recipient payloads (geo-directory format).
  */
 class BelpostRecipientAddressResolver
 {

@@ -13,7 +13,6 @@ use App\Services\Belpost\Geo\BelpostRecipientAddressResolver;
 use App\Services\Belpost\Mappers\BelpostBatchMapper;
 use App\Services\Belpost\Mappers\BelpostOrderItemMapper;
 use App\Services\Belpost\Mappers\BelpostRecipientMapper;
-use App\Services\Belpost\Recipient\BelpostRecipientService;
 use App\Services\Belpost\Support\BelpostBatchGuards;
 use App\Services\Belpost\Support\BelpostPhoneNormalizer;
 use App\Services\Belpost\Sync\BelpostBatchSyncService;
@@ -46,7 +45,6 @@ class BelpostServiceProvider extends ServiceProvider
         $this->app->singleton(BelpostGeoDirectoryService::class);
         $this->app->singleton(BelpostRecipientAddressResolver::class);
         $this->app->singleton(BelpostRecipientMapper::class);
-        $this->app->singleton(BelpostRecipientService::class);
         $this->app->singleton(BelpostOrderItemMapper::class);
 
         $this->app->singleton(BelpostBatchListService::class);

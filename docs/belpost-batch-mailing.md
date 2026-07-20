@@ -59,7 +59,7 @@ instead of calling the API when the token is missing.
 | `BELPOST_S10_SERIES_PREFIXES` | Comma-separated allowed S10 series prefixes. Empty means any valid series. | `PC` |
 | `BELPOST_S10_SERIAL_MIN` / `BELPOST_S10_SERIAL_MAX` | Optional inclusive S10 serial bounds from the Belpost contract. | none |
 | `BELPOST_OMIT_S10CODE_ON_SERIES_MISMATCH` | Omit mismatched S10 codes instead of throwing. | `true` |
-| `BELPOST_GEO_DIRECTORY_ENABLED` | Enables Belpost geo-directory address resolution for recipient registration. | `true` |
+| `BELPOST_GEO_DIRECTORY_ENABLED` | Enables Belpost geo-directory address resolution for recipient payloads. | `true` |
 
 COD email import uses IMAP settings from `src/config/services.php`:
 
@@ -96,11 +96,10 @@ Header actions on the edit page map directly to lifecycle services:
 | `deleteBelpostAction()` | `BelpostBatchListService::delete()` | Deletes the remote list and clears local Belpost fields. |
 
 Per-order relation actions call `BelpostBatchItemService::create()`,
-`update()`, or `delete()`. For ordinary batches, item sync first ensures a
-Belpost recipient exists for the order and sends `recipient_foreign_id`. For
-batches with effective declared value, the item payload inlines
-`recipient_object` instead; this works around a Belpost API rejection of COD
-items linked through `recipient_foreign_id`.
+`update()`, or `delete()`. Every item payload inlines a `recipient_object`
+built from the current order address (`BelpostRecipientMapper`). Linking via
+`recipient_foreign_id` (keyed by `user_id`) is intentionally unused: returning
+customers previously kept the address from their first Belpost registration.
 
 ## Local state model
 
@@ -143,10 +142,11 @@ committed, in OPS, or has a `dispatch_date`.
   Belpost.
 - When declared value applies, item payloads include
   `addons.declared_value`; the COD addon is capped to the declared value.
-- Declared-value item payloads include an inline `recipient_object` instead of
-  `recipient_foreign_id`. Keep recipient field fixes in both
-  `BelpostRecipientMapper::toPayload()` and `toRecipientObject()` paths because
-  the inline object is derived from the same recipient mapping.
+- Item payloads always include an inline `recipient_object` (never
+  `recipient_foreign_id`). Address hints prefer the order shipping snapshot
+  until `user.lastAddress` is admin-approved; after approval, structured
+  fields (including zip/region) win. Keep recipient field fixes in
+  `BelpostRecipientMapper::toPayload()` / `toRecipientObject()`.
 - Declared value or tariff-valid partial receipt adds `addons.shelf_life`.
 - Electronic notifications require a recipient phone with at least nine
   digits. Every item also needs an email, resolved from order, user, fallback
