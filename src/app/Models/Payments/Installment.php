@@ -84,12 +84,15 @@ class Installment extends Model
     }
 
     /**
-     * Generate next payment date
+     * Generate next payment date based on the installment contract date
+     * (falls back to created_at when contract_date is missing).
      */
     public function getNextPaymentDate(): Carbon
     {
         if (!$this->nextPaymentDate) {
-            $this->nextPaymentDate = $this->created_at->copy()
+            $baseDate = $this->contract_date ?? $this->created_at ?? now();
+
+            $this->nextPaymentDate = $baseDate->copy()
                 ->setYear(now()->year)
                 ->setMonth(now()->month);
 
