@@ -10,49 +10,15 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductAttributes\Top;
 use App\Models\Url;
-use App\Pagination\CatalogCursorPaginator;
 use App\Pagination\CatalogLengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Session;
-use Laravie\SerializesQuery\Eloquent;
 
 class CatalogService
 {
-    /**
-     * Number of products per page
-     */
-    protected const PAGE_SIZE = 12;
-
     public function __construct(
         private readonly ProductService $productService
     ) {}
-
-    /**
-     * @param  array<string, array<string, Url>>  $filters
-     * @return CatalogCursorPaginator<int, Product>
-     */
-    public function getProducts(array $filters, ProductSort $sort, ?string $search = null): CatalogCursorPaginator
-    {
-        $productsQuery = $this->productService
-            ->applyFilters($filters)
-            ->search($search)
-            ->sorting($sort, $filters);
-
-        $products = CatalogCursorPaginator::fromPaginator($productsQuery->cursorPaginate(self::PAGE_SIZE));
-        $this->addTopProducts($products, $filters);
-        $products->totalCount = $productsQuery->count() + $this->topProductsCount($products);
-
-        // save query in cache (1 hour)
-        Cache::put($this->getQueryCacheKey(), Eloquent::serialize($productsQuery), 3600);
-
-        $this->productService->addEager($products);
-        $this->addMinMaxPrices($products, $productsQuery);
-        $this->addGtmData($products);
-
-        return $products;
-    }
 
     /**
      * @param  array<string, array<string, Url>>  $filters
@@ -112,41 +78,10 @@ class CatalogService
     }
 
     /**
-     * @return CatalogCursorPaginator<int, Product>
-     */
-    public function getNextProducts(): CatalogCursorPaginator
-    {
-        $productsQuery = Cache::get($this->getQueryCacheKey());
-
-        abort_if(empty($productsQuery), 419, 'Query cache not found');
-
-        try {
-            /** @var Builder<Product> $productsQuery */
-            $productsQuery = Eloquent::unserialize($productsQuery);
-            $products = CatalogCursorPaginator::fromPaginator($productsQuery->cursorPaginate(self::PAGE_SIZE));
-        } catch (\Throwable $th) {
-            abort(419, 'Page maby expired. Error: ' . $th->getMessage());
-        }
-
-        $this->productService->addEager($products);
-        $this->addGtmData($products);
-
-        return $products;
-    }
-
-    /**
-     * Generate key for set/get query cahce
-     */
-    protected function getQueryCacheKey(): string
-    {
-        return 'catalog-query-' . Session::getId();
-    }
-
-    /**
-     * @param  CatalogCursorPaginator<int, Product>|CatalogLengthAwarePaginator<int, Product>  $products
+     * @param  CatalogLengthAwarePaginator<int, Product>  $products
      * @param  array<string, array<string, Url>>  $filters
      */
-    protected function addTopProducts(CatalogCursorPaginator|CatalogLengthAwarePaginator $products, array $filters): void
+    protected function addTopProducts(CatalogLengthAwarePaginator $products, array $filters): void
     {
         if (empty($filters[Top::class])) {
             return;
@@ -168,18 +103,18 @@ class CatalogService
     }
 
     /**
-     * @param  CatalogCursorPaginator<int, Product>|CatalogLengthAwarePaginator<int, Product>  $products
+     * @param  CatalogLengthAwarePaginator<int, Product>  $products
      */
-    protected function topProductsCount(CatalogCursorPaginator|CatalogLengthAwarePaginator $products): int
+    protected function topProductsCount(CatalogLengthAwarePaginator $products): int
     {
-        return $products->count() - self::PAGE_SIZE;
+        return max(0, $products->count() - $products->perPage());
     }
 
     /**
-     * @param  CatalogCursorPaginator<int, Product>|CatalogLengthAwarePaginator<int, Product>  $products
+     * @param  CatalogLengthAwarePaginator<int, Product>  $products
      * @param  Builder<Product>  $productsQuery
      */
-    protected function addMinMaxPrices(CatalogCursorPaginator|CatalogLengthAwarePaginator $products, Builder $productsQuery): void
+    protected function addMinMaxPrices(CatalogLengthAwarePaginator $products, Builder $productsQuery): void
     {
         $priceQuery = clone $productsQuery;
         $query = $priceQuery->getQuery();
@@ -205,9 +140,9 @@ class CatalogService
     }
 
     /**
-     * @param  CatalogCursorPaginator<int, Product>|CatalogLengthAwarePaginator<int, Product>|Collection<int, Product>  $products
+     * @param  CatalogLengthAwarePaginator<int, Product>|Collection<int, Product>  $products
      */
-    protected function addGtmData(CatalogCursorPaginator|CatalogLengthAwarePaginator|Collection $products): void
+    protected function addGtmData(CatalogLengthAwarePaginator|Collection $products): void
     {
         $products->each(function (Product $product) {
             $product->dataLayer = GoogleTagManagerService::prepareProduct($product);

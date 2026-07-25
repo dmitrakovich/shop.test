@@ -10,7 +10,6 @@ use App\Models\Category;
 use App\Models\Data\UserData;
 use App\Models\Orders\OrderItem;
 use App\Models\Product;
-use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\GoogleTagManager\DataLayer;
@@ -64,9 +63,9 @@ class GoogleTagManagerService
     /**
      * Set GTM view event for catalog page
      *
-     * @param  Collection<int, Product>|CursorPaginator<int, Product>|LengthAwarePaginator<int, Product>  $products
+     * @param  Collection<int, Product>|LengthAwarePaginator<int, Product>  $products
      */
-    public function setViewForCatalog(Collection|CursorPaginator|LengthAwarePaginator $products, string|Category $category, ?string $searchQuery = null): void
+    public function setViewForCatalog(Collection|LengthAwarePaginator $products, string|Category $category, ?string $searchQuery = null): void
     {
         if ($category instanceof Category) {
             $category = $category->getNameWithParents();
@@ -103,10 +102,10 @@ class GoogleTagManagerService
     /**
      * Prepare products array
      *
-     * @param  Collection<int, Product>|CursorPaginator<int, Product>|LengthAwarePaginator<int, Product>  $products
+     * @param  Collection<int, Product>|LengthAwarePaginator<int, Product>  $products
      * @return list<array<string, mixed>>
      */
-    public function prepareProductsArray(Collection|CursorPaginator|LengthAwarePaginator $products): array
+    public function prepareProductsArray(Collection|LengthAwarePaginator $products): array
     {
         return $products->map(
             fn (Product $product) => self::prepareProduct($product)->toArray()
@@ -116,9 +115,9 @@ class GoogleTagManagerService
     /**
      * Set GTM ecommerce event for catalog page
      *
-     * @param  Collection<int, Product>|CursorPaginator<int, Product>|LengthAwarePaginator<int, Product>  $products
+     * @param  Collection<int, Product>|LengthAwarePaginator<int, Product>  $products
      */
-    public function setEcommerceForCatalog(Collection|CursorPaginator|LengthAwarePaginator $products): void
+    public function setEcommerceForCatalog(Collection|LengthAwarePaginator $products): void
     {
         self::setEcommerceImpressions($this->prepareProductsArray($products));
     }
@@ -126,25 +125,12 @@ class GoogleTagManagerService
     /**
      * Set events for catalog page
      *
-     * @param  Collection<int, Product>|CursorPaginator<int, Product>|LengthAwarePaginator<int, Product>  $products
+     * @param  Collection<int, Product>|LengthAwarePaginator<int, Product>  $products
      */
-    public function setForCatalog(Collection|CursorPaginator|LengthAwarePaginator $products, string|Category $category, ?string $searchQuery = null): void
+    public function setForCatalog(Collection|LengthAwarePaginator $products, string|Category $category, ?string $searchQuery = null): void
     {
         $this->setViewForCatalog($products, $category, $searchQuery);
         $this->setEcommerceForCatalog($products);
-    }
-
-    /**
-     * Generate & return dataLayer script for catalog page
-     *
-     * @param  Collection<int, Product>|CursorPaginator<int, Product>|LengthAwarePaginator<int, Product>  $products
-     * @return list<array<string, mixed>>
-     */
-    public function getForCatalogArrays(Collection|CursorPaginator|LengthAwarePaginator $products, string|Category $category, ?string $searchQuery = null): array
-    {
-        $this->setForCatalog($products, $category, $searchQuery);
-
-        return GoogleTagManagerFacade::getPushData()->map(fn (DataLayer $dataLayer) => $dataLayer->toArray())->toArray();
     }
 
     /**

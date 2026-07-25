@@ -54,17 +54,10 @@ class SitemapService
                     $tempPath = $path . '/' . uniqid() . '.xml';
                     $finalPath = $path . '/' . $sitemapFile['file_name'] . '.xml';
                     $this->urlsetFileStart($tempPath);
-                    foreach ($sitemapFile['routes'] as $route) {
-                        $url = route($route, [], true);
+                    foreach ($sitemapFile['paths'] ?? [] as $frontPath) {
+                        $url = front_route((string)$frontPath);
                         $data = $this->getUrl($url, $sitemapFile['changefreq'], $sitemapFile['priority']);
                         $this->urlsetAppendFile($tempPath, $data);
-                    }
-                    foreach ($sitemapFile['routesWithParams'] as $route => $params) {
-                        foreach ($params as $param) {
-                            $url = route($route, $param, true);
-                            $data = $this->getUrl($url, $sitemapFile['changefreq'], $sitemapFile['priority']);
-                            $this->urlsetAppendFile($tempPath, $data);
-                        }
                     }
                     $this->urlsetFileEnd($tempPath, $finalPath);
                     break;
@@ -136,7 +129,7 @@ class SitemapService
                         });
 
                         foreach ($attributeLinks as $attributeLink => $exsist) {
-                            $url = route('shop', $attributeLink, true);
+                            $url = front_route('catalog/' . ltrim((string)$attributeLink, '/'));
                             $data = $this->getUrl($url, $changefreq, $priority);
                             $this->urlsetAppendFile($tempPath, $data);
                         }

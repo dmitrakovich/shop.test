@@ -11,4 +11,4 @@ Route::get('lnk/{short_link:short_link}', function (ShortLink $shortLink) {
 
     return redirect($shortLink->full_link);
 })
-    ->missing(fn () => redirect()->route('shop'))->name('short-link');
+    ->missing(fn () => front_redirect('catalog'))->name('short-link');

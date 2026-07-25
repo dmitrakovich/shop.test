@@ -5,7 +5,7 @@ catalog with Elasticsearch. **Do not use Laravel Scout** — the catalog needs
 faceted search (filters + aggregations + sort + pagination in one query), which
 Scout’s “search → IDs → hydrate” model does not fit well.
 
-Status: **planning** (no ES in the repo yet).
+Status: **planning / prep** (Blade catalog removed; no ES in the repo yet).
 
 Related code today:
 
@@ -19,6 +19,7 @@ Related code today:
 | LIKE search | `src/app/Services/SearchService.php` + `Product::scopeSearch` |
 | Filter contract | `src/app/Contracts/Filterable.php`, `AttributeFilterTrait` |
 | Sync hooks (no Product observer) | `ProductCreated` / `ProductUpdated`, `UpdateAvailabilityJob` |
+| Web storefront | Removed; unmatched paths go via `Route::fallback` → `front_redirect` |
 
 ---
 
@@ -39,6 +40,24 @@ Non-goals (for now):
   soft-delete via `UpdateAvailabilityJob`).
 - Moving Filament admin search to ES.
 - Changing canonical filter URL scheme (`Url` + path slugs).
+- Facet **counts** in API v1 (full filter dictionary only, same as today).
+- Perfect `promotion` Status sync into ES (deferred; see decisions).
+
+---
+
+## Decisions (Phase 0)
+
+| # | Question | Decision |
+| --- | --- | --- |
+| 1 | Hosting | **Self-hosted Elasticsearch** (Sail locally; same on prod/nearby host). |
+| 2 | Facet counts in v1 | **No** — listing + search + sort + min/max; `FilterService::getAll()` unchanged. Counts later if Vue needs them. |
+| 3 | `promotion` / Sale sync | **Deferred** — revisit when indexing Status filters; `st-new` / `st-sale` can be document fields from product prices. |
+| 4 | Legacy Blade catalog | **Remove first** (done) — ES only for API afterward. |
+
+Still open before Phase 1:
+
+- [ ] Confirm search vs sort behaviour when `q` is present (today MySQL forces `created_at desc`).
+- [ ] Pick packages: official client ± `elastic-client` / `elastic-migrations`.
 
 ---
 
@@ -127,9 +146,10 @@ Within one dimension: **OR** (`terms` / `whereIn`). Across dimensions: **AND**.
 Category: last path segment wins; expand to subtree IDs (same as
 `Category::getChildrenCategoriesIdsList`) → `terms` on `category_ids`.
 
-Status: do **not** reimplement sale/new SQL in ES ad hoc — encode into document
-fields (`has_discount`, `is_new`, `status_slugs`, or promotion product IDs
-refreshed when sales change).
+Status:
+
+- `st-new` / `st-sale` → document fields from product prices.
+- `promotion` → **deferred** (see decisions); keep MySQL path or skip until designed.
 
 ### Search
 
@@ -153,19 +173,13 @@ Map `ProductSort` to ES `sort`:
 ### Pagination
 
 API: length-aware (`from`/`size` + `track_total_hits` or `hits.total`). Keep
-`per_page` clamp 12–100. Cursor/session pagination for legacy Blade can remain
-on MySQL until retired.
+`per_page` clamp 12–100. Cursor/session pagination for Blade catalog has been
+**removed**.
 
 ### Facets / `filters` payload
 
-Two layers:
-
-1. **Filter dictionary** (labels, slugs, order) — still from MySQL /
-   `FilterService::getAll()` (or cache), same as today.
-2. **Availability / counts** — from ES aggregations on the current query
-   (optional enhancement). v1 can keep returning the full filter list without
-   counts if Vue does not need counts yet; confirm with frontend before building
-   dynamic facet UX.
+v1: **Filter dictionary only** from MySQL / `FilterService::getAll()` (or cache),
+same as today — no ES aggregations for counts.
 
 ### Min/max price
 
@@ -201,7 +215,7 @@ incremental jobs and full reindex.
 | `ProductCreated` / `ProductUpdated` | Upsert (or delete if soft-deleted / not listable) |
 | `UpdateAvailabilityJob` side effects | Upsert/delete after stock → soft-delete/restore |
 | Attribute / brand / category / … rename or slug change | Reindex affected products (or batch by attribute id) |
-| Promotion / sale product set changes | Refresh `status_slugs` / promotion flags for affected IDs |
+| Promotion / sale product set changes | **Deferred** with Status `promotion` |
 | Hard delete | Delete from index |
 
 Use queued jobs (`ShouldQueue`), idempotent upsert by product id. Debounce /
@@ -218,18 +232,19 @@ Artisan command, e.g. `catalog:elasticsearch-reindex`:
 
 ### Local / Sail
 
-Add Elasticsearch (or OpenSearch if preferred later) service to
-`src/docker-compose.yml`. Document env in `.env.example`
-(`ELASTICSEARCH_HOST`, …). Never commit secrets.
+Add Elasticsearch service to `src/docker-compose.yml`. Document env in
+`.env.example` (`ELASTICSEARCH_HOST`, …). Never commit secrets.
 
 ---
 
 ## Implementation phases
 
-### Phase 0 — Decisions (short)
+### Phase 0 — Decisions / prep
 
-- [ ] Confirm ES vs OpenSearch for hosting.
-- [ ] Confirm whether Vue needs live facet counts in v1.
+- [x] Hosting: self-hosted Elasticsearch.
+- [x] Facet counts: not in v1.
+- [x] `promotion` sync: deferred.
+- [x] Remove legacy Blade storefront (catalog/index/product) + cursor pagination; web unmatched → fallback.
 - [ ] Confirm search vs sort behaviour when `q` is present.
 - [ ] Pick packages: official client ± `elastic-client` / `elastic-migrations`.
 
@@ -256,7 +271,7 @@ Add Elasticsearch (or OpenSearch if preferred later) service to
       search + sort + page.
 - [ ] Map `FilterRequest` filter groups → ES filters (reuse same filter models /
       slugs; do not change URL parsing).
-- [ ] Aggregations for min/max price; optional facet counts.
+- [ ] Aggregations for min/max price (not facet counts in v1).
 - [ ] Adapter behind `CatalogService` when driver = elasticsearch.
 
 ### Phase 4 — Cutover
@@ -274,8 +289,9 @@ Add Elasticsearch (or OpenSearch if preferred later) service to
 - [ ] Monitoring: index lag, failed jobs, ES cluster health → Sentry/logs.
 - [ ] Autocomplete / suggest index if needed.
 - [ ] Optional listing denormalization to drop MySQL hydrate.
-- [ ] Invalidate/replace day-long `filters` cache strategy if facets become
-      dynamic.
+- [ ] Facet counts via aggregations if Vue needs them.
+- [ ] Design `promotion` / Sale → index sync (event + reconcile).
+- [ ] Consider removing unused `laravie/serialize-queries` (was Blade cursor cache).
 
 ---
 
@@ -307,19 +323,9 @@ backend behind it so controllers stay thin.
 - Feature-test API catalog with flag = elasticsearch (Sail ES) for one happy
   path: search + brand + size + sort + pagination + min/max.
 - Keep existing MySQL catalog tests green under `CATALOG_SEARCH_DRIVER=mysql`.
+- Legacy web storefront: `tests/Feature/Catalog/LegacyStorefrontRedirectTest.php`.
 
 Run via Sail: `cd src && ./vendor/bin/sail artisan test --compact …`.
-
----
-
-## Open questions
-
-1. Hosting: managed Elasticsearch, self-hosted, or OpenSearch-compatible API?
-2. Do we need facet **counts** in the API in v1, or only faster filtered listing?
-3. Should promotion (`Status` / sales) products be a periodic reindex of a set,
-   or event-driven from sale changes?
-4. Legacy Blade catalog / cursor pagination — migrate to ES or leave on MySQL
-   until removed?
 
 ---
 
@@ -328,3 +334,7 @@ Run via Sail: `cd src && ./vendor/bin/sail artisan test --compact …`.
 | Date | Note |
 | --- | --- |
 | 2026-07-25 | Plan created. Decision: faceted catalog → ES without Scout. |
+| 2026-07-25 | Decisions: self_es; no facet counts in v1; promotion sync deferred; remove Blade catalog first. |
+| 2026-07-25 | Removed Blade catalog: `Shop\CatalogController`, catalog/filter views, cursor pagination (`CatalogCursorPaginator`, `getProducts`/`getNextProducts`). Sitemap attribute URLs use `front_route`. |
+| 2026-07-25 | Removed web `catalog/{path?}` / `shop` route entirely; catalog URLs rely on `Route::fallback` → `front_redirect`. |
+| 2026-07-25 | Removed web `/` and `product/{slug}` (IndexController, Shop\ProductController, Blade product/index views). Sitemap static URLs use `front_route` paths. |

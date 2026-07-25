@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\Url;
-use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -36,9 +35,9 @@ class ProductService
     /**
      * Load the relationships that should be eager loaded.
      *
-     * @param  CursorPaginator<array-key, Product>|LengthAwarePaginator<array-key, Product>|EloquentCollection<array-key, Product>  $products
+     * @param  LengthAwarePaginator<array-key, Product>|EloquentCollection<array-key, Product>  $products
      */
-    public function addEager(CursorPaginator|LengthAwarePaginator|EloquentCollection $products): void
+    public function addEager(LengthAwarePaginator|EloquentCollection $products): void
     {
         $products->load([
             'category:id,parent_id,title,path',
