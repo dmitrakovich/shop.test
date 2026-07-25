@@ -26,14 +26,6 @@ class InstallmentSettingsTest extends TestCase
 
     public function test_installment_settings_page_can_be_rendered(): void
     {
-        Config::query()->create([
-            'key' => 'installment',
-            'config' => [
-                'min_price' => '100.00',
-                'min_price_3_parts' => '200.00',
-            ],
-        ]);
-
         $this->actingAs($this->admin, 'admin');
 
         $component = Livewire::test(InstallmentSettings::class);
@@ -46,14 +38,6 @@ class InstallmentSettingsTest extends TestCase
 
     public function test_installment_settings_can_be_saved(): void
     {
-        Config::query()->create([
-            'key' => 'installment',
-            'config' => [
-                'min_price' => '100.00',
-                'min_price_3_parts' => '200.00',
-            ],
-        ]);
-
         Cache::put('config.installment', ['min_price' => '100.00']);
 
         $this->actingAs($this->admin, 'admin');

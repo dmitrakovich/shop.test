@@ -27,14 +27,6 @@ class CurrencyResourceTest extends TestCase
 
     public function test_currencies_list_page_can_be_rendered(): void
     {
-        Currency::query()->create([
-            'code' => 'BYN',
-            'country' => 'BY',
-            'rate' => 1,
-            'decimals' => 2,
-            'symbol' => 'byn',
-        ]);
-
         $this->actingAs($this->admin, 'admin');
 
         $component = Livewire::test(ListCurrencies::class);
@@ -44,13 +36,7 @@ class CurrencyResourceTest extends TestCase
 
     public function test_currency_rate_can_be_updated_and_cache_is_cleared(): void
     {
-        $currency = Currency::query()->create([
-            'code' => 'USD',
-            'country' => 'US',
-            'rate' => 0.40,
-            'decimals' => 0,
-            'symbol' => '$',
-        ]);
+        $currency = Currency::query()->findOrFail('USD');
 
         Cache::put('currencies', ['USD' => $currency]);
 

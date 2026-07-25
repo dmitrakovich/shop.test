@@ -2,12 +2,10 @@
 
 namespace App\Notifications;
 
+use App\Enums\Feedback\ReviewDiscountType;
 use App\Facades\Currency;
 use App\Models\Config;
 use App\Models\Orders\Order;
-use App\Models\Orders\OrderItem;
-use App\Models\Product;
-use App\Models\ShortLink;
 
 class LeaveFeedbackSms extends AbstractSmsTraffic
 {
@@ -29,14 +27,19 @@ class LeaveFeedbackSms extends AbstractSmsTraffic
     public function getContent(): string
     {
         $currency = $this->order->currency;
-        $discount = Config::findCacheable('feedback')['discount'][$currency];
-        $discount = Currency::format($discount, $currency, '');
+        $discounts = Config::findCacheable('feedback')['discount'];
+        $photoDiscount = Currency::format(
+            (float)$discounts[ReviewDiscountType::Photo->value][$currency],
+            $currency,
+            ' ',
+        );
+        $videoDiscount = Currency::format(
+            (float)$discounts[ReviewDiscountType::Video->value][$currency],
+            $currency,
+            ' ',
+        );
 
-        $orderItems = $this->order->items->filter(fn (OrderItem $item) => $item->isCompleted());
-
-        $link = $orderItems->count() > 1
-            ? $this->orderLink()
-            : $this->productLink($orderItems->first()->product);
+        https:// api.barocco.by/admin/settings/feedback
 
         return <<<SMS
         {$this->order->first_name}, спасибо, что выбрали Barocco.by.
@@ -44,56 +47,14 @@ class LeaveFeedbackSms extends AbstractSmsTraffic
 
         Воспользуйтесь специальным предложением при следующей покупке пары обуви или аксессуара.
 
-        📸 Оставьте отзыв с фото — получите скидку 10 BYN.
+        📸 Оставьте отзыв с фото — получите скидку {$photoDiscount}.
 
-        🎥 Запишите видеоотзыв или снимите распаковку и забирайте скидку 20 BYN.
+        🎥 Запишите видеоотзыв или снимите распаковку и забирайте скидку {$videoDiscount}.
 
         Поделиться мнением о покупке можно здесь:
         https://barocco.by/feedbacks
 
         Ждем ваш отзыв!
         SMS;
-    }
-
-    /**
-     * Generate link to user's orders
-     */
-    protected function orderLink(): string
-    {
-        $link = route('orders.index', $this->utms(), true);
-
-        return 'по полученным товарам - ' . $this->reduceLink($link);
-    }
-
-    /**
-     * Generate product name and short link to him
-     */
-    protected function productLink(Product $product): string
-    {
-        $link = url($product->getUrl()) . '?' . http_build_query($this->utms()) . '#review';
-
-        return $product->shortName() . ' - ' . $this->reduceLink($link);
-    }
-
-    /**
-     * Utm params list for link
-     */
-    protected function utms(): array
-    {
-        return [
-            'utm_source' => 'viber',
-            'utm_medium' => 'messenger',
-            'utm_campaign' => 'auto',
-            'utm_content' => 'review',
-            'utm_term' => date('ymd'),
-        ];
-    }
-
-    /**
-     * Generate short link
-     */
-    protected function reduceLink(string $link): string
-    {
-        return ShortLink::createShortLink($link)->publicUrl();
     }
 }

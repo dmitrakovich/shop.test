@@ -20,13 +20,13 @@ class ConfigsTableSeeder extends Seeder
         DB::table('configs')->insert([
             0 => [
                 'key' => 'feedback',
-                'config' => '{"discount": {"BYN": "10", "KZT": "1500", "RUB": "350", "USD": "5"}, "send_after": "72"}',
+                'config' => '{"discount": {"photo": {"BYN": "10", "KZT": "1500", "RUB": "350", "USD": "5"}, "video": {"BYN": "20", "KZT": "3000", "RUB": "700", "USD": "10"}}, "send_after": "72"}',
                 'created_at' => '2023-01-22 21:25:55',
                 'updated_at' => '2023-03-04 19:11:36',
             ],
             1 => [
                 'key' => 'installment',
-                'config' => '{"min_price": "100.00"}',
+                'config' => '{"min_price": "100.00", "min_price_3_parts": "200.00"}',
                 'created_at' => '2023-01-11 22:00:36',
                 'updated_at' => '2023-01-12 08:19:26',
             ],

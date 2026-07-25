@@ -5,6 +5,7 @@ namespace App\Models\User;
 use App\Casts\AsPhone;
 use App\Contracts\AuthorInterface;
 use App\Contracts\ClientInterface;
+use App\Enums\Feedback\ReviewDiscountType;
 use App\Models\Cart;
 use App\Models\Country;
 use App\Models\Favorite;
@@ -479,11 +480,19 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
     }
 
     /**
-     * Check if user has review after order (cached)
+     * Check if user has a review after the last order (cached)
      */
     public function hasReviewAfterOrder(): bool
     {
-        return $this->getCachedUser()->hasReviewAfterOrder;
+        return $this->getReviewDiscountType() !== null;
+    }
+
+    /**
+     * Review discount type earned after the last order (cached)
+     */
+    public function getReviewDiscountType(): ?ReviewDiscountType
+    {
+        return $this->getCachedUser()->reviewDiscountType;
     }
 
     /**
@@ -492,21 +501,35 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
     private function getDataForCache(): array
     {
         return [
-            'hasReviewAfterOrder' => $this->_hasReviewAfterOrder(),
+            'reviewDiscountType' => $this->resolveReviewDiscountType(),
         ];
     }
 
     /**
-     * Check if user has review after order
+     * Resolve review discount type after the last order.
+     * Video reviews take priority over photo reviews.
      */
-    private function _hasReviewAfterOrder(): bool
+    private function resolveReviewDiscountType(): ?ReviewDiscountType
     {
-        if ($lastOrderDate = $this->orders()->latest()->value('created_at')) {
-            return $this->reviews()->where('created_at', '>', $lastOrderDate)
-                ->whereHas('media')->exists();
+        $lastOrderDate = $this->orders()->latest()->value('created_at');
+        if (!$lastOrderDate) {
+            return null;
         }
 
-        return false;
+        $reviewsAfterOrder = $this->reviews()->where('created_at', '>', $lastOrderDate);
+
+        if ((clone $reviewsAfterOrder)
+            ->whereHas('media', fn ($query) => $query->where('collection_name', 'videos'))
+            ->exists()
+        ) {
+            return ReviewDiscountType::Video;
+        }
+
+        if ((clone $reviewsAfterOrder)->whereHas('media')->exists()) {
+            return ReviewDiscountType::Photo;
+        }
+
+        return null;
     }
 
     /**

@@ -4,8 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Payments\Installment;
 use App\Notifications\InstallmentPaymentSms;
-use Carbon\Carbon;
-use Illuminate\Support\Carbon as IlluminateCarbon;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class InstallmentNextPaymentDateTest extends TestCase
@@ -13,7 +12,6 @@ class InstallmentNextPaymentDateTest extends TestCase
     protected function tearDown(): void
     {
         Carbon::setTestNow();
-        IlluminateCarbon::setTestNow();
 
         parent::tearDown();
     }
@@ -22,7 +20,7 @@ class InstallmentNextPaymentDateTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-07-10 12:00:00'));
 
-        $installment = new Installment;
+        $installment = new Installment();
         $installment->contract_date = Carbon::parse('2025-03-20');
         $installment->created_at = Carbon::parse('2025-01-05');
 
@@ -33,7 +31,7 @@ class InstallmentNextPaymentDateTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-07-25 12:00:00'));
 
-        $installment = new Installment;
+        $installment = new Installment();
         $installment->contract_date = Carbon::parse('2025-03-20');
         $installment->created_at = Carbon::parse('2025-01-05');
 
@@ -44,7 +42,7 @@ class InstallmentNextPaymentDateTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-07-03 12:00:00'));
 
-        $installment = new Installment;
+        $installment = new Installment();
         $installment->contract_date = null;
         $installment->created_at = Carbon::parse('2025-01-05');
 
@@ -55,7 +53,7 @@ class InstallmentNextPaymentDateTest extends TestCase
     {
         Carbon::setTestNow(Carbon::parse('2026-07-10 12:00:00'));
 
-        $installment = new Installment;
+        $installment = new Installment();
         $installment->contract_number = '100/1';
         $installment->monthly_fee = 50.0;
         $installment->contract_date = Carbon::parse('2025-03-20');

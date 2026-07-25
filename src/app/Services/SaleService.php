@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Data\Order\OrderData;
+use App\Enums\Feedback\ReviewDiscountType;
 use App\Enums\Promo\SaleAlgorithm;
 use App\Enums\Promo\SettingType;
 use App\Facades\Cart as CartFacade;
@@ -127,8 +128,8 @@ class SaleService
         }
 
         $this->userDiscount = $user->group->discount;
-        if ($user->hasReviewAfterOrder()) {
-            $this->reviewDiscount = $this->getReviewDiscount();
+        if ($reviewDiscountType = $user->getReviewDiscountType()) {
+            $this->reviewDiscount = $this->getReviewDiscount($reviewDiscountType);
         }
 
         if (!$promocode = $user->cart?->promocode) {
@@ -197,12 +198,12 @@ class SaleService
     }
 
     /**
-     * Get review discount sum by current currency
+     * Get review discount sum by current currency for the given review type.
      */
-    private function getReviewDiscount(): ?float
+    private function getReviewDiscount(ReviewDiscountType $type): ?float
     {
         $currency = Currency::getCurrentCurrency();
-        $discount = Config::findCacheable('feedback')['discount'][$currency->code] ?? 0;
+        $discount = Config::findCacheable('feedback')['discount'][$type->value][$currency->code];
 
         return $discount ? $discount / $currency->rate : null;
     }
