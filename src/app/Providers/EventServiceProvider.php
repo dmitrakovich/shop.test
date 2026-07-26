@@ -9,6 +9,7 @@ use App\Events\Products;
 use App\Events\ReviewPosted;
 use App\Events\User\UserLogin;
 use App\Listeners\Cache\ResetUserCache;
+use App\Listeners\Elasticsearch;
 use App\Listeners\FacebookPixel;
 use App\Listeners\GoogleTag;
 use App\Listeners\LogNotification;
@@ -104,9 +105,11 @@ class EventServiceProvider extends ServiceProvider
         Products\ProductCreated::class => [
             Product\GenerateSlug::class,
             OneC\UpdateProduct::class,
+            Elasticsearch\SyncCatalogProduct::class,
         ],
         Products\ProductUpdated::class => [
             OneC\UpdateProduct::class,
+            Elasticsearch\SyncCatalogProduct::class,
         ],
     ];
 

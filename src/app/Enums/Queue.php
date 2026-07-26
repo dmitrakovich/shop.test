@@ -10,6 +10,7 @@ enum Queue: string
     case Pixel = 'pixel';
     case Media = 'media';
     case OneC = 'one_c';
+    case Elasticsearch = 'elasticsearch';
 
     public function redisWaitKey(): string
     {
@@ -20,6 +21,7 @@ enum Queue: string
     {
         return match ($this) {
             self::Media => 120,
+            self::Elasticsearch => 120,
             default => 60,
         };
     }
@@ -52,6 +54,7 @@ enum Queue: string
             self::Default->value,
             self::Pixel->value,
             self::OneC->value,
+            self::Elasticsearch->value,
             self::Low->value,
         ];
     }

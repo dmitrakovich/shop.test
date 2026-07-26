@@ -41,7 +41,9 @@ class LegacyStorefrontRedirectTest extends TestCase
 
     public function test_legacy_blade_storefront_routes_are_unregistered(): void
     {
-        $uris = collect(Route::getRoutes())->map(fn ($route) => $route->uri());
+        $uris = collect(Route::getRoutes()->getRoutes())->map(
+            fn (\Illuminate\Routing\Route $route): string => $route->uri(),
+        );
 
         $this->assertFalse(Route::has('index-page'));
         $this->assertFalse(Route::has('shop'));

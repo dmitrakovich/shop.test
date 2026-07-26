@@ -43,8 +43,8 @@ class CatalogDocumentBuilder
             $statusSlugs[] = 'st-sale';
         }
 
-        $brandName = $product->brand?->name ?? '';
-        $categoryTitle = $product->category?->title ?? '';
+        $brandName = $product->brand->name ?? '';
+        $categoryTitle = $product->category->title ?? '';
         $tagNames = $product->tags->pluck('name')->filter()->implode(' ');
 
         $searchParts = array_filter([

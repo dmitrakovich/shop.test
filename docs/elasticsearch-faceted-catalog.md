@@ -5,7 +5,7 @@ catalog with Elasticsearch. **Do not use Laravel Scout** — the catalog needs
 faceted search (filters + aggregations + sort + pagination in one query), which
 Scout’s “search → IDs → hydrate” model does not fit well.
 
-Status: **planning / prep** (Blade catalog removed; no ES in the repo yet).
+Status: **Phase 2 in progress** (infra + document builder done; indexing wiring).
 
 Related code today:
 
@@ -255,10 +255,10 @@ Add Elasticsearch service to `src/docker-compose.yml`. Document env in
 
 ### Phase 2 — Indexing
 
-- [ ] `CatalogIndexer` (bulk upsert/delete via alias).
-- [ ] Upsert/delete job(s).
-- [ ] Wire `ProductCreated` / `ProductUpdated` + availability job.
-- [ ] `catalog:elasticsearch-reindex` command.
+- [x] `CatalogIndexer` (bulk upsert/delete via alias).
+- [x] Upsert job (delete-from-index when product missing/trashed).
+- [x] Wire `ProductCreated` / `ProductUpdated` + availability job.
+- [x] `catalog:elasticsearch-reindex` command.
 - [ ] Feature/integration tests that need live ES — only locally/Sail, not CI.
 
 ### Phase 3 — Query layer
@@ -300,7 +300,6 @@ app/Services/Elasticsearch/
   CatalogSearchService.php
 app/Jobs/Elasticsearch/
   UpsertCatalogProductJob.php
-  DeleteCatalogProductJob.php
 app/Console/Commands/
   CatalogElasticsearchReindexCommand.php
 database/elastic-migrations/   # babenkoivan elastic-migrations path
@@ -333,3 +332,6 @@ Run via Sail: `cd src && ./vendor/bin/sail artisan test --compact …`.
 | 2026-07-25 | Removed web `catalog/{path?}` / `shop` route entirely; catalog URLs rely on `Route::fallback` → `front_redirect`. |
 | 2026-07-26 | Chose babenkoivan (`elastic-client` + `elastic-migrations`). Sail ES 9.1.3 up; client smoke OK; `elastic_migrations` table migrated. |
 | 2026-07-26 | Elastic migrations path → `database/elastic-migrations`. Created `catalog_v1` + alias `catalog`; `CatalogDocumentBuilder` + tests. |
+| 2026-07-26 | Phase 2: `CatalogIndexer`, `UpsertCatalogProductJob` (also deletes when missing/trashed), `SyncCatalogProduct`, availability → catalog jobs, `catalog:elasticsearch-reindex`. |
+| 2026-07-26 | Dedicated Horizon queue `elasticsearch` + production `supervisor-elasticsearch` (`maxProcesses: 1`). |
+| 2026-07-26 | Dropped unused `DeleteCatalogProductJob` (upsert covers index removal). |

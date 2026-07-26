@@ -213,6 +213,15 @@ return [
                 'maxProcesses' => 1,
                 'tries' => 3,
             ],
+            // Keep catalog ES sync off the default worker so availability bursts
+            // do not starve high/default, and cap concurrency against the JVM.
+            'supervisor-elasticsearch' => [
+                'connection' => 'redis',
+                'queue' => [Queue::Elasticsearch->value],
+                'balance' => 'simple',
+                'maxProcesses' => 1,
+                'tries' => 3,
+            ],
             'supervisor-media' => [
                 // redis-long: retry_after 690 so ConvertVideo (600s) is not released early.
                 'connection' => 'redis-long',
