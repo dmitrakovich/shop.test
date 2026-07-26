@@ -83,13 +83,9 @@ MySQL (Product, attributes, stock, urls)
   Unchanged JSON for Vue
 ```
 
-Decision: **direct official `elasticsearch/elasticsearch` client**, optional
-helpers:
-
-- `babenkoivan/elastic-client` — Laravel binding for the client
-- `babenkoivan/elastic-migrations` — index/mapping versioning (`elastic:migrate`)
-
-No Scout drivers.
+Decision: **`babenkoivan/elastic-client` + `babenkoivan/elastic-migrations`**
+(official `elasticsearch/elasticsearch` under the hood). No Scout.
+Optional later: `spatie/elasticsearch-query-builder` for fluent search DSL.
 
 Feature flag (suggested): `CATALOG_SEARCH_DRIVER=mysql|elasticsearch` so we can
 shadow-compare and cut over safely.
@@ -245,25 +241,25 @@ Add Elasticsearch service to `src/docker-compose.yml`. Document env in
 - [x] Facet counts: not in v1.
 - [x] `promotion` sync: deferred.
 - [x] Remove legacy Blade storefront (catalog/index/product) + cursor pagination; web unmatched → fallback.
+- [x] Packages: `babenkoivan/elastic-client` + `babenkoivan/elastic-migrations` (Spatie QB optional in Phase 3).
 - [ ] Confirm search vs sort behaviour when `q` is present.
-- [ ] Pick packages: official client ± `elastic-client` / `elastic-migrations`.
 
 ### Phase 1 — Infrastructure
 
-- [ ] Sail/compose ES service + env + healthcheck.
-- [ ] Install client packages (via Sail composer).
-- [ ] Config `config/elasticsearch.php` (or package config).
-- [ ] First elastic migration: `catalog` mapping + alias.
-- [ ] Feature flag `CATALOG_SEARCH_DRIVER`.
+- [x] Sail/compose ES 9.1.3 service + env + healthcheck.
+- [x] Install `babenkoivan/elastic-client` + `babenkoivan/elastic-migrations` (via Sail).
+- [x] Publish `config/elastic.client.php` + `config/elastic.migrations.php`; DB table `elastic_migrations`.
+- [x] First elastic migration: `catalog_v1` mapping + alias `catalog`.
+- [x] Feature flag env `CATALOG_SEARCH_DRIVER` (default `mysql`) + `config/catalog.php`.
+- [x] Scaffold `CatalogDocumentBuilder` (+ unit tests).
 
 ### Phase 2 — Indexing
 
-- [ ] `CatalogDocumentBuilder`.
+- [ ] `CatalogIndexer` (bulk upsert/delete via alias).
 - [ ] Upsert/delete job(s).
 - [ ] Wire `ProductCreated` / `ProductUpdated` + availability job.
 - [ ] `catalog:elasticsearch-reindex` command.
-- [ ] Feature tests with ES test container or HTTP fake for unit pieces;
-      one integration test against Sail ES if feasible.
+- [ ] Feature/integration tests that need live ES — only locally/Sail, not CI.
 
 ### Phase 3 — Query layer
 
@@ -307,7 +303,7 @@ app/Jobs/Elasticsearch/
   DeleteCatalogProductJob.php
 app/Console/Commands/
   CatalogElasticsearchReindexCommand.php
-database/elastic/   # or package default path for elastic-migrations
+database/elastic-migrations/   # babenkoivan elastic-migrations path
 ```
 
 Keep `CatalogService` as the façade used by `Api\CatalogController`; swap the
@@ -317,13 +313,11 @@ backend behind it so controllers stay thin.
 
 ## Testing notes
 
-- Unit-test document builder field encoding (status/sale/new, category_ids).
+- Unit-test document builder field encoding (status/sale/new, category_ids) — no DB/ES.
 - Unit-test DSL builder: AND across dimensions, OR within, price range,
   category subtree, sort maps.
-- Feature-test API catalog with flag = elasticsearch (Sail ES) for one happy
-  path: search + brand + size + sort + pagination + min/max.
-- Keep existing MySQL catalog tests green under `CATALOG_SEARCH_DRIVER=mysql`.
-- Legacy web storefront: `tests/Feature/Catalog/LegacyStorefrontRedirectTest.php`.
+- Live ES checks (migrate/reindex/API) — manual or Sail-only; **not CI** (no ES there).
+- Keep MySQL catalog path tests green under `CATALOG_SEARCH_DRIVER=mysql`.
 
 Run via Sail: `cd src && ./vendor/bin/sail artisan test --compact …`.
 
@@ -337,4 +331,5 @@ Run via Sail: `cd src && ./vendor/bin/sail artisan test --compact …`.
 | 2026-07-25 | Decisions: self_es; no facet counts in v1; promotion sync deferred; remove Blade catalog first. |
 | 2026-07-25 | Removed Blade catalog: `Shop\CatalogController`, catalog/filter views, cursor pagination (`CatalogCursorPaginator`, `getProducts`/`getNextProducts`). Sitemap attribute URLs use `front_route`. |
 | 2026-07-25 | Removed web `catalog/{path?}` / `shop` route entirely; catalog URLs rely on `Route::fallback` → `front_redirect`. |
-| 2026-07-25 | Removed web `/` and `product/{slug}` (IndexController, Shop\ProductController, Blade product/index views). Sitemap static URLs use `front_route` paths. |
+| 2026-07-26 | Chose babenkoivan (`elastic-client` + `elastic-migrations`). Sail ES 9.1.3 up; client smoke OK; `elastic_migrations` table migrated. |
+| 2026-07-26 | Elastic migrations path → `database/elastic-migrations`. Created `catalog_v1` + alias `catalog`; `CatalogDocumentBuilder` + tests. |

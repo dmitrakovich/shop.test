@@ -27,6 +27,8 @@
         "php": "^8.5",
         "achyutn/filament-log-viewer": "^2.0",
         "appstract/laravel-opcache": "^4.0",
+        "babenkoivan/elastic-client": "^4.0",
+        "babenkoivan/elastic-migrations": "^5.0",
         "bezhansalleh/filament-shield": "^4.0",
         "calebporzio/sushi": "^2.5",
         "ddeboer/imap": "^1.19",
