@@ -35,6 +35,7 @@
         "dmitrakovich/smstraffic-for-laravel": "^0.6.0",
         "dmitrakovich/sxgeo": "^0.2.0",
         "drandin/declension-nouns": "dev-master",
+        "elasticsearch/elasticsearch": "^8.15",
         "encore/laravel-admin": "^1.9",
         "facebook/php-business-sdk": "^19.0",
         "filament/filament": "^5.0",

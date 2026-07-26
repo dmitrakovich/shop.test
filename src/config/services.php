@@ -46,4 +46,14 @@ return [
         'belpost_user' => env('IMAP_BELPOST_USER'),
         'belpost_password' => env('IMAP_BELPOST_PASSWORD'),
     ],
+
+    'search' => [
+        'enabled' => env('ELASTICSEARCH_ENABLED', false),
+        'hosts' => array_values(array_filter(array_map(
+            'trim',
+            explode(',', (string)env('ELASTICSEARCH_HOSTS', env('ELASTICSEARCH_HOST', 'http://elasticsearch:9200')))
+        ))),
+        'product_index' => env('ELASTICSEARCH_PRODUCT_INDEX', 'products'),
+    ],
 ];
+

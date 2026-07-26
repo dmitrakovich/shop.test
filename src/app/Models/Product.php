@@ -55,6 +55,7 @@ use Spatie\MediaLibrary\HasMedia;
  * @property string|null $product_features Особенность модели
  * @property string|null $key_features Ключевая особенность товара
  * @property int|null $country_of_origin_id
+ * @property bool $pending_es_sync
  *
  * @property-read \App\Models\Category|null $category
  * @property-read \App\Models\Collection|null $collection
@@ -118,6 +119,7 @@ class Product extends Model implements HasMedia
     protected $casts = [
         'label_id' => ProductLabel::class,
         'action' => 'boolean',
+        'pending_es_sync' => 'boolean',
     ];
 
     /**
@@ -572,5 +574,64 @@ class Product extends Model implements HasMedia
         }
 
         return $this->restoreSoftDeletes();
+    }
+
+    /**
+     * Products pending Elasticsearch synchronization.
+     *
+     * @param  Builder<Product>  $query
+     * @return Builder<Product>
+     */
+    public function scopePendingEsSync(Builder $query): Builder
+    {
+        return $query->where('pending_es_sync', true);
+    }
+
+    /**
+     * Products suitable for a full Elasticsearch document.
+     *
+     * @param  Builder<Product>  $query
+     * @return Builder<Product>
+     */
+    public function scopeForElasticsearchDocument(Builder $query): Builder
+    {
+        return $query
+            ->whereNull('products.deleted_at')
+            ->whereNotNull('products.brand_id')
+            ->whereNotNull('products.category_id')
+            ->where('products.price', '>', 0)
+            ->whereHas('media')
+            ->with([
+                'brand',
+                'category.ancestors',
+                'collection',
+                'season',
+                'sizes',
+                'colors',
+                'fabrics',
+                'heels',
+                'styles',
+                'tags',
+                'media',
+            ]);
+    }
+
+    /**
+     * Flag the product for deferred Elasticsearch sync after mass upserts
+     * (Eloquent events / SyncProductToElasticsearchJob are not fired).
+     */
+    public function markPendingEsSync(): void
+    {
+        if ($this->pending_es_sync === true) {
+            return;
+        }
+
+        static::withoutEvents(function (): void {
+            $this->newQueryWithoutScopes()
+                ->whereKey($this->getKey())
+                ->update(['pending_es_sync' => true]);
+        });
+
+        $this->pending_es_sync = true;
     }
 }

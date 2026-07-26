@@ -4,6 +4,7 @@ use App\Libraries\Seo\Providers\SeoServiceProvider;
 use App\Providers\AdminPanelProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\BelpostServiceProvider;
+use App\Providers\ElasticSearchServiceProvider;
 use App\Providers\EventServiceProvider;
 use App\Providers\GoogleTagManagerProvider;
 use App\Providers\HorizonServiceProvider;
@@ -15,6 +16,7 @@ return [
     AdminPanelProvider::class,
     AppServiceProvider::class,
     BelpostServiceProvider::class,
+    ElasticSearchServiceProvider::class,
     EventServiceProvider::class,
     GoogleTagManagerProvider::class,
     HorizonServiceProvider::class,

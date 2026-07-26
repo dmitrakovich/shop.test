@@ -34,6 +34,7 @@ class RouteServiceProvider extends ServiceProvider
     public function map(): void
     {
         $this->mapApiRoutes();
+        $this->mapApiV2Routes();
         $this->mapApiAdminRoutes();
         $this->mapApiExternalRoutes();
         $this->mapApiFallbackRoutes();
@@ -46,6 +47,14 @@ class RouteServiceProvider extends ServiceProvider
             ->prefix('api/' . self::API_VERSION)
             ->as('api.')
             ->group(base_path('routes/api.php'));
+    }
+
+    protected function mapApiV2Routes(): void
+    {
+        Route::middleware(['api', 'device.auth'])
+            ->prefix('api/v2')
+            ->as('api.v2.')
+            ->group(base_path('routes/api.v2.php'));
     }
 
     protected function mapApiAdminRoutes(): void
@@ -74,7 +83,9 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiFallbackRoutes(): void
     {
         Route::any('api/{version?}/{path?}', function (Request $request, ?string $version = null) {
-            if (str_contains($version, 'v') && $version !== self::API_VERSION) {
+            $supportedVersions = ['v1', 'v2'];
+
+            if (str_contains((string)$version, 'v') && !in_array($version, $supportedVersions, true)) {
                 abort(
                     Response::HTTP_UPGRADE_REQUIRED,
                     'API version is outdated. Please reload the page.'
