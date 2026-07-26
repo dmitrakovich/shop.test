@@ -18,8 +18,8 @@ class CatalogDocumentBuilderTest extends TestCase
     {
         $category = $this->makeCategory(10, 'Кроссовки');
         $brand = $this->makeBrand(5, 'Nike Test');
-        $size = $this->makeSizedModel(Size::class, 101);
-        $color = $this->makeSizedModel(Color::class, 202);
+        $size = $this->makeSizedModel(Size::class, 101, '38');
+        $color = $this->makeSizedModel(Color::class, 202, 'бордовый');
         $tag = $this->makeTag(303, 'вечерние');
 
         $product = $this->makeProduct([
@@ -45,7 +45,7 @@ class CatalogDocumentBuilderTest extends TestCase
             'tags' => collect([$tag]),
         ]);
 
-        $document = (new CatalogDocumentBuilder())->build($product);
+        $document = (new CatalogDocumentBuilder)->build($product);
 
         $this->assertSame(42, $document['id']);
         $this->assertSame('SKU-ES-100', $document['sku']);
@@ -63,7 +63,9 @@ class CatalogDocumentBuilderTest extends TestCase
         $this->assertStringContainsString('Nike Test', $document['search_text']);
         $this->assertStringContainsString('Кроссовки', $document['search_text']);
         $this->assertStringContainsString('черный', $document['search_text']);
+        $this->assertStringContainsString('бордовый', $document['search_text']);
         $this->assertStringContainsString('вечерние', $document['search_text']);
+        $this->assertStringContainsString('38', $document['search_text']);
     }
 
     public function test_it_marks_new_products_without_old_price(): void
@@ -160,10 +162,13 @@ class CatalogDocumentBuilderTest extends TestCase
      * @param  class-string<T>  $class
      * @return T
      */
-    private function makeSizedModel(string $class, int $id): Size|Color
+    private function makeSizedModel(string $class, int $id, ?string $name = null): Size|Color
     {
-        $model = new $class();
+        $model = new $class;
         $model->id = $id;
+        if ($name !== null) {
+            $model->name = $name;
+        }
 
         return $model;
     }

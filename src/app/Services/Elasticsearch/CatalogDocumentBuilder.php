@@ -18,8 +18,8 @@ class CatalogDocumentBuilder
         return [
             'category.parentCategory',
             'brand:id,name',
-            'sizes:id',
-            'colors:id',
+            'sizes:id,name',
+            'colors:id,name',
             'fabrics:id',
             'heels:id',
             'styles:id',
@@ -46,6 +46,8 @@ class CatalogDocumentBuilder
         $brandName = $product->brand->name ?? '';
         $categoryTitle = $product->category->title ?? '';
         $tagNames = $product->tags->pluck('name')->filter()->implode(' ');
+        $sizeNames = $product->sizes->pluck('name')->filter()->implode(' ');
+        $colorNames = $product->colors->pluck('name')->filter()->implode(' ');
 
         $searchParts = array_filter([
             $product->sku,
@@ -53,7 +55,9 @@ class CatalogDocumentBuilder
             $brandName,
             $categoryTitle,
             $product->color_txt,
+            $colorNames,
             $tagNames,
+            $sizeNames,
         ], fn (mixed $value): bool => $value !== null && $value !== '');
 
         return [

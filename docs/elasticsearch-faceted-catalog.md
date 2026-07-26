@@ -5,7 +5,7 @@ catalog with Elasticsearch. **Do not use Laravel Scout** — the catalog needs
 faceted search (filters + aggregations + sort + pagination in one query), which
 Scout’s “search → IDs → hydrate” model does not fit well.
 
-Status: **Phase 2 in progress** (infra + document builder done; indexing wiring).
+Status: **Phase 3 done locally** (query layer behind `CATALOG_SEARCH_DRIVER`; cutover still Phase 4).
 
 Related code today:
 
@@ -56,7 +56,7 @@ Non-goals (for now):
 
 Still open before Phase 1:
 
-- [ ] Confirm search vs sort behaviour when `q` is present (today MySQL forces `created_at desc`).
+- [x] Confirm search vs sort behaviour when `q` is present.
 - [ ] Pick packages: official client ± `elastic-client` / `elastic-migrations`.
 
 ---
@@ -154,8 +154,8 @@ Replace `SearchService` LIKE chains with `multi_match` / `bool` on `search_text`
 `term`/`ids` boost.
 
 Decide explicitly whether search overrides sort (today `scopeSearch` forces
-`created_at desc`). Prefer: relevance sort when `q` present, else requested
-`ProductSort`.
+`created_at desc`). **Decision (ES):** relevance (`_score desc`, then `id`);
+ignore UI `ProductSort` while `search` is non-empty. MySQL path unchanged.
 
 ### Sort
 
@@ -242,7 +242,7 @@ Add Elasticsearch service to `src/docker-compose.yml`. Document env in
 - [x] `promotion` sync: deferred.
 - [x] Remove legacy Blade storefront (catalog/index/product) + cursor pagination; web unmatched → fallback.
 - [x] Packages: `babenkoivan/elastic-client` + `babenkoivan/elastic-migrations` (Spatie QB optional in Phase 3).
-- [ ] Confirm search vs sort behaviour when `q` is present.
+- [x] Confirm search vs sort behaviour when `q` is present.
 
 ### Phase 1 — Infrastructure
 
@@ -263,12 +263,12 @@ Add Elasticsearch service to `src/docker-compose.yml`. Document env in
 
 ### Phase 3 — Query layer
 
-- [ ] `CatalogSearchService` (or similar): build DSL from current filters +
+- [x] `CatalogSearchService` (or similar): build DSL from current filters +
       search + sort + page.
-- [ ] Map `FilterRequest` filter groups → ES filters (reuse same filter models /
+- [x] Map `FilterRequest` filter groups → ES filters (reuse same filter models /
       slugs; do not change URL parsing).
-- [ ] Aggregations for min/max price (not facet counts in v1).
-- [ ] Adapter behind `CatalogService` when driver = elasticsearch.
+- [x] Aggregations for min/max price (not facet counts in v1).
+- [x] Adapter behind `CatalogService` when driver = elasticsearch.
 
 ### Phase 4 — Cutover
 
@@ -335,3 +335,5 @@ Run via Sail: `cd src && ./vendor/bin/sail artisan test --compact …`.
 | 2026-07-26 | Phase 2: `CatalogIndexer`, `UpsertCatalogProductJob` (also deletes when missing/trashed), `SyncCatalogProduct`, availability → catalog jobs, `catalog:elasticsearch-reindex`. |
 | 2026-07-26 | Dedicated Horizon queue `elasticsearch` + production `supervisor-elasticsearch` (`maxProcesses: 1`). |
 | 2026-07-26 | Dropped unused `DeleteCatalogProductJob` (upsert covers index removal). |
+| 2026-07-26 | Phase 3: `CatalogSearchService` + `CatalogService` driver switch; promotion → MySQL fallback; unit tests for DSL. |
+| 2026-07-26 | ES search sort: `_score` (best match), not MySQL `created_at` parity. |

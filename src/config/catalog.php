@@ -6,8 +6,9 @@ return [
     | Catalog search driver
     |--------------------------------------------------------------------------
     |
-    | mysql — current Eloquent listing (default).
-    | elasticsearch — Phase 3+ read model (not wired yet).
+    | mysql — Eloquent listing (default).
+    | elasticsearch — ES read model via CatalogSearchService
+    |   (falls back to mysql when Status "promotion" is selected).
     |
     */
     'search_driver' => env('CATALOG_SEARCH_DRIVER', 'mysql'),
