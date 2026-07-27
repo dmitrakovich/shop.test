@@ -6,6 +6,7 @@ use App\Enums\Consent\ConsentFormEnum;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Resources\Users\DeviceConsents\Pages\EditDeviceConsent;
 use App\Filament\Resources\Users\DeviceConsents\Pages\ListDeviceConsents;
+use App\Helpers\PhoneHelper;
 use App\Models\User\DeviceConsent;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
@@ -61,7 +62,7 @@ class DeviceConsentResource extends Resource
                     ->placeholder('—'),
                 TextColumn::make('phone')
                     ->label('Телефон')
-                    ->searchable()
+                    ->searchable(query: PhoneHelper::searchableQuery())
                     ->placeholder('—'),
                 TextColumn::make('device.api_id')
                     ->label('Device API ID')
