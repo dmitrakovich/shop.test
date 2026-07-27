@@ -11,7 +11,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RouteServiceProvider extends ServiceProvider
 {
+    /**
+     * Default / production storefront API version.
+     */
     public const string API_VERSION = 'v1';
+
+    /**
+     * Concurrently supported storefront API versions.
+     *
+     * @var list<string>
+     */
+    public const array API_VERSIONS = ['v1', 'v2'];
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -43,9 +53,14 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes(): void
     {
         Route::middleware(['api', 'device.auth'])
-            ->prefix('api/' . self::API_VERSION)
+            ->prefix('api/v1')
             ->as('api.')
             ->group(base_path('routes/api.php'));
+
+        Route::middleware(['api', 'device.auth'])
+            ->prefix('api/v2')
+            ->as('api.v2.')
+            ->group(base_path('routes/api.v2.php'));
     }
 
     protected function mapApiAdminRoutes(): void
@@ -74,7 +89,11 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiFallbackRoutes(): void
     {
         Route::any('api/{version?}/{path?}', function (Request $request, ?string $version = null) {
-            if (str_contains($version, 'v') && $version !== self::API_VERSION) {
+            if (
+                is_string($version)
+                && str_contains($version, 'v')
+                && !in_array($version, self::API_VERSIONS, true)
+            ) {
                 abort(
                     Response::HTTP_UPGRADE_REQUIRED,
                     'API version is outdated. Please reload the page.'

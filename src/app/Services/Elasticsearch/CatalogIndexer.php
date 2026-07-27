@@ -2,6 +2,7 @@
 
 namespace App\Services\Elasticsearch;
 
+use App\Models\Product;
 use Elastic\Adapter\Documents\Document;
 use Elastic\Adapter\Documents\DocumentManager;
 use Elastic\Client\ClientBuilderInterface;
@@ -9,6 +10,8 @@ use Illuminate\Support\Collection;
 
 class CatalogIndexer
 {
+    private const int SYNC_CHUNK_SIZE = 200;
+
     public function __construct(
         private readonly DocumentManager $documents,
         private readonly CatalogDocumentBuilder $builder,
@@ -18,6 +21,35 @@ class CatalogIndexer
     public function alias(): string
     {
         return (string)config('catalog.elasticsearch.alias');
+    }
+
+    /**
+     * Bulk upsert / delete by product id (missing or soft-deleted → delete).
+     *
+     * @param  list<int|string>  $productIds
+     */
+    public function syncProductIds(array $productIds): void
+    {
+        foreach (array_chunk($productIds, self::SYNC_CHUNK_SIZE) as $chunk) {
+            $products = Product::withTrashed()
+                ->with($this->builder->relations())
+                ->whereIn('id', $chunk)
+                ->get();
+
+            $upsert = [];
+            $deleteIds = array_values(array_diff($chunk, $products->modelKeys()));
+
+            $products->each(function (Product $product) use (&$upsert, &$deleteIds): void {
+                if ($product->trashed()) {
+                    $deleteIds[] = $product->id;
+                } else {
+                    $upsert[] = $product;
+                }
+            });
+
+            $this->delete($deleteIds);
+            $this->upsert($upsert);
+        }
     }
 
     /**

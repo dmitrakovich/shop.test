@@ -127,4 +127,19 @@ class CatalogIndexerTest extends TestCase
 
         $indexer->deleteAll();
     }
+
+    public function test_sync_product_ids_skips_empty_list(): void
+    {
+        $documents = Mockery::mock(DocumentManager::class);
+        $documents->shouldNotReceive('index');
+        $documents->shouldNotReceive('delete');
+
+        $indexer = new CatalogIndexer(
+            $documents,
+            new CatalogDocumentBuilder(),
+            Mockery::mock(ClientBuilderInterface::class),
+        );
+
+        $indexer->syncProductIds([]);
+    }
 }

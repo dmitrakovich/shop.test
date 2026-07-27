@@ -44,11 +44,11 @@ class CatalogSearchServiceTest extends TestCase
             ],
         ]);
 
-        $this->assertContains(['terms' => ['brand_id' => [5, 7]]], $clauses);
-        $this->assertContains(['term' => ['size_ids' => 101]], $clauses);
+        $this->assertContains(['terms' => ['brand.id' => [5, 7]]], $clauses);
+        $this->assertContains(['term' => ['sizes.id' => 101]], $clauses);
     }
 
-    public function test_category_uses_last_segment_on_category_ids(): void
+    public function test_category_uses_last_segment_on_categories_id(): void
     {
         [$clauses] = $this->service->buildFilterClauses([
             Category::class => [
@@ -57,7 +57,7 @@ class CatalogSearchServiceTest extends TestCase
             ],
         ]);
 
-        $this->assertContains(['term' => ['category_ids' => 10]], $clauses);
+        $this->assertContains(['term' => ['categories.id' => 10]], $clauses);
     }
 
     public function test_root_category_adds_no_clause(): void
@@ -199,6 +199,33 @@ class CatalogSearchServiceTest extends TestCase
         $this->assertIsArray($clause);
         $this->assertArrayHasKey('bool', $clause);
         $this->assertContains(['term' => ['id' => 38]], $clause['bool']['should']);
+    }
+
+    public function test_text_search_clause_uses_per_word_fuzziness_and_msm(): void
+    {
+        $clause = $this->service->buildSearchClause('красные туфли');
+
+        $this->assertSame(2, $clause['bool']['minimum_should_match']);
+        $this->assertCount(2, $clause['bool']['should']);
+        $this->assertSame('AUTO', $clause['bool']['should'][0]['multi_match']['fuzziness']);
+        $this->assertSame([
+            'sku.text^12',
+            'brand.name^7',
+            'short_name^6',
+            'categories.name^5',
+            'color_txt',
+            'sizes.name',
+            'colors.name',
+            'tags.name',
+        ], $clause['bool']['should'][0]['multi_match']['fields']);
+    }
+
+    public function test_three_word_search_allows_one_miss(): void
+    {
+        $clause = $this->service->buildSearchClause('красные кожаные туфли');
+
+        $this->assertSame(2, $clause['bool']['minimum_should_match']);
+        $this->assertCount(3, $clause['bool']['should']);
     }
 
     private function urlWithModelId(int $modelId): Url

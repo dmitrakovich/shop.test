@@ -58,15 +58,32 @@ class CatalogSearchService
      * @var array<class-string, string>
      */
     private const ATTRIBUTE_FIELDS = [
-        Brand::class => 'brand_id',
+        Brand::class => 'brand.id',
         ProductCollection::class => 'collection_id',
         Season::class => 'season_id',
-        Size::class => 'size_ids',
-        Color::class => 'color_ids',
+        Size::class => 'sizes.id',
+        Color::class => 'colors.id',
         Fabric::class => 'fabric_ids',
         Heel::class => 'heel_ids',
         Style::class => 'style_ids',
-        Tag::class => 'tag_ids',
+        Tag::class => 'tags.id',
+    ];
+
+    /**
+     * Boosted text fields for multi_match (weights aligned with
+     * feature/elasticsearch-catalog-v2; object {id,name}, filters use *.id).
+     *
+     * @var list<string>
+     */
+    private const SEARCH_FIELDS = [
+        'sku.text^12',
+        'brand.name^7',
+        'short_name^6',
+        'categories.name^5',
+        'color_txt',
+        'sizes.name',
+        'colors.name',
+        'tags.name',
     ];
 
     public function __construct(
@@ -216,7 +233,7 @@ class CatalogSearchService
                 $last = end($values);
                 $categoryId = (int)($last['model_id'] ?? 0);
                 if ($categoryId !== 0 && $categoryId !== Category::ROOT_CATEGORY_ID) {
-                    $clauses[] = ['term' => ['category_ids' => $categoryId]];
+                    $clauses[] = ['term' => ['categories.id' => $categoryId]];
                 }
 
                 continue;
@@ -264,20 +281,39 @@ class CatalogSearchService
                     'should' => [
                         ['term' => ['id' => (int)$token]],
                         ['wildcard' => ['sku' => ['value' => '*' . $token . '*']]],
-                        // Size names (e.g. "38") live in search_text after indexing.
-                        ['match' => ['search_text' => ['query' => (string)$token, 'operator' => 'and']]],
+                        ['match' => ['sizes.name' => ['query' => (string)$token, 'operator' => 'and']]],
+                        ['match' => ['short_name' => ['query' => (string)$token, 'operator' => 'and']]],
                     ],
                     'minimum_should_match' => 1,
                 ],
             ];
         }
 
+        $words = preg_split('/\s+/u', $search, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        if ($words === []) {
+            return null;
+        }
+
+        $should = [];
+        foreach ($words as $word) {
+            $should[] = [
+                'multi_match' => [
+                    'query' => $word,
+                    'fields' => self::SEARCH_FIELDS,
+                    'type' => 'best_fields',
+                    'fuzziness' => 'AUTO',
+                    'prefix_length' => 1,
+                    'max_expansions' => 50,
+                ],
+            ];
+        }
+
+        $n = count($words);
+
         return [
-            'multi_match' => [
-                'query' => $search,
-                'fields' => ['search_text', 'sku^3', 'color_txt'],
-                'type' => 'best_fields',
-                'operator' => 'and',
+            'bool' => [
+                'should' => $should,
+                'minimum_should_match' => $n <= 2 ? $n : $n - 1,
             ],
         ];
     }

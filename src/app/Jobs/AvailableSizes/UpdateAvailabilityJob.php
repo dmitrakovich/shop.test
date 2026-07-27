@@ -4,10 +4,10 @@ namespace App\Jobs\AvailableSizes;
 
 use App\Enums\Product\ProductLabel;
 use App\Events\Products\ProductUpdated;
-use App\Jobs\Elasticsearch\UpsertCatalogProductJob;
 use App\Models\AvailableSizes;
 use App\Models\Product;
 use App\Models\Size;
+use App\Services\Elasticsearch\CatalogIndexer;
 use App\Services\LogService;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -55,12 +55,12 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         $count = $this->restoreProducts();
         $this->log("Опубликовано $count товаров");
 
-        $this->dispatchCatalogSyncJobs(
+        app(CatalogIndexer::class)->syncProductIds(array_merge(
             $this->logData['deleteProducts'] ?? [],
             $this->logData['restoreProducts'] ?? [],
             array_keys($this->logData['addSizes'] ?? []),
             array_keys($this->logData['deleteSizes'] ?? []),
-        );
+        ));
 
         $this->writeLog();
         $this->log('Обновление успешно завершено!');
@@ -226,36 +226,6 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         }
 
         return array_filter($difference);
-    }
-
-    /**
-     * Queue catalog index sync for products touched by availability changes.
-     * Soft-deleted products are removed from the index by UpsertCatalogProductJob.
-     *
-     * @param  list<int|string>  $deletedProductIds
-     * @param  list<int|string>  $restoredProductIds
-     * @param  list<int|string>  $sizesAttachedProductIds
-     * @param  list<int|string>  $sizesDetachedProductIds
-     */
-    protected function dispatchCatalogSyncJobs(
-        array $deletedProductIds,
-        array $restoredProductIds,
-        array $sizesAttachedProductIds,
-        array $sizesDetachedProductIds,
-    ): void {
-        $productIds = array_values(array_unique(array_map(
-            intval(...),
-            array_merge(
-                $deletedProductIds,
-                $restoredProductIds,
-                $sizesAttachedProductIds,
-                $sizesDetachedProductIds,
-            ),
-        )));
-
-        foreach ($productIds as $productId) {
-            UpsertCatalogProductJob::dispatch($productId);
-        }
     }
 
     /**

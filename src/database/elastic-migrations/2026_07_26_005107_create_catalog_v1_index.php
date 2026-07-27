@@ -14,23 +14,37 @@ use Elastic\Migrations\MigrationInterface;
  */
 final class CreateCatalogV1Index implements MigrationInterface
 {
+    private const string INDEX = 'catalog_v1';
+
     public function up(): void
     {
-        $index = (string)config('catalog.elasticsearch.index');
         $alias = (string)config('catalog.elasticsearch.alias');
 
-        Index::create($index, function (Mapping $mapping, Settings $settings): void {
+        Index::create(self::INDEX, static function (Mapping $mapping, Settings $settings): void {
             $settings->index([
                 'number_of_shards' => 1,
                 'number_of_replicas' => 0,
             ]);
 
             $settings->analysis([
+                'char_filter' => [
+                    'yo_to_ye' => [
+                        'type' => 'mapping',
+                        'mappings' => ['ё=>е', 'Ё=>Е'],
+                    ],
+                ],
                 'analyzer' => [
                     'catalog_russian' => [
                         'type' => 'custom',
+                        'char_filter' => ['yo_to_ye'],
                         'tokenizer' => 'standard',
                         'filter' => ['lowercase', 'russian_stop', 'russian_stemmer'],
+                    ],
+                    'catalog_sku' => [
+                        'type' => 'custom',
+                        'char_filter' => ['yo_to_ye'],
+                        'tokenizer' => 'keyword',
+                        'filter' => ['lowercase', 'sku_word_delimiter'],
                     ],
                 ],
                 'filter' => [
@@ -42,16 +56,42 @@ final class CreateCatalogV1Index implements MigrationInterface
                         'type' => 'stemmer',
                         'language' => 'russian',
                     ],
+                    'sku_word_delimiter' => [
+                        'type' => 'word_delimiter_graph',
+                        'generate_word_parts' => true,
+                        'generate_number_parts' => true,
+                        'split_on_case_change' => true,
+                        'split_on_numerics' => true,
+                        'preserve_original' => true,
+                    ],
                 ],
             ]);
 
             $russianText = ['analyzer' => 'catalog_russian'];
+            $namedEntity = [
+                'properties' => [
+                    'id' => ['type' => 'integer'],
+                    'name' => ['type' => 'text', 'analyzer' => 'catalog_russian'],
+                ],
+            ];
 
             $mapping->integer('id');
-            $mapping->keyword('sku');
+            $mapping->keyword('sku', [
+                'fields' => [
+                    'text' => [
+                        'type' => 'text',
+                        'analyzer' => 'catalog_sku',
+                    ],
+                ],
+            ]);
             $mapping->keyword('slug');
+            $mapping->object('brand', $namedEntity);
+            $mapping->object('categories', $namedEntity);
+            $mapping->text('short_name', $russianText);
             $mapping->text('color_txt', $russianText);
-            $mapping->text('search_text', $russianText);
+            $mapping->object('sizes', $namedEntity);
+            $mapping->object('colors', $namedEntity);
+            $mapping->object('tags', $namedEntity);
 
             $mapping->scaledFloat('price', ['scaling_factor' => 100]);
             $mapping->scaledFloat('old_price', ['scaling_factor' => 100]);
@@ -59,18 +99,11 @@ final class CreateCatalogV1Index implements MigrationInterface
             $mapping->boolean('is_new');
             $mapping->keyword('status_slugs');
 
-            $mapping->integer('category_id');
-            $mapping->integer('category_ids');
-            $mapping->integer('brand_id');
             $mapping->integer('season_id');
             $mapping->integer('collection_id');
-
-            $mapping->integer('size_ids');
-            $mapping->integer('color_ids');
             $mapping->integer('fabric_ids');
             $mapping->integer('heel_ids');
             $mapping->integer('style_ids');
-            $mapping->integer('tag_ids');
 
             $mapping->integer('rating');
             $mapping->integer('newness_rating');
@@ -80,15 +113,14 @@ final class CreateCatalogV1Index implements MigrationInterface
             $mapping->date('created_at');
         });
 
-        Index::putAlias($index, $alias);
+        Index::putAlias(self::INDEX, $alias);
     }
 
     public function down(): void
     {
-        $index = (string)config('catalog.elasticsearch.index');
         $alias = (string)config('catalog.elasticsearch.alias');
 
-        Index::deleteAlias($index, $alias);
-        Index::dropIfExists($index);
+        Index::deleteAlias(self::INDEX, $alias);
+        Index::dropIfExists(self::INDEX);
     }
 }

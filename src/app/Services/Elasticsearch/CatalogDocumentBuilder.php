@@ -5,6 +5,7 @@ namespace App\Services\Elasticsearch;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class CatalogDocumentBuilder
 {
@@ -43,29 +44,31 @@ class CatalogDocumentBuilder
             $statusSlugs[] = 'st-sale';
         }
 
-        $brandName = $product->brand->name ?? '';
-        $categoryTitle = $product->category->title ?? '';
-        $tagNames = $product->tags->pluck('name')->filter()->implode(' ');
-        $sizeNames = $product->sizes->pluck('name')->filter()->implode(' ');
-        $colorNames = $product->colors->pluck('name')->filter()->implode(' ');
-
-        $searchParts = array_filter([
-            $product->sku,
-            (string)$product->id,
-            $brandName,
-            $categoryTitle,
-            $product->color_txt,
-            $colorNames,
-            $tagNames,
-            $sizeNames,
-        ], fn (mixed $value): bool => $value !== null && $value !== '');
+        $categoryChain = $this->categoryChain($product->category);
 
         return [
             'id' => $product->id,
             'sku' => $product->sku,
             'slug' => $product->slug,
+
+            'brand' => [
+                'id' => (int)($product->brand->id ?? $product->brand_id),
+                'name' => $product->brand->name ?? '',
+            ],
+            'categories' => array_map(
+                static fn (array $item): array => [
+                    'id' => $item['id'],
+                    'name' => $item['title'],
+                ],
+                $categoryChain,
+            ),
+            'short_name' => $product->category !== null
+                ? $product->shortName()
+                : (string)$product->id,
             'color_txt' => $product->color_txt,
-            'search_text' => implode(' ', $searchParts),
+            'sizes' => $this->namedObjects($product->sizes),
+            'colors' => $this->namedObjects($product->colors),
+            'tags' => $this->namedObjects($product->tags),
 
             'price' => (float)$product->price,
             'old_price' => (float)$product->old_price,
@@ -73,18 +76,13 @@ class CatalogDocumentBuilder
             'is_new' => $isNew,
             'status_slugs' => $statusSlugs,
 
-            'category_id' => $product->category_id,
-            'category_ids' => $this->categoryIdsWithAncestors($product->category),
-            'brand_id' => $product->brand_id,
             'season_id' => $product->season_id,
             'collection_id' => $product->collection_id,
 
-            'size_ids' => $product->sizes->pluck('id')->map(intval(...))->values()->all(),
-            'color_ids' => $product->colors->pluck('id')->map(intval(...))->values()->all(),
+            // Filter-only attributes (no text search yet).
             'fabric_ids' => $product->fabrics->pluck('id')->map(intval(...))->values()->all(),
             'heel_ids' => $product->heels->pluck('id')->map(intval(...))->values()->all(),
             'style_ids' => $product->styles->pluck('id')->map(intval(...))->values()->all(),
-            'tag_ids' => $product->tags->pluck('id')->map(intval(...))->values()->all(),
 
             'rating' => (int)$product->rating,
             'newness_rating' => (int)$product->newness_rating,
@@ -96,24 +94,40 @@ class CatalogDocumentBuilder
     }
 
     /**
-     * Leaf category id plus ancestors (root → … → leaf), for parent-category filters.
-     *
-     * @return list<int>
+     * @param  Collection<int, object{id: int|string, name?: string|null}>  $items
+     * @return list<array{id: int, name: string}>
      */
-    protected function categoryIdsWithAncestors(?Category $category): array
+    protected function namedObjects(Collection $items): array
+    {
+        return $items
+            ->map(static fn (object $item): array => [
+                'id' => (int)$item->id,
+                'name' => (string)($item->name ?? ''),
+            ])
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @return list<array{id: int, title: string}>
+     */
+    protected function categoryChain(?Category $category): array
     {
         if ($category === null) {
             return [];
         }
 
-        $ids = [];
+        $chain = [];
         $current = $category;
         while ($current !== null) {
-            array_unshift($ids, $current->id);
+            array_unshift($chain, [
+                'id' => $current->id,
+                'title' => (string)($current->title ?? ''),
+            ]);
             $current = $current->parentCategory;
         }
 
-        return array_values(array_unique($ids));
+        return $chain;
     }
 
     protected function formatDate(mixed $value): ?string

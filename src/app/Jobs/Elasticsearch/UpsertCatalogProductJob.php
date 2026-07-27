@@ -17,6 +17,18 @@ class UpsertCatalogProductJob extends AbstractJob implements ShouldBeUnique
     public int $uniqueFor = 60;
 
     /**
+     * The number of times the job may be attempted.
+     */
+    public int $tries = 3;
+
+    /**
+     * Backoff seconds between retries (short ES blips).
+     *
+     * @var list<int>
+     */
+    public array $backoff = [10, 30];
+
+    /**
      * @var list<string>
      */
     protected $contextVars = ['productId'];

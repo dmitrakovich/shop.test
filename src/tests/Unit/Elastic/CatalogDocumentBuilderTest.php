@@ -52,20 +52,16 @@ class CatalogDocumentBuilderTest extends TestCase
         $this->assertTrue($document['has_discount']);
         $this->assertFalse($document['is_new']);
         $this->assertSame(['st-sale'], $document['status_slugs']);
-        $this->assertSame(10, $document['category_id']);
-        $this->assertSame([10], $document['category_ids']);
-        $this->assertSame(5, $document['brand_id']);
-        $this->assertSame([101], $document['size_ids']);
-        $this->assertSame([202], $document['color_ids']);
-        $this->assertSame([303], $document['tag_ids']);
         $this->assertSame(10, $document['rating']);
-        $this->assertStringContainsString('SKU-ES-100', $document['search_text']);
-        $this->assertStringContainsString('Nike Test', $document['search_text']);
-        $this->assertStringContainsString('Кроссовки', $document['search_text']);
-        $this->assertStringContainsString('черный', $document['search_text']);
-        $this->assertStringContainsString('бордовый', $document['search_text']);
-        $this->assertStringContainsString('вечерние', $document['search_text']);
-        $this->assertStringContainsString('38', $document['search_text']);
+        $this->assertSame(['id' => 5, 'name' => 'Nike Test'], $document['brand']);
+        $this->assertSame('Кроссовки 42', $document['short_name']);
+        $this->assertSame([['id' => 10, 'name' => 'Кроссовки']], $document['categories']);
+        $this->assertSame('черный', $document['color_txt']);
+        $this->assertSame([['id' => 202, 'name' => 'бордовый']], $document['colors']);
+        $this->assertSame([['id' => 303, 'name' => 'вечерние']], $document['tags']);
+        $this->assertSame([['id' => 101, 'name' => '38']], $document['sizes']);
+        $this->assertArrayNotHasKey('brand_id', $document);
+        $this->assertArrayNotHasKey('color_ids', $document);
     }
 
     public function test_it_marks_new_products_without_old_price(): void
@@ -85,7 +81,7 @@ class CatalogDocumentBuilderTest extends TestCase
         $this->assertSame(['st-new'], $document['status_slugs']);
     }
 
-    public function test_category_ids_include_ancestor_chain(): void
+    public function test_categories_include_ancestor_chain(): void
     {
         $root = $this->makeCategory(1, 'Root');
         $child = $this->makeCategory(2, 'Child', $root);
@@ -103,7 +99,10 @@ class CatalogDocumentBuilderTest extends TestCase
 
         $document = (new CatalogDocumentBuilder())->build($product);
 
-        $this->assertSame([1, 2], $document['category_ids']);
+        $this->assertSame([
+            ['id' => 1, 'name' => 'Root'],
+            ['id' => 2, 'name' => 'Child'],
+        ], $document['categories']);
     }
 
     /**
