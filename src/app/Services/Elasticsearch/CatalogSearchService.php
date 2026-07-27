@@ -91,7 +91,7 @@ class CatalogSearchService
     ) {}
 
     /**
-     * @param  array<string, array<string, Url>>  $filters
+     * @param  array<string, array<array-key, Url>>  $filters
      */
     public function search(
         array $filters,
@@ -122,7 +122,7 @@ class CatalogSearchService
     /**
      * Build ES request parameters (unit-testable without a live cluster).
      *
-     * @param  array<string, array<string, Url>>  $filters
+     * @param  array<string, array<array-key, Url>>  $filters
      */
     public function buildSearchParameters(
         array $filters,
@@ -170,7 +170,7 @@ class CatalogSearchService
     /**
      * Whether this request can be served from Elasticsearch (promotion is MySQL-only for now).
      *
-     * @param  array<string, array<string, Url>>  $filters
+     * @param  array<string, array<array-key, Url>>  $filters
      */
     public function supportsFilters(array $filters): bool
     {
@@ -178,7 +178,7 @@ class CatalogSearchService
     }
 
     /**
-     * @param  array<string, array<string, Url>>  $filters
+     * @param  array<string, array<array-key, Url>>  $filters
      * @return array{0: list<array<string, mixed>>, 1: array<string, mixed>|null}
      */
     public function buildFilterClauses(array $filters): array
@@ -334,7 +334,7 @@ class CatalogSearchService
     }
 
     /**
-     * @param  array<string, array<string, Url>>  $filters
+     * @param  array<string, array<array-key, Url>>  $filters
      * @return list<array<string, mixed>>
      */
     public function buildSort(ProductSort $sort, array $filters, ?string $search): array
