@@ -86,9 +86,9 @@ class CatalogSearchServiceTest extends TestCase
 
     public function test_price_goes_to_post_filter_not_query_filters(): void
     {
-        $from = new Price;
+        $from = new Price();
         $from->slug = 'price-from-100';
-        $to = new Price;
+        $to = new Price();
         $to->slug = 'price-to-500';
 
         [$clauses, $postFilter] = $this->service->buildFilterClauses([
@@ -156,7 +156,7 @@ class CatalogSearchServiceTest extends TestCase
 
     public function test_build_search_parameters_wires_post_filter_and_aggs(): void
     {
-        $from = new Price;
+        $from = new Price();
         $from->slug = 'price-from-50';
 
         $parameters = $this->service->buildSearchParameters(
@@ -230,7 +230,7 @@ class CatalogSearchServiceTest extends TestCase
 
     private function urlWithModelId(int $modelId): Url
     {
-        $url = new Url;
+        $url = new Url();
         $url->model_id = $modelId;
 
         return $url;

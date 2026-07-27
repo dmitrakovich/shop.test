@@ -13,6 +13,7 @@ use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Elasticsearch catalog for the test / next frontend.
  * Response shape is intentionally independent of API v1 (MySQL).
