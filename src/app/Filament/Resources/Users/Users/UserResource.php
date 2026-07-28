@@ -11,6 +11,7 @@ use App\Filament\Resources\Users\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\Users\RelationManagers\BlacklistRelationManager;
 use App\Filament\Resources\Users\Users\RelationManagers\PaymentsRelationManager;
+use App\Helpers\PhoneHelper;
 use App\Models\Country;
 use App\Models\User\Group;
 use App\Models\User\User;
@@ -226,15 +227,7 @@ class UserResource extends Resource
                     }),
                 TextColumn::make('phone')
                     ->label('Телефон')
-                    ->searchable(query: function (Builder $query, string $search): Builder {
-                        $digits = preg_replace('/\D+/', '', $search) ?? '';
-
-                        if ($digits === '') {
-                            return $query->whereRaw('0 = 1');
-                        }
-
-                        return $query->where('phone', 'like', "%{$digits}%");
-                    }),
+                    ->searchable(query: PhoneHelper::searchableQuery()),
                 TextColumn::make('metadata.last_order_type')
                     ->label('Тип последнего заказа')
                     ->sortable()

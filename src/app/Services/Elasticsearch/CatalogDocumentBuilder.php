@@ -94,7 +94,9 @@ class CatalogDocumentBuilder
     }
 
     /**
-     * @param  Collection<int, object{id: int|string, name?: string|null}>  $items
+     * @template T of object{id: int|string, name?: string|null}
+     *
+     * @param  Collection<int, T>  $items
      * @return list<array{id: int, name: string}>
      */
     protected function namedObjects(Collection $items): array

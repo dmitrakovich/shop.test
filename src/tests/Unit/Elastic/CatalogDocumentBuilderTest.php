@@ -45,7 +45,7 @@ class CatalogDocumentBuilderTest extends TestCase
             'tags' => collect([$tag]),
         ]);
 
-        $document = (new CatalogDocumentBuilder)->build($product);
+        $document = (new CatalogDocumentBuilder())->build($product);
 
         $this->assertSame(42, $document['id']);
         $this->assertSame('SKU-ES-100', $document['sku']);
@@ -163,7 +163,7 @@ class CatalogDocumentBuilderTest extends TestCase
      */
     private function makeSizedModel(string $class, int $id, ?string $name = null): Size|Color
     {
-        $model = new $class;
+        $model = new $class();
         $model->id = $id;
         if ($name !== null) {
             $model->name = $name;

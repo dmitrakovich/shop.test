@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 
 /**
  * @property string $id
+ * @property string $slug
  * @property int $price
  * @property string $model
  *
