@@ -105,11 +105,11 @@ class EventServiceProvider extends ServiceProvider
         Products\ProductCreated::class => [
             Product\GenerateSlug::class,
             OneC\UpdateProduct::class,
-            Elasticsearch\SyncCatalogProduct::class,
+            // Elasticsearch\SyncCatalogProduct::class, // enable when ES is available
         ],
         Products\ProductUpdated::class => [
             OneC\UpdateProduct::class,
-            Elasticsearch\SyncCatalogProduct::class,
+            // Elasticsearch\SyncCatalogProduct::class, // enable when ES is available
         ],
     ];
 

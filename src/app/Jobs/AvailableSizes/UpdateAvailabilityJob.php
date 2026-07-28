@@ -55,12 +55,13 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         $count = $this->restoreProducts();
         $this->log("Опубликовано $count товаров");
 
-        app(CatalogIndexer::class)->syncProductIds(array_merge(
-            $this->logData['deleteProducts'] ?? [],
-            $this->logData['restoreProducts'] ?? [],
-            array_keys($this->logData['addSizes'] ?? []),
-            array_keys($this->logData['deleteSizes'] ?? []),
-        ));
+        // Enable when Elasticsearch is available:
+        // app(CatalogIndexer::class)->syncProductIds(array_merge(
+        //     $this->logData['deleteProducts'] ?? [],
+        //     $this->logData['restoreProducts'] ?? [],
+        //     array_keys($this->logData['addSizes'] ?? []),
+        //     array_keys($this->logData['deleteSizes'] ?? []),
+        // ));
 
         $this->writeLog();
         $this->log('Обновление успешно завершено!');
