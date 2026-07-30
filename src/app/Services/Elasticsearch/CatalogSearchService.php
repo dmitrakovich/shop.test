@@ -12,7 +12,6 @@ use App\Models\Fabric;
 use App\Models\Heel;
 use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
-use App\Models\ProductAttributes\Top;
 use App\Models\Season;
 use App\Models\Size;
 use App\Models\Style;
@@ -187,21 +186,6 @@ class CatalogSearchService
         $priceRange = [];
 
         foreach ($filters as $filterClass => $values) {
-            if ($filterClass === Top::class) {
-                $ids = array_map(intval(...), array_column($values, 'model_id'));
-                if ($ids !== []) {
-                    $clauses[] = [
-                        'bool' => [
-                            'must_not' => [
-                                ['ids' => ['values' => array_map(strval(...), $ids)]],
-                            ],
-                        ],
-                    ];
-                }
-
-                continue;
-            }
-
             if ($filterClass === Price::class) {
                 foreach ($values as $slug => $url) {
                     $price = $url->filters;

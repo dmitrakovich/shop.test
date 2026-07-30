@@ -47,10 +47,14 @@ Non-goals (for now):
 | 9 | Point updates | Unique `UpsertCatalogProductJob` (`tries=3`, `backoff=[10,30]`). |
 | 10 | Attribute shape | ES `object` `{id, name}` (not full `{id,name,slug}`; not ES `nested`). Filters on `*.id`, search on `*.name`. |
 | 11 | Full product in ES | Not now. Optional later: denorm only listing fields for v2. Attribute `slug` only if serving facets/cards from `_source`. |
+| 12 | Top pin filter (`?top=`) | **Removed** — no longer used by frontends. |
 
 Still open:
 
-- [ ] Exact v2 JSON contract with frontend (filters / facets / products).
+- [x] v2 top-level JSON ⊇ v1 keys (`products`, `banners`, `category`,
+      `currentFilters`, `badges`, `filters`, `sort`, `sortingList`,
+      `searchQuery`, `meta`). Backend = ES; `filters` may later gain facet counts.
+- [ ] Exact facet / filters payload shape with frontend (counts, structure).
 
 ---
 
@@ -85,7 +89,8 @@ MySQL (Product, attributes, stock, urls)
   CatalogSearchService
         ▼
   v1: CatalogService (MySQL) → stable JSON
-  v2: Api\V2\CatalogController + CatalogSearchService → hydrate → lean JSON (WIP)
+  v2: Api\V2\CatalogController + CatalogSearchService → hydrate → **v1-shaped JSON**
+      (`filters` may diverge later with facet counts)
 ```
 
 Env: `ELASTIC_HOST`, `CATALOG_ELASTICSEARCH_ALIAS` / `INDEX`, …
@@ -135,7 +140,6 @@ Within dimension **OR**, across **AND**. Map:
 - `status_slugs` for `st-new` / `st-sale`
 - Category: last path segment → `term` on `categories.id` (chain stored in doc)
 - Price: **post_filter** so min/max aggs ignore price bounds
-- Top pins: PHP after ES (unchanged)
 - `promotion` → not supported on v2 yet (422); v1 handles via MySQL Sale path as today
 
 ### Search
@@ -156,8 +160,12 @@ Within dimension **OR**, across **AND**. Map:
 
 ### Response
 
-- **v1:** ES IDs → Eloquent hydrate → existing resources / badges / meta.
-- **v2:** lean JSON (`total`, `page`, `products`, …); contract TBD with frontend.
+- **v1:** MySQL listing → existing resources / badges / meta.
+- **v2:** ES IDs → Eloquent hydrate → **same top-level keys as v1**
+  (`products` via `CatalogProductCollection`, `banners`, `category`,
+  `currentFilters`, `badges`, `filters`, `sort`, `sortingList`, `searchQuery`,
+  `meta`). Difference allowed: `filters` (later facet aggs + counts instead of /
+  in addition to `FilterService::getAll()`).
 
 ---
 
@@ -214,11 +222,10 @@ vs `feature/elasticsearch-catalog-v2` (reference only, no wholesale merge):
 
 ### Phase 4 — Catalog API v2 (in progress)
 
-- [x] `api/v2` routes + allowlist; skeleton controller (always ES).
+- [x] `api/v2` routes + allowlist; controller with **v1-parity payload** (ES backend).
 - [x] Search quality: `ё→е` + stemmer, fuzzy MSM, `{id,name}` entities.
 - [x] Dropped ES from v1 / removed `CATALOG_SEARCH_DRIVER`.
-- [ ] Agree v2 JSON with frontend (filters/facets/products).
-- [ ] Facet aggregations on v2.
+- [ ] Facet aggregations on v2 (`filters` may differ from v1 dictionary-only).
 - [ ] Point test front at `/api/v2`.
 - [ ] Feature tests for v2 happy path (Sail ES only).
 
@@ -267,3 +274,5 @@ cd src && ./vendor/bin/sail artisan test --compact tests/Unit/Elastic tests/Feat
 | 2026-07-26 | Mapping: `{id,name}` objects, `ё→е`+stemmer, sku delimiter; fuzzy MSM search; no `description`. |
 | 2026-07-27 | Plan refreshed to match current code; dropped obsolete drafts. |
 | 2026-07-27 | ES only on API v2; removed `CATALOG_SEARCH_DRIVER` / v1 ES path. |
+| 2026-07-28 | v2 response ⊇ v1 keys; `filters` may diverge later (facets). |
+| 2026-07-30 | Removed catalog Top pin filter (`?top=`) from v1/v2. |

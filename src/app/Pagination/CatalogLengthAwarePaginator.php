@@ -12,8 +12,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
  */
 class CatalogLengthAwarePaginator extends LengthAwarePaginator
 {
-    public int $totalCount = 0;
-
     public float $minPrice = 0;
 
     public float $maxPrice = 0;
