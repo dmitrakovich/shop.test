@@ -6,7 +6,6 @@ use App\Services\CurrencyService;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Illuminate\Contracts\View\View|null getSwitcher() Get switcher view
  * @method static void setCurrentCurrency(?string $currencyCode, $save = true) Set current currency
  * @method static \App\Models\Currency getCurrentCurrency() Get current currency object
  * @method static float convert(float $priceInByn, ?string $currencyCode = null) Convert price in needed or current currency

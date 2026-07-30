@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Currency;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
@@ -107,21 +106,6 @@ class CurrencyService
     private function setCurrencyByCode(string $currencyCode): void
     {
         $this->currency = $this->getCurrencyByCode($currencyCode);
-    }
-
-    /**
-     * Get switcher view
-     */
-    public function getSwitcher(): ?View
-    {
-        if ($this->countryCode === 'BY') {
-            return null;
-        }
-
-        return view('includes.currency-switcher', [
-            'currenciesList' => $this->allCurrencies,
-            'currentCurrency' => $this->currency->code,
-        ]);
     }
 
     /**

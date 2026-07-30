@@ -70,9 +70,6 @@
                             @include('svg.search')
                         </button>
                     </form>
-                    <div class="d-block d-md-none mt-3">
-                        {{ Currency::getSwitcher() }}
-                    </div>
                 </div>
             </div>
             <form class="inc-header__search collapse" action="/catalog" method="get" id="js-headerSearchInput">
