@@ -12,6 +12,7 @@ use App\Models\Url;
 use App\Pagination\CatalogLengthAwarePaginator;
 use App\Services\Elasticsearch\CatalogSearchResult;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -56,8 +57,9 @@ class CatalogService
     ): CatalogLengthAwarePaginator {
         $perPage = min(max($perPage, 12), 100);
         $order = array_flip($result->productIds);
+        /** @var EloquentCollection<int, Product> $items */
         $items = $result->productIds === []
-            ? new Collection()
+            ? new EloquentCollection()
             : Product::query()
                 ->whereIn('id', $result->productIds)
                 ->get()
