@@ -14,6 +14,8 @@ return [
                 env('ELASTIC_USERNAME'),
                 env('ELASTIC_PASSWORD'),
             ],
+            // bool, or absolute path to Elasticsearch HTTP CA (e.g. http_ca.crt)
+            'sslVerification' => env('ELASTIC_SSL_CA') ?: true,
         ],
     ],
 ];
