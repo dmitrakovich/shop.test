@@ -26,6 +26,10 @@ class DeviceDetect
      */
     public function handle(Request $request, Closure $next)
     {
+        if (str_starts_with($request->path(), 'pay/')) {
+            return $next($request);
+        }
+
         $webId = $this->getDeviceWebId($request);
         if (!$webId) {
             $webId = UserDevice::generateNewWebId($request);
