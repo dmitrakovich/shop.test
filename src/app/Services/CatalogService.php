@@ -8,10 +8,12 @@ use App\Facades\Currency;
 use App\Helpers\UrlHelper;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductAttributes\Top;
 use App\Models\Url;
 use App\Pagination\CatalogLengthAwarePaginator;
+use App\Services\Elasticsearch\CatalogSearchResult;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class CatalogService
@@ -35,11 +37,51 @@ class CatalogService
             ->sorting($sort, $filters);
 
         $products = CatalogLengthAwarePaginator::fromPaginator($productsQuery->paginate($perPage));
-        $this->addTopProducts($products, $filters);
-        $products->totalCount = $products->total() + $this->topProductsCount($products);
 
         $this->productService->addEager($products);
         $this->addMinMaxPrices($products, $productsQuery);
+        $this->addGtmData($products);
+
+        return $products;
+    }
+
+    /**
+     * Build a catalog paginator from an Elasticsearch hit list (API v2).
+     *
+     * @return CatalogLengthAwarePaginator<int, Product>
+     */
+    public function paginateFromSearchResult(
+        CatalogSearchResult $result,
+        int $perPage,
+        int $page,
+    ): CatalogLengthAwarePaginator {
+        $perPage = min(max($perPage, 12), 100);
+        $order = array_flip($result->productIds);
+        /** @var EloquentCollection<int, Product> $items */
+        $items = $result->productIds === []
+            ? new EloquentCollection()
+            : Product::query()
+                ->whereIn('id', $result->productIds)
+                ->get()
+                ->sortBy(fn (Product $product): int => $order[$product->id] ?? PHP_INT_MAX)
+                ->values();
+
+        /** @var CatalogLengthAwarePaginator<int, Product> $products */
+        $products = new CatalogLengthAwarePaginator(
+            $items,
+            $result->total,
+            $perPage,
+            $page,
+            [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'pageName' => 'page',
+            ],
+        );
+
+        $products->minPrice = Currency::convert($result->minPrice);
+        $products->maxPrice = Currency::convert($result->maxPrice);
+
+        $this->productService->addEager($products);
         $this->addGtmData($products);
 
         return $products;
@@ -76,39 +118,6 @@ class CatalogService
         }
 
         return $badges;
-    }
-
-    /**
-     * @param  CatalogLengthAwarePaginator<int, Product>  $products
-     * @param  array<string, array<string, Url>>  $filters
-     */
-    protected function addTopProducts(CatalogLengthAwarePaginator $products, array $filters): void
-    {
-        if (empty($filters[Top::class])) {
-            return;
-        }
-
-        $topProductsIds = array_column($filters[Top::class], 'model_id');
-        $topProducts = $this->productService->getById($topProductsIds);
-        if ($topProducts->isEmpty()) {
-            return;
-        }
-
-        $topProducts = $topProducts->keyBy('id');
-        $sorting = array_reverse($topProductsIds);
-        foreach ($sorting as $productId) {
-            if (isset($topProducts[$productId])) {
-                $products->prepend($topProducts[$productId]);
-            }
-        }
-    }
-
-    /**
-     * @param  CatalogLengthAwarePaginator<int, Product>  $products
-     */
-    protected function topProductsCount(CatalogLengthAwarePaginator $products): int
-    {
-        return max(0, $products->count() - $products->perPage());
     }
 
     /**

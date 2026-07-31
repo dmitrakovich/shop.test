@@ -26,6 +26,7 @@ Schedule::command('sanctum:prune-expired')->dailyAt('00:10');
 Schedule::command('backup:run')->dailyAt('01:00');
 Schedule::command('backup:clean')->dailyAt('06:00');
 Schedule::command('backup:monitor')->dailyAt('06:30');
+Schedule::command('catalog:elasticsearch-reindex --fresh')->dailyAt('03:20');
 
 Schedule::command('cleanup:devices')->dailyAt('04:20');
 Schedule::command('cleanup:defective-products')->weeklyOn(Carbon::SATURDAY, '04:30');

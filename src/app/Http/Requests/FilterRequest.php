@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Enums\Product\ProductSort;
 use App\Models\City;
-use App\Models\ProductAttributes\Top;
 use App\Models\Url;
 use App\Services\FilterService;
 use Illuminate\Foundation\Http\FormRequest;
@@ -61,8 +60,6 @@ class FilterRequest extends FormRequest
                 $filters[$url->model_type][$url->slug] = $url;
             });
 
-        $this->addTopProducts($filters);
-
         return $filters;
     }
 
@@ -93,26 +90,5 @@ class FilterRequest extends FormRequest
         }
 
         return $filters;
-    }
-
-    /**
-     * Add Top filters models to filters if exist
-     */
-    protected function addTopProducts(array &$filters): void
-    {
-        $top = $this->input('top', '');
-        $top = array_filter(explode(',', (string)$top), is_numeric(...));
-
-        if (!empty($top)) {
-            $filters[Top::class] = array_map(function (int $id) {
-                $urlModel = new Url([
-                    'slug' => 'top',
-                    'model_type' => Top::class,
-                    'model_id' => $id,
-                ]);
-
-                return $urlModel->setRelation('filters', new Top());
-            }, $top);
-        }
     }
 }

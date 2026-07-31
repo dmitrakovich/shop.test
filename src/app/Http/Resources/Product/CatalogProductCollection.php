@@ -23,7 +23,7 @@ class CatalogProductCollection extends ResourceCollection
     {
         return [
             ...$this->resource->toArray($request),
-            'total' => $this->resource->totalCount,
+            'total' => $this->resource->total(),
             'minPrice' => $this->resource->minPrice,
             'maxPrice' => $this->resource->maxPrice,
         ];

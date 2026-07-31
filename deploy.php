@@ -70,6 +70,9 @@ task('artisan:opcache:compile', artisan('opcache:compile --force'));
 desc('Generate permissions/policies for all entities');
 task('artisan:shield:generate', artisan('shield:generate --panel=admin --all'));
 
+desc('Runs the Elasticsearch index migrations');
+task('artisan:elastic:migrate', artisan('elastic:migrate --force', ['skipIfNoEnv', 'showOutput']));
+
 task('deploy', [
     'deploy:info',
     'deploy:setup',
@@ -82,6 +85,7 @@ task('deploy', [
     'artisan:storage:link',
     'artisan:optimize:clear',
     'artisan:migrate',
+    'artisan:elastic:migrate',
     // 'artisan:shield:generate', // temp disable, see AdminUser
     'artisan:optimize',
     'deploy:publish',

@@ -7,7 +7,6 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
-use App\Models\ProductAttributes\Top;
 use App\Models\Size;
 use App\Models\Url;
 use App\Services\Elasticsearch\CatalogSearchService;
@@ -107,24 +106,6 @@ class CatalogSearchServiceTest extends TestCase
                 ],
             ],
         ], $postFilter);
-    }
-
-    public function test_top_ids_are_excluded(): void
-    {
-        [$clauses] = $this->service->buildFilterClauses([
-            Top::class => [
-                '1' => $this->urlWithModelId(11),
-                '2' => $this->urlWithModelId(22),
-            ],
-        ]);
-
-        $this->assertContains([
-            'bool' => [
-                'must_not' => [
-                    ['ids' => ['values' => ['11', '22']]],
-                ],
-            ],
-        ], $clauses);
     }
 
     public function test_search_sort_uses_relevance_score(): void

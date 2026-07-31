@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Products\Products\Pages;
 
 use App\Events\Products\ProductUpdated;
 use App\Filament\Actions\Product\PromtAction;
+use App\Filament\Actions\Product\ReindexCatalogAction;
 use App\Filament\Resources\Products\Products\ProductResource;
 use App\Models\Product;
 use Filament\Actions\Action;
@@ -21,6 +22,7 @@ class EditProduct extends EditRecord
     {
         return [
             PromtAction::make(),
+            ReindexCatalogAction::make(),
             Action::make('open')
                 ->label('Открыть страницу товара')
                 ->icon(Heroicon::ArrowTopRightOnSquare)
