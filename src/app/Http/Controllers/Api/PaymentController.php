@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Payment\OnlinePaymentPageResource;
+use App\Models\Payments\OnlinePayment;
 use App\Services\Payment\PaymentService;
+use Illuminate\Support\Carbon;
 
 class PaymentController extends Controller
 {
@@ -31,12 +33,9 @@ class PaymentController extends Controller
      */
     public function yandex(string $linkCode): OnlinePaymentPageResource
     {
-        $payment = $this->paymentService->getPaymentByLinkCode($linkCode);
+        $payment = $this->findYandexPaymentByLinkCode($linkCode);
 
-        abort_if(
-            $payment === null || $payment->method_enum_id !== OnlinePaymentMethodEnum::YANDEX,
-            404
-        );
+        abort_if($payment === null, 404);
 
         $payment->loadMissing('order');
 
@@ -46,16 +45,40 @@ class PaymentController extends Controller
     /**
      * Resolve YooKassa confirmation URL by link code.
      *
-     * @return array{payment_url: string|null}
+     * @return array{payment_url: string}
      */
     public function resolveLinkCode(string $linkCode): array
     {
-        $payment = $this->paymentService->getPaymentByLinkCode($linkCode);
+        $payment = $this->findYandexPaymentByLinkCode($linkCode);
 
-        abort_if($payment === null, 404);
+        abort_if($payment === null || blank($payment->payment_url), 404);
 
         return [
             'payment_url' => $payment->payment_url,
         ];
+    }
+
+    private function findYandexPaymentByLinkCode(string $linkCode): ?OnlinePayment
+    {
+        $payment = $this->paymentService->getPaymentByLinkCode($linkCode);
+
+        if (
+            $payment === null
+            || $payment->method_enum_id !== OnlinePaymentMethodEnum::YANDEX
+            || $this->isLinkExpired($payment)
+        ) {
+            return null;
+        }
+
+        return $payment;
+    }
+
+    private function isLinkExpired(OnlinePayment $payment): bool
+    {
+        if (blank($payment->link_expires_at)) {
+            return false;
+        }
+
+        return now()->greaterThan(Carbon::parse($payment->link_expires_at));
     }
 }

@@ -73,6 +73,7 @@ class PaymentPageTest extends TestCase
             'payment_num' => $order->id . '-1',
             'link_code' => 'yandex-link-code',
             'payment_url' => 'https://yookassa.test/pay',
+            'link_expires_at' => now()->addHour(),
             'amount' => 1500.0,
             'currency_code' => 'RUB',
         ]);
@@ -105,6 +106,24 @@ class PaymentPageTest extends TestCase
             ->assertNotFound();
     }
 
+    public function test_yandex_page_returns_404_for_expired_link(): void
+    {
+        $order = $this->createOrder();
+        $this->createOnlinePayment([
+            'order_id' => $order->id,
+            'method_enum_id' => OnlinePaymentMethodEnum::YANDEX,
+            'payment_num' => $order->id . '-1',
+            'link_code' => 'expired-yandex',
+            'payment_url' => 'https://yookassa.test/pay',
+            'link_expires_at' => now()->subMinute(),
+            'amount' => 100.0,
+            'currency_code' => 'RUB',
+        ]);
+
+        $this->getJson('/api/v1/pay/yandex/expired-yandex', $this->deviceHeaders())
+            ->assertNotFound();
+    }
+
     public function test_resolve_link_code_returns_payment_url(): void
     {
         $order = $this->createOrder();
@@ -114,6 +133,7 @@ class PaymentPageTest extends TestCase
             'payment_num' => $order->id . '-1',
             'link_code' => 'resolve-code',
             'payment_url' => 'https://yookassa.test/confirm',
+            'link_expires_at' => now()->addMinutes(59),
             'amount' => 100.0,
             'currency_code' => 'RUB',
         ]);
@@ -123,6 +143,59 @@ class PaymentPageTest extends TestCase
             ->assertExactJson([
                 'payment_url' => 'https://yookassa.test/confirm',
             ]);
+    }
+
+    public function test_resolve_link_code_returns_404_for_non_yandex_method(): void
+    {
+        $order = $this->createOrder();
+        $this->createOnlinePayment([
+            'order_id' => $order->id,
+            'method_enum_id' => OnlinePaymentMethodEnum::ERIP,
+            'payment_num' => $order->id . '-1',
+            'payment_url' => $order->id . '-1',
+            'link_code' => 'erip-resolve',
+            'amount' => 10.0,
+            'currency_code' => 'BYN',
+        ]);
+
+        $this->postJson('/api/v1/pay/link-code/erip-resolve/resolve', [], $this->deviceHeaders())
+            ->assertNotFound();
+    }
+
+    public function test_resolve_link_code_returns_404_when_payment_url_empty(): void
+    {
+        $order = $this->createOrder();
+        $this->createOnlinePayment([
+            'order_id' => $order->id,
+            'method_enum_id' => OnlinePaymentMethodEnum::YANDEX,
+            'payment_num' => $order->id . '-1',
+            'link_code' => 'empty-url',
+            'payment_url' => null,
+            'link_expires_at' => now()->addHour(),
+            'amount' => 100.0,
+            'currency_code' => 'RUB',
+        ]);
+
+        $this->postJson('/api/v1/pay/link-code/empty-url/resolve', [], $this->deviceHeaders())
+            ->assertNotFound();
+    }
+
+    public function test_resolve_link_code_returns_404_for_expired_link(): void
+    {
+        $order = $this->createOrder();
+        $this->createOnlinePayment([
+            'order_id' => $order->id,
+            'method_enum_id' => OnlinePaymentMethodEnum::YANDEX,
+            'payment_num' => $order->id . '-1',
+            'link_code' => 'expired-resolve',
+            'payment_url' => 'https://yookassa.test/confirm',
+            'link_expires_at' => now()->subMinute(),
+            'amount' => 100.0,
+            'currency_code' => 'RUB',
+        ]);
+
+        $this->postJson('/api/v1/pay/link-code/expired-resolve/resolve', [], $this->deviceHeaders())
+            ->assertNotFound();
     }
 
     public function test_api_pay_routes_are_registered(): void
