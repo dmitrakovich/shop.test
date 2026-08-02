@@ -152,19 +152,19 @@ class OnlinePayment extends Model
     }
 
     /**
-     * Get online paymeny link.
+     * Get online payment page link on the frontend storefront.
      */
     public function getLinkAttribute(): ?string
     {
-        if ($this->method_enum_id) {
-            return match ($this->method_enum_id) {
-                OnlinePaymentMethodEnum::ERIP => isset($this->payment_url) ? route('pay.erip', $this->payment_url, true) : null,
-                OnlinePaymentMethodEnum::YANDEX => isset($this->link_code) ? route('pay.yandex', $this->link_code, true) : null,
-                default => null
-            };
-        }
-
-        return null;
+        return match ($this->method_enum_id) {
+            OnlinePaymentMethodEnum::ERIP => filled($this->payment_url)
+                ? front_route('pay/erip/' . $this->payment_url)
+                : null,
+            OnlinePaymentMethodEnum::YANDEX => filled($this->link_code)
+                ? front_route('pay/yandex/' . $this->link_code)
+                : null,
+            default => null,
+        };
     }
 
     /**
