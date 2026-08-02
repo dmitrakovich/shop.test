@@ -205,6 +205,44 @@ class PaymentPageTest extends TestCase
         $this->assertTrue(\Illuminate\Support\Facades\Route::has('api.pay.link-code.resolve'));
     }
 
+    public function test_legacy_web_pay_routes_remain_registered(): void
+    {
+        $this->assertTrue(\Illuminate\Support\Facades\Route::has('pay.erip'));
+        $this->assertTrue(\Illuminate\Support\Facades\Route::has('pay.yandex'));
+        $this->assertTrue(\Illuminate\Support\Facades\Route::has('pay.link-code'));
+    }
+
+    public function test_erip_payment_link_points_to_frontend(): void
+    {
+        $order = $this->createOrder();
+        $payment = $this->createOnlinePayment([
+            'order_id' => $order->id,
+            'method_enum_id' => OnlinePaymentMethodEnum::ERIP,
+            'payment_num' => $order->id . '-1',
+            'payment_url' => $order->id . '-1',
+            'amount' => 19.0,
+            'currency_code' => 'BYN',
+        ]);
+
+        $this->assertSame('http://front.test/pay/erip/' . $payment->payment_url, $payment->link);
+    }
+
+    public function test_yandex_payment_link_points_to_frontend(): void
+    {
+        $order = $this->createOrder();
+        $payment = $this->createOnlinePayment([
+            'order_id' => $order->id,
+            'method_enum_id' => OnlinePaymentMethodEnum::YANDEX,
+            'payment_num' => $order->id . '-1',
+            'link_code' => 'yandex-front-link',
+            'payment_url' => 'https://yookassa.test/pay',
+            'amount' => 1500.0,
+            'currency_code' => 'RUB',
+        ]);
+
+        $this->assertSame('http://front.test/pay/yandex/yandex-front-link', $payment->link);
+    }
+
     /**
      * @return array<string, string>
      */
