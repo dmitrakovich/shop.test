@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\InfoPageController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\PersistDeviceConsentHeaders;
 use App\Http\Middleware\RedirectOldProductUrls;
@@ -86,4 +87,10 @@ Route::prefix('feedbacks')->as('feedbacks.')->group(function () {
 
 Route::prefix('address')->as('address.')->group(function () {
     Route::get('countries', [AddressController::class, 'getCountries']);
+});
+
+Route::prefix('pay')->as('pay.')->group(function () {
+    Route::get('erip/{paymentUrl}', [PaymentController::class, 'erip'])->name('erip');
+    Route::get('yandex/{linkCode}', [PaymentController::class, 'yandex'])->name('yandex');
+    Route::post('link-code/{linkCode}/resolve', [PaymentController::class, 'resolveLinkCode'])->name('link-code.resolve');
 });
