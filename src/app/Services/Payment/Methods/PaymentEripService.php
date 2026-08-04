@@ -45,7 +45,7 @@ class PaymentEripService extends AbstractPaymentService
         $postData['billingInfo']['contact']['middleName'] = $order->patronymic_name;
         $postData['billingInfo']['phone']['nationalNumber'] = preg_replace('/[^0-9]/', '', $order->phone);
         $postData['billingInfo']['email'] = $order->email;
-        $postData['billingInfo']['address']['line1'] = $order->user_addr;
+        $postData['billingInfo']['address']['line1'] = $this->normalizeEposAddress($order);
         $payment = ApiHGroshFacade::invoicingCreateInvoice()->addGetParam([
             'canPayAtOnce' => 'true',
         ])->request($postData);
@@ -137,6 +137,24 @@ class PaymentEripService extends AbstractPaymentService
         }
 
         return false;
+    }
+
+    /**
+     * Shop PVZ addresses may contain quotes/special chars that break E-POS invoices.
+     */
+    private function normalizeEposAddress(Order $order): ?string
+    {
+        $address = $order->user_addr;
+
+        if (!$order->stock_id || !$address) {
+            return $address;
+        }
+
+        // Quotes, brackets and backslashes break invoice creation in E-POS.
+        $address = preg_replace('/[\x00-\x1F\x7F]/u', ' ', $address) ?? $address;
+        $address = preg_replace('/["\'«»“”„‟`´<>\\\\]/u', '', $address) ?? $address;
+
+        return trim(preg_replace('/\s+/u', ' ', $address) ?? '') ?: null;
     }
 
     /**
