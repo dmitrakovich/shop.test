@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $cart_id
  * @property int $product_id
  * @property int $count
+ * @property bool $selected
  * @property int $size_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -28,7 +29,18 @@ class CartData extends Model
         'product_id',
         'size_id',
         'count',
+        'selected',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'selected' => 'boolean',
+        ];
+    }
 
     /**
      * Indicates whether the product is available.
@@ -69,5 +81,14 @@ class CartData extends Model
     public function isAvailable(): bool
     {
         return $this->available;
+    }
+
+    /**
+     * Whether the item is selected for checkout.
+     * Defaults to true for unsaved / legacy rows without the column loaded.
+     */
+    public function isSelected(): bool
+    {
+        return (bool)($this->selected ?? true);
     }
 }

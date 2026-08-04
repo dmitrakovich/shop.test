@@ -554,7 +554,7 @@ class SaleService
         $productSaleList = [];
         $this->hasSaleProductsInCart = false;
 
-        $products = $cart->availableItems()->map(fn ($item) => $item->product);
+        $products = $cart->selectedAvailableItems()->map(fn ($item) => $item->product);
 
         if ($this->hasSale()) {
             $products = $this->sortCartProductsForSale($products);
@@ -579,7 +579,9 @@ class SaleService
                 $sales[self::PRODUCT_DISCOUNT] = $this->getProductDiscountAsSale($item->product);
             }
             /** @var \App\Models\Data\SaleData|null $generalSale */
-            $generalSale = $productSaleList[$item->product->id] ?? null;
+            $generalSale = $item->isSelected()
+                ? ($productSaleList[$item->product->id] ?? null)
+                : null;
             if ($generalSale) {
                 $sales[self::GENERAL_SALE_KEY] = $generalSale;
             }

@@ -54,6 +54,9 @@ Route::prefix('cart')->as('cart.')->group(function () {
     Route::get('/', [CartController::class, 'show'])->name('show');
     Route::post('add', [CartController::class, 'addToCart'])->name('add');
     Route::delete('remove/{itemId}', [CartController::class, 'removeItem'])->name('remove');
+    Route::post('items/{itemId}/selected', [CartController::class, 'setItemSelected'])->name('items.selected');
+    Route::post('select-all', [CartController::class, 'setAllSelected'])->name('select-all');
+    Route::delete('selected', [CartController::class, 'removeSelected'])->name('selected.destroy');
     Route::post('clear', [CartController::class, 'clear'])->name('clear');
 
     Route::get('deliveries', [CartController::class, 'getDeliveries'])->name('deliveries');

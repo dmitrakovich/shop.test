@@ -23,6 +23,7 @@ class CartItemResource extends JsonResource
         return [
             'id' => $this->id,
             'count' => $this->count,
+            'selected' => $this->isSelected(),
             'product' => new CartProductResource($this->product),
             'size' => new SizeResource($this->size),
         ];

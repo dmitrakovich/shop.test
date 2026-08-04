@@ -24,7 +24,7 @@ class OrderService
      */
     public function store(Cart $cart, OrderData $orderData): Order
     {
-        abort_if(!$cart->hasAvailableItems(), 404, 'Товаров нет в наличии');
+        abort_if(!$cart->hasSelectedAvailableItems(), 422, 'Выберите хотя бы один товар');
 
         if ($cart->isSuspicious()) {
             $cart->device->ban(BanReason::SUSPICIOUS_ORDER);
@@ -40,7 +40,7 @@ class OrderService
         ]);
 
         $adminComments = [];
-        foreach ($cart->availableItems() as $item) {
+        foreach ($cart->selectedAvailableItems() as $item) {
             $order->items()->create([
                 'product_id' => $item->product_id,
                 'size_id' => $item->size_id,
@@ -65,7 +65,7 @@ class OrderService
             ]);
         }
 
-        $cart->clear(onlyAvailable: true);
+        $cart->clearSelected();
         $cart->clearPromocode();
 
         event(new OrderCreated($order, $user));
