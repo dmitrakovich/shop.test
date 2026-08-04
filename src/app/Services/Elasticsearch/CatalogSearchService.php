@@ -4,18 +4,9 @@ namespace App\Services\Elasticsearch;
 
 use App\Enums\Product\ProductRatingColumn;
 use App\Enums\Product\ProductSort;
-use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Collection as ProductCollection;
-use App\Models\Color;
-use App\Models\Fabric;
-use App\Models\Heel;
 use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
-use App\Models\Season;
-use App\Models\Size;
-use App\Models\Style;
-use App\Models\Tag;
 use App\Models\Url;
 use App\Services\SearchService;
 use Elastic\Adapter\Documents\DocumentManager;
@@ -49,23 +40,6 @@ class CatalogSearchService
         'цветами',
         'цветах',
         'цветов',
-    ];
-
-    /**
-     * Filter model class → Elasticsearch field (terms).
-     *
-     * @var array<class-string, string>
-     */
-    private const ATTRIBUTE_FIELDS = [
-        Brand::class => 'brand.id',
-        ProductCollection::class => 'collection_id',
-        Season::class => 'season_id',
-        Size::class => 'sizes.id',
-        Color::class => 'colors.id',
-        Fabric::class => 'fabric_ids',
-        Heel::class => 'heel_ids',
-        Style::class => 'style_ids',
-        Tag::class => 'tags.id',
     ];
 
     /**
@@ -107,14 +81,17 @@ class CatalogSearchService
             ->values()
             ->all();
 
-        $minPrice = (float)($result->aggregations()->get('min_price')?->raw()['value'] ?? 0);
-        $maxPrice = (float)($result->aggregations()->get('max_price')?->raw()['value'] ?? 999);
+        $minPrice = (float)($result->aggregations()->get('min_price')?->raw()['value']['value'] ?? 0);
+        $maxPrice = (float)($result->aggregations()->get('max_price')?->raw()['value']['value'] ?? 999);
 
         return new CatalogSearchResult(
             productIds: $productIds,
             total: (int)($result->total() ?? 0),
             minPrice: $minPrice,
             maxPrice: $maxPrice > 0 ? $maxPrice : 999,
+            facetCounts: $this->parseFacetCounts($result->aggregations()->map(
+                static fn ($aggregation): array => $aggregation->raw(),
+            )->all()),
         );
     }
 
@@ -130,21 +107,10 @@ class CatalogSearchService
         int $page,
         int $perPage,
     ): SearchParameters {
-        [$filterClauses, $pricePostFilter] = $this->buildFilterClauses($filters);
+        $filterGroups = $this->buildFilterGroups($filters);
         $normalizedSearch = $this->normalizeSearchQuery($search);
         $searchClause = $this->buildSearchClause($search);
-
-        $bool = [];
-        if ($filterClauses !== []) {
-            $bool['filter'] = $filterClauses;
-        }
-        if ($searchClause !== null) {
-            $bool['must'] = [$searchClause];
-        }
-
-        $query = $bool === []
-            ? ['match_all' => (object)[]]
-            : ['bool' => $bool];
+        $query = $searchClause ?? ['match_all' => (object)[]];
 
         $parameters = (new SearchParameters())
             ->indices([(string)config('catalog.elasticsearch.alias')])
@@ -155,15 +121,109 @@ class CatalogSearchService
             ->source(false)
             ->sort($this->buildSort($sort, $filters, $normalizedSearch))
             ->aggregations([
-                'min_price' => ['min' => ['field' => 'price']],
-                'max_price' => ['max' => ['field' => 'price']],
+                'min_price' => $this->buildFilteredMetricAggregation(
+                    $filterGroups,
+                    Price::class,
+                    'min',
+                ),
+                'max_price' => $this->buildFilteredMetricAggregation(
+                    $filterGroups,
+                    Price::class,
+                    'max',
+                ),
+                ...$this->buildFacetAggregations($filterGroups),
             ]);
 
-        if ($pricePostFilter !== null) {
-            $parameters->postFilter($pricePostFilter);
+        $postFilter = $this->combineFilterGroups($filterGroups);
+        if ($postFilter !== null) {
+            $parameters->postFilter($postFilter);
         }
 
         return $parameters;
+    }
+
+    /**
+     * Build one disjunctive facet per filter group.
+     *
+     * @param  array<class-string, list<array<string, mixed>>>  $filterGroups
+     * @return array<string, array<string, mixed>>
+     */
+    private function buildFacetAggregations(array $filterGroups): array
+    {
+        $aggregations = [];
+
+        foreach (CatalogFacetDefinition::all() as $config) {
+            $name = $config->name->value;
+            $aggregations['facet_' . $name] = [
+                'filter' => $this->combineFilterGroups($filterGroups, $config->model)
+                    ?? ['match_all' => (object)[]],
+                'aggs' => [
+                    'values' => [
+                        'terms' => [
+                            'field' => $config->field,
+                            'size' => 1000,
+                        ],
+                    ],
+                ],
+            ];
+        }
+
+        return $aggregations;
+    }
+
+    /**
+     * @param  array<class-string, list<array<string, mixed>>>  $filterGroups
+     * @return array<string, mixed>
+     */
+    private function buildFilteredMetricAggregation(
+        array $filterGroups,
+        string $excludedGroup,
+        string $metric,
+    ): array {
+        return [
+            'filter' => $this->combineFilterGroups($filterGroups, $excludedGroup)
+                ?? ['match_all' => (object)[]],
+            'aggs' => [
+                'value' => [$metric => ['field' => 'price']],
+            ],
+        ];
+    }
+
+    /**
+     * @param  array<class-string, list<array<string, mixed>>>  $filterGroups
+     * @return array<string, mixed>|null
+     */
+    private function combineFilterGroups(array $filterGroups, ?string $excludedGroup = null): ?array
+    {
+        if ($excludedGroup !== null) {
+            unset($filterGroups[$excludedGroup]);
+        }
+
+        $clauses = array_merge(...array_values($filterGroups));
+
+        return $clauses === [] ? null : ['bool' => ['filter' => $clauses]];
+    }
+
+    /**
+     * @param  array<string, array<string, mixed>>  $aggregations
+     * @return array<string, array<string, int>>
+     */
+    private function parseFacetCounts(array $aggregations): array
+    {
+        $facetCounts = [];
+
+        foreach (CatalogFacetDefinition::all() as $config) {
+            $name = $config->name->value;
+            $buckets = $aggregations['facet_' . $name]['values']['buckets'] ?? [];
+            foreach ($buckets as $bucket) {
+                $count = (int)($bucket['doc_count'] ?? 0);
+                if ($count > 0 && array_key_exists('key', $bucket)) {
+                    $facetCounts[$name][(string)$bucket['key']] = $count;
+                }
+            }
+        }
+
+        return $facetCounts;
     }
 
     /**
@@ -178,15 +238,15 @@ class CatalogSearchService
 
     /**
      * @param  array<string, array<array-key, Url>>  $filters
-     * @return array{0: list<array<string, mixed>>, 1: array<string, mixed>|null}
+     * @return array<class-string, list<array<string, mixed>>>
      */
-    public function buildFilterClauses(array $filters): array
+    public function buildFilterGroups(array $filters): array
     {
-        $clauses = [];
-        $priceRange = [];
+        $groups = [];
 
         foreach ($filters as $filterClass => $values) {
             if ($filterClass === Price::class) {
+                $priceRange = [];
                 foreach ($values as $slug => $url) {
                     $price = $url->filters;
                     if (!$price instanceof Price) {
@@ -199,15 +259,21 @@ class CatalogSearchService
                     }
                 }
 
+                if ($priceRange !== []) {
+                    $groups[$filterClass] = [['range' => ['price' => $priceRange]]];
+                }
+
                 continue;
             }
 
             if ($filterClass === Status::class) {
-                foreach (array_keys($values) as $slug) {
-                    if ($slug === 'promotion') {
-                        continue;
-                    }
-                    $clauses[] = ['term' => ['status_slugs' => $slug]];
+                $slugs = array_values(array_diff(array_keys($values), ['promotion']));
+                if ($slugs !== []) {
+                    $groups[$filterClass] = [
+                        count($slugs) === 1
+                            ? ['term' => ['status_slugs' => $slugs[0]]]
+                            : ['terms' => ['status_slugs' => $slugs]],
+                    ];
                 }
 
                 continue;
@@ -217,14 +283,14 @@ class CatalogSearchService
                 $last = end($values);
                 $categoryId = (int)($last['model_id'] ?? 0);
                 if ($categoryId !== 0 && $categoryId !== Category::ROOT_CATEGORY_ID) {
-                    $clauses[] = ['term' => ['categories.id' => $categoryId]];
+                    $groups[$filterClass] = [['term' => ['categories.id' => $categoryId]]];
                 }
 
                 continue;
             }
 
-            $field = self::ATTRIBUTE_FIELDS[$filterClass] ?? null;
-            if ($field === null) {
+            $config = CatalogFacetDefinition::forModel($filterClass);
+            if ($config === null) {
                 continue;
             }
 
@@ -233,16 +299,14 @@ class CatalogSearchService
                 continue;
             }
 
-            $clauses[] = count($ids) === 1
-                ? ['term' => [$field => $ids[0]]]
-                : ['terms' => [$field => $ids]];
+            $groups[$filterClass] = [
+                count($ids) === 1
+                    ? ['term' => [$config->field => $ids[0]]]
+                    : ['terms' => [$config->field => $ids]],
+            ];
         }
 
-        $pricePostFilter = $priceRange === []
-            ? null
-            : ['range' => ['price' => $priceRange]];
-
-        return [$clauses, $pricePostFilter];
+        return $groups;
     }
 
     /**

@@ -82,7 +82,6 @@ class CatalogService
         $products->maxPrice = Currency::convert($result->maxPrice);
 
         $this->productService->addEager($products);
-        $this->addGtmData($products);
 
         return $products;
     }

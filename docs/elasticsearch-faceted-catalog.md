@@ -4,8 +4,8 @@ Working plan for storefront catalog search/filters via Elasticsearch.
 **No Laravel Scout** — need filters + sort + pagination (+ later facet aggs)
 in one query; Scout’s “search → IDs → hydrate” model does not fit well.
 
-Status: **Phases 1–3 done**; **Phase 4 in progress** (v2 skeleton + search
-quality). Prod Vue stays on API v1; test front → API v2 + ES.
+Status: **Phases 1–4 backend done**. Prod Vue stays on API v1; the next step is
+connecting the test frontend to API v2 and validating the contract.
 
 ---
 
@@ -48,13 +48,22 @@ Non-goals (for now):
 | 10 | Attribute shape | ES `object` `{id, name}` (not full `{id,name,slug}`; not ES `nested`). Filters on `*.id`, search on `*.name`. |
 | 11 | Full product in ES | Not now. Optional later: denorm only listing fields for v2. Attribute `slug` only if serving facets/cards from `_source`. |
 | 12 | Top pin filter (`?top=`) | **Removed** — no longer used by frontends. |
+| 13 | v2 response | Minimal independent contract: `products`, `banners`, `category`, `facets`, `sort`, `meta`. |
+| 14 | Facet metadata | ES returns bucket keys/counts; MySQL hydrates only metadata for positive buckets. |
+| 15 | ES query builder | Keep current explicit arrays + `elastic-adapter`; do not add `spatie/elasticsearch-query-builder` for now. |
+| 16 | Facet definitions | Keep the central ES-layer registry; do not attach ES metadata to Eloquent models. |
+
+Resolved:
+
+- [x] API v2 is independent from v1 and exposes `facets` with `count` /
+      `selected`; zero-count options are omitted.
+- [x] Current category is minimal (`id`, `name`, `slug`, `path`) with a
+      recursive `parent_category`.
 
 Still open:
 
-- [x] v2 top-level JSON ⊇ v1 keys (`products`, `banners`, `category`,
-      `currentFilters`, `badges`, `filters`, `sort`, `sortingList`,
-      `searchQuery`, `meta`). Backend = ES; `filters` may later gain facet counts.
-- [ ] Exact facet / filters payload shape with frontend (counts, structure).
+- [ ] Validate the v2 payload with the test frontend and adjust only concrete
+      frontend needs.
 
 ---
 
@@ -89,8 +98,10 @@ MySQL (Product, attributes, stock, urls)
   CatalogSearchService
         ▼
   v1: CatalogService (MySQL) → stable JSON
-  v2: Api\V2\CatalogController + CatalogSearchService → hydrate → **v1-shaped JSON**
-      (`filters` may diverge later with facet counts)
+  v2: Api\V2\CatalogController + CatalogSearchService
+      → hydrate product cards from MySQL
+      → hydrate positive facet bucket metadata from MySQL
+      → minimal independent v2 JSON
 ```
 
 Env: `ELASTIC_HOST`, `CATALOG_ELASTICSEARCH_ALIAS` / `INDEX`, …
@@ -139,7 +150,12 @@ Within dimension **OR**, across **AND**. Map:
 - `fabric_ids`, `heel_ids`, `style_ids`, `season_id`, `collection_id`
 - `status_slugs` for `st-new` / `st-sale`
 - Category: last path segment → `term` on `categories.id` (chain stored in doc)
-- Price: **post_filter** so min/max aggs ignore price bounds
+- Top-level query contains text search only.
+- All selected filters, including price, are applied to hits through
+  `post_filter`.
+- Every facet aggregation applies all filter groups except its own group.
+- Price is included when counting other facets; min/max price apply all groups
+  except the selected price range.
 - `promotion` → not supported on v2 yet (422); v1 handles via MySQL Sale path as today
 
 ### Search
@@ -156,16 +172,19 @@ Within dimension **OR**, across **AND**. Map:
 - No search: `ProductSort` → rating/price/newness fields + `id`.
 - With search: `_score`, `id`.
 - `from`/`size`, `per_page` 12–100, `track_total_hits`.
-- Aggs: `min_price` / `max_price` on `price`.
+- Aggs: filtered `min_price` / `max_price` plus disjunctive terms facets.
 
 ### Response
 
 - **v1:** MySQL listing → existing resources / badges / meta.
-- **v2:** ES IDs → Eloquent hydrate → **same top-level keys as v1**
-  (`products` via `CatalogProductCollection`, `banners`, `category`,
-  `currentFilters`, `badges`, `filters`, `sort`, `sortingList`, `searchQuery`,
-  `meta`). Difference allowed: `filters` (later facet aggs + counts instead of /
-  in addition to `FilterService::getAll()`).
+- **v2:** ES IDs → Eloquent product hydrate; ES buckets → sparse MySQL facet
+  metadata hydrate. Top-level keys: `products`, `banners`, `category`, `facets`,
+  `sort`, `meta`.
+- Facet items contain only client fields (`id`, `slug`, display name,
+  `count`, `selected`, and dimension-specific UI values). PHP model class names,
+  SEO columns and timestamps are not exposed.
+- Categories are returned as a sparse tree with `children`; current `category`
+  separately contains the recursive parent chain.
 
 ---
 
@@ -194,6 +213,8 @@ Horizon queue `elasticsearch` (prod supervisor `maxProcesses: 1`).
 | v2 catalog API | `Http/Controllers/Api/V2/CatalogController.php`, `routes/api.v2.php` |
 | Orchestration (v1) | `Services/CatalogService.php` |
 | ES document / index / search | `Services/Elasticsearch/*` |
+| Facet registry / metadata | `Enums/Catalog/CatalogFacetName.php`, `Services/Elasticsearch/CatalogFacetConfig.php`, `CatalogFacetDefinition.php`, `CatalogFacetService.php` |
+| Category API resource | `Http/Resources/Product/CategoryResource.php` |
 | Upsert job | `Jobs/Elasticsearch/UpsertCatalogProductJob.php` |
 | Availability → ES | `Jobs/AvailableSizes/UpdateAvailabilityJob.php` |
 | Reindex | `Console/Commands/CatalogElasticsearchReindexCommand.php` |
@@ -207,7 +228,53 @@ vs `feature/elasticsearch-catalog-v2` (reference only, no wholesale merge):
   all attrs as objects, `word_delimiter` on all text, **no** stemmer, facet aggs,
   `pending_es_sync`.
 - We: elastic-migrations + alias, stemmer, delimiter on SKU only, thinner doc,
-  hydrate listing, facet aggs still TODO.
+  hydrate listing + sparse facet metadata, disjunctive facet aggs done.
+
+---
+
+## Query builder library evaluation
+
+`spatie/elasticsearch-query-builder` 3.10 is active and supports the primitives
+used here: bool/term/range/multi-match queries, `post_filter`, filtered
+aggregations, terms aggregations, sorting and pagination.
+
+It is not adopted because it does not remove the catalog-specific complexity:
+
+- excluding a different filter group for every facet still requires our own
+  grouping and orchestration;
+- sparse metadata hydration and category-tree building remain application code;
+- the current `babenkoivan/elastic-adapter` already supplies `SearchParameters`,
+  execution and normalized result objects;
+- Spatie's builder executes through the official client directly and returns
+  its raw response, so adopting it would create two query/result abstractions or
+  require replacing the working adapter path;
+- the installed client is Elasticsearch PHP v9, while Spatie's current
+  development matrix declares/tests v8 only (the package does not constrain the
+  client as a runtime dependency).
+
+The fluent syntax would improve readability for simple queries, but the current
+request is already unit-tested as an array payload. The migration cost and extra
+dependency are larger than the benefit. Reconsider only if several unrelated ES
+queries appear and they can share one builder abstraction.
+
+## Facet definition organization
+
+Current choice: keep `CatalogFacetDefinition` as the central registry inside the
+Elasticsearch layer.
+
+Alternatives considered:
+
+1. **One class per facet** — strongest isolation and typing, but creates
+   boilerplate for the eight facets that use identical behavior. Consider when
+   bespoke facets become common.
+2. **Trait on filter models** — concise, but spreads ES field names and API
+   projection concerns across domain models. Not recommended.
+3. **Interface on filter models** — enables polymorphism, but overlaps the
+   existing MySQL-oriented `Filterable` contract and still handles category,
+   status and price awkwardly. Not recommended.
+4. **Central typed registry** — implemented with the `CatalogFacetName` enum and
+   readonly `CatalogFacetConfig` DTO. Extract strategies only for category,
+   status or price if their branches grow.
 
 ---
 
@@ -220,14 +287,15 @@ vs `feature/elasticsearch-catalog-v2` (reference only, no wholesale merge):
 - [x] Phase 2 — indexer, upsert job, event wiring, availability bulk, reindex command, Horizon queue.
 - [x] Phase 3 — `CatalogSearchService` for **API v2** (filters/search/sort/min-max). v1 stays MySQL-only (no driver flag).
 
-### Phase 4 — Catalog API v2 (in progress)
+### Phase 4 — Catalog API v2 (backend done)
 
-- [x] `api/v2` routes + allowlist; controller with **v1-parity payload** (ES backend).
+- [x] `api/v2` routes + allowlist; independent minimal v2 response.
 - [x] Search quality: `ё→е` + stemmer, fuzzy MSM, `{id,name}` entities.
 - [x] Dropped ES from v1 / removed `CATALOG_SEARCH_DRIVER`.
-- [ ] Facet aggregations on v2 (`filters` may differ from v1 dictionary-only).
+- [x] Disjunctive facet aggregations with price-aware counts.
+- [x] Sparse facet metadata and minimal current-category resource.
+- [x] v2 contract / query DSL tests and manual live-ES verification.
 - [ ] Point test front at `/api/v2`.
-- [ ] Feature tests for v2 happy path (Sail ES only).
 
 ### Phase 5 — Cutover
 
@@ -252,8 +320,8 @@ vs `feature/elasticsearch-catalog-v2` (reference only, no wholesale merge):
 ## Testing
 
 - Unit: document builder, search DSL (no live ES).
-- Feature: API version routing (426 / 404 / v2 route registered).
-- Live ES (migrate / reindex / API v2): manual or Sail; **not CI**.
+- Feature: API version routing, minimal v2 contract, category parent chain.
+- Live ES (migrate / reindex / API v2 combinations): manual via Sail; **not CI**.
 - API v1 catalog stays on MySQL (no ES flag).
 
 ```bash
@@ -276,3 +344,6 @@ cd src && ./vendor/bin/sail artisan test --compact tests/Unit/Elastic tests/Feat
 | 2026-07-27 | ES only on API v2; removed `CATALOG_SEARCH_DRIVER` / v1 ES path. |
 | 2026-07-28 | v2 response ⊇ v1 keys; `filters` may diverge later (facets). |
 | 2026-07-30 | Removed catalog Top pin filter (`?top=`) from v1/v2. |
+| 2026-08-04 | Added disjunctive facets, sparse metadata hydration and positive-count-only output. |
+| 2026-08-04 | Replaced v1-shaped response with minimal v2 contract and recursive category resource. |
+| 2026-08-04 | Fixed self-filter and price semantics; statuses are OR within their dimension. |
