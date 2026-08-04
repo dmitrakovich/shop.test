@@ -67,7 +67,10 @@ class CartSelectionTest extends TestCase
         $response = $this->getJson('/api/v1/cart', $this->deviceHeaders())
             ->assertOk();
 
-        $items = collect($response->json('items'));
+        /** @var array<int, array{id: int, selected: bool}> $itemsPayload */
+        $itemsPayload = $response->json('items');
+        $items = collect($itemsPayload);
+
         $this->assertTrue($items->firstWhere('id', $this->selectedItem->id)['selected']);
         $this->assertFalse($items->firstWhere('id', $this->unselectedItem->id)['selected']);
     }
