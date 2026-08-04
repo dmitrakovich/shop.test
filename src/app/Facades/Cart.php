@@ -33,6 +33,7 @@ class Cart extends Facade
                 'product_id' => $oneClickOrderData->product->id,
                 'size_id' => $size->id,
                 'count' => 1,
+                'selected' => true,
             ]));
         }
         $cart->setRelation('items', $items);

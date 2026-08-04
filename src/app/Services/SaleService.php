@@ -554,7 +554,7 @@ class SaleService
         $productSaleList = [];
         $this->hasSaleProductsInCart = false;
 
-        $products = $cart->availableItems()->map(fn ($item) => $item->product);
+        $products = $cart->selectedAvailableItems()->map(fn ($item) => $item->product);
 
         if ($this->hasSale()) {
             $products = $this->sortCartProductsForSale($products);
@@ -574,19 +574,26 @@ class SaleService
         }
 
         foreach ($cart->availableItems() as $item) {
+            // Clone so mixed selection on the same product_id (different sizes)
+            // cannot overwrite each other's sale state via a shared Product instance.
+            $product = clone $item->product;
+            $item->setRelation('product', $product);
+
             $sales = [];
-            if (!$this->hasFakeSale() && $item->product->hasBaseDiscount()) {
-                $sales[self::PRODUCT_DISCOUNT] = $this->getProductDiscountAsSale($item->product);
+            if (!$this->hasFakeSale() && $product->hasBaseDiscount()) {
+                $sales[self::PRODUCT_DISCOUNT] = $this->getProductDiscountAsSale($product);
             }
             /** @var \App\Models\Data\SaleData|null $generalSale */
-            $generalSale = $productSaleList[$item->product->id] ?? null;
+            $generalSale = $item->isSelected()
+                ? ($productSaleList[$product->id] ?? null)
+                : null;
             if ($generalSale) {
                 $sales[self::GENERAL_SALE_KEY] = $generalSale;
             }
-            $finalPrice = $generalSale ? $generalSale->price : $item->product->price;
+            $finalPrice = $generalSale ? $generalSale->price : $product->price;
 
-            $this->applyUserSales($item->product, $sales, $finalPrice);
-            $item->product->setSales($sales, $finalPrice);
+            $this->applyUserSales($product, $sales, $finalPrice);
+            $product->setSales($sales, $finalPrice);
         }
     }
 

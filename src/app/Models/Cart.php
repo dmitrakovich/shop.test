@@ -87,6 +87,16 @@ class Cart extends Model
     }
 
     /**
+     * Get available items selected for checkout.
+     *
+     * @return Collection<int, CartData>
+     */
+    public function selectedAvailableItems(): Collection
+    {
+        return $this->availableItems()->filter(fn (CartData $item) => $item->isSelected());
+    }
+
+    /**
      * Get the total count of items in the cart.
      */
     public function itemsCount(): int
@@ -100,7 +110,7 @@ class Cart extends Model
     }
 
     /**
-     * Get the total old price of items in the cart.
+     * Get the total old price of selected available items.
      *
      * @todo refactor applying sale
      */
@@ -109,7 +119,7 @@ class Cart extends Model
         Sale::applyToCart($this);
 
         $price = 0;
-        foreach ($this->availableItems() as $item) {
+        foreach ($this->selectedAvailableItems() as $item) {
             $price += ($item->product->getOldPrice() * $item->count);
         }
 
@@ -117,7 +127,7 @@ class Cart extends Model
     }
 
     /**
-     * Get all items cart price
+     * Get selected available items cart price
      *
      * @todo refactor applying sale
      */
@@ -126,7 +136,7 @@ class Cart extends Model
         Sale::applyToCart($this);
 
         $price = 0;
-        foreach ($this->availableItems() as $item) {
+        foreach ($this->selectedAvailableItems() as $item) {
             $price += ($item->product->getPrice($currencyCode) * $item->count);
         }
 
@@ -164,11 +174,15 @@ class Cart extends Model
 
         if (isset($item)) {
             $item->increment('count');
+            if (!$item->isSelected()) {
+                $item->update(['selected' => true]);
+            }
         } else {
             $this->items()->create([
                 'product_id' => $productId,
                 'count' => 1,
                 'size_id' => $sizeId,
+                'selected' => true,
             ]);
         }
 
@@ -181,6 +195,36 @@ class Cart extends Model
     public function removeItemById(int $id): self
     {
         $this->items()->where('id', $id)->delete();
+
+        return $this->refreshItems();
+    }
+
+    /**
+     * Set selection flag for one cart item.
+     */
+    public function setItemSelected(int $itemId, bool $selected): self
+    {
+        $this->items()->where('id', $itemId)->update(['selected' => $selected]);
+
+        return $this->refreshItems();
+    }
+
+    /**
+     * Select or deselect all cart items.
+     */
+    public function setAllSelected(bool $selected): self
+    {
+        $this->items()->update(['selected' => $selected]);
+
+        return $this->refreshItems();
+    }
+
+    /**
+     * Remove all selected cart items.
+     */
+    public function removeSelectedItems(): self
+    {
+        $this->items()->where('selected', true)->delete();
 
         return $this->refreshItems();
     }
@@ -218,6 +262,17 @@ class Cart extends Model
         } else {
             $this->items()->delete();
         }
+    }
+
+    /**
+     * Clear selected available items from the shopping cart (used after checkout).
+     * Unavailable selected rows are kept — they were not ordered.
+     */
+    public function clearSelected(): void
+    {
+        $itemIds = $this->selectedAvailableItems()->pluck('id');
+        $this->items()->whereIn('id', $itemIds)->delete();
+        $this->refreshItems();
     }
 
     /**
@@ -259,6 +314,14 @@ class Cart extends Model
     public function hasAvailableItems(): bool
     {
         return $this->availableItems()->isNotEmpty();
+    }
+
+    /**
+     * Check if the cart has selected available items for checkout.
+     */
+    public function hasSelectedAvailableItems(): bool
+    {
+        return $this->selectedAvailableItems()->isNotEmpty();
     }
 
     /**

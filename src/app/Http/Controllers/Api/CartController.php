@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Data\Cart\AddToCartData;
+use App\Data\Cart\CartSelectionData;
 use App\Facades\Cart as CartFacade;
 use App\Facades\Sale;
 use App\Http\Controllers\Controller;
@@ -38,24 +39,42 @@ class CartController extends Controller
     }
 
     /**
-     * Apply a promocode to the cart. (web version)
-     */
-    // public function applyPromoCode(Request $request): RedirectResponse
-    // {
-    //     if ($promocode = $request->input('promocode')) {
-    //         Sale::applyPromocode($promocode);
-    //     }
-
-    //     return back();
-    // }
-
-    /**
      * Remove a specific item from the cart.
      */
     public function removeItem(int $itemId): CartResource
     {
         return new CartResource(
             CartFacade::getCart()->removeItemById($itemId)
+        );
+    }
+
+    /**
+     * Set selection for a single cart item.
+     */
+    public function setItemSelected(int $itemId, CartSelectionData $data): CartResource
+    {
+        return new CartResource(
+            CartFacade::getCart()->setItemSelected($itemId, $data->selected)
+        );
+    }
+
+    /**
+     * Select or deselect all cart items.
+     */
+    public function setAllSelected(CartSelectionData $data): CartResource
+    {
+        return new CartResource(
+            CartFacade::getCart()->setAllSelected($data->selected)
+        );
+    }
+
+    /**
+     * Remove all selected cart items.
+     */
+    public function removeSelected(): CartResource
+    {
+        return new CartResource(
+            CartFacade::getCart()->removeSelectedItems()
         );
     }
 
