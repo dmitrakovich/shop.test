@@ -265,11 +265,13 @@ class Cart extends Model
     }
 
     /**
-     * Clear selected items from the shopping cart (used after checkout).
+     * Clear selected available items from the shopping cart (used after checkout).
+     * Unavailable selected rows are kept — they were not ordered.
      */
     public function clearSelected(): void
     {
-        $this->items()->where('selected', true)->delete();
+        $itemIds = $this->selectedAvailableItems()->pluck('id');
+        $this->items()->whereIn('id', $itemIds)->delete();
         $this->refreshItems();
     }
 
