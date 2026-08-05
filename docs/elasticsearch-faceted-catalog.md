@@ -39,7 +39,7 @@ Non-goals (for now):
 | 1 | Hosting | Self-hosted ES (Sail locally; same idea on prod). |
 | 2 | Packages | `babenkoivan/elastic-client` + `elastic-migrations`. No Scout. |
 | 3 | Facet counts in v1 | No — dictionary from `FilterService::getAll()`. |
-| 4 | `promotion` | Deferred; ES path falls back to MySQL when selected. |
+| 4 | `promotion` | Ignored on v2 ES path (not indexed); v1 still applies via MySQL Sale. |
 | 5 | Blade storefront | Removed; web unmatched → `front_redirect`. |
 | 6 | API v2 | Yes — `/api/v2/catalog`; v1 until cutover. |
 | 7 | Search + sort | With `search`: `_score desc`, `id desc` (ignore UI sort). |
@@ -156,7 +156,7 @@ Within dimension **OR**, across **AND**. Map:
 - Every facet aggregation applies all filter groups except its own group.
 - Price is included when counting other facets; min/max price apply all groups
   except the selected price range.
-- `promotion` → not supported on v2 yet (422); v1 handles via MySQL Sale path as today
+- `promotion` → ignored on v2 (not in ES); v1 handles via MySQL Sale path as today
 
 ### Search
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Enums\Product\ProductSort;
-use App\Facades\Sale;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterRequest;
@@ -19,7 +18,6 @@ use App\Services\Elasticsearch\CatalogSearchService;
 use App\Services\Seo\CatalogSeoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Elasticsearch catalog for the test / next frontend.
@@ -36,17 +34,7 @@ class CatalogController extends Controller
         CatalogSeoService $seoService,
         BannerRepository $bannerRepository,
     ): JsonResponse {
-        if ($promocode = $filterRequest->get('promocode')) {
-            Sale::applyPromocode($promocode);
-        }
-
         $currentFilters = $filterRequest->getFilters();
-        if (!$catalogSearchService->supportsFilters($currentFilters)) {
-            return response()->json([
-                'message' => 'Selected filters are not supported by Catalog API v2 yet.',
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         $sort = $filterRequest->getSorting();
         $perPage = (int)$filterRequest->input('per_page');
         $search = $filterRequest->input('search');

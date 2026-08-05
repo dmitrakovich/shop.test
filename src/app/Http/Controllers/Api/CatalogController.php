@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\Product\ProductSort;
 use App\Events\Analytics\ProductView;
-use App\Facades\Sale;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterRequest;
@@ -35,10 +34,6 @@ class CatalogController extends Controller
         CatalogSeoService $seoService,
         BannerRepository $bannerRepository,
     ): JsonResponse {
-        if ($promocode = $filterRequest->get('promocode')) {
-            Sale::applyPromocode($promocode);
-        }
-
         $sort = $filterRequest->getSorting();
         $perPage = (int)$filterRequest->input('per_page');
         $currentFilters = $filterRequest->getFilters();

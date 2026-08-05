@@ -130,12 +130,25 @@ class CatalogSearchServiceTest extends TestCase
         $this->assertSame('sale_rating', array_key_first($sort[0]));
     }
 
-    public function test_supports_filters_rejects_promotion(): void
+    public function test_promotion_status_is_ignored(): void
     {
-        $this->assertTrue($this->service->supportsFilters([]));
-        $this->assertFalse($this->service->supportsFilters([
-            Status::class => ['promotion' => $this->urlWithModelId(1)],
-        ]));
+        $this->assertArrayNotHasKey(
+            Status::class,
+            $this->service->buildFilterGroups([
+                Status::class => ['promotion' => $this->urlWithModelId(1)],
+            ]),
+        );
+
+        $groups = $this->service->buildFilterGroups([
+            Status::class => [
+                'promotion' => $this->urlWithModelId(1),
+                'st-sale' => $this->urlWithModelId(2),
+            ],
+        ]);
+
+        $this->assertSame([
+            ['term' => ['status_slugs' => 'st-sale']],
+        ], $groups[Status::class]);
     }
 
     public function test_build_search_parameters_wires_post_filter_and_aggs(): void

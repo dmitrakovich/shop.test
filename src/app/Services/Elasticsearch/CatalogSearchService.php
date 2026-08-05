@@ -227,16 +227,6 @@ class CatalogSearchService
     }
 
     /**
-     * Whether this request can be served from Elasticsearch (promotion is MySQL-only for now).
-     *
-     * @param  array<string, array<array-key, Url>>  $filters
-     */
-    public function supportsFilters(array $filters): bool
-    {
-        return !isset($filters[Status::class]['promotion']);
-    }
-
-    /**
      * @param  array<string, array<array-key, Url>>  $filters
      * @return array<class-string, list<array<string, mixed>>>
      */
@@ -267,6 +257,7 @@ class CatalogSearchService
             }
 
             if ($filterClass === Status::class) {
+                // `promotion` is Sale-driven and not indexed; ignore it on the ES path.
                 $slugs = array_values(array_diff(array_keys($values), ['promotion']));
                 if ($slugs !== []) {
                     $groups[$filterClass] = [
