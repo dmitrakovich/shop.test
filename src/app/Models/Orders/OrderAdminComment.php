@@ -3,6 +3,8 @@
 namespace App\Models\Orders;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -11,8 +13,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class OrderAdminComment extends Model
+class OrderAdminComment extends Model implements Auditable
 {
+    use AuditableTrait;
+
     protected $fillable = [
         'comment',
         'order_id',

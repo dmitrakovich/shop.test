@@ -9,6 +9,8 @@ use App\Models\Orders\Order;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -47,8 +49,18 @@ use Illuminate\Database\Eloquent\Relations;
  * @property-read \App\Models\Orders\Order|null $order
  * @property-read \App\Admin\Models\Administrator|null $admin
  */
-class OnlinePayment extends Model
+class OnlinePayment extends Model implements Auditable
 {
+    use AuditableTrait;
+
+    /**
+     * @var list<string>
+     */
+    protected $auditExclude = [
+        'request_data',
+        'qr_code',
+    ];
+
     /**
      * Indicates if all mass assignment is enabled.
      *

@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Carbon;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -31,8 +33,17 @@ use Illuminate\Support\Carbon;
  *
  * @property-read Collection|Order[] $orders
  */
-class Batch extends Model
+class Batch extends Model implements Auditable
 {
+    use AuditableTrait;
+
+    /**
+     * @var list<string>
+     */
+    protected $auditExclude = [
+        'card_number',
+    ];
+
     /**
      * Indicates if all mass assignment is enabled.
      *

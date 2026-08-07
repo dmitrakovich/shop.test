@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -25,8 +27,10 @@ use Illuminate\Support\Carbon;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserPromocode[] $userPromocodes
  * @property-read \App\Models\User\UserPromocode|null $userPromocode
  */
-class Promocode extends Model
+class Promocode extends Model implements Auditable
 {
+    use AuditableTrait;
+
     /**
      * Indicates if all mass assignment is enabled.
      *

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Collection;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\HasMedia;
@@ -46,8 +48,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Stock ordered(string $direction = 'asc')
  */
-class Stock extends Model implements HasMedia, Sortable
+class Stock extends Model implements Auditable, HasMedia, Sortable
 {
+    use AuditableTrait;
     use InteractsWithMedia, SortableTrait;
 
     /**

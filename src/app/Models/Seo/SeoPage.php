@@ -5,6 +5,8 @@ namespace App\Models\Seo;
 use App\Enums\Seo\SeoPageType;
 use Illuminate\Database\Eloquent\Model;
 use League\Uri\Uri;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -23,8 +25,19 @@ use League\Uri\Uri;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class SeoPage extends Model
+class SeoPage extends Model implements Auditable
 {
+    use AuditableTrait;
+
+    /**
+     * @var list<string>
+     */
+    protected $auditExclude = [
+        'pageviews',
+        'visits',
+        'score',
+    ];
+
     /**
      * @var list<string>
      */

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property string $code currency code 3 symbol (ISO 4217)
@@ -15,8 +17,10 @@ use Illuminate\Support\Facades\Cache;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class Currency extends Model
+class Currency extends Model implements Auditable
 {
+    use AuditableTrait;
+
     /**
      * The primary key for the model.
      *

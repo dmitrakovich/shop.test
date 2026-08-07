@@ -4,6 +4,8 @@ namespace Payments;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -19,8 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Payments\PaymentMethod filterCOD(bool $availableCOD)
  * @method static \Illuminate\Database\Eloquent\Builder|\Payments\PaymentMethod filterByCountry(string $countryCode)
  */
-class PaymentMethod extends Model
+class PaymentMethod extends Model implements Auditable
 {
+    use AuditableTrait;
+
     /**
      * @var list<string>
      */

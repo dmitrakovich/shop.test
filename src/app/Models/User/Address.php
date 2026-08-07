@@ -2,9 +2,12 @@
 
 namespace App\Models\User;
 
+use App\Enums\Audit\AuditEvent;
 use App\Models\Country;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -26,8 +29,18 @@ use Illuminate\Database\Eloquent\Relations;
  * @property-read \App\Models\Country|null $country
  * @property-read \App\Models\User\User|null $user
  */
-class Address extends Model
+class Address extends Model implements Auditable
 {
+    use AuditableTrait;
+
+    /**
+     * @var list<string>
+     */
+    protected $auditEvents = [
+        AuditEvent::Updated->value,
+        AuditEvent::Deleted->value,
+    ];
+
     /**
      * Indicates if all mass assignment is enabled.
      *

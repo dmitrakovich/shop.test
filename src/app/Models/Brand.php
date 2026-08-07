@@ -6,6 +6,8 @@ use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -21,9 +23,10 @@ use Illuminate\Support\Carbon;
  *
  * @implements Filterable<Brand>
  */
-class Brand extends Model implements Filterable
+class Brand extends Model implements Auditable, Filterable
 {
     use AttributeFilterTrait;
+    use AuditableTrait;
 
     /**
      * Indicates if all mass assignment is enabled.

@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 use Payments\PaymentMethod;
 
 /**
@@ -90,8 +92,9 @@ use Payments\PaymentMethod;
  * @property-read Collection|OrderActionLog[] $logs
  * @property-read Collection|OrderDistributionLog[] $distributionLogs
  */
-class Order extends Model
+class Order extends Model implements Auditable
 {
+    use AuditableTrait;
     use Notifiable;
 
     protected $fillable = [

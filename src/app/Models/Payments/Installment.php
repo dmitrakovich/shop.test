@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Carbon;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -25,8 +27,10 @@ use Illuminate\Support\Carbon;
  * @property-read \App\Models\Orders\OrderItem|null $orderItem
  * @property-read \App\Models\Orders\Order|null $order
  */
-class Installment extends Model
+class Installment extends Model implements Auditable
 {
+    use AuditableTrait;
+
     const PAYMENT_METHOD_ID = 4;
 
     /**

@@ -4,14 +4,18 @@ namespace App\Models\User;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
  * @property string $name
  * @property float $discount
  */
-class Group extends Model
+class Group extends Model implements Auditable
 {
+    use AuditableTrait;
+
     public const int REGISTERED = 1;
 
     private const int BEFORE_2K = 2;

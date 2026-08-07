@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -25,8 +27,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class FeedbackAnswer extends Model implements HasMedia
+class FeedbackAnswer extends Model implements Auditable, HasMedia
 {
+    use AuditableTrait;
     use InteractsWithMedia;
     use SoftDeletes;
 

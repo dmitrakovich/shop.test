@@ -4,6 +4,8 @@ namespace Deliveries;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -18,8 +20,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Deliveries\DeliveryMethod filterFitting(bool $availableFitting)
  * @method static \Illuminate\Database\Eloquent\Builder|\Deliveries\DeliveryMethod filterByCountry(string $countryCode)
  */
-class DeliveryMethod extends Model
+class DeliveryMethod extends Model implements Auditable
 {
+    use AuditableTrait;
+
     /**
      * @var list<string>
      */

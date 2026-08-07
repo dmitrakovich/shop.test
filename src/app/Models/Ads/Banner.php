@@ -9,6 +9,8 @@ use App\Enums\Ads\BannerType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Image\Enums\Constraint;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -36,8 +38,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<self> active()
  * @method static Builder<self> orderByPriority()
  */
-class Banner extends Model implements HasMedia
+class Banner extends Model implements Auditable, HasMedia
 {
+    use AuditableTrait;
     use InteractsWithMedia,
         SoftDeletes;
 

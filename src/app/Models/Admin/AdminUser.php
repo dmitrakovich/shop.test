@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -37,10 +39,19 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Admin\AdminUser permission($permissions, $without = false)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Admin\AdminUser withoutPermission($permissions)
  */
-class AdminUser extends Authenticatable implements AuthorInterface, FilamentUser
+class AdminUser extends Authenticatable implements Auditable, AuthorInterface, FilamentUser
 {
+    use AuditableTrait;
     use HasPanelShield;
     use HasRoles;
+
+    /**
+     * @var list<string>
+     */
+    protected $auditExclude = [
+        'password',
+        'remember_token',
+    ];
 
     /**
      * Indicates if all mass assignment is enabled.

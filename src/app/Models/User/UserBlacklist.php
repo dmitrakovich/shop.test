@@ -5,6 +5,8 @@ namespace App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -16,8 +18,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property-read \App\Models\User\User|null $user
  */
-class UserBlacklist extends Model
+class UserBlacklist extends Model implements Auditable
 {
+    use AuditableTrait;
     use SoftDeletes;
 
     /**

@@ -31,6 +31,8 @@ use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 use libphonenumber\PhoneNumberUtil;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -70,8 +72,10 @@ use libphonenumber\PhoneNumberUtil;
  *
  * @implements ClientInterface<$this>
  */
-class User extends Authenticatable implements AuthorInterface, ClientInterface, MustVerifyEmail
+class User extends Authenticatable implements Auditable, AuthorInterface, ClientInterface, MustVerifyEmail
 {
+    use AuditableTrait;
+
     /** @use HasApiTokens<PersonalAccessToken> */
     use HasApiTokens;
 
@@ -79,6 +83,15 @@ class User extends Authenticatable implements AuthorInterface, ClientInterface, 
     use HasFactory;
 
     use Notifiable;
+
+    /**
+     * @var list<string>
+     */
+    protected $auditExclude = [
+        'otp_code',
+        'otp_expires_at',
+        'remember_token',
+    ];
 
     /**
      * The attributes that are mass assignable.

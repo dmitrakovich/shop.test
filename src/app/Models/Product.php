@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\GoogleTagManager\DataLayer;
 use Spatie\MediaLibrary\HasMedia;
 
@@ -80,8 +82,10 @@ use Spatie\MediaLibrary\HasMedia;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyWithDiscount(float $amount = 0.01)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyNew(int $days = 10)
  */
-class Product extends Model implements HasMedia
+class Product extends Model implements Auditable, HasMedia
 {
+    use AuditableTrait;
+
     /** @use HasFactory<ProductFactory> */
     use HasFactory;
 
@@ -90,6 +94,16 @@ class Product extends Model implements HasMedia
     use SoftDeletes {
         restore as restoreSoftDeletes;
     }
+
+    /**
+     * @var list<string>
+     */
+    protected $auditExclude = [
+        'rating',
+        'newness_rating',
+        'season_rating',
+        'sale_rating',
+    ];
 
     /**
      * Default sorting

@@ -5,6 +5,8 @@ namespace App\Models\Orders;
 use App\Enums\DeliveryTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -18,8 +20,10 @@ use Illuminate\Database\Eloquent\Relations;
  *
  * @property-read \App\Models\Orders\Order|null $order
  */
-class OrderTrack extends Model
+class OrderTrack extends Model implements Auditable
 {
+    use AuditableTrait;
+
     /**
      * Indicates if all mass assignment is enabled.
      *

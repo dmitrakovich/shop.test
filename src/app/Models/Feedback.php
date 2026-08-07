@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -37,10 +39,18 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feedback forProduct(int $productId)
  */
-class Feedback extends Model implements HasMedia
+class Feedback extends Model implements Auditable, HasMedia
 {
+    use AuditableTrait;
     use InteractsWithMedia;
     use SoftDeletes;
+
+    /**
+     * @var list<string>
+     */
+    protected $auditExclude = [
+        'captcha_score',
+    ];
 
     protected $table = 'feedbacks';
 

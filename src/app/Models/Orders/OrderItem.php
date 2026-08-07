@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\Size;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -34,8 +36,10 @@ use Illuminate\Database\Eloquent\Relations;
  * @property-read \App\Models\Logs\OrderItemStatusLog|null $inventoryNotification
  * @property-read \App\Models\Logs\OrderItemStatusLog|null $statusLog
  */
-class OrderItem extends Model
+class OrderItem extends Model implements Auditable
 {
+    use AuditableTrait;
+
     public $timestamps = false;
 
     protected $fillable = [

@@ -6,6 +6,8 @@ use App\Enums\Promo\SettingType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -16,8 +18,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  */
-class SaleSetting extends Model
+class SaleSetting extends Model implements Auditable
 {
+    use AuditableTrait;
     use SoftDeletes;
 
     /**

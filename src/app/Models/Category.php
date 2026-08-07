@@ -15,6 +15,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Kalnoy\Nestedset\NodeTrait;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
@@ -46,9 +48,17 @@ use Spatie\EloquentSortable\SortableTrait;
  *
  * @implements Filterable<Category>
  */
-class Category extends Model implements Filterable, Sortable
+class Category extends Model implements Auditable, Filterable, Sortable
 {
-    use AttributeFilterTrait, NodeTrait, SoftDeletes, SortableTrait;
+    use AttributeFilterTrait, AuditableTrait, NodeTrait, SoftDeletes, SortableTrait;
+
+    /**
+     * @var list<string>
+     */
+    protected $auditExclude = [
+        '_lft',
+        '_rgt',
+    ];
 
     /**
      * @var array{order_column_name: 'order', sort_when_creating: bool}

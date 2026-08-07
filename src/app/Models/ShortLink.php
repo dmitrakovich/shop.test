@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * @property int $id
@@ -13,8 +15,18 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class ShortLink extends Model
+class ShortLink extends Model implements Auditable
 {
+    use AuditableTrait;
+
+    /**
+     * @var list<string>
+     */
+    protected $auditExclude = [
+        'hits_count',
+        'last_used_at',
+    ];
+
     final const int SHORT_LINK_LENGTH = 7;
 
     final const string CHAR_LIST = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234567890';
