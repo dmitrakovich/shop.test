@@ -29,6 +29,7 @@ Schedule::command('backup:monitor')->dailyAt('06:30');
 Schedule::command('catalog:elasticsearch-reindex --fresh')->dailyAt('03:20');
 
 Schedule::command('cleanup:devices')->dailyAt('04:20');
+Schedule::command('cleanup:audits')->dailyAt('04:25');
 Schedule::command('cleanup:defective-products')->weeklyOn(Carbon::SATURDAY, '04:30');
 
 Schedule::command('feed:generate')->everySixHours();
