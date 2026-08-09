@@ -9,6 +9,7 @@ use App\Models\User\Address;
 use App\Models\User\Group;
 use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class AuditableModelsTest extends TestCase
@@ -73,6 +74,35 @@ class AuditableModelsTest extends TestCase
         $this->assertArrayNotHasKey('password', $updated->old_values ?? []);
         $this->assertArrayNotHasKey('password', $updated->new_values ?? []);
         $this->assertSame('Audit Updated', $updated->new_values['name'] ?? null);
+    }
+
+    public function test_sanctum_authenticated_user_is_recorded_on_audit(): void
+    {
+        $group = Group::query()->create([
+            'name' => 'Sanctum audit group',
+            'discount' => 0,
+        ]);
+
+        $user = User::query()->create([
+            'group_id' => $group->id,
+            'first_name' => 'Ivan',
+            'phone' => 375291112244,
+        ]);
+
+        Sanctum::actingAs($user);
+
+        $user->update(['first_name' => 'Petr']);
+
+        $audit = Audit::query()
+            ->where('auditable_type', User::class)
+            ->where('auditable_id', $user->id)
+            ->where('event', 'updated')
+            ->latest('id')
+            ->first();
+
+        $this->assertNotNull($audit);
+        $this->assertSame($user->id, (int)$audit->user_id);
+        $this->assertSame($user->getMorphClass(), $audit->user_type);
     }
 
     public function test_user_otp_fields_are_excluded_from_audit(): void

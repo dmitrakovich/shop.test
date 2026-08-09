@@ -28,6 +28,7 @@ return [
         'morph_prefix' => 'user',
         'guards' => [
             'admin',
+            'sanctum',
             'web',
             'api',
         ],
