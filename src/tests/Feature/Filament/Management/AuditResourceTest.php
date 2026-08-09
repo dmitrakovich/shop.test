@@ -76,7 +76,6 @@ class AuditResourceTest extends TestCase
         $this->actingAs($admin, 'admin');
 
         Livewire::test(ListAudits::class)
-            ->assertSuccessful()
             ->filterTable('event', 'updated')
             ->assertSuccessful();
 

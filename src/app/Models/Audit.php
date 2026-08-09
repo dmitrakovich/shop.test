@@ -21,6 +21,7 @@ use OwenIt\Auditing\Models\Audit as BaseAudit;
  * @property string|null $tags
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @property-read Model|null $user
  * @property-read Model|null $auditable
  */
