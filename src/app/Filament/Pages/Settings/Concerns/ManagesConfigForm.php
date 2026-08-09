@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings\Concerns;
 
+use App\Enums\Config\ConfigKey;
 use App\Models\Config;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -22,7 +23,7 @@ trait ManagesConfigForm
      */
     public ?array $data = [];
 
-    abstract protected static function configKey(): string;
+    abstract protected static function configKey(): ConfigKey;
 
     abstract protected function getSavedNotificationTitle(): string;
 

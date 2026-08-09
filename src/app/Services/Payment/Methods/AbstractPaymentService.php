@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment\Methods;
 
+use App\Enums\Config\ConfigKey;
 use App\Enums\Order\OrderItemStatus;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
@@ -48,7 +49,7 @@ abstract class AbstractPaymentService
                 'admin_user_id' => Admin::user() ? Admin::user()->id : null,
                 'payment_status_enum_id' => $status,
             ]);
-            $autoOrderStatuses = (bool)(Config::findCacheable('auto_order_statuses')['active'] ?? false);
+            $autoOrderStatuses = (bool)Config::value(ConfigKey::AutoOrderStatuses, 'active', false);
             if ($autoOrderStatuses && $status === OnlinePaymentStatusEnum::SUCCEEDED) {
                 $payment->load('order.items');
                 $payment->order->update(['status' => OrderStatus::PAID]);

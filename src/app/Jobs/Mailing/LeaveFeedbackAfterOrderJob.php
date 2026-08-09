@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Mailing;
 
+use App\Enums\Config\ConfigKey;
 use App\Enums\Order\OrderItemStatus;
 use App\Enums\Order\OrderStatus;
 use App\Models\Config;
@@ -38,7 +39,7 @@ class LeaveFeedbackAfterOrderJob implements ShouldQueue
         Order::query()
             ->where('status', OrderStatus::COMPLETED)
             ->where('status_updated_at', '>', now()->subDays(self::FROM_DAYS))
-            ->where('status_updated_at', '<', now()->subHours((int)Config::findCacheable('feedback')['send_after']))
+            ->where('status_updated_at', '<', now()->subHours((int)Config::value(ConfigKey::Feedback, 'send_after')))
             ->whereRelation('items', 'status', OrderItemStatus::COMPLETED)
             ->whereDoesntHave('mailings', fn (Builder $query) => $query->where('mailing_id', self::MAILING_ID))
             ->with(['user', 'items'])

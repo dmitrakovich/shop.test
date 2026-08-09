@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Sms\Pages;
 
+use App\Enums\Config\ConfigKey;
 use App\Enums\Sms\SmsRoute;
 use App\Filament\Resources\Users\Sms\SmsResource;
 use App\Models\Config;
@@ -128,7 +129,7 @@ class ListSms extends ListRecords
             ])
             ->action(function (array $data): void {
                 Config::query()->updateOrCreate(
-                    ['key' => 'sms'],
+                    ['key' => ConfigKey::Sms],
                     ['config' => ['enabled' => $data['enabled'] ? 'on' : 'off']]
                 );
 
@@ -144,7 +145,7 @@ class ListSms extends ListRecords
      */
     private function smsConfig(): array
     {
-        $config = Config::query()->find('sms');
+        $config = Config::findByKey(ConfigKey::Sms);
 
         return $config instanceof Config ? $config->config : [];
     }

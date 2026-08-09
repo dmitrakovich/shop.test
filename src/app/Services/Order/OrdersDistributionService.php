@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\Admin\Models\Administrator;
+use App\Enums\Config\ConfigKey;
 use App\Enums\Order\OrderStatus;
 use App\Models\Config;
 use App\Models\Logs\OrderDistributionLog;
@@ -21,7 +22,7 @@ class OrdersDistributionService
      */
     public function distributeOrder(Order $order): Order
     {
-        $distribOrderSetup = Config::findCacheable('distrib_order_setup');
+        $distribOrderSetup = Config::findCacheable(ConfigKey::DistribOrderSetup);
         $distributeOrderActive = $distribOrderSetup['active'] ?? false;
         if ($distributeOrderActive) {
             $isEvenDay = date('d') % 2 == 0;

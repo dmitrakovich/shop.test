@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers\OrdersDistribution\Form;
 
+use App\Enums\Config\ConfigKey;
 use App\Models\Config;
 use App\Services\AdministratorService;
 use Encore\Admin\Widgets\Form;
@@ -24,7 +25,7 @@ class SettingsForm extends Form
     public function handle(Request $request)
     {
         $scheduleData = $request->all()['schedule'] ?? [];
-        Config::find('distrib_order_setup')->update(['config' => [
+        Config::findByKeyOrFail(ConfigKey::DistribOrderSetup)->update(['config' => [
             'active' => ($request->input('active') == 'on') ? true : false,
             'schedule' => array_map(
                 function ($item) {
@@ -70,7 +71,7 @@ class SettingsForm extends Form
      */
     public function data()
     {
-        $config = Config::findCacheable('distrib_order_setup');
+        $config = Config::findCacheable(ConfigKey::DistribOrderSetup);
 
         return [
             'active' => (bool)($config['active'] ?? false),

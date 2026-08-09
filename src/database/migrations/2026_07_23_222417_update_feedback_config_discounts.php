@@ -1,16 +1,17 @@
 <?php
 
-use App\Models\Config;
+use App\Enums\Config\ConfigKey;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        Config::query()->updateOrCreate(
-            ['key' => 'feedback'],
+        DB::table('configs')->updateOrInsert(
+            ['key' => ConfigKey::Feedback],
             [
-                'config' => [
+                'config' => json_encode([
                     'discount' => [
                         'photo' => [
                             'BYN' => '10',
@@ -26,17 +27,19 @@ return new class extends Migration
                         ],
                     ],
                     'send_after' => '72',
-                ],
+                ], JSON_THROW_ON_ERROR),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         );
     }
 
     public function down(): void
     {
-        Config::query()->updateOrCreate(
-            ['key' => 'feedback'],
+        DB::table('configs')->updateOrInsert(
+            ['key' => ConfigKey::Feedback],
             [
-                'config' => [
+                'config' => json_encode([
                     'discount' => [
                         'BYN' => '10',
                         'USD' => '5',
@@ -44,7 +47,8 @@ return new class extends Migration
                         'RUB' => '350',
                     ],
                     'send_after' => '72',
-                ],
+                ], JSON_THROW_ON_ERROR),
+                'updated_at' => now(),
             ],
         );
     }

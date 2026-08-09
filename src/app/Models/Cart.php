@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Config\ConfigKey;
 use App\Facades\Device;
 use App\Facades\Sale;
 use App\Models\Promo\Promocode;
@@ -297,7 +298,7 @@ class Cart extends Model
      */
     public function availableInstallment(): bool
     {
-        return $this->getTotalPrice() >= Config::findCacheable('installment')['min_price'];
+        return $this->getTotalPrice() >= Config::value(ConfigKey::Installment, 'min_price');
     }
 
     /**

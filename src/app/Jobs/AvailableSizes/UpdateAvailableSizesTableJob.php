@@ -2,6 +2,7 @@
 
 namespace App\Jobs\AvailableSizes;
 
+use App\Enums\Config\ConfigKey;
 use App\Enums\Order\OrderItemStatus;
 use App\Models\AvailableSizes;
 use App\Models\Brand;
@@ -320,7 +321,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     protected function filterAvailableSizes(array &$availableSizes): int
     {
         $count = 0;
-        $excludeCategories = Config::findCacheable('inventory_blacklist')['categories'];
+        $excludeCategories = Config::value(ConfigKey::InventoryBlacklist, 'categories');
 
         foreach ($availableSizes as $key => $stock) {
             if (empty($stock['sku']) || in_array($stock['category_name'], $excludeCategories)) {

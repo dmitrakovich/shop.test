@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Enums\Config\ConfigKey;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Pages\Settings\Concerns\ManagesConfigForm;
 use Filament\Forms\Components\TextInput;
@@ -22,9 +23,9 @@ class InstallmentSettings extends Page
 
     protected static ?int $navigationSort = 1;
 
-    protected static function configKey(): string
+    protected static function configKey(): ConfigKey
     {
-        return 'installment';
+        return ConfigKey::Installment;
     }
 
     protected function getSavedNotificationTitle(): string

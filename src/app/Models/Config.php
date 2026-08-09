@@ -2,32 +2,23 @@
 
 namespace App\Models;
 
+use App\Enums\Config\ConfigKey;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ItemNotFoundException;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * @property string $key
+ * @property int $id
+ * @property ConfigKey $key
  * @property array $config
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class Config extends Model
+class Config extends Model implements Auditable
 {
-    /**
-     * The primary key associated with the table.
-     */
-    protected $primaryKey = 'key';
-
-    /**
-     * Indicates if the model's ID is auto-incrementing.
-     */
-    public $incrementing = false;
-
-    /**
-     * The data type of the auto-incrementing ID.
-     */
-    protected $keyType = 'string';
+    use AuditableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -37,7 +28,10 @@ class Config extends Model
     /**
      * The attributes that should be cast.
      */
-    protected $casts = ['config' => 'array'];
+    protected $casts = [
+        'key' => ConfigKey::class,
+        'config' => 'array',
+    ];
 
     /**
      * Bootstrap the model and its traits.
@@ -47,32 +41,52 @@ class Config extends Model
         parent::boot();
 
         static::saved(function (self $config) {
-            Cache::forget('config.' . $config->key);
+            Cache::forget('config.' . $config->key->value);
         });
     }
 
+    public static function findByKey(ConfigKey $key): ?self
+    {
+        return self::query()->where('key', $key)->first();
+    }
+
+    public static function findByKeyOrFail(ConfigKey $key): self
+    {
+        return self::query()->where('key', $key)->firstOrFail();
+    }
+
     /**
-     * Find a cached config by its primary key or throw an exception.
+     * Find a cached config by its business key or throw an exception.
+     *
+     * @return array<string, mixed>
      *
      * @throws \Exception
      */
-    public static function findCacheable(string $key): array
+    public static function findCacheable(ConfigKey $key): array
     {
         return Cache::rememberForever(
-            "config.$key",
+            'config.' . $key->value,
             fn () => self::findOrException($key)->config
         );
     }
 
     /**
-     * Find a config by its primary key or throw an exception.
-     *
+     * Read a nested value from a cached config (dot notation), with an optional default.
+     */
+    public static function value(ConfigKey $key, string $path, mixed $default = null): mixed
+    {
+        return data_get(self::findCacheable($key), $path, $default);
+    }
+
+    /**
      * @throws \Exception
      */
-    private static function findOrException(string $key): self
+    private static function findOrException(ConfigKey $key): self
     {
-        if (empty($config = self::query()->find($key))) {
-            throw new ItemNotFoundException("Config with key '$key' not found");
+        $config = self::findByKey($key);
+
+        if ($config === null) {
+            throw new ItemNotFoundException("Config with key '{$key->value}' not found");
         }
 
         return $config;

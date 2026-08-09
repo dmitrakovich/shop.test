@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Info;
 
+use App\Enums\Config\ConfigKey;
 use App\Facades\Currency;
 use App\Models\Config;
 use Illuminate\Http\Request;
@@ -52,6 +53,6 @@ class InstallmentResource extends JsonResource
 
     private function getMinPriceFor3Parts(): float
     {
-        return Config::findCacheable('installment')['min_price_3_parts'] ?? 150;
+        return Config::value(ConfigKey::Installment, 'min_price_3_parts', 150);
     }
 }

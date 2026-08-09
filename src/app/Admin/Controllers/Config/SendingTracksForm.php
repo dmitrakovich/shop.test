@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers\Config;
 
+use App\Enums\Config\ConfigKey;
 use App\Models\Config;
 use Encore\Admin\Widgets\Form;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class SendingTracksForm extends Form
         $requestData['ignore_cities'] = array_filter(array_map(function ($item) {
             return $item ? mb_strtolower($item) : null;
         }, (array)($requestData['ignore_cities'] ?? [])));
-        Config::find('sending_tracks')->update(['config' => $requestData]);
+        Config::findByKeyOrFail(ConfigKey::SendingTracks)->update(['config' => $requestData]);
         admin_success('Конфиг успешно обновлен!');
 
         return back();
@@ -54,6 +55,6 @@ class SendingTracksForm extends Form
      */
     public function data()
     {
-        return Config::findCacheable('sending_tracks');
+        return Config::findCacheable(ConfigKey::SendingTracks);
     }
 }

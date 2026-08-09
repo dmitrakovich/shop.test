@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers\Config;
 
+use App\Enums\Config\ConfigKey;
 use App\Models\Config;
 use Encore\Admin\Widgets\Form;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class NewsletterForm extends Form
     {
         $requestData = $request->all();
         $requestData['active'] = (isset($requestData['active']) && $requestData['active'] === 'on') ? true : false;
-        Config::find('newsletter_register')->update(['config' => $requestData]);
+        Config::findByKeyOrFail(ConfigKey::NewsletterRegister)->update(['config' => $requestData]);
         admin_success('Конфиг успешно обновлен!');
 
         return back();
@@ -52,6 +53,6 @@ class NewsletterForm extends Form
      */
     public function data()
     {
-        return Config::findCacheable('newsletter_register');
+        return Config::findCacheable(ConfigKey::NewsletterRegister);
     }
 }

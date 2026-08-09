@@ -22,7 +22,10 @@ return new class extends Migration
             $table->string($morphPrefix . '_type')->nullable();
             $table->unsignedBigInteger($morphPrefix . '_id')->nullable();
             $table->string('event');
-            $table->morphs('auditable');
+            // String morph id: supports integer PKs and string PKs (Config, Currency).
+            $table->string('auditable_type');
+            $table->string('auditable_id', 255);
+            $table->index(['auditable_type', 'auditable_id']);
             $table->text('old_values')->nullable();
             $table->text('new_values')->nullable();
             $table->text('url')->nullable();

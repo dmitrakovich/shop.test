@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Filament\Settings;
 
+use App\Enums\Config\ConfigKey;
 use App\Enums\Feedback\ReviewDiscountType;
 use App\Filament\Pages\Settings\FeedbackSettings;
 use App\Models\Admin\AdminUser;
@@ -78,7 +79,7 @@ class FeedbackSettingsTest extends TestCase
             ->assertHasNoFormErrors()
             ->assertNotified();
 
-        $config = Config::query()->find('feedback');
+        $config = Config::findByKey(ConfigKey::Feedback);
 
         $this->assertNotNull($config);
         $this->assertSame('12', (string)$config->config['discount'][ReviewDiscountType::Photo->value]['BYN']);

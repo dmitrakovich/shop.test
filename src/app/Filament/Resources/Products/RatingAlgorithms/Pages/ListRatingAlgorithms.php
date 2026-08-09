@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\RatingAlgorithms\Pages;
 
+use App\Enums\Config\ConfigKey;
 use App\Filament\Resources\Products\RatingAlgorithms\RatingAlgorithmResource;
 use App\Jobs\UpdateProductsRatingJob;
 use App\Models\Config;
@@ -59,7 +60,7 @@ class ListRatingAlgorithms extends ListRecords
             ])
             ->action(function (array $data): void {
                 Config::query()->updateOrCreate(
-                    ['key' => 'rating'],
+                    ['key' => ConfigKey::Rating],
                     ['config' => self::normalizeConfig([...self::ratingConfig(), ...$data])]
                 );
 
@@ -90,7 +91,7 @@ class ListRatingAlgorithms extends ListRecords
      */
     private static function ratingConfig(): array
     {
-        return self::normalizeConfig(Config::findCacheable('rating'));
+        return self::normalizeConfig(Config::findCacheable(ConfigKey::Rating));
     }
 
     /**

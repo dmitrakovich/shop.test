@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\Config\ConfigKey;
 use App\Models\Config;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Facades\SmsTraffic;
@@ -67,7 +68,7 @@ abstract class AbstractSmsTraffic extends Notification
      */
     public function checkAvailability(): bool
     {
-        if (Config::findCacheable('sms')['enabled'] === 'off') {
+        if (Config::value(ConfigKey::Sms, 'enabled') === 'off') {
             return false;
         }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Config\ConfigKey;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -73,7 +74,7 @@ return new class extends Migration
         $config = $this->ratingConfig();
 
         DB::table('configs')
-            ->where('key', 'rating')
+            ->where('key', ConfigKey::Rating)
             ->update([
                 'config' => json_encode([
                     'popularity_algorithm_id' => $config['popularity_algorithm_id'] ?? null,
@@ -89,7 +90,7 @@ return new class extends Migration
      */
     private function ratingConfig(): array
     {
-        $config = DB::table('configs')->where('key', 'rating')->value('config');
+        $config = DB::table('configs')->where('key', ConfigKey::Rating)->value('config');
 
         return is_string($config) ? json_decode($config, true, 512, JSON_THROW_ON_ERROR) : [];
     }

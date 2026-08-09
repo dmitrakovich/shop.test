@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Config\ConfigKey;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Arr;
@@ -35,7 +36,7 @@ return new class extends Migration
         $algorithmIds = $this->seedAlgorithms($config);
 
         DB::table('configs')->updateOrInsert(
-            ['key' => 'rating'],
+            ['key' => ConfigKey::Rating],
             [
                 'config' => json_encode($this->normalizeConfig($config, $algorithmIds), JSON_THROW_ON_ERROR),
                 'created_at' => now(),
@@ -58,7 +59,7 @@ return new class extends Migration
      */
     private function ratingConfig(): array
     {
-        $config = DB::table('configs')->where('key', 'rating')->value('config');
+        $config = DB::table('configs')->where('key', ConfigKey::Rating)->value('config');
 
         return is_string($config) ? json_decode($config, true, 512, JSON_THROW_ON_ERROR) : [];
     }

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Filament\Settings;
 
+use App\Enums\Config\ConfigKey;
 use App\Filament\Pages\Settings\InstallmentSettings;
 use App\Models\Admin\AdminUser;
 use App\Models\Config;
@@ -51,7 +52,7 @@ class InstallmentSettingsTest extends TestCase
             ->assertHasNoFormErrors()
             ->assertNotified();
 
-        $config = Config::query()->find('installment');
+        $config = Config::findByKey(ConfigKey::Installment);
 
         $this->assertNotNull($config);
         $this->assertSame('150.5', (string)$config->config['min_price']);

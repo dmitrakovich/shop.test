@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Config\ConfigKey;
 use App\Enums\Product\RatingFactor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -77,7 +78,7 @@ class RatingAlgorithm extends Model
 
     public function isUsedInRatingConfig(): bool
     {
-        $config = Config::findCacheable('rating');
+        $config = Config::findCacheable(ConfigKey::Rating);
 
         $algorithmIds = array_values(array_unique(array_filter([
             (int)($config['popularity_algorithm_id'] ?? 0),

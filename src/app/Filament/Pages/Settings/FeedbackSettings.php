@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Enums\Config\ConfigKey;
 use App\Enums\Feedback\ReviewDiscountType;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Pages\Settings\Concerns\ManagesConfigForm;
@@ -24,9 +25,9 @@ class FeedbackSettings extends Page
 
     protected static ?int $navigationSort = 2;
 
-    protected static function configKey(): string
+    protected static function configKey(): ConfigKey
     {
-        return 'feedback';
+        return ConfigKey::Feedback;
     }
 
     protected function getSavedNotificationTitle(): string

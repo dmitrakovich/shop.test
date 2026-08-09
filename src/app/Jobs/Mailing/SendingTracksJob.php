@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Mailing;
 
+use App\Enums\Config\ConfigKey;
 use App\Models\Config;
 use App\Models\Orders\Order;
 use App\Notifications\SendingTracksSms;
@@ -28,7 +29,7 @@ class SendingTracksJob implements ShouldQueue
      */
     public function handle()
     {
-        $config = Config::findCacheable('sending_tracks');
+        $config = Config::findCacheable(ConfigKey::SendingTracks);
         if (!empty($config) && $config['active']) {
             Order::query()
                 ->whereHas('items', fn (Builder $query) => $query->whereHas('statusLog', fn (Builder $query) => $query->where('sended_at', '>', now()->subDays(1))))

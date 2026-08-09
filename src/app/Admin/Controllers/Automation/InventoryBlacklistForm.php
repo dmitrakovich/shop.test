@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers\Automation;
 
+use App\Enums\Config\ConfigKey;
 use App\Models\Config;
 use Encore\Admin\Widgets\Form;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class InventoryBlacklistForm extends Form
      */
     public function handle(Request $request)
     {
-        Config::find('inventory_blacklist')->update(['config' => [
+        Config::findByKeyOrFail(ConfigKey::InventoryBlacklist)->update(['config' => [
             'categories' => $request->input('categories')['values'],
         ]]);
 
@@ -54,6 +55,6 @@ class InventoryBlacklistForm extends Form
      */
     public function data()
     {
-        return Config::findCacheable('inventory_blacklist');
+        return Config::findCacheable(ConfigKey::InventoryBlacklist);
     }
 }

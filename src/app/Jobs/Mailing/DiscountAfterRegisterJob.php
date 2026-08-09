@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Mailing;
 
+use App\Enums\Config\ConfigKey;
 use App\Models\Config;
 use App\Models\User\User;
 use App\Notifications\DiscountAfterRegisterSms;
@@ -28,7 +29,7 @@ class DiscountAfterRegisterJob implements ShouldQueue
      */
     public function handle()
     {
-        $config = Config::findCacheable('newsletter_register');
+        $config = Config::findCacheable(ConfigKey::NewsletterRegister);
         if ($config['active']) {
             User::query()
                 ->where('created_at', '>', now()->subDays($config['to_days']))

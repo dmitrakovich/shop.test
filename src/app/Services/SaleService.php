@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Data\Order\OrderData;
+use App\Enums\Config\ConfigKey;
 use App\Enums\Feedback\ReviewDiscountType;
 use App\Enums\Promo\SaleAlgorithm;
 use App\Enums\Promo\SettingType;
@@ -203,7 +204,7 @@ class SaleService
     private function getReviewDiscount(ReviewDiscountType $type): ?float
     {
         $currency = Currency::getCurrentCurrency();
-        $discount = Config::findCacheable('feedback')['discount'][$type->value][$currency->code];
+        $discount = Config::value(ConfigKey::Feedback, "discount.{$type->value}.{$currency->code}");
 
         return $discount ? $discount / $currency->rate : null;
     }

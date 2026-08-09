@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\Config\ConfigKey;
 use App\Enums\Product\RatingFactor;
 use App\Models\Config;
 use App\Models\RatingAlgorithm;
@@ -18,8 +19,6 @@ class UpdateProductsRatingJob extends AbstractJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private const string CONFIG_KEY = 'rating';
-
     /**
      * Execute the job.
      *
@@ -29,7 +28,7 @@ class UpdateProductsRatingJob extends AbstractJob
     {
         $this->log('Старт');
 
-        $configModel = Config::query()->findOrFail(self::CONFIG_KEY);
+        $configModel = Config::findByKeyOrFail(ConfigKey::Rating);
         $config = $this->normalizeConfig($configModel->config);
         $algorithms = $this->getAlgorithms($config);
         $products = $this->getProductsData();

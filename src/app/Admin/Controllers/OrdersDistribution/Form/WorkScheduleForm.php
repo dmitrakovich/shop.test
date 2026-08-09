@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers\OrdersDistribution\Form;
 
+use App\Enums\Config\ConfigKey;
 use App\Models\Config;
 use App\Models\WorkSchedule;
 use App\Services\AdministratorService;
@@ -43,7 +44,7 @@ class WorkScheduleForm extends Form
      */
     public function form()
     {
-        $distribOrderSetup = Config::findCacheable('distrib_order_setup');
+        $distribOrderSetup = Config::findCacheable(ConfigKey::DistribOrderSetup);
         $admins = app(AdministratorService::class)->getAdministratorList();
         $date = request()->input('date') ?? date('Y-m');
         $workSchedules = WorkSchedule::select('admin_user_id', 'date')->whereBetween(

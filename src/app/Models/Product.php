@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Config\ConfigKey;
 use App\Enums\Product\ProductLabel;
 use App\Enums\Product\ProductRatingColumn;
 use App\Enums\Product\ProductSort;
@@ -572,7 +573,7 @@ class Product extends Model implements Auditable, HasMedia
      */
     public function availableInstallment(): bool
     {
-        return $this->getPrice() >= Config::findCacheable('installment')['min_price'];
+        return $this->getPrice() >= Config::value(ConfigKey::Installment, 'min_price');
     }
 
     /**
