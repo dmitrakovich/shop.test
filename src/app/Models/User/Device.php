@@ -271,4 +271,12 @@ class Device extends Model implements ClientInterface
             'agent' => 'Console',
         ]);
     }
+
+    /**
+     * Used by laravel-auditing when Device is stored as the audit actor.
+     */
+    public function getAuthIdentifier(): mixed
+    {
+        return $this->getKey();
+    }
 }

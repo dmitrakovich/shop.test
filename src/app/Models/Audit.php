@@ -78,6 +78,10 @@ class Audit extends BaseAudit
             return null;
         }
 
+        if ($user instanceof \App\Models\User\Device) {
+            return 'Device #' . $user->getKey();
+        }
+
         if (isset($user->name) && filled($user->name)) {
             $label = (string)$user->name;
 
@@ -94,6 +98,10 @@ class Audit extends BaseAudit
 
         if (isset($user->email) && filled($user->email)) {
             return (string)$user->email;
+        }
+
+        if (isset($user->first_name) && filled($user->first_name)) {
+            return (string)$user->first_name;
         }
 
         return class_basename($user) . ' #' . $user->getKey();

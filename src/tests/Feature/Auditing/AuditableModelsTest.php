@@ -6,10 +6,13 @@ use App\Models\Admin\AdminUser;
 use App\Models\Audit;
 use App\Models\ShortLink;
 use App\Models\User\Address;
+use App\Models\User\Device;
 use App\Models\User\Group;
 use App\Models\User\User;
+use App\Facades\Device as DeviceFacade;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
+use ReflectionProperty;
 use Tests\TestCase;
 
 class AuditableModelsTest extends TestCase
@@ -76,8 +79,49 @@ class AuditableModelsTest extends TestCase
         $this->assertSame('Audit Updated', $updated->new_values['name'] ?? null);
     }
 
+    public function test_guest_device_is_recorded_on_audit(): void
+    {
+        (new ReflectionProperty(DeviceFacade::class, 'currentDevice'))->setValue(null);
+
+        $device = Device::query()->create([
+            'api_id' => '8d854825-6753-4a16-9056-9f36b7ac7b90',
+            'type' => \App\Enums\Device\DeviceType::MOBILE,
+            'ip_address' => '127.0.0.1',
+            'agent' => 'PHPUnit',
+        ]);
+
+        DeviceFacade::setDevice($device);
+
+        $group = Group::query()->create([
+            'name' => 'Guest device audit group',
+            'discount' => 1,
+        ]);
+
+        $audit = Audit::query()
+            ->where('auditable_type', Group::class)
+            ->where('auditable_id', $group->id)
+            ->where('event', 'created')
+            ->latest('id')
+            ->first();
+
+        $this->assertNotNull($audit);
+        $this->assertSame($device->id, (int)$audit->user_id);
+        $this->assertSame($device->getMorphClass(), $audit->user_type);
+        $this->assertSame('Device #' . $device->id, $audit->getUserLabel());
+    }
+
     public function test_sanctum_authenticated_user_is_recorded_on_audit(): void
     {
+        (new ReflectionProperty(DeviceFacade::class, 'currentDevice'))->setValue(null);
+
+        $device = Device::query()->create([
+            'api_id' => '8d854825-6753-4a16-9056-9f36b7ac7b91',
+            'type' => \App\Enums\Device\DeviceType::MOBILE,
+            'ip_address' => '127.0.0.1',
+            'agent' => 'PHPUnit',
+        ]);
+        DeviceFacade::setDevice($device);
+
         $group = Group::query()->create([
             'name' => 'Sanctum audit group',
             'discount' => 0,
