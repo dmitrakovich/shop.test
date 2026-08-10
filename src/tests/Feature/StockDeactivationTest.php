@@ -105,4 +105,18 @@ class StockDeactivationTest extends TestCase
             return (new ReflectionProperty($job, 'syncFromOneC'))->getValue($job) === false;
         });
     }
+
+    public function test_reactivating_stock_dispatches_availability_sync_from_one_c(): void
+    {
+        Bus::fake([UpdateAvailabilityJob::class]);
+
+        $this->shop->update(['is_active' => false]);
+        Bus::assertDispatchedTimes(UpdateAvailabilityJob::class, 1);
+
+        $this->shop->update(['is_active' => true]);
+
+        Bus::assertDispatched(UpdateAvailabilityJob::class, function (UpdateAvailabilityJob $job) {
+            return (new ReflectionProperty($job, 'syncFromOneC'))->getValue($job) === true;
+        });
+    }
 }

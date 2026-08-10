@@ -78,7 +78,7 @@ class Audit extends BaseAudit
             return null;
         }
 
-        if ($user instanceof \App\Models\User\Device) {
+        if ($user instanceof User\Device) {
             return 'Device #' . $user->getKey();
         }
 

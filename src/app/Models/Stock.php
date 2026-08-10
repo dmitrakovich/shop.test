@@ -105,10 +105,18 @@ class Stock extends Model implements Auditable, HasMedia, Sortable
         });
 
         static::updated(function (Stock $stock) {
-            if ($stock->wasChanged('is_active') && !$stock->is_active) {
+            if (!$stock->wasChanged('is_active')) {
+                return;
+            }
+
+            if (!$stock->is_active) {
                 AvailableSizes::query()->where('stock_id', $stock->id)->delete();
                 UpdateAvailabilityJob::dispatch(app(LogService::class), syncFromOneC: false);
+
+                return;
             }
+
+            UpdateAvailabilityJob::dispatch(app(LogService::class), syncFromOneC: true);
         });
     }
 
