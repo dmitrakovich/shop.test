@@ -25,9 +25,11 @@ class StocksController extends Controller
         $stockIds = empty($sizeField) ? [] : AvailableSizes::query()
             ->where('product_id', $productId)
             ->where($sizeField, '>', 0)
+            ->whereHas('stock', fn ($query) => $query->active())
             ->pluck('stock_id')
             ->toArray();
 
+        $currentStockId = null;
         if ($orderItemId = $request->input('orderItemId')) {
             /** @var OrderItem|null $orderItem */
             $orderItem = OrderItem::query()->find($orderItemId);
@@ -40,6 +42,10 @@ class StocksController extends Controller
 
         return Stock::query()
             ->whereIn('id', $stockIds)
+            ->where(fn ($query) => $query->active()->when(
+                $currentStockId,
+                fn ($query) => $query->orWhere('id', $currentStockId)
+            ))
             ->get(['id', 'internal_name as text'])
             ->each(fn (Stock $stock) => $stock->setAppends([]))
             ->toArray();

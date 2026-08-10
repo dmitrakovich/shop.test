@@ -169,6 +169,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
     protected function setCurrentStockIds(): void
     {
         $this->stockIds = Stock::query()
+            ->active()
             ->where('check_availability', true)
             ->whereNotNull('one_c_id')
             ->pluck('id', 'one_c_id')

@@ -16,6 +16,7 @@ class ShopPvz extends AbstractDeliveryMethod
     public function getAdditionalInfo(): View|string|null
     {
         $shops = Stock::query()
+            ->active()
             ->where('type', StockTypeEnum::SHOP)
             ->pluck('address', 'id');
 

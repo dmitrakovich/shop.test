@@ -5,7 +5,7 @@ namespace App\Http\Resources\Product;
 use App\Enums\StockTypeEnum;
 use App\Http\Resources\Price\ProductPricesResource;
 use App\Models\AvailableSizes;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,7 +22,12 @@ class ProductResource extends JsonResource
     public function toArray(Request $request): array
     {
         $this->load([
-            'availableSizes' => fn (Builder $query) => $query->whereRelation('stock', 'type', StockTypeEnum::SHOP),
+            'availableSizes' => fn (Builder $query) => $query->whereHas(
+                'stock',
+                fn (Builder $stockQuery) => $stockQuery
+                    ->where('type', StockTypeEnum::SHOP)
+                    ->where('is_active', true)
+            ),
             'availableSizes.stock.city',
         ]);
 

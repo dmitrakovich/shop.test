@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Enums\StockTypeEnum;
+use App\Jobs\AvailableSizes\UpdateAvailabilityJob;
 use App\Models\Bots\Telegram\TelegramChat;
+use App\Services\LogService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -35,6 +37,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property float|null $geo_latitude
  * @property float|null $geo_longitude
  * @property bool $check_availability
+ * @property bool $is_active
  * @property int $sorting
  * @property int $site_sorting Сортировка на сайте
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -47,6 +50,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Stock ordered(string $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Stock active()
  */
 class Stock extends Model implements Auditable, HasMedia, Sortable
 {
@@ -81,6 +85,7 @@ class Stock extends Model implements Auditable, HasMedia, Sortable
         'type' => StockTypeEnum::class,
         'has_pickup' => 'boolean',
         'check_availability' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public $sortable = [
@@ -98,6 +103,23 @@ class Stock extends Model implements Auditable, HasMedia, Sortable
         static::addGlobalScope('order', function (Builder $builder) {
             $builder->orderBy('sorting', 'asc');
         });
+
+        static::updated(function (Stock $stock) {
+            if ($stock->wasChanged('is_active') && !$stock->is_active) {
+                AvailableSizes::query()->where('stock_id', $stock->id)->delete();
+                UpdateAvailabilityJob::dispatch(app(LogService::class), syncFromOneC: false);
+            }
+        });
+    }
+
+    /**
+     * Scope a query to only include active stocks/shops.
+     *
+     * @param  Builder<Stock>  $query
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('is_active', true);
     }
 
     /**

@@ -92,7 +92,7 @@ class OrderItemStatusController extends AbstractAdminController
             }, 'Номер заказа', 'order_id');
 
             $filter->in('stock_id', 'Склад')->multipleSelect(
-                Stock::query()->where('check_availability', true)->pluck('internal_name', 'id')
+                Stock::query()->active()->where('check_availability', true)->pluck('internal_name', 'id')
             );
         };
     }

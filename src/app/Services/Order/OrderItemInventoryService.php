@@ -126,6 +126,7 @@ class OrderItemInventoryService
         $availableSizes = AvailableSizes::query()
             ->where('product_id', $orderItem->product_id)
             ->when($stockId, fn (Builder $query) => $query->where('stock_id', $stockId))
+            ->whereHas('stock', fn (Builder $query) => $query->where('is_active', true))
             ->where($sizeField, '>', 0)
             ->get(['id', 'stock_id', $sizeField, DB::raw("$totalQuery as total")])
             ->sortByDesc($this->getStocksPriority($sizeField));
@@ -175,13 +176,17 @@ class OrderItemInventoryService
             return;
         }
 
-        $stockItemsQuery = AvailableSizes::query()->select(['product_id', 'stock_id']);
-        $orderItems->each(function (OrderItem $orderItem) use ($stockItemsQuery) {
-            $stockItemsQuery->orWhere(function (Builder $query) use ($orderItem) {
-                $sizeField = AvailableSizes::convertSizeIdToField($orderItem->size_id);
-                $query->where('product_id', $orderItem->product_id)->where($sizeField, '>', 0);
+        $stockItemsQuery = AvailableSizes::query()
+            ->select(['product_id', 'stock_id'])
+            ->whereHas('stock', fn (Builder $query) => $query->where('is_active', true))
+            ->where(function (Builder $query) use ($orderItems) {
+                $orderItems->each(function (OrderItem $orderItem) use ($query) {
+                    $query->orWhere(function (Builder $inner) use ($orderItem) {
+                        $sizeField = AvailableSizes::convertSizeIdToField($orderItem->size_id);
+                        $inner->where('product_id', $orderItem->product_id)->where($sizeField, '>', 0);
+                    });
+                });
             });
-        });
 
         $inventory = [];
         $stockItemsQuery->each(function (AvailableSizes $stockItem) use (&$inventory) {

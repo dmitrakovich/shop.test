@@ -16,7 +16,11 @@ class StockService
      */
     public function getShops(): Collection
     {
-        return Stock::where('type', StockTypeEnum::SHOP)->orderBy('site_sorting', 'asc')->get();
+        return Stock::query()
+            ->active()
+            ->where('type', StockTypeEnum::SHOP)
+            ->orderBy('site_sorting', 'asc')
+            ->get();
     }
 
     /**
@@ -26,8 +30,8 @@ class StockService
      */
     public function getCitiesWithShops(): Collection
     {
-        return City::whereHas('stocks', fn ($query) => $query->where('type', StockTypeEnum::SHOP))
-            ->with(['stocks' => fn ($query) => $query->where('type', StockTypeEnum::SHOP)->orderBy('site_sorting', 'asc')])
+        return City::whereHas('stocks', fn ($query) => $query->where('is_active', true)->where('type', StockTypeEnum::SHOP))
+            ->with(['stocks' => fn ($query) => $query->where('is_active', true)->where('type', StockTypeEnum::SHOP)->orderBy('site_sorting', 'asc')])
             ->get();
     }
 }

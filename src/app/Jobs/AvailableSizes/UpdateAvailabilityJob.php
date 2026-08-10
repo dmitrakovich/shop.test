@@ -29,7 +29,10 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      *
      * @return void
      */
-    public function __construct(private readonly LogService $logService) {}
+    public function __construct(
+        private readonly LogService $logService,
+        private readonly bool $syncFromOneC = true,
+    ) {}
 
     /**
      * Execute the job.
@@ -38,7 +41,9 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
      */
     public function handle()
     {
-        UpdateAvailableSizesTableJob::dispatchSync();
+        if ($this->syncFromOneC) {
+            UpdateAvailableSizesTableJob::dispatchSync();
+        }
 
         $this->updateProductsOneCIdFromAvailableSizes();
 
