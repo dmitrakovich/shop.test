@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use App\Enums\StockTypeEnum;
+use App\Enums\StockType;
 use App\Models\Bots\Telegram\TelegramChat;
+use Database\Factories\StockFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Collection;
@@ -22,7 +24,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $city_id
  * @property int|null $private_chat_id
  * @property int|null $group_chat_id
- * @property \App\Enums\StockTypeEnum $type
+ * @property \App\Enums\StockType $type
  * @property string $name
  * @property string $internal_name
  * @property string|null $description
@@ -35,6 +37,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property float|null $geo_latitude
  * @property float|null $geo_longitude
  * @property bool $check_availability
+ * @property bool $is_active
  * @property int $sorting
  * @property int $site_sorting Сортировка на сайте
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -47,10 +50,15 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Stock ordered(string $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Stock active()
  */
 class Stock extends Model implements Auditable, HasMedia, Sortable
 {
     use AuditableTrait;
+
+    /** @use HasFactory<StockFactory> */
+    use HasFactory;
+
     use InteractsWithMedia, SortableTrait;
 
     /**
@@ -78,9 +86,10 @@ class Stock extends Model implements Auditable, HasMedia, Sortable
      * The attributes that should be cast.
      */
     protected $casts = [
-        'type' => StockTypeEnum::class,
+        'type' => StockType::class,
         'has_pickup' => 'boolean',
         'check_availability' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public $sortable = [
@@ -98,6 +107,14 @@ class Stock extends Model implements Auditable, HasMedia, Sortable
         static::addGlobalScope('order', function (Builder $builder) {
             $builder->orderBy('sorting', 'asc');
         });
+    }
+
+    /**
+     * @param  Builder<Stock>  $query
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('is_active', true);
     }
 
     /**

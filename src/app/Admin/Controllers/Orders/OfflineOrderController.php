@@ -3,7 +3,7 @@
 namespace App\Admin\Controllers\Orders;
 
 use App\Admin\Controllers\AbstractAdminController;
-use App\Enums\StockTypeEnum;
+use App\Enums\StockType;
 use App\Filament\Resources\Users\Users\UserResource;
 use App\Models\Orders\OfflineOrder;
 use App\Models\Stock;
@@ -52,7 +52,7 @@ class OfflineOrderController extends AbstractAdminController
         $grid->filter(function (Filter $filter) {
             $filter->disableIdFilter();
             $filter->between('sold_at', 'Дата')->datetime();
-            $filter->equal('stock_id', 'Магазин')->select(Stock::query()->where('type', StockTypeEnum::SHOP)->pluck('address', 'id'));
+            $filter->equal('stock_id', 'Магазин')->select(Stock::query()->where('type', StockType::SHOP)->pluck('address', 'id'));
             $filter->like('user_phone', 'Телефон');
             $filter->where(function ($query) {
                 $query->where('product_id', 'like', "%{$this->input}%")

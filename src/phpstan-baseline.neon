@@ -55,18 +55,6 @@ parameters:
 			path: app/Enums/Payment/OnlinePaymentStatusEnum.php
 
 		-
-			message: '#^Method App\\Enums\\StockTypeEnum\:\:list\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Enums/StockTypeEnum.php
-
-		-
-			message: '#^Method App\\Enums\\StockTypeEnum\:\:name\(\) never returns null so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: app/Enums/StockTypeEnum.php
-
-		-
 			message: '#^Property App\\Events\\Analytics\\AbstractAnalyticEvent\:\:\$visitId \(string\|null\) does not accept int\.$#'
 			identifier: assign.propertyType
 			count: 1

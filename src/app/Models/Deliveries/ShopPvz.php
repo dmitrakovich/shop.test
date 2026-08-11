@@ -2,8 +2,7 @@
 
 namespace Deliveries;
 
-use App\Enums\StockTypeEnum;
-use App\Models\Stock;
+use App\Repositories\StockRepository;
 use Illuminate\Contracts\View\View;
 
 class ShopPvz extends AbstractDeliveryMethod
@@ -15,9 +14,7 @@ class ShopPvz extends AbstractDeliveryMethod
 
     public function getAdditionalInfo(): View|string|null
     {
-        $shops = Stock::query()
-            ->where('type', StockTypeEnum::SHOP)
-            ->pluck('address', 'id');
+        $shops = app(StockRepository::class)->shopAddressOptions();
 
         return view('shop.deliveries.additional-info.shop-pvz', compact('shops'));
     }

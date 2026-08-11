@@ -15,7 +15,6 @@ use App\Admin\Controllers\OrderItemController;
 use App\Admin\Controllers\Orders\OfflineOrderController;
 use App\Admin\Controllers\OrdersDistribution\SettingsController;
 use App\Admin\Controllers\OrdersDistribution\StatisticController;
-use App\Admin\Controllers\StockController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\Shop\OrderController;
 use Encore\Admin\Facades\Admin;
@@ -66,8 +65,6 @@ Route::group([
         $router->resource('batches', Departures\BatchController::class);
         $router->resource('track-numbers', Departures\OrderTrackController::class);
     });
-
-    $router->resource('stock', StockController::class);
 
     // Automation
     $router->group(['prefix' => 'automation', 'as' => 'automation.'], function (Router $router) {

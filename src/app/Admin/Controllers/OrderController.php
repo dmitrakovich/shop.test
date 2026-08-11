@@ -19,7 +19,6 @@ use App\Enums\Order\OrderMethod;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Order\OrderTypeEnum;
 use App\Enums\Order\UtmEnum;
-use App\Enums\StockTypeEnum;
 use App\Events\Analytics\OfflinePurchase;
 use App\Events\Order\OrderCreated;
 use App\Facades\Currency as CurrencyFacade;
@@ -31,8 +30,8 @@ use App\Models\Orders\OrderItemExtended;
 use App\Models\Payments\Installment;
 use App\Models\Payments\OnlinePayment;
 use App\Models\Product;
-use App\Models\Stock;
 use App\Models\User\User;
+use App\Repositories\StockRepository;
 use App\Services\AdministratorService;
 use App\Services\Order\OrderItemInventoryService;
 use Deliveries\DeliveryMethod;
@@ -279,7 +278,9 @@ class OrderController extends AbstractAdminController
             }
 
             $form->select('delivery_id', 'Способ доставки')->options(DeliveryMethod::query()->pluck('name', 'id'));
-            $form->select('stock_id', 'Адрес ПВЗ для выдачи')->options(Stock::query()->where('type', StockTypeEnum::SHOP)->pluck('address', 'id'));
+            $form->select('stock_id', 'Адрес ПВЗ для выдачи')->options(
+                app(StockRepository::class)->shopAddressOptions($order?->stock_id)
+            );
             $form->text('track.track_number', 'Трек номер');
             $form->url('track.track_link', 'Ссылка на трек номер');
             $form->currency('weight', 'Вес заказа')->symbol('Кг');

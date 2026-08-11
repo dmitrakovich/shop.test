@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auditing;
 
+use App\Facades\Device as DeviceFacade;
 use App\Models\Admin\AdminUser;
 use App\Models\Audit;
 use App\Models\ShortLink;
@@ -9,7 +10,6 @@ use App\Models\User\Address;
 use App\Models\User\Device;
 use App\Models\User\Group;
 use App\Models\User\User;
-use App\Facades\Device as DeviceFacade;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use ReflectionProperty;

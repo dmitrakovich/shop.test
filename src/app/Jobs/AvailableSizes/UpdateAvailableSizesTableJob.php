@@ -10,7 +10,7 @@ use App\Models\Category;
 use App\Models\Config;
 use App\Models\DefectiveProduct;
 use App\Models\Orders\OrderItem;
-use App\Models\Stock;
+use App\Repositories\StockRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -168,11 +168,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
      */
     protected function setCurrentStockIds(): void
     {
-        $this->stockIds = Stock::query()
-            ->where('check_availability', true)
-            ->whereNotNull('one_c_id')
-            ->pluck('id', 'one_c_id')
-            ->toArray();
+        $this->stockIds = app(StockRepository::class)->oneCIdMapForAvailabilitySync();
     }
 
     /**

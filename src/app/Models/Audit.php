@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Audit\AuditEvent;
+use App\Models\User\Device;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Models\Audit as BaseAudit;
 
@@ -78,7 +79,7 @@ class Audit extends BaseAudit
             return null;
         }
 
-        if ($user instanceof \App\Models\User\Device) {
+        if ($user instanceof Device) {
             return 'Device #' . $user->getKey();
         }
 

@@ -10,9 +10,9 @@ use App\Http\Resources\Product\CatalogProductResource;
 use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\InfoPage;
 use App\Repositories\BannerRepository;
+use App\Repositories\StockRepository;
 use App\Services\GoogleTagManagerService;
 use App\Services\SliderService;
-use App\Services\StockService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class InfoPageController extends Controller
@@ -49,8 +49,8 @@ class InfoPageController extends Controller
     /**
      * Display shops resource.
      */
-    public function shops(StockService $stockService): AnonymousResourceCollection
+    public function shops(StockRepository $stockRepository): AnonymousResourceCollection
     {
-        return ShopResource::collection($stockService->getShops());
+        return ShopResource::collection($stockRepository->getShops());
     }
 }

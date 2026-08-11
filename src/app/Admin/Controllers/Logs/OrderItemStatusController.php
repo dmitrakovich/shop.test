@@ -5,7 +5,7 @@ namespace App\Admin\Controllers\Logs;
 use App\Admin\Controllers\AbstractAdminController;
 use App\Models\Logs\OrderItemStatusLog;
 use App\Models\Orders\OrderItem;
-use App\Models\Stock;
+use App\Repositories\StockRepository;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
 use Encore\Admin\Grid\Row;
@@ -92,7 +92,7 @@ class OrderItemStatusController extends AbstractAdminController
             }, 'Номер заказа', 'order_id');
 
             $filter->in('stock_id', 'Склад')->multipleSelect(
-                Stock::query()->where('check_availability', true)->pluck('internal_name', 'id')
+                app(StockRepository::class)->availabilityCheckInternalNames()
             );
         };
     }
