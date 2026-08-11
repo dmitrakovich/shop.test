@@ -21,7 +21,6 @@ class StockRepository
         return $this->model->newQuery()
             ->active()
             ->where('type', StockType::SHOP)
-            ->orderBy('site_sorting', 'asc')
             ->get();
     }
 
@@ -38,8 +37,7 @@ class StockRepository
             ->with([
                 'stocks' => fn ($query) => $query
                     ->where('is_active', true)
-                    ->where('type', StockType::SHOP)
-                    ->orderBy('site_sorting', 'asc'),
+                    ->where('type', StockType::SHOP),
             ])
             ->get();
     }

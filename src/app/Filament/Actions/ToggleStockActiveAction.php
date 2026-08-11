@@ -25,11 +25,16 @@ class ToggleStockActiveAction
                 ? 'Склад скроется с сайта и из ПВЗ. Наличие будет синхронизировано с 1С и каталог пересчитан сразу после подтверждения.'
                 : 'Склад снова появится на сайте. Наличие будет синхронизировано с 1С и каталог пересчитан сразу после подтверждения.')
             ->modalSubmitActionLabel(fn (Stock $record): string => $record->is_active ? 'Отключить и пересчитать' : 'Включить и пересчитать')
-            ->action(function (Stock $record, LogService $logService): void {
+            ->action(function (Stock $record, LogService $logService, mixed $livewire): void {
                 $activating = !$record->is_active;
 
                 $record->update(['is_active' => $activating]);
                 UpdateAvailabilityJob::dispatchSync($logService);
+                $record->refresh();
+
+                if (method_exists($livewire, 'refreshFormData')) {
+                    $livewire->refreshFormData(['is_active']);
+                }
 
                 Notification::make()
                     ->title($activating ? 'Склад включён, каталог пересчитан' : 'Склад отключён, каталог пересчитан')

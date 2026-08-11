@@ -105,7 +105,7 @@ class Stock extends Model implements Auditable, HasMedia, Sortable
     {
         parent::boot();
         static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('sorting', 'asc');
+            $builder->orderBy('site_sorting', 'asc');
         });
     }
 
