@@ -59,6 +59,12 @@ class StockForm
                                 $record->is_active => 'Активен — виден на сайте и в ПВЗ',
                                 default => 'Отключён — скрыт с сайта и из ПВЗ',
                             })
+                            ->badge()
+                            ->color(fn (?Stock $record): string => match (true) {
+                                $record?->is_active === true => 'success',
+                                $record?->is_active === false => 'danger',
+                                default => 'gray',
+                            })
                             ->helperText('Чтобы изменить статус с пересчётом каталога, нажмите «Отключить» или «Включить» в шапке страницы.')
                             ->visibleOn('edit'),
                     ])
