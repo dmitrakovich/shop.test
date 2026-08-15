@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\Filterable;
-use App\Traits\AttributeFilterTrait;
+use App\Traits\Filterable as FilterableTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -49,7 +49,7 @@ use Spatie\EloquentSortable\SortableTrait;
  */
 class Category extends Model implements Auditable, Filterable, Sortable
 {
-    use AttributeFilterTrait, AuditableTrait, NodeTrait, SoftDeletes, SortableTrait;
+    use FilterableTrait, AuditableTrait, NodeTrait, SoftDeletes, SortableTrait;
 
     /**
      * @var list<string>

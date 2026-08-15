@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\Filterable;
-use App\Traits\AttributeFilterTrait;
+use App\Traits\Filterable as FilterableTrait;
 use Database\Factories\TagFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,7 +29,7 @@ use Illuminate\Support\Carbon;
  */
 class Tag extends Model implements Filterable
 {
-    use AttributeFilterTrait;
+    use FilterableTrait;
 
     /** @use HasFactory<TagFactory> */
     use HasFactory;

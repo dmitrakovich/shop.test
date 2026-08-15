@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\Filterable;
-use App\Traits\AttributeFilterTrait;
+use App\Traits\Filterable as FilterableTrait;
 use Database\Factories\ColorFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  */
 class Color extends Model implements Filterable
 {
-    use AttributeFilterTrait;
+    use FilterableTrait;
 
     /** @use HasFactory<ColorFactory> */
     use HasFactory;

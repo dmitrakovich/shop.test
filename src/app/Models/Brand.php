@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\Filterable;
-use App\Traits\AttributeFilterTrait;
+use App\Traits\Filterable as FilterableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -25,7 +25,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class Brand extends Model implements Auditable, Filterable
 {
-    use AttributeFilterTrait;
+    use FilterableTrait;
     use AuditableTrait;
 
     /**

@@ -5,7 +5,7 @@ namespace App\Models\ProductAttributes;
 use App\Contracts\Filterable;
 use App\Facades\Currency;
 use App\Models\Url;
-use App\Traits\AttributeFilterTrait;
+use App\Traits\Filterable as FilterableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
  */
 class Price extends Model implements Filterable
 {
-    use AttributeFilterTrait;
+    use FilterableTrait;
 
     /**
      * Indicates if all mass assignment is enabled.

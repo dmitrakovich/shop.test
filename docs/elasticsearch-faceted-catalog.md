@@ -206,7 +206,7 @@ Horizon queue `elasticsearch` (prod supervisor `maxProcesses: 1`).
 | PDP (still v1) | `Http/Controllers/Api/CatalogController.php::show` |
 | Hydrate / paginate | `Services/CatalogService.php` |
 | ES document / index / search | `Services/Elasticsearch/*` |
-| Filterable ES clauses | `Contracts/Filterable.php`, attribute models + `AttributeFilterTrait` |
+| Filterable ES clauses | `Contracts/Filterable.php`, `Traits/Filterable` (as `FilterableTrait`) |
 | Facet list / names | `Enums/Catalog/CatalogFacetName.php` (`model()` → Filterable) |
 | Facet hydrate | `Services/Elasticsearch/CatalogFacetService.php` |
 | Category API resource | `Http/Resources/Product/CategoryResource.php` |

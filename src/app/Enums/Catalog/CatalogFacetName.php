@@ -13,7 +13,6 @@ use App\Models\Season;
 use App\Models\Size;
 use App\Models\Style;
 use App\Models\Tag;
-use Illuminate\Database\Eloquent\Model;
 
 enum CatalogFacetName: string
 {
@@ -32,7 +31,7 @@ enum CatalogFacetName: string
     /**
      * Filterable Eloquent model for this facet.
      *
-     * @return class-string<Model>
+     * @return class-string<Brand|Category|Color|Fabric|Heel|ProductCollection|Season|Size|Status|Style|Tag>
      */
     public function model(): string
     {
@@ -49,5 +48,18 @@ enum CatalogFacetName: string
             self::Tags => Tag::class,
             self::Brands => Brand::class,
         };
+    }
+
+    /**
+     * Elasticsearch field used for this facet's terms aggregation.
+     *
+     * Invariant: every CatalogFacetName model defines a non-null elasticField().
+     */
+    public function field(): string
+    {
+        $field = $this->model()::elasticField();
+        assert($field !== null);
+
+        return $field;
     }
 }

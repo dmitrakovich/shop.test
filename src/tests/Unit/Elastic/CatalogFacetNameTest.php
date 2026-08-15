@@ -10,28 +10,25 @@ use PHPUnit\Framework\TestCase;
 
 class CatalogFacetNameTest extends TestCase
 {
-    public function test_each_facet_maps_to_a_filterable_model_with_an_elastic_field(): void
+    public function test_each_facet_exposes_a_non_null_elastic_field(): void
     {
         foreach (CatalogFacetName::cases() as $facet) {
-            $model = $facet->model();
-
-            $this->assertNotNull(
-                $model::elasticField(),
-                "{$facet->value} model must define elasticField()",
-            );
+            $this->assertNotSame('', $facet->field());
+            $this->assertSame($facet->model()::elasticField(), $facet->field());
         }
     }
 
     public function test_brands_map_to_brand_id_field(): void
     {
         $this->assertSame(Brand::class, CatalogFacetName::Brands->model());
-        $this->assertSame('brand.id', Brand::elasticField());
+        $this->assertSame('brand.id', CatalogFacetName::Brands->field());
     }
 
     public function test_statuses_aggregate_by_slug(): void
     {
         $this->assertSame(Status::class, CatalogFacetName::Statuses->model());
         $this->assertSame('slug', Status::elasticFacetKey());
+        $this->assertSame('status_slugs', CatalogFacetName::Statuses->field());
     }
 
     public function test_sizes_include_insole_and_active_where(): void

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\Filterable;
-use App\Traits\AttributeFilterTrait;
+use App\Traits\Filterable as FilterableTrait;
 use Database\Factories\SizeFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Size extends Model implements Filterable
 {
-    use AttributeFilterTrait;
+    use FilterableTrait;
 
     /** @use HasFactory<SizeFactory> */
     use HasFactory;

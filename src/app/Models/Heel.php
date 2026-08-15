@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\Filterable;
-use App\Traits\AttributeFilterTrait;
+use App\Traits\Filterable as FilterableTrait;
 use Database\Factories\HeelFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +24,7 @@ use Illuminate\Support\Carbon;
  */
 class Heel extends Model implements Filterable
 {
-    use AttributeFilterTrait;
+    use FilterableTrait;
 
     /** @use HasFactory<HeelFactory> */
     use HasFactory;

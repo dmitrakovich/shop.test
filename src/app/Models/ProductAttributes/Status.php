@@ -4,7 +4,7 @@ namespace App\Models\ProductAttributes;
 
 use App\Contracts\Filterable;
 use App\Models\Url;
-use App\Traits\AttributeFilterTrait;
+use App\Traits\Filterable as FilterableTrait;
 use Database\Factories\StatusFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Status extends Model implements Filterable
 {
-    use AttributeFilterTrait;
+    use FilterableTrait;
 
     /** @use HasFactory<StatusFactory> */
     use HasFactory;

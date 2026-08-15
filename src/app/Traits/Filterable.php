@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
+ * Default {@see \App\Contracts\Filterable} behaviour for catalog attributes.
+ *
+ * Import as `FilterableTrait` alongside `App\Contracts\Filterable`.
+ *
  * @mixin Model
  */
-trait AttributeFilterTrait
+trait Filterable
 {
     /**
      * Elasticsearch catalog field for this filter, or null when not indexed.
@@ -92,7 +96,7 @@ trait AttributeFilterTrait
     }
 
     /**
-     * Slug для фильтра
+     * Catalog path slug row for this attribute.
      *
      * @return MorphOne<Url, $this>
      */
@@ -102,7 +106,7 @@ trait AttributeFilterTrait
     }
 
     /**
-     * Удалить отношение при удалении фильтра
+     * Delete the related url when the attribute is deleted.
      */
     public function delete()
     {

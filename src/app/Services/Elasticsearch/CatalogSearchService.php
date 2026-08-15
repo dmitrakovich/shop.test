@@ -154,23 +154,12 @@ class CatalogSearchService
 
         foreach (CatalogFacetName::cases() as $facet) {
             $model = $facet->model();
-            if (!is_a($model, Filterable::class, true)) {
-                continue;
-            }
-
-            $field = $model::elasticField();
-            if ($field === null) {
-                continue;
-            }
-
-            $name = $facet->value;
-            $aggregations['facet_' . $name] = [
-                'filter' => $this->combineFilterGroups($filterGroups, $model)
-                    ?? ['match_all' => (object)[]],
+            $aggregations['facet_' . $facet->value] = [
+                'filter' => $this->filterClause($filterGroups, $model),
                 'aggs' => [
                     'values' => [
                         'terms' => [
-                            'field' => $field,
+                            'field' => $facet->field(),
                             'size' => 1000,
                         ],
                     ],
@@ -191,12 +180,21 @@ class CatalogSearchService
         string $metric,
     ): array {
         return [
-            'filter' => $this->combineFilterGroups($filterGroups, $excludedGroup)
-                ?? ['match_all' => (object)[]],
+            'filter' => $this->filterClause($filterGroups, $excludedGroup),
             'aggs' => [
                 'value' => [$metric => ['field' => 'price']],
             ],
         ];
+    }
+
+    /**
+     * @param  array<class-string, list<array<string, mixed>>>  $filterGroups
+     * @return array<string, mixed>
+     */
+    private function filterClause(array $filterGroups, ?string $excludedGroup = null): array
+    {
+        return $this->combineFilterGroups($filterGroups, $excludedGroup)
+            ?? ['match_all' => (object)[]];
     }
 
     /**
