@@ -37,4 +37,9 @@ class Style extends Model implements Filterable
         'slug',
         'seo',
     ];
+
+    public static function elasticField(): ?string
+    {
+        return 'style_ids';
+    }
 }

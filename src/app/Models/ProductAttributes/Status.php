@@ -3,9 +3,9 @@
 namespace App\Models\ProductAttributes;
 
 use App\Contracts\Filterable;
+use App\Models\Url;
 use App\Traits\AttributeFilterTrait;
 use Database\Factories\StatusFactory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $slug
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $model
  *
  * @property-read \App\Models\Url|null $url
  *
@@ -35,25 +34,29 @@ class Status extends Model implements Filterable
      */
     protected static $unguarded = true;
 
-    public static function applyFilter(Builder $builder, array $values): Builder
+    public static function elasticField(): ?string
     {
-        foreach ($values as $slug => $urlModel) {
-            switch ($slug) {
-                case 'st-new':
-                    $builder->where('old_price', 0);
-                    break;
+        return 'status_slugs';
+    }
 
-                case 'st-sale':
-                    $builder->whereColumn('price', '<', 'old_price');
-                    break;
+    /**
+     * @return 'id'|'slug'
+     */
+    public static function elasticFacetKey(): string
+    {
+        return 'slug';
+    }
 
-                case 'promotion':
-                    Promotion::getProductsForAllActiveSales($builder);
-                    break;
-            }
-        }
+    /**
+     * @param  array<string, Url>  $values
+     * @return list<array<string, mixed>>
+     */
+    public static function elasticFilterClauses(array $values): array
+    {
+        // `promotion` is Sale-driven and not indexed; ignore it on the ES path.
+        $slugs = array_values(array_diff(array_keys($values), ['promotion']));
 
-        return $builder;
+        return self::elasticTermOrTerms((string)static::elasticField(), $slugs);
     }
 
     /**

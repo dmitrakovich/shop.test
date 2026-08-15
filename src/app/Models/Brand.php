@@ -42,9 +42,9 @@ class Brand extends Model implements Auditable, Filterable
         });
     }
 
-    protected static function getRelationColumn(): string
+    public static function elasticField(): ?string
     {
-        return 'brand_id';
+        return 'brand.id';
     }
 
     /**

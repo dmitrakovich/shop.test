@@ -51,6 +51,27 @@ class Tag extends Model implements Filterable
         });
     }
 
+    public static function elasticField(): ?string
+    {
+        return 'tags.id';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function elasticFacetColumns(): array
+    {
+        return ['id', 'name', 'slug', 'tag_group_id'];
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function elasticFacetExtras(): array
+    {
+        return ['tag_group_id'];
+    }
+
     /**
      * Теги
      *

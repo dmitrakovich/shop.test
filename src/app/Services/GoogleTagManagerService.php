@@ -6,12 +6,9 @@ use App\Events\Analytics\ProductView;
 use App\Events\Analytics\Purchase;
 use App\Facades\Currency;
 use App\Models\Cart;
-use App\Models\Category;
 use App\Models\Data\UserData;
 use App\Models\Orders\OrderItem;
 use App\Models\Product;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Spatie\GoogleTagManager\DataLayer;
 use Spatie\GoogleTagManager\GoogleTagManagerFacade;
 
@@ -61,30 +58,6 @@ class GoogleTagManagerService
     }
 
     /**
-     * Set GTM view event for catalog page
-     *
-     * @param  Collection<int, Product>|LengthAwarePaginator<int, Product>  $products
-     */
-    public function setViewForCatalog(Collection|LengthAwarePaginator $products, string|Category $category, ?string $searchQuery = null): void
-    {
-        if ($category instanceof Category) {
-            $category = $category->getNameWithParents();
-        }
-
-        if (!empty($searchQuery)) {
-            GoogleTagManagerFacade::view('search_result', [
-                'query' => $searchQuery,
-                'ids' => $products->implode('id', ','),
-            ]);
-        } else {
-            GoogleTagManagerFacade::view('catalog', [
-                'category' => $category,
-                'ids' => $products->implode('id', ','),
-            ]);
-        }
-    }
-
-    /**
      * Prepare products array
      */
     public static function prepareProduct(Product $product, ?int $quantity = null): DataLayer
@@ -97,40 +70,6 @@ class GoogleTagManagerService
             'category' => $product->category->getNameWithParents(),
             'quantity' => $quantity,
         ]));
-    }
-
-    /**
-     * Prepare products array
-     *
-     * @param  Collection<int, Product>|LengthAwarePaginator<int, Product>  $products
-     * @return list<array<string, mixed>>
-     */
-    public function prepareProductsArray(Collection|LengthAwarePaginator $products): array
-    {
-        return $products->map(
-            fn (Product $product) => self::prepareProduct($product)->toArray()
-        )->toArray();
-    }
-
-    /**
-     * Set GTM ecommerce event for catalog page
-     *
-     * @param  Collection<int, Product>|LengthAwarePaginator<int, Product>  $products
-     */
-    public function setEcommerceForCatalog(Collection|LengthAwarePaginator $products): void
-    {
-        self::setEcommerceImpressions($this->prepareProductsArray($products));
-    }
-
-    /**
-     * Set events for catalog page
-     *
-     * @param  Collection<int, Product>|LengthAwarePaginator<int, Product>  $products
-     */
-    public function setForCatalog(Collection|LengthAwarePaginator $products, string|Category $category, ?string $searchQuery = null): void
-    {
-        $this->setViewForCatalog($products, $category, $searchQuery);
-        $this->setEcommerceForCatalog($products);
     }
 
     /**

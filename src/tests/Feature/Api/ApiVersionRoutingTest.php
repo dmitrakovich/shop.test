@@ -39,5 +39,9 @@ class ApiVersionRoutingTest extends TestCase
     public function test_v2_catalog_route_is_registered(): void
     {
         $this->assertTrue(Route::has('api.v2.catalog.index'));
+        $this->assertFalse(
+            collect(Route::getRoutes()->getRoutes())
+                ->contains(fn (\Illuminate\Routing\Route $route): bool => $route->uri() === 'api/v1/catalog/{path?}'),
+        );
     }
 }

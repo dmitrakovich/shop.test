@@ -2,12 +2,14 @@
 
 namespace App\Services\Elasticsearch;
 
+use App\Contracts\Filterable;
 use App\Enums\Catalog\CatalogFacetName;
 use App\Models\Category;
 use App\Models\Url;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use LogicException;
 
 final class CatalogFacetService
 {
@@ -19,17 +21,18 @@ final class CatalogFacetService
     {
         $facets = [];
 
-        foreach (CatalogFacetDefinition::all() as $config) {
-            $name = $config->name->value;
+        foreach (CatalogFacetName::cases() as $facet) {
+            $name = $facet->value;
             $counts = $result->facetCounts[$name] ?? [];
             if ($counts === []) {
                 continue;
             }
 
-            $selectedSlugs = array_keys($currentFilters[$config->model] ?? []);
-            $facets[$name] = $config->name === CatalogFacetName::Categories
-                ? $this->categories($config, $counts, $selectedSlugs)
-                : $this->values($config, $counts, $selectedSlugs);
+            $model = $this->filterableModel($facet);
+            $selectedSlugs = array_keys($currentFilters[$model] ?? []);
+            $facets[$name] = $facet === CatalogFacetName::Categories
+                ? $this->categories($facet, $counts, $selectedSlugs)
+                : $this->values($facet, $counts, $selectedSlugs);
 
             if ($facets[$name] === []) {
                 unset($facets[$name]);
@@ -44,29 +47,31 @@ final class CatalogFacetService
      * @param  list<string>  $selectedSlugs
      * @return list<array<string, mixed>>
      */
-    private function values(CatalogFacetConfig $config, array $counts, array $selectedSlugs): array
+    private function values(CatalogFacetName $facet, array $counts, array $selectedSlugs): array
     {
-        $model = $config->model;
+        $model = $this->filterableModel($facet);
+        $key = $model::elasticFacetKey();
+        $extras = $model::elasticFacetExtras();
         $query = $model::query()
-            ->select($config->columns)
-            ->whereIn($config->key, array_keys($counts));
+            ->select($model::elasticFacetColumns())
+            ->whereIn($key, array_keys($counts));
 
-        foreach ($config->where as $column => $value) {
+        foreach ($model::elasticFacetWhere() as $column => $value) {
             $query->where($column, $value);
         }
 
         return $query->get()
-            ->map(function (Model $model) use ($config, $counts, $selectedSlugs): array {
+            ->map(function (Model $record) use ($key, $extras, $counts, $selectedSlugs): array {
                 $facet = [
-                    'id' => (int)$model->getAttribute('id'),
-                    'slug' => (string)$model->getAttribute('slug'),
-                    'name' => (string)$model->getAttribute('name'),
-                    'count' => $counts[(string)$model->getAttribute($config->key)],
-                    'selected' => in_array((string)$model->getAttribute('slug'), $selectedSlugs, true),
+                    'id' => (int)$record->getAttribute('id'),
+                    'slug' => (string)$record->getAttribute('slug'),
+                    'name' => (string)$record->getAttribute('name'),
+                    'count' => $counts[(string)$record->getAttribute($key)],
+                    'selected' => in_array((string)$record->getAttribute('slug'), $selectedSlugs, true),
                 ];
 
-                foreach ($config->extras as $extra) {
-                    $facet[$extra] = $model->getAttribute($extra);
+                foreach ($extras as $extra) {
+                    $facet[$extra] = $record->getAttribute($extra);
                 }
 
                 return $facet;
@@ -80,12 +85,14 @@ final class CatalogFacetService
      * @param  list<string>  $selectedSlugs
      * @return list<array<string, mixed>>
      */
-    private function categories(CatalogFacetConfig $config, array $counts, array $selectedSlugs): array
+    private function categories(CatalogFacetName $facet, array $counts, array $selectedSlugs): array
     {
+        $model = $this->filterableModel($facet);
+
         /** @var EloquentCollection<int, Category> $categories */
         $categories = Category::query()
             ->whereIn('id', array_keys($counts))
-            ->get($config->columns);
+            ->get($model::elasticFacetColumns());
 
         return $this->categoryChildren(
             collect($categories->groupBy('parent_id')->all()),
@@ -124,5 +131,18 @@ final class CatalogFacetService
             ])
             ->values()
             ->all();
+    }
+
+    /**
+     * @return class-string
+     */
+    private function filterableModel(CatalogFacetName $facet): string
+    {
+        $model = $facet->model();
+        if (!is_a($model, Filterable::class, true)) {
+            throw new LogicException("Facet [{$facet->value}] model [{$model}] must implement Filterable.");
+        }
+
+        return $model;
     }
 }

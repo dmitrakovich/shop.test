@@ -2,11 +2,11 @@
 
 namespace App\Services\Elasticsearch;
 
+use App\Contracts\Filterable;
+use App\Enums\Catalog\CatalogFacetName;
 use App\Enums\Product\ProductRatingColumn;
 use App\Enums\Product\ProductSort;
-use App\Models\Category;
 use App\Models\ProductAttributes\Price;
-use App\Models\ProductAttributes\Status;
 use App\Models\Url;
 use App\Services\SearchService;
 use Elastic\Adapter\Documents\DocumentManager;
@@ -152,15 +152,25 @@ class CatalogSearchService
     {
         $aggregations = [];
 
-        foreach (CatalogFacetDefinition::all() as $config) {
-            $name = $config->name->value;
+        foreach (CatalogFacetName::cases() as $facet) {
+            $model = $facet->model();
+            if (!is_a($model, Filterable::class, true)) {
+                continue;
+            }
+
+            $field = $model::elasticField();
+            if ($field === null) {
+                continue;
+            }
+
+            $name = $facet->value;
             $aggregations['facet_' . $name] = [
-                'filter' => $this->combineFilterGroups($filterGroups, $config->model)
+                'filter' => $this->combineFilterGroups($filterGroups, $model)
                     ?? ['match_all' => (object)[]],
                 'aggs' => [
                     'values' => [
                         'terms' => [
-                            'field' => $config->field,
+                            'field' => $field,
                             'size' => 1000,
                         ],
                     ],
@@ -212,8 +222,8 @@ class CatalogSearchService
     {
         $facetCounts = [];
 
-        foreach (CatalogFacetDefinition::all() as $config) {
-            $name = $config->name->value;
+        foreach (CatalogFacetName::cases() as $facet) {
+            $name = $facet->value;
             $buckets = $aggregations['facet_' . $name]['values']['buckets'] ?? [];
             foreach ($buckets as $bucket) {
                 $count = (int)($bucket['doc_count'] ?? 0);
@@ -235,66 +245,14 @@ class CatalogSearchService
         $groups = [];
 
         foreach ($filters as $filterClass => $values) {
-            if ($filterClass === Price::class) {
-                $priceRange = [];
-                foreach ($values as $slug => $url) {
-                    $price = $url->filters;
-                    if (!$price instanceof Price) {
-                        continue;
-                    }
-                    if (str_starts_with((string)$slug, 'price-from-')) {
-                        $priceRange['gt'] = (float)$price->price;
-                    } else {
-                        $priceRange['lt'] = (float)$price->price;
-                    }
-                }
-
-                if ($priceRange !== []) {
-                    $groups[$filterClass] = [['range' => ['price' => $priceRange]]];
-                }
-
+            if (!is_a($filterClass, Filterable::class, true)) {
                 continue;
             }
 
-            if ($filterClass === Status::class) {
-                // `promotion` is Sale-driven and not indexed; ignore it on the ES path.
-                $slugs = array_values(array_diff(array_keys($values), ['promotion']));
-                if ($slugs !== []) {
-                    $groups[$filterClass] = [
-                        count($slugs) === 1
-                            ? ['term' => ['status_slugs' => $slugs[0]]]
-                            : ['terms' => ['status_slugs' => $slugs]],
-                    ];
-                }
-
-                continue;
+            $clauses = $filterClass::elasticFilterClauses($values);
+            if ($clauses !== []) {
+                $groups[$filterClass] = $clauses;
             }
-
-            if ($filterClass === Category::class) {
-                $last = end($values);
-                $categoryId = (int)($last['model_id'] ?? 0);
-                if ($categoryId !== 0 && $categoryId !== Category::ROOT_CATEGORY_ID) {
-                    $groups[$filterClass] = [['term' => ['categories.id' => $categoryId]]];
-                }
-
-                continue;
-            }
-
-            $config = CatalogFacetDefinition::forModel($filterClass);
-            if ($config === null) {
-                continue;
-            }
-
-            $ids = array_map(intval(...), array_column($values, 'model_id'));
-            if ($ids === []) {
-                continue;
-            }
-
-            $groups[$filterClass] = [
-                count($ids) === 1
-                    ? ['term' => [$config->field => $ids[0]]]
-                    : ['terms' => [$config->field => $ids]],
-            ];
         }
 
         return $groups;

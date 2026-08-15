@@ -39,4 +39,25 @@ class Color extends Model implements Filterable
         'value',
         'seo',
     ];
+
+    public static function elasticField(): ?string
+    {
+        return 'colors.id';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function elasticFacetColumns(): array
+    {
+        return ['id', 'name', 'slug', 'value'];
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function elasticFacetExtras(): array
+    {
+        return ['value'];
+    }
 }

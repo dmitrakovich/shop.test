@@ -37,4 +37,9 @@ class Fabric extends Model implements Filterable
         'slug',
         'seo',
     ];
+
+    public static function elasticField(): ?string
+    {
+        return 'fabric_ids';
+    }
 }

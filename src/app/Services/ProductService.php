@@ -3,35 +3,12 @@
 namespace App\Services;
 
 use App\Models\Product;
-use App\Models\Url;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\Session;
 
 class ProductService
 {
-    /**
-     * Применить фильтры к выборке
-     *
-     * @param  array<string, array<string, Url>>  $filters
-     * @return Builder<Product>
-     */
-    public function applyFilters(array $filters): Builder
-    {
-        $query = new Product()->newQuery();
-
-        foreach ($filters as $filterName => $filterValues) {
-            if (class_exists($filterName) && method_exists($filterName, 'applyFilter')) {
-                $query = $filterName::applyFilter($query, $filterValues);
-            } else {
-                continue;
-            }
-        }
-
-        return $query;
-    }
-
     /**
      * Load the relationships that should be eager loaded.
      *

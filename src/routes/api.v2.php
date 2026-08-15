@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\Api\V2\CatalogController;
+use App\Http\Controllers\Api\CatalogController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Catalog API v2 (test / next frontend)
+| Catalog API v2
 |--------------------------------------------------------------------------
 |
-| Elasticsearch-first catalog. Response contract may diverge from v1.
+| Elasticsearch storefront catalog. Response contract is independent from
+| the rest of the storefront API under /api/v1.
 |
 */
 

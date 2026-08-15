@@ -37,4 +37,9 @@ class Heel extends Model implements Filterable
         'slug',
         'seo',
     ];
+
+    public static function elasticField(): ?string
+    {
+        return 'heel_ids';
+    }
 }

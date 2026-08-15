@@ -21,7 +21,7 @@ integer scores on each product:
 - Schedule: `src/routes/console.php`
 - Catalog sort enum: `src/app/Enums/Product/ProductSort.php`
 - Product ordering scope: `src/app/Models/Product.php::scopeSorting`
-- API catalog route: `GET /api/v1/catalog/{path?}` from `src/routes/api.php`
+- API catalog route: `GET /api/v2/catalog/{path?}` from `src/routes/api.v2.php`
 
 ## Admin workflow
 

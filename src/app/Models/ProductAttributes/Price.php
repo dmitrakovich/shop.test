@@ -4,8 +4,8 @@ namespace App\Models\ProductAttributes;
 
 use App\Contracts\Filterable;
 use App\Facades\Currency;
+use App\Models\Url;
 use App\Traits\AttributeFilterTrait;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -13,7 +13,6 @@ use Illuminate\Support\Str;
  * @property string $id
  * @property string $slug
  * @property int $price
- * @property string $model
  *
  * @property-read \App\Models\Url|null $url
  *
@@ -46,25 +45,41 @@ class Price extends Model implements Filterable
         return (int)Str::of($this->slug)->explode('-')->last();
     }
 
-    /**
-     * @param  \App\Models\Url[]  $values
-     */
-    public static function applyFilter(Builder $builder, array $values): Builder
+    public static function elasticField(): ?string
     {
-        foreach ($values as $url) {
-            /** @var self $self */
-            $self = $url->filters;
-            $operator = str_starts_with((string)$self->slug, 'price-from-') ? '>' : '<';
-            $builder->where('price', $operator, $self->price);
-        }
-
-        return $builder;
+        return 'price';
     }
 
     /**
-     * Generate filter badge name
+     * @param  array<string, Url>  $values
+     * @return list<array<string, mixed>>
      */
-    public function getBadgeName(): string
+    public static function elasticFilterClauses(array $values): array
+    {
+        $priceRange = [];
+        foreach ($values as $slug => $url) {
+            $price = $url->filters;
+            if (!$price instanceof self) {
+                continue;
+            }
+            if (str_starts_with((string)$slug, 'price-from-')) {
+                $priceRange['gt'] = (float)$price->price;
+            } else {
+                $priceRange['lt'] = (float)$price->price;
+            }
+        }
+
+        if ($priceRange === []) {
+            return [];
+        }
+
+        return [['range' => [(string)static::elasticField() => $priceRange]]];
+    }
+
+    /**
+     * Human-readable price bound for SEO titles.
+     */
+    public function forTitle(): string
     {
         $prefix = str_starts_with($this->slug, 'price-from-') ? 'От ' : 'До ';
 

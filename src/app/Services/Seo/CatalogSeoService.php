@@ -172,7 +172,7 @@ class CatalogSeoService
                         break;
 
                     case Price::class:
-                        $value = Str::lower($filter->filters->getBadgeName());
+                        $value = Str::lower($filter->filters->forTitle());
                         break;
 
                     default:

@@ -9,7 +9,6 @@ use App\Enums\Product\ProductSort;
 use App\Facades\Currency;
 use App\Models\Collection as ProductCollection;
 use App\Models\OneC\Product as ProductFromOneC;
-use App\Services\SearchService;
 use App\Traits\ProductMedia;
 use App\Traits\ProductSales;
 use Database\Factories\ProductFactory;
@@ -393,46 +392,6 @@ class Product extends Model implements Auditable, HasMedia
                 ->orderByDesc('id'),
             // 'discount' => $query->orderByDesc('discount')->orderByDesc('id'),
         };
-    }
-
-    /**
-     * Поиск товаров
-     *
-     * @param  Builder<Product>  $query
-     * @return Builder<Product>
-     */
-    public function scopeSearch(Builder $query, ?string $search = null): Builder
-    {
-        if (empty($search)) {
-            return $query;
-        }
-        $searchService = new SearchService($search);
-
-        if ($searchService->useSimpleSearch()) {
-            $searchValue = $searchService->getIds()[0];
-
-            return $searchService->generateSearchQuery($query, 'sku')
-                ->orWhere('id', $searchValue);
-        }
-
-        $query->where(function ($query) use ($searchService) {
-            $searchService->generateSearchQuery($query, 'sku')
-                ->orWhereIn('id', $searchService->getIds())
-                ->orWhereHas('brand', function (Builder $query) use ($searchService) {
-                    $searchService->generateSearchQuery($query, 'name');
-                })
-                ->orWhereHas('category', function (Builder $query) use ($searchService) {
-                    $searchService->generateSearchQuery($query, 'title');
-                })
-                ->orWhere(function (Builder $query) use ($searchService) {
-                    $searchService->generateSearchQuery($query, 'color_txt');
-                })
-                ->orWhereHas('tags', function (Builder $query) use ($searchService) {
-                    $searchService->generateSearchQuery($query, 'name');
-                });
-        });
-
-        return $query->orderBy('created_at', 'desc');
     }
 
     /**

@@ -40,7 +40,7 @@ class Collection extends Model implements Filterable
         });
     }
 
-    protected static function getRelationColumn(): string
+    public static function elasticField(): ?string
     {
         return 'collection_id';
     }

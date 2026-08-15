@@ -3,10 +3,8 @@
 namespace App\Traits;
 
 use App\Models\Url;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Support\Str;
 
 /**
  * @mixin Model
@@ -14,53 +12,83 @@ use Illuminate\Support\Str;
 trait AttributeFilterTrait
 {
     /**
-     * Применить фильтр
-     *
-     * @param  Builder<Model>  $builder
-     * @param  array<array-key, mixed>  $values
-     * @return Builder<Model>
+     * Elasticsearch catalog field for this filter, or null when not indexed.
      */
-    public static function applyFilter(Builder $builder, array $values): Builder
-    {
-        self::beforeApplyFilter($builder, $values);
-
-        if (!$values) {
-            return $builder;
-        }
-
-        if ($relationColumn = self::getRelationColumn()) {
-            if (count($values) == 1) {
-                return $builder->where($relationColumn, $values[0]);
-            } else {
-                return $builder->whereIn($relationColumn, $values);
-            }
-        }
-
-        $relationTable = $relationName = self::getRelationNameByClass();
-
-        return $builder->whereHas($relationName, function ($query) use ($values, $relationTable) {
-            if (count($values) == 1) {
-                $query->where("$relationTable.id", $values[0]);
-            } else {
-                $query->whereIn("$relationTable.id", $values);
-            }
-        });
-    }
-
-    /**
-     * Relation column name in product table
-     */
-    protected static function getRelationColumn(): ?string
+    public static function elasticField(): ?string
     {
         return null;
     }
 
     /**
-     * Autogenerate relation name by model class
+     * Build Elasticsearch filter clauses for the selected URL filters.
+     *
+     * Default: OR of model ids on {@see elasticField()}.
+     *
+     * @param  array<string, Url>  $values
+     * @return list<array<string, mixed>>
      */
-    protected static function getRelationNameByClass(): string
+    public static function elasticFilterClauses(array $values): array
     {
-        return Str::snake(class_basename(self::class)) . 's';
+        $field = static::elasticField();
+        if ($field === null || $values === []) {
+            return [];
+        }
+
+        $ids = array_values(array_map(
+            static fn (Url $url): int => (int)$url->model_id,
+            $values,
+        ));
+
+        return self::elasticTermOrTerms($field, $ids);
+    }
+
+    /**
+     * @return 'id'|'slug'
+     */
+    public static function elasticFacetKey(): string
+    {
+        return 'id';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function elasticFacetColumns(): array
+    {
+        return ['id', 'name', 'slug'];
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function elasticFacetExtras(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function elasticFacetWhere(): array
+    {
+        return [];
+    }
+
+    /**
+     * @param  list<int|string>  $values
+     * @return list<array<string, mixed>>
+     */
+    protected static function elasticTermOrTerms(string $field, array $values): array
+    {
+        if ($values === []) {
+            return [];
+        }
+
+        return [
+            count($values) === 1
+                ? ['term' => [$field => $values[0]]]
+                : ['terms' => [$field => $values]],
+        ];
     }
 
     /**
@@ -81,56 +109,5 @@ trait AttributeFilterTrait
         $this->url()->delete();
 
         return parent::delete();
-    }
-
-    /**
-     * Если перед применением фильтра необходимо произвести
-     * преобразование над данными или запросом
-     *
-     * @param  Builder<Model>  $builder
-     * @param  array<array-key, mixed>  $values
-     */
-    public static function beforeApplyFilter(Builder &$builder, array &$values): void
-    {
-        if (!array_is_list($values)) {
-            $values = array_column($values, 'model_id');
-        }
-    }
-
-    /**
-     * Return model class name as property
-     */
-    public function getModelAttribute(): string
-    {
-        return self::class;
-    }
-
-    /**
-     * Mark filter as invisible
-     */
-    public function isInvisible(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Generate filter badge name
-     */
-    public function getBadgeName(): string
-    {
-        return $this->name ?? '';
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public static function getFilters(): array
-    {
-        return new self()->newQuery()
-            ->get()
-            ->makeHidden(['created_at', 'updated_at'])
-            ->keyBy('slug')
-            ->append(['model'])
-            ->toArray();
     }
 }

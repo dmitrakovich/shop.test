@@ -69,21 +69,32 @@ class Size extends Model implements Filterable
         });
     }
 
-    /**
-     * Generate filter badge name
-     */
-    public function getBadgeName(): string
+    public static function elasticField(): ?string
     {
-        return 'Размер: ' . $this->name;
+        return 'sizes.id';
     }
 
-    public static function getFilters(): array
+    /**
+     * @return list<string>
+     */
+    public static function elasticFacetColumns(): array
     {
-        return (new self())->newQuery()
-            ->where('is_active', true)
-            ->get(['id', 'name', 'slug', 'insole'])
-            ->keyBy('slug')
-            ->append(['model'])
-            ->toArray();
+        return ['id', 'name', 'slug', 'insole'];
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function elasticFacetExtras(): array
+    {
+        return ['insole'];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function elasticFacetWhere(): array
+    {
+        return ['is_active' => true];
     }
 }

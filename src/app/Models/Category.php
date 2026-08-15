@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Contracts\Filterable;
 use App\Traits\AttributeFilterTrait;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -113,9 +112,36 @@ class Category extends Model implements Auditable, Filterable, Sortable
         return 'slug';
     }
 
-    protected static function getRelationColumn(): string
+    public static function elasticField(): ?string
     {
-        return 'category_id';
+        return 'categories.id';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function elasticFacetColumns(): array
+    {
+        return ['id', 'slug', 'path', 'title', 'parent_id'];
+    }
+
+    /**
+     * @param  array<string, Url>  $values
+     * @return list<array<string, mixed>>
+     */
+    public static function elasticFilterClauses(array $values): array
+    {
+        $last = end($values);
+        if ($last === false) {
+            return [];
+        }
+
+        $categoryId = (int)($last->model_id ?? 0);
+        if ($categoryId === 0 || $categoryId === self::ROOT_CATEGORY_ID) {
+            return [];
+        }
+
+        return self::elasticTermOrTerms((string)static::elasticField(), [$categoryId]);
     }
 
     /**
@@ -151,19 +177,6 @@ class Category extends Model implements Auditable, Filterable, Sortable
         return $this->hasMany(Category::class, 'parent_id')->with('childrenCategories');
     }
 
-    /**
-     * @param  Builder<Model>  $builder
-     * @param  array<array-key, mixed>|false  $values
-     */
-    public static function beforeApplyFilter(Builder &$builder, array|false &$values): void
-    {
-        $currentCategoryId = end($values)['model_id'];
-        if ($currentCategoryId === self::ROOT_CATEGORY_ID) {
-            $values = false;
-        } else {
-            $values = self::getChildrenCategoriesIdsList($currentCategoryId);
-        }
-    }
 
     /**
      * Получить список идентификаторов дочерних категорий
@@ -318,29 +331,4 @@ class Category extends Model implements Auditable, Filterable, Sortable
         return $name;
     }
 
-    /**
-     * Mark filter as invisible
-     */
-    public function isInvisible(): bool
-    {
-        return $this->isRoot();
-    }
-
-    public static function getFilters(): array
-    {
-        return (new self())->newQuery()
-            ->whereNull('parent_id')
-            ->with('childrenCategories:id,slug,path,title,parent_id')
-            ->get(['id', 'slug', 'path', 'title', 'parent_id'])
-            ->each(fn (self $category) => $category->appendModelAttribute())
-            ->toArray();
-    }
-
-    private function appendModelAttribute(): void
-    {
-        $this->append(['model']);
-        foreach ($this->childrenCategories as $category) {
-            $category->appendModelAttribute();
-        }
-    }
 }
