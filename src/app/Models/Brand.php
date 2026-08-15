@@ -24,8 +24,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class Brand extends Model implements Auditable, Filterable
 {
-    use FilterableTrait;
     use AuditableTrait;
+    use FilterableTrait;
 
     /**
      * Indicates if all mass assignment is enabled.

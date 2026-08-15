@@ -48,7 +48,7 @@ use Spatie\EloquentSortable\SortableTrait;
  */
 class Category extends Model implements Auditable, Filterable, Sortable
 {
-    use FilterableTrait, AuditableTrait, NodeTrait, SoftDeletes, SortableTrait;
+    use AuditableTrait, FilterableTrait, NodeTrait, SoftDeletes, SortableTrait;
 
     /**
      * @var list<string>
@@ -175,7 +175,6 @@ class Category extends Model implements Auditable, Filterable, Sortable
     {
         return $this->hasMany(Category::class, 'parent_id')->with('childrenCategories');
     }
-
 
     /**
      * Получить список идентификаторов дочерних категорий
@@ -329,5 +328,4 @@ class Category extends Model implements Auditable, Filterable, Sortable
 
         return $name;
     }
-
 }
