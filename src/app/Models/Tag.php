@@ -19,7 +19,6 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int|null $tag_group_id Номер группы
- * @property string $model
  *
  * @property-read Collection|Product[] $products
  * @property-read TagGroup|null $group

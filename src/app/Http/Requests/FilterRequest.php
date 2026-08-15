@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Enums\Product\ProductSort;
-use App\Models\City;
 use App\Models\Url;
 use App\Services\FilterService;
 use Illuminate\Foundation\Http\FormRequest;
@@ -61,16 +60,6 @@ class FilterRequest extends FormRequest
             });
 
         return $filters;
-    }
-
-    /**
-     * Get city
-     */
-    public function getCity(): ?City
-    {
-        $citySlug = $this->route('city');
-
-        return $citySlug ? City::query()->where('slug', $citySlug)->first() : null;
     }
 
     /**

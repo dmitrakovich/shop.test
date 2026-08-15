@@ -58,11 +58,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $productsFromGroup
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AvailableSizes[] $availableSizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
- *
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Product sorting(string $type)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Product search(?string $search = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Product onlyWithDiscount(float $amount = 0.01)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Product onlyNew(int $days = 10)
  */
 class Product extends ProductModel
 {

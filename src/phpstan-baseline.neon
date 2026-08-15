@@ -1363,30 +1363,6 @@ parameters:
 			path: app/Models/ProductAttributes/Price.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:onlyNew\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Models/ProductAttributes/Promotion.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:onlyWithDiscount\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Models/ProductAttributes/Promotion.php
-
-		-
-			message: '#^Method App\\Models\\ProductAttributes\\Promotion\:\:getProductsForAllActiveSales\(\) has parameter \$builder with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/ProductAttributes/Promotion.php
-
-		-
-			message: '#^Method App\\Models\\ProductAttributes\\Promotion\:\:getProductsForAllActiveSales\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Models/ProductAttributes/Promotion.php
-
-		-
 			message: '#^Match expression does not handle remaining value\: string$#'
 			identifier: match.unhandled
 			count: 1
@@ -1577,24 +1553,6 @@ parameters:
 			identifier: missingType.generics
 			count: 1
 			path: app/Services/FeedbackService.php
-
-		-
-			message: '#^Method App\\Services\\FilterService\:\:getAll\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/FilterService.php
-
-		-
-			message: '#^Method App\\Services\\FilterService\:\:makePriceFilters\(\) has parameter \$data with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/FilterService.php
-
-		-
-			message: '#^Method App\\Services\\FilterService\:\:makePriceFilters\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/FilterService.php
 
 		-
 			message: '#^Method App\\Services\\FilterService\:\:makeUrlFilter\(\) has parameter \$filter with no type specified\.$#'
@@ -1937,48 +1895,6 @@ parameters:
 			identifier: deadCode.unreachable
 			count: 3
 			path: app/Services/Payment/PaymentService.php
-
-		-
-			message: '#^Method App\\Services\\SearchService\:\:generateSearchQuery\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/SearchService.php
-
-		-
-			message: '#^Method App\\Services\\SearchService\:\:generateSearchQuery\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/SearchService.php
-
-		-
-			message: '#^Method App\\Services\\SearchService\:\:generateSimpleSearchQuery\(\) has parameter \$fields with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SearchService.php
-
-		-
-			message: '#^Method App\\Services\\SearchService\:\:generateSimpleSearchQuery\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/SearchService.php
-
-		-
-			message: '#^Method App\\Services\\SearchService\:\:generateSimpleSearchQuery\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/SearchService.php
-
-		-
-			message: '#^Method App\\Services\\SearchService\:\:getIds\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SearchService.php
-
-		-
-			message: '#^Property App\\Services\\SearchService\:\:\$searchKeys type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/SearchService.php
 
 		-
 			message: '#^Method App\\Services\\Seo\\CatalogSeoService\:\:setCurrentFilters\(\) has parameter \$currentFilters with no value type specified in iterable type array\.$#'

@@ -2,16 +2,14 @@
 
 namespace App\Services;
 
-use Illuminate\Database\Eloquent\Builder;
-
 class SearchService
 {
     /**
      * Search keys list from search query
      *
-     * @var array
+     * @var list<string>
      */
-    protected $searchKeys = [];
+    protected array $searchKeys = [];
 
     public function __construct(string $searchQuery)
     {
@@ -19,22 +17,9 @@ class SearchService
     }
 
     /**
-     * Generate search query
-     */
-    public function generateSearchQuery(Builder $query, string $column): Builder
-    {
-        $value = reset($this->searchKeys);
-        $query->where($column, 'like', "%$value%");
-
-        while ($value = next($this->searchKeys)) {
-            $query->orWhere($column, 'like', "%$value%");
-        }
-
-        return $query;
-    }
-
-    /**
      * Prepare id list from search query
+     *
+     * @return list<int>
      */
     public function getIds(): array
     {
@@ -49,20 +34,5 @@ class SearchService
     public function useSimpleSearch(): bool
     {
         return count($this->searchKeys) === 1 && is_numeric($this->searchKeys[0]);
-    }
-
-    /**
-     * Use one value for search
-     */
-    public function generateSimpleSearchQuery(Builder $query, array $fields): Builder
-    {
-        return $query->where(function (Builder $query) use ($fields) {
-            $searchValue = $this->getIds()[0];
-            foreach ($fields as $field) {
-                $query->orWhere($field, $searchValue);
-            }
-
-            return $query;
-        });
     }
 }

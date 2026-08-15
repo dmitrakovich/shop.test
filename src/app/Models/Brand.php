@@ -17,7 +17,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $seo
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string $model
  *
  * @property-read Url|null $url
  *

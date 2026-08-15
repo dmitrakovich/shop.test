@@ -3,8 +3,6 @@
 namespace Tests\Unit;
 
 use App\Enums\Product\ProductRatingColumn;
-use App\Enums\Product\ProductSort;
-use App\Models\Product;
 use App\Models\ProductAttributes\Status;
 use App\Models\Season;
 use App\Models\Url;
@@ -86,36 +84,6 @@ class ProductRatingColumnTest extends TestCase
             ProductRatingColumn::Rating,
             ProductRatingColumn::fromFilters($filters),
         );
-    }
-
-    public function test_scope_sorting_uses_sale_rating_column_when_st_sale_filter_is_active(): void
-    {
-        $status = $this->makeStatus('st-sale');
-
-        $sql = Product::query()
-            ->sorting(ProductSort::Rating, [
-                Status::class => [
-                    'st-sale' => $this->makeFilterUrl($status),
-                ],
-            ])
-            ->toSql();
-
-        $this->assertStringContainsString('order by `sale_rating` desc', strtolower($sql));
-    }
-
-    public function test_scope_sorting_uses_season_rating_column_when_actual_season_filter_is_active(): void
-    {
-        $season = $this->makeSeason('actual-season', isActual: true);
-
-        $sql = Product::query()
-            ->sorting(ProductSort::Rating, [
-                Season::class => [
-                    $season->slug => $this->makeFilterUrl($season),
-                ],
-            ])
-            ->toSql();
-
-        $this->assertStringContainsString('order by `season_rating` desc', strtolower($sql));
     }
 
     private function makeStatus(string $slug): Status

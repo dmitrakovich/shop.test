@@ -6,7 +6,6 @@ use App\Helpers\UrlHelper;
 use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\City;
 use App\Models\Collection;
 use App\Models\Color;
 use App\Models\Fabric;
@@ -26,8 +25,6 @@ use Illuminate\Support\Str;
 class CatalogSeoService
 {
     private array $currentFilters = [];
-
-    private ?City $currentCity = null;
 
     private ?SeoPage $seoPage = null;
 
@@ -82,16 +79,6 @@ class CatalogSeoService
     public function setCurrentFilters(array $currentFilters): self
     {
         $this->currentFilters = $currentFilters;
-
-        return $this;
-    }
-
-    /**
-     * Set current city
-     */
-    public function setCurrentCity(?City $currentCity): self
-    {
-        $this->currentCity = $currentCity;
 
         return $this;
     }
@@ -194,10 +181,6 @@ class CatalogSeoService
                 if (isset($titleValues[$attrModel])) {
                     $titleValuesOrdered[] = $titleValues[$attrModel];
                 }
-            }
-
-            if ($this->currentCity) {
-                $titleValuesOrdered[] = $this->currentCity->catalog_title;
             }
 
             $titleStr = implode(' ', $titleValuesOrdered);

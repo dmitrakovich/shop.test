@@ -15,7 +15,6 @@ use Illuminate\Support\Carbon;
  * @property bool $is_actual
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string $model
  *
  * @property-read Url|null $url
  *

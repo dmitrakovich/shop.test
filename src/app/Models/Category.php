@@ -33,7 +33,6 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property int $order Порядок сортировки
- * @property string $model
  * @property string $name
  *
  * @property-read Category|null $parentCategory

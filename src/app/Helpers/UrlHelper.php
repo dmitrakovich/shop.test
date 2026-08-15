@@ -4,7 +4,6 @@ namespace App\Helpers;
 
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\City;
 use App\Models\Collection;
 use App\Models\Color;
 use App\Models\Fabric;
@@ -53,15 +52,12 @@ class UrlHelper
 
     protected static $currentFilters = [];
 
-    protected static ?City $currentCity = null;
-
     /**
      * Generate url for filter
      */
     public static function generate(array $add = [], array $remove = [], $canonical = false)
     {
         $filters = self::$currentFilters;
-        $city = self::$currentCity;
         $params = self::getParams();
 
         foreach ($remove as $filter) {
@@ -115,10 +111,6 @@ class UrlHelper
             }
         }
 
-        if ($city) {
-            array_unshift($sorted, 'city-' . $city->slug);
-        }
-
         // Empty filter path must stay in catalog (/catalog), not the homepage
         $path = implode('/', $sorted) ?: 'catalog';
 
@@ -153,14 +145,6 @@ class UrlHelper
     public static function setCurrentFilters(array $currentFilters)
     {
         self::$currentFilters = $currentFilters;
-    }
-
-    /**
-     * Установить текущий город
-     */
-    public static function setCurrentCity(?City $city): void
-    {
-        self::$currentCity = $city;
     }
 
     /**

@@ -2,8 +2,6 @@
 
 namespace App\Models\ProductAttributes;
 
-use App\Contracts\Filterable;
-use App\Traits\Filterable as FilterableTrait;
 use Database\Factories\CountryOfOriginFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,16 +15,9 @@ use Illuminate\Support\Str;
  * @property string|null $seo
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $model
- *
- * @property-read \App\Models\Url|null $url
- *
- * @implements Filterable<CountryOfOrigin>
  */
-class CountryOfOrigin extends Model implements Filterable
+class CountryOfOrigin extends Model
 {
-    use FilterableTrait;
-
     /** @use HasFactory<CountryOfOriginFactory> */
     use HasFactory;
 

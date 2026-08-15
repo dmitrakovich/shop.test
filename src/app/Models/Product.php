@@ -4,15 +4,12 @@ namespace App\Models;
 
 use App\Enums\Config\ConfigKey;
 use App\Enums\Product\ProductLabel;
-use App\Enums\Product\ProductRatingColumn;
-use App\Enums\Product\ProductSort;
 use App\Facades\Currency;
 use App\Models\Collection as ProductCollection;
 use App\Models\OneC\Product as ProductFromOneC;
 use App\Traits\ProductMedia;
 use App\Traits\ProductSales;
 use Database\Factories\ProductFactory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -76,11 +73,6 @@ use Spatie\MediaLibrary\HasMedia;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $productsFromGroup
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AvailableSizes[] $availableSizes
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
- *
- * @method static \Illuminate\Database\Eloquent\Builder<static> sorting(ProductSort $type, array<string, array<string, Url>> $filters = [])
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product search(?string $search = null)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyWithDiscount(float $amount = 0.01)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product onlyNew(int $days = 10)
  */
 class Product extends Model implements Auditable, HasMedia
 {
@@ -104,11 +96,6 @@ class Product extends Model implements Auditable, HasMedia
         'season_rating',
         'sale_rating',
     ];
-
-    /**
-     * Default sorting
-     */
-    public const DEFAULT_SORT = ProductSort::Rating;
 
     /**
      * The connection name for the model.
@@ -372,49 +359,6 @@ class Product extends Model implements Auditable, HasMedia
     public function getUrl(): string
     {
         return front_route("product/{$this->slug}");
-    }
-
-    /**
-     * Сортировка товаров
-     *
-     * @param  Builder<Product>  $query
-     * @param  array<string, array<string, Url>>  $filters
-     * @return Builder<Product>
-     */
-    public function scopeSorting(Builder $query, ProductSort $sort, array $filters = []): Builder
-    {
-        return match ($sort) {
-            ProductSort::Newness => $query->orderByDesc('newness_rating')->orderByDesc('id'),
-            ProductSort::PriceUp => $query->orderBy('price')->orderBy('id'),
-            ProductSort::PriceDown => $query->orderByDesc('price')->orderByDesc('id'),
-            ProductSort::Rating => $query
-                ->orderByDesc(ProductRatingColumn::fromFilters($filters)->value)
-                ->orderByDesc('id'),
-            // 'discount' => $query->orderByDesc('discount')->orderByDesc('id'),
-        };
-    }
-
-    /**
-     * Get only products with discount
-     *
-     * @param  Builder<Product>  $query
-     * @return Builder<Product>
-     */
-    public function scopeOnlyWithDiscount(Builder $query, float $amount = 0.01): Builder
-    {
-        return $query->whereRaw('((`old_price` - `price`) / `old_price`) > ?', $amount);
-    }
-
-    /**
-     * Get only new products
-     *
-     * @param  Builder<Product>  $query
-     * @return Builder<Product>
-     */
-    public function scopeOnlyNew(Builder $query, int $days = 10): Builder
-    {
-        // return $query->where('created_at', '>', now()->subDays($days));
-        return $query->where('old_price', 0);
     }
 
     /**
