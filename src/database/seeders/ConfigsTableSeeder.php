@@ -55,6 +55,12 @@ class ConfigsTableSeeder extends Seeder
                 'created_at' => '2023-03-20 23:16:58',
                 'updated_at' => '2023-03-20 23:17:00',
             ],
+            6 => [
+                'key' => ConfigKey::SendingTracks,
+                'config' => '{"active": true, "ignore_cities": []}',
+                'created_at' => '2023-10-16 22:41:54',
+                'updated_at' => '2023-10-16 22:41:54',
+            ],
         ]);
 
     }
