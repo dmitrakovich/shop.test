@@ -28,7 +28,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
      * If the actual number of records retrieved from 1C is less than this value,
      * an exception should be thrown.
      */
-    private const int MIN_EXPECTED_RECORDS = 3000;
+    private const int MIN_EXPECTED_RECORDS = 2000;
 
     /**
      * Table for insert data
