@@ -45,7 +45,7 @@ jobs:
         touch ~/.ssh/deploy
         (echo ${{ secrets.DEPLOY_SSH_KEY }} | base64 --decode -i > ~/.ssh/deploy)
         chmod 700 ~/.ssh/deploy
-        php ./vendor/bin/dep rollback
+        php ./vendor/bin/dep rollback production
 
     - name: Send success status
       uses: appleboy/telegram-action@master

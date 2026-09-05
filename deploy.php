@@ -29,17 +29,27 @@ set('writable_dirs', [
     'public/uploads',
 ]);
 
-// Hosts
+// Hosts — hostname/path come from GitHub Environment secrets.
+
+$sshArguments = [
+    '-o StrictHostKeyChecking=no',
+    '-o UserKnownHostsFile=/dev/null',
+];
 
 host('production')
     ->setHostname(getenv('DEPLOY_HOST'))
     ->setRemoteUser(getenv('DEPLOY_USER'))
     ->setPort((int)getenv('DEPLOY_PORT'))
     ->setDeployPath(getenv('DEPLOY_PATH'))
-    ->setSshArguments([
-        '-o StrictHostKeyChecking=no',
-        '-o UserKnownHostsFile=/dev/null',
-    ])
+    ->setSshArguments($sshArguments)
+    ->setIdentityFile('~/.ssh/deploy');
+
+host('test')
+    ->setHostname(getenv('DEPLOY_HOST'))
+    ->setRemoteUser(getenv('DEPLOY_USER'))
+    ->setPort((int)getenv('DEPLOY_PORT'))
+    ->setDeployPath(getenv('DEPLOY_PATH'))
+    ->setSshArguments($sshArguments)
     ->setIdentityFile('~/.ssh/deploy');
 
 // Tasks

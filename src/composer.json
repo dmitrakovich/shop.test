@@ -69,9 +69,9 @@
         "yoomoney/yookassa-sdk-php": "^2.2"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.15",
         "fakerphp/faker": "^1.23",
         "filament/upgrade": "^5.0",
+        "fruitcake/laravel-debugbar": "^4.4",
         "larastan/larastan": "^3.1",
         "laravel/boost": "^2.4",
         "laravel/pail": "^1.2.2",

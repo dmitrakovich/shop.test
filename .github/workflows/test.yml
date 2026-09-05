@@ -1,22 +1,32 @@
 name: Test deploy
+run-name: Test deploy (${{ inputs.branch || github.ref_name }})
 
 on:
   push:
     branches: [ test ]
-  repository_dispatch:
-    types: [ retry-* ]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'test'
+        type: string
+      deploy_params:
+        description: 'Deploy params'
+        default: "-vvv"
+        type: string
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 concurrency:
-  group: ${{ github.ref }}
+  group: test-deploy
   cancel-in-progress: true
 
 jobs:
   deploy-test:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: test
     defaults:
       run:
@@ -28,9 +38,12 @@ jobs:
       with:
         php-version: '8.5'
     - uses: actions/checkout@v4
-    - uses: symfonycorp/security-checker-action@v2
       with:
-        lock: src/composer.lock
+        ref: ${{ inputs.branch || github.ref }}
+    - name: Resolve deployed commit
+      id: deployed
+      working-directory: .
+      run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Cache Composer
@@ -55,51 +68,33 @@ jobs:
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
         DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        GITHUB_SHA: ${{ steps.deployed.outputs.sha }}
       run: |
         mkdir -p ~/.ssh
-        touch ~/.ssh/key.pem
-        (echo ${{ secrets.PRIVATE_KEY }} | base64 --decode -i > ~/.ssh/key.pem)
-        chmod 700 ~/.ssh/key.pem
-        php ./vendor/bin/deployer.phar deploy -vvv
+        touch ~/.ssh/deploy
+        (echo ${{ secrets.DEPLOY_SSH_KEY }} | base64 --decode -i > ~/.ssh/deploy)
+        chmod 700 ~/.ssh/deploy
+        php ./vendor/bin/dep deploy test ${{ inputs.deploy_params }}
+
+    - name: Escape commit message (remove < and > only)
+      id: escape
+      working-directory: .
+      run: |
+        echo "escaped_message<<EOF" >> "$GITHUB_OUTPUT"
+        git log -1 --pretty=%B \
+          | sed -e 's/</\[/g' -e 's/>/\]/g' >> "$GITHUB_OUTPUT"
+        echo "EOF" >> "$GITHUB_OUTPUT"
 
     - name: Send success status
       uses: appleboy/telegram-action@master
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: Success deploying ✅
+        format: html
+        disable_web_page_preview: true
+        message: |
+          <b>Test deploying ✅</b>
+          https://rest.barocco.by
+          ${{ inputs.branch || github.ref_name }} @ ${{ steps.deployed.outputs.sha }}
 
-
-  ##################################
-  ### Run when a schedule failed ###
-  ##################################
-  # restart_when_failed:
-  #   name: Restarts workflow if failed
-  #   runs-on: ubuntu-latest
-  #   if: failure() && github.event.client_payload.attempt < 5
-  #   needs: laravel-tests-and-deploy
-  #   steps:
-  #     - name: Sleep for 1m 36s
-  #       uses: jakejarvis/wait-action@master
-  #       with:
-  #         time: '96s'
-
-  #     - name: set attempt
-  #       run: |
-  #         ATTEMPT=${{ github.event.client_payload.attempt }}
-  #         ATTEMPT=$([ -n "$ATTEMPT" ] && echo $((++ATTEMPT)) || echo 1)
-  #         echo "attempt=$ATTEMPT" >> $GITHUB_ENV
-
-  #     - name: Send retry status
-  #       uses: appleboy/telegram-action@master
-  #       with:
-  #         to: ${{ secrets.TELEGRAM_TO }}
-  #         token: ${{ secrets.TELEGRAM_TOKEN }}
-  #         message: Failure deploy (${{ env.attempt }}) ❌ Rerun 🔄
-
-  #     - name: Retry the workflow
-  #       uses: peter-evans/repository-dispatch@v1
-  #       with:
-  #         token: ${{ secrets.API_WORKFLOW_KEY }}
-  #         event-type: retry-${{ env.attempt }}
-  #         client-payload: '{"ref": "${{ github.ref }}", "attempt": "${{ env.attempt }}"}'
+          <blockquote expandable>${{ steps.escape.outputs.escaped_message }}</blockquote>
