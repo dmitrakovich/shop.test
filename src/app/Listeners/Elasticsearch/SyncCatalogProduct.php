@@ -10,6 +10,6 @@ class SyncCatalogProduct
 {
     public function handle(ProductCreated|ProductUpdated $event): void
     {
-        UpsertCatalogProductJob::dispatch($event->product->id);
+        UpsertCatalogProductJob::dispatch($event->product->id)->afterCommit();
     }
 }

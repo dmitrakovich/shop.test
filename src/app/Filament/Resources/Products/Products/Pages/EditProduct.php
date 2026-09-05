@@ -35,8 +35,13 @@ class EditProduct extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
+        /** @var Product $product */
+        $product = $this->getRecord();
+
         if ($data['label_id']?->isNotPublished()) {
             $data['deleted_at'] = now();
+        } elseif ($product->label_id?->isNotPublished()) {
+            $data['deleted_at'] = null;
         }
 
         return $data;

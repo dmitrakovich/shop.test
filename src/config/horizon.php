@@ -218,8 +218,9 @@ return [
             'supervisor-elasticsearch' => [
                 'connection' => 'redis',
                 'queue' => [Queue::Elasticsearch->value],
-                'balance' => 'simple',
-                'maxProcesses' => 1,
+                'balance' => 'auto',
+                'autoScalingStrategy' => 'size',
+                'maxProcesses' => 7,
                 'tries' => 3,
             ],
             'supervisor-media' => [

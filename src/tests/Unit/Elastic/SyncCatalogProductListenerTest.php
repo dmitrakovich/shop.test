@@ -23,7 +23,8 @@ class SyncCatalogProductListenerTest extends TestCase
 
         Bus::assertDispatched(
             UpsertCatalogProductJob::class,
-            fn (UpsertCatalogProductJob $job): bool => $job->productId === 15,
+            fn (UpsertCatalogProductJob $job): bool => $job->productId === 15
+                && $job->afterCommit === true,
         );
     }
 
@@ -38,7 +39,8 @@ class SyncCatalogProductListenerTest extends TestCase
 
         Bus::assertDispatched(
             UpsertCatalogProductJob::class,
-            fn (UpsertCatalogProductJob $job): bool => $job->productId === 27,
+            fn (UpsertCatalogProductJob $job): bool => $job->productId === 27
+                && $job->afterCommit === true,
         );
     }
 }
