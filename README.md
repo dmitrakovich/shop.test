@@ -2,8 +2,8 @@
 
 [![Tests](https://github.com/dmitrakovich/shop.test/actions/workflows/tests.yml/badge.svg)](https://github.com/dmitrakovich/shop.test/actions/workflows/tests.yml)
 [![PHPStan](https://github.com/dmitrakovich/shop.test/actions/workflows/phpstan.yml/badge.svg)](https://github.com/dmitrakovich/shop.test/actions/workflows/phpstan.yml)
-[![Check code styling](https://github.com/dmitrakovich/shop.test/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/dmitrakovich/shop.test/actions/workflows/coding-standards.yml)
-[![Production](https://github.com/dmitrakovich/shop.test/actions/workflows/production.yml/badge.svg)](https://github.com/dmitrakovich/shop.test/actions/workflows/production.yml)
+[![Pint](https://github.com/dmitrakovich/shop.test/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/dmitrakovich/shop.test/actions/workflows/coding-standards.yml)
+[![Deploy](https://github.com/dmitrakovich/shop.test/actions/workflows/production.yml/badge.svg)](https://github.com/dmitrakovich/shop.test/actions/workflows/production.yml)
 
 Laravel backend for the Barocco e-commerce storefront. The main Vue
 storefront is maintained outside this repository; this repo provides the API,

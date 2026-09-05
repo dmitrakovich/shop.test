@@ -1,4 +1,4 @@
-name: Check code styling
+name: Pint
 
 on:
   push:
