@@ -59,10 +59,17 @@ class ListRatingAlgorithms extends ListRecords
                     ->required(),
             ])
             ->action(function (array $data): void {
+                $previous = self::ratingConfig();
+                $config = self::normalizeConfig([...$previous, ...$data]);
+
                 Config::query()->updateOrCreate(
                     ['key' => ConfigKey::Rating],
-                    ['config' => self::normalizeConfig([...self::ratingConfig(), ...$data])]
+                    ['config' => $config]
                 );
+
+                if (self::algorithmSelectionChanged($previous, $config)) {
+                    UpdateProductsRatingJob::dispatchSync();
+                }
 
                 Notification::make()
                     ->title('Настройки рейтинга сохранены')
@@ -107,5 +114,25 @@ class ListRatingAlgorithms extends ListRecords
             'sale_algorithm_id' => isset($config['sale_algorithm_id']) ? (int)$config['sale_algorithm_id'] : null,
             'last_update' => $config['last_update'] ?? null,
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $previous
+     * @param  array<string, mixed>  $next
+     */
+    private static function algorithmSelectionChanged(array $previous, array $next): bool
+    {
+        foreach ([
+            'popularity_algorithm_id',
+            'newness_algorithm_id',
+            'season_algorithm_id',
+            'sale_algorithm_id',
+        ] as $key) {
+            if ((int)($previous[$key] ?? 0) !== (int)($next[$key] ?? 0)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

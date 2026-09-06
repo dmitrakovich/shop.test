@@ -187,6 +187,7 @@ Within dimension **OR**, across **AND**. Map:
 | --- | --- |
 | `ProductCreated` / `ProductUpdated` | `UpsertCatalogProductJob` (unique) |
 | `UpdateAvailabilityJob` | `CatalogIndexer::syncProductIds` (chunked bulk) |
+| `UpdateProductsRatingJob` | `CatalogIndexer::syncProductIds` after rating columns are updated |
 | Attribute rename affecting many products | Reindex affected / full reindex |
 | `promotion` set changes | Deferred |
 | Missing / trashed | Delete from index |

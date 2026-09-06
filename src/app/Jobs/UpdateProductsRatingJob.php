@@ -7,6 +7,7 @@ use App\Enums\Product\RatingFactor;
 use App\Models\Config;
 use App\Models\RatingAlgorithm;
 use App\Services\Api\Yandex\MetrikaService;
+use App\Services\Elasticsearch\CatalogIndexer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -24,7 +25,7 @@ class UpdateProductsRatingJob extends AbstractJob
      *
      * @throws \Exception
      */
-    public function handle(MetrikaService $metrika): void
+    public function handle(MetrikaService $metrika, CatalogIndexer $indexer): void
     {
         $this->log('Старт');
 
@@ -69,6 +70,7 @@ class UpdateProductsRatingJob extends AbstractJob
 
         $this->updateProductsRating($rating);
         $this->saveConfig($configModel, $config);
+        $indexer->syncProductIds(array_keys($rating));
 
         $this->log(count($rating) . ' товаров');
         $this->log('Успешно выполнено');

@@ -34,11 +34,14 @@ The list page provides two header actions:
 1. **Settings** - choose the algorithm used for popularity and the algorithm
    used for newness.
 2. **Recalculate rating** - runs `UpdateProductsRatingJob::dispatchSync()` in
-   the current request and updates product scores immediately.
+   the current request, updates product scores immediately, and bulk-syncs those
+   products into the catalog Elasticsearch alias.
 
 The settings are stored in the `configs` table with key `rating`; current
-settings contain only `popularity_algorithm_id`, `newness_algorithm_id`, and
-`last_update`.
+settings contain only `popularity_algorithm_id`, `newness_algorithm_id`,
+`season_algorithm_id`, `sale_algorithm_id`, and `last_update`. Changing which
+algorithms are selected also runs `UpdateProductsRatingJob` so catalog sort
+order is reindexed.
 
 Boost and penalty lists are edited on each rating algorithm record, not in the
 global settings modal. If the same product or category should affect both the
