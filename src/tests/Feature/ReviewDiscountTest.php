@@ -7,6 +7,7 @@ use App\Enums\Feedback\ReviewDiscountType;
 use App\Enums\Order\OrderStatus;
 use App\Models\Feedback;
 use App\Models\Product;
+use App\Models\User\CachedUser;
 use App\Models\User\Group;
 use App\Models\User\User;
 use App\Services\SaleService;
@@ -83,6 +84,38 @@ class ReviewDiscountTest extends TestCase
         $this->assertNull($product->getSale(SaleService::REVIEW_SALE_KEY));
         $this->assertFalse($user->hasReviewAfterOrder());
         $this->assertNull($user->getReviewDiscountType());
+    }
+
+    public function test_publishing_feedback_in_admin_resets_stale_review_discount_cache(): void
+    {
+        $user = $this->createUser();
+        $this->createOrderForUser($user, now()->subDay());
+
+        Cache::put($user->getCacheKey(), new CachedUser(reviewDiscountType: null));
+        $this->assertNull($user->getReviewDiscountType());
+
+        $feedback = $this->createFeedbackForUser($user, now());
+        $this->attachMedia($feedback, 'photos');
+
+        $this->assertFalse(Cache::has($user->getCacheKey()));
+        $this->assertSame(ReviewDiscountType::Photo, $user->fresh()->getReviewDiscountType());
+    }
+
+    public function test_updating_publish_flag_resets_user_cache(): void
+    {
+        $user = $this->createUser();
+        $this->createOrderForUser($user, now()->subDay());
+        $feedback = $this->createFeedbackForUser($user, now());
+        $this->attachMedia($feedback, 'photos');
+        Cache::forget($user->getCacheKey());
+
+        $this->assertSame(ReviewDiscountType::Photo, $user->fresh()->getReviewDiscountType());
+        Cache::put($user->getCacheKey(), new CachedUser(reviewDiscountType: null));
+
+        $feedback->update(['publish' => false]);
+
+        $this->assertFalse(Cache::has($user->getCacheKey()));
+        $this->assertSame(ReviewDiscountType::Photo, $user->fresh()->getReviewDiscountType());
     }
 
     private function createUserWithReviewMedia(string $collection): User

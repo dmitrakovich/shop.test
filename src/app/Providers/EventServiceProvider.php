@@ -120,6 +120,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Models\Ads\Banner::class => [
             Observers\BannerObserver::class,
         ],
+        \App\Models\Feedback::class => [
+            Observers\FeedbackObserver::class,
+        ],
         \App\Models\Orders\Order::class => [
             Observers\OrderObserver::class,
         ],

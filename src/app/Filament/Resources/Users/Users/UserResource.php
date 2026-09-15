@@ -90,6 +90,16 @@ class UserResource extends Resource
                             ->label('Группа')
                             ->required()
                             ->native(false),
+                        TextInput::make('review_discount_type')
+                            ->label('Скидка за отзыв')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->visibleOn(Operation::Edit)
+                            ->afterStateHydrated(function (TextInput $component, ?User $record): void {
+                                $component->state(
+                                    $record?->getReviewDiscountType()?->getLabel() ?? 'Нет'
+                                );
+                            }),
                         Section::make('Адреса')->schema([
                             Repeater::make('addresses')
                                 ->label('')
