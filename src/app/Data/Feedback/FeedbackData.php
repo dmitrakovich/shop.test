@@ -6,6 +6,7 @@ use App\Data\Casts\ModelCast;
 use App\Enums\Feedback\FeedbackType;
 use App\Facades\Device;
 use App\Models\Product;
+use App\Models\User\User;
 use App\Rules\VideoFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
@@ -61,10 +62,24 @@ class FeedbackData extends Data
     public function with(): array
     {
         return [
-            'user_id' => Auth::id(),
+            'user_id' => $this->resolveUser()?->id,
             'device_id' => Device::id(),
             'ip' => Request::ip(),
         ];
+    }
+
+    /**
+     * Store is public (no auth:sanctum), so the default guard never sees the
+     * Vue Bearer token. Read Sanctum explicitly, then the device-linked user.
+     */
+    private function resolveUser(): ?User
+    {
+        $user = Auth::guard('sanctum')->user();
+        if ($user instanceof User) {
+            return $user;
+        }
+
+        return Device::current()->getUser();
     }
 
     /** @return array<string, array<int, mixed>> */

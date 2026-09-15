@@ -9,7 +9,6 @@ use App\Models\Feedback;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
 
 class FeedbackService
 {
@@ -72,6 +71,6 @@ class FeedbackService
             $feedback->addMedia($video)->toMediaCollection('videos');
         }
 
-        event(new ReviewPosted(Auth::user()));
+        event(new ReviewPosted($feedback->user));
     }
 }
