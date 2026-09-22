@@ -2,8 +2,10 @@
 
 namespace App\Models\Feeds;
 
+use App\Enums\Product\StockLevel;
 use App\Facades\Currency;
 use App\Models\Product;
+use App\Services\Feeds\StockLevelCalculator;
 use App\Services\ProductService;
 
 /**
@@ -61,6 +63,7 @@ class GoogleCsv extends AbstractFeed
             'Item category',
             'Price',
             'Sale price',
+            'Custom label',
         ];
     }
 
@@ -70,12 +73,13 @@ class GoogleCsv extends AbstractFeed
     protected function getRows(): array
     {
         $this->currency = Currency::getCurrentCurrency();
+        $stockLevels = StockLevelCalculator::levelsByProductId();
 
         return (new ProductService())->getForFeed(false)
             ->filter(function (Product $item) {
                 return count($this->getProductMedia($item->getMedia())['images']) > 0;
             })
-            ->map(function (Product $item) {
+            ->map(function (Product $item) use ($stockLevels) {
                 $media = $this->getProductMedia($item->getMedia());
                 $color = GoogleFeedFormatter::colorLabel($item->colors);
 
@@ -88,6 +92,7 @@ class GoogleCsv extends AbstractFeed
                     $item->category->name,
                     $this->formatPrice($item->getOldPrice()),
                     $this->getSalePrice($item->getPrice(), $item->getOldPrice()),
+                    ($stockLevels[$item->id] ?? StockLevel::Low)->value,
                 ];
             })->values()->toArray();
     }
