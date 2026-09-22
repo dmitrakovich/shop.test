@@ -2,8 +2,10 @@
 
 namespace App\Models\Feeds;
 
+use App\Enums\Product\StockLevel;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\Feeds\StockLevelCalculator;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
@@ -50,11 +52,13 @@ class GoogleXml extends AbstractFeed
      */
     protected function getItems(): array
     {
+        $stockLevels = StockLevelCalculator::levelsByProductId();
+
         return (new ProductService())->getForFeed(true)
             ->filter(function (Product $item) {
                 return count($this->getProductMedia($item->getMedia())['images']) > 0;
             })
-            ->map(function (Product $item) {
+            ->map(function (Product $item) use ($stockLevels) {
                 $media = $this->getProductMedia($item->getMedia());
                 $color = GoogleFeedFormatter::colorLabel($item->colors);
                 $material = GoogleFeedFormatter::material($item);
@@ -64,6 +68,7 @@ class GoogleXml extends AbstractFeed
                     'link' => $item->getUrl(),
                     'size' => $item->sizes->implode('name', '/'),
                     'availability' => $item->trashed() ? 'out of stock' : 'in stock',
+                    'custom_label_0' => ($stockLevels[$item->id] ?? StockLevel::Low)->value,
                     'price' => $item->getPrice(),
                     'old_price' => $item->getOldPrice(),
                     'images' => $media['images'],

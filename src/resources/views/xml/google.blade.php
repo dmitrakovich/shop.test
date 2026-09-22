@@ -12,6 +12,7 @@
         <g:size>{{ $item->size }}</g:size>
         <g:size_system>EU</g:size_system>
         <g:availability>{{ $item->availability }}</g:availability>
+        <g:custom_label_0>{{ $item->custom_label_0 }}</g:custom_label_0>
         <g:condition>new</g:condition>
 @if ($item->price < $item->old_price)
         <g:price>{{ $item->old_price }} {{ $currency->code }}</g:price>

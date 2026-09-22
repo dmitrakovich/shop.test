@@ -9,6 +9,9 @@ use App\Services\ProductService;
 /**
  * Class GoogleCsv
  *
+ * Google Ads dynamic-remarketing Custom business-data feed.
+ * Stock richness labels belong on Merchant Center XML (`g:custom_label_0`), not here.
+ *
  * @see https://support.google.com/google-ads/answer/6053288#zippy=%2Ccustom
  */
 class GoogleCsv extends AbstractFeed
