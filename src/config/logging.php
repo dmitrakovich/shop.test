@@ -146,6 +146,11 @@ return [
             'driver' => 'sentry',
         ],
 
+        'sentry_logs' => [
+            'driver' => 'sentry_logs',
+            'level' => env('SENTRY_LOG_LEVEL', 'debug'),
+        ],
+
         'feeds' => [
             'driver' => 'single',
             'path' => storage_path('logs/feeds.log'),

@@ -7,7 +7,8 @@ alwaysApply: false
 # Observability
 
 - Logging defaults (example env): `LOG_CHANNEL=stack`, `LOG_STACK=single`, `LOG_LEVEL=debug`.
-- Sentry is installed (`sentry/sentry-laravel`) but DSN is optional (`SENTRY_LARAVEL_DSN` in `.env.example`).
+- Structured Sentry logs use the `sentry_logs` channel (`driver` `sentry_logs`). The `sentry` channel reports Issues and spends the error quota.
+- Turn logs on with `SENTRY_ENABLE_LOGS=true`, `SENTRY_LOG_LEVEL=warning`, and `LOG_STACK=single,sentry_logs`. DSN stays optional (`SENTRY_LARAVEL_DSN`).
 
 ## When adding error handling
 
