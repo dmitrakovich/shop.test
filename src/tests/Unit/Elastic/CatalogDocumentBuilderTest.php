@@ -35,6 +35,7 @@ class CatalogDocumentBuilderTest extends TestCase
             'color_txt' => 'черный',
             'rating' => 10,
             'newness_rating' => 20,
+            'season_newness_rating' => 25,
             'season_rating' => 30,
             'sale_rating' => 40,
         ], [
@@ -53,6 +54,8 @@ class CatalogDocumentBuilderTest extends TestCase
         $this->assertFalse($document['is_new']);
         $this->assertSame(['st-sale'], $document['status_slugs']);
         $this->assertSame(10, $document['rating']);
+        $this->assertSame(20, $document['newness_rating']);
+        $this->assertSame(25, $document['season_newness_rating']);
         $this->assertSame(['id' => 5, 'name' => 'Nike Test'], $document['brand']);
         $this->assertSame('Кроссовки 42', $document['short_name']);
         $this->assertSame([['id' => 10, 'name' => 'Кроссовки']], $document['categories']);
@@ -118,6 +121,7 @@ class CatalogDocumentBuilderTest extends TestCase
             'color_txt' => null,
             'rating' => 0,
             'newness_rating' => 0,
+            'season_newness_rating' => 0,
             'season_rating' => 0,
             'sale_rating' => 0,
             'created_at' => now(),

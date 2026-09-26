@@ -31,9 +31,10 @@ class RatingAlgorithmSettingsTest extends TestCase
         Livewire::test(ListRatingAlgorithms::class)
             ->callAction('settings', data: [
                 'popularity_algorithm_id' => $newness->id,
-                'newness_algorithm_id' => $newness->id,
                 'season_algorithm_id' => $newness->id,
                 'sale_algorithm_id' => $newness->id,
+                'newness_algorithm_id' => $newness->id,
+                'season_newness_algorithm_id' => $newness->id,
             ])
             ->assertHasNoFormErrors()
             ->assertNotified('Настройки рейтинга сохранены');
@@ -42,6 +43,7 @@ class RatingAlgorithmSettingsTest extends TestCase
 
         $this->assertSame($newness->id, (int)$config['popularity_algorithm_id']);
         $this->assertSame($newness->id, (int)$config['newness_algorithm_id']);
+        $this->assertSame($newness->id, (int)$config['season_newness_algorithm_id']);
         Bus::assertDispatchedSync(UpdateProductsRatingJob::class);
     }
 
@@ -57,14 +59,43 @@ class RatingAlgorithmSettingsTest extends TestCase
         Livewire::test(ListRatingAlgorithms::class)
             ->callAction('settings', data: [
                 'popularity_algorithm_id' => $algorithm->id,
-                'newness_algorithm_id' => $algorithm->id,
                 'season_algorithm_id' => $algorithm->id,
                 'sale_algorithm_id' => $algorithm->id,
+                'newness_algorithm_id' => $algorithm->id,
+                'season_newness_algorithm_id' => $algorithm->id,
             ])
             ->assertHasNoFormErrors()
             ->assertNotified('Настройки рейтинга сохранены');
 
         Bus::assertNotDispatched(UpdateProductsRatingJob::class);
+    }
+
+    public function test_changing_only_season_newness_algorithm_recalculates_ratings(): void
+    {
+        Bus::fake([UpdateProductsRatingJob::class]);
+
+        $catalog = $this->createAlgorithm('Catalog newness');
+        $season = $this->createAlgorithm('Season newness');
+        $this->saveRatingConfig($catalog, $catalog);
+
+        $this->actingAs($this->createSuperAdmin(), 'admin');
+
+        Livewire::test(ListRatingAlgorithms::class)
+            ->callAction('settings', data: [
+                'popularity_algorithm_id' => $catalog->id,
+                'season_algorithm_id' => $catalog->id,
+                'sale_algorithm_id' => $catalog->id,
+                'newness_algorithm_id' => $catalog->id,
+                'season_newness_algorithm_id' => $season->id,
+            ])
+            ->assertHasNoFormErrors()
+            ->assertNotified('Настройки рейтинга сохранены');
+
+        $config = Config::findByKeyOrFail(ConfigKey::Rating)->config;
+
+        $this->assertSame($season->id, (int)$config['season_newness_algorithm_id']);
+        $this->assertSame($catalog->id, (int)$config['newness_algorithm_id']);
+        Bus::assertDispatchedSync(UpdateProductsRatingJob::class);
     }
 
     public function test_recalculate_action_runs_rating_job(): void
@@ -92,9 +123,10 @@ class RatingAlgorithmSettingsTest extends TestCase
             [
                 'config' => [
                     'popularity_algorithm_id' => $popularity->id,
-                    'newness_algorithm_id' => $newness->id,
                     'season_algorithm_id' => $popularity->id,
                     'sale_algorithm_id' => $popularity->id,
+                    'newness_algorithm_id' => $newness->id,
+                    'season_newness_algorithm_id' => $newness->id,
                     'last_update' => null,
                 ],
             ],

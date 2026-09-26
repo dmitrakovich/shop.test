@@ -344,7 +344,7 @@ class CatalogSearchService
 
         return match ($sort) {
             ProductSort::Newness => [
-                ['newness_rating' => ['order' => 'desc']],
+                [ProductRatingColumn::newnessFromFilters($filters)->value => ['order' => 'desc']],
                 ['id' => ['order' => 'desc']],
             ],
             ProductSort::PriceUp => [

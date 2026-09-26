@@ -34,25 +34,31 @@ class ListRatingAlgorithms extends ListRecords
             ->fillForm(fn (): array => self::ratingConfig())
             ->form([
                 Select::make('popularity_algorithm_id')
-                    ->label('Алгоритм для популярности')
-                    ->options(fn () => RatingAlgorithm::query()->orderBy('name')->pluck('name', 'id'))
-                    ->searchable()
-                    ->native(false)
-                    ->required(),
-                Select::make('newness_algorithm_id')
-                    ->label('Алгоритм для новинок')
+                    ->label('По популярности в каталоге')
                     ->options(fn () => RatingAlgorithm::query()->orderBy('name')->pluck('name', 'id'))
                     ->searchable()
                     ->native(false)
                     ->required(),
                 Select::make('season_algorithm_id')
-                    ->label('Алгоритм для актуального сезона')
+                    ->label('По популярности в текущем сезоне')
                     ->options(fn () => RatingAlgorithm::query()->orderBy('name')->pluck('name', 'id'))
                     ->searchable()
                     ->native(false)
                     ->required(),
                 Select::make('sale_algorithm_id')
-                    ->label('Алгоритм для скидок')
+                    ->label('По популярности в распродаже')
+                    ->options(fn () => RatingAlgorithm::query()->orderBy('name')->pluck('name', 'id'))
+                    ->searchable()
+                    ->native(false)
+                    ->required(),
+                Select::make('newness_algorithm_id')
+                    ->label('По новинкам в каталоге')
+                    ->options(fn () => RatingAlgorithm::query()->orderBy('name')->pluck('name', 'id'))
+                    ->searchable()
+                    ->native(false)
+                    ->required(),
+                Select::make('season_newness_algorithm_id')
+                    ->label('По новинкам в текущем сезоне')
                     ->options(fn () => RatingAlgorithm::query()->orderBy('name')->pluck('name', 'id'))
                     ->searchable()
                     ->native(false)
@@ -109,9 +115,10 @@ class ListRatingAlgorithms extends ListRecords
     {
         return [
             'popularity_algorithm_id' => isset($config['popularity_algorithm_id']) ? (int)$config['popularity_algorithm_id'] : null,
-            'newness_algorithm_id' => isset($config['newness_algorithm_id']) ? (int)$config['newness_algorithm_id'] : null,
             'season_algorithm_id' => isset($config['season_algorithm_id']) ? (int)$config['season_algorithm_id'] : null,
             'sale_algorithm_id' => isset($config['sale_algorithm_id']) ? (int)$config['sale_algorithm_id'] : null,
+            'newness_algorithm_id' => isset($config['newness_algorithm_id']) ? (int)$config['newness_algorithm_id'] : null,
+            'season_newness_algorithm_id' => isset($config['season_newness_algorithm_id']) ? (int)$config['season_newness_algorithm_id'] : null,
             'last_update' => $config['last_update'] ?? null,
         ];
     }
@@ -124,9 +131,10 @@ class ListRatingAlgorithms extends ListRecords
     {
         foreach ([
             'popularity_algorithm_id',
-            'newness_algorithm_id',
             'season_algorithm_id',
             'sale_algorithm_id',
+            'newness_algorithm_id',
+            'season_newness_algorithm_id',
         ] as $key) {
             if ((int)($previous[$key] ?? 0) !== (int)($next[$key] ?? 0)) {
                 return true;

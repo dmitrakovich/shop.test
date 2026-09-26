@@ -45,6 +45,7 @@ use Spatie\MediaLibrary\HasMedia;
  * @property bool $action
  * @property int $rating
  * @property int $newness_rating
+ * @property int $season_newness_rating
  * @property int $season_rating
  * @property int $sale_rating
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -93,6 +94,7 @@ class Product extends Model implements Auditable, HasMedia
     protected $auditExclude = [
         'rating',
         'newness_rating',
+        'season_newness_rating',
         'season_rating',
         'sale_rating',
     ];

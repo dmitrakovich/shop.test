@@ -68,11 +68,27 @@ class ProductsTable
                     ->label('Цвет')
                     ->searchable(),
                 TextColumn::make('rating')
+                    ->label('Популярность в каталоге')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('season_rating')
+                    ->label('Популярность в сезоне')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('sale_rating')
+                    ->label('Популярность в распродаже')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('newness_rating')
-                    ->label('Рейтинг новинок')
+                    ->label('Новинки в каталоге')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('season_newness_rating')
+                    ->label('Новинки в сезоне')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

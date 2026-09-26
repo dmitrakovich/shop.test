@@ -57,6 +57,10 @@ class UpdateProductsRatingJob extends AbstractJob
                     $this->scoresForProduct($product, $metrics, $ranges, $algorithms['newness']),
                     $algorithms['newness']
                 ),
+                'season_newness_rating' => $this->calculateRating(
+                    $this->scoresForProduct($product, $metrics, $ranges, $algorithms['season_newness']),
+                    $algorithms['season_newness']
+                ),
                 'season_rating' => $this->calculateRating(
                     $this->scoresForProduct($product, $metrics, $ranges, $algorithms['season']),
                     $algorithms['season']
@@ -78,13 +82,14 @@ class UpdateProductsRatingJob extends AbstractJob
 
     /**
      * @param  array<string, mixed>  $config
-     * @return array{popularity: RatingAlgorithm, newness: RatingAlgorithm, season: RatingAlgorithm, sale: RatingAlgorithm}
+     * @return array{popularity: RatingAlgorithm, newness: RatingAlgorithm, season_newness: RatingAlgorithm, season: RatingAlgorithm, sale: RatingAlgorithm}
      */
     private function getAlgorithms(array $config): array
     {
         $algorithmIds = [
             'popularity' => (int)$config['popularity_algorithm_id'],
             'newness' => (int)$config['newness_algorithm_id'],
+            'season_newness' => (int)$config['season_newness_algorithm_id'],
             'season' => (int)$config['season_algorithm_id'],
             'sale' => (int)$config['sale_algorithm_id'],
         ];
@@ -209,13 +214,14 @@ class UpdateProductsRatingJob extends AbstractJob
     }
 
     /**
-     * @param  array<int, array{rating: int, newness_rating: int, season_rating: int, sale_rating: int}>  $rating
+     * @param  array<int, array{rating: int, newness_rating: int, season_newness_rating: int, season_rating: int, sale_rating: int}>  $rating
      */
     private function updateProductsRating(array $rating): void
     {
         foreach (array_chunk($rating, 1000, true) as $ratingChunk) {
             $ratingCases = '';
             $newnessRatingCases = '';
+            $seasonNewnessRatingCases = '';
             $seasonRatingCases = '';
             $saleRatingCases = '';
             $productIds = [];
@@ -224,6 +230,7 @@ class UpdateProductsRatingJob extends AbstractJob
                 $productIds[] = (int)$id;
                 $ratingCases .= "WHEN id = {$id} THEN {$values['rating']} ";
                 $newnessRatingCases .= "WHEN id = {$id} THEN {$values['newness_rating']} ";
+                $seasonNewnessRatingCases .= "WHEN id = {$id} THEN {$values['season_newness_rating']} ";
                 $seasonRatingCases .= "WHEN id = {$id} THEN {$values['season_rating']} ";
                 $saleRatingCases .= "WHEN id = {$id} THEN {$values['sale_rating']} ";
             }
@@ -234,6 +241,7 @@ class UpdateProductsRatingJob extends AbstractJob
                 UPDATE products SET
                     rating = (CASE {$ratingCases} ELSE rating END),
                     newness_rating = (CASE {$newnessRatingCases} ELSE newness_rating END),
+                    season_newness_rating = (CASE {$seasonNewnessRatingCases} ELSE season_newness_rating END),
                     season_rating = (CASE {$seasonRatingCases} ELSE season_rating END),
                     sale_rating = (CASE {$saleRatingCases} ELSE sale_rating END)
                 WHERE id IN ({$ids})
@@ -250,6 +258,7 @@ class UpdateProductsRatingJob extends AbstractJob
         return [
             'popularity_algorithm_id' => (int)($config['popularity_algorithm_id'] ?? 0),
             'newness_algorithm_id' => (int)($config['newness_algorithm_id'] ?? 0),
+            'season_newness_algorithm_id' => (int)($config['season_newness_algorithm_id'] ?? 0),
             'season_algorithm_id' => (int)($config['season_algorithm_id'] ?? 0),
             'sale_algorithm_id' => (int)($config['sale_algorithm_id'] ?? 0),
             'last_update' => $config['last_update'] ?? null,

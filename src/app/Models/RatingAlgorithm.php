@@ -83,6 +83,7 @@ class RatingAlgorithm extends Model
         $algorithmIds = array_values(array_unique(array_filter([
             (int)($config['popularity_algorithm_id'] ?? 0),
             (int)($config['newness_algorithm_id'] ?? 0),
+            (int)($config['season_newness_algorithm_id'] ?? 0),
             (int)($config['season_algorithm_id'] ?? 0),
             (int)($config['sale_algorithm_id'] ?? 0),
         ])));

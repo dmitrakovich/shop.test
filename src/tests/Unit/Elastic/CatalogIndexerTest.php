@@ -31,6 +31,7 @@ class CatalogIndexerTest extends TestCase
             'collection_id' => 0,
             'rating' => 0,
             'newness_rating' => 0,
+            'season_newness_rating' => 0,
             'season_rating' => 0,
             'sale_rating' => 0,
             'created_at' => now(),

@@ -1,11 +1,14 @@
 # Product rating and catalog sorting
 
 Product ratings control the default product order in catalog listings and
-several recommendation sliders. The current implementation stores two signed
+several recommendation sliders. The current implementation stores five signed
 integer scores on each product:
 
-- `products.rating` - default popularity score.
-- `products.newness_rating` - score used by the "newness" sort.
+- `products.rating` - popularity in the catalog.
+- `products.season_rating` - popularity in the current season.
+- `products.sale_rating` - popularity in the sale.
+- `products.newness_rating` - newness in the catalog.
+- `products.season_newness_rating` - newness in the current season.
 
 ## Codepaths
 
@@ -31,22 +34,22 @@ all factors listed below.
 
 The list page provides two header actions:
 
-1. **Settings** - choose the algorithm used for popularity and the algorithm
-   used for newness.
+1. **Settings** - choose the algorithm used for each score: catalog popularity,
+   current-season popularity, sale popularity, catalog newness, and
+   current-season newness.
 2. **Recalculate rating** - runs `UpdateProductsRatingJob::dispatchSync()` in
    the current request, updates product scores immediately, and bulk-syncs those
    products into the catalog Elasticsearch alias.
 
 The settings are stored in the `configs` table with key `rating`; current
-settings contain only `popularity_algorithm_id`, `newness_algorithm_id`,
-`season_algorithm_id`, `sale_algorithm_id`, and `last_update`. Changing which
-algorithms are selected also runs `UpdateProductsRatingJob` so catalog sort
-order is reindexed.
+settings contain `popularity_algorithm_id`, `season_algorithm_id`,
+`sale_algorithm_id`, `newness_algorithm_id`, `season_newness_algorithm_id`,
+and `last_update`. Changing which algorithms are selected also runs
+`UpdateProductsRatingJob` so catalog sort order is reindexed.
 
 Boost and penalty lists are edited on each rating algorithm record, not in the
-global settings modal. If the same product or category should affect both the
-default popularity score and the newness score, add it to both selected
-algorithms.
+global settings modal. If the same product or category should affect more than
+one score, add it to each selected algorithm.
 
 ## Factors and scoring
 
@@ -55,7 +58,10 @@ builds normalized factor scores, and calculates:
 
 ```text
 rating = sum(factor_score * popularity_algorithm_coefficient)
+season_rating = sum(factor_score * season_algorithm_coefficient)
+sale_rating = sum(factor_score * sale_algorithm_coefficient)
 newness_rating = sum(factor_score * newness_algorithm_coefficient)
+season_newness_rating = sum(factor_score * season_newness_algorithm_coefficient)
 ```
 
 Both values are rounded to integers and written back to `products` in chunks of
@@ -107,10 +113,25 @@ Catalog requests accept a `sort` query parameter parsed by
 
 | Query value | Ordering |
 | --- | --- |
-| `rating` or omitted | `rating DESC, id DESC` |
-| `newness` | `newness_rating DESC, id DESC` |
+| `rating` or omitted | Popularity score for the current context, then `id DESC` |
+| `newness` | Newness score for the current context, then `id DESC` |
 | `price-up` | `price ASC, id ASC` |
 | `price-down` | `price DESC, id DESC` |
+
+The popularity context is chosen by active catalog filters:
+
+| Context | Score |
+| --- | --- |
+| Sale filter `st-sale` | `sale_rating` |
+| Actual season filter | `season_rating` |
+| Otherwise | `rating` |
+
+The newness context uses the same season check and does not have a sale-specific score:
+
+| Context | Score |
+| --- | --- |
+| Actual season filter | `season_newness_rating` |
+| Otherwise, including sale | `newness_rating` |
 
 Recommendation sliders in `SliderService` also order several product sets by
 `rating DESC`.
@@ -122,7 +143,10 @@ The rating algorithm migration creates `rating_algorithms`, adds
 when present. A follow-up migration makes `products.rating` signed to support
 negative penalties. The boost/penalty list migration moves legacy global lists
 from `configs.rating` into the selected popularity and newness algorithm
-records, then strips those lists from the config row.
+records, then strips those lists from the config row. Season and sale scores
+were added later. `products.season_newness_rating` splits catalog newness from
+current-season newness; the migration copies the existing newness algorithm id
+and backfills the column from `newness_rating` until the next recalculation.
 
 When changing factors or score semantics:
 

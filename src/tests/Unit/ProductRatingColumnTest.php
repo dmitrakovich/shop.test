@@ -86,6 +86,82 @@ class ProductRatingColumnTest extends TestCase
         );
     }
 
+    public function test_newness_from_filters_returns_catalog_newness_by_default(): void
+    {
+        $this->assertSame(
+            ProductRatingColumn::NewnessRating,
+            ProductRatingColumn::newnessFromFilters([]),
+        );
+    }
+
+    public function test_newness_from_filters_returns_season_newness_when_actual_season_filter_is_active(): void
+    {
+        $season = $this->makeSeason('actual-season', isActual: true);
+
+        $filters = [
+            Season::class => [
+                $season->slug => $this->makeFilterUrl($season),
+            ],
+        ];
+
+        $this->assertSame(
+            ProductRatingColumn::SeasonNewnessRating,
+            ProductRatingColumn::newnessFromFilters($filters),
+        );
+    }
+
+    public function test_newness_from_filters_keeps_catalog_newness_for_sale(): void
+    {
+        $status = $this->makeStatus('st-sale');
+
+        $filters = [
+            Status::class => [
+                'st-sale' => $this->makeFilterUrl($status),
+            ],
+        ];
+
+        $this->assertSame(
+            ProductRatingColumn::NewnessRating,
+            ProductRatingColumn::newnessFromFilters($filters),
+        );
+    }
+
+    public function test_newness_from_filters_prefers_season_newness_when_sale_and_actual_season_are_active(): void
+    {
+        $status = $this->makeStatus('st-sale');
+        $season = $this->makeSeason('actual-season', isActual: true);
+
+        $filters = [
+            Status::class => [
+                'st-sale' => $this->makeFilterUrl($status),
+            ],
+            Season::class => [
+                $season->slug => $this->makeFilterUrl($season),
+            ],
+        ];
+
+        $this->assertSame(
+            ProductRatingColumn::SeasonNewnessRating,
+            ProductRatingColumn::newnessFromFilters($filters),
+        );
+    }
+
+    public function test_newness_from_filters_ignores_non_actual_season_filter(): void
+    {
+        $season = $this->makeSeason('old-season', isActual: false);
+
+        $filters = [
+            Season::class => [
+                $season->slug => $this->makeFilterUrl($season),
+            ],
+        ];
+
+        $this->assertSame(
+            ProductRatingColumn::NewnessRating,
+            ProductRatingColumn::newnessFromFilters($filters),
+        );
+    }
+
     private function makeStatus(string $slug): Status
     {
         return new Status([

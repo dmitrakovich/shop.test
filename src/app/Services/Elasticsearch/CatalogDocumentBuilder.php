@@ -86,6 +86,7 @@ class CatalogDocumentBuilder
 
             'rating' => (int)$product->rating,
             'newness_rating' => (int)$product->newness_rating,
+            'season_newness_rating' => (int)$product->season_newness_rating,
             'season_rating' => (int)$product->season_rating,
             'sale_rating' => (int)$product->sale_rating,
 

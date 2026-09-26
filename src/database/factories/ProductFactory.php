@@ -53,6 +53,7 @@ class ProductFactory extends Factory
             'action' => fake()->boolean(),
             'rating' => fake()->numberBetween(0, 100),
             'newness_rating' => fake()->numberBetween(0, 100),
+            'season_newness_rating' => fake()->numberBetween(0, 100),
             'season_rating' => fake()->numberBetween(0, 100),
             'sale_rating' => fake()->numberBetween(0, 100),
             'product_group_id' => null,

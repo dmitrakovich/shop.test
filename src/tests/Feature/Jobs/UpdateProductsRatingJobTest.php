@@ -22,12 +22,14 @@ class UpdateProductsRatingJobTest extends TestCase
         $this->travelTo(now()->midDay());
 
         $algorithm = $this->createAlgorithm(createdAtCoefficient: 2);
-        $this->saveRatingConfig($algorithm);
+        $seasonNewness = $this->createAlgorithm(createdAtCoefficient: 1, name: 'Season newness');
+        $this->saveRatingConfig($algorithm, $seasonNewness);
         $product = Product::factory()->create([
             'price' => 1000,
             'old_price' => 0,
             'rating' => 1,
             'newness_rating' => 1,
+            'season_newness_rating' => 1,
             'season_rating' => 1,
             'sale_rating' => 1,
             'created_at' => now(),
@@ -55,6 +57,7 @@ class UpdateProductsRatingJobTest extends TestCase
 
         $this->assertSame(200, $product->rating);
         $this->assertSame(200, $product->newness_rating);
+        $this->assertSame(100, $product->season_newness_rating);
         $this->assertSame(200, $product->season_rating);
         $this->assertSame(200, $product->sale_rating);
         $this->assertNotNull(Config::findByKeyOrFail(ConfigKey::Rating)->config['last_update']);
@@ -76,15 +79,15 @@ class UpdateProductsRatingJobTest extends TestCase
         $this->assertNotNull(Config::findByKeyOrFail(ConfigKey::Rating)->config['last_update']);
     }
 
-    private function createAlgorithm(int $createdAtCoefficient = 0): RatingAlgorithm
+    private function createAlgorithm(int $createdAtCoefficient = 0, string $name = 'Test algorithm'): RatingAlgorithm
     {
         return RatingAlgorithm::query()->create([
-            'name' => 'Test algorithm',
+            'name' => $name,
             'created_at_coefficient' => $createdAtCoefficient,
         ]);
     }
 
-    private function saveRatingConfig(RatingAlgorithm $algorithm): void
+    private function saveRatingConfig(RatingAlgorithm $algorithm, ?RatingAlgorithm $seasonNewness = null): void
     {
         Config::query()->updateOrCreate(
             ['key' => ConfigKey::Rating],
@@ -92,6 +95,7 @@ class UpdateProductsRatingJobTest extends TestCase
                 'config' => [
                     'popularity_algorithm_id' => $algorithm->id,
                     'newness_algorithm_id' => $algorithm->id,
+                    'season_newness_algorithm_id' => ($seasonNewness ?? $algorithm)->id,
                     'season_algorithm_id' => $algorithm->id,
                     'sale_algorithm_id' => $algorithm->id,
                 ],

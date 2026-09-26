@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ProductAttributes\Price;
 use App\Models\ProductAttributes\Status;
+use App\Models\Season;
 use App\Models\Size;
 use App\Models\Url;
 use App\Services\Elasticsearch\CatalogSearchService;
@@ -128,6 +129,28 @@ class CatalogSearchServiceTest extends TestCase
         ], null);
 
         $this->assertSame('sale_rating', array_key_first($sort[0]));
+    }
+
+    public function test_newness_sort_uses_catalog_newness_by_default(): void
+    {
+        $sort = $this->service->buildSort(ProductSort::Newness, [], null);
+
+        $this->assertSame('newness_rating', array_key_first($sort[0]));
+    }
+
+    public function test_newness_sort_uses_season_newness_for_actual_season(): void
+    {
+        $season = new Season([
+            'slug' => 'actual-season',
+            'name' => 'Season',
+            'is_actual' => true,
+        ]);
+
+        $sort = $this->service->buildSort(ProductSort::Newness, [
+            Season::class => ['actual-season' => $this->urlWithFilter($season, 1)],
+        ], null);
+
+        $this->assertSame('season_newness_rating', array_key_first($sort[0]));
     }
 
     public function test_promotion_status_is_ignored(): void
