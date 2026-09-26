@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\LogCategory;
+use App\Jobs\Middleware\MeasureJobDuration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,6 +15,14 @@ use Throwable;
 abstract class AbstractJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * @return list<class-string>
+     */
+    public function middleware(): array
+    {
+        return [MeasureJobDuration::class];
+    }
 
     /**
      * Handle a job failure.

@@ -39,6 +39,14 @@ class UpdateAvailableSizesFullTableJob extends UpdateAvailableSizesTableJob
     }
 
     /**
+     * The full table sync runs silently and does not publish catalog availability metrics.
+     */
+    protected function recordsCatalogMetrics(): bool
+    {
+        return false;
+    }
+
+    /**
      * The full table sync runs silently.
      *
      * @param  array<string, scalar|null>  $context

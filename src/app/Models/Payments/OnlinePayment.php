@@ -4,6 +4,7 @@ namespace App\Models\Payments;
 
 use App\Admin\Models\Administrator;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
+use App\Metrics\ApplicationMetrics;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
 use App\Models\Orders\Order;
 use Encore\Admin\Facades\Admin;
@@ -94,6 +95,8 @@ class OnlinePayment extends Model implements Auditable
             };
         });
         self::created(function ($model) {
+            app(ApplicationMetrics::class)->paymentStatus($model->last_status_enum_id, $model->method_enum_id);
+
             if ($model->last_status_enum_id === OnlinePaymentStatusEnum::PENDING) {
                 $model->statuses()->create([
                     'admin_user_id' => Admin::user()->id ?? null,

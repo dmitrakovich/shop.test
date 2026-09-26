@@ -4,6 +4,7 @@ namespace App\Jobs\AvailableSizes;
 
 use App\Enums\Config\ConfigKey;
 use App\Enums\Order\OrderItemStatus;
+use App\Metrics\ApplicationMetrics;
 use App\Models\AvailableSizes;
 use App\Models\Brand;
 use App\Models\Category;
@@ -80,6 +81,7 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
 
         $availableSizes = $this->getAvailableSizesFrom1C();
         $this->log('Получено наличие из 1С', ['count' => count($availableSizes)]);
+        $this->recordOneCRows(count($availableSizes));
 
         $count = $this->filterAvailableSizes($availableSizes);
         $this->log('Отфильтрованы записи с неподходящими категориями или пустыми артикулами', ['count' => $count]);
@@ -94,12 +96,37 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
         $count = $this->removeEmptySizes($availableSizes);
         $this->log('Удалены записи с пустыми размерами', ['count' => $count]);
 
+        $this->writeAvailableSizes($availableSizes);
+
+        $this->log('Успешно выполнено', ['count' => count($availableSizes)]);
+    }
+
+    /**
+     * The full-table sync is a separate snapshot and must not move the catalog gauge.
+     */
+    protected function recordsCatalogMetrics(): bool
+    {
+        return true;
+    }
+
+    protected function recordOneCRows(int $count): void
+    {
+        if (!$this->recordsCatalogMetrics()) {
+            return;
+        }
+
+        app(ApplicationMetrics::class)->oneCRows($count);
+    }
+
+    /**
+     * @param  list<array<string, mixed>>  $availableSizes
+     */
+    protected function writeAvailableSizes(array $availableSizes): void
+    {
         DB::table($this->availableSizesTable)->truncate();
         DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
         DB::table($this->availableSizesTable)->insert($availableSizes);
         DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
-
-        $this->log('Успешно выполнено', ['count' => count($availableSizes)]);
     }
 
     /**

@@ -19,6 +19,16 @@ alwaysApply: false
 - Job lifecycle messages: `Старт`, `Успешно выполнено` (with `count` when there is one), `Ошибка выполнения` (level `error`, with `error`).
 - Feeds log one `Фид сгенерирован` event: `feed`, `format`, `currency`, `size_bytes`, `duration_ms`, `memory_peak_mb`.
 
+## Application metrics
+
+Emit through `App\Metrics\ApplicationMetrics` (`\Sentry\traceMetrics()`). The SDK flushes metrics at the end of the request, command, or queue job. `enable_metrics` in `config/sentry.php` has no effect.
+
+- `job.duration` — distribution, milliseconds, attribute `job`. Recorded by `MeasureJobDuration` for every `AbstractJob`, including failed runs.
+- `availability.onec_rows` — gauge of rows received from 1C. The full-table sync does not emit it.
+- `availability.products_unpublished`, `availability.products_published`, `availability.sizes_added`, `availability.sizes_removed` — counters for one availability run.
+- `feed.duration` (distribution, ms), `feed.size_bytes` (gauge, bytes), `feed.memory_peak` (gauge, MB). Attributes: `feed`, `format`, `currency`.
+- `payment.status` — counter on a status change to `SUCCEEDED`, `CANCELED`, or `WAITING_FOR_CAPTURE`, including COD created already succeeded. Attributes: `status`, `method`. `PENDING` is not sent.
+
 ## When adding error handling
 
 - Prefer actionable logs with context (ids, order numbers, user id) over silent catches.

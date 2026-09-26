@@ -4,6 +4,7 @@ namespace App\Jobs\AvailableSizes;
 
 use App\Enums\Product\ProductLabel;
 use App\Events\Products\ProductUpdated;
+use App\Metrics\ApplicationMetrics;
 use App\Models\AvailableSizes;
 use App\Models\Product;
 use App\Models\Size;
@@ -42,17 +43,23 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
 
         $this->updateProductsOneCIdFromAvailableSizes();
 
+        $metrics = app(ApplicationMetrics::class);
+
         $count = $this->deleteUnavailableProducts();
         $this->log('Сняты с публикации товары', ['count' => $count]);
+        $metrics->productsUnpublished($count);
 
         [$attached, $detached] = $this->updateSizes();
         $this->log('Обновлены размеры товаров', ['added' => $attached, 'removed' => $detached]);
+        $metrics->sizesAdded($attached);
+        $metrics->sizesRemoved($detached);
 
         // $count = $this->updatePrices();
         // $this->log('Обновлены цены товаров', ['count' => $count]);
 
         $count = $this->restoreProducts();
         $this->log('Опубликованы товары', ['count' => $count]);
+        $metrics->productsPublished($count);
 
         app(CatalogIndexer::class)->syncProductIds(array_merge(
             $this->logData['deleteProducts'] ?? [],

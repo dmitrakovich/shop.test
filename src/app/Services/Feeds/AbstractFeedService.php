@@ -4,6 +4,7 @@ namespace App\Services\Feeds;
 
 use App\Contracts\FeedServiceInterface;
 use App\Enums\LogCategory;
+use App\Metrics\ApplicationMetrics;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
 use App\Models\Feeds\AbstractFeed;
@@ -52,14 +53,27 @@ abstract class AbstractFeedService implements FeedServiceInterface
         // backup() stats this path via file_exists(); drop PHP's stat cache so filesize() sees the new file.
         clearstatcache(true, $this->filePath);
 
+        $sizeBytes = (int)filesize($this->filePath);
+        $durationMs = (int)round((microtime(true) - $startedAt) * 1000);
+        $memoryPeakMb = round(memory_get_peak_usage() / 1024 / 1024, 1);
+
         Log::channel(LogCategory::Feeds->value)->info('Фид сгенерирован', [
             'feed' => $this->feedInstance->getKey(),
             'format' => $this->feedInstance::FILE_TYPE,
             'currency' => $this->currency->code,
-            'size_bytes' => filesize($this->filePath),
-            'duration_ms' => (int)round((microtime(true) - $startedAt) * 1000),
-            'memory_peak_mb' => round(memory_get_peak_usage() / 1024 / 1024, 1),
+            'size_bytes' => $sizeBytes,
+            'duration_ms' => $durationMs,
+            'memory_peak_mb' => $memoryPeakMb,
         ]);
+
+        app(ApplicationMetrics::class)->feedGenerated(
+            (string)$this->feedInstance->getKey(),
+            $this->feedInstance::FILE_TYPE,
+            $this->currency->code,
+            $sizeBytes,
+            $durationMs,
+            $memoryPeakMb,
+        );
     }
 
     /**
