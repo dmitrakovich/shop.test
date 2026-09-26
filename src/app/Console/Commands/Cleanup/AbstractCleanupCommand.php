@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Cleanup;
 
+use App\Enums\LogCategory;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +27,7 @@ abstract class AbstractCleanupCommand extends Command
     {
         $resultMessage = sprintf($this->logText(), $this->query()->forceDelete());
 
-        Log::channel('jobs')->info($resultMessage);
+        Log::channel(LogCategory::Jobs->value)->info($resultMessage);
         $this->info($resultMessage);
     }
 }

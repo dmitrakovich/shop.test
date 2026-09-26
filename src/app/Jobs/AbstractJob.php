@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\LogCategory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -54,7 +55,7 @@ abstract class AbstractJob implements ShouldQueue
     /**
      * Запись отадочных сообщений в логd
      */
-    protected function log(string $msg, string $level = 'info', string $channel = 'jobs'): void
+    protected function log(string $msg, string $level = 'info', string $channel = LogCategory::Jobs->value): void
     {
         $msg = "$msg [{$this->getName()}]";
         $context = [];

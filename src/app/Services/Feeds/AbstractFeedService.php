@@ -3,6 +3,7 @@
 namespace App\Services\Feeds;
 
 use App\Contracts\FeedServiceInterface;
+use App\Enums\LogCategory;
 use App\Facades\Currency as CurrencyFacade;
 use App\Models\Currency;
 use App\Models\Feeds\AbstractFeed;
@@ -38,7 +39,7 @@ abstract class AbstractFeedService implements FeedServiceInterface
         $this->currency = $currency;
         $this->filePath = $this->getFilePath();
 
-        Log::channel('feeds')->info('Start generate', [basename($this->filePath)]);
+        Log::channel(LogCategory::Feeds->value)->info('Start generate', [basename($this->filePath)]);
 
         CurrencyFacade::setCurrentCurrency($this->currency->code);
     }
@@ -74,6 +75,6 @@ abstract class AbstractFeedService implements FeedServiceInterface
 
     public function __destruct()
     {
-        Log::channel('feeds')->info('Finish generate', [basename($this->filePath)]);
+        Log::channel(LogCategory::Feeds->value)->info('Finish generate', [basename($this->filePath)]);
     }
 }

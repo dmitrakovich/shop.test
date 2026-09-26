@@ -1,6 +1,6 @@
 <?php
 
-use App\Logging\SimpleFormatter;
+use App\Enums\LogCategory;
 use App\Logging\TelegramFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
@@ -128,20 +128,6 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
-        'jobs' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/jobs.log'),
-            'tap' => [SimpleFormatter::class],
-            'level' => 'debug',
-        ],
-
-        'update_availability' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/update_availability.log'),
-            'tap' => [SimpleFormatter::class],
-            'level' => 'debug',
-        ],
-
         'sentry' => [
             'driver' => 'sentry',
         ],
@@ -151,20 +137,7 @@ return [
             'level' => env('SENTRY_LOG_LEVEL', 'debug'),
         ],
 
-        'feeds' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/feeds.log'),
-            'tap' => [SimpleFormatter::class],
-            'level' => 'debug',
-        ],
-
-        'debug' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/debug.log'),
-            'tap' => [SimpleFormatter::class],
-            'level' => env('LOG_LEVEL', 'debug'),
-            'days' => 7,
-        ],
+        ...LogCategory::channels(),
 
     ],
 

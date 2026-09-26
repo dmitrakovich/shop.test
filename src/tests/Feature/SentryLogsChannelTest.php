@@ -2,7 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Enums\LogCategory;
+use DateTimeImmutable;
 use Illuminate\Support\Facades\Log;
+use Monolog\Level;
+use Monolog\Logger;
+use Monolog\LogRecord;
 use Psr\Log\LoggerInterface;
 use Tests\TestCase;
 
@@ -15,10 +20,36 @@ class SentryLogsChannelTest extends TestCase
         $this->assertIsArray($channel);
         $this->assertSame('sentry_logs', $channel['driver']);
         $this->assertSame(
-            env('SENTRY_LOG_LEVEL', 'warning'),
+            env('SENTRY_LOG_LEVEL', 'debug'),
             $channel['level'],
         );
         $this->assertInstanceOf(LoggerInterface::class, Log::channel('sentry_logs'));
+    }
+
+    public function test_category_channels_are_sentry_logs_with_a_filter_attribute(): void
+    {
+        foreach (LogCategory::cases() as $category) {
+            $name = $category->value;
+            $this->assertSame('sentry_logs', config("logging.channels.{$name}.driver"));
+
+            $monolog = Log::channel($name)->getLogger();
+            $this->assertInstanceOf(Logger::class, $monolog);
+
+            $record = new LogRecord(
+                new DateTimeImmutable(),
+                $name,
+                Level::Info,
+                'probe',
+                ['file.xml'],
+            );
+
+            foreach (array_reverse($monolog->getProcessors()) as $processor) {
+                $record = $processor($record);
+            }
+
+            $this->assertSame($name, $record->extra['log_category']);
+            $this->assertSame('["file.xml"]', $record->extra['context']);
+        }
     }
 
     public function test_sentry_release_comes_from_deployer_release_file(): void

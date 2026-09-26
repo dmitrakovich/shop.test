@@ -2,6 +2,7 @@
 
 namespace App\Jobs\AvailableSizes;
 
+use App\Enums\LogCategory;
 use App\Jobs\AbstractJob;
 use Illuminate\Support\Facades\Log;
 
@@ -24,7 +25,7 @@ abstract class AbstractAvailableSizesJob extends AbstractJob
      */
     protected function log(string $message, string $level = 'info', string $channel = ''): void
     {
-        parent::log($message, $level, 'update_availability');
+        parent::log($message, $level, LogCategory::UpdateAvailability->value);
     }
 
     /**
@@ -34,6 +35,6 @@ abstract class AbstractAvailableSizesJob extends AbstractJob
      */
     protected function debug(string $message, array $context = []): void
     {
-        Log::channel('debug')->debug($message, $context);
+        Log::channel(LogCategory::Debug->value)->debug($message, $context);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Enums\Bot\TelegramBotActions;
+use App\Enums\LogCategory;
 use App\Enums\Order\OrderItemStatus;
 use App\Models\Bots\Telegram\TelegramChat;
 use App\Models\Orders\OrderItem;
@@ -51,7 +52,7 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
         {$stock->name} {$stock->address}
         MSG;
 
-        Log::channel('debug')->debug($message);
+        Log::channel(LogCategory::Debug->value)->debug($message);
 
         return $chat->message($message)
             ->photo($product->getFirstCatalogMediaUrl())
