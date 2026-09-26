@@ -65,13 +65,6 @@ class PaymentService
     }
 
     /**
-     * Create OnlinePayment after order.
-     *
-     * @param  array  $data
-     */
-    public function createAfterOrder(Order $order) {}
-
-    /**
      * Cancel payment.
      *
      * @return OnlinePayment

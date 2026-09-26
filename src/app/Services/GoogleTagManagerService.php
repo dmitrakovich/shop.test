@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Events\Analytics\ProductView;
 use App\Events\Analytics\Purchase;
 use App\Facades\Currency;
-use App\Models\Cart;
 use App\Models\Data\UserData;
 use App\Models\Orders\OrderItem;
 use App\Models\Product;
@@ -23,30 +22,11 @@ class GoogleTagManagerService
     }
 
     /**
-     * Set GTM view event for cart page
-     */
-    public function setViewForCart(Cart $cart): void
-    {
-        GoogleTagManagerFacade::view('cart', [
-            'ids' => $cart->items->implode('product_id', ','),
-            'value' => $cart->getTotalPrice('USD'),
-        ]);
-    }
-
-    /**
      * Set GTM view event for order complete page
      */
     public function setViewForOrder(): void
     {
         GoogleTagManagerFacade::view('order_complete');
-    }
-
-    /**
-     * Set GTM view event for index page
-     */
-    public function setViewForIndex(): void
-    {
-        GoogleTagManagerFacade::view('index');
     }
 
     /**
@@ -70,30 +50,6 @@ class GoogleTagManagerService
             'category' => $product->category->getNameWithParents(),
             'quantity' => $quantity,
         ]));
-    }
-
-    /**
-     * Set GTM ecommerce product impressions event
-     */
-    public static function setEcommerceImpressions(array $impressions): void
-    {
-        GoogleTagManagerFacade::ecommerce('productImpressions', [
-            'impressions' => $impressions,
-        ]);
-    }
-
-    /**
-     * Set GTM ecommerce remove from cart flash event
-     */
-    public function setProductRemoveFlashEvent(Product $product, int $quantity): void
-    {
-        GoogleTagManagerFacade::ecommerceFlash('productRemove', [
-            'remove' => [
-                'products' => [
-                    self::prepareProduct($product, $quantity)->toArray(),
-                ],
-            ],
-        ]);
     }
 
     /**

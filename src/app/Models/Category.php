@@ -294,16 +294,6 @@ class Category extends Model implements Auditable, Filterable, Sortable
         return $this->id === self::ROOT_CATEGORY_ID;
     }
 
-    public function isShoesRoot(): bool
-    {
-        return $this->id === self::SHOES_PARENT_ID;
-    }
-
-    public function isAccessoriesRoot(): bool
-    {
-        return $this->id === self::ACCESSORIES_PARENT_ID;
-    }
-
     /**
      * Prepare name for catalog page title
      */

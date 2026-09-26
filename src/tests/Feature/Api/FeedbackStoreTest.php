@@ -12,6 +12,7 @@ use App\ValueObjects\Phone;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Route;
 use ReflectionProperty;
 use Tests\TestCase;
 
@@ -111,6 +112,14 @@ class FeedbackStoreTest extends TestCase
             ReviewPosted::class,
             fn (ReviewPosted $event): bool => $event->user?->is($tokenUser) === true,
         );
+    }
+
+    public function test_feedback_answer_stub_route_is_removed(): void
+    {
+        $this->assertFalse(Route::has('api.feedbacks.answers.store'));
+
+        $this->postJson('/api/v1/feedbacks/1/answers', [], $this->deviceHeaders())
+            ->assertNotFound();
     }
 
     /**
