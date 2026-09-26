@@ -26,4 +26,4 @@ final class AddSeasonNewnessRatingToCatalogV1Index implements MigrationInterface
     {
         // Elasticsearch cannot remove a mapped field without reindexing.
     }
-};
+}

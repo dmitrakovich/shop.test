@@ -36,8 +36,7 @@ class UpdateProductsRatingJob extends AbstractJob
 
         if ($products->isEmpty()) {
             $this->saveConfig($configModel, $config);
-            $this->log('0 товаров');
-            $this->log('Успешно выполнено');
+            $this->log('Успешно выполнено', ['count' => 0]);
 
             return;
         }
@@ -76,8 +75,7 @@ class UpdateProductsRatingJob extends AbstractJob
         $this->saveConfig($configModel, $config);
         $indexer->syncProductIds(array_keys($rating));
 
-        $this->log(count($rating) . ' товаров');
-        $this->log('Успешно выполнено');
+        $this->log('Успешно выполнено', ['count' => count($rating)]);
     }
 
     /**

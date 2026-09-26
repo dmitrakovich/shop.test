@@ -39,10 +39,33 @@ abstract class AbstractFeedService implements FeedServiceInterface
         $this->currency = $currency;
         $this->filePath = $this->getFilePath();
 
-        Log::channel(LogCategory::Feeds->value)->info('Start generate', [basename($this->filePath)]);
-
         CurrencyFacade::setCurrentCurrency($this->currency->code);
     }
+
+    public function generate(): void
+    {
+        $startedAt = microtime(true);
+        memory_reset_peak_usage();
+
+        $this->write();
+
+        // backup() stats this path via file_exists(); drop PHP's stat cache so filesize() sees the new file.
+        clearstatcache(true, $this->filePath);
+
+        Log::channel(LogCategory::Feeds->value)->info('Фид сгенерирован', [
+            'feed' => $this->feedInstance->getKey(),
+            'format' => $this->feedInstance::FILE_TYPE,
+            'currency' => $this->currency->code,
+            'size_bytes' => filesize($this->filePath),
+            'duration_ms' => (int)round((microtime(true) - $startedAt) * 1000),
+            'memory_peak_mb' => round(memory_get_peak_usage() / 1024 / 1024, 1),
+        ]);
+    }
+
+    /**
+     * Write the feed to `$this->filePath`.
+     */
+    abstract protected function write(): void;
 
     /**
      * Return feed file path by instance & currency
@@ -71,10 +94,5 @@ abstract class AbstractFeedService implements FeedServiceInterface
         }
 
         copy($this->filePath, $backupFilePath);
-    }
-
-    public function __destruct()
-    {
-        Log::channel(LogCategory::Feeds->value)->info('Finish generate', [basename($this->filePath)]);
     }
 }

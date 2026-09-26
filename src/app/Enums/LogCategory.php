@@ -16,12 +16,12 @@ enum LogCategory: string
      *
      * @return array{driver: string, name: string, level: string, tap: list<string>}
      */
-    public function channel(): array
+    public function channel(string $level): array
     {
         return [
             'driver' => 'sentry_logs',
             'name' => $this->value,
-            'level' => $this->level(),
+            'level' => $level,
             'tap' => [SentryLogCategory::class . ':' . $this->value],
         ];
     }
@@ -29,22 +29,14 @@ enum LogCategory: string
     /**
      * @return array<string, array{driver: string, name: string, level: string, tap: list<string>}>
      */
-    public static function channels(): array
+    public static function channels(string $debugLevel): array
     {
         $channels = [];
 
         foreach (self::cases() as $category) {
-            $channels[$category->value] = $category->channel();
+            $channels[$category->value] = $category->channel($category === self::Debug ? $debugLevel : 'debug');
         }
 
         return $channels;
-    }
-
-    private function level(): string
-    {
-        return match ($this) {
-            self::Debug => (string)env('LOG_LEVEL', 'debug'),
-            default => 'debug',
-        };
     }
 }

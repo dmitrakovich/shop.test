@@ -331,18 +331,6 @@ parameters:
 			path: app/Http/Webhooks/TelegramBotHandler.php
 
 		-
-			message: '#^Property App\\Jobs\\AbstractJob\:\:\$contextVars type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/AbstractJob.php
-
-		-
-			message: '#^Property App\\Jobs\\AbstractJob\:\:\$jobName has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: app/Jobs/AbstractJob.php
-
-		-
 			message: '#^Method App\\Jobs\\AvailableSizes\\UpdateAvailabilityJob\:\:arrayDiffAssocRecursive\(\) has parameter \$array1 with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -469,12 +457,6 @@ parameters:
 			path: app/Jobs/AvailableSizes/UpdateAvailableSizesTableJob.php
 
 		-
-			message: '#^Property App\\Jobs\\FeedGeneratorJob\:\:\$contextVars type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/FeedGeneratorJob.php
-
-		-
 			message: '#^Parameter \#1 \$discount of class App\\Notifications\\DiscountAfterRegisterSms constructor expects string, float given\.$#'
 			identifier: argument.type
 			count: 1
@@ -499,34 +481,10 @@ parameters:
 			path: app/Jobs/OneC/UpdateOfflineOrdersJob.php
 
 		-
-			message: '#^Property App\\Jobs\\OneC\\UpdateOfflineOrdersJob\:\:\$contextVars type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/OneC/UpdateOfflineOrdersJob.php
-
-		-
 			message: '#^Property App\\Jobs\\OneC\\UpdateOfflineOrdersJob\:\:\$stocks with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
 			identifier: missingType.generics
 			count: 1
 			path: app/Jobs/OneC/UpdateOfflineOrdersJob.php
-
-		-
-			message: '#^Property App\\Jobs\\Payment\\SendInstallmentNoticeJob\:\:\$contextVars type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/Payment/SendInstallmentNoticeJob.php
-
-		-
-			message: '#^Property App\\Jobs\\SxGeoUpdateJob\:\:\$contextVars type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Jobs/SxGeoUpdateJob.php
-
-		-
-			message: '#^Property App\\Jobs\\SxGeoUpdateJob\:\:\$jobName has no type specified\.$#'
-			identifier: missingType.property
-			count: 1
-			path: app/Jobs/SxGeoUpdateJob.php
 
 		-
 			message: '#^Property App\\Jobs\\SxGeoUpdateJob\:\:\$lastUpdFile has no type specified\.$#'
@@ -827,18 +785,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Logging/FacebookApiLogger.php
-
-		-
-			message: '#^Method App\\Logging\\SimpleFormatter\:\:__invoke\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Logging/SimpleFormatter.php
-
-		-
-			message: '#^Method App\\Logging\\SimpleFormatter\:\:__invoke\(\) has parameter \$logger with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Logging/SimpleFormatter.php
 
 		-
 			message: '#^Method App\\Logging\\TelegramFormatter\:\:__invoke\(\) has no return type specified\.$#'

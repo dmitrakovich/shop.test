@@ -5,9 +5,9 @@ namespace App\Services\Feeds;
 class CsvService extends AbstractFeedService
 {
     /**
-     * Generate csv file
+     * Write csv file
      */
-    public function generate(): void
+    protected function write(): void
     {
         $this->saveToFile($this->feedInstance->getPreparedData());
     }

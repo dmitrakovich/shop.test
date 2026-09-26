@@ -52,7 +52,13 @@ class OrderItemInventoryNotification extends Notification implements ShouldQueue
         {$stock->name} {$stock->address}
         MSG;
 
-        Log::channel(LogCategory::Debug->value)->debug($message);
+        Log::channel(LogCategory::Debug->value)->debug('Уведомление в Telegram об остатках', [
+            'status' => $this->orderItem->status->name,
+            'order_id' => $this->orderItem->order_id,
+            'product_id' => $product->id,
+            'size_id' => $this->orderItem->size_id,
+            'stock_id' => $stock->id,
+        ]);
 
         return $chat->message($message)
             ->photo($product->getFirstCatalogMediaUrl())

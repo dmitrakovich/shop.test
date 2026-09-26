@@ -43,17 +43,16 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         $this->updateProductsOneCIdFromAvailableSizes();
 
         $count = $this->deleteUnavailableProducts();
-        $this->log("Снято с публикации $count товаров");
+        $this->log('Сняты с публикации товары', ['count' => $count]);
 
         [$attached, $detached] = $this->updateSizes();
-        $this->log("Удалено $detached размеров");
-        $this->log("Добавлено $attached размеров");
+        $this->log('Обновлены размеры товаров', ['added' => $attached, 'removed' => $detached]);
 
         // $count = $this->updatePrices();
-        // $this->log("Обновлены цены для $count товаров");
+        // $this->log('Обновлены цены товаров', ['count' => $count]);
 
         $count = $this->restoreProducts();
-        $this->log("Опубликовано $count товаров");
+        $this->log('Опубликованы товары', ['count' => $count]);
 
         app(CatalogIndexer::class)->syncProductIds(array_merge(
             $this->logData['deleteProducts'] ?? [],
@@ -63,7 +62,7 @@ class UpdateAvailabilityJob extends AbstractAvailableSizesJob
         ));
 
         $this->writeLog();
-        $this->log('Обновление успешно завершено!');
+        $this->log('Успешно выполнено');
     }
 
     /**

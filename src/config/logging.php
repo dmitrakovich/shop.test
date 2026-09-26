@@ -137,7 +137,7 @@ return [
             'level' => env('SENTRY_LOG_LEVEL', 'debug'),
         ],
 
-        ...LogCategory::channels(),
+        ...LogCategory::channels(debugLevel: env('LOG_LEVEL', 'debug')),
 
     ],
 

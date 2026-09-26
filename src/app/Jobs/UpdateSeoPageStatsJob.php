@@ -26,11 +26,10 @@ class UpdateSeoPageStatsJob extends AbstractJob
                 throw new RuntimeException('Не обновлено ни одной SEO-страницы');
             }
 
-            $this->log("{$count} страниц");
-            $this->log('Успешно выполнено');
+            $this->log('Успешно выполнено', ['count' => $count]);
         } catch (\Throwable $exception) {
             captureException($exception);
-            $this->error($exception->getMessage());
+            $this->error('Ошибка выполнения', ['error' => $exception->getMessage()]);
         }
     }
 }

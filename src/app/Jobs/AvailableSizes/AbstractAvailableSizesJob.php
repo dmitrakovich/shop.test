@@ -15,17 +15,9 @@ abstract class AbstractAvailableSizesJob extends AbstractJob
      */
     public $timeout = 600;
 
-    /**
-     * @var array<int, string>
-     */
-    protected $contextVars = ['usedMemory'];
-
-    /**
-     * Write message in logs
-     */
-    protected function log(string $message, string $level = 'info', string $channel = ''): void
+    protected function logCategory(): LogCategory
     {
-        parent::log($message, $level, LogCategory::UpdateAvailability->value);
+        return LogCategory::UpdateAvailability;
     }
 
     /**

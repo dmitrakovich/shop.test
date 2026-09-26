@@ -39,9 +39,11 @@ class UpdateAvailableSizesFullTableJob extends UpdateAvailableSizesTableJob
     }
 
     /**
-     * Write message in logs
+     * The full table sync runs silently.
+     *
+     * @param  array<string, scalar|null>  $context
      */
-    protected function log(string $message, string $level = '', string $channel = ''): void
+    protected function log(string $message, array $context = [], string $level = 'info'): void
     {
         //
     }

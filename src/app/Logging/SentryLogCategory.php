@@ -10,23 +10,17 @@ class SentryLogCategory
 {
     /**
      * Tag Sentry logs so Explore can filter one category: log_category:jobs
+     *
+     * Only the explicit log context is sent. Laravel Context is dropped because jobs
+     * put raw 1C rows with customer names and phones there.
      */
     public function __invoke(Logger $logger, string $category): void
     {
         $category = LogCategory::from($category)->value;
 
-        $logger->pushProcessor(static function (LogRecord $record) use ($category): LogRecord {
-            $record->extra['log_category'] = $category;
-
-            if (array_is_list($record->context) && $record->context !== []) {
-                $encoded = json_encode($record->context, JSON_UNESCAPED_UNICODE);
-
-                if (is_string($encoded)) {
-                    $record->extra['context'] = $encoded;
-                }
-            }
-
-            return $record;
-        });
+        $logger->pushProcessor(static fn (LogRecord $record): LogRecord => $record->with(
+            context: array_filter($record->context, static fn (mixed $value): bool => $value !== null),
+            extra: ['log_category' => $category],
+        ));
     }
 }

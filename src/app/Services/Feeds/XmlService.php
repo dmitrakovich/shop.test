@@ -7,9 +7,9 @@ use Illuminate\Contracts\View\View;
 class XmlService extends AbstractFeedService
 {
     /**
-     * Generate xml file
+     * Write xml file
      */
-    public function generate(): void
+    protected function write(): void
     {
         $data = view('xml.' . $this->feedInstance->getViewName(), [
             'currency' => $this->currency,

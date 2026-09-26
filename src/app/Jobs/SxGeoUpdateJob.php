@@ -18,8 +18,6 @@ class SxGeoUpdateJob extends AbstractJob
     // final const URL = 'https://sypexgeo.net/ru/pc/download/%s/SxGeoCountry.zip'; // premium
     final const string URL = 'https://sypexgeo.net/files/SxGeoCountry.zip';
 
-    protected $jobName = 'Обновление базы Sypex Geo';
-
     /**
      * Директория для сохранения файлов SxGeo
      */
@@ -36,13 +34,6 @@ class SxGeoUpdateJob extends AbstractJob
      * @var int
      */
     public $timeout = 600;
-
-    /**
-     * Переменные, которые нужно отразить в context
-     *
-     * @var array
-     */
-    protected $contextVars = ['lastModified'];
 
     /**
      * Last db modified date
@@ -67,7 +58,7 @@ class SxGeoUpdateJob extends AbstractJob
      */
     public function handle()
     {
-        $this->log('Старт. Скачиваем архив с сервера');
+        $this->log('Старт');
 
         $zipFile = $this->sxGeoPath . '/SxGeoTmp.zip';
 
@@ -104,7 +95,15 @@ class SxGeoUpdateJob extends AbstractJob
 
         file_put_contents($this->lastUpdFile, $this->lastModified);
 
-        $this->log('База успешно обновлена');
+        $this->log('Успешно выполнено');
+    }
+
+    /**
+     * @return array<string, scalar|null>
+     */
+    protected function logContext(): array
+    {
+        return ['last_modified' => $this->lastModified];
     }
 
     /**

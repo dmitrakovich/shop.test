@@ -72,35 +72,34 @@ class UpdateAvailableSizesTableJob extends AbstractAvailableSizesJob
      */
     public function handle()
     {
-        $this->log('Подготовка к синхронизации');
+        $this->log('Старт');
         $this->setCurrentStockIds();
         $this->setCurrentProductIds();
         $this->setCurrentBrandIds();
         $this->setCurrentCategoryIds();
 
-        $this->log('Получение наличия с 1С');
         $availableSizes = $this->getAvailableSizesFrom1C();
+        $this->log('Получено наличие из 1С', ['count' => count($availableSizes)]);
 
         $count = $this->filterAvailableSizes($availableSizes);
-        $this->log("Отфильтровано $count записей с неподходящими категориями или пустыми артикулами");
+        $this->log('Отфильтрованы записи с неподходящими категориями или пустыми артикулами', ['count' => $count]);
 
         $count = $this->updateAvailableSizesFromOrders($availableSizes);
-        $this->log("Обновлено $count доступных размеров товаров на основе заказов");
+        $this->log('Обновлены доступные размеры на основе заказов', ['count' => $count]);
 
         $count = $this->updateAvailableSizesByDefectiveProducts($availableSizes);
-        $this->log("Убрано $count доступных размеров товаров на основе реестра брака");
+        $this->log('Убраны доступные размеры на основе реестра брака', ['count' => $count]);
 
         $this->replaceNegativeSizesWithZero($availableSizes);
         $count = $this->removeEmptySizes($availableSizes);
-        $this->log("Удалено $count записей с пустыми размерами");
+        $this->log('Удалены записи с пустыми размерами', ['count' => $count]);
 
-        $this->log('Запись полученных и сопоставленных данных в базу');
         DB::table($this->availableSizesTable)->truncate();
         DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
         DB::table($this->availableSizesTable)->insert($availableSizes);
         DB::connection()->getPdo()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
 
-        $this->log('Таблица с наличием успешно обновлена');
+        $this->log('Успешно выполнено', ['count' => count($availableSizes)]);
     }
 
     /**

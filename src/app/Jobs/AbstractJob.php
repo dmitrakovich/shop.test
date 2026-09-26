@@ -16,79 +16,48 @@ abstract class AbstractJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Имя выполняемой задачи
-     */
-    protected $jobName = null;
-
-    /**
-     * Переменные, которые нужно отразить в context
-     *
-     * @var array
-     */
-    protected $contextVars = [];
-
-    /**
      * Handle a job failure.
+     */
+    public function failed(Throwable $exception): void
+    {
+        $this->error('Ошибка выполнения', ['error' => $exception->getMessage()]);
+    }
+
+    protected function logCategory(): LogCategory
+    {
+        return LogCategory::Jobs;
+    }
+
+    /**
+     * Attributes attached to every log of this job.
      *
-     * @return void
+     * @return array<string, scalar|null>
      */
-    public function failed(Throwable $exception)
+    protected function logContext(): array
     {
-        $errorMsg = <<<MSG
-            Job: {$this->getName()};
-            Error: {$exception->getMessage()};
-            Line: {$exception->getLine()};
-            File: {$exception->getFile()};
-            MSG;
-        // Trace: {$exception->getTraceAsString()};
-        $this->error("{$exception->getMessage()} [{$this->getName()}]");
+        return [];
     }
 
     /**
-     * Получить имя текущей задачи
+     * Keep the message constant and pass changing values in `$context`, so Explore can group by message.
+     *
+     * @param  array<string, scalar|null>  $context
      */
-    protected function getName(): string
+    protected function log(string $message, array $context = [], string $level = 'info'): void
     {
-        return $this->jobName ?? static::class;
+        Log::channel($this->logCategory()->value)->log($level, $message, [
+            'job' => class_basename(static::class),
+            'memory_mb' => round(memory_get_usage() / 1024 / 1024, 1),
+            ...$this->logContext(),
+            ...$context,
+        ]);
     }
 
     /**
-     * Запись отадочных сообщений в логd
+     * @param  array<string, scalar|null>  $context
      */
-    protected function log(string $msg, string $level = 'info', string $channel = LogCategory::Jobs->value): void
+    protected function error(string $message, array $context = []): void
     {
-        $msg = "$msg [{$this->getName()}]";
-        $context = [];
-        foreach ($this->contextVars as $var) {
-            switch ($var) {
-                case 'usedMemory':
-                    $context['usedMemory'] = $this->getFormatedUsedMemory();
-                    break;
-
-                default:
-                    $context[$var] = $this->$var ?? null;
-                    break;
-            }
-        }
-        Log::channel($channel)->log($level, $msg, $context);
-    }
-
-    /**
-     * Запись сообщения об ошибке в лог
-     */
-    protected function error(string $msg): void
-    {
-        $this->log($msg, 'error');
-    }
-
-    /**
-     * Получить форматированное кол-во использованной памяти
-     */
-    protected function getFormatedUsedMemory(): string
-    {
-        $base = log(memory_get_usage(), 1024);
-        $suffixes = ['', 'K', 'M', 'G', 'T'];
-
-        return round(1024 ** ($base - floor($base)), 2) . ' ' . $suffixes[(int)floor($base)];
+        $this->log($message, $context, 'error');
     }
 }

@@ -25,9 +25,12 @@ abstract class AbstractCleanupCommand extends Command
      */
     public function handle(): void
     {
-        $resultMessage = sprintf($this->logText(), $this->query()->forceDelete());
+        $count = $this->query()->forceDelete();
 
-        Log::channel(LogCategory::Jobs->value)->info($resultMessage);
-        $this->info($resultMessage);
+        Log::channel(LogCategory::Jobs->value)->info('Удалены устаревшие записи', [
+            'command' => $this->getName(),
+            'count' => $count,
+        ]);
+        $this->info(sprintf($this->logText(), $count));
     }
 }

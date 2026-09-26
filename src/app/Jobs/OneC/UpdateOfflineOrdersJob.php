@@ -33,11 +33,6 @@ class UpdateOfflineOrdersJob extends AbstractJob
     public $timeout = 500;
 
     /**
-     * @var array
-     */
-    protected $contextVars = ['usedMemory'];
-
-    /**
      * Stock models collection
      *
      * @var Collection<Stock>

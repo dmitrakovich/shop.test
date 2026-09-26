@@ -24,11 +24,6 @@ class FeedGeneratorJob extends AbstractJob
     public $timeout = 600;
 
     /**
-     * @var array
-     */
-    protected $contextVars = ['usedMemory'];
-
-    /**
      * Create a new job instance.
      *
      * @return void
@@ -60,5 +55,17 @@ class FeedGeneratorJob extends AbstractJob
         $xmlService = $this->getFeedService();
         $xmlService->backup();
         $xmlService->generate();
+    }
+
+    /**
+     * @return array<string, scalar|null>
+     */
+    protected function logContext(): array
+    {
+        return [
+            'feed' => $this->feedInstance->getKey(),
+            'format' => $this->feedInstance::FILE_TYPE,
+            'currency' => $this->currency->code,
+        ];
     }
 }

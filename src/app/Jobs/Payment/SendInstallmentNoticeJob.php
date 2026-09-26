@@ -4,15 +4,9 @@ namespace App\Jobs\Payment;
 
 use App\Jobs\AbstractJob;
 use App\Services\Payment\InstallmentService;
-use Drandin\DeclensionNouns\Facades\DeclensionNoun;
 
 class SendInstallmentNoticeJob extends AbstractJob
 {
-    /**
-     * @var array
-     */
-    protected $contextVars = ['usedMemory'];
-
     /**
      * Execute the job.
      *
@@ -20,10 +14,10 @@ class SendInstallmentNoticeJob extends AbstractJob
      */
     public function handle(InstallmentService $installmentService)
     {
-        $this->log('Отправка уведомлений о рассрочке');
+        $this->log('Старт');
 
         $count = $installmentService->sendNotifications();
 
-        $this->log('Отправлено ' . DeclensionNoun::make($count, 'уведомление'));
+        $this->log('Успешно выполнено', ['count' => $count]);
     }
 }

@@ -28,15 +28,9 @@ class UpsertCatalogProductJob extends AbstractJob implements ShouldBeUnique
      */
     public array $backoff = [10, 30];
 
-    /**
-     * @var list<string>
-     */
-    protected $contextVars = ['productId'];
-
     public function __construct(public readonly int $productId)
     {
         $this->onQueue(Queue::Elasticsearch);
-        $this->jobName = 'UpsertCatalogProduct';
     }
 
     public function uniqueId(): string
@@ -57,5 +51,13 @@ class UpsertCatalogProductJob extends AbstractJob implements ShouldBeUnique
         }
 
         $indexer->upsert([$product]);
+    }
+
+    /**
+     * @return array<string, scalar|null>
+     */
+    protected function logContext(): array
+    {
+        return ['product_id' => $this->productId];
     }
 }

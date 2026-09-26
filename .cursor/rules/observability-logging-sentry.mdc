@@ -11,6 +11,14 @@ alwaysApply: false
 - `App\Enums\LogCategory` registers Sentry channels (`jobs`, `feeds`, `debug`, `update_availability`) and sets `log_category`. Filter in Explore with `log_category:jobs` (or `feeds`, `debug`, `update_availability`).
 - Turn logs on with `SENTRY_ENABLE_LOGS=true`, `SENTRY_LOG_LEVEL=warning`, and `LOG_STACK=single,sentry_logs`. DSN stays optional (`SENTRY_LARAVEL_DSN`).
 
+## Log payload in category channels
+
+- Keep the message constant; put changing values into context with `snake_case` keys and scalar values (`['count' => $count]`, not `"Удалено $count записей"`). Explore groups and charts by message.
+- Context is the whole payload: `null` values are dropped and Laravel `Context` is not sent (it can hold customer data).
+- Jobs log through `AbstractJob::log($message, $context)`. `job` and `memory_mb` are added automatically; job-wide attributes go in `logContext()`, the channel in `logCategory()`.
+- Job lifecycle messages: `Старт`, `Успешно выполнено` (with `count` when there is one), `Ошибка выполнения` (level `error`, with `error`).
+- Feeds log one `Фид сгенерирован` event: `feed`, `format`, `currency`, `size_bytes`, `duration_ms`, `memory_peak_mb`.
+
 ## When adding error handling
 
 - Prefer actionable logs with context (ids, order numbers, user id) over silent catches.
