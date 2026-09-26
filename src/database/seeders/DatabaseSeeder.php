@@ -41,8 +41,6 @@ class DatabaseSeeder extends Seeder
             Schema::enableForeignKeyConstraints();
         }
 
-        $this->call(AdminPanelSeeder::class);
-
         // auto-generated
         $this->call(StatusesTableSeeder::class);
         $this->call(ConfigsTableSeeder::class);
