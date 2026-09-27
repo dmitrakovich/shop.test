@@ -48,6 +48,11 @@ class Api
             throw new ActionNotFoundException("Action doesn't exist: {$className}.");
         }
 
+        // Path segments are baked in at construction. Reusing one instance would keep the first ids.
+        if ($arguments !== []) {
+            return new $className($this->httpClient, $arguments);
+        }
+
         if (!isset($this->actionContainer[$className])) {
             $this->actionContainer[$className] = new $className($this->httpClient, $arguments);
         }

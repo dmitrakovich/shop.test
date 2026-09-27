@@ -13,5 +13,6 @@ return [
     'elasticsearch' => [
         'alias' => env('CATALOG_ELASTICSEARCH_ALIAS', 'catalog'),
         'index' => env('CATALOG_ELASTICSEARCH_INDEX', 'catalog_v1'),
+        'suggestions_alias' => env('CATALOG_ELASTICSEARCH_SUGGESTIONS_ALIAS', 'catalog_suggestions'),
     ],
 ];

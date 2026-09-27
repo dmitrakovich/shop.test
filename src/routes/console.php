@@ -27,6 +27,7 @@ Schedule::command('backup:run')->dailyAt('01:00');
 Schedule::command('backup:clean')->dailyAt('06:00');
 Schedule::command('backup:monitor')->dailyAt('06:30');
 Schedule::command('catalog:elasticsearch-reindex --fresh')->dailyAt('03:20');
+Schedule::command('catalog:suggestions-rebuild')->dailyAt('03:40');
 
 Schedule::command('cleanup:devices')->dailyAt('04:20');
 Schedule::command('cleanup:audits')->dailyAt('04:25');
