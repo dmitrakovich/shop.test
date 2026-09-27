@@ -48,7 +48,7 @@ class OrdersOverviewTest extends TestCase
         $dashboard = Livewire::test(Dashboard::class);
         $dashboard->assertSuccessful();
         $dashboard->assertSee('https://filamentphp.com');
-        $dashboard->assertSee('По дате создания, последние 60 дней');
+        $dashboard->assertSee('По дате создания, последние 45 дней');
     }
 
     public function test_orders_chart_counts_orders_by_created_at_day(): void
@@ -61,11 +61,11 @@ class OrdersOverviewTest extends TestCase
         $this->createOrder(now());
         $this->createOrder(now()->subDays(3));
         $this->createOrder(now()->subDays(40));
-        $this->createOrder(now()->subDays(70));
+        $this->createOrder(now()->subDays(50));
 
         $after = $this->series();
 
-        $this->assertCount(60, $after);
+        $this->assertCount(45, $after);
         $this->assertSame($before[today()->format('d.m')] + 2, $after[today()->format('d.m')]);
         $this->assertSame($before[today()->subDays(3)->format('d.m')] + 1, $after[today()->subDays(3)->format('d.m')]);
         $this->assertSame($before[today()->subDays(40)->format('d.m')] + 1, $after[today()->subDays(40)->format('d.m')]);
@@ -81,7 +81,7 @@ class OrdersOverviewTest extends TestCase
         $component = Livewire::test(OrdersChart::class);
         $component->assertSuccessful();
         $component->assertSee('data-chart-type="line"', false);
-        $component->assertSee('max-height: 540px', false);
+        $component->assertSee('max-height: 500px', false);
 
         $method = new ReflectionMethod(OrdersChart::class, 'getData');
         /** @var array{datasets: list<array{data: list<int>}>, labels: list<string>} $data */
