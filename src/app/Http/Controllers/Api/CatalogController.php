@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\Product\ProductSort;
 use App\Events\Analytics\ProductView;
+use App\Facades\Device;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterRequest;
+use App\Http\Requests\SearchSuggestionsRequest;
+use App\Http\Resources\Search\SearchSuggestionsResource;
 use App\Http\Resources\Ads\BannerResource;
 use App\Http\Resources\Feedback\FeedbackResource;
 use App\Http\Resources\Info\InstallmentResource;
@@ -16,16 +19,19 @@ use App\Http\Resources\Product\CategoryResource;
 use App\Http\Resources\Product\ProductResource;
 use App\Libraries\Seo\Facades\SeoFacade;
 use App\Models\Category;
+use App\Models\Logs\SearchQueryLog;
 use App\Models\Product;
 use App\Repositories\BannerRepository;
 use App\Services\CatalogService;
 use App\Services\Elasticsearch\CatalogFacetService;
 use App\Services\Elasticsearch\CatalogSearchService;
 use App\Services\FeedbackService;
+use App\Services\SearchSuggestionsService;
 use App\Services\Seo\CatalogSeoService;
 use App\Services\SliderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 
 class CatalogController extends Controller
 {
@@ -62,6 +68,15 @@ class CatalogController extends Controller
             $page,
         );
 
+        if ($page === 1 && $catalogSearchService->normalizeSearchQuery($searchQuery) !== '') {
+            SearchQueryLog::query()->create([
+                'device_id' => Device::current()->id,
+                'query' => mb_substr(Str::squish(mb_strtolower((string)$searchQuery)), 0, 255),
+                'results_count' => $result->total,
+                'filters_path' => mb_substr((string)$filterRequest->route('path'), 0, 255) ?: null,
+            ]);
+        }
+
         /** @var Category $category */
         $category = end($currentFilters[Category::class])->getFilterModel();
         $category->loadParentCategoryChain();
@@ -88,6 +103,19 @@ class CatalogController extends Controller
                 'image' => SeoFacade::getImage(),
             ],
         ]);
+    }
+
+    /**
+     * Empty field: popular products and top queries.
+     * From 2 characters: text suggestions and matching categories.
+     */
+    public function suggestions(
+        SearchSuggestionsRequest $request,
+        SearchSuggestionsService $searchSuggestionsService,
+    ): SearchSuggestionsResource {
+        return new SearchSuggestionsResource(
+            $searchSuggestionsService->forQuery($request->string('query')->value()),
+        );
     }
 
     /**

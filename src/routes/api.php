@@ -43,6 +43,7 @@ Route::middleware('auth:sanctum')->prefix('account')->as('account.')->group(func
 
 Route::get('app-init', [AppController::class, 'init']);
 Route::get('product/{product:slug}', [CatalogController::class, 'show'])->withTrashed()->name('product.show');
+Route::get('search/suggestions', [CatalogController::class, 'suggestions'])->name('search.suggestions');
 
 Route::get('main-page', [InfoPageController::class, 'main']);
 Route::get('info-page/{page:slug}', [InfoPageController::class, 'show']);
