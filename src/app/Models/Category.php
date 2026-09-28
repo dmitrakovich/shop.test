@@ -81,7 +81,6 @@ class Category extends Model implements Auditable, Filterable, Sortable
             }
         });
         static::saved(function (self $category): void {
-            Cache::forget(config('cache_config.global_nav_categories.key'));
             $category->url()->updateOrCreate([], ['slug' => $category->slug]);
 
             if ($category->wasChanged(['slug', 'parent_id'])) {

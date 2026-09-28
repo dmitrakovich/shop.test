@@ -5,8 +5,6 @@ use App\Admin\Controllers\Bookkeeping;
 use App\Admin\Controllers\Config;
 use App\Admin\Controllers\Debug\CacheController;
 use App\Admin\Controllers\Departures;
-use App\Admin\Controllers\DocController;
-use App\Admin\Controllers\InfoPageController;
 use App\Admin\Controllers\Logs;
 use App\Admin\Controllers\Offline\DisplacementController;
 use App\Admin\Controllers\OrderCommentController;
@@ -29,8 +27,6 @@ Route::group([
     'namespace' => config('admin.route.namespace'),
     'middleware' => config('admin.route.middleware'),
 ], function (Router $router) {
-    $router->resource('info-pages', InfoPageController::class);
-
     $router->group(['prefix' => 'orders', 'as' => 'orders.'], function (Router $router) {
         $router->resource('offline', OfflineOrderController::class);
     });
@@ -53,11 +49,6 @@ Route::group([
 
     $router->group(['prefix' => 'bookkeeping'], function (Router $router) {
         $router->resource('payments', Bookkeeping\PaymentController::class);
-    });
-
-    $router->group(['prefix' => 'docs'], function (Router $router) {
-        $router->resource('edit', DocController::class);
-        $router->get('{doc:slug}', DocController::class);
     });
 
     $router->group(['prefix' => 'departures'], function (Router $router) {

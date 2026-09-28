@@ -4,7 +4,6 @@ namespace App\Services\Product;
 
 use App\Models\Product;
 use App\Models\ProductGroup;
-use Illuminate\Support\Facades\Cache;
 
 class ProductGroupService
 {
@@ -19,8 +18,6 @@ class ProductGroupService
         } else {
             Product::withTrashed()->where('id', $productId)->update(['product_group_id' => null]);
         }
-        $cacheConfig = config('cache_config.product_group');
-        Cache::forget($cacheConfig['key'] . $productGroupId);
 
         return true;
     }
@@ -35,15 +32,11 @@ class ProductGroupService
     {
         $product = Product::withTrashed()->find($toProductId);
         if ($product->product_group_id) {
-            $productGroupId = $product->product_group_id;
             Product::withTrashed()->where('id', $curProductId)->update(['product_group_id' => $product->product_group_id]);
         } else {
             $productGroup = ProductGroup::create();
-            $productGroupId = $productGroup->id;
             Product::withTrashed()->whereIn('id', [$curProductId, $toProductId])->update(['product_group_id' => $productGroup->id]);
         }
-        $cacheConfig = config('cache_config.product_group');
-        Cache::forget($cacheConfig['key'] . $productGroupId);
 
         return true;
     }

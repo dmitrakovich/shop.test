@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
@@ -70,6 +69,7 @@ class AdminPanelProvider extends PanelProvider
                 OrdersChart::class,
             ])
             ->sidebarCollapsibleOnDesktop()
+            ->navigationGroups(NavGroup::class)
             ->navigationItems([
                 ...$this->generateHorizonNavItems(),
                 ...$this->generateOldAdminNavItems(),
@@ -93,7 +93,6 @@ class AdminPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make()
                     ->navigationGroup(NavGroup::Management) // doesn't work: lib bug
                     ->registerNavigation(true),
-                FilamentLogViewer::make(),
             ])
             ->bootUsing(function (Panel $panel) {
                 Table::configureUsing(function (Table $table) {

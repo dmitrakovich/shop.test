@@ -2,21 +2,22 @@
 
 namespace App\Models;
 
-use Database\Factories\InfoPageFactory;
+use Database\Factories\DocFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
  * @property string $slug
- * @property string $name
- * @property string|null $html
+ * @property string $title
+ * @property int $sort
+ * @property string $html
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
-class InfoPage extends Model
+class Doc extends Model
 {
-    /** @use HasFactory<InfoPageFactory> */
+    /** @use HasFactory<DocFactory> */
     use HasFactory;
 
     /**
@@ -25,4 +26,9 @@ class InfoPage extends Model
      * @var bool
      */
     protected static $unguarded = true;
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 }
