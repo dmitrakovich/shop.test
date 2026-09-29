@@ -3,7 +3,6 @@
 use App\Admin\Controllers\Automation;
 use App\Admin\Controllers\Bookkeeping;
 use App\Admin\Controllers\Config;
-use App\Admin\Controllers\Debug\CacheController;
 use App\Admin\Controllers\Departures;
 use App\Admin\Controllers\Logs;
 use App\Admin\Controllers\Offline\DisplacementController;
@@ -13,7 +12,6 @@ use App\Admin\Controllers\OrderItemController;
 use App\Admin\Controllers\Orders\OfflineOrderController;
 use App\Admin\Controllers\OrdersDistribution\SettingsController;
 use App\Admin\Controllers\OrdersDistribution\StatisticController;
-use App\Http\Controllers\DebugController;
 use App\Http\Controllers\Shop\OrderController;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Routing\Router;
@@ -79,15 +77,5 @@ Route::group([
     $router->group(['prefix' => 'logs', 'as' => 'logs.'], function (Router $router) {
         $router->resource('inventory', Logs\InventoryController::class);
         $router->resource('order-item-statuses', Logs\OrderItemStatusController::class);
-    });
-
-    // debug
-    $router->group(['prefix' => 'debug'], function (Router $router) {
-        $router->any('clear-cache', CacheController::class);
-    });
-    Route::get('debug', [DebugController::class, 'index']);
-    Route::get('phpinfo', [DebugController::class, 'phpinfo']);
-    Route::get('debug-sentry', function (): never {
-        throw new \Exception('Debug Sentry error!');
     });
 });
