@@ -47,6 +47,9 @@ class OrdersDistributionTest extends TestCase
                     ],
                 ],
             ])
+            ->assertSee('Время работы (четные дни)')
+            ->assertSee('Время работы (нечетные дни)')
+            ->assertSeeHtml('fi-fo-table-repeater')
             ->call('save')
             ->assertHasNoFormErrors()
             ->assertNotified('Настройки распределения сохранены');
@@ -72,6 +75,7 @@ class OrdersDistributionTest extends TestCase
         Livewire::test(WorkSchedulePage::class)
             ->assertSuccessful()
             ->assertSee('Петров Б.')
+            ->assertSeeHtml('work-schedule-table')
             ->set('shifts.' . $date . '.' . $manager->id, true)
             ->call('save')
             ->assertNotified('График работы сохранён');

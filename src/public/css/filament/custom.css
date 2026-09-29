@@ -1,7 +1,66 @@
 .bg-danger\/10 {
     background-color: rgba(239, 68, 68, 0.1);
 }
+
 /* fix for rating */
 .text-primary-500 {
     color: oklch(0.666 0.179 58.318);
+}
+
+.work-schedule .fi-section-header-heading {
+    text-align: center;
+}
+
+.work-schedule-scroll {
+    overflow-x: auto;
+}
+
+.work-schedule-table {
+    min-width: 68rem;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.work-schedule-table th,
+.work-schedule-table td {
+    padding: 0.4rem 0.1rem;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 500;
+}
+
+.work-schedule-manager {
+    width: 9.5rem;
+    padding-left: 0.75rem;
+    text-align: left;
+    white-space: nowrap;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--color-white);
+}
+
+.work-schedule-table thead .work-schedule-manager {
+    background: var(--gray-50);
+}
+
+.work-schedule-weekend {
+    background: color-mix(in oklab, var(--gray-950) 5%, transparent);
+}
+
+.work-schedule-table thead .work-schedule-weekend {
+    background: var(--gray-100);
+}
+
+.dark .work-schedule-manager {
+    background: var(--gray-900);
+}
+
+.dark .work-schedule-table thead .work-schedule-manager {
+    background: color-mix(in oklab, var(--color-white) 5%, var(--gray-900));
+}
+
+.dark .work-schedule-weekend,
+.dark .work-schedule-table thead .work-schedule-weekend {
+    background: color-mix(in oklab, var(--color-white) 5%, var(--gray-900));
 }

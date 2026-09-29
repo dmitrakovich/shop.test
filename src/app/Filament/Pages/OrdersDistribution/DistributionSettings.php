@@ -7,10 +7,12 @@ use App\Enums\Filament\NavGroup;
 use App\Filament\Pages\Settings\Concerns\ManagesConfigForm;
 use App\Services\AdministratorService;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Repeater\TableColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -53,39 +55,44 @@ class DistributionSettings extends Page
                             ->label('Расписание')
                             ->addActionLabel('Добавить менеджера')
                             ->defaultItems(0)
-                            ->columns(2)
+                            ->reorderable(false)
+                            ->compact()
                             ->columnSpanFull()
+                            ->table([
+                                TableColumn::make('Менеджер')->markAsRequired()->width('22%'),
+                                TableColumn::make('Время работы (четные дни)')->markAsRequired(),
+                                TableColumn::make('Время работы (нечетные дни)')->markAsRequired(),
+                            ])
                             ->schema([
                                 Select::make('admin_user_id')
-                                    ->label('Менеджер')
+                                    ->hiddenLabel()
                                     ->options(fn (): array => app(AdministratorService::class)->getAdministratorList()->all())
                                     ->searchable()
                                     ->native(false)
                                     ->required()
-                                    ->columnSpanFull()
                                     ->dehydrateStateUsing(fn (mixed $state): int => (int)$state),
-                                TimePicker::make('time_from_even')
-                                    ->label('С (четные дни)')
-                                    ->seconds(false)
-                                    ->native(false)
-                                    ->required(),
-                                TimePicker::make('time_to_even')
-                                    ->label('До (четные дни)')
-                                    ->seconds(false)
-                                    ->native(false)
-                                    ->required(),
-                                TimePicker::make('time_from_odd')
-                                    ->label('С (нечетные дни)')
-                                    ->seconds(false)
-                                    ->native(false)
-                                    ->required(),
-                                TimePicker::make('time_to_odd')
-                                    ->label('До (нечетные дни)')
-                                    ->seconds(false)
-                                    ->native(false)
-                                    ->required(),
+                                $this->timeRange('time_from_even', 'time_to_even'),
+                                $this->timeRange('time_from_odd', 'time_to_odd'),
                             ]),
                     ]),
             ]);
+    }
+
+    private function timeRange(string $from, string $to): Grid
+    {
+        return Grid::make(2)->schema([
+            TimePicker::make($from)
+                ->hiddenLabel()
+                ->prefix('с')
+                ->seconds(false)
+                ->native(false)
+                ->required(),
+            TimePicker::make($to)
+                ->hiddenLabel()
+                ->prefix('до')
+                ->seconds(false)
+                ->native(false)
+                ->required(),
+        ]);
     }
 }
