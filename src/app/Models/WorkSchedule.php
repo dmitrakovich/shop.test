@@ -21,11 +21,14 @@ class WorkSchedule extends Model
     protected static $unguarded = true;
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'date' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'date' => 'date',
+        ];
+    }
 }

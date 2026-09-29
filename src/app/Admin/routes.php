@@ -10,8 +10,6 @@ use App\Admin\Controllers\OrderCommentController;
 use App\Admin\Controllers\OrderController as AdminOrderController;
 use App\Admin\Controllers\OrderItemController;
 use App\Admin\Controllers\Orders\OfflineOrderController;
-use App\Admin\Controllers\OrdersDistribution\SettingsController;
-use App\Admin\Controllers\OrdersDistribution\StatisticController;
 use App\Http\Controllers\Shop\OrderController;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Routing\Router;
@@ -61,12 +59,6 @@ Route::group([
         $router->resource('stock', Automation\StockController::class);
         $router->get('stock-update', [Automation\StockController::class, 'updateAvailability'])->name('stock-update');
         $router->get('inventory-blacklist', Automation\InventoryBlacklistForm::class);
-    });
-
-    // Orders distribution
-    $router->group(['prefix' => 'orders_distribution'], function (Router $router) {
-        $router->get('settings', [SettingsController::class, 'index']);
-        $router->resource('statistic', StatisticController::class);
     });
 
     $router->group(['prefix' => 'offline', 'as' => 'offline.'], function (Router $router) {

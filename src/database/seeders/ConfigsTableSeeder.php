@@ -61,6 +61,12 @@ class ConfigsTableSeeder extends Seeder
                 'created_at' => '2023-10-16 22:41:54',
                 'updated_at' => '2023-10-16 22:41:54',
             ],
+            7 => [
+                'key' => ConfigKey::DistribOrderSetup,
+                'config' => '{"active": false, "schedule": []}',
+                'created_at' => '2023-12-17 13:54:24',
+                'updated_at' => '2023-12-17 13:54:24',
+            ],
         ]);
 
     }

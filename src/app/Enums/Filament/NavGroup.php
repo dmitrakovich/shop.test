@@ -20,6 +20,7 @@ enum NavGroup implements Collapsible, HasIcon, HasLabel
     case Management;
     case Settings;
     case Departures;
+    case OrdersDistribution;
     case Seo;
 
     public function getLabel(): string
@@ -36,6 +37,7 @@ enum NavGroup implements Collapsible, HasIcon, HasLabel
             self::Management => 'Управление',
             self::Settings => 'Настройки',
             self::Departures => 'Отправления',
+            self::OrdersDistribution => 'Распределение заказов',
             self::Seo => 'SEO',
         };
     }
@@ -54,6 +56,7 @@ enum NavGroup implements Collapsible, HasIcon, HasLabel
             self::Management => Heroicon::OutlinedShieldCheck,
             self::Settings => Heroicon::OutlinedAdjustmentsHorizontal,
             self::Departures => Heroicon::OutlinedTruck,
+            self::OrdersDistribution => Heroicon::OutlinedArrowsRightLeft,
             self::Seo => Heroicon::OutlinedGlobeAlt,
         };
     }
@@ -66,7 +69,7 @@ enum NavGroup implements Collapsible, HasIcon, HasLabel
     public function isCollapsed(): bool
     {
         return match ($this) {
-            self::Docs, self::Analytics, self::Management, self::Settings => true,
+            self::Docs, self::Analytics, self::Management, self::OrdersDistribution, self::Settings => true,
             default => false,
         };
     }
