@@ -16,7 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware
             ->redirectGuestsTo(fn () => Filament::getPanel('admin')->getLoginUrl())
             ->validateSignatures(['utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term'])
-            ->preventRequestsDuringMaintenance(['/opcache-api/*'])
             ->encryptCookies(['utm', Cookie::YANDEX_ID->value, Cookie::GOOGLE_ID->value]);
 
         $middleware->group('web', [
