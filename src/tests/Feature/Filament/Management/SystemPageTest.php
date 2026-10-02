@@ -4,7 +4,6 @@ namespace Tests\Feature\Filament\Management;
 
 use App\Filament\Pages\Management\System;
 use App\Models\Admin\AdminUser;
-use Appstract\Opcache\OpcacheFacade as OPcache;
 use Filament\Actions\Action;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
@@ -50,7 +49,7 @@ class SystemPageTest extends TestCase
             ->assertSee('PHP Variables', false);
     }
 
-    public function test_clear_cache_action_clears_application_and_opcache(): void
+    public function test_clear_cache_action_clears_application_cache(): void
     {
         $commands = [];
 
@@ -61,8 +60,6 @@ class SystemPageTest extends TestCase
 
                 return 0;
             });
-
-        OPcache::shouldReceive('clear')->once();
 
         $this->actingAs($this->createSuperAdmin(), 'admin');
 

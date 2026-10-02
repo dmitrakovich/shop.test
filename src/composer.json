@@ -25,7 +25,6 @@
     ],
     "require": {
         "php": "^8.5",
-        "appstract/laravel-opcache": "^4.0",
         "babenkoivan/elastic-client": "^4.0",
         "babenkoivan/elastic-migrations": "^5.0",
         "bezhansalleh/filament-shield": "^4.0",
