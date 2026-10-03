@@ -63,9 +63,17 @@ class RouteServiceProvider extends ServiceProvider
             ->group(base_path('routes/api.v2.php'));
     }
 
+    /**
+     * Product and stock lookups for the legacy order form.
+     *
+     * Do not add auth or a limiter that resolves the admin user. The legacy
+     * admin is about to be removed, and loading that user boots Filament Shield,
+     * which throws NoDefaultPanelSetException when no default panel is set.
+     */
     protected function mapApiAdminRoutes(): void
     {
-        Route::middleware(['web', 'admin.auth', 'throttle:admin-api'])
+        Route::middleware(['api'])
+            ->withoutMiddleware('throttle:api')
             ->prefix('api/admin')
             ->as('api.admin.')
             ->group(base_path('routes/api.admin.php'));
@@ -110,11 +118,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-        });
-
-        // The order form fires two lookups per line on open, plus select2 search.
-        RateLimiter::for('admin-api', function (Request $request) {
-            return Limit::perMinute(600)->by($request->user('admin')?->id ?: $request->ip());
         });
     }
 }
