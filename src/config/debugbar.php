@@ -21,6 +21,7 @@ return [
     'except' => [
         'telescope*',
         'horizon*',
+        'admin/phpinfo',
         '_boost/browser-logs',
         'livewire-*/livewire.js',
     ],

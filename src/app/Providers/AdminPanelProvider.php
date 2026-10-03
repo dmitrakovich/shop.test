@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use App\Enums\Filament\NavGroup;
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Widgets\OrdersChart;
+use App\Http\Controllers\Admin\PhpInfoController;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -30,6 +30,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -70,6 +71,7 @@ class AdminPanelProvider extends PanelProvider
                 OrdersChart::class,
             ])
             ->sidebarCollapsibleOnDesktop()
+            ->navigationGroups(NavGroup::class)
             ->navigationItems([
                 ...$this->generateHorizonNavItems(),
                 ...$this->generateOldAdminNavItems(),
@@ -93,7 +95,6 @@ class AdminPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make()
                     ->navigationGroup(NavGroup::Management) // doesn't work: lib bug
                     ->registerNavigation(true),
-                FilamentLogViewer::make(),
             ])
             ->bootUsing(function (Panel $panel) {
                 Table::configureUsing(function (Table $table) {
@@ -104,6 +105,12 @@ class AdminPanelProvider extends PanelProvider
             ->assets([
                 Css::make('custom', resource_path('css/custom-filament.css')),
             ], 'filament')
+            ->authenticatedRoutes(function (Panel $panel): void {
+                Route::get('phpinfo', PhpInfoController::class)->name('phpinfo');
+            })
+            ->spaUrlExceptions([
+                '*/admin/phpinfo',
+            ])
             ->spa();
     }
 

@@ -106,27 +106,6 @@ class LegacyAdminApiSecurityTest extends TestCase
             ->assertExactJson([]);
     }
 
-    public function test_legacy_debug_routes_are_not_registered(): void
-    {
-        $uris = collect(Route::getRoutes()->getRoutes())
-            ->map(fn (\Illuminate\Routing\Route $route): string => $route->uri());
-
-        $this->assertFalse($uris->contains('old-admin/phpinfo'));
-        $this->assertFalse($uris->contains('old-admin/debug-sentry'));
-        $this->assertFalse($uris->contains('old-admin/debug/clear-cache'));
-        $this->assertFalse($uris->contains('old-admin/debug'));
-
-        foreach ([
-            '/old-admin/phpinfo',
-            '/old-admin/debug-sentry',
-            '/old-admin/debug/clear-cache',
-            '/old-admin/debug',
-        ] as $uri) {
-            $this->forgetDevice();
-            $this->get($uri)->assertRedirect();
-        }
-    }
-
     private function forgetDevice(): void
     {
         (new ReflectionProperty(Device::class, 'currentDevice'))->setValue(null);

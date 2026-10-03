@@ -83,7 +83,6 @@ Route::prefix('feedbacks')->as('feedbacks.')->group(function () {
         Route::post('/', [FeedbackController::class, 'store'])
             ->middleware(PersistDeviceConsentHeaders::class . ':' . ConsentFormEnum::Feedback->value)
             ->name('store');
-        Route::post('{feedback}/answers', [FeedbackController::class, 'storeAnswer'])->name('answers.store');
     });
 });
 

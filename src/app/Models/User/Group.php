@@ -3,7 +3,6 @@
 namespace App\Models\User;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -44,14 +43,6 @@ class Group extends Model implements Auditable
      * The attributes that are mass assignable.
      */
     protected $fillable = ['name', 'discount'];
-
-    public static function boot()
-    {
-        parent::boot();
-        self::saved(function ($model) {
-            Cache::forget(config('cache_config.global_user_discounts.key'));
-        });
-    }
 
     /**
      * Default model data

@@ -2,28 +2,27 @@
 
 namespace App\Models;
 
+use Database\Factories\InfoPageFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * @property int $id
  * @property string $slug
  * @property string $name
- * @property string|null $icon
  * @property string|null $html
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
 class InfoPage extends Model
 {
+    /** @use HasFactory<InfoPageFactory> */
+    use HasFactory;
+
     /**
-     * Bootstrap the model and its traits.
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
      */
-    protected static function boot(): void
-    {
-        parent::boot();
-        static::saved(function () {
-            Cache::forget(config('cache_config.global_nav_info_pages.key'));
-        });
-    }
+    protected static $unguarded = true;
 }

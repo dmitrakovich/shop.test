@@ -4,16 +4,12 @@ use App\Admin\Controllers\Automation;
 use App\Admin\Controllers\Bookkeeping;
 use App\Admin\Controllers\Config;
 use App\Admin\Controllers\Departures;
-use App\Admin\Controllers\DocController;
-use App\Admin\Controllers\InfoPageController;
 use App\Admin\Controllers\Logs;
 use App\Admin\Controllers\Offline\DisplacementController;
 use App\Admin\Controllers\OrderCommentController;
 use App\Admin\Controllers\OrderController as AdminOrderController;
 use App\Admin\Controllers\OrderItemController;
 use App\Admin\Controllers\Orders\OfflineOrderController;
-use App\Admin\Controllers\OrdersDistribution\SettingsController;
-use App\Admin\Controllers\OrdersDistribution\StatisticController;
 use App\Http\Controllers\Shop\OrderController;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Routing\Router;
@@ -27,8 +23,6 @@ Route::group([
     'namespace' => config('admin.route.namespace'),
     'middleware' => config('admin.route.middleware'),
 ], function (Router $router) {
-    $router->resource('info-pages', InfoPageController::class);
-
     $router->group(['prefix' => 'orders', 'as' => 'orders.'], function (Router $router) {
         $router->resource('offline', OfflineOrderController::class);
     });
@@ -53,11 +47,6 @@ Route::group([
         $router->resource('payments', Bookkeeping\PaymentController::class);
     });
 
-    $router->group(['prefix' => 'docs'], function (Router $router) {
-        $router->resource('edit', DocController::class);
-        $router->get('{doc:slug}', DocController::class);
-    });
-
     $router->group(['prefix' => 'departures'], function (Router $router) {
         $router->resource('order-to-send', Departures\OrderToSendController::class);
         $router->resource('batches', Departures\BatchController::class);
@@ -70,12 +59,6 @@ Route::group([
         $router->resource('stock', Automation\StockController::class);
         $router->get('stock-update', [Automation\StockController::class, 'updateAvailability'])->name('stock-update');
         $router->get('inventory-blacklist', Automation\InventoryBlacklistForm::class);
-    });
-
-    // Orders distribution
-    $router->group(['prefix' => 'orders_distribution'], function (Router $router) {
-        $router->get('settings', [SettingsController::class, 'index']);
-        $router->resource('statistic', StatisticController::class);
     });
 
     $router->group(['prefix' => 'offline', 'as' => 'offline.'], function (Router $router) {

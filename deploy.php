@@ -71,12 +71,6 @@ task('deploy:writable', function () {
     });
 });
 
-desc('Clear OPCache');
-task('artisan:opcache:clear', artisan('opcache:clear'));
-
-desc('Pre-compile application code');
-task('artisan:opcache:compile', artisan('opcache:compile --force'));
-
 desc('Generate permissions/policies for all entities');
 task('artisan:shield:generate', artisan('shield:generate --panel=admin --all'));
 
@@ -101,7 +95,6 @@ task('deploy', [
     'deploy:publish',
 ]);
 
-after('deploy:symlink', 'artisan:opcache:clear');
 after('deploy:symlink', 'artisan:horizon:terminate');
 
 after('deploy:failed', 'deploy:unlock');
@@ -109,7 +102,6 @@ after('deploy:failed', 'deploy:unlock');
 // Rollback settings
 task('rollback:after', [
     'artisan:cache:clear',
-    'artisan:opcache:clear',
 ]);
 
 after('rollback', 'rollback:after');
