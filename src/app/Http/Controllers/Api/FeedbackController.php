@@ -6,7 +6,7 @@ use App\Data\Feedback\FeedbackData;
 use App\Enums\Feedback\FeedbackType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Ads\BannerResource;
-use App\Http\Resources\Feedback\FeedbackCollection;
+use App\Http\Resources\Feedback\FeedbackResource;
 use App\Models\Feedback;
 use App\Repositories\BannerRepository;
 use App\Services\FeedbackService;
@@ -22,12 +22,12 @@ class FeedbackController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return array{feedbacks: FeedbackCollection, banners: AnonymousResourceCollection}
+     * @return array{feedbacks: AnonymousResourceCollection, banners: AnonymousResourceCollection}
      */
     public function index(): array
     {
         return [
-            'feedbacks' => new FeedbackCollection($this->feedbackService->getByType(FeedbackType::REVIEW)),
+            'feedbacks' => FeedbackResource::collection($this->feedbackService->getByType(FeedbackType::REVIEW)),
             'banners' => BannerResource::collection($this->bannerRepository->getFeedbackBanners()),
         ];
     }
