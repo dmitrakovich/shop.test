@@ -7,7 +7,6 @@ use App\Enums\Feedback\FeedbackType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Ads\BannerResource;
 use App\Http\Resources\Feedback\FeedbackCollection;
-use App\Models\Feedback;
 use App\Repositories\BannerRepository;
 use App\Services\FeedbackService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -38,10 +37,5 @@ class FeedbackController extends Controller
     public function store(FeedbackData $feedbackData): void
     {
         $this->feedbackService->store($feedbackData);
-    }
-
-    public function storeAnswer(Feedback $feedback): void
-    {
-        // code...
     }
 }

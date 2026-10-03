@@ -495,20 +495,6 @@ class Order extends Model implements Auditable
         return $resultItemPrice;
     }
 
-    /**
-     * Get installment monthly fee sum.
-     */
-    public function getInstallmentMonthlyFeeSum(): float
-    {
-        $price = 0;
-        $this->loadMissing(['itemsExtended']);
-        foreach ($this->itemsExtended as $item) {
-            $price += (float)$item->installment_monthly_fee;
-        }
-
-        return $price;
-    }
-
     public function getUniqItemsCount(): int
     {
         $items = [];

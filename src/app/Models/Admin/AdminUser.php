@@ -9,8 +9,6 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
@@ -115,20 +113,6 @@ class AdminUser extends Authenticatable implements Auditable, AuthorInterface, F
     }
 
     /**
-     * Get all old permissions of user.
-     *
-     * @return mixed
-     */
-    public function allPermissions(): Collection
-    {
-        $rolesId = DB::table('admin_role_users')->where('user_id', auth()->id())->pluck('role_id');
-        $permissionsId = DB::table('admin_role_permissions')->whereIn('role_id', $rolesId)->pluck('permission_id');
-        $permissions = \Encore\Admin\Auth\Database\Permission::query()->whereIn('id', $permissionsId)->get();
-
-        return $permissions;
-    }
-
-    /**
      * Check if user has permission.
      *
      * TEMPORARY: always allow — restore real checks after Filament migration.
@@ -178,20 +162,6 @@ class AdminUser extends Authenticatable implements Auditable, AuthorInterface, F
         }
 
         return $this->oldRoles->pluck('slug')->contains($role);
-    }
-
-    /**
-     * Check if user in $oldRoles.
-     *
-     * TEMPORARY: always true — restore real checks after Filament migration.
-     *
-     * @param  array  $oldRoles
-     *
-     * @return mixed
-     */
-    public function inRoles(array $roles = []): bool
-    {
-        return true;
     }
 
     /**

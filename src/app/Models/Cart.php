@@ -98,19 +98,6 @@ class Cart extends Model
     }
 
     /**
-     * Get the total count of items in the cart.
-     */
-    public function itemsCount(): int
-    {
-        $counter = 0;
-        foreach ($this->items as $item) {
-            $counter += $item->count;
-        }
-
-        return $counter;
-    }
-
-    /**
      * Get the total old price of selected available items.
      *
      * @todo refactor applying sale
@@ -299,22 +286,6 @@ class Cart extends Model
     public function availableInstallment(): bool
     {
         return $this->getTotalPrice() >= Config::value(ConfigKey::Installment, 'min_price');
-    }
-
-    /**
-     * Check if the cart has an applied promocode.
-     */
-    public function hasPromocode(): bool
-    {
-        return (bool)$this->promocode;
-    }
-
-    /**
-     * Check if the cart has available items.
-     */
-    public function hasAvailableItems(): bool
-    {
-        return $this->availableItems()->isNotEmpty();
     }
 
     /**

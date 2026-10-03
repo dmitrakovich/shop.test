@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Enums\StockType;
-use App\Models\City;
 use App\Models\Stock;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,24 +20,6 @@ class StockRepository
         return $this->model->newQuery()
             ->active()
             ->where('type', StockType::SHOP)
-            ->get();
-    }
-
-    /**
-     * @return Collection<int, City>
-     */
-    public function getCitiesWithShops(): Collection
-    {
-        return City::query()
-            ->whereHas(
-                'stocks',
-                fn (Builder $query) => $query->where('is_active', true)->where('type', StockType::SHOP)
-            )
-            ->with([
-                'stocks' => fn ($query) => $query
-                    ->where('is_active', true)
-                    ->where('type', StockType::SHOP),
-            ])
             ->get();
     }
 
