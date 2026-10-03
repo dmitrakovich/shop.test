@@ -4,8 +4,8 @@ namespace App\Services\Feeds;
 
 use App\Contracts\FeedServiceInterface;
 use App\Enums\LogCategory;
-use App\Metrics\ApplicationMetrics;
 use App\Facades\Currency as CurrencyFacade;
+use App\Metrics\ApplicationMetrics;
 use App\Models\Currency;
 use App\Models\Feeds\AbstractFeed;
 use Illuminate\Support\Facades\Log;

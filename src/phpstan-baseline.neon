@@ -1771,12 +1771,6 @@ parameters:
 			path: app/Services/Payment/PaymentService.php
 
 		-
-			message: '#^PHPDoc tag @param references unknown parameter\: \$data$#'
-			identifier: parameter.notFound
-			count: 1
-			path: app/Services/Payment/PaymentService.php
-
-		-
 			message: '#^Parameter \$amount of method App\\Services\\Payment\\PaymentService\:\:captureOnlinePayment\(\) has invalid type App\\Services\\Payment\\nulls\.$#'
 			identifier: class.notFound
 			count: 1
