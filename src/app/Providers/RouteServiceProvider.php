@@ -65,10 +65,7 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapApiAdminRoutes(): void
     {
-        /** @var list<string> $adminMiddleware */
-        $adminMiddleware = config('admin.route.middleware');
-
-        Route::middleware([...$adminMiddleware, 'throttle:api'])
+        Route::middleware(['web', 'admin.auth', 'throttle:admin-api'])
             ->prefix('api/admin')
             ->as('api.admin.')
             ->group(base_path('routes/api.admin.php'));
@@ -113,6 +110,11 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        // The order form fires two lookups per line on open, plus select2 search.
+        RateLimiter::for('admin-api', function (Request $request) {
+            return Limit::perMinute(600)->by($request->user('admin')?->id ?: $request->ip());
         });
     }
 }

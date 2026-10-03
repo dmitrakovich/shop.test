@@ -5,6 +5,8 @@ namespace Tests\Feature\Admin;
 use App\Facades\Device;
 use App\Models\Admin\AdminUser;
 use App\Models\Product;
+use App\Models\User\User;
+use App\ValueObjects\Phone;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\DB;
@@ -40,8 +42,8 @@ class LegacyAdminApiSecurityTest extends TestCase
             ->first(fn (\Illuminate\Routing\Route $route): bool => $route->uri() === 'api/admin/stocks');
 
         $this->assertNotNull($route);
-        $this->assertNotContains('throttle:api', $route->excludedMiddleware());
-        $this->assertContains('throttle:api', $route->gatherMiddleware());
+        $this->assertContains('throttle:admin-api', $route->gatherMiddleware());
+        $this->assertNotContains('admin', $route->gatherMiddleware());
 
         $middleware = $this->app->make(Router::class)->gatherRouteMiddleware($route);
 
@@ -53,6 +55,12 @@ class LegacyAdminApiSecurityTest extends TestCase
         );
         $this->assertTrue(
             collect($middleware)->contains(fn (string $name): bool => str_contains($name, 'ThrottleRequests')),
+        );
+        $this->assertFalse(
+            collect($middleware)->contains(fn (string $name): bool => str_contains($name, 'LogOperation')),
+        );
+        $this->assertFalse(
+            collect($middleware)->contains(fn (string $name): bool => str_contains($name, 'Admin\\Middleware\\Bootstrap')),
         );
     }
 
@@ -91,7 +99,7 @@ class LegacyAdminApiSecurityTest extends TestCase
             ->get('/api/admin/product/product?q=' . $product->id, $headers)
             ->assertOk()
             ->assertJsonStructure(['data', 'current_page'])
-            ->assertHeader('X-RateLimit-Limit', '60');
+            ->assertHeader('X-RateLimit-Limit', '600');
 
         $this->forgetDevice();
         $this->actingAs($admin, 'admin')
@@ -143,6 +151,48 @@ class LegacyAdminApiSecurityTest extends TestCase
         $this->get('/api/admin/stocks?productId=' . $product->id . '&sizeId=1')
             ->assertOk()
             ->assertExactJson([]);
+    }
+
+    public function test_storefront_user_cannot_read_admin_lookups(): void
+    {
+        $customer = User::withoutEvents(fn (): User => User::query()->create([
+            'phone' => Phone::fromRawString('375291112233'),
+        ]));
+        $product = Product::factory()->create([
+            'category_id' => DB::table('categories')->value('id'),
+            'brand_id' => DB::table('brands')->value('id'),
+        ]);
+
+        $this->forgetDevice();
+        $this->actingAs($customer)
+            ->get('/api/admin/product/data?productId=' . $product->id)
+            ->assertRedirect('/admin/auth/login')
+            ->assertDontSee($product->slug, false);
+    }
+
+    public function test_order_form_lookup_burst_is_not_throttled(): void
+    {
+        $admin = AdminUser::query()->create([
+            'username' => 'burst_admin',
+            'password' => bcrypt('secret'),
+            'name' => 'Burst Admin',
+        ]);
+        $product = Product::factory()->create([
+            'category_id' => DB::table('categories')->value('id'),
+            'brand_id' => DB::table('brands')->value('id'),
+        ]);
+        $urls = [
+            '/api/admin/product/product?q=' . $product->id,
+            '/api/admin/product/data?productId=' . $product->id,
+            '/api/admin/stocks?productId=' . $product->id . '&sizeId=1',
+        ];
+
+        $this->actingAs($admin, 'admin');
+
+        for ($attempt = 0; $attempt < 40; $attempt++) {
+            $this->forgetDevice();
+            $this->get($urls[$attempt % 3])->assertOk();
+        }
     }
 
     private function forgetDevice(): void
