@@ -106,6 +106,45 @@ class LegacyAdminApiSecurityTest extends TestCase
             ->assertExactJson([]);
     }
 
+    public function test_old_admin_login_session_can_call_order_form_lookups(): void
+    {
+        AdminUser::query()->create([
+            'username' => 'order_form_admin',
+            'password' => bcrypt('secret'),
+            'name' => 'Order Form Admin',
+        ]);
+
+        $product = Product::factory()->create([
+            'category_id' => DB::table('categories')->value('id'),
+            'brand_id' => DB::table('brands')->value('id'),
+        ]);
+
+        $this->forgetDevice();
+        $this->get('/admin/auth/login')->assertOk();
+
+        $this->forgetDevice();
+        $this->post('/admin/auth/login', [
+            'username' => 'order_form_admin',
+            'password' => 'secret',
+            '_token' => csrf_token(),
+        ])->assertRedirect();
+
+        $this->forgetDevice();
+        $this->get('/api/admin/product/product?q=' . $product->id)
+            ->assertOk()
+            ->assertJsonStructure(['data', 'current_page', 'next_page_url']);
+
+        $this->forgetDevice();
+        $this->get('/api/admin/product/data?productId=' . $product->id)
+            ->assertOk()
+            ->assertJsonStructure(['name', 'link', 'image', 'sizes']);
+
+        $this->forgetDevice();
+        $this->get('/api/admin/stocks?productId=' . $product->id . '&sizeId=1')
+            ->assertOk()
+            ->assertExactJson([]);
+    }
+
     private function forgetDevice(): void
     {
         (new ReflectionProperty(Device::class, 'currentDevice'))->setValue(null);
