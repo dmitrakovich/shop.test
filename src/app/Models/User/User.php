@@ -117,6 +117,8 @@ class User extends Authenticatable implements Auditable, AuthorInterface, Client
      */
     protected $hidden = [
         'remember_token',
+        'otp_code',
+        'otp_expires_at',
     ];
 
     /**

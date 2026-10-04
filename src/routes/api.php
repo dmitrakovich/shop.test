@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\Consent\ConsentFormEnum;
-use App\Facades\Device;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\AuthController;
@@ -14,13 +13,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\PersistDeviceConsentHeaders;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/user', fn (Request $request) => [
-    'user' => $request->user(),
-    'device' => Device::current(),
-])->middleware('auth:sanctum');
 
 Route::prefix('auth')->as('auth.')->middleware('captcha')->group(function () {
     Route::prefix('otp')->as('otp.')->group(function () {
