@@ -67,6 +67,12 @@ class ConfigsTableSeeder extends Seeder
                 'created_at' => '2023-12-17 13:54:24',
                 'updated_at' => '2023-12-17 13:54:24',
             ],
+            8 => [
+                'key' => ConfigKey::AutoOrderStatuses,
+                'config' => '{"active": false, "belpost_parse_email": false}',
+                'created_at' => '2023-11-22 23:05:43',
+                'updated_at' => '2023-11-22 23:05:43',
+            ],
         ]);
 
     }

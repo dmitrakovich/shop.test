@@ -4,24 +4,28 @@ namespace App\Filament\Pages\Settings;
 
 use App\Enums\Config\ConfigKey;
 use App\Enums\Feedback\ReviewDiscountType;
-use App\Enums\Filament\NavGroup;
+use App\Filament\Pages\Settings\Concerns\ConfigClusterPage;
 use App\Filament\Pages\Settings\Concerns\ManagesConfigForm;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 
 class FeedbackSettings extends Page
 {
+    use ConfigClusterPage;
     use ManagesConfigForm;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Settings;
+    protected static string|\BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
 
     protected static ?string $navigationLabel = 'Отзывы';
 
     protected static ?string $title = 'Отзывы';
 
-    protected static ?string $slug = 'settings/feedback';
+    protected ?string $subheading = 'Скидки за отзыв и SMS после завершения заказа';
+
+    protected static ?string $slug = 'feedback';
 
     protected static ?int $navigationSort = 2;
 
@@ -62,10 +66,14 @@ class FeedbackSettings extends Page
                         ->columns(4),
                     ReviewDiscountType::cases(),
                 ),
-                TextInput::make('send_after')
-                    ->label('Отправлять смс через (часов)')
-                    ->numeric()
-                    ->required(),
+                Section::make()
+                    ->schema([
+                        TextInput::make('send_after')
+                            ->label('Отправлять смс через (часов)')
+                            ->helperText('Через сколько часов после завершения заказа отправить просьбу оставить отзыв.')
+                            ->numeric()
+                            ->required(),
+                    ]),
             ]);
     }
 }

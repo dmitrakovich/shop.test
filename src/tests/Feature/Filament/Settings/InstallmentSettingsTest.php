@@ -31,6 +31,7 @@ class InstallmentSettingsTest extends TestCase
 
         $component = Livewire::test(InstallmentSettings::class);
         $component->assertSuccessful();
+        $component->assertSee('Минимальные суммы для оплаты частями');
         $component->assertFormSet([
             'min_price' => '100.00',
             'min_price_3_parts' => '200.00',

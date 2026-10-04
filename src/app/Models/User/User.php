@@ -244,32 +244,6 @@ class User extends Authenticatable implements Auditable, AuthorInterface, Client
     }
 
     /**
-     * Get first full user address if exist
-     */
-    public function getFirstFullAddress(): ?string
-    {
-        if (!$address = $this->getFirstAddress()) {
-            return null;
-        }
-
-        $addressParts = array_filter([
-            optional($address->country)->name,
-            $address->city,
-            $address->address,
-        ]);
-
-        return implode(', ', $addressParts);
-    }
-
-    /**
-     * Check user has addresses
-     */
-    public function hasAddresses(): bool
-    {
-        return !empty($this->getFirstAddress());
-    }
-
-    /**
      * Get the user's full name.
      */
     public function getFullName(): string
@@ -414,15 +388,6 @@ class User extends Authenticatable implements Auditable, AuthorInterface, Client
     public function routeNotificationForSmsTraffic($notification)
     {
         return $this->phone->forSms();
-    }
-
-    /**
-     * Check if required fields filled
-     */
-    public function hasRequiredFields(): bool
-    {
-        return !empty($this->first_name) && !empty($this->last_name)
-            && !empty($this->getFirstAddress()?->city);
     }
 
     /**

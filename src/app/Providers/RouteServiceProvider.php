@@ -63,6 +63,13 @@ class RouteServiceProvider extends ServiceProvider
             ->group(base_path('routes/api.v2.php'));
     }
 
+    /**
+     * Product and stock lookups for the legacy order form.
+     *
+     * Do not add auth or a limiter that resolves the admin user. The legacy
+     * admin is about to be removed, and loading that user boots Filament Shield,
+     * which throws NoDefaultPanelSetException when no default panel is set.
+     */
     protected function mapApiAdminRoutes(): void
     {
         Route::middleware(['api'])

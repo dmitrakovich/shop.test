@@ -3,7 +3,6 @@
 namespace App\Filament\Pages\Management;
 
 use App\Enums\Filament\NavGroup;
-use Appstract\Opcache\OpcacheFacade as OPcache;
 use Exception;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -48,7 +47,7 @@ class System extends Page
                 ->icon(Heroicon::OutlinedArrowPath)
                 ->requiresConfirmation()
                 ->modalHeading('Сбросить кэш')
-                ->modalDescription('Будут очищены кэш приложения, конфиг, маршруты, представления, события и OPcache.')
+                ->modalDescription('Будут очищены кэш приложения, конфиг, маршруты, представления и события.')
                 ->modalSubmitActionLabel('Сбросить')
                 ->action(function (): void {
                     Artisan::call('cache:clear');
@@ -56,7 +55,6 @@ class System extends Page
                     Artisan::call('route:clear');
                     Artisan::call('view:clear');
                     Artisan::call('event:clear');
-                    OPcache::clear();
 
                     Notification::make()
                         ->title('Кэш сброшен')
