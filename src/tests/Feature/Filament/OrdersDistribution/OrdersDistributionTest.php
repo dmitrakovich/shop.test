@@ -122,22 +122,22 @@ class OrdersDistributionTest extends TestCase
             ->call('previousMonth')
             ->assertSet('month', '2026-09')
             ->assertCount('days', 30)
-            ->assertSet('shifts.2026-09-15.'.$manager->id, true)
-            ->assertSet('shifts.2026-09-01.'.$manager->id, false)
+            ->assertSet('shifts.2026-09-15.' . $manager->id, true)
+            ->assertSet('shifts.2026-09-01.' . $manager->id, false)
             ->assertSeeHtml('wire:key="work-schedule-2026-09"')
-            ->assertSeeHtml('wire:key="shift-2026-09-15-'.$manager->id.'"')
+            ->assertSeeHtml('wire:key="shift-2026-09-15-' . $manager->id . '"')
             ->call('previousMonth')
             ->assertSet('month', '2026-08')
             ->assertCount('days', 31)
-            ->assertSet('shifts.2026-08-15.'.$manager->id, true)
-            ->assertSet('shifts.2026-08-31.'.$manager->id, true)
-            ->assertSet('shifts.2026-08-01.'.$manager->id, false)
+            ->assertSet('shifts.2026-08-15.' . $manager->id, true)
+            ->assertSet('shifts.2026-08-31.' . $manager->id, true)
+            ->assertSet('shifts.2026-08-01.' . $manager->id, false)
             ->assertSeeHtml('wire:key="work-schedule-2026-08"')
             ->call('nextMonth')
             ->assertSet('month', '2026-09')
             ->assertCount('days', 30)
-            ->assertSet('shifts.2026-09-15.'.$manager->id, true)
-            ->assertSet('shifts.2026-08-31.'.$manager->id, null);
+            ->assertSet('shifts.2026-09-15.' . $manager->id, true)
+            ->assertSet('shifts.2026-08-31.' . $manager->id, null);
     }
 
     public function test_distribution_log_lists_entries(): void

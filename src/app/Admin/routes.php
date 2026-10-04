@@ -40,7 +40,6 @@ Route::group([
     $router->group(['prefix' => 'config', 'as' => 'config.'], function (Router $router) {
         $router->get('newsletter_for_registered', Config\NewsletterForm::class);
         $router->get('sending-tracks', Config\SendingTracksForm::class);
-        $router->get('auto-order-statuses', Config\AutoOrderStatusesForm::class);
     });
 
     $router->group(['prefix' => 'bookkeeping'], function (Router $router) {

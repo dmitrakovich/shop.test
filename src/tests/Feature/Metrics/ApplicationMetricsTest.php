@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Metrics;
 
-use App\Enums\Config\ConfigKey;
 use App\Enums\Order\OrderStatus;
 use App\Enums\Payment\OnlinePaymentMethodEnum;
 use App\Enums\Payment\OnlinePaymentStatusEnum;
@@ -11,7 +10,6 @@ use App\Jobs\AvailableSizes\UpdateAvailableSizesFullTableJob;
 use App\Jobs\AvailableSizes\UpdateAvailableSizesTableJob;
 use App\Jobs\Payment\SendInstallmentNoticeJob;
 use App\Metrics\ApplicationMetrics;
-use App\Models\Config;
 use App\Models\Currency;
 use App\Models\Feeds\AbstractFeed;
 use App\Models\Orders\Order;
@@ -168,10 +166,6 @@ class ApplicationMetricsTest extends TestCase
 
     public function test_payment_status_change_is_counted_once(): void
     {
-        Config::query()->create([
-            'key' => ConfigKey::AutoOrderStatuses,
-            'config' => ['active' => false],
-        ]);
         $payment = $this->createPayment(OnlinePaymentMethodEnum::YANDEX, OnlinePaymentStatusEnum::PENDING);
         $metrics = $this->mock(ApplicationMetrics::class);
         $metrics->shouldReceive('paymentStatus')
