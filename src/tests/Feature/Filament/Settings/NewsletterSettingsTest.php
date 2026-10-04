@@ -34,6 +34,7 @@ class NewsletterSettingsTest extends TestCase
             ->assertSee('Включена')
             ->assertSee('Количество дней после регистрации до')
             ->assertSee('Количество дней после регистрации от')
+            ->assertSee('SMS-скидка пользователям без заказов после регистрации')
             ->assertFormSet([
                 'active' => true,
                 'to_days' => 30,

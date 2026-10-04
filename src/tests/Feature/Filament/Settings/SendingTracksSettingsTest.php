@@ -33,6 +33,7 @@ class SendingTracksSettingsTest extends TestCase
             ->assertSuccessful()
             ->assertSee('Включена')
             ->assertSee('Города исключения')
+            ->assertSee('SMS с трек-номером после отправки заказа')
             ->assertFormSet([
                 'active' => true,
                 'ignore_cities' => [],

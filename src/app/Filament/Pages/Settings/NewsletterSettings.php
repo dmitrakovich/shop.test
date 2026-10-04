@@ -3,26 +3,31 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Enums\Config\ConfigKey;
-use App\Enums\Filament\NavGroup;
+use App\Filament\Pages\Settings\Concerns\ConfigClusterPage;
 use App\Filament\Pages\Settings\Concerns\ManagesConfigForm;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 
 class NewsletterSettings extends Page
 {
+    use ConfigClusterPage;
     use ManagesConfigForm;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavGroup::Settings;
+    protected static string|\BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
     protected static ?string $navigationLabel = 'Рассылка для зарегистрированных';
 
     protected static ?string $title = 'Рассылка для зарегистрированных';
 
-    protected static ?string $slug = 'settings/newsletter';
+    protected ?string $subheading = 'SMS-скидка пользователям без заказов после регистрации';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?string $slug = 'newsletter';
+
+    protected static ?int $navigationSort = 5;
 
     protected static function configKey(): ConfigKey
     {
@@ -38,20 +43,29 @@ class NewsletterSettings extends Page
     {
         return $schema
             ->components([
-                Toggle::make('active')
-                    ->label('Включена'),
-                TextInput::make('to_days')
-                    ->label('Количество дней после регистрации до')
-                    ->numeric()
-                    ->minValue(1)
-                    ->required()
-                    ->dehydrateStateUsing(fn (mixed $state): int => (int)$state),
-                TextInput::make('from_days')
-                    ->label('Количество дней после регистрации от')
-                    ->numeric()
-                    ->minValue(0)
-                    ->required()
-                    ->dehydrateStateUsing(fn (mixed $state): int => (int)$state),
+                Section::make()
+                    ->columns(2)
+                    ->schema([
+                        Toggle::make('active')
+                            ->label('Включена')
+                            ->helperText('Отправляет скидку пользователям без заказов в выбранном диапазоне дней.')
+                            ->onColor('success')
+                            ->columnSpanFull(),
+                        TextInput::make('from_days')
+                            ->label('Количество дней после регистрации от')
+                            ->helperText('Минимальный возраст аккаунта.')
+                            ->numeric()
+                            ->minValue(0)
+                            ->required()
+                            ->dehydrateStateUsing(fn (mixed $state): int => (int)$state),
+                        TextInput::make('to_days')
+                            ->label('Количество дней после регистрации до')
+                            ->helperText('Максимальный возраст аккаунта.')
+                            ->numeric()
+                            ->minValue(1)
+                            ->required()
+                            ->dehydrateStateUsing(fn (mixed $state): int => (int)$state),
+                    ]),
             ]);
     }
 }

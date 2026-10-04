@@ -33,6 +33,7 @@ class AutoOrderStatusesSettingsTest extends TestCase
             ->assertSuccessful()
             ->assertSee('Включено')
             ->assertSee('Email автопарсинг (БелПочта)')
+            ->assertSee('Автосмена статусов заказа и разбор писем Белпочты')
             ->assertFormSet([
                 'active' => false,
                 'belpost_parse_email' => false,

@@ -32,6 +32,7 @@ class FeedbackSettingsTest extends TestCase
 
         $component = Livewire::test(FeedbackSettings::class);
         $component->assertSuccessful();
+        $component->assertSee('Скидки за отзыв и SMS после завершения заказа');
         $component->assertFormSet([
             'discount' => [
                 ReviewDiscountType::Photo->value => [
