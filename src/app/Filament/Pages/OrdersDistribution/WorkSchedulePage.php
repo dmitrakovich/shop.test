@@ -101,6 +101,7 @@ class WorkSchedulePage extends Page
         $this->monthLabel = $month['label'];
         $this->days = $month['days'];
         $this->rows = $month['rows'];
+        $this->reset('shifts');
         $this->shifts = $month['shifts'];
     }
 }

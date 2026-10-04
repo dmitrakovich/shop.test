@@ -16,7 +16,7 @@
                     </p>
                 </div>
             @else
-                <div class="work-schedule-scroll">
+                <div class="work-schedule-scroll" wire:key="work-schedule-{{ $month }}">
                     <table class="fi-ta-table work-schedule-table">
                         <thead>
                             <tr>
@@ -29,7 +29,7 @@
                         </thead>
                         <tbody>
                             @foreach ($rows as $row)
-                                <tr wire:key="manager-{{ $row['admin_user_id'] }}">
+                                <tr wire:key="manager-{{ $month }}-{{ $row['admin_user_id'] }}">
                                     <td class="work-schedule-manager">{{ $row['name'] }}</td>
                                     @foreach ($days as $day)
                                         @php($date = \Illuminate\Support\Carbon::parse($day))
@@ -37,6 +37,7 @@
                                             <input
                                                 type="checkbox"
                                                 class="fi-checkbox-input"
+                                                wire:key="shift-{{ $day }}-{{ $row['admin_user_id'] }}"
                                                 wire:model="shifts.{{ $day }}.{{ $row['admin_user_id'] }}"
                                             >
                                         </td>
