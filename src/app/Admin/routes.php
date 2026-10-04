@@ -2,7 +2,6 @@
 
 use App\Admin\Controllers\Automation;
 use App\Admin\Controllers\Bookkeeping;
-use App\Admin\Controllers\Config;
 use App\Admin\Controllers\Departures;
 use App\Admin\Controllers\Logs;
 use App\Admin\Controllers\Offline\DisplacementController;
@@ -36,10 +35,6 @@ Route::group([
     $router->post('orders/change-user-by-phone', [AdminOrderController::class, 'changeUserByPhone']);
     $router->post('orders/update-user-address', [AdminOrderController::class, 'updateUserAddress']);
     $router->post('orders/add-order-comment', [AdminOrderController::class, 'addOrderComment']);
-
-    $router->group(['prefix' => 'config', 'as' => 'config.'], function (Router $router) {
-        $router->get('newsletter_for_registered', Config\NewsletterForm::class);
-    });
 
     $router->group(['prefix' => 'bookkeeping'], function (Router $router) {
         $router->resource('payments', Bookkeeping\PaymentController::class);
