@@ -48,16 +48,27 @@ class GoogleXml extends AbstractFeed
     }
 
     /**
+     * Products included in the feed.
+     *
+     * @return EloquentCollection<array-key, Product>
+     */
+    protected function getFeedProducts(): EloquentCollection
+    {
+        return (new ProductService())->getForFeed(true)
+            ->filter(function (Product $item) {
+                return count($this->getProductMedia($item->getMedia())['images']) > 0;
+            })
+            ->values();
+    }
+
+    /**
      * Items data
      */
     protected function getItems(): array
     {
         $stockLevels = StockLevelCalculator::levelsByProductId();
 
-        return (new ProductService())->getForFeed(true)
-            ->filter(function (Product $item) {
-                return count($this->getProductMedia($item->getMedia())['images']) > 0;
-            })
+        return $this->getFeedProducts()
             ->map(function (Product $item) use ($stockLevels) {
                 $media = $this->getProductMedia($item->getMedia());
                 $color = GoogleFeedFormatter::colorLabel($item->colors);
