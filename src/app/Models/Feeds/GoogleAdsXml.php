@@ -16,6 +16,11 @@ class GoogleAdsXml extends GoogleXml
         return 'google_ads';
     }
 
+    public function getViewName(): string
+    {
+        return 'google';
+    }
+
     /**
      * @return EloquentCollection<array-key, Product>
      */
