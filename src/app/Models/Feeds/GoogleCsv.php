@@ -5,6 +5,7 @@ namespace App\Models\Feeds;
 use App\Facades\Currency;
 use App\Models\Product;
 use App\Services\ProductService;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 /**
  * Class GoogleCsv
@@ -68,16 +69,27 @@ class GoogleCsv extends AbstractFeed
     }
 
     /**
+     * Products included in the feed.
+     *
+     * @return EloquentCollection<array-key, Product>
+     */
+    protected function getFeedProducts(): EloquentCollection
+    {
+        return (new ProductService())->getForFeed(false)
+            ->filter(function (Product $item) {
+                return count($this->getProductMedia($item->getMedia())['images']) > 0;
+            })
+            ->values();
+    }
+
+    /**
      * Rows data
      */
     protected function getRows(): array
     {
         $this->currency = Currency::getCurrentCurrency();
 
-        return (new ProductService())->getForFeed(false)
-            ->filter(function (Product $item) {
-                return count($this->getProductMedia($item->getMedia())['images']) > 0;
-            })
+        return $this->getFeedProducts()
             ->map(function (Product $item) {
                 $media = $this->getProductMedia($item->getMedia());
                 $color = GoogleFeedFormatter::colorLabel($item->colors);

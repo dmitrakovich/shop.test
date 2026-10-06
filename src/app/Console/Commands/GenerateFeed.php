@@ -4,8 +4,11 @@ namespace App\Console\Commands;
 
 use App\Jobs\FeedGeneratorJob;
 use App\Models\Currency;
+use App\Models\Feeds\GoogleAdsCsv;
+use App\Models\Feeds\GoogleAdsXml;
 use App\Models\Feeds\GoogleCsv;
 use App\Models\Feeds\GoogleXml;
+use App\Models\Feeds\YandexAdsXml;
 use App\Models\Feeds\YandexBusinessXml;
 use App\Models\Feeds\YandexXml;
 use Illuminate\Console\Command;
@@ -29,8 +32,11 @@ class GenerateFeed extends Command
     final const array INSTANCES = [
         'yandex_xml' => YandexXml::class,
         'yandex_business_xml' => YandexBusinessXml::class,
+        'yandex_ads_xml' => YandexAdsXml::class,
         'google_xml' => GoogleXml::class,
         'google_csv' => GoogleCsv::class,
+        'google_ads_xml' => GoogleAdsXml::class,
+        'google_ads_csv' => GoogleAdsCsv::class,
     ];
 
     /**
