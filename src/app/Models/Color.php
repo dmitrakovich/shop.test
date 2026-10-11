@@ -39,6 +39,13 @@ class Color extends Model implements Filterable
         'seo',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function (self $color): void {
+            $color->url()->updateOrCreate([], ['slug' => $color->slug]);
+        });
+    }
+
     public static function elasticField(): ?string
     {
         return 'colors.id';
