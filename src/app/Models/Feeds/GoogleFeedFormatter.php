@@ -26,7 +26,7 @@ final class GoogleFeedFormatter
     }
 
     /**
-     * Формат: «Тип обуви Бренд, материал, цвет, р. размер» — без внутреннего ID.
+     * Формат: «Тип обуви Бренд, материал, цвет, р. размер».
      */
     public static function title(Product $product, string $colorForFeed): string
     {

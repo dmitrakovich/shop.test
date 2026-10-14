@@ -28,6 +28,9 @@
 @endif
 @endforeach
         <g:brand>{{ $item->brand }}</g:brand>
+@if ($item->mpn !== '')
+        <g:mpn>{{ $item->mpn }}</g:mpn>
+@endif
         <g:google_product_category>{{ $item->google_product_category }}</g:google_product_category>
         <g:product_type>{{ $item->product_type }}</g:product_type>
         <g:age_group>adult</g:age_group>

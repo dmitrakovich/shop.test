@@ -84,6 +84,7 @@ class GoogleXml extends AbstractFeed
                     'old_price' => $item->getOldPrice(),
                     'images' => $media['images'],
                     'brand' => $this->xmlSpecialChars($item->brand->name),
+                    'mpn' => trim($item->sku),
                     'google_product_category' => $this->getGoogleCategory($item->category),
                     'product_type' => $this->getProductType($item->category),
                     'description' => GoogleFeedFormatter::description($item),

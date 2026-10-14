@@ -49,6 +49,9 @@
                 <delivery>true</delivery>
                 <typePrefix>{{ $offer->type_prefix }}</typePrefix>
                 <vendor>{{ $offer->vendor }}</vendor>
+@if ($offer->vendor_code !== '')
+                <vendorCode>{{ $offer->vendor_code }}</vendorCode>
+@endif
                 <model>{{ $offer->model }}</model>
                 <description><![CDATA[{!! $offer->description !!}]]></description>
                 <sales_notes>{{ $offer->sales_notes }}</sales_notes>
