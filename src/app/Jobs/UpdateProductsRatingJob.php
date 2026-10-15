@@ -138,6 +138,18 @@ class UpdateProductsRatingJob extends AbstractJob
      */
     private function getMetrics(array $productIds, MetrikaService $metrika): array
     {
+        if (!config('services.yandex.metrika_enabled', true)) {
+            $this->log('Яндекс Метрика отключена');
+
+            $empty = array_fill_keys($productIds, 0.0);
+
+            return [
+                RatingFactor::Views->value => $empty,
+                RatingFactor::Purchases->value => $empty,
+                RatingFactor::Carts->value => $empty,
+            ];
+        }
+
         $productMetrics = $metrika->fetchProductMetrics($productIds);
 
         return [
