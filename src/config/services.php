@@ -27,6 +27,7 @@ return [
     'yandex' => [
         'counter_id' => env('YANDEX_COUNTER_ID'),
         'token' => env('YANDEX_TOKEN'),
+        'metrika_enabled' => filter_var(env('YANDEX_METRIKA_ENABLED', true), FILTER_VALIDATE_BOOLEAN),
     ],
 
     'sxgeo' => [
