@@ -7,7 +7,6 @@ use App\Admin\Controllers\Offline\DisplacementController;
 use App\Admin\Controllers\OrderCommentController;
 use App\Admin\Controllers\OrderController as AdminOrderController;
 use App\Admin\Controllers\OrderItemController;
-use App\Admin\Controllers\Orders\OfflineOrderController;
 use App\Http\Controllers\Shop\OrderController;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Routing\Router;
@@ -21,9 +20,6 @@ Route::group([
     'namespace' => config('admin.route.namespace'),
     'middleware' => config('admin.route.middleware'),
 ], function (Router $router) {
-    $router->group(['prefix' => 'orders', 'as' => 'orders.'], function (Router $router) {
-        $router->resource('offline', OfflineOrderController::class);
-    });
     // todo: move to orders
     $router->resource('orders', AdminOrderController::class);
     $router->resource('order-items', OrderItemController::class);

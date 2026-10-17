@@ -10,6 +10,7 @@ use App\Filament\Resources\Users\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\Users\RelationManagers\BlacklistRelationManager;
+use App\Filament\Resources\Users\Users\RelationManagers\OfflineOrdersRelationManager;
 use App\Filament\Resources\Users\Users\RelationManagers\PaymentsRelationManager;
 use App\Helpers\PhoneHelper;
 use App\Models\Country;
@@ -217,6 +218,9 @@ class UserResource extends Resource
                         RelationManager::make()->manager(PaymentsRelationManager::class)->lazy(true),
                     ])
                         ->columns(1),
+                    Tab::make('Покупки в магазинах')->hiddenOn(Operation::Create)->schema([
+                        RelationManager::make()->manager(OfflineOrdersRelationManager::class)->lazy(true),
+                    ])->columns(1),
                     Tab::make('Черный список (Лог)')->hiddenOn(Operation::Create)->schema([
                         RelationManager::make()->manager(BlacklistRelationManager::class)->lazy(true),
                     ])->columns(1),
