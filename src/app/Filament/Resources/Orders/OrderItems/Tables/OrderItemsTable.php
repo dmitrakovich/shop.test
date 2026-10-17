@@ -143,7 +143,6 @@ class OrderItemsTable
                     ->whereHas('statusLog', fn (Builder $query) => $query->whereDate('completed_at', $operator, $date))),
             ])
             ->searchPlaceholder('Код товара или артикул')
-            ->defaultPaginationPageOption(50)
             ->recordActions([])
             ->toolbarActions([])
             ->selectable(false);

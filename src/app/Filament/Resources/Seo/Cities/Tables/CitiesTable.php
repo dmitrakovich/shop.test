@@ -44,7 +44,6 @@ class CitiesTable
             ])
             ->recordActions([
                 EditAction::make()->hiddenLabel(),
-            ])
-            ->defaultPaginationPageOption(50);
+            ]);
     }
 }

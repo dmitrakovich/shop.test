@@ -286,6 +286,7 @@ class UserResource extends Resource
                 EditAction::make(),
                 ToggleDeviceBanAction::make(),
             ])
+            // ->deferFilters()
             ->filters([
                 SelectFilter::make('last_order_type')
                     ->label('Тип последнего заказа')
@@ -393,9 +394,7 @@ class UserResource extends Resource
                         TextConstraint::make('addresses.city')->label('Город'),
                         TextConstraint::make('addresses.address')->label('Адрес'),
                     ]),
-            ], layout: FiltersLayout::AboveContentCollapsible)
-            // ->deferFilters()
-            ->defaultPaginationPageOption(50);
+            ], layout: FiltersLayout::AboveContentCollapsible);
     }
 
     public static function getPages(): array

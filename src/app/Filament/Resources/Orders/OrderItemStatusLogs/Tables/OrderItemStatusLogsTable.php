@@ -145,7 +145,6 @@ class OrderItemStatusLogsTable
                     }),
             ])
             ->searchPlaceholder('Код товара или артикул')
-            ->defaultPaginationPageOption(50)
             ->recordActions([])
             ->toolbarActions([])
             ->selectable(false);

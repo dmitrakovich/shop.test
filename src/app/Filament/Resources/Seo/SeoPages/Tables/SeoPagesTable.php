@@ -61,7 +61,6 @@ class SeoPagesTable
             ])
             ->recordActions([
                 EditAction::make()->hiddenLabel(),
-            ])
-            ->defaultPaginationPageOption(50);
+            ]);
     }
 }
