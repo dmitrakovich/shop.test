@@ -3,6 +3,7 @@
 namespace App\Models\Logs;
 
 use App\Enums\Order\OrderItemStatus;
+use App\Enums\Order\OrderItemStatusLogStage;
 use App\Models\Bots\Telegram\TelegramChat;
 use App\Models\Orders\OrderItem;
 use App\Models\Stock;
@@ -114,6 +115,14 @@ class OrderItemStatusLog extends Model
             OrderItemStatus::RETURN, OrderItemStatus::RETURN_FITTING => 'returned_at',
             default => null
         };
+    }
+
+    /**
+     * Get the current stage of the unit on the stock.
+     */
+    public function getStage(): OrderItemStatusLogStage
+    {
+        return OrderItemStatusLogStage::fromLog($this);
     }
 
     /**

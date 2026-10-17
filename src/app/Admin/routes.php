@@ -3,7 +3,6 @@
 use App\Admin\Controllers\Automation;
 use App\Admin\Controllers\Bookkeeping;
 use App\Admin\Controllers\Departures;
-use App\Admin\Controllers\Logs;
 use App\Admin\Controllers\Offline\DisplacementController;
 use App\Admin\Controllers\OrderCommentController;
 use App\Admin\Controllers\OrderController as AdminOrderController;
@@ -54,10 +53,5 @@ Route::group([
 
     $router->group(['prefix' => 'offline', 'as' => 'offline.'], function (Router $router) {
         $router->resource('displacement', DisplacementController::class);
-    });
-
-    // logs
-    $router->group(['prefix' => 'logs', 'as' => 'logs.'], function (Router $router) {
-        $router->resource('order-item-statuses', Logs\OrderItemStatusController::class);
     });
 });

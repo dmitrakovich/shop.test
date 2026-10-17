@@ -4,6 +4,7 @@ namespace Tests\Feature\Filament;
 
 use App\Enums\Filament\NavGroup;
 use App\Filament\Resources\Inventory\InventoryLogs\InventoryLogResource;
+use App\Filament\Resources\Orders\OrderItemStatusLogs\OrderItemStatusLogResource;
 use App\Models\Admin\AdminUser;
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationGroup;
@@ -33,7 +34,7 @@ class OldAdminNavigationTest extends TestCase
         $this->assertSame([
             'Заказы' => url('old-admin/orders'),
             'Товары в заказах' => url('old-admin/order-items'),
-            'Движение единиц' => url('old-admin/logs/order-item-statuses'),
+            'Движение единиц' => OrderItemStatusLogResource::getUrl(),
             'Оффлайн продажи' => url('old-admin/orders/offline'),
             'Платежи' => url('old-admin/bookkeeping/payments'),
         ], $this->groupItemUrls(NavGroup::Orders));
@@ -55,7 +56,7 @@ class OldAdminNavigationTest extends TestCase
         $oldAdminItems = $this->navigationItems()
             ->filter(fn (NavigationItem $item): bool => str_starts_with((string)$item->getUrl(), url('old-admin/')));
 
-        $this->assertCount(9, $oldAdminItems);
+        $this->assertCount(8, $oldAdminItems);
 
         foreach ($oldAdminItems as $item) {
             $this->assertTrue($item->shouldOpenUrlInNewTab(), $item->getLabel());
@@ -83,6 +84,7 @@ class OldAdminNavigationTest extends TestCase
         $this->assertContains('old-admin/departures/order-to-send', $uris);
         $this->assertNotContains('old-admin/departures/batches', $uris);
         $this->assertNotContains('old-admin/logs/inventory', $uris);
+        $this->assertNotContains('old-admin/logs/order-item-statuses', $uris);
         $this->assertNotContains('old-admin/automation/inventory-blacklist', $uris);
     }
 

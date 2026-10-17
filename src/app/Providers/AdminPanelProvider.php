@@ -169,7 +169,6 @@ class AdminPanelProvider extends PanelProvider
         return collect([
             'orders' => ['label' => 'Заказы', 'group' => NavGroup::Orders, 'sort' => 1],
             'order-items' => ['label' => 'Товары в заказах', 'group' => NavGroup::Orders, 'sort' => 2],
-            'logs/order-item-statuses' => ['label' => 'Движение единиц', 'group' => NavGroup::Orders, 'sort' => 3],
             'orders/offline' => ['label' => 'Оффлайн продажи', 'group' => NavGroup::Orders, 'sort' => 4],
             'bookkeeping/payments' => ['label' => 'Платежи', 'group' => NavGroup::Orders, 'sort' => 5],
             'departures/order-to-send' => ['label' => 'Заказы на отправку', 'group' => NavGroup::Departures, 'sort' => 1],
