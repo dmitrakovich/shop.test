@@ -1,6 +1,7 @@
 ---
 description: API routing conventions (Sanctum, captcha, device consent headers)
 globs: src/routes/api*.php
+paths: "src/routes/api*.php"
 alwaysApply: false
 ---
 

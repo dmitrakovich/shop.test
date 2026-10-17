@@ -1,6 +1,7 @@
 ---
 description: PHPUnit testing conventions and env defaults
 globs: src/tests/**/*.php
+paths: "src/tests/**/*.php"
 alwaysApply: false
 ---
 

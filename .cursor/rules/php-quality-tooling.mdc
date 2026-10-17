@@ -1,6 +1,7 @@
 ---
 description: PHP conventions, Pint, PHPStan level 6 expectations
 globs: src/**/*.php
+paths: "src/**/*.php"
 alwaysApply: false
 ---
 

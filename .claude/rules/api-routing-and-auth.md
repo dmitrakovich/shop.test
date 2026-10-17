@@ -1,0 +1,1 @@
+../../.cursor/rules/api-routing-and-auth.mdc

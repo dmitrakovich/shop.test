@@ -1,6 +1,7 @@
 ---
 description: Logging and Sentry conventions
 globs: src/**/*.php
+paths: "src/**/*.php"
 alwaysApply: false
 ---
 

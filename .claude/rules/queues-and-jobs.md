@@ -1,0 +1,1 @@
+../../.cursor/rules/queues-and-jobs.mdc

@@ -1,0 +1,1 @@
+../../.cursor/rules/php-quality-tooling.mdc

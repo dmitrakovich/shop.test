@@ -1,6 +1,7 @@
 ---
 description: Legacy encore/laravel-admin area (limited changes, migration-friendly)
 globs: src/app/Admin/**/*.php
+paths: "src/app/Admin/**/*.php"
 alwaysApply: false
 ---
 

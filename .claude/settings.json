@@ -1,0 +1,5 @@
+{
+    "env": {
+        "COMPOSE_PROJECT_NAME": "barocco"
+    }
+}

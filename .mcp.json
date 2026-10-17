@@ -1,0 +1,14 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "src/vendor/bin/sail",
+            "args": [
+                "artisan",
+                "boost:mcp"
+            ],
+            "env": {
+                "COMPOSE_PROJECT_NAME": "barocco"
+            }
+        }
+    }
+}

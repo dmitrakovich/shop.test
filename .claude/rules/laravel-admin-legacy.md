@@ -1,0 +1,1 @@
+../../.cursor/rules/laravel-admin-legacy.mdc

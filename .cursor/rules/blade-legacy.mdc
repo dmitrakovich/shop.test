@@ -1,6 +1,7 @@
 ---
 description: Blade templates are legacy; emails are OK; no new Blade pages
 globs: src/resources/views/**/*.blade.php
+paths: "src/resources/views/**/*.blade.php"
 alwaysApply: false
 ---
 

@@ -6,3 +6,4 @@
 .env.testing
 /.bladeformatterrc.json
 /.bladeignore
+/.claude/settings.local.json

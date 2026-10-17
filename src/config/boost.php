@@ -53,11 +53,12 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Agent Paths (Cursor)
+    | Agent Paths (Cursor, Claude Code)
     |--------------------------------------------------------------------------
     |
-    | Cursor opens the repository root, not src/. Point Boost outputs at the
-    | workspace-level .cursor directory and AGENTS.md in the repo root.
+    | Agents open the repository root, not src/. Point Boost outputs at the
+    | workspace-level agent directories. Both agents share AGENTS.md in the
+    | repo root: Claude Code reads it when there is no CLAUDE.md.
     |
     */
 
@@ -66,6 +67,11 @@ return [
             'mcp_config_path' => '../.cursor/mcp.json',
             'guidelines_path' => '../AGENTS.md',
             'skills_path' => '../.cursor/skills',
+        ],
+        'claude_code' => [
+            'mcp_config_path' => '../.mcp.json',
+            'guidelines_path' => '../AGENTS.md',
+            'skills_path' => '../.claude/skills',
         ],
     ],
 

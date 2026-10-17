@@ -1,6 +1,7 @@
 ---
 description: Filament admin conventions (preferred admin surface)
 globs: src/app/Filament/**/*.php
+paths: "src/app/Filament/**/*.php"
 alwaysApply: false
 ---
 

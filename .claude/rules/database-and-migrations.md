@@ -1,0 +1,1 @@
+../../.cursor/rules/database-and-migrations.mdc

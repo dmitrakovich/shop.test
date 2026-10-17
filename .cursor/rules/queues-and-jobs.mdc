@@ -1,6 +1,7 @@
 ---
 description: Queueing conventions (database queue, redis present)
 globs: src/app/**/*.php
+paths: "src/app/**/*.php"
 alwaysApply: false
 ---
 

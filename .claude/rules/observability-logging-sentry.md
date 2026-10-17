@@ -1,0 +1,1 @@
+../../.cursor/rules/observability-logging-sentry.mdc

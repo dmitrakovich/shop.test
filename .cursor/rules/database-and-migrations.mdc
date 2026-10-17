@@ -1,6 +1,7 @@
 ---
 description: Database, migrations, and testing DB expectations
 globs: src/database/**/*.php
+paths: "src/database/**/*.php"
 alwaysApply: false
 ---
 
