@@ -363,6 +363,120 @@ class CatalogSearchServiceTest extends TestCase
         $this->assertCount(3, $clause['bool']['should']);
     }
 
+    public function test_number_from_three_digits_also_matches_id_prefix(): void
+    {
+        $idPrefix = ['prefix' => ['short_name' => ['value' => '974']]];
+
+        $clause = $this->service->buildSearchClause('974');
+        $suggestionQuery = $this->service->buildProductSuggestionParameters('974', 8)->toArray()['body']['query'];
+
+        $this->assertContains(['term' => ['id' => 974]], $clause['bool']['should']);
+        $this->assertContains($idPrefix, $clause['bool']['should']);
+        $this->assertContains($idPrefix, $suggestionQuery['bool']['should']);
+    }
+
+    public function test_short_number_skips_id_prefix(): void
+    {
+        $clause = $this->service->buildSearchClause('38');
+
+        $this->assertNotContains(['prefix' => ['short_name' => ['value' => '38']]], $clause['bool']['should']);
+        $this->assertCount(4, $clause['bool']['should']);
+    }
+
+    public function test_word_with_digits_also_matches_any_part_of_the_sku(): void
+    {
+        $clause = $this->service->buildSearchClause('ботинки HT86');
+
+        $this->assertArrayHasKey('multi_match', $clause['bool']['should'][0]);
+        $this->assertSame('ht86', $clause['bool']['should'][1]['dis_max']['queries'][0]['multi_match']['query']);
+        $this->assertSame([
+            'wildcard' => [
+                'sku' => [
+                    'value' => '*ht86*',
+                    'case_insensitive' => true,
+                    'boost' => 50,
+                ],
+            ],
+        ], $clause['bool']['should'][1]['dis_max']['queries'][1]);
+    }
+
+    public function test_sizes_and_words_without_digits_skip_sku_substring_match(): void
+    {
+        $clause = $this->service->buildSearchClause('туфли 38 черные');
+
+        foreach ($clause['bool']['should'] as $wordClause) {
+            $this->assertSame(['multi_match'], array_keys($wordClause));
+        }
+    }
+
+    public function test_sku_substring_escapes_wildcard_characters(): void
+    {
+        $clause = $this->service->buildSearchClause('a1*?\\');
+
+        $this->assertSame(
+            '*a1\\*\\?\\\\*',
+            $clause['bool']['should'][0]['dis_max']['queries'][1]['wildcard']['sku']['value'],
+        );
+    }
+
+    public function test_stop_words_match_everything_instead_of_failing_the_query(): void
+    {
+        $clause = $this->service->buildSearchClause('ботинки с мехом');
+
+        foreach ($clause['bool']['should'] as $wordClause) {
+            $this->assertSame('all', $wordClause['multi_match']['zero_terms_query']);
+        }
+    }
+
+    public function test_catalog_search_matches_whole_words(): void
+    {
+        $clause = $this->service->buildSearchClause('туфли ч');
+
+        $this->assertSame('best_fields', $clause['bool']['should'][1]['multi_match']['type']);
+    }
+
+    public function test_product_suggestions_match_the_last_word_as_a_prefix(): void
+    {
+        $parameters = $this->service->buildProductSuggestionParameters('туфли ч', 8)->toArray();
+        $should = $parameters['body']['query']['bool']['should'];
+
+        $this->assertSame('catalog', $parameters['index']);
+        $this->assertSame(8, $parameters['body']['size']);
+        $this->assertFalse($parameters['body']['_source']);
+        $this->assertSame('best_fields', $should[0]['multi_match']['type']);
+        $this->assertSame('bool_prefix', $should[1]['multi_match']['type']);
+        $this->assertSame(2, $parameters['body']['query']['bool']['minimum_should_match']);
+        $this->assertSame([
+            ['_score' => ['order' => 'desc']],
+            ['rating' => ['order' => 'desc']],
+            ['id' => ['order' => 'desc']],
+        ], $parameters['body']['sort']);
+    }
+
+    public function test_product_suggestions_need_a_search_word(): void
+    {
+        $this->assertNull($this->service->buildProductSuggestionParameters('размера', 8));
+        $this->assertSame([], $this->service->suggestProductIds('  ', 8));
+    }
+
+    public function test_suggest_product_ids_keeps_relevance_order(): void
+    {
+        $documents = Mockery::mock(DocumentManager::class);
+        $documents->shouldReceive('search')
+            ->once()
+            ->andReturn(new SearchResult([
+                'hits' => [
+                    'total' => ['value' => 2],
+                    'hits' => [
+                        ['_index' => 'catalog_v1', '_id' => '5', '_source' => []],
+                        ['_index' => 'catalog_v1', '_id' => '3', '_source' => []],
+                    ],
+                ],
+            ]));
+
+        $this->assertSame([5, 3], (new CatalogSearchService($documents))->suggestProductIds('ry13', 8));
+    }
+
     private function urlWithModelId(int $modelId): Url
     {
         $url = new Url();

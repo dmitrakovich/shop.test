@@ -159,7 +159,18 @@ Within dimension **OR**, across **AND**. Map:
   `minimum_should_match` = n (if n≤2) else n−1.
 - Boosts: `sku.text^12`, `brand.name^7`, `short_name^6`, `categories.name^5`,
   then `color_txt`, `sizes.name`, `colors.name`, `tags.name`.
-- Numeric single token: `id` term / `sku` wildcard / `sizes.name` / `short_name`.
+- Numeric single token: `id` term / `sku` wildcard / `sizes.name` / `short_name`;
+  from 3 digits also `short_name` prefix = id prefix (`974` → `9740`–`9749`).
+- Word with a digit (≥ 3 chars): also case-insensitive `*word*` wildcard on `sku`
+  (constant boost 50) — any part of the SKU (`HT86` → `HT860L-G01-S69`).
+- `zero_terms_query: all`: stop words (`с`, `на`) match everything instead of
+  failing `minimum_should_match` (`ботинки с мехом`).
+
+### Search suggestions (`/api/v1/search/suggestions`)
+
+- `suggestions`: phrase completions from `catalog_suggestions` (rebuilt nightly).
+- `products`: same text query on `catalog`, last word as prefix (`bool_prefix`),
+  sorted `_score`, `rating`; retried in the other keyboard layout when empty.
 
 ### Sort / pagination / min-max
 
@@ -322,3 +333,4 @@ cd src && ./vendor/bin/sail artisan test --compact tests/Unit/Elastic tests/Feat
 | 2026-08-04 | Fixed self-filter and price semantics; statuses are OR within their dimension. |
 | 2026-08-15 | Removed `/api/v1/catalog` MySQL listing; Filterable is ES-only. |
 | 2026-08-15 | Moved ES catalog into `Api\CatalogController`; dropped `RedirectOldProductUrls`. |
+| 2026-10-10 | SKU substring search, stop words in queries, products in search suggestions. |

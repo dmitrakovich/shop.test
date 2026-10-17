@@ -10,7 +10,9 @@ use App\Models\ProductAttributes\Price;
 use App\Models\Url;
 use App\Services\SearchService;
 use Elastic\Adapter\Documents\DocumentManager;
+use Elastic\Adapter\Search\Hit;
 use Elastic\Adapter\Search\SearchParameters;
+use Elastic\Adapter\Search\SearchResult;
 
 class CatalogSearchService
 {
@@ -59,6 +61,17 @@ class CatalogSearchService
         'tags.name',
     ];
 
+    /**
+     * Shorter tokens ("38") are sizes rather than SKU or id fragments.
+     */
+    private const int FRAGMENT_MIN_LENGTH = 3;
+
+    /**
+     * Constant score of a SKU substring hit: above text field matches,
+     * below a whole SKU part matched on sku.text.
+     */
+    private const int SKU_FRAGMENT_BOOST = 50;
+
     public function __construct(
         private readonly DocumentManager $documents,
     ) {}
@@ -76,10 +89,7 @@ class CatalogSearchService
         $parameters = $this->buildSearchParameters($filters, $sort, $search, $page, $perPage);
         $result = $this->documents->search($parameters);
 
-        $productIds = $result->hits()
-            ->map(static fn ($hit): int => (int)$hit->document()->id())
-            ->values()
-            ->all();
+        $productIds = $this->productIds($result);
 
         $minPrice = (float)($result->aggregations()->get('min_price')?->raw()['value']['value'] ?? 0);
         $maxPrice = (float)($result->aggregations()->get('max_price')?->raw()['value']['value'] ?? 999);
@@ -93,6 +103,38 @@ class CatalogSearchService
                 static fn ($aggregation): array => $aggregation->raw(),
             )->all()),
         );
+    }
+
+    /**
+     * Products for the search dropdown, ranked like the catalog search
+     * but matching the word being typed as a prefix.
+     *
+     * @return list<int>
+     */
+    public function suggestProductIds(string $search, int $limit): array
+    {
+        $parameters = $this->buildProductSuggestionParameters($search, $limit);
+
+        return $parameters === null ? [] : $this->productIds($this->documents->search($parameters));
+    }
+
+    public function buildProductSuggestionParameters(string $search, int $limit): ?SearchParameters
+    {
+        $query = $this->buildSearchClause($search, prefixLastWord: true);
+        if ($query === null) {
+            return null;
+        }
+
+        return (new SearchParameters())
+            ->indices([(string)config('catalog.elasticsearch.alias')])
+            ->query($query)
+            ->size($limit)
+            ->source(false)
+            ->sort([
+                ['_score' => ['order' => 'desc']],
+                [ProductRatingColumn::Rating->value => ['order' => 'desc']],
+                ['id' => ['order' => 'desc']],
+            ]);
     }
 
     /**
@@ -257,9 +299,10 @@ class CatalogSearchService
     }
 
     /**
+     * @param  bool  $prefixLastWord  Match the last word as a prefix (search-as-you-type).
      * @return array<string, mixed>|null
      */
-    public function buildSearchClause(?string $search): ?array
+    public function buildSearchClause(?string $search, bool $prefixLastWord = false): ?array
     {
         $search = $this->normalizeSearchQuery($search);
         if ($search === '') {
@@ -269,19 +312,7 @@ class CatalogSearchService
         $searchService = new SearchService($search);
 
         if ($searchService->useSimpleSearch()) {
-            $token = $searchService->getIds()[0];
-
-            return [
-                'bool' => [
-                    'should' => [
-                        ['term' => ['id' => (int)$token]],
-                        ['wildcard' => ['sku' => ['value' => '*' . $token . '*']]],
-                        ['match' => ['sizes.name' => ['query' => (string)$token, 'operator' => 'and']]],
-                        ['match' => ['short_name' => ['query' => (string)$token, 'operator' => 'and']]],
-                    ],
-                    'minimum_should_match' => 1,
-                ],
-            ];
+            return $this->buildNumberClause($searchService->getIds()[0]);
         }
 
         $words = preg_split('/\s+/u', $search, -1, PREG_SPLIT_NO_EMPTY) ?: [];
@@ -289,26 +320,89 @@ class CatalogSearchService
             return null;
         }
 
-        $should = [];
-        foreach ($words as $word) {
-            $should[] = [
-                'multi_match' => [
-                    'query' => $word,
-                    'fields' => self::SEARCH_FIELDS,
-                    'type' => 'best_fields',
-                    'fuzziness' => 'AUTO',
-                    'prefix_length' => 1,
-                    'max_expansions' => 50,
-                ],
-            ];
-        }
-
         $n = count($words);
+        $should = [];
+        foreach ($words as $index => $word) {
+            $should[] = $this->buildWordClause($word, $prefixLastWord && $index === $n - 1);
+        }
 
         return [
             'bool' => [
                 'should' => $should,
                 'minimum_should_match' => $n <= 2 ? $n : $n - 1,
+            ],
+        ];
+    }
+
+    /**
+     * A single number is an id, a SKU part or a size.
+     * From 3 digits it is also an id prefix: short_name ends with the id ("974" → "Ботинки 9744").
+     * The exact id still ranks first through the short_name match.
+     *
+     * @return array<string, mixed>
+     */
+    private function buildNumberClause(int $number): array
+    {
+        $token = (string)$number;
+
+        $should = [
+            ['term' => ['id' => $number]],
+            ['wildcard' => ['sku' => ['value' => '*' . $token . '*']]],
+            ['match' => ['sizes.name' => ['query' => $token, 'operator' => 'and']]],
+            ['match' => ['short_name' => ['query' => $token, 'operator' => 'and']]],
+        ];
+
+        if (strlen($token) >= self::FRAGMENT_MIN_LENGTH) {
+            $should[] = ['prefix' => ['short_name' => ['value' => $token]]];
+        }
+
+        return [
+            'bool' => [
+                'should' => $should,
+                'minimum_should_match' => 1,
+            ],
+        ];
+    }
+
+    /**
+     * Stop words ("с", "на") analyze to nothing and match everything,
+     * so they don't count against minimum_should_match.
+     * Words with digits also match any part of the SKU ("HT86" → "HT860L-G01-S69").
+     *
+     * @return array<string, mixed>
+     */
+    private function buildWordClause(string $word, bool $isPrefix): array
+    {
+        $textClause = [
+            'multi_match' => [
+                'query' => $word,
+                'fields' => self::SEARCH_FIELDS,
+                'type' => $isPrefix ? 'bool_prefix' : 'best_fields',
+                'fuzziness' => 'AUTO',
+                'prefix_length' => 1,
+                'max_expansions' => 50,
+                'zero_terms_query' => 'all',
+            ],
+        ];
+
+        if (mb_strlen($word) < self::FRAGMENT_MIN_LENGTH || preg_match('/\d/', $word) !== 1) {
+            return $textClause;
+        }
+
+        return [
+            'dis_max' => [
+                'queries' => [
+                    $textClause,
+                    [
+                        'wildcard' => [
+                            'sku' => [
+                                'value' => '*' . addcslashes($word, '*?\\') . '*',
+                                'case_insensitive' => true,
+                                'boost' => self::SKU_FRAGMENT_BOOST,
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ];
     }
@@ -326,6 +420,17 @@ class CatalogSearchService
         ) ?: [];
 
         return implode(' ', array_diff($tokens, self::SEARCH_NOISE_WORDS));
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function productIds(SearchResult $result): array
+    {
+        return $result->hits()
+            ->map(static fn (Hit $hit): int => (int)$hit->document()->id())
+            ->values()
+            ->all();
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Helpers\KeyboardLayoutHelper;
 use App\Models\Category;
 use App\Models\Logs\SearchQueryLog;
 use App\Models\Product;
+use App\Services\Elasticsearch\CatalogSearchService;
 use App\Services\Elasticsearch\CatalogSuggestionService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,6 +25,7 @@ class SearchSuggestionsService
 
     public function __construct(
         private readonly CatalogSuggestionService $catalogSuggestionService,
+        private readonly CatalogSearchService $catalogSearchService,
         private readonly ProductService $productService,
     ) {}
 
@@ -36,7 +38,7 @@ class SearchSuggestionsService
             suggestions: $short ? [] : $this->catalogSuggestionService->suggest($query),
             categories: $short ? new Collection() : $this->categories($query),
             queries: $short ? $this->topQueries() : [],
-            products: $short ? $this->popularProducts() : new Collection(),
+            products: $short ? $this->popularProducts() : $this->matchingProducts($query),
         );
     }
 
@@ -75,6 +77,36 @@ class SearchSuggestionsService
             ->orderByDesc('id')
             ->limit(self::LIMIT)
             ->get();
+
+        $this->productService->addEager($products);
+
+        return $products;
+    }
+
+    /**
+     * Catalog products for the typed text, retried in the other keyboard layout when nothing matches.
+     *
+     * @return Collection<int, Product>
+     */
+    private function matchingProducts(string $query): Collection
+    {
+        $productIds = $this->catalogSearchService->suggestProductIds($query, self::LIMIT);
+
+        $switched = KeyboardLayoutHelper::switch($query);
+        if ($productIds === [] && $switched !== null) {
+            $productIds = $this->catalogSearchService->suggestProductIds($switched, self::LIMIT);
+        }
+
+        if ($productIds === []) {
+            return new Collection();
+        }
+
+        $order = array_flip($productIds);
+        $products = Product::query()
+            ->whereIn('id', $productIds)
+            ->get()
+            ->sortBy(static fn (Product $product): int => $order[$product->id])
+            ->values();
 
         $this->productService->addEager($products);
 

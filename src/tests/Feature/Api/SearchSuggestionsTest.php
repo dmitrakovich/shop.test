@@ -8,6 +8,7 @@ use App\Models\Logs\SearchQueryLog;
 use App\Models\Product;
 use App\Models\User\Device as UserDevice;
 use Elastic\Adapter\Documents\DocumentManager;
+use Elastic\Adapter\Search\SearchParameters;
 use Elastic\Adapter\Search\SearchResult;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
@@ -29,9 +30,11 @@ class SearchSuggestionsTest extends TestCase
         (new ReflectionProperty(Device::class, 'currentDevice'))->setValue(null);
     }
 
-    public function test_it_returns_text_suggestions_and_matching_categories(): void
+    public function test_it_returns_text_suggestions_matching_categories_and_products(): void
     {
-        $this->mockSuggestionSearch();
+        $first = $this->createProduct();
+        $second = $this->createProduct();
+        $this->mockSuggestionSearch(static fn (string $query): array => [$second->id, $first->id]);
 
         $response = $this->getJson('/api/v1/search/suggestions?query=' . rawurlencode('бот'), [
             'device-id' => self::DEVICE_ID,
@@ -41,8 +44,9 @@ class SearchSuggestionsTest extends TestCase
             ->assertOk()
             ->assertJsonPath('suggestions.0', 'ботинки')
             ->assertJsonPath('suggestions.1', 'ботинки черные')
-            ->assertJsonPath('queries', [])
-            ->assertJsonPath('products', []);
+            ->assertJsonPath('queries', []);
+
+        $this->assertSame([$second->id, $first->id], array_column($response->json('products'), 'id'));
 
         $names = array_column($response->json('categories'), 'name');
         $this->assertSame('Ботинки', $names[0]);
@@ -98,6 +102,36 @@ class SearchSuggestionsTest extends TestCase
         $this->assertNotContains($unpublished->id, array_column($response->json('products'), 'id'));
     }
 
+    public function test_products_are_retried_in_the_other_keyboard_layout(): void
+    {
+        $product = $this->createProduct();
+        $catalogQueries = [];
+        $this->mockSuggestionSearch(static function (string $query) use ($product, &$catalogQueries): array {
+            $catalogQueries[] = $query;
+
+            return $query === 'ботинки' ? [$product->id] : [];
+        });
+
+        $this->getJson('/api/v1/search/suggestions?query=' . rawurlencode(',jnbyrb'), [
+            'device-id' => self::DEVICE_ID,
+        ])
+            ->assertOk()
+            ->assertJsonPath('products.0.id', $product->id);
+
+        $this->assertSame([',jnbyrb', 'ботинки'], $catalogQueries);
+    }
+
+    public function test_no_matching_products_returns_an_empty_list(): void
+    {
+        $this->mockSuggestionSearch(static fn (string $query): array => []);
+
+        $this->getJson('/api/v1/search/suggestions?query=' . rawurlencode('юбка'), [
+            'device-id' => self::DEVICE_ID,
+        ])
+            ->assertOk()
+            ->assertJsonPath('products', []);
+    }
+
     public function test_one_character_stays_on_the_empty_state(): void
     {
         $documents = Mockery::mock(DocumentManager::class);
@@ -139,28 +173,58 @@ class SearchSuggestionsTest extends TestCase
         }
     }
 
-    private function mockSuggestionSearch(): void
+    private function createProduct(): Product
+    {
+        return Product::factory()->published()->create([
+            'category_id' => Category::query()->whereKeyNot(Category::ROOT_CATEGORY_ID)->value('id'),
+        ]);
+    }
+
+    /**
+     * Phrase suggestions come from the suggestions index; catalog hits are resolved per searched word.
+     *
+     * @param  callable(string): list<int>  $catalogHits
+     */
+    private function mockSuggestionSearch(callable $catalogHits): void
     {
         $documents = Mockery::mock(DocumentManager::class);
         $documents->shouldReceive('search')
-            ->once()
-            ->andReturn(new SearchResult([
-                'hits' => [
-                    'total' => ['value' => 0],
-                    'hits' => [],
-                ],
-                'suggest' => [
-                    'phrases' => [[
-                        'text' => 'бот',
-                        'offset' => 0,
-                        'length' => 3,
-                        'options' => [
-                            ['text' => 'ботинки', '_source' => ['text' => 'ботинки']],
-                            ['text' => 'ботинки черные', '_source' => ['text' => 'ботинки черные']],
+            ->andReturnUsing(static function (SearchParameters $parameters) use ($catalogHits): SearchResult {
+                $request = $parameters->toArray();
+
+                if ($request['index'] === 'catalog_suggestions') {
+                    return new SearchResult([
+                        'hits' => [
+                            'total' => ['value' => 0],
+                            'hits' => [],
                         ],
-                    ]],
-                ],
-            ]));
+                        'suggest' => [
+                            'phrases' => [[
+                                'text' => 'бот',
+                                'offset' => 0,
+                                'length' => 3,
+                                'options' => [
+                                    ['text' => 'ботинки', '_source' => ['text' => 'ботинки']],
+                                    ['text' => 'ботинки черные', '_source' => ['text' => 'ботинки черные']],
+                                ],
+                            ]],
+                        ],
+                    ]);
+                }
+
+                $productIds = $catalogHits($request['body']['query']['bool']['should'][0]['multi_match']['query']);
+
+                return new SearchResult([
+                    'hits' => [
+                        'total' => ['value' => count($productIds)],
+                        'hits' => array_map(static fn (int $id): array => [
+                            '_index' => 'catalog_v1',
+                            '_id' => (string)$id,
+                            '_source' => [],
+                        ], $productIds),
+                    ],
+                ]);
+            });
         $this->app->instance(DocumentManager::class, $documents);
     }
 }
