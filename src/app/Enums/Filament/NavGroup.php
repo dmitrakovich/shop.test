@@ -9,31 +9,31 @@ use Filament\Support\Icons\Heroicon;
 
 enum NavGroup implements Collapsible, HasIcon, HasLabel
 {
+    case Orders;
+    case Departures;
     case Docs;
     case Promo;
     case Users;
     case Products;
+    case Inventory;
     case Registers;
     case Analytics;
-    case OldAdminPanel;
-    case Automation;
     case Management;
     case Settings;
-    case Departures;
     case OrdersDistribution;
     case Seo;
 
     public function getLabel(): string
     {
         return match ($this) {
+            self::Orders => 'Заказы',
             self::Docs => 'Документация',
             self::Promo => 'Промо',
             self::Users => 'Клиенты',
             self::Products => 'Товары',
             self::Registers => 'Реестры',
             self::Analytics => 'Аналитика',
-            self::OldAdminPanel => 'Старая админка',
-            self::Automation => 'Автоматизация',
+            self::Inventory => 'Наличие / 1С',
             self::Management => 'Управление',
             self::Settings => 'Настройки',
             self::Departures => 'Отправления',
@@ -45,14 +45,14 @@ enum NavGroup implements Collapsible, HasIcon, HasLabel
     public function getIcon(): Heroicon
     {
         return match ($this) {
+            self::Orders => Heroicon::OutlinedShoppingBag,
             self::Docs => Heroicon::OutlinedBookOpen,
             self::Promo => Heroicon::OutlinedFire,
             self::Users => Heroicon::OutlinedUserGroup,
             self::Products => Heroicon::OutlinedSquares2x2,
             self::Registers => Heroicon::OutlinedFolder,
             self::Analytics => Heroicon::OutlinedChartBar,
-            self::OldAdminPanel => Heroicon::OutlinedArrowUturnLeft,
-            self::Automation => Heroicon::OutlinedCog8Tooth,
+            self::Inventory => Heroicon::OutlinedArchiveBox,
             self::Management => Heroicon::OutlinedShieldCheck,
             self::Settings => Heroicon::OutlinedAdjustmentsHorizontal,
             self::Departures => Heroicon::OutlinedTruck,

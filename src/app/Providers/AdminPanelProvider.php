@@ -143,24 +143,40 @@ class AdminPanelProvider extends PanelProvider
         return app()->environment('local') || Gate::check('viewHorizon', $user);
     }
 
-    public function generateOldAdminNavItems(): array
+    /**
+     * Links to old admin sections that are not migrated yet, placed in their target groups.
+     *
+     * @return array<int, NavigationItem>
+     */
+    private function generateOldAdminNavItems(): array
     {
-        return $this->getOldAdminNavItems()->map(function ($label, $uri) {
-            return NavigationItem::make()
-                ->label($label)
+        return $this->getOldAdminNavItems()
+            ->map(fn (array $item, string $uri): NavigationItem => NavigationItem::make($item['label'])
                 ->url(url('old-admin/' . $uri), shouldOpenInNewTab: true)
-                ->group(NavGroup::OldAdminPanel);
-        })->toArray();
+                ->group($item['group'])
+                ->sort($item['sort'])
+                ->badge('old', color: 'gray')
+                ->badgeTooltip('Откроется в старой админке'))
+            ->values()
+            ->all();
     }
 
+    /**
+     * @return Collection<string, array{label: string, group: NavGroup, sort: int}>
+     */
     private function getOldAdminNavItems(): Collection
     {
         return collect([
-            'orders' => 'Заказы',
-            'order-items' => 'Товары в заказах',
-            'logs/inventory' => 'Наличие - лог',
-            'automation/inventory' => 'Наличие - добавить',
-            'automation/stock' => 'Склад',
+            'orders' => ['label' => 'Заказы', 'group' => NavGroup::Orders, 'sort' => 1],
+            'order-items' => ['label' => 'Товары в заказах', 'group' => NavGroup::Orders, 'sort' => 2],
+            'logs/order-item-statuses' => ['label' => 'Движение единиц', 'group' => NavGroup::Orders, 'sort' => 3],
+            'orders/offline' => ['label' => 'Оффлайн продажи', 'group' => NavGroup::Orders, 'sort' => 4],
+            'bookkeeping/payments' => ['label' => 'Платежи', 'group' => NavGroup::Orders, 'sort' => 5],
+            'departures/order-to-send' => ['label' => 'Заказы на отправку', 'group' => NavGroup::Departures, 'sort' => 1],
+            'departures/track-numbers' => ['label' => 'Трек-номера', 'group' => NavGroup::Departures, 'sort' => 3],
+            'automation/stock' => ['label' => 'Склад', 'group' => NavGroup::Inventory, 'sort' => 1],
+            'automation/inventory' => ['label' => 'Новые товары из 1С', 'group' => NavGroup::Inventory, 'sort' => 2],
+            'logs/inventory' => ['label' => 'Лог наличия', 'group' => NavGroup::Inventory, 'sort' => 3],
         ]);
     }
 }

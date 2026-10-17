@@ -51,7 +51,6 @@ Route::group([
         $router->resource('inventory', Automation\InventoryController::class);
         $router->resource('stock', Automation\StockController::class);
         $router->get('stock-update', [Automation\StockController::class, 'updateAvailability'])->name('stock-update');
-        $router->get('inventory-blacklist', Automation\InventoryBlacklistForm::class);
     });
 
     $router->group(['prefix' => 'offline', 'as' => 'offline.'], function (Router $router) {

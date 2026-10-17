@@ -7,6 +7,7 @@ use App\Filament\Clusters\Config\ConfigCluster;
 use App\Filament\Pages\Settings\AutoOrderStatusesSettings;
 use App\Filament\Pages\Settings\FeedbackSettings;
 use App\Filament\Pages\Settings\InstallmentSettings;
+use App\Filament\Pages\Settings\InventoryBlacklistSettings;
 use App\Filament\Pages\Settings\NewsletterSettings;
 use App\Filament\Pages\Settings\SendingTracksSettings;
 use App\Models\Admin\AdminUser;
@@ -59,6 +60,7 @@ class ConfigNavigationTest extends TestCase
         $this->assertNotContains('Автоматические статусы заказа', $settingsLabels);
         $this->assertNotContains('Отправка треков', $settingsLabels);
         $this->assertNotContains('Рассылка для зарегистрированных', $settingsLabels);
+        $this->assertNotContains('Исключённые категории 1С', $settingsLabels);
 
         $configItem = collect($settingsGroup->getItems())
             ->first(fn (NavigationItem $item): bool => $item->getLabel() === 'Конфиг');
@@ -85,6 +87,7 @@ class ConfigNavigationTest extends TestCase
             'Автоматические статусы заказа',
             'Отправка треков',
             'Рассылка для зарегистрированных',
+            'Исключённые категории 1С',
         ], $subNavLabels);
 
         $this->get(ConfigCluster::getUrl())
@@ -93,6 +96,7 @@ class ConfigNavigationTest extends TestCase
         $this->get(FeedbackSettings::getUrl())->assertOk();
         $this->get(SendingTracksSettings::getUrl())->assertOk();
         $this->get(NewsletterSettings::getUrl())->assertOk();
+        $this->get(InventoryBlacklistSettings::getUrl())->assertOk();
     }
 
     private function createSuperAdmin(): AdminUser
