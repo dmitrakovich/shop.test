@@ -2,23 +2,30 @@
 
 namespace App\Models\Logs;
 
+use App\Enums\Product\InventoryLogAction;
 use App\Models\Product;
+use Database\Factories\InventoryLogFactory;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property int $product_id
- * @property string $action
+ * @property InventoryLogAction $action
  * @property array|null $added_sizes
  * @property array|null $removed_sizes
  * @property \Illuminate\Support\Carbon|null $created_at
  *
  * @property-read \App\Models\Product|null $product
  */
+#[UseFactory(InventoryLogFactory::class)]
 class InventoryLog extends Model
 {
+    /** @use HasFactory<InventoryLogFactory> */
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -50,30 +57,10 @@ class InventoryLog extends Model
      * @var array
      */
     protected $casts = [
+        'action' => InventoryLogAction::class,
         'added_sizes' => 'array',
         'removed_sizes' => 'array',
     ];
-
-    /**
-     * The action to restore inventory.
-     *
-     * @var string
-     */
-    const ACTION_RESTORE = 'RESTORE';
-
-    /**
-     * The action to update inventory.
-     *
-     * @var string
-     */
-    const ACTION_UPDATE = 'UPDATE';
-
-    /**
-     * The action to delete inventory.
-     *
-     * @var string
-     */
-    const ACTION_DELETE = 'DELETE';
 
     /**
      * Get the product that the inventory log belongs to.
@@ -85,25 +72,5 @@ class InventoryLog extends Model
         return $this->belongsTo(Product::class)
             ->with(['category:id,title', 'brand:id,name'])
             ->withTrashed();
-    }
-
-    /**
-     * Format sizes as a comma-separated string.
-     */
-    public function formatSizes(?array $sizes, Collection $sizeNames): ?string
-    {
-        if (empty($sizes)) {
-            return null;
-        }
-
-        return implode(', ', array_map(fn ($sizeId) => $sizeNames[$sizeId], $sizes));
-    }
-
-    /**
-     * Farmat date in admin panel
-     */
-    protected function serializeDate(\DateTimeInterface $date): string
-    {
-        return $date->format('d.m.Y H:i:s');
     }
 }

@@ -3,12 +3,15 @@
 namespace Tests\Feature\Filament;
 
 use App\Enums\Filament\NavGroup;
+use App\Filament\Resources\Inventory\InventoryLogs\InventoryLogResource;
 use App\Models\Admin\AdminUser;
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -43,7 +46,7 @@ class OldAdminNavigationTest extends TestCase
         $this->assertSame([
             'Склад' => url('old-admin/automation/stock'),
             'Новые товары из 1С' => url('old-admin/automation/inventory'),
-            'Лог наличия' => url('old-admin/logs/inventory'),
+            'Лог наличия' => InventoryLogResource::getUrl(),
         ], $this->groupItemUrls(NavGroup::Inventory));
     }
 
@@ -52,7 +55,7 @@ class OldAdminNavigationTest extends TestCase
         $oldAdminItems = $this->navigationItems()
             ->filter(fn (NavigationItem $item): bool => str_starts_with((string)$item->getUrl(), url('old-admin/')));
 
-        $this->assertCount(10, $oldAdminItems);
+        $this->assertCount(9, $oldAdminItems);
 
         foreach ($oldAdminItems as $item) {
             $this->assertTrue($item->shouldOpenUrlInNewTab(), $item->getLabel());
@@ -67,9 +70,20 @@ class OldAdminNavigationTest extends TestCase
         $this->assertNotContains(url('old-admin/departures/batches'), $urls);
         $this->assertNotContains(url('old-admin/offline/displacement'), $urls);
         $this->assertNotContains(url('old-admin/automation/inventory-blacklist'), $urls);
+        $this->assertNotContains(url('old-admin/logs/inventory'), $urls);
         $this->assertSame(1, $urls->filter(fn (?string $url): bool => $url === url('old-admin/automation/stock'))->count());
         $this->assertNotContains('Старая админка', $this->groupLabels());
         $this->assertContains('Наличие / 1С', $this->groupLabels());
+    }
+
+    public function test_migrated_old_admin_routes_are_removed(): void
+    {
+        $uris = collect(Route::getRoutes()->getRoutes())->map(fn (RoutingRoute $route): string => $route->uri());
+
+        $this->assertContains('old-admin/departures/order-to-send', $uris);
+        $this->assertNotContains('old-admin/departures/batches', $uris);
+        $this->assertNotContains('old-admin/logs/inventory', $uris);
+        $this->assertNotContains('old-admin/automation/inventory-blacklist', $uris);
     }
 
     public function test_orders_and_departures_groups_come_first(): void

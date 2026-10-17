@@ -176,7 +176,6 @@ class AdminPanelProvider extends PanelProvider
             'departures/track-numbers' => ['label' => 'Трек-номера', 'group' => NavGroup::Departures, 'sort' => 3],
             'automation/stock' => ['label' => 'Склад', 'group' => NavGroup::Inventory, 'sort' => 1],
             'automation/inventory' => ['label' => 'Новые товары из 1С', 'group' => NavGroup::Inventory, 'sort' => 2],
-            'logs/inventory' => ['label' => 'Лог наличия', 'group' => NavGroup::Inventory, 'sort' => 3],
         ]);
     }
 }

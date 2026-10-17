@@ -42,7 +42,6 @@ Route::group([
 
     $router->group(['prefix' => 'departures'], function (Router $router) {
         $router->resource('order-to-send', Departures\OrderToSendController::class);
-        $router->resource('batches', Departures\BatchController::class);
         $router->resource('track-numbers', Departures\OrderTrackController::class);
     });
 
@@ -59,7 +58,6 @@ Route::group([
 
     // logs
     $router->group(['prefix' => 'logs', 'as' => 'logs.'], function (Router $router) {
-        $router->resource('inventory', Logs\InventoryController::class);
         $router->resource('order-item-statuses', Logs\OrderItemStatusController::class);
     });
 });

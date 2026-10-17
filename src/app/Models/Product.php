@@ -6,6 +6,7 @@ use App\Enums\Config\ConfigKey;
 use App\Enums\Product\ProductLabel;
 use App\Facades\Currency;
 use App\Models\Collection as ProductCollection;
+use App\Models\Logs\InventoryLog;
 use App\Models\OneC\Product as ProductFromOneC;
 use App\Traits\ProductMedia;
 use App\Traits\ProductSales;
@@ -303,6 +304,16 @@ class Product extends Model implements Auditable, HasMedia
     public function availableSizes(): Relations\HasMany
     {
         return $this->hasMany(AvailableSizes::class);
+    }
+
+    /**
+     * Get the automatic availability update history of the product.
+     *
+     * @return Relations\HasMany<InventoryLog, $this>
+     */
+    public function inventoryLogs(): Relations\HasMany
+    {
+        return $this->hasMany(InventoryLog::class);
     }
 
     /**

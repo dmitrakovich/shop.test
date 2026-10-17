@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Product\InventoryLogAction;
 use App\Models\Logs;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\Auth;
@@ -23,11 +24,11 @@ class LogService
         $logData = [];
         foreach ($restoreProducts as $productId) {
             $logData[$productId]['product_id'] = $productId;
-            $logData[$productId]['action'] = Logs\InventoryLog::ACTION_RESTORE;
+            $logData[$productId]['action'] = InventoryLogAction::Restore->value;
         }
         foreach ($deleteProducts as $productId) {
             $logData[$productId]['product_id'] = $productId;
-            $logData[$productId]['action'] = Logs\InventoryLog::ACTION_DELETE;
+            $logData[$productId]['action'] = InventoryLogAction::Delete->value;
         }
         foreach ($addSizes as $productId => $sizes) {
             $logData[$productId]['product_id'] = $productId;
@@ -40,7 +41,7 @@ class LogService
 
         $now = now();
         foreach ($logData as &$data) {
-            $data['action'] ??= Logs\InventoryLog::ACTION_UPDATE;
+            $data['action'] ??= InventoryLogAction::Update->value;
             $data['added_sizes'] ??= null;
             $data['removed_sizes'] ??= null;
             $data['created_at'] = $now;
