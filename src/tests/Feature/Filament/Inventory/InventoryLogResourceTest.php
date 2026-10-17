@@ -55,8 +55,8 @@ class InventoryLogResourceTest extends TestCase
 
     public function test_inventory_log_can_be_searched_by_product_id_and_sku(): void
     {
-        $product = Product::factory()->create(['sku' => 'ABC-777']);
-        $otherProduct = Product::factory()->create(['sku' => 'XYZ-111']);
+        $product = Product::factory()->create(['sku' => 'ABC-QQQ']);
+        $otherProduct = Product::factory()->create(['sku' => 'XYZ-WWW']);
 
         $productLog = InventoryLog::factory()->for($product)->create();
         $otherLog = InventoryLog::factory()->for($otherProduct)->create();
@@ -65,7 +65,7 @@ class InventoryLogResourceTest extends TestCase
             ->searchTable((string)$product->id)
             ->assertCanSeeTableRecords([$productLog])
             ->assertCanNotSeeTableRecords([$otherLog])
-            ->searchTable('c-77')
+            ->searchTable('c-qq')
             ->assertCanSeeTableRecords([$productLog])
             ->assertCanNotSeeTableRecords([$otherLog]);
     }
@@ -90,9 +90,14 @@ class InventoryLogResourceTest extends TestCase
 
         $log = InventoryLog::factory()->deleted()->for($product)->create();
 
+        $removedProduct = Product::factory()->create();
+        $removedProductLog = InventoryLog::factory()->deleted()->for($removedProduct)->create();
+        $removedProduct->forceDelete();
+
         Livewire::test(ListInventoryLogs::class)
-            ->assertCanSeeTableRecords([$log])
-            ->assertSee('SKU-TRASHED');
+            ->assertCanSeeTableRecords([$log, $removedProductLog])
+            ->assertSee('SKU-TRASHED')
+            ->assertTableColumnFormattedStateSet('product_id', 'Товар удалён', $removedProductLog);
     }
 
     public function test_product_page_shows_only_its_inventory_history(): void

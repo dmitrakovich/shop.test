@@ -6,7 +6,6 @@ use App\Admin\Controllers\Departures;
 use App\Admin\Controllers\Offline\DisplacementController;
 use App\Admin\Controllers\OrderCommentController;
 use App\Admin\Controllers\OrderController as AdminOrderController;
-use App\Admin\Controllers\OrderItemController;
 use App\Http\Controllers\Shop\OrderController;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Routing\Router;
@@ -22,7 +21,6 @@ Route::group([
 ], function (Router $router) {
     // todo: move to orders
     $router->resource('orders', AdminOrderController::class);
-    $router->resource('order-items', OrderItemController::class);
     // $router->resource('order-comments', OrderCommentController::class); // todo: maybe excess
     $router->get('orders/{order}/process', [AdminOrderController::class, 'process'])->name('orders.process');
     $router->get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');

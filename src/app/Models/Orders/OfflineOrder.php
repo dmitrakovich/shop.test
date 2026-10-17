@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Size;
 use App\Models\Stock;
 use App\Models\User\User;
+use App\ValueObjects\Phone;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -50,6 +51,22 @@ class OfflineOrder extends Model
         'sold_at' => 'datetime',
         'returned_at' => 'datetime',
     ];
+
+    /**
+     * Get the client phone, or null when 1C has none ("NONE", empty or garbage).
+     */
+    public function getPhone(): ?Phone
+    {
+        if (mb_strlen(trim($this->user_phone)) < 7) {
+            return null;
+        }
+
+        try {
+            return Phone::fromRawString($this->user_phone);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
 
     /**
      * Get the product associated with the offline order.

@@ -69,12 +69,26 @@ class OfflineOrderResourceTest extends TestCase
             ->assertSee('+375291112233');
     }
 
+    public function test_missing_phone_from_1c_is_shown_as_empty(): void
+    {
+        $noneSale = $this->createOfflineOrder(['user_phone' => 'NONE']);
+        $emptySale = $this->createOfflineOrder(['user_phone' => '']);
+
+        Livewire::test(ListOfflineOrders::class)
+            ->assertTableColumnStateNotSet('user_phone', 'NONE', $noneSale)
+            ->assertTableColumnStateSet('user_phone', null, $noneSale)
+            ->assertTableColumnStateSet('user_phone', null, $emptySale)
+            ->assertDontSee('NONE')
+            ->filterTable('user_phone', ['user_phone' => 'NONE'])
+            ->assertCanNotSeeTableRecords([$noneSale, $emptySale]);
+    }
+
     public function test_offline_sales_can_be_searched_by_product_id_and_sku(): void
     {
-        $product = Product::factory()->create(['sku' => 'SITE-SKU-42']);
-        $byProduct = $this->createOfflineOrder(['product_id' => $product->id, 'sku' => 'ONE-C-1']);
-        $bySku = $this->createOfflineOrder(['sku' => 'ABC-777']);
-        $other = $this->createOfflineOrder(['sku' => 'XYZ-111']);
+        $product = Product::factory()->create(['sku' => 'SITE-SKU-AB']);
+        $byProduct = $this->createOfflineOrder(['product_id' => $product->id, 'sku' => 'ONE-C-AAA']);
+        $bySku = $this->createOfflineOrder(['sku' => 'ABC-QQQ']);
+        $other = $this->createOfflineOrder(['sku' => 'XYZ-WWW']);
 
         Livewire::test(ListOfflineOrders::class)
             ->searchTable((string)$product->id)
@@ -83,7 +97,7 @@ class OfflineOrderResourceTest extends TestCase
             ->searchTable('site-sku')
             ->assertCanSeeTableRecords([$byProduct])
             ->assertCanNotSeeTableRecords([$bySku, $other])
-            ->searchTable('c-77')
+            ->searchTable('c-qq')
             ->assertCanSeeTableRecords([$bySku])
             ->assertCanNotSeeTableRecords([$byProduct, $other]);
     }

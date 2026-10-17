@@ -2,9 +2,10 @@
 
 namespace App\Enums\Order;
 
+use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum OrderItemStatus: int implements HasLabel
+enum OrderItemStatus: int implements HasColor, HasLabel
 {
     case NEW = 1;
     case RESERVED = 2;
@@ -42,6 +43,17 @@ enum OrderItemStatus: int implements HasLabel
             self::COLLECT => 'Собран',
             self::WAITING_REFUND => 'Ожидает возврат',
             self::DISPLACEMENT => 'Перемещение',
+        };
+    }
+
+    public function getColor(): string
+    {
+        return match ($this) {
+            self::NEW, self::CANCELED => 'gray',
+            self::COMPLETED, self::INSTALLMENT => 'success',
+            self::RETURN, self::RETURN_FITTING, self::WAITING_REFUND => 'warning',
+            self::NO_AVAILABILITY => 'danger',
+            default => 'info',
         };
     }
 

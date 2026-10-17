@@ -63,8 +63,14 @@ class OrderItemStatusLogResourceTest extends TestCase
         $orphan = $this->createLog($this->createOrderItem($order));
         OrderItem::query()->whereKey($orphan->order_item_id)->delete();
 
+        $deletedProduct = Product::factory()->create();
+        $deletedProductLog = $this->createLog($this->createOrderItem($order, $deletedProduct));
+        $deletedProduct->forceDelete();
+
         Livewire::test(ListOrderItemStatusLogs::class)
-            ->assertCanSeeTableRecords([$outOfStock, $orphan])
+            ->assertCanSeeTableRecords([$outOfStock, $orphan, $deletedProductLog])
+            ->assertTableColumnStateSet('product', 'Позиция удалена из заказа', $orphan)
+            ->assertTableColumnStateSet('product', 'Товар удалён', $deletedProductLog)
             ->assertTableColumnStateSet('stage', OrderItemStatusLogStage::OutOfStock, $outOfStock)
             ->assertSee('Позиция удалена из заказа');
     }
@@ -72,15 +78,15 @@ class OrderItemStatusLogResourceTest extends TestCase
     public function test_movements_can_be_searched_by_product_id_and_sku(): void
     {
         $order = $this->createOrder();
-        $product = Product::factory()->create(['sku' => 'ABC-555']);
+        $product = Product::factory()->create(['sku' => 'ABC-QQQ']);
         $productLog = $this->createLog($this->createOrderItem($order, $product));
-        $otherLog = $this->createLog($this->createOrderItem($order, Product::factory()->create(['sku' => 'XYZ-999'])));
+        $otherLog = $this->createLog($this->createOrderItem($order, Product::factory()->create(['sku' => 'XYZ-WWW'])));
 
         Livewire::test(ListOrderItemStatusLogs::class)
             ->searchTable((string)$product->id)
             ->assertCanSeeTableRecords([$productLog])
             ->assertCanNotSeeTableRecords([$otherLog])
-            ->searchTable('c-55')
+            ->searchTable('c-qq')
             ->assertCanSeeTableRecords([$productLog])
             ->assertCanNotSeeTableRecords([$otherLog]);
     }

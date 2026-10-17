@@ -11,6 +11,7 @@ use App\Models\Stock;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Fieldset;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -45,7 +46,14 @@ class OrderItemStatusLogsTable
                     ->label('Товар')
                     ->state(fn (OrderItemStatusLog $record): string => self::getProductTitle($record))
                     ->description(fn (OrderItemStatusLog $record): ?string => self::getProductDescription($record))
-                    ->color(fn (OrderItemStatusLog $record): ?string => $record->orderItem ? null : 'gray')
+                    ->color(fn (OrderItemStatusLog $record): ?string => match (true) {
+                        $record->orderItem === null => 'gray',
+                        !$record->orderItem->product->exists => 'danger',
+                        default => null,
+                    })
+                    ->icon(fn (OrderItemStatusLog $record): ?Heroicon => $record->orderItem && !$record->orderItem->product->exists
+                        ? Heroicon::OutlinedTrash
+                        : null)
                     ->url(fn (OrderItemStatusLog $record): ?string => $record->orderItem?->product->exists
                         ? ProductResource::getUrl('edit', ['record' => $record->orderItem->product])
                         : null)
@@ -149,6 +157,10 @@ class OrderItemStatusLogsTable
 
         if ($orderItem === null) {
             return 'Позиция удалена из заказа';
+        }
+
+        if (!$orderItem->product->exists) {
+            return 'Товар удалён';
         }
 
         return trim("{$orderItem->product->brand?->name} {$orderItem->product->sku}");

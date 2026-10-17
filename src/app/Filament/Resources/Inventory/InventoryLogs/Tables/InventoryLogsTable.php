@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Size;
 use Filament\Forms\Components\DatePicker;
 use Filament\Schemas\Components\Fieldset;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -38,6 +39,8 @@ class InventoryLogsTable
                     ->label('Товар')
                     ->formatStateUsing(fn (InventoryLog $record): string => self::getProductTitle($record))
                     ->description(fn (InventoryLog $record): string => self::getProductDescription($record))
+                    ->color(fn (InventoryLog $record): ?string => $record->product ? null : 'danger')
+                    ->icon(fn (InventoryLog $record): ?Heroicon => $record->product ? null : Heroicon::OutlinedTrash)
                     ->url(fn (InventoryLog $record): ?string => $record->product
                         ? ProductResource::getUrl('edit', ['record' => $record->product])
                         : null)
@@ -101,7 +104,7 @@ class InventoryLogsTable
         $product = $record->product;
 
         if ($product === null) {
-            return "Товар #{$record->product_id} удалён";
+            return 'Товар удалён';
         }
 
         return trim("{$product->brand?->name} {$product->sku}");

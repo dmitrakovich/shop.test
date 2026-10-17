@@ -77,7 +77,7 @@ class OfflineOrdersTable
                     ->visible($withClientColumns),
                 TextColumn::make('user_phone')
                     ->label('Телефон')
-                    ->formatStateUsing(fn (?string $state): ?string => filled($state) ? '+' . PhoneHelper::digitsOnly($state) : null)
+                    ->state(fn (OfflineOrder $record): ?string => $record->getPhone()?->toE164())
                     ->placeholder('—')
                     ->visible($withClientColumns),
                 TextColumn::make('returned_at')
